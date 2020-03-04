@@ -1,0 +1,13 @@
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\bin\Debug\netcoreapp3.1\Data.deps.json
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\bin\Debug\netcoreapp3.1\Data.dll
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\obj\Debug\netcoreapp3.1\Data.csprojAssemblyReference.cache
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\obj\Debug\netcoreapp3.1\Data.AssemblyInfoInputs.cache
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\obj\Debug\netcoreapp3.1\Data.AssemblyInfo.cs
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\bin\Debug\netcoreapp3.1\Data.pdb
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\bin\Debug\netcoreapp3.1\Models.dll
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\bin\Debug\netcoreapp3.1\Models.pdb
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\obj\Debug\netcoreapp3.1\Data.csproj.CopyComplete
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\obj\Debug\netcoreapp3.1\Data.dll
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\obj\Debug\netcoreapp3.1\Data.pdb
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\bin\Debug\netcoreapp3.1\Data.runtimeconfig.json
+C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Data\bin\Debug\netcoreapp3.1\Data.runtimeconfig.dev.json
