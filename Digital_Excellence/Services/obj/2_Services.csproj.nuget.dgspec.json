@@ -1,0 +1,190 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Services\\2_Services.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\5_Models.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\5_Models.csproj",
+        "projectName": "5_Models",
+        "projectPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\5_Models.csproj",
+        "packagesPath": "C:\\Users\\Daroot\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Daroot\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Repositories\\3_Repositories.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Repositories\\3_Repositories.csproj",
+        "projectName": "3_Repositories",
+        "projectPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Repositories\\3_Repositories.csproj",
+        "packagesPath": "C:\\Users\\Daroot\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Repositories\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Daroot\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\5_Models.csproj": {
+                "projectPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\5_Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Services\\2_Services.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Services\\2_Services.csproj",
+        "projectName": "2_Services",
+        "projectPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Services\\2_Services.csproj",
+        "packagesPath": "C:\\Users\\Daroot\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Services\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Daroot\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\5_Models.csproj": {
+                "projectPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Models\\5_Models.csproj"
+              },
+              "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Repositories\\3_Repositories.csproj": {
+                "projectPath": "C:\\Users\\Daroot\\source\\repos\\Digital-Excellence\\Digital_Excellence\\Repositories\\3_Repositories.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
