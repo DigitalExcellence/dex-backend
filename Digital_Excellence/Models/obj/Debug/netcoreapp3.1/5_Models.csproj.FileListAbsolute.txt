@@ -1,8 +1,0 @@
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\bin\Debug\netcoreapp3.1\5_Models.deps.json
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\bin\Debug\netcoreapp3.1\5_Models.dll
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\bin\Debug\netcoreapp3.1\5_Models.pdb
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\obj\Debug\netcoreapp3.1\5_Models.csprojAssemblyReference.cache
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\obj\Debug\netcoreapp3.1\5_Models.AssemblyInfoInputs.cache
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\obj\Debug\netcoreapp3.1\5_Models.AssemblyInfo.cs
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\obj\Debug\netcoreapp3.1\5_Models.dll
-C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Models\obj\Debug\netcoreapp3.1\5_Models.pdb
