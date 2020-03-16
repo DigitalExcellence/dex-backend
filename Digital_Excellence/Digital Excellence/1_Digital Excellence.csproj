@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Digital_Excellence</RootNamespace>
-    <DocumentationFile>C:\Users\Daroot\source\repos\Digital-Excellence\Digital_Excellence\Digital Excellence\Digital_Excellence.xml</DocumentationFile>
+    <DocumentationFile>.\Digital_Excellence.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
