@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using API.Resources.Project;
+using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -11,7 +11,7 @@ namespace API.Controllers
 	/// <summary>
 	/// This controller handles the CRUD projects
 	/// </summary>
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
@@ -57,14 +57,14 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-		public IActionResult CreateProject([FromBody]CreateProjectResource projectResource)
+		public IActionResult CreateProject([FromBody]ProjectResource projectResource)
 		{
             if (projectResource == null) throw new ArgumentNullException(nameof(projectResource));
             if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
-			Project project = _mapper.Map<CreateProjectResource, Project>(projectResource);
+			Project project = _mapper.Map<ProjectResource, Project>(projectResource);
             User u = new User();
             u.Name = "bob";
             project.User = u;
@@ -73,7 +73,7 @@ namespace API.Controllers
 
 				_projectService.Add(project);
 				_projectService.Save();
-				return Created(nameof(CreateProject), _mapper.Map<Project, CreateProjectResourceResult>(project));
+				return Created(nameof(CreateProject), _mapper.Map<Project, ProjectResourceResult>(project));
 			}
 			catch
 			{
@@ -89,7 +89,7 @@ namespace API.Controllers
         /// <param name="projectResource"></param>
         /// <returns></returns>
         [HttpPut("{projectId}")]
-		public async Task<IActionResult> UpdateProject(int projectId, [FromBody]CreateProjectResource projectResource)
+		public async Task<IActionResult> UpdateProject(int projectId, [FromBody]ProjectResource projectResource)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -102,12 +102,12 @@ namespace API.Controllers
 				return NoContent();
 			}
 
-			_mapper.Map<CreateProjectResource, Project>(projectResource, project);
+			_mapper.Map<ProjectResource, Project>(projectResource, project);
 
 			_projectService.Update(project);
 			_projectService.Save();
 
-			return Ok(_mapper.Map<Project, CreateProjectResourceResult>(project));
+			return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
 
 		}
 

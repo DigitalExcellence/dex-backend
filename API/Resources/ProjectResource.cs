@@ -1,4 +1,8 @@
-﻿namespace API.Resources
+﻿using System.Collections;
+using System.Collections.Generic;
+using Models;
+
+namespace API.Resources
 {
     /// <summary>
     /// The view model of a project
@@ -12,7 +16,7 @@
         /// <summary>
         /// This gets or sets the Title
         /// </summary>
-        public string Title { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// This gets or sets the Description
         /// </summary>
@@ -21,5 +25,9 @@
         /// This gets or sets the Url
         /// </summary>
         public string Url { get; set; }
+        /// <summary>
+        /// This gets or sets the collaborators
+        /// </summary>
+        public ICollection<Collaborator> collaborators { get; set; }
     }
 }

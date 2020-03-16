@@ -80,6 +80,21 @@
             Validates this instance.
             </summary>
         </member>
+        <member name="T:API.Configuration.MappingProfile">
+            <summary>
+            This profiles adds every resource mapping.
+            </summary>
+        </member>
+        <member name="M:API.Configuration.MappingProfile.#ctor">
+            <summary>
+            Create a map for every resource mapping.
+            </summary>
+        </member>
+        <member name="T:API.Controllers.ProjectController">
+            <summary>
+            This controller handles the CRUD projects
+            </summary>
+        </member>
         <member name="M:API.Controllers.ProjectController.#ctor(Services.Services.IProjectService,AutoMapper.IMapper)">
             <summary>
             Initialize a new instance of ProjectController
@@ -91,30 +106,37 @@
             <summary>
             Get a project.
             </summary>
-            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.ProjectController.CreateProject(API.Resources.ProjectResource)">
             <summary>
-            Create a user account.
+            Create a Project.
             </summary>
-            <param name="accountResource"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.ProjectController.UpdateProject(System.Int32,API.Resources.ProjectResource)">
             <summary>
-            Update the User account.
+            Update the Project
             </summary>
-            <param name="userId"></param>
-            <param name="userResource"></param>
+            <param name="projectId"></param>
+            <param name="projectResource"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.ProjectController.DeleteProject(System.Int32)">
             <summary>
-            Gets the student information.
+            deletes a project.
             </summary>
-            <param name="studentId">The student identifier.</param>
             <returns></returns>
+        </member>
+        <member name="T:API.Controllers.SearchController">
+            <summary>
+            The controller that handles search requests
+            </summary>
+        </member>
+        <member name="T:API.Controllers.UserController">
+            <summary>
+            This controller handles the user settings.
+            </summary>
         </member>
         <member name="M:API.Controllers.UserController.#ctor(Services.Services.IUserService,AutoMapper.IMapper)">
             <summary>
@@ -149,7 +171,6 @@
             <summary>
             Gets the student information.
             </summary>
-            <param name="studentId">The student identifier.</param>
             <returns></returns>
         </member>
         <member name="T:API.Extensions.AutoMapperExtensions">
@@ -205,6 +226,137 @@
             </summary>
             <param name="iUserPrincipal">The i user principal.</param>
             <returns></returns>
+        </member>
+        <member name="T:API.Program">
+            <summary>
+            the main starting point of the program.
+            </summary>
+        </member>
+        <member name="M:API.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:API.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            The kestrel builder.
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:API.Resources.ProjectResource">
+            <summary>
+            The view model of a project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.UserId">
+            <summary>
+            This gets or sets the userId
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Name">
+            <summary>
+            This gets or sets the Title
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Description">
+            <summary>
+            This gets or sets the Description
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Url">
+            <summary>
+            This gets or sets the Url
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.collaborators">
+            <summary>
+            This gets or sets the collaborators
+            </summary>
+        </member>
+        <member name="T:API.Resources.ProjectResourceResult">
+            <summary>
+            The view model result of project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.UserId">
+            <summary>
+            This gets or sets the userId
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Title">
+            <summary>
+            This gets or sets the Title
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Description">
+            <summary>
+            This gets or sets the Description
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Url">
+            <summary>
+            This gets or sets the Url
+            </summary>
+        </member>
+        <member name="T:API.Resources.UserResource">
+            <summary>
+            The view model of a user
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.Name">
+            <summary>
+            This gets or sets the Name
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.ProfileUrl">
+            <summary>
+            This gets or sets the ProfileUrl
+            </summary>
+        </member>
+        <member name="T:API.Resources.UserResourceResult">
+            <summary>
+            the view model result of user.
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.Name">
+            <summary>
+            This gets or sets the Name
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.ProfileUrl">
+            <summary>
+            This gets or sets the ProfileUrl
+            </summary>
+        </member>
+        <member name="T:API.Startup">
+            <summary>
+            The main configuration of the app.
+            </summary>
+        </member>
+        <member name="P:API.Startup.Config">
+            <summary>
+            the class that holds the dynamic configuration.
+            </summary>
+        </member>
+        <member name="P:API.Startup.Environment">
+            <summary>
+            the class that holds the environment settings.
+            </summary>
+        </member>
+        <member name="M:API.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            startup getter.
+            </summary>
+            <param name="configuration"></param>
+            <param name="environment"></param>
+        </member>
+        <member name="M:API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            the service configuration.
+            </summary>
+            <param name="services"></param>
         </member>
         <member name="M:API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>

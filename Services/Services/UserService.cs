@@ -28,11 +28,6 @@ namespace Services.Services
             return await Repository.GetUserAsync(userId);
         }
 
-		public async Task<User> GetUserAsync(int userId)
-		{
-			return await Repository.GetUserAsync(userId);
-		}
-
 		public async Task<bool> RemoveUserAsync(int userId)
 		{
 			return await Repository.RemoveUserAsync(userId);

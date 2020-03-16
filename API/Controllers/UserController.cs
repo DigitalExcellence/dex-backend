@@ -110,7 +110,6 @@ namespace API.Controllers
         /// <summary>
         /// Gets the student information.
         /// </summary>
-<<<<<<< HEAD:Digital_Excellence/Digital Excellence/Controllers/UserController.cs
         /// <returns></returns>
         [HttpDelete("{userId}")]
 		public async Task<IActionResult> DeleteAccount(int userId)
@@ -127,21 +126,4 @@ namespace API.Controllers
 
 
 	}
-=======
-        /// <param name="studentId">The student identifier.</param>
-        /// <returns></returns>
-        [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteAccount(int userId)
-        {
-            if (await _userService.FindAsync(userId) == null)
-            {
-                return NoContent();
-            }
-
-            await _userService.RemoveAsync(userId);
-            _userService.Save();
-            return Ok();
-        }
-    }
->>>>>>> develop:API/Controllers/UserController.cs
 }

@@ -30,5 +30,9 @@
     <ProjectReference Include="..\Services\2_Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Project\" />
+  </ItemGroup>
+
 
 </Project>
