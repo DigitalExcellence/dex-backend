@@ -37,6 +37,7 @@ msbuild.wrn
 
 # Visual Studio 2015 cache/options directory
 .vs/
+**/.vs/
 **/wwwroot/dist/
 **/ClientApp/dist/
 
@@ -322,6 +323,4 @@ profile
 .env
 
 ####
-
-# Build results
 
