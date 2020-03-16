@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Digital_Excellence.Resources
+﻿namespace API.Resources
 {
+    /// <summary>
+    /// The view model of a user
+    /// </summary>
     public class UserResource
     {
-        public string Username { get; set; }
+        /// <summary>
+        /// This gets or sets the Name
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// This gets or sets the ProfileUrl
+        /// </summary>
         public string ProfileUrl { get; set; }
 
     }

@@ -1,22 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Digital_Excellence;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace Digital_Excellence
+namespace API
 {
+    /// <summary>
+	/// the main starting point of the program.
+	/// </summary>
 	public class Program
 	{
+		/// <summary>
+		/// Main
+		/// </summary>
+		/// <param name="args"></param>
 		public static void Main(string[] args)
 		{
 			CreateHostBuilder(args).Build().Run();
 		}
-
+		/// <summary>
+		/// The kestrel builder.
+		/// </summary>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public static IWebHostBuilder CreateHostBuilder(string[] args)
 		{
 			return WebHost.CreateDefaultBuilder(args)

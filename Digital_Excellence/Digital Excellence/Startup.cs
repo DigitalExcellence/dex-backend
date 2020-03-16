@@ -1,47 +1,56 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
-using Digital_Excellence.Configuration;
+using API.Configuration;
+using Data;
+using Digital_Excellence.Extensions;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Models;
 using Services.Services;
-using AutoMapper;
-using FluentValidation.AspNetCore;
-using Microsoft.OpenApi.Models;
-using Microsoft.Data.SqlClient;
-using Data;
-using Digital_Excellence.Extensions;
 
-namespace Digital_Excellence
+namespace API
 {
+	/// <summary>
+	/// The main configuration of the app.
+	/// </summary>
 	public class Startup
 	{
-
+		/// <summary>
+		/// the class that holds the dynamic configuration.
+		/// </summary>
 		public Config Config { get; }
 
+		/// <summary>
+		/// the class that holds the environment settings.
+		/// </summary>
 		public IWebHostEnvironment Environment { get; }
 
-
+		/// <summary>
+		/// startup getter.
+		/// </summary>
+		/// <param name="configuration"></param>
+		/// <param name="environment"></param>
 		public Startup(IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			Config = configuration.GetSection("App").Get<Config>();
 			Config.OriginalConfiguration = configuration;
 			Environment = environment;
 		}
-
+		/// <summary>
+		/// the service configuration.
+		/// </summary>
+		/// <param name="services"></param>
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddDbContext<ApplicationDbContext>(o =>

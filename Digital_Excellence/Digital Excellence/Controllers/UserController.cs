@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using API.Resources;
 using AutoMapper;
-using Digital_Excellence.Resources;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
 
-namespace Digital_Excellence.Controllers
+namespace API.Controllers
 {
+	/// <summary>
+	/// This controller handles the user settings.
+	/// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -108,12 +107,11 @@ namespace Digital_Excellence.Controllers
 
 		}
 
-		/// <summary>
-		/// Gets the student information.
-		/// </summary>
-		/// <param name="studentId">The student identifier.</param>
-		/// <returns></returns>
-		[HttpDelete("{userId}")]
+        /// <summary>
+        /// Gets the student information.
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("{userId}")]
 		public async Task<IActionResult> DeleteAccount(int userId)
 		{
 			if(await _userService.FindAsync(userId) == null)

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Configuration;
 using NetEscapades.Configuration.Validation;
 
-namespace Digital_Excellence.Configuration
+namespace API.Configuration
 {
+    /// <summary>
+	/// This class holds all dynamic configurable values.
+	/// </summary>
 	public class Config : IValidatable
 	{
 		/// <summary>

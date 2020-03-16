@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Configuration;
 using AutoMapper;
-using Digital_Excellence.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Digital_Excellence.Extensions

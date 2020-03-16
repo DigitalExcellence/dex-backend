@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using API.Resources.Project;
 using AutoMapper;
-using Digital_Excellence.Resources;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
 
-namespace Digital_Excellence.Controllers
+namespace API.Controllers
 {
+	/// <summary>
+	/// This controller handles the CRUD projects
+	/// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
@@ -30,12 +30,11 @@ namespace Digital_Excellence.Controllers
 		}
 
 
-		/// <summary>
-		/// Get a project.
-		/// </summary>
-		/// <param name="userId"></param>
-		/// <returns></returns>
-		[HttpGet("{projectId}")]
+        /// <summary>
+        /// Get a project.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{projectId}")]
 		//[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
 		public async Task<IActionResult> GetProject(int projectId)
 		{
@@ -53,41 +52,44 @@ namespace Digital_Excellence.Controllers
 		}
 
 
-		/// <summary>
-		/// Create a user account.
-		/// </summary>
-		/// <param name="accountResource"></param>
-		/// <returns></returns>
-		[HttpPost]
-		public IActionResult CreateProject([FromBody]ProjectResource projectResource)
+        /// <summary>
+        /// Create a Project.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+		public IActionResult CreateProject([FromBody]CreateProjectResource projectResource)
 		{
-			if (!ModelState.IsValid)
+            if (projectResource == null) throw new ArgumentNullException(nameof(projectResource));
+            if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
-			Project project = _mapper.Map<ProjectResource, Project>(projectResource);
+			Project project = _mapper.Map<CreateProjectResource, Project>(projectResource);
+            User u = new User();
+            u.Name = "bob";
+            project.User = u;
 			try
 			{
 
 				_projectService.Add(project);
 				_projectService.Save();
-				return Created(nameof(CreateProject), _mapper.Map<Project, ProjectResourceResult>(project));
+				return Created(nameof(CreateProject), _mapper.Map<Project, CreateProjectResourceResult>(project));
 			}
 			catch
 			{
-				return BadRequest("Could not Create the User account");
+				return BadRequest("Could not Create the Project");
 			}
 
 		}
 
-		/// <summary>
-		/// Update the User account.
-		/// </summary>
-		/// <param name="userId"></param>
-		/// <param name="userResource"></param>
-		/// <returns></returns>
-		[HttpPut("{projectId}")]
-		public async Task<IActionResult> UpdateProject(int projectId, [FromBody]ProjectResource projectResource)
+        /// <summary>
+        /// Update the Project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="projectResource"></param>
+        /// <returns></returns>
+        [HttpPut("{projectId}")]
+		public async Task<IActionResult> UpdateProject(int projectId, [FromBody]CreateProjectResource projectResource)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -100,21 +102,20 @@ namespace Digital_Excellence.Controllers
 				return NoContent();
 			}
 
-			_mapper.Map<ProjectResource, Project>(projectResource, project);
+			_mapper.Map<CreateProjectResource, Project>(projectResource, project);
 
 			_projectService.Update(project);
 			_projectService.Save();
 
-			return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
+			return Ok(_mapper.Map<Project, CreateProjectResourceResult>(project));
 
 		}
 
-		/// <summary>
-		/// Gets the student information.
-		/// </summary>
-		/// <param name="studentId">The student identifier.</param>
-		/// <returns></returns>
-		[HttpDelete("{projectId}")]
+        /// <summary>
+        /// deletes a project.
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("{projectId}")]
 		public async Task<IActionResult> DeleteProject(int projectId)
 		{
 			if (await _projectService.FindAsync(projectId) == null)

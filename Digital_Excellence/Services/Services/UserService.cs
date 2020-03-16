@@ -12,6 +12,7 @@ namespace Services.Services
 	{
 		Task<User> GetUserAsync(int userId);
 		Task<bool> RemoveUserAsync(int userId);
+		User GetUserByUsername(string upn);
 	}
 
 	public class UserService : Service<User>, IUserService
@@ -31,6 +32,11 @@ namespace Services.Services
 		public async Task<bool> RemoveUserAsync(int userId)
 		{
 			return await Repository.RemoveUserAsync(userId);
+		}
+
+		public User GetUserByUsername(string upn)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
