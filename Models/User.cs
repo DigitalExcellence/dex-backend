@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Models
+﻿namespace Models
 {
     public class User
     {
         public int Id { get; set; }
 
+        public string Name { get; set; }
+        
+        public string Email { get; set; }
+        
+        public string IdentityId { get; set; }
+        
+        public LinkedService[] Services { get; set; }
+        
         public User()
         {
         }
@@ -16,8 +20,6 @@ namespace Models
         {
             Id = userId;
         }
-
-        public string Username { get; set; }
-        public string ProfileUrl { get; set; }
+        
     }
 }
