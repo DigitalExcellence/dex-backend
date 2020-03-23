@@ -11,6 +11,8 @@
         
         public string Description { get; set; }
         
+        public string ShortDescription { get; set; }
+        
         public string Uri { get; set; }
         
         public string[] Contributors { get; set; }
