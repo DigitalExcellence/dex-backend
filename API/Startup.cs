@@ -61,28 +61,6 @@ namespace API
             services.UseConfigurationValidation();
             services.ConfigureValidatableSetting<Config>(Config.OriginalConfiguration.GetSection("App"));
 
-            // JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            // JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
-
-            // services.AddAuthentication(o =>
-            //     {
-            //         o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //         o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //         o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //     })
-            //     .AddJwtBearer(options =>
-            //     {
-            //         options.Authority = Config.IdentityServer.IdentityUrl;
-            //         options.Audience = "dex-api";
-            //         options.RequireHttpsMetadata = false;
-            //         options.TokenValidationParameters = new TokenValidationParameters
-            //         {
-            //             //ValidateActor = false,
-            //             NameClaimType = "name",
-            //             RoleClaimType = "role"
-            //         };
-            //     });
-
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
@@ -234,34 +212,5 @@ namespace API
                 context.Database.Migrate();
             }
         }
-
-
-        //public IConfiguration Configuration { get; }
-
-        //// This method gets called by the runtime. Use this method to add services to the container.
-        //public void ConfigureServices(IServiceCollection services)
-        //{
-        //	services.AddControllers();
-        //}
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        //{
-        //	if (env.IsDevelopment())
-        //	{
-        //		app.UseDeveloperExceptionPage();
-        //	}
-
-        //	app.UseHttpsRedirection();
-
-        //	app.UseRouting();
-
-        //	app.UseAuthorization();
-
-        //	app.UseEndpoints(endpoints =>
-        //	{
-        //		endpoints.MapControllers();
-        //	});
-        //}
     }
 }
