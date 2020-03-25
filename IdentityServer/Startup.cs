@@ -1,6 +1,8 @@
-﻿using IdentityServer.Configuration;
+﻿using Configuration;
+using IdentityServer.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -8,10 +10,15 @@ namespace IdentityServer
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Config Config { get; }
         public IWebHostEnvironment Environment { get; }
 
-        public Startup(IWebHostEnvironment environment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
+            Config = configuration.GetSection("App").Get<Config>();
+            Configuration = configuration;
             Environment = environment;
         }
 
@@ -32,9 +39,9 @@ namespace IdentityServer
                 .AddTestUsers(TestUsers.Users);
 
             // in-memory, code config
-            builder.AddInMemoryIdentityResources(Config.Ids);
-            builder.AddInMemoryApiResources(Config.Apis);
-            builder.AddInMemoryClients(Config.Clients);
+            builder.AddInMemoryIdentityResources(IdentityConfig.Ids);
+            builder.AddInMemoryApiResources(IdentityConfig.Apis);
+            builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             builder.AddTestUsers(TestUsers.Users);
 
             // services.AddAuthentication()
@@ -45,12 +52,14 @@ namespace IdentityServer
             //         options.Authority = "";
             //         // ...
             //     });
-            //builder.AddInMemoryIdentityResources(Configuration.GetSection("IdentityResources"));
-            //builder.AddInMemoryApiResources(Configuration.GetSection("ApiResources"));
-            //builder.AddInMemoryClients(Configuration.GetSection("clients"));
 
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            if (Environment.IsDevelopment())
+            {
+                //TODO: Have some sort of certificate on the production servers
+                // not recommended for production - you need to store your key material somewhere secure
+                builder.AddDeveloperSigningCredential();
+            }
+
         }
 
         public void Configure(IApplicationBuilder app)

@@ -34,7 +34,6 @@ namespace API
             Config = configuration.GetSection("App").Get<Config>();
             Config.OriginalConfiguration = configuration;
             Environment = environment;
-            IdentityModelEventSource.ShowPII = true;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -67,10 +66,10 @@ namespace API
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:5004";
+                    options.Authority = Config.IdentityServer.IdentityUrl;
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "dex-api";
-                    options.ApiSecret = "secret";
+                    options.ApiName = Config.Frontend.ClientId;
+                    options.ApiSecret = Config.Frontend.ClientSecret;
                     options.EnableCaching = true;
 
                 });
@@ -111,7 +110,6 @@ namespace API
             services.AddServicesAndRepositories();
         }
 
-
         /// <summary>
         /// Configures the specified application.
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -148,7 +146,7 @@ namespace API
 
             app.UseCors(c =>
             {
-                c.WithOrigins(Config.Self.FrontEnd);
+                c.WithOrigins(Config.Frontend.FrontendUrl);
                 c.SetIsOriginAllowedToAllowWildcardSubdomains();
                 c.AllowAnyHeader();
                 c.AllowAnyMethod();

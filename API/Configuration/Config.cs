@@ -18,7 +18,7 @@ namespace API.Configuration
             /// The front end.
             /// </value>
             [Required, Url]
-            public string FrontEnd { get; set; }
+            public string FrontendUrl { get; set; }
 
             /// <summary>
             /// Gets or sets the client identifier.
@@ -69,7 +69,7 @@ namespace API.Configuration
         /// <value>
         /// The self.
         /// </value>
-        public SelfConfig Self { get; set; }
+        public SelfConfig Frontend { get; set; }
 
         /// <summary>
         /// Gets or sets the identity server.

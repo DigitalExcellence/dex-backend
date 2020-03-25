@@ -9,7 +9,7 @@
             
             </summary>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.FrontEnd">
+        <member name="P:API.Configuration.Config.SelfConfig.FrontendUrl">
             <summary>
             Gets or sets the front end.
             </summary>
@@ -54,7 +54,7 @@
             The original configuration.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.Self">
+        <member name="P:API.Configuration.Config.Frontend">
             <summary>
             Gets or sets the self.
             </summary>
