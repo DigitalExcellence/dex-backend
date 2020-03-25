@@ -1,4 +1,4 @@
-﻿using IdentityServer4;
+﻿using IdentityServer.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,21 +17,10 @@ namespace IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
+            services.AddOidcStateDataFormatterCache();
+
             services.AddControllersWithViews();
-
-            // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
-            services.Configure<IISOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
-            // configures IIS in-proc settings
-            services.Configure<IISServerOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -48,7 +37,14 @@ namespace IdentityServer
             builder.AddInMemoryClients(Config.Clients);
             builder.AddTestUsers(TestUsers.Users);
 
-            // or in-memory, json config
+            // services.AddAuthentication()
+            //     .AddOpenIdConnect("FHICT", "Fontys FHICT", options =>
+            //     {
+            //         options.ClientId = "";
+            //         options.ClientSecret = "";
+            //         options.Authority = "";
+            //         // ...
+            //     });
             //builder.AddInMemoryIdentityResources(Configuration.GetSection("IdentityResources"));
             //builder.AddInMemoryApiResources(Configuration.GetSection("ApiResources"));
             //builder.AddInMemoryClients(Configuration.GetSection("clients"));

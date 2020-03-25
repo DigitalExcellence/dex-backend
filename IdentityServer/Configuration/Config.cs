@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using IdentityServer4;
 
-namespace IdentityServer
+namespace IdentityServer.Configuration
 {
     public static class Config
     {
@@ -16,34 +16,31 @@ namespace IdentityServer
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
-                new ApiResource("DeX-API", "Digital Excellence API"), 
+                new ApiResource("dex-api", "Digital Excellence API"), 
             };
         
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // machine to machine client (from quickstart 1)
+                // machine to machine client (Identity -> API)
                 new Client
                 {
-                    ClientId = "client",
+                    ClientId = "dex-api-client",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
                     },
-                    AllowedScopes =
-                    {
-                        "DeX-API"
-                    }
+                    AllowedScopes = { "dex-api" }
                 },
                 // interactive ASP.NET Core MVC client
                 new Client
                 {
-                    ClientId = "mvc",
+                    ClientId = "dex-frontend",
+                    ClientName = "Digital Excellence Angular Frontend",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
                     RequirePkce = true,
 
                     // where to redirect to after login
@@ -55,10 +52,9 @@ namespace IdentityServer
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "DeX-API"
-                    },
-                    AllowOfflineAccess = true
+                        IdentityServerConstants.StandardScopes.Profile
+                    }
+                    // AllowOfflineAccess = true
                 }
             };
         

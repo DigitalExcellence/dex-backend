@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models;
@@ -33,6 +34,7 @@ namespace API
             Config = configuration.GetSection("App").Get<Config>();
             Config.OriginalConfiguration = configuration;
             Environment = environment;
+            IdentityModelEventSource.ShowPII = true;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -51,32 +53,48 @@ namespace API
             services.AddMvc(options => { options.EnableEndpointRouting = false; })
                 .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+            services.AddAuthorization();
+
             services.AddAutoMapper();
             services.AddPolicies();
 
             services.UseConfigurationValidation();
             services.ConfigureValidatableSetting<Config>(Config.OriginalConfiguration.GetSection("App"));
 
+            // JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            // JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+            // services.AddAuthentication(o =>
+            //     {
+            //         o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //         o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //         o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //     })
+            //     .AddJwtBearer(options =>
+            //     {
+            //         options.Authority = Config.IdentityServer.IdentityUrl;
+            //         options.Audience = "dex-api";
+            //         options.RequireHttpsMetadata = false;
+            //         options.TokenValidationParameters = new TokenValidationParameters
+            //         {
+            //             //ValidateActor = false,
+            //             NameClaimType = "name",
+            //             RoleClaimType = "role"
+            //         };
+            //     });
+
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(o =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
                 {
-                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = Config.IdentityServer.IdentityUrl;
-                    options.Audience = "Dex-API";
+                    options.Authority = "http://localhost:5004";
                     options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        //ValidateActor = false,
-                        NameClaimType = "name",
-                        RoleClaimType = "role"
-                    };
+                    options.ApiName = "dex-api";
+                    options.ApiSecret = "secret";
+                    options.EnableCaching = true;
+
                 });
 
             services.AddCors();
