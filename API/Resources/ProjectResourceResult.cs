@@ -1,4 +1,6 @@
-﻿namespace API.Resources
+﻿using System;
+
+namespace API.Resources
 {
     public class ProjectResourceResult
     {
@@ -16,6 +18,10 @@
         public string Uri { get; set; }
         
         public string[] Contributors { get; set; }
+        
+        public DateTime Created { get; set; }
+        
+        public DateTime Updated { get; set; }
         
     }
 }
