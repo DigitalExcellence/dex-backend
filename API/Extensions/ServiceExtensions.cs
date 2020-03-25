@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Models.Defaults;
+using System.Reflection;
 
 namespace API.Extensions
 {

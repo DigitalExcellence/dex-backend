@@ -1,10 +1,7 @@
-﻿using System;
+﻿using NetEscapades.Configuration.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using NetEscapades.Configuration.Validation;
 
 namespace Configuration
 {

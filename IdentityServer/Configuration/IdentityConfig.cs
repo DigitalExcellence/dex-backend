@@ -1,9 +1,9 @@
-﻿using IdentityServer4.Models;
+﻿using Configuration;
+using IdentityServer4;
+using IdentityServer4.Models;
+using Models.Defaults;
 using System.Collections.Generic;
 using System.Linq;
-using Configuration;
-using IdentityServer4;
-using Models.Defaults;
 
 namespace IdentityServer.Configuration
 {
@@ -26,9 +26,9 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.ScopeCategories.ApiDataRead)),
                         new Scope(nameof(Defaults.ScopeCategories.ApiDataWrite))
                     }
-                }, 
+                },
             };
-        
+
         public static IEnumerable<Client> Clients(Config config) =>
             new Client[]
             {
@@ -72,6 +72,6 @@ namespace IdentityServer.Configuration
                     // AllowOfflineAccess = true
                 }
             };
-        
+
     }
 }

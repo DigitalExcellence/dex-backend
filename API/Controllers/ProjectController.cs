@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using API.Resources;
+﻿using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {

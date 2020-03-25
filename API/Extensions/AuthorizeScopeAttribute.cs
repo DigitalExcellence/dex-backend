@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Models.Defaults;
+using System;
+using System.Linq;
+using System.Security.Claims;
 
 namespace API.Extensions
 {
@@ -17,7 +15,7 @@ namespace API.Extensions
         /// <param name="claimValue"></param>
         public AuthorizeScopeAttribute(string claimValue) : base(typeof(AuthorizeScopeFilter))
         {
-            Arguments = new object[] {new Claim("scope", claimValue)};
+            Arguments = new object[] { new Claim("scope", claimValue) };
         }
     }
 

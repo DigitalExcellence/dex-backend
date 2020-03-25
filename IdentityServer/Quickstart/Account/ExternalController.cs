@@ -1,4 +1,5 @@
 using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -12,9 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
-using IdentityServer4;
 
 namespace IdentityServer
 {
@@ -60,18 +59,18 @@ namespace IdentityServer
                 throw new Exception("invalid return URL");
             }
             // start challenge and roundtrip the return URL and scheme 
-                var props = new AuthenticationProperties
-                {
-                    RedirectUri = Url.Action(nameof(Callback)),
-                    Items =
+            var props = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action(nameof(Callback)),
+                Items =
                     {
                         { "returnUrl", returnUrl },
                         { "scheme", provider },
                     }
-                };
+            };
 
-                return Challenge(props, provider);
-            }
+            return Challenge(props, provider);
+        }
 
         /// <summary>
         /// Post processing of external authentication

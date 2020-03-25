@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using NetEscapades.Configuration.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Configuration
 {
