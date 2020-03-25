@@ -10,4 +10,8 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="System.Security.Principal.Windows" Version="4.3.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Models\5_Models.csproj" />
+  </ItemGroup>
 </Project>

@@ -152,6 +152,29 @@
             <param name="studentId">The student identifier.</param>
             <returns></returns>
         </member>
+        <member name="M:API.Extensions.AuthorizeScopeAttribute.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="claimValue"></param>
+        </member>
+        <member name="T:API.Extensions.AuthorizeScopeFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:API.Extensions.AuthorizeScopeFilter.#ctor(System.Security.Claims.Claim)">
+            <summary>
+            
+            </summary>
+            <param name="claim"></param>
+        </member>
+        <member name="M:API.Extensions.AuthorizeScopeFilter.OnAuthorization(Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
         <member name="T:API.Extensions.AutoMapperExtensions">
             <summary>
             AutoMapperExtensions

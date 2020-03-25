@@ -1,6 +1,7 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
 using IdentityServer4;
+using Models.Defaults;
 
 namespace IdentityServer.Configuration
 {
@@ -16,7 +17,14 @@ namespace IdentityServer.Configuration
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
-                new ApiResource("dex-api", "Digital Excellence API"), 
+                new ApiResource("dex-api", "Digital Excellence API")
+                {
+                    Scopes =
+                    {
+                        new Scope(nameof(Defaults.ScopeCategories.ApiDataRead)),
+                        new Scope(nameof(Defaults.ScopeCategories.ApiDataWrite))
+                    }
+                }, 
             };
         
         public static IEnumerable<Client> Clients =>
@@ -31,7 +39,11 @@ namespace IdentityServer.Configuration
                     {
                         new Secret("secret".Sha256())
                     },
-                    AllowedScopes = { "dex-api" }
+                    AllowedScopes =
+                    {
+                        nameof(Defaults.ScopeCategories.ApiDataRead),
+                        nameof(Defaults.ScopeCategories.ApiDataWrite)
+                    }
                 },
                 // interactive ASP.NET Core MVC client
                 new Client
@@ -52,7 +64,8 @@ namespace IdentityServer.Configuration
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        nameof(Defaults.ScopeCategories.ApiDataRead)
                     }
                     // AllowOfflineAccess = true
                 }
