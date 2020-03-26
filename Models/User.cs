@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
@@ -14,6 +15,8 @@ namespace Models
 
         [Required]
         public string IdentityId { get; set; }
+
+        public List<Project> Projects { get; set; }
         
         public LinkedService[] Services { get; set; }
         

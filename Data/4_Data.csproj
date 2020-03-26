@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20200304083429_updateModels.Designer.cs" />
     <Compile Remove="Migrations\20200326115807_Initial.cs" />
     <Compile Remove="Migrations\20200326115807_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200326135520_FixedManyToOneUserProjects.cs" />
+    <Compile Remove="Migrations\20200326135520_FixedManyToOneUserProjects.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
