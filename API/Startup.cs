@@ -45,6 +45,7 @@ namespace API
                             maxRetryDelay: TimeSpan.FromSeconds(30),
                             errorNumbersToAdd: null);
                     });
+                
             });
 
             services.AddMvc(options => { options.EnableEndpointRouting = false; })
@@ -116,6 +117,7 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            UpdateDatabase(app);
             //IApplicationLifetime applicationLifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
 
             if (env.IsDevelopment())
@@ -196,16 +198,19 @@ namespace API
         }
 
         /// <summary>
-        /// Initializes the specified services.
+        /// Initializes the database
         /// </summary>
-        /// <param name="services">The services.</param>
-        public void Initialize(IServiceProvider services)
+        /// <param name="app"></param>
+        private static void UpdateDatabase(IApplicationBuilder app)
         {
-            // Create a new service scope to ensure the database context is correctly disposed when this methods returns.
-            using (IServiceScope scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
             {
-                ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                context.Database.Migrate();
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
+                }
             }
         }
     }

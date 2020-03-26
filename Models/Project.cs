@@ -1,13 +1,33 @@
-﻿namespace Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace Models
 {
     public class Project
     {
+        
         public int Id { get; set; }
-        public int UserId { get; set; }
+        
+        [Required]
         public User User { get; set; }
 
-        public string Title { get; set; }
+        [Required]
+        public string Name { get; set; }
+
         public string Description { get; set; }
-        public string Url { get; set; }
+        
+        [Required]
+        public string ShortDescription { get; set; }
+        
+        [Required]
+        public string Uri { get; set; }
+        
+        public string[] Contributors { get; set; }
+        
+        [Required]
+        public DateTime Created { get; set; }
+        
+        [Required]
+        public DateTime Updated { get; set; }
     }
 }

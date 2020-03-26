@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200304082656_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200304082656_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200304083429_updateModels.cs" />
+    <Compile Remove="Migrations\20200304083429_updateModels.Designer.cs" />
+    <Compile Remove="Migrations\20200326115807_Initial.cs" />
+    <Compile Remove="Migrations\20200326115807_Initial.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
@@ -12,6 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
