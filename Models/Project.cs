@@ -10,6 +10,7 @@ namespace Models
         
         [Required]
         public User User { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         public string Name { get; set; }

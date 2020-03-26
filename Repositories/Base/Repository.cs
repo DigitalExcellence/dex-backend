@@ -29,6 +29,7 @@ namespace Repositories.Base
         public virtual void Add(TEntity entity)
         {
             DbSet.Add(entity);
+            DbContext.SaveChanges();
         }
 
         public virtual void AddRange(IEnumerable<TEntity> entities)
