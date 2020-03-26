@@ -87,6 +87,13 @@
             <param name="projectService"></param>
             <param name="mapper"></param>
         </member>
+        <member name="M:API.Controllers.ProjectController.GetAllprojects">
+            <summary>
+            Get all projects.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ProjectController.GetProject(System.Int32)">
             <summary>
             Get a project.
