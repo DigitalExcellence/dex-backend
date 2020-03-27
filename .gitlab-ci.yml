@@ -11,10 +11,10 @@ build:
     artifacts:
       paths:
         - bin/
-    tag: backend
+    tags: [backend]
 
 test:
     stage: test
     script: 
         - "dotnet test"
-    tag: backend
+    tags: [backend]
