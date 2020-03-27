@@ -145,6 +145,13 @@
             This controller handles the user settings.
             </summary>
         </member>
+        <member name="M:API.Controllers.SearchController.SearchInternalProjects(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Search for projects
+            </summary>
+            <param name="query">The search query</param>
+            <returns>Search results</returns>
+        </member>
         <member name="M:API.Controllers.UserController.#ctor(Services.Services.IUserService,AutoMapper.IMapper)">
             <summary>
             Initialize a new instance of UserController
@@ -428,6 +435,29 @@
         <member name="P:API.Resources.UserResourceResult.ProfileUrl">
             <summary>
             This gets or sets the ProfileUrl
+            </summary>
+        </member>
+        <member name="T:API.Helpers.Seed">
+            <summary>
+            Class for helpers to seed data into the database
+            </summary>
+        </member>
+        <member name="M:API.Helpers.Seed.#ctor(AutoMapper.IMapper,Services.Services.IUserService,Services.Services.IProjectService)">
+            <summary>
+            Prepare for seed
+            </summary>
+            <param name="mapper"></param>
+            <param name="userService"></param>
+            <param name="projectService"></param>
+        </member>
+        <member name="M:API.Helpers.Seed.SeedUsers">
+            <summary>
+            Seed random users into the database using fake date from Bogus
+            </summary>
+        </member>
+        <member name="M:API.Helpers.Seed.SeedProjects">
+            <summary>
+            Seed random projects into the database using fake date from Bogus
             </summary>
         </member>
         <member name="M:API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
