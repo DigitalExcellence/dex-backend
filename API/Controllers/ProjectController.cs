@@ -12,7 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectService _projectService;
@@ -38,13 +38,13 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllprojects()
         {
 
-            IEnumerable<Project> projects = await _projectService.GetAll();
+            List<Project> projects = await _projectService.GetAllWithUsersAsync();
             if (projects == null)
             {
                 return NoContent();
             }
 
-            return Ok(projects);
+            return Ok(_mapper.Map<List<Project>, List<ProjectResourceResult>>(projects));
         }
 
 
@@ -67,7 +67,7 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            return Ok(project);
+            return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
         }
 
 

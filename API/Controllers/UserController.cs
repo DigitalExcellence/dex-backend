@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -48,7 +48,7 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            return Ok(user);
+            return Ok(_mapper.Map<User, UserResourceResult>(user));
         }
 
 

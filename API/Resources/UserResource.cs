@@ -1,4 +1,6 @@
-﻿namespace API.Resources
+﻿using System.Collections.Generic;
+
+namespace API.Resources
 {
     public class UserResource
     {
@@ -9,7 +11,7 @@
         
         public string IdentityId { get; set; }
         
-        public LinkedServiceResource[] Services { get; set; }
+        public List<LinkedServiceResource> Services { get; set; }
         
     }
 }

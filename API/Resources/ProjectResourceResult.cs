@@ -7,7 +7,7 @@ namespace API.Resources
         
         public int Id { get; set; }
         
-        public int UserId { get; set; }
+        public UserResourceResult User { get; set; }
 
         public string Name { get; set; }
         

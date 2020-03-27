@@ -18,10 +18,12 @@ namespace Models
 
         public List<Project> Projects { get; set; }
         
-        public LinkedService[] Services { get; set; }
+        public List<LinkedService> Services { get; set; }
         
         public User()
         {
+            Projects = new List<Project>();
+            Services = new List<LinkedService>();
         }
 
         public User(int userId) : this()

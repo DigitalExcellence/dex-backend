@@ -5,7 +5,6 @@ namespace API.Resources
     public class ProjectResource
     {
 
-        public int UserId { get; set; }
 
         public string Name { get; set; }
         
