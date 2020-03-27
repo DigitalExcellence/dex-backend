@@ -14,14 +14,14 @@ namespace Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
-            ValueConverter<string[], string> converter = new ValueConverter<string[], string>(
+            ValueConverter<List<string>, string> converter = new ValueConverter<List<string>, string>(
                 v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<string[]>(v));
+                v => JsonConvert.DeserializeObject<List<string>>(v));
 
-            ValueComparer<string[]> comparer = new ValueComparer<string[]>(
+            ValueComparer<List<string>> comparer = new ValueComparer<List<string>>(
                (l, r) => JsonConvert.SerializeObject(l) == JsonConvert.SerializeObject(r),
                v => v == null ? 0 : JsonConvert.SerializeObject(v).GetHashCode(),
-               v => JsonConvert.DeserializeObject<string[]>(JsonConvert.SerializeObject(v)));
+               v => JsonConvert.DeserializeObject<List<string>>(JsonConvert.SerializeObject(v)));
 
             builder.Property(p => p.Contributors).HasConversion(converter);
             builder.Property(p => p.Contributors).Metadata.SetValueConverter(converter);
