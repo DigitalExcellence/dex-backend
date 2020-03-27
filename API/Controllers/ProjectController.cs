@@ -1,7 +1,10 @@
+
 using System;
 using System.Threading.Tasks;
-using API.Resources;
+ using System.Collections.Generic;
+ using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
@@ -16,6 +19,7 @@ namespace API.Controllers
     public class ProjectController : ControllerBase
     {
 		private readonly IProjectService _projectService;
+		private readonly IUserService _userService;
 		private readonly IMapper _mapper;
 
 		/// <summary>
@@ -23,11 +27,29 @@ namespace API.Controllers
 		/// </summary>
 		/// <param name="projectService"></param>
 		/// <param name="mapper"></param>
-		public ProjectController(IProjectService projectService, IMapper mapper)
+		public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
 		{
 			_projectService = projectService;
-			_mapper = mapper;
+            _userService = userService;
+            _mapper = mapper;
 		}
+
+        /// <summary>
+        /// Get all projects.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet()]
+        public async Task<IActionResult> GetAllprojects()
+        {
+            IEnumerable<Project> projects = await _projectService.GetAll();
+            if (projects == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(projects);
+        }
 
 
         /// <summary>
@@ -35,7 +57,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{projectId}")]
-		//[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
+        //[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
 		public async Task<IActionResult> GetProject(int projectId)
 		{
 			if (projectId < 0)
@@ -57,23 +79,19 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-		public IActionResult CreateProject([FromBody]ProjectResource projectResource)
+		public async Task<IActionResult> CreateProjectAsync([FromBody]ProjectResource projectResource)
 		{
             if (projectResource == null) throw new ArgumentNullException(nameof(projectResource));
-            if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-			Project project = _mapper.Map<ProjectResource, Project>(projectResource);
-            User u = new User();
-            u.Name = "bob";
-            project.User = u;
+            Project project = _mapper.Map<ProjectResource, Project>(projectResource);
+            //TODO: When login in frontend is functioning, get the user from JWT information
+            User user = await _userService.GetUserAsync(1);
+            project.User = user;
+            project.UserId = user.Id;
 			try
 			{
-
-				_projectService.Add(project);
+                _projectService.Add(project);
 				_projectService.Save();
-				return Created(nameof(CreateProject), _mapper.Map<Project, ProjectResourceResult>(project));
+				return Created(nameof(CreateProjectAsync), _mapper.Map<Project, ProjectResourceResult>(project));
 			}
 			catch
 			{
@@ -91,12 +109,7 @@ namespace API.Controllers
         [HttpPut("{projectId}")]
 		public async Task<IActionResult> UpdateProject(int projectId, [FromBody]ProjectResource projectResource)
 		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			Project project = await _projectService.FindAsync(projectId);
+            Project project = await _projectService.FindAsync(projectId);
 			if (project == null)
 			{
 				return NoContent();

@@ -23,7 +23,7 @@ namespace Repositories
         {
 			return GetDbSet<Project>()
                 .Where(s => s.Id == id)
-                .Include(p => p.Contributors)
+                .Include(p => p.Collaborators)
                 .SingleOrDefaultAsync();
         }
     }

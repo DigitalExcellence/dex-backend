@@ -4,12 +4,12 @@
         <name>1_API</name>
     </assembly>
     <members>
-        <member name="T:API.Configuration.Config.SelfConfig">
+        <member name="T:API.Configuration.Config.FrontendConfig">
             <summary>
             
             </summary>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.FrontEnd">
+        <member name="P:API.Configuration.Config.FrontendConfig.FrontendUrl">
             <summary>
             Gets or sets the front end.
             </summary>
@@ -17,7 +17,7 @@
             The front end.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.ClientId">
+        <member name="P:API.Configuration.Config.FrontendConfig.ClientId">
             <summary>
             Gets or sets the client identifier.
             </summary>
@@ -25,7 +25,7 @@
             The client identifier.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.ClientSecret">
+        <member name="P:API.Configuration.Config.FrontendConfig.ClientSecret">
             <summary>
             Gets or sets the client secret.
             </summary>
@@ -54,7 +54,7 @@
             The original configuration.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.Self">
+        <member name="P:API.Configuration.Config.Frontend">
             <summary>
             Gets or sets the self.
             </summary>
@@ -101,6 +101,13 @@
             </summary>
             <param name="projectService"></param>
             <param name="mapper"></param>
+        </member>
+        <member name="M:API.Controllers.ProjectController.GetAllprojects">
+            <summary>
+            Get all projects.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
         </member>
         <member name="M:API.Controllers.ProjectController.GetProject(System.Int32)">
             <summary>
@@ -173,6 +180,29 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:API.Extensions.AuthorizeScopeAttribute.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="claimValue"></param>
+        </member>
+        <member name="T:API.Extensions.AuthorizeScopeFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:API.Extensions.AuthorizeScopeFilter.#ctor(System.Security.Claims.Claim)">
+            <summary>
+            
+            </summary>
+            <param name="claim"></param>
+        </member>
+        <member name="M:API.Extensions.AuthorizeScopeFilter.OnAuthorization(Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
         <member name="T:API.Extensions.AutoMapperExtensions">
             <summary>
             AutoMapperExtensions
@@ -227,23 +257,28 @@
             <param name="iUserPrincipal">The i user principal.</param>
             <returns></returns>
         </member>
-        <member name="T:API.Program">
+        <member name="T:API.Helpers.Seed">
             <summary>
-            the main starting point of the program.
+            Class for helpers to seed data into the database
             </summary>
         </member>
-        <member name="M:API.Program.Main(System.String[])">
+        <member name="M:API.Helpers.Seed.#ctor(AutoMapper.IMapper,Services.Services.IUserService,Services.Services.IProjectService)">
             <summary>
-            Main
+            Prepare for seed
             </summary>
-            <param name="args"></param>
+            <param name="mapper"></param>
+            <param name="userService"></param>
+            <param name="projectService"></param>
         </member>
-        <member name="M:API.Program.CreateHostBuilder(System.String[])">
+        <member name="M:API.Helpers.Seed.SeedUsers">
             <summary>
-            The kestrel builder.
+            Seed random users into the database using fake date from Bogus
             </summary>
-            <param name="args"></param>
-            <returns></returns>
+        </member>
+        <member name="M:API.Helpers.Seed.SeedProjects">
+            <summary>
+            Seed random projects into the database using fake date from Bogus
+            </summary>
         </member>
         <member name="T:API.Resources.ProjectResource">
             <summary>
@@ -265,14 +300,29 @@
             This gets or sets the Description
             </summary>
         </member>
-        <member name="P:API.Resources.ProjectResource.Url">
+        <member name="P:API.Resources.ProjectResource.ShortDescription">
             <summary>
-            This gets or sets the Url
+            This gets or sets the Short description of the project
             </summary>
         </member>
-        <member name="P:API.Resources.ProjectResource.collaborators">
+        <member name="P:API.Resources.ProjectResource.Uri">
+            <summary>
+            This gets or sets the Uri
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Collaborators">
             <summary>
             This gets or sets the collaborators
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Created">
+            <summary>
+            This gets or sets the Created time of the project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Updated">
+            <summary>
+            This gets or sets the Updated time of the project
             </summary>
         </member>
         <member name="T:API.Resources.ProjectResourceResult">
@@ -285,9 +335,9 @@
             This gets or sets the userId
             </summary>
         </member>
-        <member name="P:API.Resources.ProjectResourceResult.Title">
+        <member name="P:API.Resources.ProjectResourceResult.Name">
             <summary>
-            This gets or sets the Title
+            This gets or sets the Name
             </summary>
         </member>
         <member name="P:API.Resources.ProjectResourceResult.Description">
@@ -295,9 +345,29 @@
             This gets or sets the Description
             </summary>
         </member>
-        <member name="P:API.Resources.ProjectResourceResult.Url">
+        <member name="P:API.Resources.ProjectResourceResult.ShortDescription">
             <summary>
-            This gets or sets the Url
+            This gets or sets the Short Description
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Uri">
+            <summary>
+            This gets or sets the Uri
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Collaborators">
+            <summary>
+            This gets or sets the collaborators
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Created">
+            <summary>
+            This gets or sets the Created time of the project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Updated">
+            <summary>
+            This gets or sets the Updated time of the project
             </summary>
         </member>
         <member name="T:API.Resources.UserResource">
@@ -310,6 +380,21 @@
             This gets or sets the Name
             </summary>
         </member>
+        <member name="P:API.Resources.UserResource.Email">
+            <summary>
+            This gets or sets the email
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.IdentityId">
+            <summary>
+            This gets or sets the Identity Id from external identity provider
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.Services">
+            <summary>
+            This gets or sets the linked services
+            </summary>
+        </member>
         <member name="P:API.Resources.UserResource.ProfileUrl">
             <summary>
             This gets or sets the ProfileUrl
@@ -320,43 +405,30 @@
             the view model result of user.
             </summary>
         </member>
+        <member name="P:API.Resources.UserResourceResult.Id">
+            <summary>
+            This gets or sets the Id
+            </summary>
+        </member>
         <member name="P:API.Resources.UserResourceResult.Name">
             <summary>
             This gets or sets the Name
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.Email">
+            <summary>
+            This gets or sets the Email
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.IdentityId">
+            <summary>
+            This gets or sets the Identity Id of an external provider
             </summary>
         </member>
         <member name="P:API.Resources.UserResourceResult.ProfileUrl">
             <summary>
             This gets or sets the ProfileUrl
             </summary>
-        </member>
-        <member name="T:API.Startup">
-            <summary>
-            The main configuration of the app.
-            </summary>
-        </member>
-        <member name="P:API.Startup.Config">
-            <summary>
-            the class that holds the dynamic configuration.
-            </summary>
-        </member>
-        <member name="P:API.Startup.Environment">
-            <summary>
-            the class that holds the environment settings.
-            </summary>
-        </member>
-        <member name="M:API.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
-            <summary>
-            startup getter.
-            </summary>
-            <param name="configuration"></param>
-            <param name="environment"></param>
-        </member>
-        <member name="M:API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            the service configuration.
-            </summary>
-            <param name="services"></param>
         </member>
         <member name="M:API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
@@ -366,11 +438,17 @@
             <param name="app">The application.</param>
             <param name="env">The env.</param>
         </member>
-        <member name="M:API.Startup.Initialize(System.IServiceProvider)">
+        <member name="M:API.Startup.UpdateDatabase(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
-            Initializes the specified services.
+            Initializes the database
             </summary>
-            <param name="services">The services.</param>
+            <param name="app"></param>
+        </member>
+        <member name="M:API.Startup.SeedDatabase(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Initializes the database
+            </summary>
+            <param name="app"></param>
         </member>
     </members>
 </doc>

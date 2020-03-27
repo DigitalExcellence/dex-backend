@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
-using API.Resources;
+﻿using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -61,11 +62,6 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAccount([FromBody] UserResource accountResource)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             User user = _mapper.Map<UserResource, User>(accountResource);
             try
             {
@@ -88,11 +84,6 @@ namespace API.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             User user = await _userService.FindAsync(userId);
             if (user == null)
             {

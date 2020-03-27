@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace Models.Defaults
 {
@@ -11,32 +8,34 @@ namespace Models.Defaults
         {
             public const string BackendApplication = "BackendApplication";
             public const string Student = "Student";
-            public const string StudentAndBackendApps = BackendApplication + ", " + Student;
+            public const string Teacher = "Teacher";
         }
 
         public static class Claims
         {
-            public const string StudentPcn = "studentpcn";
-            public const string Classes = "classes";
-            public const string IsStudentRegistered = "is_student_registered";
         }
 
         public static class ScopeCategories
         {
-            [Description("This scope category gives read access to the Student Data namespace")]
-            public const string StudentDataRead = Scopes.StudentRead;
+            [Description("This scope category gives read access to the entire API namespace")]
+            public const string ApiDataRead = Scopes.ProjectRead + Scopes.UserRead;
 
-            [Description("This scope category gives access to the Student Data namespace")]
-            public const string StudentDataWrite = Scopes.StudentWrite;
+            [Description("This scope category gives write access to the entire API namespace")]
+            public const string ApiDataWrite = Scopes.ProjectWrite + Scopes.UserWrite;
         }
 
         public static class Scopes
         {
-            [Description("This scope gives read access to the student namespace")]
-            public const string StudentRead = "student:read";
+            [Description("This scope gives read access to the project namespace")]
+            public const string ProjectRead = "project:read";
 
-            [Description("This scope gives write access to the student namespace")]
-            public const string StudentWrite = "student:write";
+            [Description("This scope gives write access to the project namespace")]
+            public const string ProjectWrite = "project:write";
+            [Description("This scope gives read access to the user namespace")]
+            public const string UserRead = "user:read";
+
+            [Description("This scope gives write access to the user namespace")]
+            public const string UserWrite = "user:write";
         }
     }
 }

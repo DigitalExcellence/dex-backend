@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
@@ -8,6 +7,19 @@ namespace Models
     {
         public int Id { get; set; }
 
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string IdentityId { get; set; }
+
+        public List<Project> Projects { get; set; }
+        
+        public LinkedService[] Services { get; set; }
+        
         public User()
         {
         }
@@ -16,8 +28,7 @@ namespace Models
 		{
 			Id = userId;
 		}
-		public string Name { get; set; }
-		public string Email { get; set; }
+
 		public string ProfileUrl { get; set; }
 
     }
