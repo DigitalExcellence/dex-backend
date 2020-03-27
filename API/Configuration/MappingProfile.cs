@@ -13,6 +13,8 @@ namespace API.Configuration
 
             CreateMap<ProjectResource, Project>();
             CreateMap<Project, ProjectResourceResult>();
+
+            CreateMap<Project, SearchResultResource>();
         }
     }
 }
