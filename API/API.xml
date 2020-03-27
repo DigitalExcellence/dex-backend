@@ -4,12 +4,12 @@
         <name>1_API</name>
     </assembly>
     <members>
-        <member name="T:API.Configuration.Config.SelfConfig">
+        <member name="T:API.Configuration.Config.FrontendConfig">
             <summary>
             
             </summary>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.FrontendUrl">
+        <member name="P:API.Configuration.Config.FrontendConfig.FrontendUrl">
             <summary>
             Gets or sets the front end.
             </summary>
@@ -17,7 +17,7 @@
             The front end.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.ClientId">
+        <member name="P:API.Configuration.Config.FrontendConfig.ClientId">
             <summary>
             Gets or sets the client identifier.
             </summary>
@@ -25,7 +25,7 @@
             The client identifier.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.ClientSecret">
+        <member name="P:API.Configuration.Config.FrontendConfig.ClientSecret">
             <summary>
             Gets or sets the client secret.
             </summary>

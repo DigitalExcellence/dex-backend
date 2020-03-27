@@ -29,10 +29,10 @@ namespace Configuration
             [Required, Range(0, int.MaxValue)]
             public int DeleteTokenLifeTimeInDays { get; set; }
             /// <summary>
-            /// Gets or sets the identity appliations.
+            /// Gets or sets the identity applications.
             /// </summary>
             /// <value>
-            /// The identity appliations.
+            /// The identity applications.
             /// </value>
             public List<Dictionary<string, string>> IdentityApplications { get; set; }
         }

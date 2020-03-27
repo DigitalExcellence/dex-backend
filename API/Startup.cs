@@ -226,10 +226,10 @@ namespace API
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope())
             {
-                var projectService = serviceScope.ServiceProvider.GetService<IProjectService>();
-                var userService = serviceScope.ServiceProvider.GetService<IUserService>();
-                var mapper = serviceScope.ServiceProvider.GetService<IMapper>();
-                var seed = new Seed(mapper, userService, projectService);
+                var seed = new Seed(
+                    serviceScope.ServiceProvider.GetService<IMapper>(), 
+                    serviceScope.ServiceProvider.GetService<IUserService>(), 
+                    serviceScope.ServiceProvider.GetService<IProjectService>());
                 seed.SeedUsers();
                 seed.SeedProjects();
             }
