@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Services.Sources
+﻿namespace Services.Sources
 {
     public interface ISource
     {

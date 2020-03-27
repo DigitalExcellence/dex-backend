@@ -7,11 +7,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SearchController : ControllerBase
     {
         

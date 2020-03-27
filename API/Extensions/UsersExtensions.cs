@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Models.Defaults;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using Microsoft.AspNetCore.Http;
-using Models.Defaults;
 
 namespace API.Extensions
 {
