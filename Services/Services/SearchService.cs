@@ -29,6 +29,10 @@ namespace Services.Services
             return await _projectRepository.SearchAsync(query);
         }
         
+        // Search for projects
+        // @param query The search query
+        // @param skip The amount of results to skip
+        // @param take The amount of results to return
         public virtual async Task<IEnumerable<Project>> SearchInternalProjectsSkipTake(string query, int skip, int take)
         {
             return await _projectRepository.SearchSkipTakeAsync(query, skip, take);
