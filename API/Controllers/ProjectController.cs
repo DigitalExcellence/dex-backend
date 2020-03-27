@@ -1,14 +1,18 @@
 ﻿using System.Threading.Tasks;
-using API.Resources;
+ using System.Collections.Generic;
+ using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectService _projectService;
@@ -25,6 +29,24 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all projects.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet()]
+        public async Task<IActionResult> GetAllprojects()
+        {
+
+            IEnumerable<Project> projects = await _projectService.GetAll();
+            if (projects == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(projects);
+        }
+
 
         /// <summary>
         /// Get a project.
@@ -32,7 +54,6 @@ namespace API.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{projectId}")]
-        //[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
         public async Task<IActionResult> GetProject(int projectId)
         {
             if (projectId < 0)

@@ -1,7 +1,3 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Configuration;
 using API.Extensions;
 using API.Helpers;
@@ -16,10 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models;
 using Services.Services;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace API
 {
@@ -53,6 +52,8 @@ namespace API
             services.AddMvc(options => { options.EnableEndpointRouting = false; })
                 .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+            services.AddAuthorization();
+
             services.AddAutoMapper();
             services.AddPolicies();
 
@@ -62,30 +63,22 @@ namespace API
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(o =>
-                {
-                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Config.IdentityServer.IdentityUrl;
-                    options.Audience = "Dex-API";
                     options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        //ValidateActor = false,
-                        NameClaimType = "name",
-                        RoleClaimType = "role"
-                    };
+                    options.ApiName = Config.Frontend.ClientId;
+                    options.ApiSecret = Config.Frontend.ClientSecret;
+                    options.EnableCaching = true;
+
                 });
 
             services.AddCors();
 
             services.AddSwaggerGen(o =>
             {
-                o.SwaggerDoc("v1", new OpenApiInfo() {Title = "Dex API", Version = "v1"});
+                o.SwaggerDoc("v1", new OpenApiInfo() { Title = "Dex API", Version = "v1" });
                 o.IncludeXmlComments($@"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml");
                 o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
                 {
@@ -116,7 +109,6 @@ namespace API
             services.AddSingleton(Config);
             services.AddServicesAndRepositories();
         }
-
 
         /// <summary>
         /// Configures the specified application.
@@ -156,7 +148,7 @@ namespace API
 
             app.UseCors(c =>
             {
-                c.WithOrigins(Config.Self.FrontEnd);
+                c.WithOrigins(Config.Frontend.FrontendUrl);
                 c.SetIsOriginAllowedToAllowWildcardSubdomains();
                 c.AllowAnyHeader();
                 c.AllowAnyMethod();
@@ -234,42 +226,14 @@ namespace API
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope())
             {
-                var projectService = serviceScope.ServiceProvider.GetService<IProjectService>();
-                var userService = serviceScope.ServiceProvider.GetService<IUserService>();
-                var mapper = serviceScope.ServiceProvider.GetService<IMapper>();
-                var seed = new Seed(mapper, userService, projectService);
+                var seed = new Seed(
+                    serviceScope.ServiceProvider.GetService<IMapper>(), 
+                    serviceScope.ServiceProvider.GetService<IUserService>(), 
+                    serviceScope.ServiceProvider.GetService<IProjectService>());
                 seed.SeedUsers();
                 seed.SeedProjects();
             }
         }
 
-
-        //public IConfiguration Configuration { get; }
-
-        //// This method gets called by the runtime. Use this method to add services to the container.
-        //public void ConfigureServices(IServiceCollection services)
-        //{
-        //	services.AddControllers();
-        //}
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        //{
-        //	if (env.IsDevelopment())
-        //	{
-        //		app.UseDeveloperExceptionPage();
-        //	}
-
-        //	app.UseHttpsRedirection();
-
-        //	app.UseRouting();
-
-        //	app.UseAuthorization();
-
-        //	app.UseEndpoints(endpoints =>
-        //	{
-        //		endpoints.MapControllers();
-        //	});
-        //}
     }
 }

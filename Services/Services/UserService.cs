@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Models;
+﻿using Models;
 using Repositories;
 using Services.Base;
+using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -16,7 +13,7 @@ namespace Services.Services
 
     public class UserService : Service<User>, IUserService
     {
-        protected new IUserRepository Repository => (IUserRepository) base.Repository;
+        protected new IUserRepository Repository => (IUserRepository)base.Repository;
 
         public UserService(IUserRepository repository) : base(repository)
         {

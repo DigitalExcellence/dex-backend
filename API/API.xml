@@ -4,12 +4,12 @@
         <name>1_API</name>
     </assembly>
     <members>
-        <member name="T:API.Configuration.Config.SelfConfig">
+        <member name="T:API.Configuration.Config.FrontendConfig">
             <summary>
             
             </summary>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.FrontEnd">
+        <member name="P:API.Configuration.Config.FrontendConfig.FrontendUrl">
             <summary>
             Gets or sets the front end.
             </summary>
@@ -17,7 +17,7 @@
             The front end.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.ClientId">
+        <member name="P:API.Configuration.Config.FrontendConfig.ClientId">
             <summary>
             Gets or sets the client identifier.
             </summary>
@@ -25,7 +25,7 @@
             The client identifier.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.SelfConfig.ClientSecret">
+        <member name="P:API.Configuration.Config.FrontendConfig.ClientSecret">
             <summary>
             Gets or sets the client secret.
             </summary>
@@ -54,7 +54,7 @@
             The original configuration.
             </value>
         </member>
-        <member name="P:API.Configuration.Config.Self">
+        <member name="P:API.Configuration.Config.Frontend">
             <summary>
             Gets or sets the self.
             </summary>
@@ -86,6 +86,13 @@
             </summary>
             <param name="projectService"></param>
             <param name="mapper"></param>
+        </member>
+        <member name="M:API.Controllers.ProjectController.GetAllprojects">
+            <summary>
+            Get all projects.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
         </member>
         <member name="M:API.Controllers.ProjectController.GetProject(System.Int32)">
             <summary>
@@ -158,6 +165,29 @@
             </summary>
             <param name="studentId">The student identifier.</param>
             <returns></returns>
+        </member>
+        <member name="M:API.Extensions.AuthorizeScopeAttribute.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="claimValue"></param>
+        </member>
+        <member name="T:API.Extensions.AuthorizeScopeFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:API.Extensions.AuthorizeScopeFilter.#ctor(System.Security.Claims.Claim)">
+            <summary>
+            
+            </summary>
+            <param name="claim"></param>
+        </member>
+        <member name="M:API.Extensions.AuthorizeScopeFilter.OnAuthorization(Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
         </member>
         <member name="T:API.Extensions.AutoMapperExtensions">
             <summary>
