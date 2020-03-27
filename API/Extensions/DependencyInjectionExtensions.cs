@@ -26,6 +26,8 @@ namespace API.Extensions
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
 
+            services.AddScoped<ISearchService, SearchService>();
+
             return services;
         }
     }
