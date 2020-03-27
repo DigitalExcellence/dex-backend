@@ -236,29 +236,6 @@
             <param name="iUserPrincipal">The i user principal.</param>
             <returns></returns>
         </member>
-        <member name="T:API.Helpers.Seed">
-            <summary>
-            Class for helpers to seed data into the database
-            </summary>
-        </member>
-        <member name="M:API.Helpers.Seed.#ctor(AutoMapper.IMapper,Services.Services.IUserService,Services.Services.IProjectService)">
-            <summary>
-            Prepare for seed
-            </summary>
-            <param name="mapper"></param>
-            <param name="userService"></param>
-            <param name="projectService"></param>
-        </member>
-        <member name="M:API.Helpers.Seed.SeedUsers">
-            <summary>
-            Seed random users into the database using fake date from Bogus
-            </summary>
-        </member>
-        <member name="M:API.Helpers.Seed.SeedProjects">
-            <summary>
-            Seed random projects into the database using fake date from Bogus
-            </summary>
-        </member>
         <member name="M:API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             Configures the specified application.
@@ -268,12 +245,6 @@
             <param name="env">The env.</param>
         </member>
         <member name="M:API.Startup.UpdateDatabase(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
-            <summary>
-            Initializes the database
-            </summary>
-            <param name="app"></param>
-        </member>
-        <member name="M:API.Startup.SeedDatabase(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Initializes the database
             </summary>
