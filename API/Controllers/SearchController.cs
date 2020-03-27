@@ -34,7 +34,7 @@ namespace API.Controllers
         {
 
             if (query.Length < 0) return BadRequest("Query required");
-            if (page < 1) return BadRequest("Invalid page number");
+            if (page != null && page < 1) return BadRequest("Invalid page number");
             
             amountOnPage ??= 20;
             amountOnPage = amountOnPage <= 0 ? 20 : amountOnPage;
