@@ -6,17 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200304082656_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200304082656_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20200304083429_updateModels.cs" />
-    <Compile Remove="Migrations\20200304083429_updateModels.Designer.cs" />
-    <Compile Remove="Migrations\20200326115807_Initial.cs" />
-    <Compile Remove="Migrations\20200326115807_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200326135520_FixedManyToOneUserProjects.cs" />
-    <Compile Remove="Migrations\20200326135520_FixedManyToOneUserProjects.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
