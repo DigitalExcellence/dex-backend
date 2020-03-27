@@ -87,7 +87,7 @@ namespace _4_Data.Migrations
             modelBuilder.Entity("Models.Project", b =>
                 {
                     b.HasOne("Models.User", "User")
-                        .WithMany()
+                        .WithMany("Projects")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

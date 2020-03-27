@@ -1,5 +1,7 @@
 using API.Configuration;
 using API.Extensions;
+using API.Helpers;
+using AutoMapper;
 using Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,7 +47,6 @@ namespace API
                             maxRetryDelay: TimeSpan.FromSeconds(30),
                             errorNumbersToAdd: null);
                     });
-                
             });
 
             services.AddMvc(options => { options.EnableEndpointRouting = false; })
@@ -118,6 +119,7 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
+            SeedDatabase(app);
             //IApplicationLifetime applicationLifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
 
             if (env.IsDevelopment())
@@ -213,5 +215,25 @@ namespace API
                 }
             }
         }
+
+        /// <summary>
+        /// Initializes the database
+        /// </summary>
+        /// <param name="app"></param>
+        private static void SeedDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                var projectService = serviceScope.ServiceProvider.GetService<IProjectService>();
+                var userService = serviceScope.ServiceProvider.GetService<IUserService>();
+                var mapper = serviceScope.ServiceProvider.GetService<IMapper>();
+                var seed = new Seed(mapper, userService, projectService);
+                seed.SeedUsers();
+                seed.SeedProjects();
+            }
+        }
+
     }
 }
