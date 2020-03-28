@@ -123,6 +123,13 @@
             <param name="studentId">The student identifier.</param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.SearchController.SearchInternalProjects(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Search for projects
+            </summary>
+            <param name="query">The search query</param>
+            <returns>Search results</returns>
+        </member>
         <member name="M:API.Controllers.UserController.#ctor(Services.Services.IUserService,AutoMapper.IMapper)">
             <summary>
             Initialize a new instance of UserController
