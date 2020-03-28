@@ -24,10 +24,12 @@ namespace Models
         {
         }
 
-        public User(int userId) : this()
-        {
-            Id = userId;
-        }
-        
+		public User(int userId) : this()
+		{
+			Id = userId;
+		}
+
+		public string ProfileUrl { get; set; }
+
     }
 }

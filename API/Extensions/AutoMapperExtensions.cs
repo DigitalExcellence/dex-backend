@@ -1,4 +1,4 @@
-﻿using API.Configuration;
+using API.Configuration;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 

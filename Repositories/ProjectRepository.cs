@@ -19,10 +19,18 @@ namespace Repositories
         
     }
 
-    public class ProjectRepository : Repository<Project>, IProjectRepository
-    {
-        public ProjectRepository(DbContext dbContext) : base(dbContext)
+	public class ProjectRepository : Repository<Project>, IProjectRepository
+	{
+		public ProjectRepository(DbContext dbContext) : base(dbContext)
+		{
+		}
+
+        public override Task<Project> FindAsync(int id)
         {
+			return GetDbSet<Project>()
+                .Where(s => s.Id == id)
+                .Include(p => p.Collaborators)
+                .SingleOrDefaultAsync();
         }
 
         public virtual async Task<IEnumerable<Project>> SearchAsync(string query)

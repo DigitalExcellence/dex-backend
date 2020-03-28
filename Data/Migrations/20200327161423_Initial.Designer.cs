@@ -10,16 +10,39 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200326135758_Initial")]
+    [Migration("20200327161423_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Models.Collaborator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Collaborators");
+                });
 
             modelBuilder.Entity("Models.Project", b =>
                 {
@@ -27,9 +50,6 @@ namespace _4_Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Contributors")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -81,9 +101,19 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfileUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Models.Collaborator", b =>
+                {
+                    b.HasOne("Models.Project", null)
+                        .WithMany("Collaborators")
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("Models.Project", b =>

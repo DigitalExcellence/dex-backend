@@ -49,6 +49,7 @@ namespace API.Helpers
                 user.IdentityId = (i + 2).ToString();
                 if (_userService.GetAll().Result.Count() > 14) return;
                 _userService.Add(user);
+                _userService.Save();
             }
         }
 
@@ -74,6 +75,7 @@ namespace API.Helpers
                 project.Updated = DateTime.Now;
                 if (_projectService.GetAll().Result.Count() > 14) return;
                 _projectService.Add(project);
+                _projectService.Save();
             }
         }
     }

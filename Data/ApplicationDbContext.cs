@@ -8,6 +8,7 @@ namespace Data
     {
         public DbSet<User> User { get; set; }
         public DbSet<Project> Project { get; set; }
+        public DbSet<Collaborator> Collaborators { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
