@@ -80,14 +80,29 @@
             Validates this instance.
             </summary>
         </member>
-        <member name="M:API.Controllers.ProjectController.#ctor(Services.Services.IProjectService,AutoMapper.IMapper)">
+        <member name="T:API.Configuration.MappingProfile">
+            <summary>
+            This profiles adds every resource mapping.
+            </summary>
+        </member>
+        <member name="M:API.Configuration.MappingProfile.#ctor">
+            <summary>
+            Create a map for every resource mapping.
+            </summary>
+        </member>
+        <member name="T:API.Controllers.ProjectController">
+            <summary>
+            This controller handles the CRUD projects
+            </summary>
+        </member>
+        <member name="M:API.Controllers.ProjectController.#ctor(Services.Services.IProjectService,Services.Services.IUserService,AutoMapper.IMapper)">
             <summary>
             Initialize a new instance of ProjectController
             </summary>
             <param name="projectService"></param>
             <param name="mapper"></param>
         </member>
-        <member name="M:API.Controllers.ProjectController.GetAllprojects">
+        <member name="M:API.Controllers.ProjectController.GetAllProjects">
             <summary>
             Get all projects.
             </summary>
@@ -98,30 +113,32 @@
             <summary>
             Get a project.
             </summary>
-            <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.ProjectController.CreateProject(API.Resources.ProjectResource)">
+        <member name="M:API.Controllers.ProjectController.CreateProjectAsync(API.Resources.ProjectResource)">
             <summary>
-            Create a user account.
+            Create a Project.
             </summary>
-            <param name="accountResource"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.ProjectController.UpdateProject(System.Int32,API.Resources.ProjectResource)">
             <summary>
-            Update the User account.
+            Update the Project
             </summary>
-            <param name="userId"></param>
-            <param name="userResource"></param>
+            <param name="projectId"></param>
+            <param name="projectResource"></param>
             <returns></returns>
         </member>
         <member name="M:API.Controllers.ProjectController.DeleteProject(System.Int32)">
             <summary>
-            Gets the student information.
+            deletes a project.
             </summary>
-            <param name="studentId">The student identifier.</param>
             <returns></returns>
+        </member>
+        <member name="T:API.Controllers.SearchController">
+            <summary>
+            The controller that handles search requests
+            </summary>
         </member>
         <member name="M:API.Controllers.SearchController.SearchInternalProjects(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
@@ -129,6 +146,11 @@
             </summary>
             <param name="query">The search query</param>
             <returns>Search results</returns>
+        </member>
+        <member name="T:API.Controllers.UserController">
+            <summary>
+            This controller handles the user settings.
+            </summary>
         </member>
         <member name="M:API.Controllers.UserController.#ctor(Services.Services.IUserService,AutoMapper.IMapper)">
             <summary>
@@ -163,7 +185,6 @@
             <summary>
             Gets the student information.
             </summary>
-            <param name="studentId">The student identifier.</param>
             <returns></returns>
         </member>
         <member name="M:API.Extensions.AuthorizeScopeAttribute.#ctor(System.String)">
@@ -264,6 +285,156 @@
         <member name="M:API.Helpers.Seed.SeedProjects">
             <summary>
             Seed random projects into the database using fake date from Bogus
+            </summary>
+        </member>
+        <member name="T:API.Resources.ProjectResource">
+            <summary>
+            The view model of a project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.UserId">
+            <summary>
+            This gets or sets the userId
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Name">
+            <summary>
+            This gets or sets the Title
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Description">
+            <summary>
+            This gets or sets the Description
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.ShortDescription">
+            <summary>
+            This gets or sets the Short description of the project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Uri">
+            <summary>
+            This gets or sets the Uri
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Collaborators">
+            <summary>
+            This gets or sets the collaborators
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Created">
+            <summary>
+            This gets or sets the Created time of the project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResource.Updated">
+            <summary>
+            This gets or sets the Updated time of the project
+            </summary>
+        </member>
+        <member name="T:API.Resources.ProjectResourceResult">
+            <summary>
+            The view model result of project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.UserId">
+            <summary>
+            This gets or sets the userId
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Name">
+            <summary>
+            This gets or sets the Name
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Description">
+            <summary>
+            This gets or sets the Description
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.ShortDescription">
+            <summary>
+            This gets or sets the Short Description
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Uri">
+            <summary>
+            This gets or sets the Uri
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Collaborators">
+            <summary>
+            This gets or sets the collaborators
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Created">
+            <summary>
+            This gets or sets the Created time of the project
+            </summary>
+        </member>
+        <member name="P:API.Resources.ProjectResourceResult.Updated">
+            <summary>
+            This gets or sets the Updated time of the project
+            </summary>
+        </member>
+        <member name="T:API.Resources.UserResource">
+            <summary>
+            The view model of a user
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.Name">
+            <summary>
+            This gets or sets the Name
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.Email">
+            <summary>
+            This gets or sets the email
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.IdentityId">
+            <summary>
+            This gets or sets the Identity Id from external identity provider
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.Services">
+            <summary>
+            This gets or sets the linked services
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResource.ProfileUrl">
+            <summary>
+            This gets or sets the ProfileUrl
+            </summary>
+        </member>
+        <member name="T:API.Resources.UserResourceResult">
+            <summary>
+            the view model result of user.
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.Id">
+            <summary>
+            This gets or sets the Id
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.Name">
+            <summary>
+            This gets or sets the Name
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.Email">
+            <summary>
+            This gets or sets the Email
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.IdentityId">
+            <summary>
+            This gets or sets the Identity Id of an external provider
+            </summary>
+        </member>
+        <member name="P:API.Resources.UserResourceResult.ProfileUrl">
+            <summary>
+            This gets or sets the ProfileUrl
             </summary>
         </member>
         <member name="M:API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">

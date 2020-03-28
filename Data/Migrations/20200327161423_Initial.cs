@@ -15,7 +15,8 @@ namespace _4_Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    IdentityId = table.Column<string>(nullable: false)
+                    IdentityId = table.Column<string>(nullable: false),
+                    ProfileUrl = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,7 +34,6 @@ namespace _4_Data.Migrations
                     Description = table.Column<string>(nullable: true),
                     ShortDescription = table.Column<string>(nullable: false),
                     Uri = table.Column<string>(nullable: false),
-                    Contributors = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     Updated = table.Column<DateTime>(nullable: false)
                 },
@@ -48,6 +48,32 @@ namespace _4_Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Collaborators",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(nullable: true),
+                    Role = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Collaborators", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Collaborators_Project_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Project",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Collaborators_ProjectId",
+                table: "Collaborators",
+                column: "ProjectId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Project_UserId",
                 table: "Project",
@@ -56,6 +82,9 @@ namespace _4_Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Collaborators");
+
             migrationBuilder.DropTable(
                 name: "Project");
 

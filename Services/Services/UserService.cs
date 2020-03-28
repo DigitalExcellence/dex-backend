@@ -1,15 +1,17 @@
-﻿using Models;
+﻿using System;
+using Models;
 using Repositories;
 using Services.Base;
 using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    public interface IUserService : IService<User>
-    {
-        Task<User> GetUserAsync(int userId);
-        Task<bool> RemoveUserAsync(int userId);
-    }
+	public interface IUserService : IService<User>
+	{
+		Task<User> GetUserAsync(int userId);
+		Task<bool> RemoveUserAsync(int userId);
+		User GetUserByUsername(string upn);
+	}
 
     public class UserService : Service<User>, IUserService
     {
@@ -24,9 +26,14 @@ namespace Services.Services
             return await Repository.GetUserAsync(userId);
         }
 
-        public async Task<bool> RemoveUserAsync(int userId)
-        {
-            return await Repository.RemoveUserAsync(userId);
-        }
-    }
+		public async Task<bool> RemoveUserAsync(int userId)
+		{
+			return await Repository.RemoveUserAsync(userId);
+		}
+
+		public User GetUserByUsername(string upn)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

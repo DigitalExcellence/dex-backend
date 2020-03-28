@@ -227,8 +227,8 @@ namespace API
                 .CreateScope())
             {
                 var seed = new Seed(
-                    serviceScope.ServiceProvider.GetService<IMapper>(), 
-                    serviceScope.ServiceProvider.GetService<IUserService>(), 
+                    serviceScope.ServiceProvider.GetService<IMapper>(),
+                    serviceScope.ServiceProvider.GetService<IUserService>(),
                     serviceScope.ServiceProvider.GetService<IProjectService>());
                 seed.SeedUsers();
                 seed.SeedProjects();
