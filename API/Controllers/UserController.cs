@@ -48,7 +48,7 @@ namespace API.Controllers
             User user = await _userService.FindAsync(userId);
             if (user == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
             return Ok(user);
@@ -88,7 +88,7 @@ namespace API.Controllers
             User user = await _userService.FindAsync(userId);
             if (user == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
             _mapper.Map<UserResource, User>(userResource, user);
@@ -107,9 +107,9 @@ namespace API.Controllers
 		public async Task<IActionResult> DeleteAccount(int userId)
 		{
 			if(await _userService.FindAsync(userId) == null)
-			{
-				return NoContent();
-			}
+            {
+                return NotFound();
+            }
 
 			await _userService.RemoveAsync(userId);
 			_userService.Save();
