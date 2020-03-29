@@ -1,4 +1,6 @@
-﻿namespace API.Resources
+﻿using System.Collections.Generic;
+
+namespace API.Resources
 {
     /// <summary>
     /// The view model of a user
@@ -17,6 +19,7 @@
         /// This gets or sets the Identity Id from external identity provider
         /// </summary>
         public string IdentityId { get; set; }
+        
         /// <summary>
         /// This gets or sets the linked services
         /// </summary>

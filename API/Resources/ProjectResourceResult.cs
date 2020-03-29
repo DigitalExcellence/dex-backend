@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Models;
 
 namespace API.Resources
 {
@@ -10,6 +9,9 @@ namespace API.Resources
     public class ProjectResourceResult
     {
         public int Id { get; set; }
+        
+        public UserResourceResult User { get; set; }
+
         /// <summary>
         /// This gets or sets the userId
         /// </summary>
@@ -33,7 +35,7 @@ namespace API.Resources
         /// <summary>
         /// This gets or sets the collaborators
         /// </summary>
-        public ICollection<Collaborator> Collaborators { get; set; }
+        public ICollection<CollaboratorResourceResult> Collaborators { get; set; }
         /// <summary>
         /// This gets or sets the Created time of the project
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using Data.Configurations;
+using Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -21,6 +22,10 @@ namespace Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
 
+            // Database seeding for demo
+            modelBuilder.SeedCollaborators(
+                modelBuilder.SeedProjects(
+                    modelBuilder.SeedUsers()));
         }
     }
 }

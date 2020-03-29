@@ -17,11 +17,14 @@ namespace API.Configuration
 			CreateMap<UserResource, User>();
 			CreateMap<User, UserResourceResult>();
 
-            CreateMap<ProjectResource, Project>();
-            CreateMap<Project, ProjectResourceResult>();
+			CreateMap<ProjectResource, Project>();
+			CreateMap<Project, ProjectResourceResult>();
 
-            CreateMap<Project, SearchResultResource>();
-        }
+			CreateMap<CollaboratorResource, Collaborator>();
+			CreateMap<Collaborator, CollaboratorResourceResult>();
+
+			CreateMap<Project, SearchResultResource>();
+		}
 
 	}
 }

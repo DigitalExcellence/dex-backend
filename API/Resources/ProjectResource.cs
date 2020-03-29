@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Models;
 
 namespace API.Resources
 {
@@ -32,7 +31,7 @@ namespace API.Resources
         /// <summary>
         /// This gets or sets the collaborators
         /// </summary>
-        public ICollection<Collaborator> Collaborators { get; set; }
+        public ICollection<CollaboratorResource> Collaborators { get; set; }
         /// <summary>
         /// This gets or sets the Created time of the project
         /// </summary>

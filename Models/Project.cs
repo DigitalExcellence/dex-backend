@@ -20,7 +20,8 @@ namespace Models
 
         [Required]
         public string ShortDescription { get; set; }
-        public ICollection<Collaborator> Collaborators { get; set; }
+        
+        public List<Collaborator> Collaborators { get; set; }
 
         [Required]
         public string Uri { get; set; }
@@ -30,5 +31,10 @@ namespace Models
         
         [Required]
         public DateTime Updated { get; set; }
+
+        public Project()
+        {
+            Collaborators = new List<Collaborator>();
+        }
     }
 }

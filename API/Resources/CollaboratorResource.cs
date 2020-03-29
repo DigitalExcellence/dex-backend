@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Models
+namespace API.Resources
 {
-    public class Collaborator
+    public class CollaboratorResource
     {
-        public int Id { get; set; }
         public string FullName { get; set; }
         public string Role { get; set; }
-        public int ProjectId { get; set; }
     }
 }
