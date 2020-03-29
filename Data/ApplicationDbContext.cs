@@ -1,4 +1,5 @@
 ﻿using Data.Configurations;
+using Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -8,6 +9,7 @@ namespace Data
     {
         public DbSet<User> User { get; set; }
         public DbSet<Project> Project { get; set; }
+        public DbSet<Collaborator> Collaborators { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -20,6 +22,10 @@ namespace Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
 
+            // Database seeding for demo
+            modelBuilder.SeedCollaborators(
+                modelBuilder.SeedProjects(
+                    modelBuilder.SeedUsers()));
         }
     }
 }

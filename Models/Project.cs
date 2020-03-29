@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models
@@ -16,19 +17,24 @@ namespace Models
         public string Name { get; set; }
 
         public string Description { get; set; }
-        
+
         [Required]
         public string ShortDescription { get; set; }
         
+        public List<Collaborator> Collaborators { get; set; }
+
         [Required]
         public string Uri { get; set; }
-        
-        public string[] Contributors { get; set; }
-        
+
         [Required]
         public DateTime Created { get; set; }
         
         [Required]
         public DateTime Updated { get; set; }
+
+        public Project()
+        {
+            Collaborators = new List<Collaborator>();
+        }
     }
 }

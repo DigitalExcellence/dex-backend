@@ -1,7 +1,5 @@
 using API.Configuration;
 using API.Extensions;
-using API.Helpers;
-using AutoMapper;
 using Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -118,10 +116,6 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            UpdateDatabase(app);
-            SeedDatabase(app);
-            //IApplicationLifetime applicationLifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
-
             if (env.IsDevelopment())
             {
                 //app.UseBrowserLink();
@@ -198,42 +192,5 @@ namespace API
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-
-        /// <summary>
-        /// Initializes the database
-        /// </summary>
-        /// <param name="app"></param>
-        private static void UpdateDatabase(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
-                {
-                    context.Database.Migrate();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initializes the database
-        /// </summary>
-        /// <param name="app"></param>
-        private static void SeedDatabase(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                var seed = new Seed(
-                    serviceScope.ServiceProvider.GetService<IMapper>(), 
-                    serviceScope.ServiceProvider.GetService<IUserService>(), 
-                    serviceScope.ServiceProvider.GetService<IProjectService>());
-                seed.SeedUsers();
-                seed.SeedProjects();
-            }
-        }
-
     }
 }
