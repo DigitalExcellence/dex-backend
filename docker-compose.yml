@@ -1,0 +1,12 @@
+version: '3.6'
+services:
+  api:
+    build: ./API
+    ports:
+      - 5001:5001
+    depends_on:
+      - db
+  db:
+    build: ./Data
+    ports:
+      - 1433:1433
