@@ -23,7 +23,9 @@ namespace Data
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
 
             // Database seeding for demo
-            modelBuilder.SeedProjects(modelBuilder.SeedUsers());
+            modelBuilder.SeedCollaborators(
+                modelBuilder.SeedProjects(
+                    modelBuilder.SeedUsers()));
         }
     }
 }

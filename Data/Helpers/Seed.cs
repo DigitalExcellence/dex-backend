@@ -37,27 +37,46 @@ namespace Data.Helpers
         /// <summary>
         /// Seed random projects into the database using fake date from Bogus
         /// </summary>
-        public static void SeedProjects(this ModelBuilder modelBuilder, List<User> users)
+        public static List<Project> SeedProjects(this ModelBuilder modelBuilder, List<User> users)
         {
-            if (users.Count < 1) return;
-
+            if (users.Count < 1) return null;
+            List<Project> projects = new List<Project>();
             Random r = new Random();
             for (var i = 0; i < 30; i++)
             {
                 var user = users[r.Next(0, users.Count - 1)];
-
                 var projectToFake = new Faker<Project>()
                     .RuleFor(s => s.Id, i+1)
                     .RuleFor(s => s.UserId, user.Id)
                     .RuleFor(s => s.Uri, f => f.Internet.Url())
                     .RuleFor(s => s.Name, f => f.Commerce.ProductName())
-                    .RuleFor(s => s.Description, f => f.Lorem.Letter(150))
-                    .RuleFor(s => s.ShortDescription, f => f.Lorem.Letter(30));
+                    .RuleFor(s => s.Description, f => f.Lorem.Sentences(10))
+                    .RuleFor(s => s.ShortDescription, f => f.Lorem.Sentences(1));
                 var project = projectToFake.Generate();
 
                 project.Created = DateTime.Now.AddDays(-2);
                 project.Updated = DateTime.Now;
+                projects.Add(project);
                 modelBuilder.Entity<Project>().HasData(project);
+            }
+
+            return projects;
+        }
+
+        public static void SeedCollaborators(this ModelBuilder modelBuilder, List<Project> projects)
+        {
+            foreach (var project in projects)
+            {
+                var collaboratorToFake = new Faker<Collaborator>()
+                    .RuleFor(s => s.Id, f => f.Random.Number(1, 9999))
+                    .RuleFor(c => c.FullName, f => f.Name.FullName())
+                    .RuleFor(c => c.Role, f => f.Name.JobTitle());
+
+                var collaborator = collaboratorToFake.Generate();
+                var collaborator2 = collaboratorToFake.Generate();
+                collaborator.ProjectId = project.Id;
+                collaborator2.ProjectId = project.Id;
+                modelBuilder.Entity<Collaborator>().HasData(collaborator, collaborator2);
             }
         }
     }
