@@ -3,10 +3,26 @@ services:
   api:
     build: ./API
     ports:
-      - 5001:5001
+      - 80:80
     depends_on:
       - db
+    networks:
+      - mysql-network
+    environment:
+      - ConnectionStrings__DefaultConnection= Server=172.16.238.2;Database=master;User=sa;Password=Dexcelence!1;
+
   db:
     build: ./Data
     ports:
       - 1433:1433
+    networks:
+      mysql-network:
+        ipv4_address: 172.16.238.2
+
+networks:
+  mysql-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24 
