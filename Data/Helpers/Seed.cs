@@ -63,6 +63,9 @@ namespace Data.Helpers
             return projects;
         }
 
+        /// <summary>
+        /// Seed random Collaborators into the database using fake date from Bogus
+        /// </summary>
         public static void SeedCollaborators(this ModelBuilder modelBuilder, List<Project> projects)
         {
             foreach (var project in projects)
