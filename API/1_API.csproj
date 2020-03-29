@@ -5,7 +5,15 @@
     <RootNamespace>API</RootNamespace>
     <DocumentationFile>.\API.xml</DocumentationFile>
     <Company>Digital Excellence Fontys</Company>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Resources\Project\**" />
+    <Content Remove="Resources\Project\**" />
+    <EmbeddedResource Remove="Resources\Project\**" />
+    <None Remove="Resources\Project\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />

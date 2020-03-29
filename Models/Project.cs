@@ -17,15 +17,15 @@ namespace Models
         public string Name { get; set; }
 
         public string Description { get; set; }
-        
+
         [Required]
         public string ShortDescription { get; set; }
         
+        public List<Collaborator> Collaborators { get; set; }
+
         [Required]
         public string Uri { get; set; }
-        
-        public List<string> Contributors { get; set; }
-        
+
         [Required]
         public DateTime Created { get; set; }
         
@@ -34,7 +34,7 @@ namespace Models
 
         public Project()
         {
-            Contributors = new List<string>();
+            Collaborators = new List<Collaborator>();
         }
     }
 }

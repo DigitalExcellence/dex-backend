@@ -1,146 +1,144 @@
-﻿using System.Threading.Tasks;
- using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
  using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    //[Authorize]
-    public class ProjectController : ControllerBase
-    {
-        private readonly IProjectService _projectService;
-        private readonly IMapper _mapper;
+	/// <summary>
+	/// This controller handles the CRUD projects
+	/// </summary>
+	[Route("api/[controller]")]
+	[ApiController]
+	//[Authorize]
+	public class ProjectController : ControllerBase
+	{
+		private readonly IProjectService _projectService;
+		private readonly IUserService _userService;
+		private readonly IMapper _mapper;
 
-        /// <summary>
-        /// Initialize a new instance of ProjectController
-        /// </summary>
-        /// <param name="projectService"></param>
-        /// <param name="mapper"></param>
-        public ProjectController(IProjectService projectService, IMapper mapper)
-        {
-            _projectService = projectService;
-            _mapper = mapper;
-        }
+		/// <summary>
+		/// Initialize a new instance of ProjectController
+		/// </summary>
+		/// <param name="projectService"></param>
+		/// <param name="mapper"></param>
+		public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
+		{
+			_projectService = projectService;
+			_userService = userService;
+			_mapper = mapper;
+		}
 
-        /// <summary>
-        /// Get all projects.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet()]
-        public async Task<IActionResult> GetAllprojects()
-        {
+		/// <summary>
+		/// Get all projects.
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		[HttpGet()]
+		public async Task<IActionResult> GetAllProjects()
+		{
+			List<Project> projects = await _projectService.GetAllWithUsersAsync();
+			if (projects == null)
+			{
+				return NotFound();
+			}
 
-            List<Project> projects = await _projectService.GetAllWithUsersAsync();
-            if (projects == null)
-            {
-                return NoContent();
-            }
-
-            return Ok(_mapper.Map<List<Project>, List<ProjectResourceResult>>(projects));
-        }
-
-
-        /// <summary>
-        /// Get a project.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        [HttpGet("{projectId}")]
-        public async Task<IActionResult> GetProject(int projectId)
-        {
-            if (projectId < 0)
-            {
-                return BadRequest("Invalid project Id");
-            }
-
-            Project project = await _projectService.FindAsync(projectId);
-            if (project == null)
-            {
-                return NoContent();
-            }
-
-            return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
-        }
+			return Ok(_mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
+		}
 
 
-        /// <summary>
-        /// Create a user account.
-        /// </summary>
-        /// <param name="accountResource"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public IActionResult CreateProject([FromBody] ProjectResource projectResource)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+		/// <summary>
+		/// Get a project.
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("{projectId}")]
+		//[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
+		public async Task<IActionResult> GetProject(int projectId)
+		{
+			if (projectId < 0)
+			{
+				return BadRequest("Invalid project Id");
+			}
 
-            Project project = _mapper.Map<ProjectResource, Project>(projectResource);
-            try
-            {
-                _projectService.Add(project);
-                _projectService.Save();
-                return Created(nameof(CreateProject), _mapper.Map<Project, ProjectResourceResult>(project));
-            }
-            catch
-            {
-                return BadRequest("Could not Create the User account");
-            }
-        }
+			Project project = await _projectService.FindAsync(projectId);
+			if (project == null)
+			{
+				return NoContent();
+			}
 
-        /// <summary>
-        /// Update the User account.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="userResource"></param>
-        /// <returns></returns>
-        [HttpPut("{projectId}")]
-        public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+			return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
+		}
 
-            Project project = await _projectService.FindAsync(projectId);
-            if (project == null)
-            {
-                return NoContent();
-            }
+		/// <summary>
+		/// Create a Project.
+		/// </summary>
+		/// <returns></returns>
+		[HttpPost]
+		public async Task<IActionResult> CreateProjectAsync([FromBody]ProjectResource projectResource)
+		{
+			if (projectResource == null)
+			{
+				return BadRequest("Project is null");
+			}
+			Project project = _mapper.Map<ProjectResource, Project>(projectResource);
+			//TODO: When login in frontend is functioning, get the user from JWT information
+			User user = await _userService.GetUserAsync(1);
+			project.User = user;
+			project.UserId = user.Id;
+			try
+			{
+				_projectService.Add(project);
+				_projectService.Save();
+				return Created(nameof(CreateProjectAsync), _mapper.Map<Project, ProjectResourceResult>(project));
+			}
+			catch
+			{
+				return BadRequest("Could not Create the Project");
+			}
+		}
 
-            _mapper.Map<ProjectResource, Project>(projectResource, project);
+		/// <summary>
+		/// Update the Project
+		/// </summary>
+		/// <param name="projectId"></param>
+		/// <param name="projectResource"></param>
+		/// <returns></returns>
+		[HttpPut("{projectId}")]
+		public async Task<IActionResult> UpdateProject(int projectId, [FromBody]ProjectResource projectResource)
+		{
+			Project project = await _projectService.FindAsync(projectId);
+			if (project == null)
+			{
+				return NotFound();
+			}
 
-            _projectService.Update(project);
-            _projectService.Save();
+			_mapper.Map<ProjectResource, Project>(projectResource, project);
 
-            return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
-        }
+			_projectService.Update(project);
+			_projectService.Save();
 
-        /// <summary>
-        /// Gets the student information.
-        /// </summary>
-        /// <param name="studentId">The student identifier.</param>
-        /// <returns></returns>
-        [HttpDelete("{projectId}")]
-        public async Task<IActionResult> DeleteProject(int projectId)
-        {
-            if (await _projectService.FindAsync(projectId) == null)
-            {
-                return NoContent();
-            }
+			return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
+		}
 
-            await _projectService.RemoveAsync(projectId);
-            _projectService.Save();
-            return Ok();
-        }
-    }
+		/// <summary>
+		/// deletes a project.
+		/// </summary>
+		/// <returns></returns>
+		[HttpDelete("{projectId}")]
+		public async Task<IActionResult> DeleteProject(int projectId)
+		{
+			if (await _projectService.FindAsync(projectId) == null)
+			{
+				return NotFound();
+			}
+			await _projectService.RemoveAsync(projectId);
+			_projectService.Save();
+			return Ok();
+		}
+	}
 }
