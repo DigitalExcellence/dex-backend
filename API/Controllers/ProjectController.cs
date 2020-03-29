@@ -65,10 +65,10 @@ namespace API.Controllers
 				return BadRequest("Invalid project Id");
 			}
 
-			Project project = await _projectService.FindAsync(projectId);
+			Project project = await _projectService.FindWithUserAndCollaboratorsAsync(projectId);
 			if (project == null)
 			{
-				return NoContent();
+				return NotFound();
 			}
 
 			return Ok(_mapper.Map<Project, ProjectResourceResult>(project));

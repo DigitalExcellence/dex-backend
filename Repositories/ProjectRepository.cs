@@ -17,6 +17,8 @@ namespace Repositories
 		Task<IEnumerable<Project>> SearchSkipTakeAsync(String query, int skip, int take);
 		
 		Task<int> SearchCountAsync(String query);
+
+		Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 	}
 
 	public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -87,6 +89,15 @@ namespace Repositories
 					p.Id.ToString().Equals(query) ||
 					p.User.Name.Contains(query)
 				).CountAsync();
+		}
+
+		public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+		{
+			return GetDbSet<Project>()
+				.Include(project => project.User)
+				.Include(project => project.Collaborators)
+				.Where(project => project.Id == id)
+				.FirstOrDefaultAsync();
 		}
 	}
 }
