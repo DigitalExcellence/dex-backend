@@ -19,7 +19,8 @@ namespace Services.Services
         private ISourceManagerService _sourceManagerService;
         private IProjectService _projectService;
 
-        public SearchService(ISourceManagerService sourceManagerService, IProjectService projectService)
+        public SearchService(ISourceManagerService sourceManagerService, 
+            IProjectService projectService)
         {
             _sourceManagerService = sourceManagerService;
             _projectService = projectService;

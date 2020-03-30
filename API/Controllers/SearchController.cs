@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.Resources;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Search;
 using Services.Services;
 using System.Collections.Generic;
@@ -14,21 +16,21 @@ namespace API.Controllers
     public class SearchController : ControllerBase
     {
         private readonly ISearchService _searchService;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Initialise a new instance of SearchController
         /// </summary>
-        /// <param name="searchService"></param>
-        public SearchController(ISearchService searchService)
+        public SearchController(ISearchService searchService, 
+            IMapper mapper)
         {
             _searchService = searchService;
+            _mapper = mapper;
         }
 
         /// <summary>
         /// Search in internal sources
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Internal([FromBody] SearchRequest query)
         {
@@ -36,27 +38,25 @@ namespace API.Controllers
 
             if(results == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
-            return Ok(results);
+            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResult>>(results));
         }
 
         /// <summary>
         /// Search in external sources
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         public async Task<IActionResult> External([FromBody] SearchRequest request)
         {
             IEnumerable<SearchResult> results = await _searchService.SearchExternallyAsync(request);
 
             if (results == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
-            return Ok(results);
+            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResult>>(results));
         }
 
     }

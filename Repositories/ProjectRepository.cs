@@ -12,7 +12,7 @@ namespace Repositories
     public interface IProjectRepository : IRepository<Project>
     {
         Task<Project> GetProjectAsync(int projectId);
-        Task<bool> RemoveProjectAsync(int projectId);
+        void RemoveProjectAsync(int projectId);
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -28,7 +28,7 @@ namespace Repositories
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<bool> RemoveProjectAsync(int projectId)
+        public async void RemoveProjectAsync(int projectId)
         {
             Project project = await GetDbSet<Project>()
                  .Where(s => s.Id == projectId)
@@ -37,10 +37,7 @@ namespace Repositories
             if (project != null)
             {
                 GetDbSet<Project>().Remove(project);
-                return true;
             }
-
-            return false;
         }
     }
 }
