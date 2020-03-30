@@ -26,7 +26,7 @@ namespace Services.Services
             IList<SearchResult> results = new List<SearchResult>();
             foreach(ISource source in query.Sources)
             {
-                SearchResult result = await source.Search(query);
+                SearchResult result = await source.Search(query.QueryParameters);
                 results.Add(result);
             }
 

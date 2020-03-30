@@ -7,10 +7,17 @@ namespace Search
 {
     public class SearchRequest
     {
+        /// <summary>
+        /// Query parameters to search with
+        /// </summary>
         public IEnumerable<SearchQueryParameter> QueryParameters { get; }
-        public IEnumerable<SourceType> Sources { get; }
 
-        public SearchRequest(IEnumerable<SearchQueryParameter> queryParameters, IEnumerable<SourceType> sources)
+        /// <summary>
+        /// List of sources to search in
+        /// </summary>
+        public IEnumerable<ISource> Sources { get; }
+
+        public SearchRequest(IEnumerable<SearchQueryParameter> queryParameters, IEnumerable<ISource> sources)
         {
             this.QueryParameters = queryParameters;
             this.Sources = sources;

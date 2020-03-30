@@ -17,10 +17,12 @@ namespace Services.Services
     public class SearchService : ISearchService
     {
         private ISourceManagerService _sourceManagerService;
+        private IProjectService _projectService;
 
-        public SearchService(ISourceManagerService sourceManagerService)
+        public SearchService(ISourceManagerService sourceManagerService, IProjectService projectService)
         {
             _sourceManagerService = sourceManagerService;
+            _projectService = projectService;
         }
 
         public async Task<IEnumerable<SearchResult>> SearchExternallyAsync(SearchRequest request)
@@ -30,7 +32,7 @@ namespace Services.Services
 
         public async Task<IEnumerable<SearchResult>> SearchInternallyAsync(SearchRequest request)
         {
-            throw new NotImplementedException();
+            return await _projectService.SearchAsync(request);
         }
     }
 }

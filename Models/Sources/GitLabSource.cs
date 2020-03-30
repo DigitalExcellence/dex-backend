@@ -8,7 +8,7 @@ namespace Sources
 {
     public class GitLabSource : ISource
     {
-        public Task<SearchResult> Search(SearchRequest request)
+        public Task<SearchResult> Search(IEnumerable<SearchQueryParameter> parameters)
         {
             throw new NotImplementedException();
         }
