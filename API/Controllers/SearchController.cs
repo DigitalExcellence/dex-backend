@@ -32,16 +32,16 @@ namespace API.Controllers
         /// Search in internal sources
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> Internal([FromBody] SearchRequest query)
+        public IActionResult Internal([FromBody] SearchRequest query)
         {
-            IEnumerable<SearchResult> results = await _searchService.SearchInternallyAsync(query);
+            IEnumerable<SearchResult> results = _searchService.SearchInternally(query);
 
             if(results == null)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResult>>(results));
+            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResultResource>>(results));
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResult>>(results));
+            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResultResource>>(results));
         }
 
     }

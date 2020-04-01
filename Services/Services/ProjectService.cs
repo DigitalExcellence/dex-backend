@@ -11,7 +11,7 @@ namespace Services.Services
 {
     public interface IProjectService : IService<Project>
     {
-        Task<IEnumerable<SearchResult>> SearchAsync(SearchRequest query);
+        IEnumerable<Project> Search(IEnumerable<string> values);
     }
 
     public class ProjectService : Service<Project>, IProjectService
@@ -23,9 +23,16 @@ namespace Services.Services
 
         }
 
-        public async Task<IEnumerable<SearchResult>> SearchAsync(SearchRequest query)
+        public IEnumerable<Project> Search(IEnumerable<string> values)
         {
-            throw new NotImplementedException();
+            IList<Project> found = new List<Project>();
+
+            foreach (string v in values)
+            {
+                Repository.SearchProject(v);
+            }
+
+            return found;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Repositories
     {
         Task<Project> GetProjectAsync(int projectId);
         void RemoveProjectAsync(int projectId);
+        IEnumerable<Project> SearchProject(string value);
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -38,6 +39,13 @@ namespace Repositories
             {
                 GetDbSet<Project>().Remove(project);
             }
+        }
+
+        public IEnumerable<Project> SearchProject(string value)
+        {
+            IEnumerable<Project> found = GetDbSet<Project>()
+                .Where(p => p.Title.Contains($"/{value}/", StringComparison.OrdinalIgnoreCase));
+            return found;
         }
     }
 }
