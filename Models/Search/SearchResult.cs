@@ -6,15 +6,15 @@ namespace Search
 {
     public class SearchResult
     {
-        public int Id { get; }
-        public string Name { get; }
-        public string Description { get; }
-        public string Type { get; }
-        public string Uri { get; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; }
+        public string Uri { get; set; }
 
-        public SearchResult(int id, string name, string description, string type, string uri)
+        public SearchResult() { }
+
+        public SearchResult(string name, string description, string type, string uri)
         {
-            Id = id;
             Name = name;
             Description = description;
             Type = type;

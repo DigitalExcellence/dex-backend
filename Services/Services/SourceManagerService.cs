@@ -23,10 +23,11 @@ namespace Services.Services
             IList<SearchResult> results = new List<SearchResult>();
             foreach(ISource source in query.Sources)
             {
-                SearchResult result = await source.Search(query.QueryParameters);
-                results.Add(result);
+                IEnumerable<SearchResult> searchResults = await source.Search("temp");
+                //SearchResult result = await source.Search(query.QueryParameters);
+                foreach(SearchResult searchResult in searchResults)
+                    results.Add(searchResult);
             }
-
             return results;
         }
     }

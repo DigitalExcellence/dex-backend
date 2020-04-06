@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Search;
+using Sources;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Services.Sources
 {
@@ -9,7 +13,7 @@ namespace Services.Sources
             throw new NotImplementedException();
         }
 
-        public void Search(string searchTerm)
+        public Task<IEnumerable<SearchResult>> Search(string searchTerm)
         {
             throw new NotImplementedException();
         }

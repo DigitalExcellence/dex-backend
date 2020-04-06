@@ -70,7 +70,7 @@ namespace API.Controllers
 			{
 				return NotFound();
 			}
-
+			//TODO CREATE MAPPER
 			return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
 		}
 

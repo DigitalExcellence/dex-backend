@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using Models;
+using Sources;
+using Services.Sources;
 
 namespace API.Controllers
 {
@@ -37,9 +39,19 @@ namespace API.Controllers
         /// <summary>
         /// Search in external sources
         /// </summary>
-        [HttpGet("external/{query}")]
-        public async Task<IActionResult> External(string query, [FromQuery(Name = "page")] int? page, [FromQuery(Name = "amountOnPage")] int? amountOnPage)
+        [HttpGet("external")]
+        public async Task<IActionResult> External()
         {
+            List<ISource> sources = new List<ISource>();
+            sources.Add(new GitLabSource());
+
+            List<SearchQueryParameter> queryParameters = new List<SearchQueryParameter>();
+            SearchRequest request = new SearchRequest()
+            {
+                Sources = sources,
+                QueryParameters = queryParameters
+
+            };
             IEnumerable<SearchResult> results = await _searchService.SearchExternallyAsync(request);
 
             if (results == null)
