@@ -14,7 +14,6 @@ namespace Services.Services
     {
         IEnumerable<SearchResult> SearchInternally(SearchRequest request);
         Task<IEnumerable<SearchResult>> SearchExternallyAsync(SearchRequest request);
-
     }
 
     public class SearchService : ISearchService
