@@ -1,19 +1,21 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Models;
+using Repositories;
 using Search;
-using Sources;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Services
 {
     public interface ISearchService
     {
-        IEnumerable<SearchResult> SearchInternally(SearchRequest request);
         Task<IEnumerable<SearchResult>> SearchExternallyAsync(SearchRequest request);
+        Task<IEnumerable<Project>> SearchInternalProjects(string query);
+        
+        Task<IEnumerable<Project>> SearchInternalProjectsSkipTake(string query, int skip, int take);
+        
+        Task<int> SearchInternalProjectsCount(string query);
+        
     }
 
     public class SearchService : ISearchService
@@ -36,13 +38,26 @@ namespace Services.Services
             return await _sourceManagerService.SearchAsync(request);
         }
 
-        public IEnumerable<SearchResult> SearchInternally(SearchRequest request)
+        private IProjectRepository _projectRepository;
+
+        public virtual async Task<IEnumerable<Project>> SearchInternalProjects(string query)
         {
-            IEnumerable<Project> projects = _projectService.Search(request.QueryParameters.ToList().Select(queryparameter => queryparameter.value));
-
-            IEnumerable<SearchResult> results = _mapper.Map<IEnumerable<Project>, IEnumerable<SearchResult>>(projects);
-
-            return results;
+            return await _projectRepository.SearchAsync(query);
         }
+        
+        // Search for projects
+        // @param query The search query
+        // @param skip The amount of results to skip
+        // @param take The amount of results to return
+        public virtual async Task<IEnumerable<Project>> SearchInternalProjectsSkipTake(string query, int skip, int take)
+        {
+            return await _projectRepository.SearchSkipTakeAsync(query, skip, take);
+        }
+        
+        public virtual async Task<int> SearchInternalProjectsCount(string query)
+        {
+            return await _projectRepository.SearchCountAsync(query);
+        }
+        
     }
 }

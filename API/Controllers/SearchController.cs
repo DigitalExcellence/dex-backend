@@ -1,10 +1,13 @@
-﻿using API.Resources;
+using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Search;
 using Services.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using System.Linq;
+using Models;
 
 namespace API.Controllers
 {
@@ -13,6 +16,7 @@ namespace API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class SearchController : ControllerBase
     {
         private readonly ISearchService _searchService;
@@ -28,21 +32,7 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Search in internal sources
-        /// </summary>
-        [HttpGet]
-        public IActionResult Internal([FromBody] SearchRequest query)
-        {
-            IEnumerable<SearchResult> results = _searchService.SearchInternally(query);
 
-            if(results == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResultResource>>(results));
-        }
 
         /// <summary>
         /// Search in external sources
@@ -58,6 +48,41 @@ namespace API.Controllers
 
             return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResultResource>>(results));
         }
+        
+        /// <summary>
+        /// Search for projects
+        /// </summary>
+        /// <param name="query">The search query</param>
+        /// <returns>Search results</returns>
+        [HttpGet("internal/{query}")]
+        public async Task<IActionResult> SearchInternalProjects(string query, [FromQuery(Name = "page")] int? page, [FromQuery(Name = "amountOnPage")] int? amountOnPage)
+        {
 
+            if (query.Length < 0) return BadRequest("Query required");
+            if (page != null && page < 1) return BadRequest("Invalid page number");
+            
+            amountOnPage ??= 20;
+            amountOnPage = amountOnPage <= 0 ? 20 : amountOnPage;
+
+            IEnumerable<Project> projects = page == null ?
+                await _searchService.SearchInternalProjects(query) :
+                await _searchService.SearchInternalProjectsSkipTake(query, (int) (amountOnPage*(page-1)), (int) amountOnPage);
+
+            List<SearchResultResource> searchResults = new List<SearchResultResource>();
+            foreach (Project project in projects)
+            {
+                SearchResultResource searchResult = _mapper.Map<Project, SearchResultResource>(project);
+                searchResults.Add(searchResult);
+            }
+            SearchResultsResource searchResultsResource = new SearchResultsResource();
+            searchResultsResource.Results = searchResults.ToArray();
+            searchResultsResource.Query = query;
+            searchResultsResource.Count = searchResults.Count();
+            searchResultsResource.TotalCount = await _searchService.SearchInternalProjectsCount(query);
+            searchResultsResource.Page = page;
+            searchResultsResource.TotalPages = (int) Math.Ceiling(searchResultsResource.TotalCount / (decimal) amountOnPage);
+            
+            return Ok(searchResultsResource);
+        }
     }
 }

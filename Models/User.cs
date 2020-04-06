@@ -1,23 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
-    public class User
-    {
-        public int Id { get; set; }
+	public class User
+	{
+		public int Id { get; set; }
 
-        public User()
-        {
-        }
+		[Required]
+		public string Name { get; set; }
 
-        public User(int userId) : this()
-        {
-            Id = userId;
-        }
+		[Required]
+		public string Email { get; set; }
 
-        public string Username { get; set; }
-        public string ProfileUrl { get; set; }
-    }
+		[Required]
+		public string IdentityId { get; set; }
+
+		public List<Project> Projects { get; set; }
+		
+		public List<LinkedService> Services { get; set; }
+		
+		public User()
+		{
+			Projects = new List<Project>();
+			Services = new List<LinkedService>();
+		}
+
+		public User(int userId) : this()
+		{
+			Id = userId;
+		}
+
+		public string ProfileUrl { get; set; }
+
+	}
 }

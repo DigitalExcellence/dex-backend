@@ -1,14 +1,19 @@
-﻿using System.Threading.Tasks;
-using API.Resources;
+﻿using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+	/// <summary>
+	/// This controller handles the user settings.
+	/// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -43,10 +48,10 @@ namespace API.Controllers
             User user = await _userService.FindAsync(userId);
             if (user == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
-            return Ok(user);
+            return Ok(_mapper.Map<User, UserResourceResult>(user));
         }
 
 
@@ -58,11 +63,6 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAccount([FromBody] UserResource accountResource)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             User user = _mapper.Map<UserResource, User>(accountResource);
             try
             {
@@ -85,15 +85,10 @@ namespace API.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             User user = await _userService.FindAsync(userId);
             if (user == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
             _mapper.Map<UserResource, User>(userResource, user);
@@ -107,19 +102,20 @@ namespace API.Controllers
         /// <summary>
         /// Gets the student information.
         /// </summary>
-        /// <param name="studentId">The student identifier.</param>
         /// <returns></returns>
         [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteAccount(int userId)
-        {
-            if (await _userService.FindAsync(userId) == null)
+		public async Task<IActionResult> DeleteAccount(int userId)
+		{
+			if(await _userService.FindAsync(userId) == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
-            await _userService.RemoveAsync(userId);
-            _userService.Save();
-            return Ok();
-        }
-    }
+			await _userService.RemoveAsync(userId);
+			_userService.Save();
+			return Ok();
+		}
+
+
+	}
 }

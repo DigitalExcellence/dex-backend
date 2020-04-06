@@ -1,3 +1,8 @@
+## Project specific
+**/API.xml
+
+##
+
 *.swp
 *.*~
 project.lock.json
@@ -324,3 +329,5 @@ profile
 
 ####
 
+
+IdentityServer/tempkey.rsa

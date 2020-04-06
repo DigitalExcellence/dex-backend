@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "5_Models", "Models\5_Models
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4_Data", "Data\4_Data.csproj", "{B626B71A-6C31-4921-896C-A8946092D159}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6_IdentityServer", "IdentityServer\6_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B626B71A-6C31-4921-896C-A8946092D159}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B626B71A-6C31-4921-896C-A8946092D159}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B626B71A-6C31-4921-896C-A8946092D159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{823A7672-639A-4C68-AD71-04C9C62E1468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{823A7672-639A-4C68-AD71-04C9C62E1468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{823A7672-639A-4C68-AD71-04C9C62E1468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{823A7672-639A-4C68-AD71-04C9C62E1468}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

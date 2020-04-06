@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using NetEscapades.Configuration.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Configuration
 {
@@ -9,7 +9,7 @@ namespace API.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public class SelfConfig
+        public class FrontendConfig
         {
             /// <summary>
             /// Gets or sets the front end.
@@ -18,7 +18,7 @@ namespace API.Configuration
             /// The front end.
             /// </value>
             [Required, Url]
-            public string FrontEnd { get; set; }
+            public string FrontendUrl { get; set; }
 
             /// <summary>
             /// Gets or sets the client identifier.
@@ -69,7 +69,7 @@ namespace API.Configuration
         /// <value>
         /// The self.
         /// </value>
-        public SelfConfig Self { get; set; }
+        public FrontendConfig Frontend { get; set; }
 
         /// <summary>
         /// Gets or sets the identity server.
@@ -92,9 +92,8 @@ namespace API.Configuration
         /// </summary>
         public void Validate()
         {
-            //Validator.ValidateObject(Self, new ValidationContext(Self), validateAllProperties: true);
-            //Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), validateAllProperties: true);
-            //Validator.ValidateObject(Smtp, new ValidationContext(Smtp), validateAllProperties: true);
+            Validator.ValidateObject(Frontend, new ValidationContext(Frontend), validateAllProperties: true);
+            Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), validateAllProperties: true);
         }
     }
 }
