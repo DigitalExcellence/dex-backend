@@ -37,7 +37,8 @@ namespace API.Controllers
         /// <summary>
         /// Search in external sources
         /// </summary>
-        public async Task<IActionResult> External([FromBody] SearchRequest request)
+        [HttpGet("external/{query}")]
+        public async Task<IActionResult> External(string query, [FromQuery(Name = "page")] int? page, [FromQuery(Name = "amountOnPage")] int? amountOnPage)
         {
             IEnumerable<SearchResult> results = await _searchService.SearchExternallyAsync(request);
 

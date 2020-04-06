@@ -28,6 +28,8 @@ namespace API.Extensions
 
             services.AddScoped<ISearchService, SearchService>();
 
+            services.AddScoped<ISourceManagerService, SourceManagerService>();
+
             return services;
         }
     }
