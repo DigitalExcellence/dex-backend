@@ -18,25 +18,43 @@ namespace Services.Sources
             this.client = new GitLabClient("https://git.fhict.nl", "q6C7ygyGyQ5RjvACxWiy");
         }
 
-        public void getSource(string url)
+        public async Task<IEnumerable<SearchResult>> Search(List<SearchQueryParameter> queryParameters)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<SearchResult>> Search(string searchTerm)
-        {
-            //FOR NOW THIS RETURNS ALL OF THE INTERNAL PROJECTS, FILTERING NEEDS TO BE DONE BASED ON SEARCHQUERYPARAMETERS WHICH WILL BE RECEIVED VIA
-            //PARAMETERS INSTEAD OF THE SEARTERM-STRING.
-            List<SearchResult> searchResults = new List<SearchResult>();
-            var projects = await this.client.Projects.GetAsync(project => project.Visibility = QueryProjectVisibilityLevel.Internal);
-            foreach(Project project in projects) {
-                searchResults.Add(new SearchResult()
+            ProjectQueryOptions queryOptions = null;
+            foreach(SearchQueryParameter queryParameter in queryParameters)
+            {
+                switch(queryParameter.Type)
                 {
-                    Name = project.Name,
-                    Description = project.Description,
-                    Type = project.Visibility.ToString(),
-                    Uri = project.HttpUrlToRepo
-                });
+                    case SearchQueryParameterType.NAME:
+                        queryOptions.Filter = queryParameter.Value.ToString();
+                        break;
+                    case SearchQueryParameterType.VISIBILITY:
+                        if (queryParameter.Value.Equals("PRIVATE"))
+                            queryOptions.Visibility = QueryProjectVisibilityLevel.Private;
+                        if (queryParameter.Value.Equals("INTERNAL"))
+                            queryOptions.Visibility = QueryProjectVisibilityLevel.Internal;
+                        if (queryParameter.Value.Equals("PUBLIC"))
+                            queryOptions.Visibility = QueryProjectVisibilityLevel.Public;
+                        if (queryParameter.Value.Equals("ALL"))
+                            queryOptions.Visibility = QueryProjectVisibilityLevel.All;
+                        break;
+                }
+            }
+
+            List<SearchResult> searchResults = new List<SearchResult>();
+            if(queryParameters != null)
+            {
+                var projects = await this.client.Projects.GetAsync(project => project.Visibility = QueryProjectVisibilityLevel.Internal);
+                foreach (Project project in projects)
+                {
+                    searchResults.Add(new SearchResult()
+                    {
+                        Name = project.Name,
+                        Description = project.Description,
+                        Type = project.Visibility.ToString(),
+                        Uri = project.HttpUrlToRepo
+                    });
+                }
             }
             return searchResults;
         }

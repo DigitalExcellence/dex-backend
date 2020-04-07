@@ -15,9 +15,9 @@ namespace Search
         /// <summary>
         /// List of sources to search in
         /// </summary>
-        public IEnumerable<ISource> Sources { get; set;  }
+        public IEnumerable<SourceType> Sources { get; set; }
 
-        public SearchRequest(IEnumerable<SearchQueryParameter> queryParameters, IEnumerable<ISource> sources)
+        public SearchRequest(IEnumerable<SearchQueryParameter> queryParameters, IEnumerable<SourceType> sources)
         {
             this.QueryParameters = queryParameters;
             this.Sources = sources;

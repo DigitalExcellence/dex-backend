@@ -8,7 +8,6 @@ namespace Sources
 {
     public interface ISource
     {
-        Task<IEnumerable<SearchResult>> Search(string searchTerm);
-        void getSource(string url);
+        Task<IEnumerable<SearchResult>> Search(List<SearchQueryParameter> queryParameters);
     }
 }

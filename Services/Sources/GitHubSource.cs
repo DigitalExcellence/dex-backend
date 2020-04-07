@@ -8,12 +8,7 @@ namespace Services.Sources
 {
     public class GitHubSource : ISource
     {
-        public void getSource(string url)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<SearchResult>> Search(string searchTerm)
+        public Task<IEnumerable<SearchResult>> Search(List<SearchQueryParameter> queryParameters)
         {
             throw new NotImplementedException();
         }

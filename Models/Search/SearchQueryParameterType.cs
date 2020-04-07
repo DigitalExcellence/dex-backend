@@ -6,6 +6,7 @@ namespace Search
 {
     public enum SearchQueryParameterType
     {
-        NAME, DESCRIPTION
+        NAME, 
+        VISIBILITY
     }
 }

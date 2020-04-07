@@ -72,7 +72,7 @@ namespace API.Controllers
 			}
 			//TODO CREATE MAPPER
 			return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
-		}
+		} 
 
 		/// <summary>
 		/// Create a Project.

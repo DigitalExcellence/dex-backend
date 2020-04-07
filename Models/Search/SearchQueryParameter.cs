@@ -6,13 +6,15 @@ namespace Search
 {
     public class SearchQueryParameter
     {
-        public SearchQueryParameterType type { get; }
-        public string value { get; }
+        public SearchQueryParameterType Type { get; set; }
+        public string Value { get; set;  }
 
         public SearchQueryParameter(SearchQueryParameterType type, string value)
         {
-            this.type = type;
-            this.value = value;
+            this.Type = type;
+            this.Value = value;
         }
+
+        public SearchQueryParameter() { }
     }
 }

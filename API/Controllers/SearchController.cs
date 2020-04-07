@@ -39,19 +39,9 @@ namespace API.Controllers
         /// <summary>
         /// Search in external sources
         /// </summary>
-        [HttpGet("external")]
-        public async Task<IActionResult> External()
+        [HttpPost("external")]
+        public async Task<IActionResult> External([FromBody] SearchRequest request)
         {
-            List<ISource> sources = new List<ISource>();
-            sources.Add(new GitLabSource());
-
-            List<SearchQueryParameter> queryParameters = new List<SearchQueryParameter>();
-            SearchRequest request = new SearchRequest()
-            {
-                Sources = sources,
-                QueryParameters = queryParameters
-
-            };
             IEnumerable<SearchResult> results = await _searchService.SearchExternallyAsync(request);
 
             if (results == null)
