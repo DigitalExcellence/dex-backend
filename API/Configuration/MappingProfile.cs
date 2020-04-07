@@ -1,6 +1,7 @@
 ﻿using API.Resources;
 using AutoMapper;
 using Models;
+using Search;
 
 namespace API.Configuration
 {
@@ -24,6 +25,8 @@ namespace API.Configuration
 			CreateMap<Collaborator, CollaboratorResourceResult>();
 
 			CreateMap<Project, SearchResultResource>();
+
+			CreateMap<SearchResult, SearchResultResource>();
 		}
 
 	}

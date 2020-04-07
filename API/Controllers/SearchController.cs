@@ -59,7 +59,14 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<SearchResultResource>>(results));
+            List<SearchResultResource> resultResources = new List<SearchResultResource>();
+            foreach(SearchResult searchResult in results)
+            {
+                SearchResultResource searchResultResource = _mapper.Map<SearchResult, SearchResultResource>(searchResult);
+                resultResources.Add(searchResultResource);
+            }
+
+            return Ok(resultResources);
         }
         
         /// <summary>
