@@ -25,14 +25,10 @@ namespace Services.Services
             foreach(SourceType sourceType in request.Sources)
             {
                 ISource source = null;
-                switch(sourceType) {
-                    case SourceType.GITLAB:
-                        source = new GitLabSource();
-                        break;
-                    case SourceType.GITHUB:
-                        source = new GitHubSource();
-                        break;
-                }
+                if (sourceType == SourceType.GITLAB)
+                    source = new GitLabSource();
+                if (sourceType == SourceType.GITHUB)
+                    source = new GitHubSource();
                 if(source != null)
                 {
                     IEnumerable<SearchResult> searchResults = await source.Search((List<SearchQueryParameter>)request.QueryParameters);
