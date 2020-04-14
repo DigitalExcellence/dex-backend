@@ -1,3 +1,20 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+* 
+* This program is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU Lesser General Public License as published 
+* by the Free Software Foundation version 3 of the License.
+* 
+* This program is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU Lesser General Public License for more details.
+* 
+* You can find a copy of the GNU Lesser General Public License 
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using API.Configuration;
 using API.Extensions;
 using Data;
@@ -69,14 +86,20 @@ namespace API
                     options.ApiName = Config.Frontend.ClientId;
                     options.ApiSecret = Config.Frontend.ClientSecret;
                     options.EnableCaching = true;
-
                 });
 
             services.AddCors();
 
             services.AddSwaggerGen(o =>
             {
-                o.SwaggerDoc("v1", new OpenApiInfo() { Title = "Dex API", Version = "v1" });
+                o.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = "Dex API", Version = "v1", License = new OpenApiLicense
+                    {
+                        Name = "GNU Lesser General Public License v3.0",
+                        Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
+                    }
+                });
                 o.IncludeXmlComments($@"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml");
                 o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
                 {
