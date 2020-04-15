@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -38,6 +38,8 @@ namespace Models
         public string ShortDescription { get; set; }
         
         public List<Collaborator> Collaborators { get; set; }
+
+        public List<Highlight> HighlightedProjects { get; set; }
 
         [Required]
         public string Uri { get; set; }
