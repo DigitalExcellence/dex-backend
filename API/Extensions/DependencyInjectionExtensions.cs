@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -41,6 +41,9 @@ namespace API.Extensions
 
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+
+            services.AddScoped<IHighlightService, HighlightService>();
+            services.AddScoped<IHighlightRepository, HighlightRepository>();
 
             services.AddScoped<ISearchService, SearchService>();
 

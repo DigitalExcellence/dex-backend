@@ -39,8 +39,6 @@ namespace Models
         
         public List<Collaborator> Collaborators { get; set; }
 
-        public List<Highlight> HighlightedProjects { get; set; }
-
         [Required]
         public string Uri { get; set; }
 
