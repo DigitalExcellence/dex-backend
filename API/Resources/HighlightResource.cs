@@ -21,10 +21,10 @@ namespace API.Resources
         /// <summary>
         /// This gets or sets the start date that the highlight should start
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         /// <summary>
         /// This gets or sets the end date that highlight should end
         /// </summary>
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

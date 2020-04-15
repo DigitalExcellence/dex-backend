@@ -15,8 +15,8 @@ namespace Models
         [Required]
         public bool IsHighlighted { get; set; } = true;
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }
