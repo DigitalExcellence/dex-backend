@@ -54,6 +54,8 @@ namespace API.Controllers
         {
             if (query.Length < 0) return BadRequest("Query required");
             if (parameters.Page != null && parameters.Page < 1) return BadRequest("Invalid page number");
+            if(parameters.SortBy != null && parameters.SortBy != "name" && parameters.SortBy != "created" && parameters.SortBy != "updated") return BadRequest("Invalid sort value: Use \"name\", \"created\" or \"updated\"");
+            if(parameters.SortDirection != null && parameters.SortDirection != "asc" && parameters.SortDirection != "desc") return BadRequest("Invalid sort direction: Use \"asc\" or \"desc\"");
 
             SearchParams searchParams = _mapper.Map<SearchRequestParamsResource, SearchParams>(parameters);
             IEnumerable<Project> projects = await _searchService.SearchInternalProjects(query, searchParams);

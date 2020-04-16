@@ -24,5 +24,9 @@ namespace API.Resources
 
         public int? AmountOnPage { get; set; }
 
+        public string SortBy { get; set; }
+
+        public string SortDirection { get; set; }
+
     }
 }

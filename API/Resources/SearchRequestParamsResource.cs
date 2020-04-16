@@ -28,5 +28,11 @@ namespace API.Resources
         [FromQuery(Name = "amountOnPage")]
         public int? AmountOnPage { get; set; }
 
+        [FromQuery(Name = "sortBy")]
+        public string SortBy { get; set; }
+
+        [FromQuery(Name = "sortDirection")]
+        public string SortDirection { get; set; }
+
     }
 }

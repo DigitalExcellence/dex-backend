@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Models;
 using Repositories;
 using System;
+using System.Linq.Expressions;
 
 namespace Services.Services
 {
@@ -51,10 +52,33 @@ namespace Services.Services
         /// <returns>The projects that match the search query</returns>
         public virtual async Task<IEnumerable<Project>> SearchInternalProjects(string query, SearchParams searchParams)
         {
-            if(searchParams.AmountOnPage == null || searchParams.AmountOnPage <= 0) searchParams.AmountOnPage = 20;
-            if(searchParams.Page == null) return await _projectRepository.SearchAsync(query);
-            return await _projectRepository.SearchSkipTakeAsync(query, (int) (searchParams.AmountOnPage * (searchParams.Page - 1)),
-                                                                (int) searchParams.AmountOnPage);
+            if(!searchParams.AmountOnPage.HasValue || searchParams.AmountOnPage <= 0) searchParams.AmountOnPage = 20;
+
+            int? skip = null;
+            int? take = null;
+            if(searchParams.Page.HasValue)
+            {
+                skip = searchParams.AmountOnPage * (searchParams.Page - 1);
+                take = searchParams.AmountOnPage;
+            }
+
+            Expression<Func<Project, object>> orderBy;
+            switch(searchParams.SortBy)
+            {
+                case "name":
+                    orderBy = project => project.Name;
+                    break;
+                case "created":
+                    orderBy = project => project.Created;
+                    break;
+                default:
+                    orderBy = project => project.Updated;
+                    break;
+            }
+
+            bool orderByDirection = searchParams.SortDirection == "asc";
+
+            return await _projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection);
         }
 
         /// <summary>
