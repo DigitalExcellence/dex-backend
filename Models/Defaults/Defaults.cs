@@ -34,10 +34,10 @@ namespace Models.Defaults
         public static class ScopeCategories
         {
             [Description("This scope category gives read access to the entire API namespace")]
-            public const string ApiDataRead = Scopes.ProjectRead + Scopes.UserRead;
+            public const string ApiDataRead = Scopes.ProjectRead + " " +  Scopes.UserRead;
 
             [Description("This scope category gives write access to the entire API namespace")]
-            public const string ApiDataWrite = Scopes.ProjectWrite + Scopes.UserWrite;
+            public const string ApiDataWrite = Scopes.ProjectWrite + " " + Scopes.UserWrite;
         }
 
         public static class Scopes
@@ -52,6 +52,8 @@ namespace Models.Defaults
             [Description("This scope gives write access to the user namespace")]
             public const string UserWrite = "user:write";
 
+            [Description("This scope gives read access to the highlight namespace")]
+            public const string HighlightRead = "highlight:read";
             [Description("This scope gives write access to the highlight namespace")]
             public const string HighlightWrite = "highlight:write";
 

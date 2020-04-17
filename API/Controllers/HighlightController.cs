@@ -1,5 +1,6 @@
 using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Defaults;
 using Services.Services;
 
 namespace API.Controllers
@@ -36,6 +38,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
         public async Task<IActionResult> GetAllHighlights(bool returnOnlyTheHightlighted = true)
         {
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync(returnOnlyTheHightlighted);
@@ -53,7 +56,7 @@ namespace API.Controllers
         /// <param name="highlightId"></param>
         /// <returns></returns>
         [HttpGet("{projectId}")]
-        //[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
+        [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
         public async Task<IActionResult> GetHighlight(int highlightId)
         {
             if(highlightId < 0)
@@ -76,6 +79,7 @@ namespace API.Controllers
         /// <param name="highlightResource"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public async Task<IActionResult> CreateHighlightAsync(HighlightResource highlightResource)
         {
             if(highlightResource == null)
@@ -101,6 +105,7 @@ namespace API.Controllers
         /// <param name="highlightResource"></param>
         /// <returns></returns>
         [HttpPut("{highlightId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public async Task<IActionResult> UpdateHighlight(int highlightId, [FromBody]HighlightResource highlightResource)
         {
             Highlight highlight = await highlightService.FindAsync(highlightId);
@@ -124,6 +129,7 @@ namespace API.Controllers
         /// <param name="highlightId"></param>
         /// <returns></returns>
         [HttpDelete("{highlightId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public async Task<IActionResult> DeleteHighlight(int highlightId)
         {
             if(await highlightService.FindAsync(highlightId) == null)

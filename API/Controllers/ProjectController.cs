@@ -14,6 +14,8 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
+using API.Extensions;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Defaults;
 using Services.Services;
 
 namespace API.Controllers
@@ -29,10 +32,9 @@ namespace API.Controllers
 	/// <summary>
 	/// This controller handles the CRUD projects
 	/// </summary>
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
-	//[Authorize]
-	public class ProjectController : ControllerBase
+    public class ProjectController : ControllerBase
 	{
 		private readonly IProjectService _projectService;
 		private readonly IUserService _userService;
@@ -55,8 +57,9 @@ namespace API.Controllers
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <returns></returns>
-		[HttpGet()]
-		public async Task<IActionResult> GetAllProjects()
+		[HttpGet]
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectRead))]
+        public async Task<IActionResult> GetAllProjects()
 		{
 			List<Project> projects = await _projectService.GetAllWithUsersAsync();
 			if (projects == null)
@@ -73,7 +76,7 @@ namespace API.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("{projectId}")]
-		//[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
+		[Authorize(Policy = nameof(Defaults.Scopes.ProjectRead))]
 		public async Task<IActionResult> GetProject(int projectId)
 		{
 			if (projectId < 0)
@@ -95,7 +98,8 @@ namespace API.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<IActionResult> CreateProjectAsync([FromBody]ProjectResource projectResource)
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        public async Task<IActionResult> CreateProjectAsync([FromBody]ProjectResource projectResource)
 		{
 			if (projectResource == null)
 			{
@@ -125,7 +129,8 @@ namespace API.Controllers
 		/// <param name="projectResource"></param>
 		/// <returns></returns>
 		[HttpPut("{projectId}")]
-		public async Task<IActionResult> UpdateProject(int projectId, [FromBody]ProjectResource projectResource)
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        public async Task<IActionResult> UpdateProject(int projectId, [FromBody]ProjectResource projectResource)
 		{
 			Project project = await _projectService.FindAsync(projectId);
 			if (project == null)
@@ -146,7 +151,8 @@ namespace API.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpDelete("{projectId}")]
-		public async Task<IActionResult> DeleteProject(int projectId)
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        public async Task<IActionResult> DeleteProject(int projectId)
 		{
 			if (await _projectService.FindAsync(projectId) == null)
 			{
