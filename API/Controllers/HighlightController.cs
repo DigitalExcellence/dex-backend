@@ -38,7 +38,6 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
         public async Task<IActionResult> GetAllHighlights(bool returnOnlyTheHightlighted = true)
         {
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync(returnOnlyTheHightlighted);
@@ -56,7 +55,6 @@ namespace API.Controllers
         /// <param name="highlightId"></param>
         /// <returns></returns>
         [HttpGet("{projectId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
         public async Task<IActionResult> GetHighlight(int highlightId)
         {
             if(highlightId < 0)

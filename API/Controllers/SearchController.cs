@@ -52,7 +52,6 @@ namespace API.Controllers
         /// <param name="query">The search query</param>
         /// <returns>Search results</returns>
         [HttpGet("internal/{query}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectRead))]
         public async Task<IActionResult> SearchInternalProjects(string query, [FromQuery(Name = "page")] int? page, [FromQuery(Name = "amountOnPage")] int? amountOnPage)
         {
 

@@ -88,20 +88,16 @@ namespace API
                                                  });
             services.AddAuthorization(o =>
                                       {
-                                          o.AddPolicy(nameof(Defaults.ScopeCategories.ApiDataRead), policy => policy.RequireScope(nameof(Defaults.ScopeCategories.ApiDataRead)));
-                                          o.AddPolicy(nameof(Defaults.ScopeCategories.ApiDataWrite), policy => policy.RequireScope(nameof(Defaults.ScopeCategories.ApiDataWrite)));
                                           o.AddPolicy(nameof(Defaults.Scopes.HighlightWrite), policy => policy.RequireScope(nameof(Defaults.Scopes.HighlightWrite)));
                                           o.AddPolicy(nameof(Defaults.Scopes.HighlightRead), policy => policy.RequireScope(nameof(Defaults.Scopes.HighlightRead)));
                                           o.AddPolicy(nameof(Defaults.Scopes.ProjectRead), policy => policy.RequireScope(nameof(Defaults.Scopes.ProjectRead)));
+                                          o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite), policy => policy.RequireScope(nameof(Defaults.Scopes.ProjectWrite)));                                          o.AddPolicy(nameof(Defaults.Scopes.ProjectRead), policy => policy.RequireScope(nameof(Defaults.Scopes.ProjectRead)));
+                                          o.AddPolicy(nameof(Defaults.Scopes.UserRead), policy => policy.RequireScope(nameof(Defaults.Scopes.UserRead)));
+                                          o.AddPolicy(nameof(Defaults.Scopes.UserWrite), policy => policy.RequireScope(nameof(Defaults.Scopes.UserWrite)));
                                       });
 
             services.AddCors();
-            services.AddControllersWithViews(endpoints =>
-                                             {
-                                                 AuthorizationPolicy policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                                                 endpoints.Filters.Add(new AuthorizeFilter(policy));
-                                             })
-                .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>());
+            services.AddControllersWithViews().AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddSwaggerGen(o =>
                                    {

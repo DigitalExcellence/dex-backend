@@ -58,7 +58,6 @@ namespace API.Controllers
 		/// <param name="userId"></param>
 		/// <returns></returns>
 		[HttpGet]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectRead))]
         public async Task<IActionResult> GetAllProjects()
 		{
 			List<Project> projects = await _projectService.GetAllWithUsersAsync();
@@ -76,8 +75,7 @@ namespace API.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("{projectId}")]
-		[Authorize(Policy = nameof(Defaults.Scopes.ProjectRead))]
-		public async Task<IActionResult> GetProject(int projectId)
+        public async Task<IActionResult> GetProject(int projectId)
 		{
 			if (projectId < 0)
 			{
