@@ -11,16 +11,16 @@ namespace Services.Services
 
     public interface IHighlightService : IService<Highlight>
     {
-        Task<List<Highlight>> GetHighlightsAsync(bool onlyTheHightlighted);
+        Task<List<Highlight>> GetHighlightsAsync();
     }
     public class HighlightService : Service<Highlight>, IHighlightService
     {
         protected new IHighlightRepository Repository => (IHighlightRepository) base.Repository;
         public HighlightService(IHighlightRepository repository) : base(repository) { }
 
-        public async Task<List<Highlight>> GetHighlightsAsync(bool onlyTheHightlighted)
+        public async Task<List<Highlight>> GetHighlightsAsync()
         {
-            return await Repository.GetHighlightsAsync(onlyTheHightlighted);
+            return await Repository.GetHighlightsAsync();
         }
 
     }

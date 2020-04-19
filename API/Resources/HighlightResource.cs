@@ -15,10 +15,6 @@ namespace API.Resources
         /// </summary>
         public int ProjectId { get; set; }
         /// <summary>
-        /// This gets or sets the highlighted boolean
-        /// </summary>
-        public bool IsHighlighted { get; set; } = true;
-        /// <summary>
         /// This gets or sets the start date that the highlight should start
         /// </summary>
         public DateTime? StartDate { get; set; }

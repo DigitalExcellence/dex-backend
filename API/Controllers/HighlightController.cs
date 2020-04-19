@@ -38,9 +38,9 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllHighlights(bool returnOnlyTheHightlighted = true)
+        public async Task<IActionResult> GetAllHighlights()
         {
-            IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync(returnOnlyTheHightlighted);
+            IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync();
             if(!highlights.Any())
             {
                 return NotFound();

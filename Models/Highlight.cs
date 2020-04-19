@@ -9,11 +9,8 @@ namespace Models
 
         [Required]
         public int ProjectId { get; set; }
-
-        public Project Project { get; set; }
-
         [Required]
-        public bool IsHighlighted { get; set; } = true;
+        public Project Project { get; set; }
 
         public DateTime? StartDate { get; set; }
 
