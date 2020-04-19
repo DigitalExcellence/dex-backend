@@ -22,28 +22,45 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 
 namespace IdentityServer
 {
 
+    /// <summary>
+    ///     Startup file for Identity Server
+    /// </summary>
     public class Startup
     {
 
-        public IConfiguration Configuration { get; }
-
-        public Config Config { get; }
-
-        public IWebHostEnvironment Environment { get; }
-
+        /// <summary>
+        ///     Startup constructor
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="environment"></param>
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Config = configuration.GetSection("App")
-                .Get<Config>();
+                                  .Get<Config>();
             Configuration = configuration;
             Environment = environment;
         }
 
+        /// <summary>
+        ///     Configuration for Identity server
+        /// </summary>
+        public IConfiguration Configuration { get; }
+
+        /// <summary>
+        ///     Config for Identity server
+        /// </summary>
+        public Config Config { get; }
+
+        public IWebHostEnvironment Environment { get; }
+
+        /// <summary>
+        ///     Configure services for the identity server
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
@@ -52,14 +69,14 @@ namespace IdentityServer
             services.AddControllersWithViews();
 
             IIdentityServerBuilder builder = services.AddIdentityServer(options =>
-                                                                        {
-                                                                            options.Events.RaiseErrorEvents = true;
-                                                                            options.Events.RaiseInformationEvents =
-                                                                                true;
-                                                                            options.Events.RaiseFailureEvents = true;
-                                                                            options.Events.RaiseSuccessEvents = true;
-                                                                        })
-                .AddTestUsers(TestUsers.Users);
+                                                     {
+                                                         options.Events.RaiseErrorEvents = true;
+                                                         options.Events.RaiseInformationEvents =
+                                                             true;
+                                                         options.Events.RaiseFailureEvents = true;
+                                                         options.Events.RaiseSuccessEvents = true;
+                                                     })
+                                                     .AddTestUsers(TestUsers.Users);
 
             // in-memory, code config
             builder.AddInMemoryIdentityResources(IdentityConfig.Ids);
@@ -83,17 +100,21 @@ namespace IdentityServer
                 builder.AddDeveloperSigningCredential();
             }
             services.AddCors(options =>
-                             {
-                                 options.AddPolicy("dex-api",
-                                     policy =>
-                                     {
-                                         policy.AllowAnyOrigin()
-                                             .AllowAnyHeader()
-                                             .AllowAnyMethod();
-                                     });
-                             });
+            {
+                options.AddPolicy("dex-api",
+                                  policy =>
+                                  {
+                                      policy.AllowAnyOrigin()
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                                  });
+            });
         }
 
+        /// <summary>
+        ///     Configure the application
+        /// </summary>
+        /// <param name="app"></param>
         public void Configure(IApplicationBuilder app)
         {
             if(Environment.IsDevelopment())

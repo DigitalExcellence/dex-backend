@@ -14,9 +14,10 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 namespace Services.Services
 {
-    public class SourceManagerService
-    {
-    }
+
+    public class SourceManagerService { }
+
 }

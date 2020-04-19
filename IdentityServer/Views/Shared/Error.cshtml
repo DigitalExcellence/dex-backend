@@ -1,25 +1,25 @@
 <!--
- Digital Excellence Copyright (C) 2020 Brend Smits
+Digital Excellence Copyright (C) 2020 Brend Smits
  
- This program is free software: you can redistribute it and/or modify 
- it under the terms of the GNU Lesser General Public License as published 
- by the Free Software Foundation version 3 of the License.
+This program is free software: you can redistribute it and/or modify 
+it under the terms of the GNU Lesser General Public License as published 
+by the Free Software Foundation version 3 of the License.
  
- This program is distributed in the hope that it will be useful, 
- but WITHOUT ANY WARRANTY; without even the implied warranty 
- of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- See the GNU Lesser General Public License for more details.
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU Lesser General Public License for more details.
  
- You can find a copy of the GNU Lesser General Public License 
- along with this program, in the LICENSE.md file in the root project directory.
- If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+You can find a copy of the GNU Lesser General Public License 
+along with this program, in the LICENSE.md file in the root project directory.
+If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 -->
 @model ErrorViewModel
 
 @{
-    var error = Model?.Error?.Error;
-    var errorDescription = Model?.Error?.ErrorDescription;
-    var request_id = Model?.Error?.RequestId;
+    string error = Model?.Error?.Error;
+    string errorDescription = Model?.Error?.ErrorDescription;
+    string request_id = Model?.Error?.RequestId;
 }
 
 <div class="error-page">
@@ -32,7 +32,7 @@
             <div class="alert alert-danger">
                 Sorry, there was an error
 
-                @if (error != null)
+                @if(error != null)
                 {
                     <strong>
                         <em>
@@ -40,14 +40,14 @@
                         </em>
                     </strong>
 
-                    if (errorDescription != null)
+                    if(errorDescription != null)
                     {
                         <div>@errorDescription</div>
                     }
                 }
             </div>
 
-            @if (request_id != null)
+            @if(request_id != null)
             {
                 <div class="request-id">Request Id: @request_id</div>
             }

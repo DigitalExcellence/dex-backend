@@ -14,16 +14,19 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
-using Microsoft.EntityFrameworkCore;
- using Microsoft.EntityFrameworkCore.Metadata.Builders;
- using Models;
 
- namespace Data.Configurations
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models;
+
+namespace Data.Configurations
 {
+
     internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
     {
-        public void Configure(EntityTypeBuilder<Project> builder)
-        {
-        }
+
+        public void Configure(EntityTypeBuilder<Project> builder) { }
+
     }
+
 }

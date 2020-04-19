@@ -14,14 +14,26 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 namespace API.Resources
 {
+
+    /// <summary>
+    ///     Resource to show what user linked to which service
+    /// </summary>
     public class LinkedServiceResource
     {
-        
+
+        /// <summary>
+        ///     Get or Set Service
+        /// </summary>
         public string Service { get; set; }
 
+        /// <summary>
+        ///     Get or Set Refresh Token
+        /// </summary>
         public string RefreshToken { get; set; }
 
     }
+
 }

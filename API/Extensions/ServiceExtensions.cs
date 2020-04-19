@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Models.Defaults;
@@ -21,13 +22,15 @@ using System.Reflection;
 
 namespace API.Extensions
 {
+
     /// <summary>
-    /// ServicesExtensions
+    ///     ServicesExtensions
     /// </summary>
     public static class ServicesExtensions
     {
+
         /// <summary>
-        /// Adds the policies.
+        ///     Adds the policies.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <returns></returns>
@@ -37,14 +40,22 @@ namespace API.Extensions
             {
                 FieldInfo[] fields = typeof(Defaults.Scopes).GetFields();
 
-                foreach (FieldInfo field in fields)
+                foreach(FieldInfo field in fields)
                 {
                     o.AddPolicy(field.Name,
-                        policy => { policy.RequireClaim("scope", field.GetRawConstantValue().ToString().Split(' ')); });
+                                policy =>
+                                {
+                                    policy.RequireClaim("scope",
+                                                        field.GetRawConstantValue()
+                                                             .ToString()
+                                                             .Split(' '));
+                                });
                 }
             });
 
             return services;
         }
+
     }
+
 }

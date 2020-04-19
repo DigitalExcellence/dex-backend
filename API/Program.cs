@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,52 +26,69 @@ using System.IO;
 
 namespace API
 {
+
+    /// <summary>
+    ///     Program.cs
+    /// </summary>
     public class Program
     {
+
+        /// <summary>
+        ///     Main of API
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .MinimumLevel.Override("System", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate)
-                .CreateLogger();
+                         .MinimumLevel.Debug()
+                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                         .MinimumLevel.Override("System", LogEventLevel.Warning)
+                         .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+                         .Enrich.FromLogContext()
+                         .WriteTo.Console(outputTemplate:
+                                          "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                                          theme: AnsiConsoleTheme.Literate)
+                         .CreateLogger();
 
             try
             {
                 Log.Information("Starting host...");
-                CreateHostBuilder(args).Build().Run();
+                CreateHostBuilder(args)
+                    .Build()
+                    .Run();
                 return 0;
-            }
-            catch (Exception ex)
+            } catch(Exception ex)
             {
                 Log.Fatal(ex, "Host terminated unexpectedly.");
                 return 1;
-            }
-            finally
+            } finally
             {
                 Log.CloseAndFlush();
             }
         }
 
+        /// <summary>
+        ///     Host Builder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IWebHostBuilder CreateHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    IWebHostEnvironment env = hostingContext.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-                    config.AddEnvironmentVariables();
-                })
-                .UseStartup<Startup>()
-                .UseKestrel(o => o.AddServerHeader = false)
-                .UseSerilog();
-
-
+                          .UseContentRoot(Directory.GetCurrentDirectory())
+                          .ConfigureAppConfiguration((hostingContext, config) =>
+                          {
+                              IWebHostEnvironment env = hostingContext.HostingEnvironment;
+                              config.AddJsonFile("appsettings.json", true, true)
+                                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+                              config.AddEnvironmentVariables();
+                          })
+                          .UseStartup<Startup>()
+                          .UseKestrel(o => o.AddServerHeader = false)
+                          .UseSerilog();
         }
+
     }
+
 }

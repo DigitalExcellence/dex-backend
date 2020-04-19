@@ -14,17 +14,21 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Models
 {
+
     public class Collaborator
     {
+
         public int Id { get; set; }
+
         public string FullName { get; set; }
+
         public string Role { get; set; }
+
         public int ProjectId { get; set; }
+
     }
+
 }

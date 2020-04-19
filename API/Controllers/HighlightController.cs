@@ -1,30 +1,30 @@
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Services.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// Highlight controller for highlights
+    ///     Highlight controller for highlights
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class HighlightController : ControllerBase
     {
+
         private readonly IHighlightService highlightService;
         private readonly IMapper mapper;
 
         /// <summary>
-        /// Initialize a new instance of HighlightController
+        ///     Initialize a new instance of HighlightController
         /// </summary>
         /// <param name="highlightService"></param>
         /// <param name="mapper"></param>
@@ -33,8 +33,9 @@ namespace API.Controllers
             this.highlightService = highlightService;
             this.mapper = mapper;
         }
+
         /// <summary>
-        /// Get all highlights.
+        ///     Get all highlights.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -50,7 +51,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get a Highlight by id
+        ///     Get a Highlight by id
         /// </summary>
         /// <param name="highlightId"></param>
         /// <returns></returns>
@@ -72,7 +73,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Creates a highlight
+        ///     Creates a highlight
         /// </summary>
         /// <param name="highlightResource"></param>
         /// <returns></returns>
@@ -97,14 +98,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Update the Highlight
+        ///     Update the Highlight
         /// </summary>
         /// <param name="highlightId"></param>
         /// <param name="highlightResource"></param>
         /// <returns></returns>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        public async Task<IActionResult> UpdateHighlight(int highlightId, [FromBody]HighlightResource highlightResource)
+        public async Task<IActionResult> UpdateHighlight(int highlightId,
+                                                         [FromBody] HighlightResource highlightResource)
         {
             Highlight highlight = await highlightService.FindAsync(highlightId);
             if(highlight == null)
@@ -112,7 +114,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            mapper.Map<HighlightResource, Highlight>(highlightResource, highlight);
+            mapper.Map(highlightResource, highlight);
 
             highlightService.Update(highlight);
             highlightService.Save();
@@ -122,7 +124,7 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// Removes a highlight by id
+        ///     Removes a highlight by id
         /// </summary>
         /// <param name="highlightId"></param>
         /// <returns></returns>
@@ -138,5 +140,7 @@ namespace API.Controllers
             highlightService.Save();
             return Ok();
         }
+
     }
+
 }

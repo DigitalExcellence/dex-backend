@@ -14,12 +14,16 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
+using Microsoft.AspNetCore.Server.IISIntegration;
 using System;
 
 namespace IdentityServer
 {
+
     public class AccountOptions
     {
+
         public static bool AllowLocalLogin = true;
         public static bool AllowRememberLogin = true;
         public static TimeSpan RememberMeLoginDuration = TimeSpan.FromDays(30);
@@ -28,8 +32,10 @@ namespace IdentityServer
         public static bool AutomaticRedirectAfterSignOut = false;
 
         // specify the Windows authentication scheme being used
-        public static readonly string WindowsAuthenticationSchemeName = Microsoft.AspNetCore.Server.IISIntegration.IISDefaults.AuthenticationScheme;
+        public static readonly string WindowsAuthenticationSchemeName = IISDefaults.AuthenticationScheme;
 
         public static string InvalidCredentialsErrorMessage = "Invalid username or password";
+
     }
+
 }

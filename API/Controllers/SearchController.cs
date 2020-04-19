@@ -15,30 +15,29 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Models.Defaults;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// The controller that handles search requests
+    ///     The controller that handles search requests
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SearchController : ControllerBase
     {
 
-        private readonly ISearchService _searchService;
         private readonly IMapper _mapper;
+
+        private readonly ISearchService _searchService;
 
         public SearchController(ISearchService searchService, IMapper mapper)
         {
@@ -47,21 +46,32 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Search for projects
+        ///     Search for projects
         /// </summary>
         /// <param name="query">The search query</param>
         /// <returns>Search results</returns>
         [HttpGet("internal/{query}")]
-        public async Task<IActionResult> SearchInternalProjects(string query, [FromQuery] SearchRequestParamsResource parameters)
+        public async Task<IActionResult> SearchInternalProjects(string query,
+                                                                [FromQuery] SearchRequestParamsResource parameters)
         {
-            if (query.Length < 0) return BadRequest("Query required");
-            if (parameters.Page != null && parameters.Page < 1) return BadRequest("Invalid page number");
-            if(parameters.SortBy != null && parameters.SortBy != "name" && parameters.SortBy != "created" && parameters.SortBy != "updated") return BadRequest("Invalid sort value: Use \"name\", \"created\" or \"updated\"");
-            if(parameters.SortDirection != null && parameters.SortDirection != "asc" && parameters.SortDirection != "desc") return BadRequest("Invalid sort direction: Use \"asc\" or \"desc\"");
+            if(query.Length < 0) return BadRequest("Query required");
+            if(parameters.Page != null &&
+               parameters.Page < 1)
+                return BadRequest("Invalid page number");
+            if(parameters.SortBy != null &&
+               parameters.SortBy != "name" &&
+               parameters.SortBy != "created" &&
+               parameters.SortBy != "updated")
+                return BadRequest("Invalid sort value: Use \"name\", \"created\" or \"updated\"");
+            if(parameters.SortDirection != null &&
+               parameters.SortDirection != "asc" &&
+               parameters.SortDirection != "desc")
+                return BadRequest("Invalid sort direction: Use \"asc\" or \"desc\"");
 
             SearchParams searchParams = _mapper.Map<SearchRequestParamsResource, SearchParams>(parameters);
             IEnumerable<Project> projects = await _searchService.SearchInternalProjects(query, searchParams);
-            IEnumerable<SearchResultResource> searchResults = _mapper.Map<IEnumerable<Project>, IEnumerable<SearchResultResource>>(projects);
+            IEnumerable<SearchResultResource> searchResults =
+                _mapper.Map<IEnumerable<Project>, IEnumerable<SearchResultResource>>(projects);
 
             SearchResultsResource searchResultsResource = new SearchResultsResource();
             searchResultsResource.Results = searchResults.ToArray();
@@ -69,10 +79,12 @@ namespace API.Controllers
             searchResultsResource.Count = searchResults.Count();
             searchResultsResource.TotalCount = await _searchService.SearchInternalProjectsCount(query, searchParams);
             searchResultsResource.Page = searchParams.Page;
-            searchResultsResource.TotalPages = await _searchService.SearchInternalProjectsTotalPages(query, searchParams);
+            searchResultsResource.TotalPages =
+                await _searchService.SearchInternalProjectsTotalPages(query, searchParams);
 
             return Ok(searchResultsResource);
         }
 
     }
+
 }

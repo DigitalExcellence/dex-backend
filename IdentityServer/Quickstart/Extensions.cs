@@ -14,25 +14,29 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
+using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace IdentityServer
 {
+
     public static class Extensions
     {
+
         /// <summary>
-        /// Determines whether the client is configured to use PKCE.
+        ///     Determines whether the client is configured to use PKCE.
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="client_id">The client identifier.</param>
         /// <returns></returns>
         public static async Task<bool> IsPkceClientAsync(this IClientStore store, string client_id)
         {
-            if (!string.IsNullOrWhiteSpace(client_id))
+            if(!string.IsNullOrWhiteSpace(client_id))
             {
-                var client = await store.FindEnabledClientByIdAsync(client_id);
+                Client client = await store.FindEnabledClientByIdAsync(client_id);
                 return client?.RequirePkce == true;
             }
 
@@ -44,7 +48,13 @@ namespace IdentityServer
             controller.HttpContext.Response.StatusCode = 200;
             controller.HttpContext.Response.Headers["Location"] = "";
 
-            return controller.View(viewName, new RedirectViewModel { RedirectUrl = redirectUri });
+            return controller.View(viewName,
+                                   new RedirectViewModel
+                                   {
+                                       RedirectUrl = redirectUri
+                                   });
         }
+
     }
+
 }

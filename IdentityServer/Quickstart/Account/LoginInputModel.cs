@@ -14,17 +14,25 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using System.ComponentModel.DataAnnotations;
 
 namespace IdentityServer
 {
+
     public class LoginInputModel
     {
+
         [Required]
         public string Username { get; set; }
+
         [Required]
         public string Password { get; set; }
+
         public bool RememberLogin { get; set; }
+
         public string ReturnUrl { get; set; }
+
     }
+
 }

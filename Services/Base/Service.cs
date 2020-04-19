@@ -14,20 +14,23 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Repositories.Base;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Base
 {
+
     public abstract class Service<TEntity> : IService<TEntity> where TEntity : class
     {
-        protected IRepository<TEntity> Repository { get; }
 
         protected Service(IRepository<TEntity> repository)
         {
             Repository = repository;
         }
+
+        protected IRepository<TEntity> Repository { get; }
 
         public virtual async Task<TEntity> FindAsync(int id)
         {
@@ -68,5 +71,7 @@ namespace Services.Base
         {
             Repository.Save();
         }
+
     }
+
 }

@@ -16,17 +16,19 @@
 */
 
 using API.Resources;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Models;
 using Repositories;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Services.Services
 {
+
     public interface ISearchService
     {
+
         Task<IEnumerable<Project>> SearchInternalProjects(string query, SearchParams searchParams);
 
         Task<int> SearchInternalProjectsCount(string query, SearchParams searchParams);
@@ -37,7 +39,8 @@ namespace Services.Services
 
     public class SearchService : ISearchService
     {
-        private IProjectRepository _projectRepository;
+
+        private readonly IProjectRepository _projectRepository;
 
         public SearchService(IProjectRepository projectRepository)
         {
@@ -45,14 +48,16 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Search for projects in the internal database
+        ///     Search for projects in the internal database
         /// </summary>
         /// <param name="query">The search query</param>
         /// <param name="searchParams">The parameters to narrow down the search results</param>
         /// <returns>The projects that match the search query</returns>
         public virtual async Task<IEnumerable<Project>> SearchInternalProjects(string query, SearchParams searchParams)
         {
-            if(!searchParams.AmountOnPage.HasValue || searchParams.AmountOnPage <= 0) searchParams.AmountOnPage = 20;
+            if(!searchParams.AmountOnPage.HasValue ||
+               searchParams.AmountOnPage <= 0)
+                searchParams.AmountOnPage = 20;
 
             int? skip = null;
             int? take = null;
@@ -82,7 +87,7 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Get the number of projects that match the search query
+        ///     Get the number of projects that match the search query
         /// </summary>
         /// <param name="query">The search query</param>
         /// <param name="searchParams">The parameters to narrow down the search results</param>
@@ -93,17 +98,20 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Search for projects in the internal database
+        ///     Search for projects in the internal database
         /// </summary>
         /// <param name="query">The search query</param>
         /// <param name="searchParams">The parameters to narrow down the search results</param>
         /// <returns>The projects that match the search query</returns>
         public virtual async Task<int> SearchInternalProjectsTotalPages(string query, SearchParams searchParams)
         {
-            if(searchParams.AmountOnPage == null || searchParams.AmountOnPage <= 0) searchParams.AmountOnPage = 20;
+            if(searchParams.AmountOnPage == null ||
+               searchParams.AmountOnPage <= 0)
+                searchParams.AmountOnPage = 20;
             int count = await SearchInternalProjectsCount(query, searchParams);
             return (int) Math.Ceiling(count / (decimal) searchParams.AmountOnPage);
         }
 
     }
+
 }

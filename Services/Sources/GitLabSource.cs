@@ -14,12 +14,15 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using System;
 
 namespace Services.Sources
 {
+
     public class GitLabSource : ISource
     {
+
         public void getSource(string url)
         {
             throw new NotImplementedException();
@@ -29,5 +32,7 @@ namespace Services.Sources
         {
             throw new NotImplementedException();
         }
+
     }
+
 }
