@@ -14,21 +14,27 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using IdentityServer4.Models;
 
 namespace IdentityServer
 {
+
     public class ErrorViewModel
     {
-        public ErrorViewModel()
-        {
-        }
+
+        public ErrorViewModel() { }
 
         public ErrorViewModel(string error)
         {
-            Error = new ErrorMessage { Error = error };
+            Error = new ErrorMessage
+                    {
+                        Error = error
+                    };
         }
 
         public ErrorMessage Error { get; set; }
+
     }
+
 }

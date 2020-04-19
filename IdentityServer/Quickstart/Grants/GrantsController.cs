@@ -14,8 +14,10 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
@@ -26,22 +28,24 @@ using System.Threading.Tasks;
 
 namespace IdentityServer
 {
+
     /// <summary>
-    /// This sample controller allows a user to revoke grants given to clients
+    ///     This sample controller allows a user to revoke grants given to clients
     /// </summary>
     [SecurityHeaders]
     [Authorize]
     public class GrantsController : Controller
     {
-        private readonly IIdentityServerInteractionService _interaction;
+
         private readonly IClientStore _clients;
-        private readonly IResourceStore _resources;
         private readonly IEventService _events;
+        private readonly IIdentityServerInteractionService _interaction;
+        private readonly IResourceStore _resources;
 
         public GrantsController(IIdentityServerInteractionService interaction,
-            IClientStore clients,
-            IResourceStore resources,
-            IEventService events)
+                                IClientStore clients,
+                                IResourceStore resources,
+                                IEventService events)
         {
             _interaction = interaction;
             _clients = clients;
@@ -50,7 +54,7 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Show list of grants
+        ///     Show list of grants
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -59,7 +63,7 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Handle postback to revoke a client
+        ///     Handle postback to revoke a client
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -73,36 +77,43 @@ namespace IdentityServer
 
         private async Task<GrantsViewModel> BuildViewModelAsync()
         {
-            var grants = await _interaction.GetAllUserConsentsAsync();
+            IEnumerable<Consent> grants = await _interaction.GetAllUserConsentsAsync();
 
-            var list = new List<GrantViewModel>();
-            foreach (var grant in grants)
+            List<GrantViewModel> list = new List<GrantViewModel>();
+            foreach(Consent grant in grants)
             {
-                var client = await _clients.FindClientByIdAsync(grant.ClientId);
-                if (client != null)
+                Client client = await _clients.FindClientByIdAsync(grant.ClientId);
+                if(client != null)
                 {
-                    var resources = await _resources.FindResourcesByScopeAsync(grant.Scopes);
+                    Resources resources = await _resources.FindResourcesByScopeAsync(grant.Scopes);
 
-                    var item = new GrantViewModel()
-                    {
-                        ClientId = client.ClientId,
-                        ClientName = client.ClientName ?? client.ClientId,
-                        ClientLogoUrl = client.LogoUri,
-                        ClientUrl = client.ClientUri,
-                        Created = grant.CreationTime,
-                        Expires = grant.Expiration,
-                        IdentityGrantNames = resources.IdentityResources.Select(x => x.DisplayName ?? x.Name).ToArray(),
-                        ApiGrantNames = resources.ApiResources.Select(x => x.DisplayName ?? x.Name).ToArray()
-                    };
+                    GrantViewModel item = new GrantViewModel
+                                          {
+                                              ClientId = client.ClientId,
+                                              ClientName = client.ClientName ?? client.ClientId,
+                                              ClientLogoUrl = client.LogoUri,
+                                              ClientUrl = client.ClientUri,
+                                              Created = grant.CreationTime,
+                                              Expires = grant.Expiration,
+                                              IdentityGrantNames = resources
+                                                                   .IdentityResources
+                                                                   .Select(x => x.DisplayName ?? x.Name)
+                                                                   .ToArray(),
+                                              ApiGrantNames = resources
+                                                              .ApiResources.Select(x => x.DisplayName ?? x.Name)
+                                                              .ToArray()
+                                          };
 
                     list.Add(item);
                 }
             }
 
             return new GrantsViewModel
-            {
-                Grants = list
-            };
+                   {
+                       Grants = list
+                   };
         }
+
     }
+
 }

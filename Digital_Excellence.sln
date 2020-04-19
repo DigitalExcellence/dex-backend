@@ -18,6 +18,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2_Services.Tests", "2_Services.Tests\2_Services.Tests.csproj", "{D7ABD315-4B00-4A5F-8961-8147ED6602C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3_Repositories.Tests", "3_Repositories.Tests\3_Repositories.Tests.csproj", "{471B1E44-E308-4C6D-B595-15AD939820DB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{445ECBDE-DF20-43B3-BD4B-4881F05203A2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

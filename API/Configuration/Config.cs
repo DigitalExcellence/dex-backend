@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -14,102 +14,102 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Microsoft.Extensions.Configuration;
 using NetEscapades.Configuration.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace API.Configuration
 {
+
     public class Config : IValidatable
     {
+
         /// <summary>
-        /// 
+        ///     Gets or sets the original configuration.
+        /// </summary>
+        /// <value>
+        ///     The original configuration.
+        /// </value>
+        public IConfiguration OriginalConfiguration { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the self.
+        /// </summary>
+        /// <value>
+        ///     The self.
+        /// </value>
+        public FrontendConfig Frontend { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the identity server.
+        /// </summary>
+        /// <value>
+        ///     The identity server.
+        /// </value>
+        public IdentityServerConfig IdentityServer { get; set; }
+
+        /// <summary>
+        ///     Validates this instance.
+        /// </summary>
+        public void Validate()
+        {
+            Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
+            Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
+        }
+
+        /// <summary>
         /// </summary>
         public class FrontendConfig
         {
+
             /// <summary>
-            /// Gets or sets the front end.
+            ///     Gets or sets the front end.
             /// </summary>
             /// <value>
-            /// The front end.
+            ///     The front end.
             /// </value>
-            [Required, Url]
+            [Required]
+            [Url]
             public string FrontendUrl { get; set; }
 
             /// <summary>
-            /// Gets or sets the client identifier.
+            ///     Gets or sets the client identifier.
             /// </summary>
             /// <value>
-            /// The client identifier.
+            ///     The client identifier.
             /// </value>
             [Required]
             public string ClientId { get; set; }
 
             /// <summary>
-            /// Gets or sets the client secret.
+            ///     Gets or sets the client secret.
             /// </summary>
             /// <value>
-            /// The client secret.
+            ///     The client secret.
             /// </value>
             [Required]
             public string ClientSecret { get; set; }
+
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public class IdentityServerConfig
         {
+
             /// <summary>
-            /// Gets or sets the identity URL.
+            ///     Gets or sets the identity URL.
             /// </summary>
             /// <value>
-            /// The identity URL.
+            ///     The identity URL.
             /// </value>
-            [Required, Url]
+            [Required]
+            [Url]
             public string IdentityUrl { get; set; }
+
         }
 
-
-        /// <summary>
-        /// Gets or sets the original configuration.
-        /// </summary>
-        /// <value>
-        /// The original configuration.
-        /// </value>
-        public IConfiguration OriginalConfiguration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the self.
-        /// </summary>
-        /// <value>
-        /// The self.
-        /// </value>
-        public FrontendConfig Frontend { get; set; }
-
-        /// <summary>
-        /// Gets or sets the identity server.
-        /// </summary>
-        /// <value>
-        /// The identity server.
-        /// </value>
-        public IdentityServerConfig IdentityServer { get; set; }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Config"/> class.
-        /// </summary>
-        public Config()
-        {
-        }
-
-        /// <summary>
-        /// Validates this instance.
-        /// </summary>
-        public void Validate()
-        {
-            Validator.ValidateObject(Frontend, new ValidationContext(Frontend), validateAllProperties: true);
-            Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), validateAllProperties: true);
-        }
     }
+
 }

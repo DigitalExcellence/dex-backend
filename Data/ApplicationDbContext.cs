@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Data.Configurations;
 using Data.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -21,27 +22,32 @@ using Models;
 
 namespace Data
 {
+
     public class ApplicationDbContext : DbContext
     {
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
         public DbSet<User> User { get; set; }
+
         public DbSet<Project> Project { get; set; }
+
         public DbSet<Collaborator> Collaborators { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
+        public DbSet<Highlight> Highlight { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             //modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
 
             // Database seeding for demo
-            modelBuilder.SeedCollaborators(
-                modelBuilder.SeedProjects(
-                    modelBuilder.SeedUsers()));
+            modelBuilder.SeedCollaborators(modelBuilder.SeedProjects(modelBuilder.SeedUsers()));
         }
+
     }
+
 }

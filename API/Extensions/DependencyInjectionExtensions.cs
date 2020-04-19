@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,13 +23,15 @@ using Services.Services;
 
 namespace API.Extensions
 {
+
     /// <summary>
-    /// DependencyInjectionExtensions
+    ///     DependencyInjectionExtensions
     /// </summary>
     public static class DependencyInjectionExtensions
     {
+
         /// <summary>
-        /// Adds all the services and repositories.
+        ///     Adds all the services and repositories.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <returns></returns>
@@ -42,9 +45,14 @@ namespace API.Extensions
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
 
+            services.AddScoped<IHighlightService, HighlightService>();
+            services.AddScoped<IHighlightRepository, HighlightRepository>();
+
             services.AddScoped<ISearchService, SearchService>();
 
             return services;
         }
+
     }
+
 }

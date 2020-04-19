@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
@@ -22,38 +23,44 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     public interface IUserRepository : IRepository<User>
     {
+
         Task<User> GetUserAsync(int userId);
+
         Task<bool> RemoveUserAsync(int userId);
+
     }
 
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository(DbContext dbContext) : base(dbContext)
-        {
-        }
+
+        public UserRepository(DbContext dbContext) : base(dbContext) { }
 
         public async Task<User> GetUserAsync(int userId)
         {
             return await GetDbSet<User>()
-                .Where(s => s.Id == userId)
-                .SingleOrDefaultAsync();
+                         .Where(s => s.Id == userId)
+                         .SingleOrDefaultAsync();
         }
 
         public async Task<bool> RemoveUserAsync(int userId)
         {
             User user = await GetDbSet<User>()
-                .Where(s => s.Id == userId)
-                .SingleOrDefaultAsync();
+                              .Where(s => s.Id == userId)
+                              .SingleOrDefaultAsync();
 
-            if (user != null)
+            if(user != null)
             {
-                GetDbSet<User>().Remove(user);
+                GetDbSet<User>()
+                    .Remove(user);
                 return true;
             }
 
             return false;
         }
+
     }
+
 }

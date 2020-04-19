@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -14,32 +14,41 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 namespace API.Resources
 {
+
     /// <summary>
-    /// the view model result of user.
+    ///     the view model result of user.
     /// </summary>
     public class UserResourceResult
     {
+
         /// <summary>
-        /// This gets or sets the Id
+        ///     This gets or sets the Id
         /// </summary>
         public int Id { get; set; }
+
         /// <summary>
-        /// This gets or sets the Name
+        ///     This gets or sets the Name
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
-        /// This gets or sets the Email
+        ///     This gets or sets the Email
         /// </summary>
         public string Email { get; set; }
+
         /// <summary>
-        /// This gets or sets the Identity Id of an external provider
+        ///     This gets or sets the Identity Id of an external provider
         /// </summary>
         public string IdentityId { get; set; }
+
         /// <summary>
-        /// This gets or sets the ProfileUrl
+        ///     This gets or sets the ProfileUrl
         /// </summary>
         public string ProfileUrl { get; set; }
+
     }
+
 }

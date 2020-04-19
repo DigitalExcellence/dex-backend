@@ -1,4 +1,4 @@
-﻿using _3_Repositories.Tests.Base;
+using _3_Repositories.Tests.Base;
 using _3_Repositories.Tests.DataSources;
 using Models;
 using NUnit.Framework;
@@ -167,31 +167,31 @@ namespace _3_Repositories.Tests
 
             // Tests
             // Id search
-            List<Project> retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("1", 0, 1);
+            List<Project> retrieved = (List<Project>)await _repository.SearchAsync("1", 0, 1);
             Assert.AreEqual(1, retrieved.Count, "Id search failed");
 
             // Name search
-            retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("abc", 10, 10);
+            retrieved = (List<Project>)await _repository.SearchAsync("abc", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Name search failed");
 
             // Description search
-            retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("def", 10, 10);
+            retrieved = (List<Project>)await _repository.SearchAsync("def", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Description search failed");
 
             // Short Description search
-            retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("ghij", 10, 10);
+            retrieved = (List<Project>)await _repository.SearchAsync("ghij", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Short Description search failed");
 
             // Uri search
-            retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("example", 10, 10);
+            retrieved = (List<Project>)await _repository.SearchAsync("example", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Uri search failed");
 
             // User name search
-            retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("xyz", 10, 10);
+            retrieved = (List<Project>)await _repository.SearchAsync("xyz", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "User name search failed");
 
             // Combined search
-            retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("ex", 10, 40);
+            retrieved = (List<Project>)await _repository.SearchAsync("ex", 10, 40);
             Assert.AreEqual(40, retrieved.Count, "Combined search failed");
         }
 
@@ -209,7 +209,7 @@ namespace _3_Repositories.Tests
             await SaveChangesAsync();
 
             // Tests
-            List<Project> retrieved = (List<Project>)await _repository.SearchSkipTakeAsync("ex", 1000, 10);
+            List<Project> retrieved = (List<Project>)await _repository.SearchAsync("ex", 1000, 10);
             Assert.AreEqual(0, retrieved.Count);
         }
 
