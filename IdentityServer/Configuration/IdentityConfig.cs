@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -39,8 +39,12 @@ namespace IdentityServer.Configuration
                 {
                     Scopes =
                     {
-                        new Scope(nameof(Defaults.ScopeCategories.ApiDataRead)),
-                        new Scope(nameof(Defaults.ScopeCategories.ApiDataWrite))
+                        new Scope(nameof(Defaults.Scopes.ProjectRead)),
+                        new Scope(nameof(Defaults.Scopes.ProjectWrite)),
+                        new Scope(nameof(Defaults.Scopes.UserWrite)),
+                        new Scope(nameof(Defaults.Scopes.UserRead)),
+                        new Scope(nameof(Defaults.Scopes.HighlightWrite)),
+                        new Scope(nameof(Defaults.Scopes.HighlightRead))
                     }
                 },
             };
@@ -59,8 +63,10 @@ namespace IdentityServer.Configuration
                     },
                     AllowedScopes =
                     {
-                        nameof(Defaults.ScopeCategories.ApiDataRead),
-                        nameof(Defaults.ScopeCategories.ApiDataWrite)
+                        nameof(Defaults.Scopes.ProjectRead),
+                        nameof(Defaults.Scopes.ProjectWrite),
+                        nameof(Defaults.Scopes.UserWrite),
+                        nameof(Defaults.Scopes.UserRead)
                     }
                 },
                 // interactive ASP.NET Core MVC client
@@ -69,22 +75,27 @@ namespace IdentityServer.Configuration
                     ClientId = "dex-frontend",
                     ClientName = "Digital Excellence Angular Frontend",
                     ClientSecrets = { new Secret(config.Self.IdentityApplications.Single(a => a["Key"].Equals("dex-frontend"))["Value"].Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.Implicit,
                     RequirePkce = true,
 
                     // where to redirect to after login
-                    RedirectUris = { "http://localhost:5002/signin-oidc" },
+                    RedirectUris = { "http://localhost:4200/auth-callback" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:4200/" },
 
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        nameof(Defaults.ScopeCategories.ApiDataRead)
-                    }
+                        nameof(Defaults.Scopes.ProjectRead),
+                        nameof(Defaults.Scopes.ProjectWrite),
+                        nameof(Defaults.Scopes.UserWrite),
+                        nameof(Defaults.Scopes.UserRead),
+                        nameof(Defaults.Scopes.HighlightRead),
+                        nameof(Defaults.Scopes.HighlightWrite)
+                    },
+                    AllowAccessTokensViaBrowser = true
                     // AllowOfflineAccess = true
                 }
             };

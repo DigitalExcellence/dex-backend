@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -26,6 +26,7 @@ namespace Data
         public DbSet<User> User { get; set; }
         public DbSet<Project> Project { get; set; }
         public DbSet<Collaborator> Collaborators { get; set; }
+        public DbSet<Highlight> Highlight { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

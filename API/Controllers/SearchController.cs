@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 *
 * This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Models.Defaults;
 
 namespace API.Controllers
 {
@@ -31,7 +34,6 @@ namespace API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class SearchController : ControllerBase
     {
 

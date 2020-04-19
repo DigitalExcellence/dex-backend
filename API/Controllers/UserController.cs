@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -19,6 +19,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Defaults;
 using Services.Services;
 using System.Threading.Tasks;
 
@@ -29,7 +30,6 @@ namespace API.Controllers
 	/// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -53,7 +53,7 @@ namespace API.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("{userId}")]
-        //[Authorize(Roles = nameof(Defaults.Roles.Student), Policy = nameof(Defaults.Scopes.StudentRead))]
+        [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
         public async Task<IActionResult> GetUser(int userId)
         {
             if (userId < 0)
@@ -77,6 +77,7 @@ namespace API.Controllers
         /// <param name="accountResource"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         public async Task<IActionResult> CreateAccount([FromBody] UserResource accountResource)
         {
             User user = _mapper.Map<UserResource, User>(accountResource);
@@ -99,6 +100,7 @@ namespace API.Controllers
         /// <param name="userResource"></param>
         /// <returns></returns>
         [HttpPut("{userId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
             User user = await _userService.FindAsync(userId);
@@ -120,7 +122,8 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("{userId}")]
-		public async Task<IActionResult> DeleteAccount(int userId)
+        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
+        public async Task<IActionResult> DeleteAccount(int userId)
 		{
 			if(await _userService.FindAsync(userId) == null)
             {

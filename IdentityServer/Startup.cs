@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Configuration;
 using IdentityServer.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -21,19 +22,24 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 
 namespace IdentityServer
 {
+
     public class Startup
     {
+
         public IConfiguration Configuration { get; }
 
         public Config Config { get; }
+
         public IWebHostEnvironment Environment { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            Config = configuration.GetSection("App").Get<Config>();
+            Config = configuration.GetSection("App")
+                .Get<Config>();
             Configuration = configuration;
             Environment = environment;
         }
@@ -45,13 +51,14 @@ namespace IdentityServer
 
             services.AddControllersWithViews();
 
-            var builder = services.AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-            })
+            IIdentityServerBuilder builder = services.AddIdentityServer(options =>
+                                                                        {
+                                                                            options.Events.RaiseErrorEvents = true;
+                                                                            options.Events.RaiseInformationEvents =
+                                                                                true;
+                                                                            options.Events.RaiseFailureEvents = true;
+                                                                            options.Events.RaiseSuccessEvents = true;
+                                                                        })
                 .AddTestUsers(TestUsers.Users);
 
             // in-memory, code config
@@ -69,28 +76,40 @@ namespace IdentityServer
             //         // ...
             //     });
 
-            if (Environment.IsDevelopment())
+            if(Environment.IsDevelopment())
             {
                 //TODO: Have some sort of certificate on the production servers
                 // not recommended for production - you need to store your key material somewhere secure
                 builder.AddDeveloperSigningCredential();
             }
-
+            services.AddCors(options =>
+                             {
+                                 options.AddPolicy("dex-api",
+                                     policy =>
+                                     {
+                                         policy.AllowAnyOrigin()
+                                             .AllowAnyHeader()
+                                             .AllowAnyMethod();
+                                     });
+                             });
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            if (Environment.IsDevelopment())
+            if(Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseStaticFiles();
 
+            app.UseCors("dex-api");
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }
+
     }
+
 }

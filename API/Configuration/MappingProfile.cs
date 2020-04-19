@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 *
 * This program is free software: you can redistribute it and/or modify
@@ -42,6 +42,9 @@ namespace API.Configuration
 			CreateMap<Project, SearchResultResource>();
 
             CreateMap<SearchRequestParamsResource, SearchParams>();
+
+            CreateMap<HighlightResource, Highlight>();
+            CreateMap<Highlight, HighlightResourceResult>();
         }
 
 	}
