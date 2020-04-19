@@ -14,7 +14,6 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
-
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
