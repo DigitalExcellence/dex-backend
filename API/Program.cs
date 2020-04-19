@@ -27,9 +27,17 @@ using System.IO;
 namespace API
 {
 
+    /// <summary>
+    ///     Program.cs
+    /// </summary>
     public class Program
     {
 
+        /// <summary>
+        ///     Main of API
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -38,10 +46,9 @@ namespace API
                          .MinimumLevel.Override("System", LogEventLevel.Warning)
                          .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                          .Enrich.FromLogContext()
-                         .WriteTo.Console(
-                             outputTemplate:
-                             "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-                             theme: AnsiConsoleTheme.Literate)
+                         .WriteTo.Console(outputTemplate:
+                                          "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                                          theme: AnsiConsoleTheme.Literate)
                          .CreateLogger();
 
             try
@@ -61,6 +68,11 @@ namespace API
             }
         }
 
+        /// <summary>
+        ///     Host Builder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IWebHostBuilder CreateHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)

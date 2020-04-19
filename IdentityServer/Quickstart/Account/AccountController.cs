@@ -135,11 +135,10 @@ namespace IdentityServer
                 if(_users.ValidateCredentials(model.Username, model.Password))
                 {
                     TestUser user = _users.FindByUsername(model.Username);
-                    await _events.RaiseAsync(
-                        new UserLoginSuccessEvent(user.Username,
-                                                  user.SubjectId,
-                                                  user.Username,
-                                                  clientId: context?.ClientId));
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username,
+                                                                       user.SubjectId,
+                                                                       user.Username,
+                                                                       clientId: context?.ClientId));
 
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.

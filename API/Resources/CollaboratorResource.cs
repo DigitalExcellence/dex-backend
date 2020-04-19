@@ -14,16 +14,23 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Resources
 {
+
     public class CollaboratorResource
     {
+
+        /// <summary>
+        ///     Get or Set the Fullname of a collaborator
+        /// </summary>
         public string FullName { get; set; }
+
+        /// <summary>
+        ///     Get or Set the Role of a collaborator
+        /// </summary>
         public string Role { get; set; }
+
     }
+
 }

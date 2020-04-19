@@ -14,31 +14,36 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using API.Configuration;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Extensions
 {
+
     /// <summary>
-    /// AutoMapperExtensions
+    ///     AutoMapperExtensions
     /// </summary>
     public static class AutoMapperExtensions
     {
+
         /// <summary>
-        /// Adds the autoMapper.
+        ///     Adds the autoMapper.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <returns></returns>
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
             // Auto Mapper Configurations
-            var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
+            MapperConfiguration mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
             return services;
         }
+
     }
+
 }

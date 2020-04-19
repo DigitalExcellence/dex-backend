@@ -19,20 +19,39 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Resources
 {
+
+    /// <summary>
+    ///     Resource to describe parameters for Search Request
+    /// </summary>
     public class SearchRequestParamsResource
     {
 
+        /// <summary>
+        ///     Get or Set the page in query parameter
+        /// </summary>
         [FromQuery(Name = "page")]
         public int? Page { get; set; }
 
+        /// <summary>
+        ///     Get or Set the amount of Search Results on a single page
+        /// </summary>
         [FromQuery(Name = "amountOnPage")]
         public int? AmountOnPage { get; set; }
 
+        /// <summary>
+        ///     Get or Set the sort by query parameter
+        ///     Possible sorts are: name, created, updated
+        /// </summary>
         [FromQuery(Name = "sortBy")]
         public string SortBy { get; set; }
 
+        /// <summary>
+        ///     Get or Set the direction of sorting by query parameter.
+        ///     Possible options are : asc, desc
+        /// </summary>
         [FromQuery(Name = "sortDirection")]
         public string SortDirection { get; set; }
 
     }
+
 }

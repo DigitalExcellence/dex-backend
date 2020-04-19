@@ -26,9 +26,17 @@ using Microsoft.Extensions.Hosting;
 namespace IdentityServer
 {
 
+    /// <summary>
+    ///     Startup file for Identity Server
+    /// </summary>
     public class Startup
     {
 
+        /// <summary>
+        ///     Startup constructor
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="environment"></param>
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Config = configuration.GetSection("App")
@@ -37,12 +45,22 @@ namespace IdentityServer
             Environment = environment;
         }
 
+        /// <summary>
+        ///     Configuration for Identity server
+        /// </summary>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        ///     Config for Identity server
+        /// </summary>
         public Config Config { get; }
 
         public IWebHostEnvironment Environment { get; }
 
+        /// <summary>
+        ///     Configure services for the identity server
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
@@ -93,6 +111,10 @@ namespace IdentityServer
             });
         }
 
+        /// <summary>
+        ///     Configure the application
+        /// </summary>
+        /// <param name="app"></param>
         public void Configure(IApplicationBuilder app)
         {
             if(Environment.IsDevelopment())

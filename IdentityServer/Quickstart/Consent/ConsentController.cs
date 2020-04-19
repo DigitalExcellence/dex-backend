@@ -239,9 +239,9 @@ namespace IdentityServer
                                                                   vm.ScopesConsented.Contains(x.Name) || model == null))
                                 .ToArray();
             vm.ResourceScopes = resources.ApiResources.SelectMany(x => x.Scopes)
-                                         .Select(x => CreateScopeViewModel(
-                                                     x,
-                                                     vm.ScopesConsented.Contains(x.Name) || model == null))
+                                         .Select(x => CreateScopeViewModel(x,
+                                                                           vm.ScopesConsented.Contains(x.Name) ||
+                                                                           model == null))
                                          .ToArray();
             if(ConsentOptions.EnableOfflineAccess &&
                resources.OfflineAccess)
