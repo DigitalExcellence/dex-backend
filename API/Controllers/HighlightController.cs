@@ -41,7 +41,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllHighlights(bool returnOnlyTheHightlighted = true)
         {
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync(returnOnlyTheHightlighted);
-            if(highlights == null)
+            if(!highlights.Any())
             {
                 return NotFound();
             }

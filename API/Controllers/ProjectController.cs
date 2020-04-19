@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Models;
 using Models.Defaults;
 using Services.Services;
@@ -61,7 +62,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllProjects()
 		{
 			List<Project> projects = await _projectService.GetAllWithUsersAsync();
-			if (projects == null)
+			if (!projects.Any())
 			{
 				return NotFound();
 			}
