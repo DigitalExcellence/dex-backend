@@ -37,37 +37,37 @@ namespace API.Controllers
     public class ProjectController : ControllerBase
     {
 
-        private readonly IMapper _mapper;
-        private readonly IProjectService _projectService;
-        private readonly IUserService _userService;
+        private readonly IMapper mapper;
+        private readonly IProjectService projectService;
+        private readonly IUserService userService;
 
         /// <summary>
         ///     Initialize a new instance of ProjectController
         /// </summary>
         /// <param name="projectService"></param>
+        /// <param name="userService"></param>
         /// <param name="mapper"></param>
         public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
         {
-            _projectService = projectService;
-            _userService = userService;
-            _mapper = mapper;
+            this.projectService = projectService;
+            this.userService = userService;
+            this.mapper = mapper;
         }
 
         /// <summary>
         ///     Get all projects.
         /// </summary>
-        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAllProjects()
         {
-            List<Project> projects = await _projectService.GetAllWithUsersAsync();
+            List<Project> projects = await projectService.GetAllWithUsersAsync();
             if(!projects.Any())
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
+            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
         }
 
 
@@ -83,13 +83,13 @@ namespace API.Controllers
                 return BadRequest("Invalid project Id");
             }
 
-            Project project = await _projectService.FindWithUserAndCollaboratorsAsync(projectId);
+            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId);
             if(project == null)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
         /// <summary>
@@ -104,17 +104,17 @@ namespace API.Controllers
             {
                 return BadRequest("Project is null");
             }
-            Project project = _mapper.Map<ProjectResource, Project>(projectResource);
+            Project project = mapper.Map<ProjectResource, Project>(projectResource);
 
             //TODO: When login in frontend is functioning, get the user from JWT information
-            User user = await _userService.GetUserAsync(1);
+            User user = await userService.GetUserAsync(1);
             project.User = user;
             project.UserId = user.Id;
             try
             {
-                _projectService.Add(project);
-                _projectService.Save();
-                return Created(nameof(CreateProjectAsync), _mapper.Map<Project, ProjectResourceResult>(project));
+                projectService.Add(project);
+                projectService.Save();
+                return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
             } catch
             {
                 return BadRequest("Could not Create the Project");
@@ -131,18 +131,18 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
-            Project project = await _projectService.FindAsync(projectId);
+            Project project = await projectService.FindAsync(projectId);
             if(project == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(projectResource, project);
+            mapper.Map(projectResource, project);
 
-            _projectService.Update(project);
-            _projectService.Save();
+            projectService.Update(project);
+            projectService.Save();
 
-            return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
         /// <summary>
@@ -153,12 +153,12 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            if(await _projectService.FindAsync(projectId) == null)
+            if(await projectService.FindAsync(projectId) == null)
             {
                 return NotFound();
             }
-            await _projectService.RemoveAsync(projectId);
-            _projectService.Save();
+            await projectService.RemoveAsync(projectId);
+            projectService.Save();
             return Ok();
         }
 

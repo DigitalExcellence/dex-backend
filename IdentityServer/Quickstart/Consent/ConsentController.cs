@@ -39,11 +39,11 @@ namespace IdentityServer
     public class ConsentController : Controller
     {
 
-        private readonly IClientStore _clientStore;
-        private readonly IEventService _events;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly ILogger<ConsentController> _logger;
-        private readonly IResourceStore _resourceStore;
+        private readonly IClientStore clientStore;
+        private readonly IEventService events;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly ILogger<ConsentController> logger;
+        private readonly IResourceStore resourceStore;
 
         public ConsentController(
             IIdentityServerInteractionService interaction,
@@ -52,11 +52,11 @@ namespace IdentityServer
             IEventService events,
             ILogger<ConsentController> logger)
         {
-            _interaction = interaction;
-            _clientStore = clientStore;
-            _resourceStore = resourceStore;
-            _events = events;
-            _logger = logger;
+            this.interaction = interaction;
+            this.clientStore = clientStore;
+            this.resourceStore = resourceStore;
+            this.events = events;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace IdentityServer
 
             if(result.IsRedirect)
             {
-                if(await _clientStore.IsPkceClientAsync(result.ClientId))
+                if(await clientStore.IsPkceClientAsync(result.ClientId))
                 {
                     // if the client is PKCE then we assume it's native, so this change in how to
                     // return the response is for better UX for the end user.
@@ -118,7 +118,7 @@ namespace IdentityServer
             ProcessConsentResult result = new ProcessConsentResult();
 
             // validate return url is still valid
-            AuthorizationRequest request = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            AuthorizationRequest request = await interaction.GetAuthorizationContextAsync(model.ReturnUrl);
             if(request == null) return result;
 
             ConsentResponse grantedConsent = null;
@@ -129,7 +129,7 @@ namespace IdentityServer
                 grantedConsent = ConsentResponse.Denied;
 
                 // emit event
-                await _events.RaiseAsync(
+                await events.RaiseAsync(
                     new ConsentDeniedEvent(User.GetSubjectId(), request.ClientId, request.ScopesRequested));
             }
 
@@ -153,7 +153,7 @@ namespace IdentityServer
                                      };
 
                     // emit event
-                    await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(),
+                    await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(),
                                                                      request.ClientId,
                                                                      request.ScopesRequested,
                                                                      grantedConsent.ScopesConsented,
@@ -170,7 +170,7 @@ namespace IdentityServer
             if(grantedConsent != null)
             {
                 // communicate outcome of consent back to identityserver
-                await _interaction.GrantConsentAsync(request, grantedConsent);
+                await interaction.GrantConsentAsync(request, grantedConsent);
 
                 // indicate that's it ok to redirect back to authorization endpoint
                 result.RedirectUri = model.ReturnUrl;
@@ -186,28 +186,28 @@ namespace IdentityServer
 
         private async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentInputModel model = null)
         {
-            AuthorizationRequest request = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            AuthorizationRequest request = await interaction.GetAuthorizationContextAsync(returnUrl);
             if(request != null)
             {
-                Client client = await _clientStore.FindEnabledClientByIdAsync(request.ClientId);
+                Client client = await clientStore.FindEnabledClientByIdAsync(request.ClientId);
                 if(client != null)
                 {
                     Resources resources =
-                        await _resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
+                        await resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
                     if(resources != null &&
                        (resources.IdentityResources.Any() || resources.ApiResources.Any()))
                     {
                         return CreateConsentViewModel(model, returnUrl, request, client, resources);
                     }
-                    _logger.LogError("No scopes matching: {0}",
+                    logger.LogError("No scopes matching: {0}",
                                      request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
                 } else
                 {
-                    _logger.LogError("Invalid client id: {0}", request.ClientId);
+                    logger.LogError("Invalid client id: {0}", request.ClientId);
                 }
             } else
             {
-                _logger.LogError("No consent request matching request: {0}", returnUrl);
+                logger.LogError("No consent request matching request: {0}", returnUrl);
             }
 
             return null;

@@ -35,8 +35,8 @@ namespace API.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly IMapper mapper;
+        private readonly IUserService userService;
 
         /// <summary>
         ///     Initialize a new instance of UserController
@@ -45,8 +45,8 @@ namespace API.Controllers
         /// <param name="mapper"></param>
         public UserController(IUserService userService, IMapper mapper)
         {
-            _userService = userService;
-            _mapper = mapper;
+            this.userService = userService;
+            this.mapper = mapper;
         }
 
 
@@ -64,13 +64,13 @@ namespace API.Controllers
                 return BadRequest("Invalid user Id");
             }
 
-            User user = await _userService.FindAsync(userId);
+            User user = await userService.FindAsync(userId);
             if(user == null)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserResourceResult>(user));
         }
 
 
@@ -81,14 +81,14 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
-        public async Task<IActionResult> CreateAccount([FromBody] UserResource accountResource)
+        public IActionResult CreateAccount([FromBody] UserResource accountResource)
         {
-            User user = _mapper.Map<UserResource, User>(accountResource);
+            User user = mapper.Map<UserResource, User>(accountResource);
             try
             {
-                _userService.Add(user);
-                _userService.Save();
-                return Created(nameof(CreateAccount), _mapper.Map<User, UserResourceResult>(user));
+                userService.Add(user);
+                userService.Save();
+                return Created(nameof(CreateAccount), mapper.Map<User, UserResourceResult>(user));
             } catch
             {
                 return BadRequest("Could not Create the User account");
@@ -105,18 +105,18 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
-            User user = await _userService.FindAsync(userId);
+            User user = await userService.FindAsync(userId);
             if(user == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(userResource, user);
+            mapper.Map(userResource, user);
 
-            _userService.Update(user);
-            _userService.Save();
+            userService.Update(user);
+            userService.Save();
 
-            return Ok(_mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserResourceResult>(user));
         }
 
         /// <summary>
@@ -127,13 +127,13 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         public async Task<IActionResult> DeleteAccount(int userId)
         {
-            if(await _userService.FindAsync(userId) == null)
+            if(await userService.FindAsync(userId) == null)
             {
                 return NotFound();
             }
 
-            await _userService.RemoveAsync(userId);
-            _userService.Save();
+            await userService.RemoveAsync(userId);
+            userService.Save();
             return Ok();
         }
 

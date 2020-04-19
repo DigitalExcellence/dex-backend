@@ -96,7 +96,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        public async Task<IActionResult> CreateHighlightAsync(HighlightResource highlightResource)
+        public IActionResult CreateHighlightAsync(HighlightResource highlightResource)
         {
             if(highlightResource == null)
             {

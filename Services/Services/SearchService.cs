@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -40,11 +40,11 @@ namespace Services.Services
     public class SearchService : ISearchService
     {
 
-        private readonly IProjectRepository _projectRepository;
+        private readonly IProjectRepository projectRepository;
 
         public SearchService(IProjectRepository projectRepository)
         {
-            _projectRepository = projectRepository;
+            this.projectRepository = projectRepository;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Services.Services
 
             bool orderByDirection = searchParams.SortDirection == "asc";
 
-            return await _projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection);
+            return await projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Services.Services
         /// <returns>The number of projects that match the search query</returns>
         public virtual async Task<int> SearchInternalProjectsCount(string query, SearchParams searchParams)
         {
-            return await _projectRepository.SearchCountAsync(query);
+            return await projectRepository.SearchCountAsync(query);
         }
 
         /// <summary>

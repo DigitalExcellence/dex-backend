@@ -1,48 +1,46 @@
-using _3_Repositories.Tests.DataGenerators.Base;
-using _3_Repositories.Tests.Extensions;
 using Data;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Repositories.Base;
+using Repositories.Tests.Extensions;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace _3_Repositories.Tests.Base
+namespace Repositories.Tests.Base
 {
     public abstract class RepositoryTest<TDomain, TRepository> 
         where TDomain : class
         where TRepository : class, IRepository<TDomain>
     {
-        protected ApplicationDbContext _dbContext;
-        protected TRepository _repository;
+        protected ApplicationDbContext DbContext;
+        protected TRepository Repository;
 
         protected Task SaveChangesAsync()
         {
-            return _dbContext.SaveChangesAsync();
+            return DbContext.SaveChangesAsync();
         }
 
         [SetUp]
         public virtual void Initialize()
         {
-            _dbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
             Type repositoryType = typeof(TRepository);
             ConstructorInfo repositoryCtor = repositoryType.GetConstructor(new[] { typeof(ApplicationDbContext) });
-            _repository = (TRepository)repositoryCtor.Invoke(new object[] { _dbContext });
+            Repository = (TRepository)repositoryCtor.Invoke(new object[] { DbContext });
         }
 
         public virtual async Task FindAsyncTest_GoodFlow(TDomain entity)
         {
-            _dbContext.Add(entity);
+            DbContext.Add(entity);
             await SaveChangesAsync();
 
             Type type = entity.GetType();
             int id = (int)type.GetProperty("Id").GetValue(entity);
 
-            TDomain retrieved = await _repository.FindAsync(id);
+            TDomain retrieved = await Repository.FindAsync(id);
 
             foreach (PropertyInfo prop in type.GetProperties())
             {
@@ -52,19 +50,19 @@ namespace _3_Repositories.Tests.Base
 
         public virtual async Task FindAsyncTest_BadFlow_NotExists(TDomain entity)
         {
-            await _dbContext.AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
+            await DbContext.AddAsync(entity);
+            await DbContext.SaveChangesAsync();
 
-            Assert.IsNull(await _repository.FindAsync(-1));
+            Assert.IsNull(await Repository.FindAsync(-1));
         }
 
         public virtual async Task AddAsyncTest_GoodFlow(TDomain entity)
         {
-            _repository.Add(entity);
+            Repository.Add(entity);
             await SaveChangesAsync();
 
             int id = (int)entity.GetType().GetProperty("Id").GetValue(entity);
-            _repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
+            Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
         }
 
         [Test]
@@ -72,7 +70,7 @@ namespace _3_Repositories.Tests.Base
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
-                _repository.Add(null);
+                Repository.Add(null);
                 await SaveChangesAsync();
             });
 
@@ -82,13 +80,13 @@ namespace _3_Repositories.Tests.Base
         {
             Type type = typeof(TDomain);
 
-            _repository.AddRange(entities);
+            Repository.AddRange(entities);
             await SaveChangesAsync();
 
             foreach (TDomain entity in entities)
             {
                 int id = (int)type.GetProperty("Id").GetValue(entity);
-                _repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
+                Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
             }
         }
 
@@ -97,7 +95,7 @@ namespace _3_Repositories.Tests.Base
         {
             List<TDomain> entities = new List<TDomain>();
 
-            _repository.Invoking(r => r.AddRange(entities)).Should().NotThrow();
+            Repository.Invoking(r => r.AddRange(entities)).Should().NotThrow();
         }
 
         [Test]
@@ -105,54 +103,54 @@ namespace _3_Repositories.Tests.Base
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                _repository.AddRange(null);
+                Repository.AddRange(null);
             });
         }
 
         public virtual async Task UpdateTest_GoodFlow(TDomain entity, TDomain updateEntity)
         {
             TDomain copy = entity.CloneObject<TDomain>();
-            _repository.Add(entity);
+            Repository.Add(entity);
             await SaveChangesAsync();
 
             Type type = entity.GetType();
             int id = (int)type.GetProperty("Id").GetValue(entity);
 
-            _repository.Update(entity);
+            Repository.Update(entity);
             await SaveChangesAsync();
-            Assert.AreEqual(entity, await _repository.FindAsync(id));
-            Assert.AreNotEqual(copy, await _repository.FindAsync(id));
+            Assert.AreEqual(entity, await Repository.FindAsync(id));
+            Assert.AreNotEqual(copy, await Repository.FindAsync(id));
         }
 
         public virtual async Task UpdateTest_BadFlow_NotExists(TDomain entity, TDomain updateEntity)
         {
-            _repository.Add(entity);
+            Repository.Add(entity);
             await SaveChangesAsync();
 
             entity.GetType().GetProperty("Id").SetValue(updateEntity, -1);
 
             Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
             {
-                _repository.Update(updateEntity);
+                Repository.Update(updateEntity);
                 await SaveChangesAsync();
             });
         }
 
         public virtual async Task UpdateTest_BadFlow_Null(TDomain entity)
         {
-            _repository.Add(entity);
+            Repository.Add(entity);
             await SaveChangesAsync();
 
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
-                _repository.Update(null);
+                Repository.Update(null);
                 await SaveChangesAsync();
             });
         }
 
         public virtual async Task RemoveAsyncTest_GoodFlow(TDomain entity)
         {
-            _repository.Add(entity);
+            Repository.Add(entity);
             await SaveChangesAsync();
             await RemoveAsyncTest(entity);
         }
@@ -161,39 +159,39 @@ namespace _3_Repositories.Tests.Base
         {
             int id = (int)entity.GetType().GetProperty("Id").GetValue(entity);
 
-            await _repository.RemoveAsync(id);
+            await Repository.RemoveAsync(id);
             await SaveChangesAsync();
 
-            Assert.NotNull(_repository.FindAsync(id));
+            Assert.NotNull(Repository.FindAsync(id));
         }
 
         public virtual async Task RemoveAsyncTest_BadFlow_NotExists(TDomain entity)
         {
-            _repository.Add(entity);
+            Repository.Add(entity);
             await SaveChangesAsync();
 
             Assert.ThrowsAsync<KeyNotFoundException>(async () =>
             {
-                await _repository.RemoveAsync(-1);
+                await Repository.RemoveAsync(-1);
             });
         }
 
         public virtual async Task GetAllAsyncTest_GoodFlow(List<TDomain> entities, int amountToTest)
         {
-            await _dbContext.AddRangeAsync(entities);
+            await DbContext.AddRangeAsync(entities);
             await SaveChangesAsync();
 
-            List<TDomain> retrievedEntities = (List<TDomain>)await _repository.GetAll();
+            List<TDomain> retrievedEntities = (List<TDomain>)await Repository.GetAll();
             Assert.AreEqual(amountToTest, retrievedEntities.Count);
         }
 
         public virtual async Task GetAllAsyncTest_Badflow_Empty()
         {
             List<TDomain> entities = new List<TDomain>();
-            await _dbContext.AddRangeAsync(entities);
+            await DbContext.AddRangeAsync(entities);
             await SaveChangesAsync();
             
-            List<TDomain> retrievedEntities = (List<TDomain>)await _repository.GetAll();
+            List<TDomain> retrievedEntities = (List<TDomain>)await Repository.GetAll();
             Assert.AreEqual(0, retrievedEntities.Count);
         }
     }

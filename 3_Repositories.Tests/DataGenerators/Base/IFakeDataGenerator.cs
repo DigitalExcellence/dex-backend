@@ -1,8 +1,6 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace _3_Repositories.Tests.DataGenerators.Base
+namespace Repositories.Tests.DataGenerators.Base
 {
     public interface IFakeDataGenerator<T>
     {

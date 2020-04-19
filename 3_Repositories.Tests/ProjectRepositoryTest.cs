@@ -1,17 +1,16 @@
-using _3_Repositories.Tests.Base;
-using _3_Repositories.Tests.DataSources;
 using Models;
 using NUnit.Framework;
-using Repositories;
+using Repositories.Tests.Base;
+using Repositories.Tests.DataSources;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace _3_Repositories.Tests
+namespace Repositories.Tests
 {
     [TestFixture]
     public class ProjectRepositoryTest : RepositoryTest<Project, ProjectRepository>
     {
-        protected new IProjectRepository _repository => (IProjectRepository)base._repository;
+        protected new IProjectRepository Repository => (IProjectRepository)base.Repository;
 
         [Test]
         public async Task GetAllWithUserAsyncTest_GoodFlow(
@@ -23,11 +22,11 @@ namespace _3_Repositories.Tests
             {
                 projects[i].User = users[i];
             }
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await _repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
             Assert.AreEqual(100, retrieved.Count);
             foreach(Project project in projects)
             {
@@ -38,11 +37,11 @@ namespace _3_Repositories.Tests
         [Test]
         public async Task GetAllWithUsersAsyncTest_NoProjects([UserDataSource(100)]List<User> users)
         {
-            _dbContext.AddRange(users);
+            DbContext.AddRange(users);
             await SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await _repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -51,11 +50,11 @@ namespace _3_Repositories.Tests
             [ProjectDataSource(100)]List<Project> projects)
         {
             // Seed database
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await _repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
             Assert.AreEqual(0, retrieved.Count);
             foreach (Project project in projects)
             {
@@ -73,39 +72,39 @@ namespace _3_Repositories.Tests
             // And seed database
             projects = SetStaticTestData(projects, users);
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Tests
             // Id search
-            List<Project> retrieved = (List<Project>)await _repository.SearchAsync("1");
+            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("1");
             foreach (Project project in retrieved)
             {
                 Assert.True(project.Id.ToString().Contains("1"), "Id search failed");
             }
 
             // Name search
-            retrieved = (List<Project>)await _repository.SearchAsync("abc");
+            retrieved = (List<Project>)await Repository.SearchAsync("abc");
             Assert.AreEqual(50, retrieved.Count, "Name search failed");
 
             // Description search
-            retrieved = (List<Project>)await _repository.SearchAsync("def");
+            retrieved = (List<Project>)await Repository.SearchAsync("def");
             Assert.AreEqual(50, retrieved.Count, "Description search failed");
 
             // Short Description search
-            retrieved = (List<Project>)await _repository.SearchAsync("ghij");
+            retrieved = (List<Project>)await Repository.SearchAsync("ghij");
             Assert.AreEqual(50, retrieved.Count, "ShortDescription search failed");
 
             // Uri search
-            retrieved = (List<Project>)await _repository.SearchAsync("example");
+            retrieved = (List<Project>)await Repository.SearchAsync("example");
             Assert.AreEqual(50, retrieved.Count, "Uri search failed");
 
             // User name search
-            retrieved = (List<Project>)await _repository.SearchAsync("xyz");
+            retrieved = (List<Project>)await Repository.SearchAsync("xyz");
             Assert.AreEqual(50, retrieved.Count, "User name search failed");
 
             // Combined search
-            retrieved = (List<Project>)await _repository.SearchAsync("ex");
+            retrieved = (List<Project>)await Repository.SearchAsync("ex");
             Assert.AreEqual(100, retrieved.Count, "Combined search failed");
         }
 
@@ -114,11 +113,11 @@ namespace _3_Repositories.Tests
             [UserDataSource(100)]List<User> users)
         {
             // Seed database
-            _dbContext.AddRange(users);
+            DbContext.AddRange(users);
             await SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = (List<Project>)await _repository.SearchAsync("abc");
+            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("abc");
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -129,7 +128,7 @@ namespace _3_Repositories.Tests
             // And seed database
             projects = SetStaticTestData(projects);
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
         }
 
@@ -143,12 +142,12 @@ namespace _3_Repositories.Tests
             // And seed database
             projects = SetStaticTestData(projects, users);
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Tests
             // Id search
-            List<Project> retrieved = (List<Project>)await _repository.SearchAsync("-1");
+            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("-1");
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -162,36 +161,36 @@ namespace _3_Repositories.Tests
             // And seed database
             projects = SetStaticTestData(projects, users);
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Tests
             // Id search
-            List<Project> retrieved = (List<Project>)await _repository.SearchAsync("1", 0, 1);
+            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("1", 0, 1);
             Assert.AreEqual(1, retrieved.Count, "Id search failed");
 
             // Name search
-            retrieved = (List<Project>)await _repository.SearchAsync("abc", 10, 10);
+            retrieved = (List<Project>)await Repository.SearchAsync("abc", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Name search failed");
 
             // Description search
-            retrieved = (List<Project>)await _repository.SearchAsync("def", 10, 10);
+            retrieved = (List<Project>)await Repository.SearchAsync("def", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Description search failed");
 
             // Short Description search
-            retrieved = (List<Project>)await _repository.SearchAsync("ghij", 10, 10);
+            retrieved = (List<Project>)await Repository.SearchAsync("ghij", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Short Description search failed");
 
             // Uri search
-            retrieved = (List<Project>)await _repository.SearchAsync("example", 10, 10);
+            retrieved = (List<Project>)await Repository.SearchAsync("example", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Uri search failed");
 
             // User name search
-            retrieved = (List<Project>)await _repository.SearchAsync("xyz", 10, 10);
+            retrieved = (List<Project>)await Repository.SearchAsync("xyz", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "User name search failed");
 
             // Combined search
-            retrieved = (List<Project>)await _repository.SearchAsync("ex", 10, 40);
+            retrieved = (List<Project>)await Repository.SearchAsync("ex", 10, 40);
             Assert.AreEqual(40, retrieved.Count, "Combined search failed");
         }
 
@@ -205,11 +204,11 @@ namespace _3_Repositories.Tests
             // And seed database
             projects = SetStaticTestData(projects, users);
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Tests
-            List<Project> retrieved = (List<Project>)await _repository.SearchAsync("ex", 1000, 10);
+            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("ex", 1000, 10);
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -223,11 +222,11 @@ namespace _3_Repositories.Tests
             // And seed database
             projects = SetStaticTestData(projects, users);
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Tests
-            int retrieved = await _repository.SearchCountAsync("ex");
+            int retrieved = await Repository.SearchCountAsync("ex");
             Assert.AreEqual(100, retrieved);
         }
 
@@ -241,11 +240,11 @@ namespace _3_Repositories.Tests
             // And seed database
             projects = SetStaticTestData(projects, users);
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Tests
-            int retrieved = await _repository.SearchCountAsync("randomSearchWhichDoesntMatch");
+            int retrieved = await Repository.SearchCountAsync("randomSearchWhichDoesntMatch");
             Assert.AreEqual(0, retrieved);
         }
 
@@ -253,7 +252,7 @@ namespace _3_Repositories.Tests
         public async Task SearchCountAsyncTest_BadFlow_NoProjects()
         {
             // Tests
-            int retrieved = await _repository.SearchCountAsync("1");
+            int retrieved = await Repository.SearchCountAsync("1");
             Assert.AreEqual(0, retrieved);
         }
 
@@ -276,11 +275,11 @@ namespace _3_Repositories.Tests
                 }
             }
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Testing
-            Project retrieved = await _repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
             Assert.AreEqual(projects[0].Id, retrieved.Id);
             Assert.AreEqual(projects[0].Name, retrieved.Name);
             Assert.AreEqual(projects[0].ShortDescription, retrieved.ShortDescription);
@@ -294,7 +293,7 @@ namespace _3_Repositories.Tests
         public async Task FindWithUserAndCollaboratorsAsyncTest_BadFlow_NoProjects()
         {
             // Testing
-            Project retrieved = await _repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
             Assert.IsNull(retrieved);
         }
 
@@ -316,11 +315,11 @@ namespace _3_Repositories.Tests
                 }
             }
 
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Testing
-            Project retrieved = await _repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
             
             // Retrieved is null because there are no users and users is required
             Assert.IsNull(retrieved);
@@ -334,11 +333,11 @@ namespace _3_Repositories.Tests
             // Seeding
             projects = SetStaticTestData(projects, users);
             
-            _dbContext.AddRange(projects);
+            DbContext.AddRange(projects);
             await SaveChangesAsync();
 
             // Testing
-            Project retrieved = await _repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
             Assert.AreEqual(projects[0].Id, retrieved.Id);
             Assert.AreEqual(projects[0].Name, retrieved.Name);
             Assert.AreEqual(projects[0].ShortDescription, retrieved.ShortDescription);
@@ -387,10 +386,10 @@ namespace _3_Repositories.Tests
             [CollaboratorDataSource(10)]List<Collaborator> collaborators)
         {
             project.Collaborators = collaborators;
-            _dbContext.Add(project);
+            DbContext.Add(project);
             await SaveChangesAsync();
 
-            Assert.IsNull(await _repository.FindAsync(-1));
+            Assert.IsNull(await Repository.FindAsync(-1));
         }
 
         // Override default test with extra parameters due to override in repository
@@ -399,10 +398,10 @@ namespace _3_Repositories.Tests
             [CollaboratorDataSource(10)]List<Collaborator> collaborators)
         {
             project.Collaborators = collaborators;
-            _dbContext.Add(project);
+            DbContext.Add(project);
             await SaveChangesAsync();
 
-            Project retrieved = await _repository.FindAsync(1);
+            Project retrieved = await Repository.FindAsync(1);
             Assert.AreEqual(project.Id, retrieved.Id);
             Assert.AreEqual(project.Name, retrieved.Name);
             Assert.AreEqual(project.Description, retrieved.Description);

@@ -1,17 +1,15 @@
-﻿using _3_Repositories.Tests.DataGenerators.Base;
 using Bogus;
 using Models;
+using Repositories.Tests.DataGenerators.Base;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace _3_Repositories.Tests.DataGenerators
+namespace Repositories.Tests.DataGenerators
 {
     public class ProjectDataGenerator : FakeDataGenerator<Project>
     {
         public ProjectDataGenerator()
         {
-            _faker = new Faker<Project>()
+            Faker = new Faker<Project>()
                 .RuleFor(project => project.Name, faker => faker.Name.FirstName())
                 .RuleFor(project => project.ShortDescription, faker => faker.Lorem.Words(10).ToString())
                 .RuleFor(project => project.Description, faker => faker.Lorem.Words(40).ToString())

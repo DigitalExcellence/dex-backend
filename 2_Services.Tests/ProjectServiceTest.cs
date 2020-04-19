@@ -1,34 +1,34 @@
-using _2_Services.Tests.Base;
-using _3_Repositories.Tests.DataSources;
 using Models;
 using Moq;
 using NUnit.Framework;
 using Repositories;
+using Repositories.Tests.DataSources;
 using Services.Services;
+using Services.Tests.Base;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace _2_Services.Tests
+namespace Services.Tests
 {
     [TestFixture]
     public class ProjectServiceTest : ServiceTest<Project, ProjectService, IProjectRepository>
     {
-        protected new IProjectService _service => (IProjectService)base._service;
+        protected new IProjectService Service => (IProjectService)base.Service;
 
 
         [Test]
         public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
-            _repositoryMock.Setup(
+            RepositoryMock.Setup(
                 repository => repository.GetAllWithUsersAsync())
                 .Returns(
                     Task.FromResult(projects)
                 );
 
-            List<Project> retrievedProjects = await _service.GetAllWithUsersAsync();
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync();
 
             Assert.DoesNotThrow(() => {
-                _repositoryMock.Verify(repository => repository.GetAllWithUsersAsync(), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
@@ -37,16 +37,16 @@ namespace _2_Services.Tests
         [Test]
         public async Task FindWithUserAndCollaboratorsAsync([ProjectDataSource]Project project)
         {
-            _repositoryMock.Setup(
+            RepositoryMock.Setup(
                repository => repository.FindWithUserAndCollaboratorsAsync(1))
                .Returns(
                    Task.FromResult(project)
                );
 
-            Project retrievedProject = await _service.FindWithUserAndCollaboratorsAsync(1);
+            Project retrievedProject = await Service.FindWithUserAndCollaboratorsAsync(1);
 
             Assert.DoesNotThrow(() => {
-                _repositoryMock.Verify(repository => repository.FindWithUserAndCollaboratorsAsync(1), Times.Once);
+                RepositoryMock.Verify(repository => repository.FindWithUserAndCollaboratorsAsync(1), Times.Once);
             });
 
             Assert.AreEqual(project, retrievedProject);
