@@ -177,6 +177,7 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            UpdateDatabase(app);
             if(env.IsDevelopment())
             {
                 //app.UseBrowserLink();
@@ -247,6 +248,24 @@ namespace API
                             });
                         });
         }
+
+        /// <summary>
+        /// Initializes the database
+        /// </summary>
+        /// <param name="app"></param>
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using(IServiceScope serviceScope = app.ApplicationServices
+                                                  .GetRequiredService<IServiceScopeFactory>()
+                                                  .CreateScope())
+            {
+                using(ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
+        }
+
 
     }
 
