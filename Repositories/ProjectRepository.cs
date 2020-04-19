@@ -1,16 +1,16 @@
 ﻿/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System.Linq.Expressions;
 
 namespace Repositories
 {
@@ -28,11 +29,15 @@ namespace Repositories
 	{
 		Task<List<Project>> GetAllWithUsersAsync();
 
-		Task<IEnumerable<Project>> SearchAsync(String query);
-		
-		Task<IEnumerable<Project>> SearchSkipTakeAsync(String query, int skip, int take);
-		
-		Task<int> SearchCountAsync(String query);
+		Task<IEnumerable<Project>> SearchAsync(
+            string query,
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true
+            );
+
+        Task<int> SearchCountAsync(string query);
 
 		Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 	}
@@ -58,41 +63,48 @@ namespace Repositories
 				.ToListAsync();
 		}
 
-		public virtual async Task<IEnumerable<Project>> SearchAsync(string query)
+        /// <summary>
+        /// Search the database for projects matching the search query and parameters
+        /// </summary>
+        /// <param name="query">The search query</param>
+        /// <param name="skip">The number of projects to skip</param>
+        /// <param name="take">The number of projects to return</param>
+        /// <param name="orderBy">The property to order the projects by</param>
+        /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
+        /// <returns>The projects matching the search query and parameters</returns>
+		public virtual async Task<IEnumerable<Project>> SearchAsync(
+            string query,
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true
+            )
 		{
-			return await DbSet
+			IQueryable<Project> queryable = DbSet
 				.Include(p => p.User)
 				.Where(p =>
-				p.Name.Contains(query) ||
-				p.Description.Contains(query) ||
-				p.ShortDescription.Contains(query) ||
-				p.Uri.Contains(query) ||
-				p.Id.ToString().Equals(query) ||
-				p.User.Name.Contains(query)
-				).ToListAsync();
+				    p.Name.Contains(query) ||
+				    p.Description.Contains(query) ||
+				    p.ShortDescription.Contains(query) ||
+				    p.Uri.Contains(query) ||
+				    p.Id.ToString().Equals(query) ||
+				    p.User.Name.Contains(query)
+				);
+            if(orderBy != null)
+            {
+                if(orderByAsc)
+                {
+                    queryable = queryable.OrderBy(orderBy);
+                } else
+                {
+                    queryable = queryable.OrderByDescending(orderBy);
+                }
+            }
+            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
+            if(take.HasValue) queryable = queryable.Take(take.Value);
+            return await queryable.ToListAsync();
 		}
-		
-		// Search for projects
-		// @param query The search query
-		// @param skip The amount of results to skip
-		// @param take The amount of results to return
-		public virtual async Task<IEnumerable<Project>> SearchSkipTakeAsync(string query, int skip, int take)
-		{
-			return await DbSet
-				.Include(p => p.User)
-				.Where(p =>
-					p.Name.Contains(query) ||
-					p.Description.Contains(query) ||
-					p.ShortDescription.Contains(query) ||
-					p.Uri.Contains(query) ||
-					p.Id.ToString().Equals(query) ||
-					p.User.Name.Contains(query)
-				)
-				.Skip(skip)
-				.Take(take)
-				.ToListAsync();
-		}
-		
+
 		public virtual async Task<int> SearchCountAsync(string query)
 		{
 			return await DbSet
