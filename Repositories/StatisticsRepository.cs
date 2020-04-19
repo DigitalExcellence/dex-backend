@@ -14,20 +14,21 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
 
 namespace Repositories
 {
-    public interface IStatisticsRepository : IRepository<Statistic>
-    {
-    }
+
+    public interface IStatisticsRepository : IRepository<Statistic> { }
 
     public class StatisticsRepository : Repository<Statistic>, IStatisticsRepository
     {
-        public StatisticsRepository(DbContext dbContext) : base(dbContext)
-        {
-        }
+
+        public StatisticsRepository(DbContext dbContext) : base(dbContext) { }
+
     }
+
 }

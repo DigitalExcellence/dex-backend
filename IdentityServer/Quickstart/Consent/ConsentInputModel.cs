@@ -14,15 +14,23 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using System.Collections.Generic;
 
 namespace IdentityServer
 {
+
     public class ConsentInputModel
     {
+
         public string Button { get; set; }
+
         public IEnumerable<string> ScopesConsented { get; set; }
+
         public bool RememberConsent { get; set; }
+
         public string ReturnUrl { get; set; }
+
     }
+
 }

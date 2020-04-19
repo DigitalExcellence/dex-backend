@@ -1,18 +1,18 @@
 <!--
- Digital Excellence Copyright (C) 2020 Brend Smits
+Digital Excellence Copyright (C) 2020 Brend Smits
  
- This program is free software: you can redistribute it and/or modify 
- it under the terms of the GNU Lesser General Public License as published 
- by the Free Software Foundation version 3 of the License.
+This program is free software: you can redistribute it and/or modify 
+it under the terms of the GNU Lesser General Public License as published 
+by the Free Software Foundation version 3 of the License.
  
- This program is distributed in the hope that it will be useful, 
- but WITHOUT ANY WARRANTY; without even the implied warranty 
- of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- See the GNU Lesser General Public License for more details.
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU Lesser General Public License for more details.
  
- You can find a copy of the GNU Lesser General Public License 
- along with this program, in the LICENSE.md file in the root project directory.
- If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+You can find a copy of the GNU Lesser General Public License 
+along with this program, in the LICENSE.md file in the root project directory.
+If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 -->
 @model LoginViewModel
 
@@ -21,11 +21,11 @@
         <h1>Login</h1>
     </div>
 
-    <partial name="_ValidationSummary" />
+    <partial name="_ValidationSummary"/>
 
     <div class="row">
 
-        @if (Model.EnableLocalLogin)
+        @if(Model.EnableLocalLogin)
         {
             <div class="col-sm-6">
                 <div class="panel panel-default">
@@ -35,7 +35,7 @@
                     <div class="panel-body">
 
                         <form asp-route="Login">
-                            <input type="hidden" asp-for="ReturnUrl" />
+                            <input type="hidden" asp-for="ReturnUrl"/>
 
                             <fieldset>
                                 <div class="form-group">
@@ -46,7 +46,7 @@
                                     <label asp-for="Password"></label>
                                     <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
                                 </div>
-                                @if (Model.AllowRememberLogin)
+                                @if(Model.AllowRememberLogin)
                                 {
                                     <div class="form-group login-remember">
                                         <label asp-for="RememberLogin">
@@ -66,7 +66,7 @@
             </div>
         }
 
-        @if (Model.VisibleExternalProviders.Any())
+        @if(Model.VisibleExternalProviders.Any())
         {
             <div class="col-md-6 col-sm-6 external-providers">
                 <div class="panel panel-default">
@@ -75,7 +75,7 @@
                     </div>
                     <div class="panel-body">
                         <ul class="list-inline">
-                            @foreach (var provider in Model.VisibleExternalProviders)
+                            @foreach(ExternalProvider provider in Model.VisibleExternalProviders)
                             {
                                 <li>
                                     <a class="btn btn-default"
@@ -93,7 +93,8 @@
             </div>
         }
 
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+        @if(!Model.EnableLocalLogin &&
+            !Model.VisibleExternalProviders.Any())
         {
             <div class="alert alert-warning">
                 <strong>Invalid login request</strong>

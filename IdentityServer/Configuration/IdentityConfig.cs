@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Configuration;
 using IdentityServer4;
 using IdentityServer4.Models;
@@ -23,17 +24,15 @@ using System.Linq;
 
 namespace IdentityServer.Configuration
 {
+
     public static class IdentityConfig
     {
+
         public static IEnumerable<IdentityResource> Ids =>
-            new IdentityResource[]
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
-            };
+            new IdentityResource[] {new IdentityResources.OpenId(), new IdentityResources.Profile()};
 
         public static IEnumerable<ApiResource> Apis =>
-            new ApiResource[]
+            new[]
             {
                 new ApiResource("dex-api", "Digital Excellence API")
                 {
@@ -46,59 +45,77 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.HighlightWrite)),
                         new Scope(nameof(Defaults.Scopes.HighlightRead))
                     }
-                },
-            };
-
-        public static IEnumerable<Client> Clients(Config config) =>
-            new Client[]
-            {
-                // machine to machine client (Identity -> API)
-                new Client
-                {
-                    ClientId = "dex-api-client",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets =
-                    {
-                        new Secret(config.Self.IdentityApplications.Single(a => a["Key"].Equals("dex-api"))["Value"].Sha256())
-                    },
-                    AllowedScopes =
-                    {
-                        nameof(Defaults.Scopes.ProjectRead),
-                        nameof(Defaults.Scopes.ProjectWrite),
-                        nameof(Defaults.Scopes.UserWrite),
-                        nameof(Defaults.Scopes.UserRead)
-                    }
-                },
-                // interactive ASP.NET Core MVC client
-                new Client
-                {
-                    ClientId = "dex-frontend",
-                    ClientName = "Digital Excellence Angular Frontend",
-                    ClientSecrets = { new Secret(config.Self.IdentityApplications.Single(a => a["Key"].Equals("dex-frontend"))["Value"].Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    RequirePkce = true,
-
-                    // where to redirect to after login
-                    RedirectUris = { "http://localhost:4200/auth-callback" },
-
-                    // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:4200/" },
-
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        nameof(Defaults.Scopes.ProjectRead),
-                        nameof(Defaults.Scopes.ProjectWrite),
-                        nameof(Defaults.Scopes.UserWrite),
-                        nameof(Defaults.Scopes.UserRead),
-                        nameof(Defaults.Scopes.HighlightRead),
-                        nameof(Defaults.Scopes.HighlightWrite)
-                    },
-                    AllowAccessTokensViaBrowser = true
-                    // AllowOfflineAccess = true
                 }
             };
 
+        public static IEnumerable<Client> Clients(Config config)
+        {
+            return new[]
+                   {
+                       // machine to machine client (Identity -> API)
+                       new Client
+                       {
+                           ClientId = "dex-api-client",
+                           AllowedGrantTypes = GrantTypes.ClientCredentials,
+                           ClientSecrets =
+                           {
+                               new Secret(config.Self.IdentityApplications.Single(a => a["Key"]
+                                                                                      .Equals("dex-api"))["Value"]
+                                                .Sha256())
+                           },
+                           AllowedScopes =
+                           {
+                               nameof(Defaults.Scopes.ProjectRead),
+                               nameof(Defaults.Scopes.ProjectWrite),
+                               nameof(Defaults.Scopes.UserWrite),
+                               nameof(Defaults.Scopes.UserRead)
+                           }
+                       },
+
+                       // interactive ASP.NET Core MVC client
+                       new Client
+                       {
+                           ClientId = "dex-frontend",
+                           ClientName = "Digital Excellence Angular Frontend",
+                           ClientSecrets =
+                           {
+                               new Secret(config.Self.IdentityApplications.Single(a => a["Key"]
+                                                                                      .Equals("dex-frontend"))["Value"]
+                                                .Sha256())
+                           },
+                           AllowedGrantTypes = GrantTypes.Implicit,
+                           RequirePkce = true,
+
+                           // where to redirect to after login
+                           RedirectUris =
+                           {
+                               "http://localhost:4200/auth-callback"
+                           },
+
+                           // where to redirect to after logout
+                           PostLogoutRedirectUris =
+                           {
+                               "http://localhost:4200/"
+                           },
+
+                           AllowedScopes = new List<string>
+                                           {
+                                               IdentityServerConstants.StandardScopes.OpenId,
+                                               IdentityServerConstants.StandardScopes.Profile,
+                                               nameof(Defaults.Scopes.ProjectRead),
+                                               nameof(Defaults.Scopes.ProjectWrite),
+                                               nameof(Defaults.Scopes.UserWrite),
+                                               nameof(Defaults.Scopes.UserRead),
+                                               nameof(Defaults.Scopes.HighlightRead),
+                                               nameof(Defaults.Scopes.HighlightWrite)
+                                           },
+                           AllowAccessTokensViaBrowser = true
+
+                           // AllowOfflineAccess = true
+                       }
+                   };
+        }
+
     }
+
 }

@@ -1,18 +1,18 @@
 ﻿<!--
- Digital Excellence Copyright (C) 2020 Brend Smits
+Digital Excellence Copyright (C) 2020 Brend Smits
  
- This program is free software: you can redistribute it and/or modify 
- it under the terms of the GNU Lesser General Public License as published 
- by the Free Software Foundation version 3 of the License.
+This program is free software: you can redistribute it and/or modify 
+it under the terms of the GNU Lesser General Public License as published 
+by the Free Software Foundation version 3 of the License.
  
- This program is distributed in the hope that it will be useful, 
- but WITHOUT ANY WARRANTY; without even the implied warranty 
- of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- See the GNU Lesser General Public License for more details.
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU Lesser General Public License for more details.
  
- You can find a copy of the GNU Lesser General Public License 
- along with this program, in the LICENSE.md file in the root project directory.
- If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+You can find a copy of the GNU Lesser General Public License 
+along with this program, in the LICENSE.md file in the root project directory.
+If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 -->
 @model GrantsViewModel
 
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    @if (Model.Grants.Any() == false)
+    @if(Model.Grants.Any() == false)
     {
         <div class="row">
             <div class="col-sm-8">
@@ -35,14 +35,13 @@
                 </div>
             </div>
         </div>
-    }
-    else
+    } else
     {
-        foreach (var grant in Model.Grants)
+        foreach(GrantViewModel grant in Model.Grants)
         {
             <div class="row grant">
                 <div class="col-sm-2">
-                    @if (grant.ClientLogoUrl != null)
+                    @if(grant.ClientLogoUrl != null)
                     {
                         <img src="@grant.ClientLogoUrl">
                     }
@@ -52,30 +51,30 @@
                     <div>
                         <span class="created">Created:</span> @grant.Created.ToString("yyyy-MM-dd")
                     </div>
-                    @if (grant.Expires.HasValue)
+                    @if(grant.Expires.HasValue)
                     {
                         <div>
                             <span class="expires">Expires:</span> @grant.Expires.Value.ToString("yyyy-MM-dd")
                         </div>
                     }
-                    @if (grant.IdentityGrantNames.Any())
+                    @if(grant.IdentityGrantNames.Any())
                     {
                         <div>
                             <div class="granttype">Identity Grants</div>
                             <ul>
-                                @foreach (var name in grant.IdentityGrantNames)
-                        {
+                                @foreach(string name in grant.IdentityGrantNames)
+                                {
                                     <li>@name</li>
                                 }
                             </ul>
                         </div>
                     }
-                    @if (grant.ApiGrantNames.Any())
+                    @if(grant.ApiGrantNames.Any())
                     {
                         <div>
                             <div class="granttype">API Grants</div>
                             <ul>
-                                @foreach (var name in grant.ApiGrantNames)
+                                @foreach(string name in grant.ApiGrantNames)
                                 {
                                     <li>@name</li>
                                 }

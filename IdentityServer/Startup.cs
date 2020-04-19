@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 
 namespace IdentityServer
 {
@@ -30,19 +29,19 @@ namespace IdentityServer
     public class Startup
     {
 
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        {
+            Config = configuration.GetSection("App")
+                                  .Get<Config>();
+            Configuration = configuration;
+            Environment = environment;
+        }
+
         public IConfiguration Configuration { get; }
 
         public Config Config { get; }
 
         public IWebHostEnvironment Environment { get; }
-
-        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
-        {
-            Config = configuration.GetSection("App")
-                .Get<Config>();
-            Configuration = configuration;
-            Environment = environment;
-        }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -52,14 +51,14 @@ namespace IdentityServer
             services.AddControllersWithViews();
 
             IIdentityServerBuilder builder = services.AddIdentityServer(options =>
-                                                                        {
-                                                                            options.Events.RaiseErrorEvents = true;
-                                                                            options.Events.RaiseInformationEvents =
-                                                                                true;
-                                                                            options.Events.RaiseFailureEvents = true;
-                                                                            options.Events.RaiseSuccessEvents = true;
-                                                                        })
-                .AddTestUsers(TestUsers.Users);
+                                                     {
+                                                         options.Events.RaiseErrorEvents = true;
+                                                         options.Events.RaiseInformationEvents =
+                                                             true;
+                                                         options.Events.RaiseFailureEvents = true;
+                                                         options.Events.RaiseSuccessEvents = true;
+                                                     })
+                                                     .AddTestUsers(TestUsers.Users);
 
             // in-memory, code config
             builder.AddInMemoryIdentityResources(IdentityConfig.Ids);
@@ -83,15 +82,15 @@ namespace IdentityServer
                 builder.AddDeveloperSigningCredential();
             }
             services.AddCors(options =>
-                             {
-                                 options.AddPolicy("dex-api",
-                                     policy =>
-                                     {
-                                         policy.AllowAnyOrigin()
-                                             .AllowAnyHeader()
-                                             .AllowAnyMethod();
-                                     });
-                             });
+            {
+                options.AddPolicy("dex-api",
+                                  policy =>
+                                  {
+                                      policy.AllowAnyOrigin()
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                                  });
+            });
         }
 
         public void Configure(IApplicationBuilder app)

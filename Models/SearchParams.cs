@@ -17,6 +17,7 @@
 
 namespace API.Resources
 {
+
     public class SearchParams
     {
 
@@ -29,4 +30,5 @@ namespace API.Resources
         public string SortDirection { get; set; }
 
     }
+
 }

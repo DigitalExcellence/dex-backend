@@ -14,15 +14,25 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 namespace IdentityServer
 {
+
     public class ScopeViewModel
     {
+
         public string Name { get; set; }
+
         public string DisplayName { get; set; }
+
         public string Description { get; set; }
+
         public bool Emphasize { get; set; }
+
         public bool Required { get; set; }
+
         public bool Checked { get; set; }
+
     }
+
 }

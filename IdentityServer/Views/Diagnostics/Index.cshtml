@@ -1,26 +1,27 @@
 <!--
- Digital Excellence Copyright (C) 2020 Brend Smits
+Digital Excellence Copyright (C) 2020 Brend Smits
  
- This program is free software: you can redistribute it and/or modify 
- it under the terms of the GNU Lesser General Public License as published 
- by the Free Software Foundation version 3 of the License.
+This program is free software: you can redistribute it and/or modify 
+it under the terms of the GNU Lesser General Public License as published 
+by the Free Software Foundation version 3 of the License.
  
- This program is distributed in the hope that it will be useful, 
- but WITHOUT ANY WARRANTY; without even the implied warranty 
- of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- See the GNU Lesser General Public License for more details.
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU Lesser General Public License for more details.
  
- You can find a copy of the GNU Lesser General Public License 
- along with this program, in the LICENSE.md file in the root project directory.
- If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+You can find a copy of the GNU Lesser General Public License 
+along with this program, in the LICENSE.md file in the root project directory.
+If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 -->
+@using System.Security.Claims
 @model DiagnosticsViewModel
 
 <h1>Authentication cookie</h1>
 
 <h3>Claims</h3>
 <dl>
-    @foreach (var claim in Model.AuthenticateResult.Principal.Claims)
+    @foreach(Claim claim in Model.AuthenticateResult.Principal.Claims)
     {
         <dt>@claim.Type</dt>
         <dd>@claim.Value</dd>
@@ -29,18 +30,18 @@
 
 <h3>Properties</h3>
 <dl>
-    @foreach (var prop in Model.AuthenticateResult.Properties.Items)
+    @foreach(KeyValuePair<string, string> prop in Model.AuthenticateResult.Properties.Items)
     {
         <dt>@prop.Key</dt>
         <dd>@prop.Value</dd>
     }
 </dl>
 
-@if (Model.Clients.Any())
+@if(Model.Clients.Any())
 {
     <h3>Clients</h3>
     <ul>
-        @foreach (var client in Model.Clients)
+        @foreach(string client in Model.Clients)
         {
             <li>@client</li>
         }

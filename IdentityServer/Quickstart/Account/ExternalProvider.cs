@@ -14,11 +14,17 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 namespace IdentityServer
 {
+
     public class ExternalProvider
     {
+
         public string DisplayName { get; set; }
+
         public string AuthenticationScheme { get; set; }
+
     }
+
 }

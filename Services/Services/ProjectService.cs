@@ -14,6 +14,7 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
+
 using Models;
 using Repositories;
 using Services.Base;
@@ -22,20 +23,22 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
+
     public interface IProjectService : IService<Project>
     {
+
         Task<List<Project>> GetAllWithUsersAsync();
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+
     }
 
     public class ProjectService : Service<Project>, IProjectService
     {
-        protected new IProjectRepository Repository => (IProjectRepository)base.Repository;
 
-        public ProjectService(IProjectRepository repository) : base(repository)
-        {
-        }
+        public ProjectService(IProjectRepository repository) : base(repository) { }
+
+        protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
 
         public Task<List<Project>> GetAllWithUsersAsync()
         {
@@ -46,5 +49,7 @@ namespace Services.Services
         {
             return Repository.FindWithUserAndCollaboratorsAsync(id);
         }
+
     }
+
 }
