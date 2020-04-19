@@ -123,7 +123,6 @@ namespace IdentityServer
             }
 
             app.UseStaticFiles();
-
             app.UseCors("dex-api");
             app.UseRouting();
             app.UseIdentityServer();

@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -48,6 +48,14 @@ namespace Configuration
         ///     The fhict.
         /// </value>
         public FhictConfig Fhict { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the frontend
+        /// </summary>
+        /// <value>
+        ///     The fhict.
+        /// </value>
+        public FrontendConfig Frontend { get; set; }
 
         /// <summary>
         ///     Validates this instance.
@@ -162,6 +170,20 @@ namespace Configuration
             [Required]
             [Url]
             public string FhictRedirectUri { get; set; }
+
+        }
+        /// <summary>
+        /// </summary>
+        public class FrontendConfig
+        {
+            /// <summary>
+            ///     Gets or sets the redirect urls of the frontend
+            /// </summary>
+            public List<string> RedirectUrisFrontend { get; set; }
+            /// <summary>
+            ///     Gets or sets the post logouts urls
+            /// </summary>
+            public List<string> PostLogoutUrisFrontend { get; set; }
 
         }
 
