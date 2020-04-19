@@ -58,9 +58,9 @@ namespace Repositories
 				.ToListAsync();
 		}
 
-		public virtual async Task<IEnumerable<Project>> SearchAsync(string query)
+		private IQueryable<Project> SearchQuery(string query)
 		{
-			return await DbSet
+			return DbSet
 				.Include(p => p.User)
 				.Where(p =>
 				p.Name.Contains(query) ||
@@ -69,7 +69,13 @@ namespace Repositories
 				p.Uri.Contains(query) ||
 				p.Id.ToString().Equals(query) ||
 				p.User.Name.Contains(query)
-				).ToListAsync();
+				);
+		}
+
+		public virtual async Task<IEnumerable<Project>> SearchAsync(string query)
+		{
+			return await SearchQuery(query)
+				.ToListAsync();
 		}
 		
 		// Search for projects
@@ -78,16 +84,7 @@ namespace Repositories
 		// @param take The amount of results to return
 		public virtual async Task<IEnumerable<Project>> SearchSkipTakeAsync(string query, int skip, int take)
 		{
-			return await DbSet
-				.Include(p => p.User)
-				.Where(p =>
-					p.Name.Contains(query) ||
-					p.Description.Contains(query) ||
-					p.ShortDescription.Contains(query) ||
-					p.Uri.Contains(query) ||
-					p.Id.ToString().Equals(query) ||
-					p.User.Name.Contains(query)
-				)
+			return await SearchQuery(query)
 				.Skip(skip)
 				.Take(take)
 				.ToListAsync();
@@ -95,16 +92,8 @@ namespace Repositories
 		
 		public virtual async Task<int> SearchCountAsync(string query)
 		{
-			return await DbSet
-				.Include(p => p.User)
-				.Where(p =>
-					p.Name.Contains(query) ||
-					p.Description.Contains(query) ||
-					p.ShortDescription.Contains(query) ||
-					p.Uri.Contains(query) ||
-					p.Id.ToString().Equals(query) ||
-					p.User.Name.Contains(query)
-				).CountAsync();
+			return await SearchQuery(query)
+				.CountAsync();
 		}
 
 		public Task<Project> FindWithUserAndCollaboratorsAsync(int id)

@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Repositories.Base
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected DbContext DbContext { get; }
         protected DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
@@ -30,7 +30,7 @@ namespace Repositories.Base
             return DbContext.Set<T>();
         }
 
-        public Repository(DbContext dbContext)
+        protected Repository(DbContext dbContext)
         {
             DbContext = dbContext;
         }
