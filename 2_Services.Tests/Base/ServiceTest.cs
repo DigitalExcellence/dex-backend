@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using Repositories.Base;
@@ -10,6 +9,15 @@ using System.Threading.Tasks;
 
 namespace Services.Tests.Base
 {
+    /// <summary>
+    /// Base test class which should be inherited from when creating unittests for the services.
+    /// By inheriting, all the default tests are included in the new test class.
+    /// YOU SHOULD OVERRIDE THE DEFAULT TEST TO ADD THE [Test] attribute.
+    /// If you do not override the tests and add the [Test] attribute, the default tests will not be triggered.
+    /// </summary>
+    /// <typeparam name="TDomain">Modelclass which is used to test</typeparam>
+    /// <typeparam name="TService">Service which should be tested</typeparam>
+    /// <typeparam name="TRepository">IRepository which is used to mock the used Repository</typeparam>
     public abstract class ServiceTest<TDomain, TService, TRepository>
         where TDomain : class 
         where TService: class, IService<TDomain>
@@ -18,6 +26,11 @@ namespace Services.Tests.Base
         protected TService Service;
         protected Mock<TRepository> RepositoryMock;
 
+        /// <summary>
+        /// Initialize runs before every test
+        /// Mock the repository given as generic in TRepository
+        /// Initialize the service with reflection
+        /// </summary>
         [SetUp]
         public void Initialize() 
         {
@@ -30,6 +43,11 @@ namespace Services.Tests.Base
             Service = (TService)serviceCtor.Invoke(new object[] { RepositoryMock.Object });
         }
 
+        /// <summary>
+        /// Test if the repository method is called and check if anything has changed to the entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task FindAsyncTest_GoodFlow(TDomain entity)
         {
             RepositoryMock.Setup(
@@ -47,6 +65,10 @@ namespace Services.Tests.Base
             Assert.AreEqual(entity, retrievedEntity);
         }
 
+        /// <summary>
+        /// Test if the repository method is called
+        /// </summary>
+        /// <param name="entity"></param>
         public virtual void AddTest_GoodFlow(TDomain entity)
         {
             RepositoryMock.Setup(
@@ -59,6 +81,10 @@ namespace Services.Tests.Base
                 });
         }
 
+        /// <summary>
+        /// Test if the repository method is called
+        /// </summary>
+        /// <param name="entities"></param>
         public virtual void AddRangeTest_GoodFlow(IEnumerable<TDomain> entities)
         {
             RepositoryMock.Setup(
@@ -72,6 +98,10 @@ namespace Services.Tests.Base
 
         }
 
+        /// <summary>
+        /// Test if the repository method is called
+        /// </summary>
+        /// <param name="entity"></param>
         public virtual void Update(TDomain entity)
         {
             RepositoryMock.Setup(
@@ -84,6 +114,10 @@ namespace Services.Tests.Base
             });
         }
 
+        /// <summary>
+        /// Test if the repository method is called
+        /// </summary>
+        /// <param name="entity"></param>
         public virtual void Remove(TDomain entity)
         {
             RepositoryMock.Setup(
@@ -96,6 +130,11 @@ namespace Services.Tests.Base
             });
         }
 
+        /// <summary>
+        /// Test if the repository method is called
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public virtual async Task RemoveAsync(int id)
         {
             RepositoryMock.Setup(
@@ -108,6 +147,12 @@ namespace Services.Tests.Base
             });
         }
 
+        /// <summary>
+        /// Test if the repository method is called
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <param name="amountToTest"></param>
+        /// <returns></returns>
         public virtual async Task GetAll(List<TDomain> entities, int amountToTest)
         {
             RepositoryMock.Setup(
@@ -125,6 +170,9 @@ namespace Services.Tests.Base
             Assert.AreEqual(amountToTest, retrievedList.Count);
         }
 
+        /// <summary>
+        /// Test if the repository method is called
+        /// </summary>
         public virtual void Save()
         {
             RepositoryMock.Setup(

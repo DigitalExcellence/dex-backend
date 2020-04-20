@@ -11,6 +11,14 @@ using System.Threading.Tasks;
 
 namespace Repositories.Tests.Base
 {
+    /// <summary>
+    /// Base test class which should be inherited from when creating unittests for the repositories.
+    /// By inheriting, all the default tests are included in the new test class.
+    /// YOU SHOULD OVERRIDE THE DEFAULT TEST TO ADD THE [Test] attribute.
+    /// If you do not override the tests and add the [Test] attribute, the default tests will not be triggered.
+    /// </summary>
+    /// <typeparam name="TDomain">Modelclass which is used to test</typeparam>
+    /// <typeparam name="TRepository">Repository which should be tested</typeparam>
     public abstract class RepositoryTest<TDomain, TRepository> 
         where TDomain : class
         where TRepository : class, IRepository<TDomain>
@@ -18,11 +26,8 @@ namespace Repositories.Tests.Base
         protected ApplicationDbContext DbContext;
         protected TRepository Repository;
 
-        protected Task SaveChangesAsync()
-        {
-            return DbContext.SaveChangesAsync();
-        }
-
+        // Initialize runs before every test
+        // Initialize the repository with reflection
         [SetUp]
         public virtual void Initialize()
         {
@@ -32,10 +37,18 @@ namespace Repositories.Tests.Base
             Repository = (TRepository)repositoryCtor.Invoke(new object[] { DbContext });
         }
 
+        /// <summary>
+        // Add the given entity to the database
+        // EF Core will give the entity automatically an id
+        // Check which id the entity has and use this id to retrieve it from the database again
+        // Check if all the properties of the retrieved entity match to the properties of the original entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task FindAsyncTest_GoodFlow(TDomain entity)
         {
             DbContext.Add(entity);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             Type type = entity.GetType();
             int id = (int)type.GetProperty("Id").GetValue(entity);
@@ -48,6 +61,13 @@ namespace Repositories.Tests.Base
             }
         }
 
+        /// <summary>
+        /// Add the given entity to the database
+        /// Try to retrieve an entity from the database with a key that doesn't exist
+        /// Check if the error is handled correctly by returning null
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task FindAsyncTest_BadFlow_NotExists(TDomain entity)
         {
             await DbContext.AddAsync(entity);
@@ -56,32 +76,47 @@ namespace Repositories.Tests.Base
             Assert.IsNull(await Repository.FindAsync(-1));
         }
 
+        /// <summary>
+        /// Add the given entity to the database
+        /// Check if the return type is not null
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task AddAsyncTest_GoodFlow(TDomain entity)
         {
             Repository.Add(entity);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             int id = (int)entity.GetType().GetProperty("Id").GetValue(entity);
             Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
         }
 
-        [Test]
+        /// <summary>
+        /// Check if the error is handled correctly when trying to add null to the database
+        /// </summary>
         public virtual void AddTest_BadFlow_Null()
         {
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
                 Repository.Add(null);
-                await SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
             });
 
         }
 
+        /// <summary>
+        /// Add a range of objects to the database
+        /// Retrieve the items from the database again by their id
+        /// and check if they are not null
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
         public virtual async Task AddRangeTest_GoodFlow(List<TDomain> entities)
         {
             Type type = typeof(TDomain);
 
             Repository.AddRange(entities);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             foreach (TDomain entity in entities)
             {
@@ -90,7 +125,9 @@ namespace Repositories.Tests.Base
             }
         }
 
-        [Test]
+        /// <summary>
+        /// Check if the error is handled correctly when adding an empty list to the database
+        /// </summary>
         public virtual void AddRangeTest_BadFlow_EmptyList()
         {
             List<TDomain> entities = new List<TDomain>();
@@ -98,7 +135,9 @@ namespace Repositories.Tests.Base
             Repository.Invoking(r => r.AddRange(entities)).Should().NotThrow();
         }
 
-        [Test]
+        /// <summary>
+        /// Check if the error is handled correctly when adding a null list to the database
+        /// </summary>
         public virtual void AddRangeTest_BadFlow_Null()
         {
             Assert.Throws<ArgumentNullException>(() =>
@@ -107,68 +146,96 @@ namespace Repositories.Tests.Base
             });
         }
 
+        /// <summary>
+        /// Add the first entity to the database
+        /// Update the entity in the database with the second entity
+        /// Retrieve the entity in the database and check if the entity is not equal to the first entity
+        /// Also check if the database entity is equal to the second entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="updateEntity"></param>
+        /// <returns></returns>
         public virtual async Task UpdateTest_GoodFlow(TDomain entity, TDomain updateEntity)
         {
             TDomain copy = entity.CloneObject<TDomain>();
             Repository.Add(entity);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             Type type = entity.GetType();
             int id = (int)type.GetProperty("Id").GetValue(entity);
 
             Repository.Update(entity);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
             Assert.AreEqual(entity, await Repository.FindAsync(id));
             Assert.AreNotEqual(copy, await Repository.FindAsync(id));
         }
 
+        /// <summary>
+        /// Try to update an entity in the database which does not exist
+        /// and check how the error is handled
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="updateEntity"></param>
+        /// <returns></returns>
         public virtual async Task UpdateTest_BadFlow_NotExists(TDomain entity, TDomain updateEntity)
         {
             Repository.Add(entity);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             entity.GetType().GetProperty("Id").SetValue(updateEntity, -1);
 
             Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
             {
                 Repository.Update(updateEntity);
-                await SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
             });
         }
 
+        /// <summary>
+        /// Try to update the entity in the database with null
+        /// and check how the error is handled
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task UpdateTest_BadFlow_Null(TDomain entity)
         {
             Repository.Add(entity);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
                 Repository.Update(null);
-                await SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
             });
         }
 
+        /// <summary>
+        /// Add the given entity to the database and try to remove it again with the id it got from EF Core.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task RemoveAsyncTest_GoodFlow(TDomain entity)
         {
             Repository.Add(entity);
-            await SaveChangesAsync();
-            await RemoveAsyncTest(entity);
-        }
-
-        protected async Task RemoveAsyncTest(TDomain entity)
-        {
-            int id = (int)entity.GetType().GetProperty("Id").GetValue(entity);
+            await DbContext.SaveChangesAsync();
+            int id = (int) entity.GetType().GetProperty("Id").GetValue(entity);
 
             await Repository.RemoveAsync(id);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             Assert.NotNull(Repository.FindAsync(id));
         }
 
+        /// <summary>
+        /// Try to remove an non existing entity from the database
+        /// and check how the error is handled
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task RemoveAsyncTest_BadFlow_NotExists(TDomain entity)
         {
             Repository.Add(entity);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             Assert.ThrowsAsync<KeyNotFoundException>(async () =>
             {
@@ -176,20 +243,32 @@ namespace Repositories.Tests.Base
             });
         }
 
-        public virtual async Task GetAllAsyncTest_GoodFlow(List<TDomain> entities, int amountToTest)
+        /// <summary>
+        /// Add the given list to the database and retrieve them again
+        /// Check if the retrieved list is the same amount as the given list
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <param name="amountToTest"></param>
+        /// <returns></returns>
+        public virtual async Task GetAllAsyncTest_GoodFlow(List<TDomain> entities)
         {
+            int amountToTest = entities.Count;
             await DbContext.AddRangeAsync(entities);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             List<TDomain> retrievedEntities = (List<TDomain>)await Repository.GetAll();
             Assert.AreEqual(amountToTest, retrievedEntities.Count);
         }
 
+        /// <summary>
+        /// Try to retrieve a list from an empty database and check how the error is handled
+        /// </summary>
+        /// <returns></returns>
         public virtual async Task GetAllAsyncTest_Badflow_Empty()
         {
             List<TDomain> entities = new List<TDomain>();
             await DbContext.AddRangeAsync(entities);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
             
             List<TDomain> retrievedEntities = (List<TDomain>)await Repository.GetAll();
             Assert.AreEqual(0, retrievedEntities.Count);

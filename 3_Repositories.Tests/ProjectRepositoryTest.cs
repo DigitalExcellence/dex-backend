@@ -23,7 +23,7 @@ namespace Repositories.Tests
                 projects[i].User = users[i];
             }
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Test
             List<Project> retrieved = await Repository.GetAllWithUsersAsync();
@@ -38,7 +38,7 @@ namespace Repositories.Tests
         public async Task GetAllWithUsersAsyncTest_NoProjects([UserDataSource(100)]List<User> users)
         {
             DbContext.AddRange(users);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Test
             List<Project> retrieved = await Repository.GetAllWithUsersAsync();
@@ -51,7 +51,7 @@ namespace Repositories.Tests
         {
             // Seed database
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Test
             List<Project> retrieved = await Repository.GetAllWithUsersAsync();
@@ -73,7 +73,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects, users);
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Tests
             // Id search
@@ -114,7 +114,7 @@ namespace Repositories.Tests
         {
             // Seed database
             DbContext.AddRange(users);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Test
             List<Project> retrieved = (List<Project>)await Repository.SearchAsync("abc");
@@ -129,7 +129,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects);
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects, users);
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Tests
             // Id search
@@ -162,7 +162,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects, users);
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Tests
             // Id search
@@ -205,7 +205,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects, users);
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Tests
             List<Project> retrieved = (List<Project>)await Repository.SearchAsync("ex", 1000, 10);
@@ -223,7 +223,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects, users);
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Tests
             int retrieved = await Repository.SearchCountAsync("ex");
@@ -241,7 +241,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects, users);
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Tests
             int retrieved = await Repository.SearchCountAsync("randomSearchWhichDoesntMatch");
@@ -276,7 +276,7 @@ namespace Repositories.Tests
             }
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Testing
             Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
@@ -316,7 +316,7 @@ namespace Repositories.Tests
             }
 
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Testing
             Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
@@ -334,7 +334,7 @@ namespace Repositories.Tests
             projects = SetStaticTestData(projects, users);
             
             DbContext.AddRange(projects);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             // Testing
             Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
@@ -348,38 +348,43 @@ namespace Repositories.Tests
         }
 
 
-        //Default test from RepositoryTest
+        // Default test from RepositoryTest
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task AddAsyncTest_GoodFlow([ProjectDataSource]Project entity)
         {
             return base.AddAsyncTest_GoodFlow(entity);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override void AddRangeTest_BadFlow_EmptyList()
         {
             base.AddRangeTest_BadFlow_EmptyList();
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override void AddRangeTest_BadFlow_Null()
         {
             base.AddRangeTest_BadFlow_Null();
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task AddRangeTest_GoodFlow([ProjectDataSource(5)]List<Project> entities)
         {
             return base.AddRangeTest_GoodFlow(entities);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override void AddTest_BadFlow_Null()
         {
             base.AddTest_BadFlow_Null();
         }
 
-        // Override default test with extra parameters due to override in repository
+        // Override default test with extra parameters due to override in projectRepository
         [Test]
         public async Task FindAsyncTest_BadFlow_NotExists(
             [ProjectDataSource]Project project,
@@ -387,19 +392,19 @@ namespace Repositories.Tests
         {
             project.Collaborators = collaborators;
             DbContext.Add(project);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             Assert.IsNull(await Repository.FindAsync(-1));
         }
 
-        // Override default test with extra parameters due to override in repository
+        // Override default test with extra parameters due to override in projectRepository
         [Test]
         public async Task FindAsyncTest_GoodFlow([ProjectDataSource]Project project,
             [CollaboratorDataSource(10)]List<Collaborator> collaborators)
         {
             project.Collaborators = collaborators;
             DbContext.Add(project);
-            await SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
             Project retrieved = await Repository.FindAsync(1);
             Assert.AreEqual(project.Id, retrieved.Id);
@@ -410,42 +415,49 @@ namespace Repositories.Tests
             Assert.AreEqual(project.Collaborators.Count, retrieved.Collaborators.Count);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task GetAllAsyncTest_Badflow_Empty()
         {
             return base.GetAllAsyncTest_Badflow_Empty();
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
-        public Task GetAllAsyncTest_GoodFlow([ProjectDataSource(5)]List<Project> entities)
+        public override Task GetAllAsyncTest_GoodFlow([ProjectDataSource(5)]List<Project> entities)
         {
-            return base.GetAllAsyncTest_GoodFlow(entities, 5);
+            return base.GetAllAsyncTest_GoodFlow(entities);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task RemoveAsyncTest_BadFlow_NotExists([ProjectDataSource]Project entity)
         {
             return base.RemoveAsyncTest_BadFlow_NotExists(entity);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task RemoveAsyncTest_GoodFlow([ProjectDataSource]Project entity)
         {
             return base.RemoveAsyncTest_GoodFlow(entity);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task UpdateTest_BadFlow_NotExists([ProjectDataSource]Project entity, [ProjectDataSource]Project updateEntity)
         {
             return base.UpdateTest_BadFlow_NotExists(entity, updateEntity);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task UpdateTest_BadFlow_Null([ProjectDataSource]Project entity)
         {
             return base.UpdateTest_BadFlow_Null(entity);
         }
 
+        // Calling base method with correct parameters to trigger default test
         [Test]
         public override Task UpdateTest_GoodFlow([ProjectDataSource]Project entity, [ProjectDataSource]Project updateEntity)
         {
