@@ -1,0 +1,28 @@
+{
+	"info": {
+		"_postman_id": "00e58bc3-a4d6-4c62-a484-a3f70dc823a3",
+		"name": "Digital Excellence API",
+		"description": "Testing Digital Excellence API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Project-GetAllProjects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
