@@ -37,20 +37,21 @@ namespace API.Controllers
     public class ProjectController : ControllerBase
     {
 
-        private readonly IMapper _mapper;
-        private readonly IProjectService _projectService;
-        private readonly IUserService _userService;
+        private readonly IMapper mapper;
+        private readonly IProjectService projectService;
+        private readonly IUserService userService;
 
         /// <summary>
-        ///     Initialize a new instance of ProjectController
+        /// Initialize a new instance of ProjectController
         /// </summary>
         /// <param name="projectService"></param>
+        /// <param name="userService"></param>
         /// <param name="mapper"></param>
         public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
         {
-            _projectService = projectService;
-            _userService = userService;
-            _mapper = mapper;
+            this.projectService = projectService;
+            this.userService = userService;
+            this.mapper = mapper;
         }
 
         /// <summary>
@@ -105,11 +106,8 @@ namespace API.Controllers
                 return BadRequest("Project is null");
             }
             Project project = _mapper.Map<ProjectResource, Project>(projectResource);
-
-            //TODO: When login in frontend is functioning, get the user from JWT information
-            User user = await _userService.GetUserAsync(1);
+            User user = await _userService.GetUserAsync(projectResource.UserId);
             project.User = user;
-            project.UserId = user.Id;
             try
             {
                 _projectService.Add(project);
