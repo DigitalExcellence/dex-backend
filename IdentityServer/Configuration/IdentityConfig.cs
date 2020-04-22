@@ -80,23 +80,16 @@ namespace IdentityServer.Configuration
                            ClientSecrets =
                            {
                                new Secret(config.Self.IdentityApplications.Single(a => a["Key"]
-                                                                                      .Equals("dex-frontend"))["Value"]
-                                                .Sha256())
+                                                                                      .Equals("dex-frontend"))["Value"].Sha256())
                            },
                            AllowedGrantTypes = GrantTypes.Implicit,
                            RequirePkce = true,
 
                            // where to redirect to after login
-                           RedirectUris =
-                           {
-                               "http://localhost:4200/auth-callback"
-                           },
+                           RedirectUris = config.Frontend.RedirectUrisFrontend,
 
                            // where to redirect to after logout
-                           PostLogoutRedirectUris =
-                           {
-                               "http://localhost:4200/"
-                           },
+                           PostLogoutRedirectUris = config.Frontend.PostLogoutUrisFrontend,
 
                            AllowedScopes = new List<string>
                                            {
