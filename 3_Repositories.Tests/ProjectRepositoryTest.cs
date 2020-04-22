@@ -12,6 +12,12 @@ namespace Repositories.Tests
     {
         protected new IProjectRepository Repository => (IProjectRepository)base.Repository;
 
+        /// <summary>
+        /// Test if projects with user relations are retrieved correctly
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task GetAllWithUserAsyncTest_GoodFlow(
             [ProjectDataSource(100)]List<Project> projects,
@@ -34,6 +40,11 @@ namespace Repositories.Tests
             }
         }
 
+        /// <summary>
+        /// Test if no projects are retrieved when the database is empty
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task GetAllWithUsersAsyncTest_NoProjects([UserDataSource(100)]List<User> users)
         {
@@ -45,6 +56,11 @@ namespace Repositories.Tests
             Assert.AreEqual(0, retrieved.Count);
         }
 
+        /// <summary>
+        /// Test if no projects are retrieved when the required relation with users is missing
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <returns></returns>
         [Test]
         public async Task GetAllWithUsersAsyncTest_NoUsers(
             [ProjectDataSource(100)]List<Project> projects)
@@ -56,12 +72,14 @@ namespace Repositories.Tests
             // Test
             List<Project> retrieved = await Repository.GetAllWithUsersAsync();
             Assert.AreEqual(0, retrieved.Count);
-            foreach (Project project in projects)
-            {
-                Assert.IsNull(project.User);
-            }
         }
 
+        /// <summary>
+        /// Check if the search is returning the correct projects based on the search terms
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_GoodFlow(
             [ProjectDataSource(100)]List<Project> projects,
@@ -108,6 +126,11 @@ namespace Repositories.Tests
             Assert.AreEqual(100, retrieved.Count, "Combined search failed");
         }
 
+        /// <summary>
+        /// Check if the search is returning no projects when the database is empty
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_BadFlow_NoProjects(
             [UserDataSource(100)]List<User> users)
@@ -121,6 +144,11 @@ namespace Repositories.Tests
             Assert.AreEqual(0, retrieved.Count);
         }
 
+        /// <summary>
+        /// Check if the search is returning no projects when the required relation with users is missing
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_BadFlow_NoUsers([ProjectDataSource(100)]List<Project> projects)
         {
@@ -130,8 +158,17 @@ namespace Repositories.Tests
 
             DbContext.AddRange(projects);
             await DbContext.SaveChangesAsync();
+
+            List<Project> retrieved = (List<Project>) await Repository.SearchAsync("abc");
+            Assert.AreEqual(0, retrieved.Count);
         }
 
+        /// <summary>
+        /// Check if the search is returning no projects if non of the projects has the included string in any of the properties
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_BadFlow_NoMatching(
             [ProjectDataSource(100)]List<Project> projects,
@@ -151,6 +188,12 @@ namespace Repositories.Tests
             Assert.AreEqual(0, retrieved.Count);
         }
 
+        /// <summary>
+        /// Check if the search is able to skip the correct amount of projects while returning the correct search results
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchSkipTakeAsyncTest_GoodFlow(
             [ProjectDataSource(100)]List<Project> projects,
@@ -194,6 +237,12 @@ namespace Repositories.Tests
             Assert.AreEqual(40, retrieved.Count, "Combined search failed");
         }
 
+        /// <summary>
+        /// Check if the search is returning no projects when skipping all the projects in the result
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchSkipTakeAsyncTest_BadFlow_SkipAllProjects(
             [ProjectDataSource(100)]List<Project> projects,
@@ -212,6 +261,12 @@ namespace Repositories.Tests
             Assert.AreEqual(0, retrieved.Count);
         }
 
+        /// <summary>
+        /// Check if the count is counting the correct amount of projects
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchCountAsyncTest_GoodFlow(
             [ProjectDataSource(100)]List<Project> projects,
@@ -230,6 +285,12 @@ namespace Repositories.Tests
             Assert.AreEqual(100, retrieved);
         }
 
+        /// <summary>
+        /// Check if the count is returning 0 when there are no matching projects
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task SearchCountAsyncTest_BadFlow_NoMatchingProjects(
             [ProjectDataSource(100)]List<Project> projects,
@@ -248,6 +309,10 @@ namespace Repositories.Tests
             Assert.AreEqual(0, retrieved);
         }
 
+        /// <summary>
+        /// Check if the count is returning 0 when there are no projects in the database
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task SearchCountAsyncTest_BadFlow_NoProjects()
         {
@@ -256,6 +321,13 @@ namespace Repositories.Tests
             Assert.AreEqual(0, retrieved);
         }
 
+        /// <summary>
+        /// Checks if the correct project with user and collaborators are found
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <param name="collaborators"></param>
+        /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_GoodFlow(
             [ProjectDataSource(100)]List<Project> projects,
@@ -289,6 +361,10 @@ namespace Repositories.Tests
             Assert.AreEqual(projects[0].Collaborators[0].FullName, retrieved.Collaborators[0].FullName);
         }
 
+        /// <summary>
+        /// Checks if the result is null when the database has no projects
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_BadFlow_NoProjects()
         {
@@ -297,6 +373,12 @@ namespace Repositories.Tests
             Assert.IsNull(retrieved);
         }
 
+        /// <summary>
+        /// Checks if the result is null when the required relation with user is missing
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="collaborators"></param>
+        /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_BadFlow_NoUsers(
             [ProjectDataSource(100)]List<Project> projects,
@@ -325,6 +407,12 @@ namespace Repositories.Tests
             Assert.IsNull(retrieved);
         }
 
+        /// <summary>
+        /// Checks if the amount of collaborators is 0 when the database has no collaborators
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_BadFlow_NoCollaborators(
             [ProjectDataSource(100)]List<Project> projects,
@@ -348,43 +436,42 @@ namespace Repositories.Tests
         }
 
 
-        // Default test from RepositoryTest
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task AddAsyncTest_GoodFlow([ProjectDataSource]Project entity)
         {
             return base.AddAsyncTest_GoodFlow(entity);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override void AddRangeTest_BadFlow_EmptyList()
         {
             base.AddRangeTest_BadFlow_EmptyList();
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override void AddRangeTest_BadFlow_Null()
         {
             base.AddRangeTest_BadFlow_Null();
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task AddRangeTest_GoodFlow([ProjectDataSource(5)]List<Project> entities)
         {
             return base.AddRangeTest_GoodFlow(entities);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override void AddTest_BadFlow_Null()
         {
             base.AddTest_BadFlow_Null();
         }
 
-        // Override default test with extra parameters due to override in projectRepository
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public async Task FindAsyncTest_BadFlow_NotExists(
             [ProjectDataSource]Project project,
@@ -397,7 +484,7 @@ namespace Repositories.Tests
             Assert.IsNull(await Repository.FindAsync(-1));
         }
 
-        // Override default test with extra parameters due to override in projectRepository
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public async Task FindAsyncTest_GoodFlow([ProjectDataSource]Project project,
             [CollaboratorDataSource(10)]List<Collaborator> collaborators)
@@ -415,49 +502,49 @@ namespace Repositories.Tests
             Assert.AreEqual(project.Collaborators.Count, retrieved.Collaborators.Count);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task GetAllAsyncTest_Badflow_Empty()
         {
             return base.GetAllAsyncTest_Badflow_Empty();
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task GetAllAsyncTest_GoodFlow([ProjectDataSource(5)]List<Project> entities)
         {
             return base.GetAllAsyncTest_GoodFlow(entities);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task RemoveAsyncTest_BadFlow_NotExists([ProjectDataSource]Project entity)
         {
             return base.RemoveAsyncTest_BadFlow_NotExists(entity);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task RemoveAsyncTest_GoodFlow([ProjectDataSource]Project entity)
         {
             return base.RemoveAsyncTest_GoodFlow(entity);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task UpdateTest_BadFlow_NotExists([ProjectDataSource]Project entity, [ProjectDataSource]Project updateEntity)
         {
             return base.UpdateTest_BadFlow_NotExists(entity, updateEntity);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task UpdateTest_BadFlow_Null([ProjectDataSource]Project entity)
         {
             return base.UpdateTest_BadFlow_Null(entity);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task UpdateTest_GoodFlow([ProjectDataSource]Project entity, [ProjectDataSource]Project updateEntity)
         {

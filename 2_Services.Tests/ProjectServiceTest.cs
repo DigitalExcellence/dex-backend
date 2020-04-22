@@ -16,6 +16,11 @@ namespace Services.Tests
         protected new IProjectService Service => (IProjectService)base.Service;
 
 
+        /// <summary>
+        /// Test whether the repository method is called and no changes have been applied to the object
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <returns></returns>
         [Test]
         public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
@@ -34,6 +39,11 @@ namespace Services.Tests
             Assert.AreEqual(projects, retrievedProjects);
         }
 
+        /// <summary>
+        /// Test whether the repository method is called and no changes are applied to the object
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsync([ProjectDataSource]Project project)
         {
@@ -52,50 +62,49 @@ namespace Services.Tests
             Assert.AreEqual(project, retrievedProject);
         }
 
-        // Default tests from base class
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void AddRangeTest_GoodFlow([ProjectDataSource(100)]IEnumerable<Project> entities)
         {
             base.AddRangeTest_GoodFlow(entities);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void AddTest_GoodFlow([ProjectDataSource]Project entity)
         {
             base.AddTest_GoodFlow(entity);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public Task GetAll([ProjectDataSource(100)]List<Project> entities)
         {
             return base.GetAll(entities, 100);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void Remove([ProjectDataSource]Project entity)
         {
             base.Remove(entity);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public Task RemoveAsync()
         {
             return base.RemoveAsync(1);
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void Save()
         {
             base.Save();
         }
 
-        // Calling base method with correct parameters to trigger default test
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void Update([ProjectDataSource]Project entity)
         {

@@ -26,8 +26,10 @@ namespace Repositories.Tests.Base
         protected ApplicationDbContext DbContext;
         protected TRepository Repository;
 
-        // Initialize runs before every test
-        // Initialize the repository with reflection
+        /// <summary>
+        /// Initialize runs before every test
+        /// Initialize the repository with reflection
+        /// </summary>
         [SetUp]
         public virtual void Initialize()
         {
