@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added this very changelog - [#69](https://github.com/DigitalExcellence/dex-backend/issues/71)
-- Added issue templates (bug & report) - [#11](https://github.com/DigitalExcellence/dex-backend/issues/11)
+- Added issue & pull request templates (bug & report) - [#11](https://github.com/DigitalExcellence/dex-backend/issues/11)
 
 ### Changed
 
