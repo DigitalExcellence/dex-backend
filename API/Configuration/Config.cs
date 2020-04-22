@@ -52,7 +52,7 @@ namespace API.Configuration
         /// <summary>
         /// 
         /// </summary>
-        public SwaggerConfig swaggerConfig { get; set; }
+        public SwaggerConfig Swagger { get; set; }
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -60,7 +60,7 @@ namespace API.Configuration
         {
             Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
             Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
-            Validator.ValidateObject(swaggerConfig, new ValidationContext(swaggerConfig), true);
+            Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
         }
 
         /// <summary>
@@ -115,8 +115,16 @@ namespace API.Configuration
 
         }
 
+        /// <summary>
+        /// </summary>
         public class SwaggerConfig
         {
+            /// <summary>
+            /// Gets or sets the client identifier.
+            /// </summary>
+            /// <value>
+            /// The client identifier.
+            /// </value>
             [Required]
             public string ClientId { get; set; }
         }

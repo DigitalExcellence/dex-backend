@@ -231,7 +231,7 @@ namespace API
                 o.DocExpansion(DocExpansion.None);
                 o.RoutePrefix = "";
                 o.DisplayRequestDuration();
-                o.OAuthClientId(Config.swaggerConfig.ClientId);
+                o.OAuthClientId(Config.Swagger.ClientId);
             });
 
             app.UseStaticFiles();
