@@ -50,9 +50,13 @@ namespace API.Configuration
         public IdentityServerConfig IdentityServer { get; set; }
 
         /// <summary>
-        /// 
+        /// Gets or sets the swagger.
         /// </summary>
+        /// <value>
+        /// The swagger.
+        /// </value>
         public SwaggerConfig Swagger { get; set; }
+
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -99,6 +103,7 @@ namespace API.Configuration
         }
 
         /// <summary>
+        /// Contains the identity server configuration.
         /// </summary>
         public class IdentityServerConfig
         {
@@ -116,6 +121,7 @@ namespace API.Configuration
         }
 
         /// <summary>
+        /// Contains the swagger configuration.
         /// </summary>
         public class SwaggerConfig
         {
