@@ -54,19 +54,36 @@ namespace API.Controllers
         public async Task<IActionResult> SearchInternalProjects(string query,
                                                                 [FromQuery] SearchRequestParamsResource parameters)
         {
-            if(query.Length < 0) return BadRequest("Query required");
+            ProblemDetails RequestDetail = new ProblemDetails
+            {
+                Title = "Invalid search request"
+            };
+            if(query.Length < 0)
+            {
+                RequestDetail.Detail = "Query required";
+                return BadRequest(RequestDetail);
+            }
             if(parameters.Page != null &&
                parameters.Page < 1)
-                return BadRequest("Invalid page number");
+            {
+                RequestDetail.Detail = "Invalid page number";
+                return BadRequest(RequestDetail);
+            }
             if(parameters.SortBy != null &&
                parameters.SortBy != "name" &&
                parameters.SortBy != "created" &&
                parameters.SortBy != "updated")
-                return BadRequest("Invalid sort value: Use \"name\", \"created\" or \"updated\"");
+            {
+                RequestDetail.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\"";
+                return BadRequest(RequestDetail);
+            }
             if(parameters.SortDirection != null &&
                parameters.SortDirection != "asc" &&
                parameters.SortDirection != "desc")
-                return BadRequest("Invalid sort direction: Use \"asc\" or \"desc\"");
+            {
+                RequestDetail.Detail = "Invalid sort direction: Use \"asc\" or \"desc\"";
+                return BadRequest(RequestDetail);
+            }
 
             SearchParams searchParams = _mapper.Map<SearchRequestParamsResource, SearchParams>(parameters);
             IEnumerable<Project> projects = await _searchService.SearchInternalProjects(query, searchParams);
