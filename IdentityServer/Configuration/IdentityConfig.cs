@@ -92,19 +92,41 @@ namespace IdentityServer.Configuration
                            PostLogoutRedirectUris = config.Frontend.PostLogoutUrisFrontend,
 
                            AllowedScopes = new List<string>
-                                           {
-                                               IdentityServerConstants.StandardScopes.OpenId,
-                                               IdentityServerConstants.StandardScopes.Profile,
-                                               nameof(Defaults.Scopes.ProjectRead),
-                                               nameof(Defaults.Scopes.ProjectWrite),
-                                               nameof(Defaults.Scopes.UserWrite),
-                                               nameof(Defaults.Scopes.UserRead),
-                                               nameof(Defaults.Scopes.HighlightRead),
-                                               nameof(Defaults.Scopes.HighlightWrite)
-                                           },
+                            {
+                                IdentityServerConstants.StandardScopes.OpenId,
+                                IdentityServerConstants.StandardScopes.Profile,
+                                nameof(Defaults.Scopes.ProjectRead),
+                                nameof(Defaults.Scopes.ProjectWrite),
+                                nameof(Defaults.Scopes.UserWrite),
+                                nameof(Defaults.Scopes.UserRead),
+                                nameof(Defaults.Scopes.HighlightRead),
+                                nameof(Defaults.Scopes.HighlightWrite)
+                            },
                            AllowAccessTokensViaBrowser = true
 
                            // AllowOfflineAccess = true
+                       },
+
+                       new Client
+                       {
+                           ClientId = "Swagger-UI",
+                           ClientName = "Swagger UI",
+                           AllowedGrantTypes = GrantTypes.Implicit,
+                           AllowAccessTokensViaBrowser = true,
+                           
+                           RedirectUris = config.Swagger.RedirectUrisSwagger,
+                           PostLogoutRedirectUris = config.Swagger.PostLogoutUrisSwagger,
+                           AllowedScopes = new List<string>
+                            {
+                                IdentityServerConstants.StandardScopes.OpenId,
+                                IdentityServerConstants.StandardScopes.Profile,
+                                nameof(Defaults.Scopes.ProjectRead),
+                                nameof(Defaults.Scopes.ProjectWrite),
+                                nameof(Defaults.Scopes.UserWrite),
+                                nameof(Defaults.Scopes.UserRead),
+                                nameof(Defaults.Scopes.HighlightRead),
+                                nameof(Defaults.Scopes.HighlightWrite)
+                            },
                        }
                    };
         }

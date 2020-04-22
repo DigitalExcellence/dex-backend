@@ -50,12 +50,17 @@ namespace API.Configuration
         public IdentityServerConfig IdentityServer { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public SwaggerConfig swaggerConfig { get; set; }
+        /// <summary>
         ///     Validates this instance.
         /// </summary>
         public void Validate()
         {
             Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
             Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
+            Validator.ValidateObject(swaggerConfig, new ValidationContext(swaggerConfig), true);
         }
 
         /// <summary>
@@ -108,6 +113,12 @@ namespace API.Configuration
             [Url]
             public string IdentityUrl { get; set; }
 
+        }
+
+        public class SwaggerConfig
+        {
+            [Required]
+            public string ClientId { get; set; }
         }
 
     }
