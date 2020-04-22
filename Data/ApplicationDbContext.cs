@@ -36,6 +36,7 @@ namespace Data
 
         public DbSet<Highlight> Highlight { get; set; }
 
+        public DbSet<EmbeddedProject> EmbeddedProject { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

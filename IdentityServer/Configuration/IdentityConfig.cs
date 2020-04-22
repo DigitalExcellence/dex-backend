@@ -43,7 +43,9 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.UserWrite)),
                         new Scope(nameof(Defaults.Scopes.UserRead)),
                         new Scope(nameof(Defaults.Scopes.HighlightWrite)),
-                        new Scope(nameof(Defaults.Scopes.HighlightRead))
+                        new Scope(nameof(Defaults.Scopes.HighlightRead)),
+                        new Scope(nameof(Defaults.Scopes.EmbedWrite)),
+                        new Scope(nameof(Defaults.Scopes.EmbedRead)),
                     }
                 }
             };
@@ -68,7 +70,9 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.ProjectRead),
                                nameof(Defaults.Scopes.ProjectWrite),
                                nameof(Defaults.Scopes.UserWrite),
-                               nameof(Defaults.Scopes.UserRead)
+                               nameof(Defaults.Scopes.UserRead),
+                               nameof(Defaults.Scopes.EmbedWrite),
+                               nameof(Defaults.Scopes.EmbedRead)
                            }
                        },
 

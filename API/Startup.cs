@@ -116,6 +116,11 @@ namespace API
                             policy => policy.RequireScope(nameof(Defaults.Scopes.UserRead)));
                 o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
                             policy => policy.RequireScope(nameof(Defaults.Scopes.UserWrite)));
+                o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
+                            policy => policy.RequireScope(nameof(Defaults.Scopes.EmbedRead)));
+                o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
+                            policy => policy.RequireScope(nameof(Defaults.Scopes.EmbedWrite)));
+
             });
 
             services.AddCors();

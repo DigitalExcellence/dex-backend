@@ -50,6 +50,8 @@ namespace API.Extensions
 
             services.AddScoped<ISearchService, SearchService>();
 
+            services.AddScoped<IEmbedService, EmbedService>();
+            services.AddScoped<IEmbedRepository, EmbedRepository>();
             return services;
         }
 

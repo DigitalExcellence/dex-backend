@@ -66,6 +66,11 @@ namespace Models.Defaults
             [Description("This scope gives write access to the highlight namespace")]
             public const string HighlightWrite = "highlight:write";
 
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedWrite = "embed:write";
+
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedRead = "embed:read";
         }
 
     }
