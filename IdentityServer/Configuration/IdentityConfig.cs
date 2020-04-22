@@ -113,13 +113,11 @@ namespace IdentityServer.Configuration
                            ClientName = "Swagger UI",
                            AllowedGrantTypes = GrantTypes.Implicit,
                            AllowAccessTokensViaBrowser = true,
-                           
+                           AlwaysIncludeUserClaimsInIdToken = true,
                            RedirectUris = config.Swagger.RedirectUrisSwagger,
                            PostLogoutRedirectUris = config.Swagger.PostLogoutUrisSwagger,
                            AllowedScopes = new List<string>
                             {
-                                IdentityServerConstants.StandardScopes.OpenId,
-                                IdentityServerConstants.StandardScopes.Profile,
                                 nameof(Defaults.Scopes.ProjectRead),
                                 nameof(Defaults.Scopes.ProjectWrite),
                                 nameof(Defaults.Scopes.UserWrite),
