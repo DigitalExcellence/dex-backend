@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added this very changelog - [#69](https://git.fhict.nl/dex/dex-backend/-/issues/69)
 - You can now authenticate swagger with the Identity server - [#101]https://github.com/DigitalExcellence/dex-backend/issues/101
+- Added issue & pull request templates (bug & report) - [#11](https://github.com/DigitalExcellence/dex-backend/issues/11)
+
 ### Changed
 
 ### Deprecated
