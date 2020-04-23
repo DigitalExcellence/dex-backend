@@ -54,35 +54,39 @@ namespace API.Controllers
         public async Task<IActionResult> SearchInternalProjects(string query,
                                                                 [FromQuery] SearchRequestParamsResource parameters)
         {
-            ProblemDetails RequestDetail = new ProblemDetails
+            ProblemDetails problem = new ProblemDetails
             {
-                Title = "Invalid search request"
+                Title = "Invalid search request."
             };
             if(query.Length < 0)
             {
-                RequestDetail.Detail = "Query required";
-                return BadRequest(RequestDetail);
+                problem.Detail = "The Query parameter cannot be empty.";
+                problem.Instance = "13A59FAE-E98F-42B3-AFD4-84F3019EC790";
+                return BadRequest(problem);
             }
             if(parameters.Page != null &&
                parameters.Page < 1)
             {
-                RequestDetail.Detail = "Invalid page number";
-                return BadRequest(RequestDetail);
+                problem.Detail = "The page number cannot be smaller then 1.";
+                problem.Instance = "65EB6EF1-2CF4-4F7B-8A0A-C047C701337A";
+                return BadRequest(problem);
             }
             if(parameters.SortBy != null &&
                parameters.SortBy != "name" &&
                parameters.SortBy != "created" &&
                parameters.SortBy != "updated")
             {
-                RequestDetail.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\"";
-                return BadRequest(RequestDetail);
+                problem.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\".";
+                problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
+                return BadRequest(problem);
             }
             if(parameters.SortDirection != null &&
                parameters.SortDirection != "asc" &&
                parameters.SortDirection != "desc")
             {
-                RequestDetail.Detail = "Invalid sort direction: Use \"asc\" or \"desc\"";
-                return BadRequest(RequestDetail);
+                problem.Detail = "Invalid sort direction: Use \"asc\" or \"desc\".";
+                problem.Instance = "3EE043D5-070B-443A-A951-B252A1BB8EF9";
+                return BadRequest(problem);
             }
 
             SearchParams searchParams = _mapper.Map<SearchRequestParamsResource, SearchParams>(parameters);

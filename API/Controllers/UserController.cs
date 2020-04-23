@@ -61,13 +61,25 @@ namespace API.Controllers
         {
             if(userId < 0)
             {
-                return BadRequest("Invalid user Id");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The user id is less then zero and therefore cannot exist in the database.",
+                    Instance = "EAF7FEA1-47E9-4CF8-8415-4D3BC843FB71",
+                };
+                return BadRequest(problem);
             }
 
             User user = await _userService.FindAsync(userId);
             if(user == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "140B718F-9ECD-4F68-B441-F85C1DC7DC32"
+                };
+                return NotFound(problem);
             }
 
             return Ok(_mapper.Map<User, UserResourceResult>(user));
@@ -91,7 +103,13 @@ namespace API.Controllers
                 return Created(nameof(CreateAccount), _mapper.Map<User, UserResourceResult>(user));
             } catch
             {
-                return BadRequest("Could not Create the User account");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to create user account.",
+                    Detail = "Failed saving the user account to the database.",
+                    Instance = "D8C786C1-9E6D-4D36-83F4-A55D394B5017"
+                };
+                return BadRequest(problem);
             }
         }
 
@@ -108,7 +126,13 @@ namespace API.Controllers
             User user = await _userService.FindAsync(userId);
             if(user == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with that user id.",
+                    Instance = "EF4DA55A-C31A-4BC4-AE30-098DEB0D3457"
+                };
+                return NotFound(problem);
             }
 
             _mapper.Map(userResource, user);
@@ -129,14 +153,18 @@ namespace API.Controllers
         {
             if(await _userService.FindAsync(userId) == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this student id.",
+                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                };
+                return NotFound(problem);
             }
 
             await _userService.RemoveAsync(userId);
             _userService.Save();
             return Ok();
         }
-
     }
-
 }
