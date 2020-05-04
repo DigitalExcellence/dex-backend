@@ -15,7 +15,7 @@ namespace Repositories.Tests.DataGenerators
                 .RuleFor(project => project.Description, faker => faker.Lorem.Words(40).ToString())
                 .RuleFor(project => project.Uri, faker => faker.Internet.Url())
                 .RuleFor(project => project.Created, faker => faker.Date.Past())
-                .RuleFor(project => project.Created, DateTime.Now);
+                .RuleFor(project => project.Updated, DateTime.Now);
         }
     }
 }
