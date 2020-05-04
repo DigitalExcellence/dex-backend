@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Setup basic unit test framework to ensure that the core functionality of the application works [#65] (https://github.com/DigitalExcellence/dex-backend/issues/65)
 - Added example unittests for other contributors [#74] (https://github.com/DigitalExcellence/dex-backend/issues/74)
 - Added issue & pull request templates (bug & report) - [#11](https://github.com/DigitalExcellence/dex-backend/issues/11)
+- Added unittests for UserRepository
 
 ### Changed
 
