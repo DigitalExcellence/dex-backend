@@ -68,7 +68,9 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.ProjectRead),
                                nameof(Defaults.Scopes.ProjectWrite),
                                nameof(Defaults.Scopes.UserWrite),
-                               nameof(Defaults.Scopes.UserRead)
+                               nameof(Defaults.Scopes.UserRead),
+                               nameof(Defaults.Scopes.HighlightRead),
+                               nameof(Defaults.Scopes.HighlightWrite)
                            }
                        },
 

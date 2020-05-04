@@ -30,6 +30,7 @@ namespace Repositories
         Task<User> GetUserAsync(int userId);
 
         Task<bool> RemoveUserAsync(int userId);
+        Task<bool> UserHasScope(int userId, string scope);
 
     }
 
@@ -61,6 +62,25 @@ namespace Repositories
             return false;
         }
 
+        public async Task<bool> UserHasScope(int userId, string scope)
+        {
+            var user = await GetDbSet<User>()
+                             .Include(s => s.Role)
+                             .Where(s => s.Id == userId)
+                             .SingleOrDefaultAsync();
+            if(user.Role == null)
+            {
+                return false;
+            }
+            foreach (var scoop1  in user.Role.Scopes )
+            {
+                if(scoop1.Scope == scope)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 }

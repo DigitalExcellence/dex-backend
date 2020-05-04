@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -33,6 +33,8 @@ namespace Services.Services
 
         User GetUserByUsername(string upn);
 
+        Task<bool> UserHasScope(int userId, string scope);
+
     }
 
     public class UserService : Service<User>, IUserService
@@ -55,6 +57,11 @@ namespace Services.Services
         public User GetUserByUsername(string upn)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> UserHasScope(int userId, string scope)
+        {
+            return await Repository.UserHasScope(userId, scope);
         }
 
     }

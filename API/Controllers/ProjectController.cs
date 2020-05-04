@@ -128,6 +128,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
+            var x = HttpContext.User;
             Project project = await projectService.FindAsync(projectId);
             if(project == null)
             {

@@ -40,6 +40,8 @@ namespace Models
         [Required]
         public string Name { get; set; }
 
+        public Role Role { get; set; }
+
         [Required]
         public string Email { get; set; }
 
