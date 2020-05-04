@@ -35,6 +35,7 @@ using Models.Defaults;
 using Services.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
@@ -125,43 +126,49 @@ namespace API
             services.AddSwaggerGen(o =>
             {
                 o.SwaggerDoc("v1",
-                             new OpenApiInfo
-                             {
-                                 Title = "Dex API",
-                                 Version = "v1",
-                                 License = new OpenApiLicense
-                                           {
-                                               Name = "GNU Lesser General Public License v3.0",
-                                               Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
-                                           }
-                             });
+                    new OpenApiInfo
+                    {
+                        Title = "Dex API",
+                        Version = "v1",
+                        License = new OpenApiLicense
+                        {
+                            Name = "GNU Lesser General Public License v3.0",
+                            Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
+                        }
+                    });
                 o.IncludeXmlComments($@"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml");
-                o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
-                                        new OpenApiSecurityScheme
-                                        {
-                                            Name = "Authorization",
-                                            Type = SecuritySchemeType.OAuth2,
-                                            Scheme = "Bearer",
-                                            BearerFormat = "JWT",
-                                            In = ParameterLocation.Header,
-                                            Description =
-                                                "JWT Authorization header using the Bearer scheme. Example: \"Bearer <token>\""
-                                        });
+                o.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize"),
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "ProjectWrite", "Project write operations" },
+                                { "ProjectRead", "Project read operations" },
+
+                                { "UserWrite", "User write operations" },
+                                { "UserRead", "User read operations" },
+
+                                { "HighlightWrite", "Highlight write operations" },
+                                { "HighlightRead", "Highlight read operations" },
+                            }
+                        }
+                    }
+                });
                 o.AddSecurityRequirement(new OpenApiSecurityRequirement
-                                         {
-                                             {
-                                                 new OpenApiSecurityScheme
-                                                 {
-                                                     Reference = new OpenApiReference
-                                                                 {
-                                                                     Type = ReferenceType
-                                                                         .SecurityScheme,
-                                                                     Id = "Bearer"
-                                                                 }
-                                                 },
-                                                 new string[] { }
-                                             }
-                                         });
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                        },
+                        new[] { "" }
+                    }
+                });
             });
 
             // Add application services.
@@ -221,32 +228,30 @@ namespace API
                 o.DocExpansion(DocExpansion.None);
                 o.RoutePrefix = "";
                 o.DisplayRequestDuration();
+                o.OAuthClientId(Config.Swagger.ClientId);
             });
 
             app.UseStaticFiles();
 
             //StudentInfo
-            app.UseWhen(context =>
-                            (context.Request.Method.Equals(HttpMethods.Post) ||
-                             context.Request.Method.Equals(HttpMethods.Put)) &&
-                            context.User.Identities.Any(i => i.IsAuthenticated),
-                        appBuilder =>
+            app.UseWhen(context => 
+                (context.Request.Method.Equals(HttpMethods.Post) || context.Request.Method.Equals(HttpMethods.Put)) && context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
+                {
+                    appBuilder.Use(async (context, next) =>
+                    {
+                        DbContext dbContext = context.RequestServices.GetService<DbContext>();
+                        IUserService userService =
+                            context.RequestServices.GetService<IUserService>();
+                        int studentId = context.User.GetStudentId(context);
+                        if(await userService.GetUserAsync(studentId) == null)
                         {
-                            appBuilder.Use(async (context, next) =>
-                            {
-                                DbContext dbContext = context.RequestServices.GetService<DbContext>();
-                                IUserService userService =
-                                    context.RequestServices.GetService<IUserService>();
-                                int studentId = context.User.GetStudentId(context);
-                                if(await userService.GetUserAsync(studentId) == null)
-                                {
-                                    userService.Add(new User(studentId));
-                                    await dbContext.SaveChangesAsync();
-                                }
+                            userService.Add(new User(studentId));
+                            await dbContext.SaveChangesAsync();
+                        }
 
-                                await next();
-                            });
-                        });
+                        await next();
+                    });
+                });
         }
 
         /// <summary>
