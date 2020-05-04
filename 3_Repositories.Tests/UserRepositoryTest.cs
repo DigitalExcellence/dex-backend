@@ -12,6 +12,9 @@ namespace Repositories.Tests
     {
         protected new IUserRepository Repository => (IUserRepository)base.Repository;
 
+        /// <summary>
+        /// User is retrieved correctly
+        /// </summary>
         [Test]
         public async Task GetUserAsync_GoodFlow([UserDataSource]User entity)
         {
@@ -24,6 +27,9 @@ namespace Repositories.Tests
             Assert.AreEqual(entity, retrieved);
         }
 
+        /// <summary>
+        /// User not added and thus not found in repo
+        /// </summary>
         [Test]
         public async Task GetUserAsync_NotFound([UserDataSource]User entity)
         {
@@ -33,6 +39,9 @@ namespace Repositories.Tests
             Assert.IsNull(retrieved);
         }
 
+        /// <summary>
+        /// User correctly removed from repo
+        /// </summary>
         [Test]
         public async Task RemoveUserAsync_GoodFlow([UserDataSource]User entity)
         {
@@ -49,6 +58,11 @@ namespace Repositories.Tests
             Assert.IsNull(retrieved);
         }
 
+        /// <summary>
+        /// User that was not in repo not found
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         [Test]
         public async Task RemoveUserAsync_NotFound([UserDataSource]User entity)
         {
