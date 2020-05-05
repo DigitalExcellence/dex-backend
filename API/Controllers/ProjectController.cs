@@ -76,6 +76,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{projectId}")]
+        [Authorize(Policy = "Over21")]
         public async Task<IActionResult> GetProject(int projectId)
         {
             if(projectId < 0)

@@ -7,7 +7,9 @@ namespace Models
     public class Role
     {
 
-        public int id { get; set; }
+        public int Id { get; set; }
+
+        public string Name { get; set; }
         public List<RoleScope> Scopes { get; set; }
 
     }

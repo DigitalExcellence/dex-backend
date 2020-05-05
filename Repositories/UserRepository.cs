@@ -28,9 +28,10 @@ namespace Repositories
     {
 
         Task<User> GetUserAsync(int userId);
+        Task<User> GetUserByIdentityIdAsync(string userId);
 
         Task<bool> RemoveUserAsync(int userId);
-        Task<bool> UserHasScope(int userId, string scope);
+        bool UserHasScope(string identityId, string scope);
 
     }
 
@@ -43,6 +44,12 @@ namespace Repositories
         {
             return await GetDbSet<User>()
                          .Where(s => s.Id == userId)
+                         .SingleOrDefaultAsync();
+        }
+        public async Task<User> GetUserByIdentityIdAsync(string identityId)
+        {
+            return await GetDbSet<User>()
+                         .Where(s => s.IdentityId == identityId)
                          .SingleOrDefaultAsync();
         }
 
@@ -62,17 +69,18 @@ namespace Repositories
             return false;
         }
 
-        public async Task<bool> UserHasScope(int userId, string scope)
+        public bool UserHasScope(string identityId, string scope)
         {
-            var user = await GetDbSet<User>()
+            User user = GetDbSet<User>()
                              .Include(s => s.Role)
-                             .Where(s => s.Id == userId)
-                             .SingleOrDefaultAsync();
-            if(user.Role == null)
+                             .Where(s => s.IdentityId == identityId)
+                             .SingleOrDefault();
+            
+            if(user == null || user.Role == null)
             {
                 return false;
             }
-            foreach (var scoop1  in user.Role.Scopes )
+            foreach(RoleScope scoop1 in user.Role.Scopes)
             {
                 if(scoop1.Scope == scope)
                 {

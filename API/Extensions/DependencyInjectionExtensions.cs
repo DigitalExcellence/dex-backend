@@ -16,6 +16,7 @@
 */
 
 using Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
@@ -50,6 +51,7 @@ namespace API.Extensions
 
             services.AddScoped<ISearchService, SearchService>();
 
+            services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
             return services;
         }
 

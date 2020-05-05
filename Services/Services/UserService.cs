@@ -28,12 +28,13 @@ namespace Services.Services
     {
 
         Task<User> GetUserAsync(int userId);
+        Task<User> GetUserByIdentityIdAsync(string identityId);
 
         Task<bool> RemoveUserAsync(int userId);
 
         User GetUserByUsername(string upn);
 
-        Task<bool> UserHasScope(int userId, string scope);
+        bool UserHasScope(string identityId, string scope);
 
     }
 
@@ -49,6 +50,11 @@ namespace Services.Services
             return await Repository.GetUserAsync(userId);
         }
 
+        public async Task<User> GetUserByIdentityIdAsync(string identityId)
+        {
+            return await Repository.GetUserByIdentityIdAsync(identityId);
+        }
+
         public async Task<bool> RemoveUserAsync(int userId)
         {
             return await Repository.RemoveUserAsync(userId);
@@ -59,9 +65,9 @@ namespace Services.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> UserHasScope(int userId, string scope)
+        public bool UserHasScope(string identityId, string scope)
         {
-            return await Repository.UserHasScope(userId, scope);
+            return Repository.UserHasScope(identityId, scope);
         }
 
     }

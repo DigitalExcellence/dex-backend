@@ -117,7 +117,10 @@ namespace API
                             policy => policy.RequireScope(nameof(Defaults.Scopes.UserRead)));
                 o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
                             policy => policy.RequireScope(nameof(Defaults.Scopes.UserWrite)));
+                o.AddPolicy("Over21", policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserWrite))));
             });
+
+            
 
             services.AddCors();
             services.AddControllersWithViews()
@@ -176,6 +179,7 @@ namespace API
             services.AddServicesAndRepositories();
         }
 
+        
         /// <summary>
         ///     Configures the specified application.
         ///     This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -184,6 +188,8 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
+
             UpdateDatabase(app);
             if(env.IsDevelopment())
             {
@@ -219,6 +225,29 @@ namespace API
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+            //StudentInfo
+            app.UseWhen(context =>
+                context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
+                {
+                    appBuilder.Use(async (context, next) =>
+                    {
+                        DbContext dbContext = context.RequestServices.GetService<DbContext>();
+                        IUserService userService =
+                            context.RequestServices.GetService<IUserService>();
+                        int studentId = context.User.GetStudentId(context);
+                        if(await userService.GetUserByIdentityIdAsync(studentId.ToString()) == null)
+                        {
+                            userService.Add(new User(studentId.ToString()));
+                            await dbContext.SaveChangesAsync();
+                        }
+
+                        await next();
+                    });
+                });
+
+
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
             app.UseSwagger();
@@ -233,25 +262,7 @@ namespace API
 
             app.UseStaticFiles();
 
-            //StudentInfo
-            app.UseWhen(context => 
-                (context.Request.Method.Equals(HttpMethods.Post) || context.Request.Method.Equals(HttpMethods.Put)) && context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
-                {
-                    appBuilder.Use(async (context, next) =>
-                    {
-                        DbContext dbContext = context.RequestServices.GetService<DbContext>();
-                        IUserService userService =
-                            context.RequestServices.GetService<IUserService>();
-                        int studentId = context.User.GetStudentId(context);
-                        if(await userService.GetUserAsync(studentId) == null)
-                        {
-                            userService.Add(new User(studentId));
-                            await dbContext.SaveChangesAsync();
-                        }
-
-                        await next();
-                    });
-                });
+            
         }
 
         /// <summary>
