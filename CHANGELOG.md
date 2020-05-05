@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - You can now authenticate swagger with the Identity server - [#101]https://github.com/DigitalExcellence/dex-backend/issues/101
 - Added issue & pull request templates (bug & report) - [#11](https://github.com/DigitalExcellence/dex-backend/issues/11)
 - Changed errors to be compliant with RFC 7807, with guids for easy error searching - [#80](https://github.com/DigitalExcellence/dex-backend/issues/80)
+- Added roles and authorization validation. - [#107](https://github.com/DigitalExcellence/dex-backend/issues/107)
 
 ### Changed
 
