@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -76,7 +77,6 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{projectId}")]
-        [Authorize(Policy = "Over21")]
         public async Task<IActionResult> GetProject(int projectId)
         {
             if(projectId < 0)
@@ -149,13 +149,23 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("{projectId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        [Authorize]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            if(await projectService.FindAsync(projectId) == null)
+            Project project = await projectService.FindAsync(projectId);
+            if(project == null)
             {
                 return NotFound();
             }
+            string identity = HttpContext.User.GetStudentId(HttpContext);
+            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.ProjectWrite));
+            User user = await userService.GetUserByIdentityIdAsync(identity);
+
+            if(!(project.UserId == user.Id || isAllowed))
+            {
+                return BadRequest("The user is not allowed to remove the project.");
+            }
+
             await projectService.RemoveAsync(projectId);
             projectService.Save();
             return Ok();

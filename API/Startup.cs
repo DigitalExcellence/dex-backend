@@ -103,24 +103,26 @@ namespace API
                     });
             services.AddAuthorization(o =>
             {
-                o.AddPolicy(nameof(Defaults.Scopes.HighlightWrite),
-                            policy => policy.RequireScope(nameof(Defaults.Scopes.HighlightWrite)));
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
-                            policy => policy.RequireScope(nameof(Defaults.Scopes.HighlightRead)));
-                o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
-                            policy => policy.RequireScope(nameof(Defaults.Scopes.ProjectRead)));
-                o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
-                            policy => policy.RequireScope(nameof(Defaults.Scopes.ProjectWrite)));
-                o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
-                            policy => policy.RequireScope(nameof(Defaults.Scopes.ProjectRead)));
-                o.AddPolicy(nameof(Defaults.Scopes.UserRead),
-                            policy => policy.RequireScope(nameof(Defaults.Scopes.UserRead)));
-                o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
-                            policy => policy.RequireScope(nameof(Defaults.Scopes.UserWrite)));
-                o.AddPolicy("Over21", policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserWrite))));
-            });
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.HighlightWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.HighlightWrite))));
 
-            
+                o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.UserRead),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.RoleRead),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.RoleWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
+            });
 
             services.AddCors();
             services.AddControllersWithViews()
@@ -236,8 +238,8 @@ namespace API
                         DbContext dbContext = context.RequestServices.GetService<DbContext>();
                         IUserService userService =
                             context.RequestServices.GetService<IUserService>();
-                        int studentId = context.User.GetStudentId(context);
-                        if(await userService.GetUserByIdentityIdAsync(studentId.ToString()) == null)
+                        string studentId = context.User.GetStudentId(context);
+                        if(await userService.GetUserByIdentityIdAsync(studentId) == null)
                         {
                             userService.Add(new User(studentId.ToString()));
                             await dbContext.SaveChangesAsync();

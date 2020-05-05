@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Models.Defaults;
 using System;
@@ -37,9 +38,9 @@ namespace API.Extensions
         /// <exception cref="Exception">The back-end header isn't added!</exception>
         /// <exception cref="NotSupportedException">The jwt doesn't have a sub</exception>
         /// <exception cref="System.Exception">The back-end header isn't added!</exception>
-        public static int GetStudentId(this ClaimsPrincipal claimsPrincipal, HttpContext actionContext)
+        public static string GetStudentId(this ClaimsPrincipal claimsPrincipal, HttpContext actionContext)
         {
-            int studentId;
+            string studentId;
 
             if(claimsPrincipal.Identities.Any(i => !i.IsAuthenticated))
             {
@@ -57,7 +58,7 @@ namespace API.Extensions
                     throw new Exception("The back-end header isn't added!");
                 }
 
-                studentId = Convert.ToInt32(studentIdHeader);
+                studentId = studentIdHeader;
             } else
             {
                 string sub = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Equals("sub"))
@@ -67,7 +68,7 @@ namespace API.Extensions
                     throw new NotSupportedException("The jwt doesn't have a sub");
                 }
 
-                return Convert.ToInt32(sub);
+                return sub;
             }
 
             return studentId;

@@ -51,6 +51,10 @@ namespace API.Extensions
 
             services.AddScoped<ISearchService, SearchService>();
 
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+
+
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
             return services;
         }

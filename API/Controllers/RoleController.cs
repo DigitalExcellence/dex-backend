@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Services.Services;
+using static Models.Defaults.Defaults;
 
 namespace API.Controllers
 {
@@ -42,7 +43,7 @@ namespace API.Controllers
         ///     Get all Roles.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("Roles")]
         [Authorize(Policy = nameof(Defaults.Scopes.RoleRead))]
         public async Task<IActionResult> GetAllRoles()
         {
@@ -55,23 +56,16 @@ namespace API.Controllers
             return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleResourceResult>>(roles));
         }
 
-
         /// <summary>
-        ///     Get all Roles.
+        ///     Get all Scopes.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize(Policy = nameof(Defaults.Scopes.RoleRead))]
-        public async Task<IActionResult> GetAllPossibleScopes()
+        [HttpGet("Scopes")]
+        //[Authorize(Policy = nameof(Defaults.Scopes.RoleRead))]
+        public IActionResult GetAllPossibleScopes()
         {
-
-            //TODO Get from defaults
-
-            return Ok(null);
+            return Ok(roleService.GetValidScopes());
         }
-
-
-
 
         /// <summary>
         ///     Get a Role.
@@ -107,13 +101,20 @@ namespace API.Controllers
                 return BadRequest("Role is null");
             }
             Role role = mapper.Map<RoleResource, Role>(roleResource);
-            // TODO Validate existence of scopes.
+            foreach(RoleScope x in role.Scopes)
+            {
+                if(roleService.isValidScope(x.Scope) == false)
+                {
+                    return BadRequest($"Not a valid scope: {x.Scope}");
+                }
+            }
             try
             {
                 roleService.Add(role);
                 roleService.Save();
                 return Created(nameof(CreateRoleAsync), mapper.Map<Role, RoleResourceResult>(role));
-            } catch
+            }
+            catch
             {
                 return BadRequest("Could not Create the Role.");
             }
@@ -160,8 +161,51 @@ namespace API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Sets the role.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="roleId">The role identifier.</param>
+        /// <returns></returns>
+        [HttpPut("setRole")]
+        public async Task<IActionResult> SetRole(int userId, int roleId)
+        {
+            Role role = await roleService.FindAsync(roleId);
+            if(role == null)
+            {
+                return NotFound("Role not found.");
+            }
+            User user = await userService.FindAsync(userId);
+            if(user == null)
+            {
+                return NotFound("User not found.");
+            }
+            user.Role = role;
+            userService.Update(user);
+            userService.Save();
 
+            return Ok(mapper.Map<User, UserResourceResult>(user));
+        }
 
+        /// <summary>
+        /// Removes the role.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        [HttpDelete("RemoveRole")]
+        public async Task<IActionResult> RemoveRole(int userId)
+        {
+            User user = await userService.FindAsync(userId);
+            if(user == null)
+            {
+                return NotFound("User not found.");
+            }
+            user.Role = null;
+            userService.Update(user);
+            userService.Save();
+
+            return Ok(mapper.Map<User, UserResourceResult>(user));
+        }
 
     }
 }

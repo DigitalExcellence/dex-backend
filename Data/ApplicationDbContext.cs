@@ -36,6 +36,8 @@ namespace Data
 
         public DbSet<Highlight> Highlight { get; set; }
 
+        public DbSet<Role> Role { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

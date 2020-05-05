@@ -40,6 +40,14 @@ namespace Repositories
 
         public UserRepository(DbContext dbContext) : base(dbContext) { }
 
+        public async override Task<User> FindAsync(int userId)
+        {
+            return await GetDbSet<User>()
+                             .Where(s => s.Id == userId)
+                             .Include(s => s.Role)
+                             .ThenInclude(s => s.Scopes)
+                             .SingleOrDefaultAsync();
+        }
         public async Task<User> GetUserAsync(int userId)
         {
             return await GetDbSet<User>()
@@ -72,8 +80,9 @@ namespace Repositories
         public bool UserHasScope(string identityId, string scope)
         {
             User user = GetDbSet<User>()
-                             .Include(s => s.Role)
                              .Where(s => s.IdentityId == identityId)
+                             .Include(s => s.Role)
+                             .ThenInclude(s => s.Scopes)
                              .SingleOrDefault();
             
             if(user == null || user.Role == null)

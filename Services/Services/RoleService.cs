@@ -18,8 +18,11 @@
 using Models;
 using Repositories;
 using Services.Base;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
+using static Models.Defaults.Defaults;
 
 namespace Services.Services
 {
@@ -28,6 +31,8 @@ namespace Services.Services
     {
 
         Task<List<Role>> GetAllAsync();
+        List<string> GetValidScopes();
+        bool isValidScope(string scope);
 
     }
 
@@ -41,6 +46,34 @@ namespace Services.Services
         public Task<List<Role>> GetAllAsync()
         {
             return Repository.GetAllAsync();
+        }
+        /// <summary>
+        /// Gets the valid scopes.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetValidScopes()
+        {
+            Type scopeType = typeof(Scopes);
+            FieldInfo[] scopeTypeFields = scopeType.GetFields(BindingFlags.Static | BindingFlags.Public);
+            List<string> validScopes = new List<string>();
+            foreach(FieldInfo x in scopeTypeFields)
+            {
+                validScopes.Add(x.Name);
+            }
+            return validScopes;
+        }
+
+        /// <summary>
+        /// Determines whether the scope is a valid scope.
+        /// </summary>
+        /// <param name="scope">The scope.</param>
+        /// <returns>
+        ///   <c>true</c> if [is valid scope] [the specified scope]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool isValidScope(string scope)
+        {
+            List<string> scopes = GetValidScopes();
+            return scopes.Contains(scope);
         }
 
     }
