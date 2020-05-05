@@ -50,7 +50,13 @@ namespace API.Controllers
             List<Role> roles = await roleService.GetAllAsync();
             if(!roles.Any())
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting all roles.",
+                    Detail = "There where no roles found in the database.",
+                    Instance = "3EB1E953-96D7-45FE-8C5C-05306AF8D060"
+                };
+                return NotFound(problem);
             }
 
             return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleResourceResult>>(roles));
@@ -61,10 +67,21 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Scopes")]
-        //[Authorize(Policy = nameof(Defaults.Scopes.RoleRead))]
+        [Authorize(Policy = nameof(Defaults.Scopes.RoleRead))]
         public IActionResult GetAllPossibleScopes()
         {
-            return Ok(roleService.GetValidScopes());
+            List<string> scopeList = roleService.GetValidScopes();
+            if(!scopeList.Any())
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "No valid Scopes found",
+                    Detail = "There where no valid scopes found.",
+                    Instance = "DEB2161D-A8E7-4AAE-BB0F-CDB3CA5D5B9E"
+                };
+                return NotFound(problem);
+            }
+            return Ok(scopeList);
         }
 
         /// <summary>
@@ -77,37 +94,65 @@ namespace API.Controllers
         {
             if(roleId < 0)
             {
-                return BadRequest("Invalid role Id");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting role.",
+                    Detail = "The Id is smaller then 0 and therefore it could never be a valid role id.",
+                    Instance = "5024ADDA-6DE2-4B49-896A-526E8EC4313D"
+                };
+                return BadRequest(problem);
             }
 
             Role role = await roleService.FindAsync(roleId);
             if(role == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting role.",
+                    Detail = "The roule could not be found in the database.",
+                    Instance = "1739EFA6-3F31-4C88-B596-74DA403AC51B"
+                };
+                return NotFound(problem);
             }
 
             return Ok(mapper.Map<Role, RoleResourceResult>(role));
         }
 
         /// <summary>
-        ///     Create a Role.
+        /// Creates the role asynchronous.
         /// </summary>
+        /// <param name="roleResource">The role resource.</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
         public async Task<IActionResult> CreateRoleAsync([FromBody] RoleResource roleResource)
         {
             if(roleResource == null)
             {
-                return BadRequest("Role is null");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to create a new role.",
+                    Detail = "The specified role resource was null",
+                    Instance = "ABA3B997-1B80-47FC-A72B-69BC0D8DFA93"
+                };
+                return BadRequest(problem);
             }
             Role role = mapper.Map<RoleResource, Role>(roleResource);
-            foreach(RoleScope x in role.Scopes)
+
+            foreach(RoleScope roleScope in role.Scopes)
             {
-                if(roleService.isValidScope(x.Scope) == false)
+                if(roleService.isValidScope(roleScope.Scope) == false)
                 {
-                    return BadRequest($"Not a valid scope: {x.Scope}");
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed to create a new role.",
+                        Detail = $"The specied scope: {roleScope.Scope} is not valid.",
+                        Instance = "1F40D851-8A4C-41F6-917C-D876970D825F"
+                    };
+                    return BadRequest(problem);
                 }
             }
+
             try
             {
                 roleService.Add(role);
@@ -116,14 +161,21 @@ namespace API.Controllers
             }
             catch
             {
-                return BadRequest("Could not Create the Role.");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to save the new role.",
+                    Detail = "There was a problem while saving the project to the database.",
+                    Instance = "D56DBE55-57A1-4655-99C5-4F4ECEEE3BE4"
+                };
+                return BadRequest(problem);
             }
         }
 
         /// <summary>
-        ///     Update the Role
+        /// Updates the role.
         /// </summary>
-
+        /// <param name="roleId">The role identifier.</param>
+        /// <param name="roleResource">The role resource.</param>
         /// <returns></returns>
         [HttpPut("{roleId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
@@ -132,11 +184,31 @@ namespace API.Controllers
             Role role = await roleService.FindAsync(roleId);
             if(role == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update the role.",
+                    Detail = "The specified role could not be found in the database",
+                    Instance = "8F167FDF-3B2B-4E71-B3D0-AA2B1C1CE2C3"
+                };
+                return NotFound(problem);
             }
 
             mapper.Map(roleResource, role);
-            // TODO Validate existence of scopes.
+
+
+            foreach(RoleScope roleScope in role.Scopes)
+            {
+                if(!roleService.isValidScope(roleScope.Scope))
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed to update the role",
+                        Detail = $"The specified scope is not a valid scope: {roleScope.Scope}.",
+                        Instance = "E0BB725C-4013-4B0E-AEBC-857F1F75B29C"
+                    };
+                    return BadRequest(problem);
+                }
+            }
 
             roleService.Update(role);
             roleService.Save();
@@ -145,8 +217,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     deletes a Role.
+        /// Deletes the role.
         /// </summary>
+        /// <param name="roleId">The role identifier.</param>
         /// <returns></returns>
         [HttpDelete("{roleId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
@@ -154,7 +227,13 @@ namespace API.Controllers
         {
             if(await roleService.FindAsync(roleId) == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the role.",
+                    Detail = "The role could not be found in the database.",
+                    Instance = "CBC4C09D-DFEA-44D8-A310-2CE149BAD498"
+                };
+                return NotFound(problem);
             }
             await roleService.RemoveAsync(roleId);
             roleService.Save();
@@ -168,17 +247,30 @@ namespace API.Controllers
         /// <param name="roleId">The role identifier.</param>
         /// <returns></returns>
         [HttpPut("setRole")]
+        [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
         public async Task<IActionResult> SetRole(int userId, int roleId)
         {
             Role role = await roleService.FindAsync(roleId);
             if(role == null)
             {
-                return NotFound("Role not found.");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to set role.",
+                    Detail = "The role could not be found in the database.",
+                    Instance = "A4D7DA5F-F47B-4FF6-8241-93D6808EEEDB"
+                };
+                return NotFound(problem);
             }
             User user = await userService.FindAsync(userId);
             if(user == null)
             {
-                return NotFound("User not found.");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to set role.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "3C6F3A13-5045-41FF-8C77-FB3A7B49F597"
+                };
+                return NotFound(problem);
             }
             user.Role = role;
             userService.Update(user);
@@ -193,13 +285,21 @@ namespace API.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
         [HttpDelete("RemoveRole")]
+        [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
         public async Task<IActionResult> RemoveRole(int userId)
         {
             User user = await userService.FindAsync(userId);
             if(user == null)
             {
-                return NotFound("User not found.");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove role.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "16243FD2-7256-40B7-90D2-70FFDDA4A6E6"
+                };
+                return NotFound(problem);
             }
+
             user.Role = null;
             userService.Update(user);
             userService.Save();

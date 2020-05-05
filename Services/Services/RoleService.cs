@@ -43,6 +43,10 @@ namespace Services.Services
 
         protected new IRoleRepository Repository => (IRoleRepository) base.Repository;
 
+        /// <summary>
+        /// Gets all asynchronous.
+        /// </summary>
+        /// <returns></returns>
         public Task<List<Role>> GetAllAsync()
         {
             return Repository.GetAllAsync();
@@ -56,9 +60,9 @@ namespace Services.Services
             Type scopeType = typeof(Scopes);
             FieldInfo[] scopeTypeFields = scopeType.GetFields(BindingFlags.Static | BindingFlags.Public);
             List<string> validScopes = new List<string>();
-            foreach(FieldInfo x in scopeTypeFields)
+            foreach(FieldInfo fieldInfo in scopeTypeFields)
             {
-                validScopes.Add(x.Name);
+                validScopes.Add(fieldInfo.Name);
             }
             return validScopes;
         }

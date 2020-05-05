@@ -160,7 +160,6 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
-            var x = HttpContext.User;
             Project project = await projectService.FindAsync(projectId);
             if(project == null)
             {
@@ -206,7 +205,13 @@ namespace API.Controllers
 
             if(!(project.UserId == user.Id || isAllowed))
             {
-                return BadRequest("The user is not allowed to remove the project.");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the project.",
+                    Detail = "The user is not allowed to delete the project.",
+                    Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
+                };
+                return BadRequest(problem);
             }
 
             await projectService.RemoveAsync(projectId);
