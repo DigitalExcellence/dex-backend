@@ -24,6 +24,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Models;
 using Models.Defaults;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -65,7 +66,13 @@ namespace API.Controllers
             List<Project> projects = await projectService.GetAllWithUsersAsync();
             if(!projects.Any())
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting all projects.",
+                    Detail = "There where no projects found in the database.",
+                    Instance = "1B9B7B05-1EBA-49B0-986F-B54EBA70EC0D"
+                };
+                return NotFound(problem);
             }
 
             return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
@@ -81,13 +88,25 @@ namespace API.Controllers
         {
             if(projectId < 0)
             {
-                return BadRequest("Invalid project Id");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting project.",
+                    Detail = "The Id is smaller then 0 and therefore it could never be a valid project id.",
+                    Instance = "D590A4FE-FDBA-4AE5-B184-BC7395C45D4E"
+                };
+                return BadRequest(problem);
             }
 
             Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId);
             if(project == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "38516C41-4BFB-47BE-A759-1206BE6D2D13"
+                };
+                return NotFound(problem);
             }
 
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
@@ -103,7 +122,13 @@ namespace API.Controllers
         {
             if(projectResource == null)
             {
-                return BadRequest("Project is null");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to create a new project.",
+                    Detail = "The specified project resource was null.",
+                    Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
+                };
+                return BadRequest(problem);
             }
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
             User user = await userService.GetUserAsync(projectResource.UserId);
@@ -115,7 +140,13 @@ namespace API.Controllers
                 return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
             } catch
             {
-                return BadRequest("Could not Create the Project");
+                ProblemDetails problem = new ProblemDetails()
+                {
+                    Title = "Failed to save new project.",
+                    Detail = "There was a problem while saving the project to the database.",
+                    Instance = "9FEEF001-F91F-44E9-8090-6106703AB033"
+                };
+                return BadRequest(problem);
             }
         }
 
@@ -133,7 +164,13 @@ namespace API.Controllers
             Project project = await projectService.FindAsync(projectId);
             if(project == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update project.",
+                    Detail = "The specified project could not be found in the database.",
+                    Instance = "6A123609-19A1-47F0-B789-3D8F2A52C0C6"
+                };
+                return NotFound(problem);
             }
 
             mapper.Map(projectResource, project);
@@ -155,7 +192,13 @@ namespace API.Controllers
             Project project = await projectService.FindAsync(projectId);
             if(project == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
+                };
+                return NotFound(problem);
             }
             string identity = HttpContext.User.GetStudentId(HttpContext);
             bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.ProjectWrite));
