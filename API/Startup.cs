@@ -30,6 +30,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
@@ -161,6 +163,8 @@ namespace API
 
                                 { "HighlightWrite", "Highlight write operations" },
                                 { "HighlightRead", "Highlight read operations" },
+                                { "profile", "Profile information" },
+                                {"openid", "Open id information" }
                             }
                         }
                     }
@@ -174,7 +178,7 @@ namespace API
                         },
                         new[] { "" }
                     }
-                });
+                }); ;
             });
 
             // Add application services.
@@ -244,6 +248,7 @@ namespace API
                         string studentId = context.User.GetStudentId(context);
                         if(await userService.GetUserByIdentityIdAsync(studentId) == null)
                         {
+                            context.GetUserInformation();
                             userService.Add(new User(studentId.ToString()));
                             await dbContext.SaveChangesAsync();
                         }

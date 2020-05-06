@@ -117,7 +117,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        [Authorize]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
         {
             if(projectResource == null)
@@ -157,7 +157,7 @@ namespace API.Controllers
         /// <param name="projectResource"></param>
         /// <returns></returns>
         [HttpPut("{projectId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        [Authorize]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
             Project project = await projectService.FindAsync(projectId);
@@ -173,6 +173,21 @@ namespace API.Controllers
             }
 
             mapper.Map(projectResource, project);
+
+            string identity = HttpContext.User.GetStudentId(HttpContext);
+            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.ProjectWrite));
+            User user = await userService.GetUserByIdentityIdAsync(identity);
+
+            if(!(project.UserId == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to edit the project.",
+                    Detail = "The user is not allowed to edit the project.",
+                    Instance = "2E765D18-8EBC-4117-8F9E-B800E8967038"
+                };
+                return BadRequest(problem);
+            }
 
             projectService.Update(project);
             projectService.Save();
@@ -218,7 +233,5 @@ namespace API.Controllers
             projectService.Save();
             return Ok();
         }
-
     }
-
 }

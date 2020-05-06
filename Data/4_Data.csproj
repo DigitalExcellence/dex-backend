@@ -8,6 +8,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200419124410_HighlightBooleanRemoval.cs" />
     <Compile Remove="Migrations\20200419124410_HighlightBooleanRemoval.Designer.cs" />
+    <Compile Remove="Migrations\20200505225055_DefaultRoles.cs" />
+    <Compile Remove="Migrations\20200505225055_DefaultRoles.Designer.cs" />
+    <Compile Remove="Migrations\20200505225549_DefaultRoles.cs" />
+    <Compile Remove="Migrations\20200505225549_DefaultRoles.Designer.cs" />
+    <Compile Remove="Migrations\20200505230556_DefaultRoles.cs" />
+    <Compile Remove="Migrations\20200505230556_DefaultRoles.Designer.cs" />
   </ItemGroup>
 
     <ItemGroup>

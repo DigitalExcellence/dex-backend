@@ -74,6 +74,13 @@ namespace API.Extensions
             return studentId;
         }
 
+
+        public static string GetUserInformation(this HttpContext actionContext)
+        {
+            var x = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization");
+            return "";
+        }
+
         /// <summary>
         ///     Gets the name of the student.
         /// </summary>

@@ -79,7 +79,7 @@ namespace IdentityServer
                                                      .AddTestUsers(TestUsers.Users);
 
             // in-memory, code config
-            builder.AddInMemoryIdentityResources(IdentityConfig.Ids);
+            builder.AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources());
             builder.AddInMemoryApiResources(IdentityConfig.Apis);
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             builder.AddTestUsers(TestUsers.Users);
