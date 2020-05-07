@@ -7,7 +7,7 @@ services:
     depends_on:
       - db
     networks:
-      - mysql-network
+      - mssql-network
       - web
     environment:
       - ConnectionStrings__DefaultConnection=$PRODUCTION_CONNECTION_STRING 
@@ -26,7 +26,7 @@ services:
     ports:
       - 1433:1433
     networks:
-      mysql-network:
+      mssql-network:
         ipv4_address: 172.16.238.2
     environment:
       - MSSQL_SA_PASSWORD=$PRODUCTION_DATABASE_PASSWORD
