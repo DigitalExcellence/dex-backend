@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -40,11 +40,11 @@ namespace Services.Services
     public class SearchService : ISearchService
     {
 
-        private readonly IProjectRepository _projectRepository;
+        private readonly IProjectRepository projectRepository;
 
         public SearchService(IProjectRepository projectRepository)
         {
-            _projectRepository = projectRepository;
+            this.projectRepository = projectRepository;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Services.Services
 
             bool orderByDirection = searchParams.SortDirection == "asc";
 
-            return await _projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection, searchParams.Highlighted);
+            return await projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection, searchParams.Highlighted);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Services.Services
         /// <returns>The number of projects that match the search query</returns>
         public virtual async Task<int> SearchInternalProjectsCount(string query, SearchParams searchParams)
         {
-            return await _projectRepository.SearchCountAsync(query);
+            return await projectRepository.SearchCountAsync(query);
         }
 
         /// <summary>
