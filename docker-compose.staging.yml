@@ -57,4 +57,5 @@ networks:
       config:
         - subnet: 172.16.238.0/24
   web:
-    external: true
+    external:
+      name: web
