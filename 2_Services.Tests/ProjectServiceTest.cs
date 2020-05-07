@@ -19,7 +19,7 @@ namespace Services.Tests
         /// <summary>
         /// Test whether the repository method is called and no changes have been applied to the object
         /// </summary>
-        /// <param name="projects"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
@@ -42,7 +42,7 @@ namespace Services.Tests
         /// <summary>
         /// Test whether the repository method is called and no changes are applied to the object
         /// </summary>
-        /// <param name="project"></param>
+        /// <param name="project">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsync([ProjectDataSource]Project project)
@@ -78,9 +78,9 @@ namespace Services.Tests
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
-        public Task GetAll([ProjectDataSource(100)]List<Project> entities)
+        public override Task GetAll([ProjectDataSource(100)]List<Project> entities)
         {
-            return base.GetAll(entities, 100);
+            return base.GetAll(entities);
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
