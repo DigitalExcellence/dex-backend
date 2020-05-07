@@ -10,10 +10,10 @@ services:
       - mssql-network
       - web
     environment:
-      - ConnectionStrings__DefaultConnection=$STAGING_CONNECTION_STRING 
+      - ConnectionStrings__DefaultConnection=${STAGING_CONNECTION_STRING} 
       - App__Frontend__FrontendUrl=https://staging.dex.software 
-      - App__Frontend__ClientId=$STAGING_API_FRONTEND_CLIENT_ID
-      - App__Frontend__ClientSecret=$STAGING_API_FRONTEND_CLIENT_SECRET 
+      - App__Frontend__ClientId=${STAGING_API_FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${STAGING_API_FRONTEND_CLIENT_SECRET} 
       - App__IdentityServer__IdentityUrl=https://identity.staging.dex.software
     labels:
       - traefik.backend=api
@@ -29,7 +29,7 @@ services:
       mssql-network:
         ipv4_address: 172.16.238.2
     environment:
-      - MSSQL_SA_PASSWORD=$STAGING_DATABASE_PASSWORD
+      - MSSQL_SA_PASSWORD=${STAGING_DATABASE_PASSWORD}
 
   identity:
     build: ./IdentityServer
@@ -39,7 +39,7 @@ services:
       - web
     environment:
       - App__Self__JwtAuthority=https://staging.dex.software/ 
-      - App__Self__IdentityApplications=$STAGING_IDENTITY_APPLICATIONS
+      - App__Self__IdentityApplications=${STAGING_IDENTITY_APPLICATIONS}
       - App__Api__DeXApiUrl=https://staging.api.dex.software 
       - App__Frontend__RedirectUrisFrontend=[ "https://staging.dex.software/auth-callback" ]
       - App__Frontend__PostLogoutUrisFrontend=[ "https://staging.dex.software/" ]

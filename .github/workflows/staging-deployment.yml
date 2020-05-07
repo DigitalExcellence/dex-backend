@@ -1,0 +1,35 @@
+name: staging-deployment
+
+on: 
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+      STAGING_CONNECTION_STRING: ${{ secrets.STAGING_CONNECTION_STRING }}
+      STAGING_API_FRONTEND_CLIENT_ID: ${{ secrets.STAGING_API_FRONTEND_CLIENT_ID }}
+      STAGING_API_FRONTEND_CLIENT_SECRET: ${{ secrets.STAGING_API_FRONTEND_CLIENT_SECRET }}
+      STAGING_DATABASE_PASSWORD: ${{ secrets.STAGING_DATABASE_PASSWORD }}
+      STAGING_IDENTITY_APPLICATIONS: ${{ secrets.STAGING_IDENTITY_APPLICATIONS }}
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with: 
+          dotnet-version: 3.1.101
+
+      # dotnet build and publish
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+      - name: dotnet publish
+        run: dotnet publish -c Release
+
+      # docker compose up
+      - name: Build the docker-compose stack
+        run: docker-compose up
+      - name: Check running containers
+        run: docker ps -a

@@ -10,10 +10,10 @@ services:
       - mssql-network
       - web
     environment:
-      - ConnectionStrings__DefaultConnection=$PRODUCTION_CONNECTION_STRING 
+      - ConnectionStrings__DefaultConnection=${PRODUCTION_CONNECTION_STRING} 
       - App__Frontend__FrontendUrl=https://dex.software 
-      - App__Frontend__ClientId=$PRODUCTION_API_FRONTEND_CLIENT_ID
-      - App__Frontend__ClientSecret=$PRODUCTION_API_FRONTEND_CLIENT_SECRET
+      - App__Frontend__ClientId=${PRODUCTION_API_FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${PRODUCTION_API_FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=https://identity.dex.software
     labels:
       - traefik.backend=api
@@ -29,7 +29,7 @@ services:
       mssql-network:
         ipv4_address: 172.16.238.2
     environment:
-      - MSSQL_SA_PASSWORD=$PRODUCTION_DATABASE_PASSWORD
+      - MSSQL_SA_PASSWORD=${PRODUCTION_DATABASE_PASSWORD}
 
   identity:
     build: ./IdentityServer
@@ -39,7 +39,7 @@ services:
       - web
     environment:
       - App__Self__JwtAuthority=https://dex.software/
-      - App__Self__IdentityApplications=$PRODUCTION_IDENTITY_APPLICATIONS
+      - App__Self__IdentityApplications=${PRODUCTION_IDENTITY_APPLICATIONS}
       - App__Api__DeXApiUrl=https://api.dex.software 
       - App__Frontend__RedirectUrisFrontend=[ "https://dex.software/auth-callback" ] 
       - App__Frontend__PostLogoutUrisFrontend=[ "https://dex.software/" ]

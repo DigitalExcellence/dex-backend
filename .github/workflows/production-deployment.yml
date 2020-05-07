@@ -1,0 +1,35 @@
+name: production-deployment
+
+on: 
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+      PRODUCTION_CONNECTION_STRING: ${{ secrets.PRODUCTION_CONNECTION_STRING }}
+      PRODUCTION_API_FRONTEND_CLIENT_ID: ${{ secrets.PRODUCTION_API_FRONTEND_CLIENT_ID }}
+      PRODUCTION_API_FRONTEND_CLIENT_SECRET: ${{ secrets.PRODUCTION_API_FRONTEND_CLIENT_SECRET }}
+      PRODUCTION_DATABASE_PASSWORD: ${{ secrets.PRODUCTION_DATABASE_PASSWORD }}
+      PRODUCTION_IDENTITY_APPLICATIONS: ${{ secrets.PRODUCTION_IDENTITY_APPLICATIONS }}
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with: 
+          dotnet-version: 3.1.101
+
+      # dotnet build and publish
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+      - name: dotnet publish
+        run: dotnet publish -c Release
+
+      # docker compose up
+      - name: Build the docker-compose stack
+        run: docker-compose up
+      - name: Check running containers
+        run: docker ps -a
