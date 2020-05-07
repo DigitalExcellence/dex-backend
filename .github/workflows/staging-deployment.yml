@@ -30,6 +30,6 @@ jobs:
 
       # docker compose up
       - name: Build the docker-compose stack
-        run: docker-compose up
+        run: docker-compose up -f docker-compose.staging.yml
       - name: Check running containers
         run: docker ps -a
