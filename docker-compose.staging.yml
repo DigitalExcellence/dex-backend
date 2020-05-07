@@ -21,7 +21,7 @@ services:
       - traefik.docker.network=web
       - traefik.port=5000
       
- db:
+  db:
     build: ./Data
     ports:
       - 1433:1433
@@ -56,6 +56,5 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
-    external: false
   web:
     external: true
