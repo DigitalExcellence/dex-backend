@@ -37,7 +37,8 @@ namespace Repositories
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
-            bool orderByAsc = true
+            bool orderByAsc = true,
+            bool? highlighted = null
         );
 
         Task<int> SearchCountAsync(string query);
@@ -74,13 +75,15 @@ namespace Repositories
         /// <param name="take">The number of projects to return</param>
         /// <param name="orderBy">The property to order the projects by</param>
         /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">Filter highlighted projects</param>
         /// <returns>The projects matching the search query and parameters</returns>
         public virtual async Task<IEnumerable<Project>> SearchAsync(
             string query,
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
-            bool orderByAsc = true
+            bool orderByAsc = true,
+            bool? highlighted = null
         )
         {
             IQueryable<Project> queryable = DbSet
@@ -105,6 +108,23 @@ namespace Repositories
             }
             if(skip.HasValue) queryable = queryable.Skip(skip.Value);
             if(take.HasValue) queryable = queryable.Take(take.Value);
+            if(highlighted.HasValue)
+            {
+                IEnumerable<int> highlightedQueryable = DbContext.Set<Highlight>()
+                                                       .Where(h => h.StartDate <= DateTime.Now ||
+                                                                   h.StartDate == null)
+                                                       .Where(h => h.EndDate >= DateTime.Now ||
+                                                                   h.EndDate == null)
+                                                       .Select(h => h.ProjectId)
+                                                       .ToList();
+                if(highlighted.Value)
+                {
+                    queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id));
+                } else
+                {
+                    queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
+                }
+            }
             return await queryable.ToListAsync();
         }
 

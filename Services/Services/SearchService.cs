@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -83,7 +83,7 @@ namespace Services.Services
 
             bool orderByDirection = searchParams.SortDirection == "asc";
 
-            return await _projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection);
+            return await _projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection, searchParams.Highlighted);
         }
 
         /// <summary>
