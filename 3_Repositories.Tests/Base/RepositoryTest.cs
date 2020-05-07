@@ -45,7 +45,7 @@ namespace Repositories.Tests.Base
         // Check which id the entity has and use this id to retrieve it from the database again
         // Check if all the properties of the retrieved entity match to the properties of the original entity
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task FindAsyncTest_GoodFlow(TDomain entity)
         {
@@ -68,7 +68,7 @@ namespace Repositories.Tests.Base
         /// Try to retrieve an entity from the database with a key that doesn't exist
         /// Check if the error is handled correctly by returning null
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task FindAsyncTest_BadFlow_NotExists(TDomain entity)
         {
@@ -82,7 +82,7 @@ namespace Repositories.Tests.Base
         /// Add the given entity to the database
         /// Check if the return type is not null
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task AddAsyncTest_GoodFlow(TDomain entity)
         {
@@ -111,7 +111,7 @@ namespace Repositories.Tests.Base
         /// Retrieve the items from the database again by their id
         /// and check if they are not null
         /// </summary>
-        /// <param name="entities"></param>
+        /// <param name="entities">The entitis which are used as data to test</param>
         /// <returns></returns>
         public virtual async Task AddRangeTest_GoodFlow(List<TDomain> entities)
         {
@@ -154,8 +154,8 @@ namespace Repositories.Tests.Base
         /// Retrieve the entity in the database and check if the entity is not equal to the first entity
         /// Also check if the database entity is equal to the second entity
         /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="updateEntity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
+        /// <param name="updateEntity">The entity which is used to update the data to test</param>
         /// <returns></returns>
         public virtual async Task UpdateTest_GoodFlow(TDomain entity, TDomain updateEntity)
         {
@@ -176,8 +176,8 @@ namespace Repositories.Tests.Base
         /// Try to update an entity in the database which does not exist
         /// and check how the error is handled
         /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="updateEntity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
+        /// <param name="updateEntity">The entity which is used to update the data to test</param>
         /// <returns></returns>
         public virtual async Task UpdateTest_BadFlow_NotExists(TDomain entity, TDomain updateEntity)
         {
@@ -197,7 +197,7 @@ namespace Repositories.Tests.Base
         /// Try to update the entity in the database with null
         /// and check how the error is handled
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task UpdateTest_BadFlow_Null(TDomain entity)
         {
@@ -214,7 +214,7 @@ namespace Repositories.Tests.Base
         /// <summary>
         /// Add the given entity to the database and try to remove it again with the id it got from EF Core.
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task RemoveAsyncTest_GoodFlow(TDomain entity)
         {
@@ -232,7 +232,7 @@ namespace Repositories.Tests.Base
         /// Try to remove an non existing entity from the database
         /// and check how the error is handled
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task RemoveAsyncTest_BadFlow_NotExists(TDomain entity)
         {
@@ -249,8 +249,7 @@ namespace Repositories.Tests.Base
         /// Add the given list to the database and retrieve them again
         /// Check if the retrieved list is the same amount as the given list
         /// </summary>
-        /// <param name="entities"></param>
-        /// <param name="amountToTest"></param>
+        /// <param name="entities">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task GetAllAsyncTest_GoodFlow(List<TDomain> entities)
         {

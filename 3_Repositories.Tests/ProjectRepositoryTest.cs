@@ -15,8 +15,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Test if projects with user relations are retrieved correctly
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task GetAllWithUserAsyncTest_GoodFlow(
@@ -43,7 +43,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Test if no projects are retrieved when the database is empty
         /// </summary>
-        /// <param name="users"></param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task GetAllWithUsersAsyncTest_NoProjects([UserDataSource(100)]List<User> users)
@@ -59,7 +59,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Test if no projects are retrieved when the required relation with users is missing
         /// </summary>
-        /// <param name="projects"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task GetAllWithUsersAsyncTest_NoUsers(
@@ -77,8 +77,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the search is returning the correct projects based on the search terms
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_GoodFlow(
@@ -129,7 +129,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the search is returning no projects when the database is empty
         /// </summary>
-        /// <param name="users"></param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_BadFlow_NoProjects(
@@ -147,7 +147,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the search is returning no projects when the required relation with users is missing
         /// </summary>
-        /// <param name="projects"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_BadFlow_NoUsers([ProjectDataSource(100)]List<Project> projects)
@@ -166,8 +166,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the search is returning no projects if non of the projects has the included string in any of the properties
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchAsyncTest_BadFlow_NoMatching(
@@ -191,8 +191,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the search is able to skip the correct amount of projects while returning the correct search results
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchSkipTakeAsyncTest_GoodFlow(
@@ -240,8 +240,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the search is returning no projects when skipping all the projects in the result
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchSkipTakeAsyncTest_BadFlow_SkipAllProjects(
@@ -264,8 +264,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the count is counting the correct amount of projects
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchCountAsyncTest_GoodFlow(
@@ -288,8 +288,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Check if the count is returning 0 when there are no matching projects
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task SearchCountAsyncTest_BadFlow_NoMatchingProjects(
@@ -324,9 +324,9 @@ namespace Repositories.Tests
         /// <summary>
         /// Checks if the correct project with user and collaborators are found
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
-        /// <param name="collaborators"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
+        /// <param name="collaborators">The collaborators which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_GoodFlow(
@@ -376,8 +376,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Checks if the result is null when the required relation with user is missing
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="collaborators"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="collaborators">The collaborators which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_BadFlow_NoUsers(
@@ -410,8 +410,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Checks if the amount of collaborators is 0 when the database has no collaborators
         /// </summary>
-        /// <param name="projects"></param>
-        /// <param name="users"></param>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_BadFlow_NoCollaborators(

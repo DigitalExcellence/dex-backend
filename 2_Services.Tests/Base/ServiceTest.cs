@@ -46,7 +46,7 @@ namespace Services.Tests.Base
         /// <summary>
         /// Test if the repository method is called and check if anything has changed to the entity
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
         public virtual async Task FindAsyncTest_GoodFlow(TDomain entity)
         {
@@ -68,7 +68,7 @@ namespace Services.Tests.Base
         /// <summary>
         /// Test if the repository method is called
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         public virtual void AddTest_GoodFlow(TDomain entity)
         {
             RepositoryMock.Setup(
@@ -84,7 +84,7 @@ namespace Services.Tests.Base
         /// <summary>
         /// Test if the repository method is called
         /// </summary>
-        /// <param name="entities"></param>
+        /// <param name="entities">The entities which are used as data to test</param>
         public virtual void AddRangeTest_GoodFlow(IEnumerable<TDomain> entities)
         {
             RepositoryMock.Setup(
@@ -101,7 +101,7 @@ namespace Services.Tests.Base
         /// <summary>
         /// Test if the repository method is called
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         public virtual void Update(TDomain entity)
         {
             RepositoryMock.Setup(
@@ -117,7 +117,7 @@ namespace Services.Tests.Base
         /// <summary>
         /// Test if the repository method is called
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">The entity which is used as data to test</param>
         public virtual void Remove(TDomain entity)
         {
             RepositoryMock.Setup(
@@ -133,7 +133,7 @@ namespace Services.Tests.Base
         /// <summary>
         /// Test if the repository method is called
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">The id which is used to remove the entity</param>
         /// <returns></returns>
         public virtual async Task RemoveAsync(int id)
         {
@@ -150,11 +150,11 @@ namespace Services.Tests.Base
         /// <summary>
         /// Test if the repository method is called
         /// </summary>
-        /// <param name="entities"></param>
-        /// <param name="amountToTest"></param>
+        /// <param name="entities">The entities which are used as data to test</param>
         /// <returns></returns>
-        public virtual async Task GetAll(List<TDomain> entities, int amountToTest)
+        public virtual async Task GetAll(List<TDomain> entities)
         {
+            int amountToTest = entities.Count;
             RepositoryMock.Setup(
                 repository => repository.GetAll())
                 .Returns(
