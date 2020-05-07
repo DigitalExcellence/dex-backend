@@ -50,7 +50,7 @@ services:
       - traefik.port=5005
 
 networks:
-  mysql-network:
+  mssql-network:
     driver: bridge
     ipam:
       driver: default
