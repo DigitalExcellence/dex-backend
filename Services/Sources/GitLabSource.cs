@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -23,7 +23,7 @@ namespace Services.Sources
     public class GitLabSource : ISource
     {
 
-        public void getSource(string url)
+        public void GetSource(string url)
         {
             throw new NotImplementedException();
         }
