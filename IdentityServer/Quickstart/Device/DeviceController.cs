@@ -37,11 +37,11 @@ namespace IdentityServer.Device
     public class DeviceController : Controller
     {
 
-        private readonly IClientStore _clientStore;
-        private readonly IEventService _events;
-        private readonly IDeviceFlowInteractionService _interaction;
-        private readonly ILogger<DeviceController> _logger;
-        private readonly IResourceStore _resourceStore;
+        private readonly IClientStore clientStore;
+        private readonly IEventService events;
+        private readonly IDeviceFlowInteractionService interaction;
+        private readonly ILogger<DeviceController> logger;
+        private readonly IResourceStore resourceStore;
 
         public DeviceController(
             IDeviceFlowInteractionService interaction,
@@ -50,11 +50,11 @@ namespace IdentityServer.Device
             IEventService eventService,
             ILogger<DeviceController> logger)
         {
-            _interaction = interaction;
-            _clientStore = clientStore;
-            _resourceStore = resourceStore;
-            _events = eventService;
-            _logger = logger;
+            this.interaction = interaction;
+            this.clientStore = clientStore;
+            this.resourceStore = resourceStore;
+            events = eventService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -95,7 +95,7 @@ namespace IdentityServer.Device
         {
             ProcessConsentResult result = new ProcessConsentResult();
 
-            DeviceFlowAuthorizationRequest request = await _interaction.GetAuthorizationContextAsync(model.UserCode);
+            DeviceFlowAuthorizationRequest request = await interaction.GetAuthorizationContextAsync(model.UserCode);
             if(request == null) return result;
 
             ConsentResponse grantedConsent = null;
@@ -106,7 +106,7 @@ namespace IdentityServer.Device
                 grantedConsent = ConsentResponse.Denied;
 
                 // emit event
-                await _events.RaiseAsync(
+                await events.RaiseAsync(
                     new ConsentDeniedEvent(User.GetSubjectId(), request.ClientId, request.ScopesRequested));
             }
 
@@ -130,7 +130,7 @@ namespace IdentityServer.Device
                                      };
 
                     // emit event
-                    await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(),
+                    await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(),
                                                                      request.ClientId,
                                                                      request.ScopesRequested,
                                                                      grantedConsent.ScopesConsented,
@@ -147,7 +147,7 @@ namespace IdentityServer.Device
             if(grantedConsent != null)
             {
                 // communicate outcome of consent back to identityserver
-                await _interaction.HandleRequestAsync(model.UserCode, grantedConsent);
+                await interaction.HandleRequestAsync(model.UserCode, grantedConsent);
 
                 // indicate that's it ok to redirect back to authorization endpoint
                 result.RedirectUri = model.ReturnUrl;
@@ -165,24 +165,24 @@ namespace IdentityServer.Device
             string userCode,
             DeviceAuthorizationInputModel model = null)
         {
-            DeviceFlowAuthorizationRequest request = await _interaction.GetAuthorizationContextAsync(userCode);
+            DeviceFlowAuthorizationRequest request = await interaction.GetAuthorizationContextAsync(userCode);
             if(request != null)
             {
-                Client client = await _clientStore.FindEnabledClientByIdAsync(request.ClientId);
+                Client client = await clientStore.FindEnabledClientByIdAsync(request.ClientId);
                 if(client != null)
                 {
                     Resources resources =
-                        await _resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
+                        await resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
                     if(resources != null &&
                        (resources.IdentityResources.Any() || resources.ApiResources.Any()))
                     {
                         return CreateConsentViewModel(userCode, model, client, resources);
                     }
-                    _logger.LogError("No scopes matching: {0}",
+                    logger.LogError("No scopes matching: {0}",
                                      request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
                 } else
                 {
-                    _logger.LogError("Invalid client id: {0}", request.ClientId);
+                    logger.LogError("Invalid client id: {0}", request.ClientId);
                 }
             }
 

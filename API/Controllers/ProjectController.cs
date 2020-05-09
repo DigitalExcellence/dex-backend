@@ -20,12 +20,13 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
+
 using Models;
 using Models.Defaults;
 using Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -131,6 +132,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
+
             User user = await userService.GetUserAsync(projectResource.UserId);
             project.User = user;
             try
@@ -191,7 +193,6 @@ namespace API.Controllers
 
             projectService.Update(project);
             projectService.Save();
-
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
@@ -214,6 +215,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
+            
             string identity = HttpContext.User.GetStudentId(HttpContext);
             bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.ProjectWrite));
             User user = await userService.GetUserByIdentityIdAsync(identity);
