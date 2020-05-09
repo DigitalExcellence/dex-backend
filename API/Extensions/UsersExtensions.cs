@@ -15,11 +15,18 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Configuration;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Models;
 using Models.Defaults;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -75,10 +82,33 @@ namespace API.Extensions
         }
 
 
-        public static string GetUserInformation(this HttpContext actionContext)
+        public static User GetUserInformationAsync(this HttpContext actionContext, Config config)
         {
-            var x = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization");
-            return "";
+            string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
+            if(string.IsNullOrEmpty(bearerToken))
+            {
+                return null;
+            }
+            // Not sure maybe has to be retrieved from the originating identity server aka from the token iss.
+            RestClient client = new RestClient(config.IdentityServer.IdentityUrl + "/connect/userinfo");
+            RestRequest request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", bearerToken);
+            IRestResponse response = client.Execute(request);
+            JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
+            if(jsonResponse == null ||
+               !jsonResponse.ContainsKey("name") ||
+               !jsonResponse.ContainsKey("email") ||
+               !jsonResponse.ContainsKey("sub"))
+            {
+                return null;
+            }
+            User newUser = new User()
+            {
+                Name = (string) jsonResponse["name"],
+                Email = (string) jsonResponse["email"],
+                IdentityId = (string) jsonResponse["sub"]
+            };
+            return newUser ;
         }
 
         /// <summary>

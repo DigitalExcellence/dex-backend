@@ -89,9 +89,9 @@ namespace Repositories
             {
                 return false;
             }
-            foreach(RoleScope scoop1 in user.Role.Scopes)
+            foreach(RoleScope scp in user.Role.Scopes)
             {
-                if(scoop1.Scope == scope)
+                if(scp.Scope == scope)
                 {
                     return true;
                 }

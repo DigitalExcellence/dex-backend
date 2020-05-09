@@ -57,6 +57,8 @@ namespace Services.Services
         /// <returns></returns>
         public List<string> GetValidScopes()
         {
+            // Via reflection this gets the object type itself, then gets all the public static fields and for each field append the name to the valid scope name.
+            // This is done  because we call nameof(value) for all the scopes.
             Type scopeType = typeof(Scopes);
             FieldInfo[] scopeTypeFields = scopeType.GetFields(BindingFlags.Static | BindingFlags.Public);
             List<string> validScopes = new List<string>();

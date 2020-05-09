@@ -125,7 +125,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
-        public async Task<IActionResult> CreateRoleAsync([FromBody] RoleResource roleResource)
+        public async Task<IActionResult> CreateRoleAsync(RoleResource roleResource)
         {
             if(roleResource == null)
             {
@@ -179,7 +179,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPut("{roleId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
-        public async Task<IActionResult> UpdateRole(int roleId, [FromBody] RoleResource roleResource)
+        public async Task<IActionResult> UpdateRole(int roleId, RoleResource roleResource)
         {
             Role role = await roleService.FindAsync(roleId);
             if(role == null)

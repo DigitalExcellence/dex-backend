@@ -30,14 +30,6 @@ namespace Models
             Services = new List<LinkedService>();
         }
 
-        public User(string identityId) : this()
-        {
-            IdentityId = identityId;
-            Email = "test";
-            Name = "bob";
-            //TODO Get valid values
-        }
-
         public int Id { get; set; }
 
         [Required]

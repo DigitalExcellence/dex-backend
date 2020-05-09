@@ -33,7 +33,8 @@ namespace IdentityServer.Configuration
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Email()
             };
         }
         
@@ -103,12 +104,9 @@ namespace IdentityServer.Configuration
                             {
                                 IdentityServerConstants.StandardScopes.OpenId,
                                 IdentityServerConstants.StandardScopes.Profile,
-                                nameof(Defaults.Scopes.ProjectRead),
-                                nameof(Defaults.Scopes.ProjectWrite),
-                                nameof(Defaults.Scopes.UserWrite),
-                                nameof(Defaults.Scopes.UserRead),
-                                nameof(Defaults.Scopes.HighlightRead),
-                                nameof(Defaults.Scopes.HighlightWrite)
+                                IdentityServerConstants.StandardScopes.Email,
+                                "dex-api"
+
                             },
                            AllowAccessTokensViaBrowser = true
 

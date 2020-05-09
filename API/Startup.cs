@@ -248,8 +248,22 @@ namespace API
                         string studentId = context.User.GetStudentId(context);
                         if(await userService.GetUserByIdentityIdAsync(studentId) == null)
                         {
-                            context.GetUserInformation();
-                            userService.Add(new User(studentId.ToString()));
+                            User newUser = context.GetUserInformationAsync(Config);
+                            if(newUser == null)
+                            {
+                                // Then it probably belongs swagger so we set the username as developer.
+                                newUser = new User()
+                                {
+                                    Name = "Developer",
+                                    Email = "Developer@DEX.com",
+                                    IdentityId = studentId
+                                };
+                                userService.Add(newUser);
+
+                            } else
+                            {
+                                userService.Add(newUser);
+                            }
                             await dbContext.SaveChangesAsync();
                         }
 

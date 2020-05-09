@@ -28,7 +28,7 @@ namespace API.Extensions
     }
 
     /// <summary>
-    /// 
+    /// This handler is called every time authorize is called with a policy created by the scoperequirement class.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Authorization.AuthorizationHandler{API.Extensions.ScopeRequirement}" />
     public class ScopeRequirementHandler : AuthorizationHandler<ScopeRequirement>
@@ -57,14 +57,14 @@ namespace API.Extensions
             
             if(string.IsNullOrEmpty(studentId))
             {
-                return Task.FromResult(0);
+                return Task.CompletedTask;
             }
 
             if(userService.UserHasScope(studentId, requirement.RequiredScope))
             {
                 context.Succeed(requirement);
             }
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }
