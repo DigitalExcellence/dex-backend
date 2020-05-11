@@ -31,10 +31,12 @@ namespace Repositories.Tests
         /// User not added and thus not found in repo
         /// </summary>
         [Test]
-        public async Task GetUserAsync_NotFound([UserDataSource]User entity)
+        public async Task GetUserAsync_NotFound()
         {
+            int randomId = 74;
+
             //Test
-            User retrieved = await Repository.GetUserAsync(entity.Id);
+            User retrieved = await Repository.GetUserAsync(randomId);
 
             Assert.IsNull(retrieved);
         }
@@ -64,10 +66,12 @@ namespace Repositories.Tests
         /// <param name="entity"></param>
         /// <returns></returns>
         [Test]
-        public async Task RemoveUserAsync_NotFound([UserDataSource]User entity)
+        public async Task RemoveUserAsync_NotFound()
         {
+            int randomId = 74;
+
             //Test
-            bool removed = await Repository.RemoveUserAsync(entity.Id);
+            bool removed = await Repository.RemoveUserAsync(randomId);
             await DbContext.SaveChangesAsync();
 
             Assert.IsFalse(removed);
