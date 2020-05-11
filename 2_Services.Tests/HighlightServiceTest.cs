@@ -41,6 +41,10 @@ namespace Services.Tests
             Assert.AreEqual(10, retrievedHighlights.Count);
         }
 
+        /// <summary>
+        /// Test whether the repository method is called and no changes have been applied to the object assuming no lights were provided
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetHighlightsAsync_NoHighlights()
         {
@@ -77,11 +81,6 @@ namespace Services.Tests
             base.AddTest_GoodFlow(entity);
         }
 
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override Task FindAsyncTest_GoodFlow([HighlightDataSource]Highlight entity)
@@ -94,11 +93,6 @@ namespace Services.Tests
         public override Task GetAll([HighlightDataSource(10)]List<Highlight> entities)
         {
             return base.GetAll(entities);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
@@ -120,11 +114,6 @@ namespace Services.Tests
         public override void Save()
         {
             base.Save();
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
