@@ -21,8 +21,14 @@ namespace Repositories.Tests
         /// <returns></returns>
         [Test]
         public async Task GetAllWithUserAsyncTest_GoodFlow(
-            [HighlightDataSource(10)]List<Highlight> highlights)
+            [HighlightDataSource(10)]List<Highlight> highlights, [ProjectDataSource(10)] List<Project> projects)
         {
+            foreach(Highlight highlight in highlights)
+            {
+                highlight.Project = projects[highlights.IndexOf(highlight)];
+                highlight.ProjectId = highlight.Project.Id;
+            }
+
             // Seed database
             DbContext.AddRange(highlights);
             await DbContext.SaveChangesAsync();
@@ -47,7 +53,24 @@ namespace Repositories.Tests
 
             // Test
             List<Highlight> retrieved = await Repository.GetHighlightsAsync();
-            Assert.AreEqual(retrieved.Count, 0);
+            Assert.AreEqual(0, retrieved.Count);
+        }
+
+
+        /// <summary>
+        /// Test if no highlights are retrieved when no project is provided.
+        /// </summary>
+        /// <returns></returns>
+        [Test]
+        public async Task GetAllWithUserAsyncTest_NoProjectInHighlight([HighlightDataSource] Highlight highlight)
+        {
+            // Seed database
+            DbContext.Add(highlight);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            List<Highlight> retrieved = await Repository.GetHighlightsAsync();
+            Assert.AreEqual(0, retrieved.Count);
         }
 
         ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
@@ -85,11 +108,6 @@ namespace Repositories.Tests
             base.AddTest_BadFlow_Null();
         }
 
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
         ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task FindAsyncTest_BadFlow_NotExists([HighlightDataSource]Highlight entity)
@@ -118,16 +136,6 @@ namespace Repositories.Tests
             return base.GetAllAsyncTest_GoodFlow(entities);
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-
         ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task RemoveAsyncTest_BadFlow_NotExists([HighlightDataSource]Highlight entity)
@@ -140,11 +148,6 @@ namespace Repositories.Tests
         public override Task RemoveAsyncTest_GoodFlow([HighlightDataSource]Highlight entity)
         {
             return base.RemoveAsyncTest_GoodFlow(entity);
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
 
         ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
