@@ -32,6 +32,9 @@ namespace API.Resources
         /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        ///     This gets or sets the user
+        /// </summary>
         public UserResourceResult User { get; set; }
 
         /// <summary>

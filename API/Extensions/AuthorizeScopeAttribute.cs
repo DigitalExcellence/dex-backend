@@ -73,7 +73,7 @@ namespace API.Extensions
             foreach(Claim scope in scopes)
             {
                 // Check if the selected scope is a category
-                FieldInfo? scopeCategory = typeof(Defaults.ScopeCategories).GetField(scope.Value);
+                FieldInfo scopeCategory = typeof(Defaults.ScopeCategories).GetField(scope.Value);
                 if(scopeCategory != null)
                 {
                     // get every scope in the category
