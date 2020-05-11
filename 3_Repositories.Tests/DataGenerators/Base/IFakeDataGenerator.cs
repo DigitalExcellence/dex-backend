@@ -2,6 +2,10 @@ using System.Collections.Generic;
 
 namespace Repositories.Tests.DataGenerators.Base
 {
+    /// <summary>
+    /// Interface to define the required methods in fakeDataGenerator
+    /// </summary>
+    /// <typeparam name="T">Domain class from the Models</typeparam>
     public interface IFakeDataGenerator<T>
     {
         /// <summary>

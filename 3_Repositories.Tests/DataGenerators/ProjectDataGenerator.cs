@@ -5,8 +5,15 @@ using System;
 
 namespace Repositories.Tests.DataGenerators
 {
+    /// <summary>
+    /// FakeDataGenerator for the projects
+    /// </summary>
     public class ProjectDataGenerator : FakeDataGenerator<Project>
     {
+        /// <summary>
+        /// Initializes the projectDataGenerator
+        /// and define dataGenerator options
+        /// </summary>
         public ProjectDataGenerator()
         {
             Faker = new Faker<Project>()

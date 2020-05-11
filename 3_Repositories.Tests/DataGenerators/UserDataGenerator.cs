@@ -4,8 +4,15 @@ using Repositories.Tests.DataGenerators.Base;
 
 namespace Repositories.Tests.DataGenerators
 {
+    /// <summary>
+    /// FakeDataGenerator for the users
+    /// </summary>
     public class UserDataGenerator : FakeDataGenerator<User>
     {
+        /// <summary>
+        /// Initializes the userDataGenerator
+        /// and define dataGenerator options
+        /// </summary>
         public UserDataGenerator()
         {
             Faker = new Faker<User>()
