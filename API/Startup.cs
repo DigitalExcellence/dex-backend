@@ -288,26 +288,6 @@ namespace API
             });
 
             app.UseStaticFiles();
-
-            //StudentInfo
-            app.UseWhen(context => 
-                (context.Request.Method.Equals(HttpMethods.Post) || context.Request.Method.Equals(HttpMethods.Put)) && context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
-                {
-                    appBuilder.Use(async (context, next) =>
-                    {
-                        DbContext dbContext = context.RequestServices.GetService<DbContext>();
-                        IUserService userService =
-                            context.RequestServices.GetService<IUserService>();
-                        int studentId = context.User.GetStudentId(context);
-                        if(await userService.GetUserAsync(studentId) == null)
-                        {
-                            userService.Add(new User(studentId));
-                            await dbContext.SaveChangesAsync();
-                        }
-
-                        await next();
-                    });
-                });
         }
 
         /// <summary>
