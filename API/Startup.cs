@@ -19,6 +19,7 @@ using API.Configuration;
 using API.Extensions;
 using Data;
 using FluentValidation.AspNetCore;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -174,6 +175,7 @@ namespace API
             // Add application services.
             services.AddSingleton(Config);
             services.AddServicesAndRepositories();
+            services.AddProblemDetails();
         }
 
         /// <summary>
@@ -207,6 +209,7 @@ namespace API
                 app.UseExceptionHandler();
             }
 
+            app.UseProblemDetails();
 
             app.UseRouting();
             app.UseCors(c =>

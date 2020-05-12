@@ -52,6 +52,16 @@ namespace API.Resources
         [FromQuery(Name = "sortDirection")]
         public string SortDirection { get; set; }
 
+        /// <summary>
+        /// This property filter the projects on the highlighted state
+        /// Possible value:
+        ///  - null (Return all results)
+        ///  - true (Only return highlighted results)
+        ///  - false (Only return not highlighted results)
+        /// </summary>
+        [FromQuery(Name = "highlighted")]
+        public bool? Highlighted { get; set; }
+
     }
 
 }

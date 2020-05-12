@@ -48,14 +48,14 @@ namespace API.Extensions
     public class AuthorizeScopeFilter : IAuthorizationFilter
     {
 
-        private readonly Claim _claim;
+        private readonly Claim claim;
 
         /// <summary>
         /// </summary>
         /// <param name="claim"></param>
         public AuthorizeScopeFilter(Claim claim)
         {
-            _claim = claim;
+            this.claim = claim;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace API.Extensions
         /// <param name="context"></param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            bool hasClaim = context.HttpContext.User.Claims.Any(c => c.Type == _claim.Type && c.Value == _claim.Value);
+            bool hasClaim = context.HttpContext.User.Claims.Any(c => c.Type == claim.Type && c.Value == claim.Value);
 
             //Get all scopes from the user
             IEnumerable<Claim> scopes =
@@ -73,7 +73,7 @@ namespace API.Extensions
             foreach(Claim scope in scopes)
             {
                 // Check if the selected scope is a category
-                FieldInfo? scopeCategory = typeof(Defaults.ScopeCategories).GetField(scope.Value);
+                FieldInfo scopeCategory = typeof(Defaults.ScopeCategories).GetField(scope.Value);
                 if(scopeCategory != null)
                 {
                     // get every scope in the category
@@ -85,7 +85,7 @@ namespace API.Extensions
                     {
                         // check if the scope in the category is equal to the requested scope
                         if(string.Equals(defaultScope,
-                                         _claim.Value,
+                                         claim.Value,
                                          StringComparison.OrdinalIgnoreCase))
                         {
                             hasIdentityClaim = true;
@@ -93,7 +93,7 @@ namespace API.Extensions
                     }
                 } else
                 {
-                    if(scope.Value == _claim.Value)
+                    if(scope.Value == claim.Value)
                     {
                         hasIdentityClaim = true;
                     }

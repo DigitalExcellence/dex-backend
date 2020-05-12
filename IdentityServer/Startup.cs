@@ -93,10 +93,12 @@ namespace IdentityServer
             //         // ...
             //     });
 
+            //TODO: Have some sort of certificate on the production servers
+            // not recommended for production - you need to store your key material somewhere secure
+            builder.AddDeveloperSigningCredential();
+
             if(Environment.IsDevelopment())
             {
-                //TODO: Have some sort of certificate on the production servers
-                // not recommended for production - you need to store your key material somewhere secure
                 builder.AddDeveloperSigningCredential();
             }
             services.AddCors(options =>

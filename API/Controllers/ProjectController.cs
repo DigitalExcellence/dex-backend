@@ -19,11 +19,13 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
+
 using Models;
 using Models.Defaults;
 using Services.Services;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -37,37 +39,43 @@ namespace API.Controllers
     public class ProjectController : ControllerBase
     {
 
-        private readonly IMapper _mapper;
-        private readonly IProjectService _projectService;
-        private readonly IUserService _userService;
+        private readonly IMapper mapper;
+        private readonly IProjectService projectService;
+        private readonly IUserService userService;
 
         /// <summary>
         ///     Initialize a new instance of ProjectController
         /// </summary>
         /// <param name="projectService"></param>
+        /// <param name="userService"></param>
         /// <param name="mapper"></param>
         public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
         {
-            _projectService = projectService;
-            _userService = userService;
-            _mapper = mapper;
+            this.projectService = projectService;
+            this.userService = userService;
+            this.mapper = mapper;
         }
 
         /// <summary>
         ///     Get all projects.
         /// </summary>
-        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetAllProjects()
         {
-            List<Project> projects = await _projectService.GetAllWithUsersAsync();
+            List<Project> projects = await projectService.GetAllWithUsersAsync();
             if(!projects.Any())
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting all projects.",
+                    Detail = "There where no projects found in the database.",
+                    Instance = "1B9B7B05-1EBA-49B0-986F-B54EBA70EC0D"
+                };
+                return NotFound(problem);
             }
 
-            return Ok(_mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
+            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
         }
 
 
@@ -80,16 +88,28 @@ namespace API.Controllers
         {
             if(projectId < 0)
             {
-                return BadRequest("Invalid project Id");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting project.",
+                    Detail = "The Id is smaller then 0 and therefore it could never be a valid project id.",
+                    Instance = "D590A4FE-FDBA-4AE5-B184-BC7395C45D4E"
+                };
+                return BadRequest(problem);
             }
 
-            Project project = await _projectService.FindWithUserAndCollaboratorsAsync(projectId);
+            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId);
             if(project == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "38516C41-4BFB-47BE-A759-1206BE6D2D13"
+                };
+                return NotFound(problem);
             }
 
-            return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
         /// <summary>
@@ -102,22 +122,34 @@ namespace API.Controllers
         {
             if(projectResource == null)
             {
-                return BadRequest("Project is null");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to create a new project.",
+                    Detail = "The specified project resource was null.",
+                    Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
+                };
+                return BadRequest(problem);
             }
-            Project project = _mapper.Map<ProjectResource, Project>(projectResource);
+            Project project = mapper.Map<ProjectResource, Project>(projectResource);
 
             //TODO: When login in frontend is functioning, get the user from JWT information
-            User user = await _userService.GetUserAsync(1);
+            User user = await userService.GetUserAsync(1);
             project.User = user;
             project.UserId = user.Id;
             try
             {
-                _projectService.Add(project);
-                _projectService.Save();
-                return Created(nameof(CreateProjectAsync), _mapper.Map<Project, ProjectResourceResult>(project));
+                projectService.Add(project);
+                projectService.Save();
+                return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
             } catch
             {
-                return BadRequest("Could not Create the Project");
+                ProblemDetails problem = new ProblemDetails()
+                {
+                    Title = "Failed to save new project.",
+                    Detail = "There was a problem while saving the project to the database.",
+                    Instance = "9FEEF001-F91F-44E9-8090-6106703AB033"
+                };
+                return BadRequest(problem);
             }
         }
 
@@ -131,18 +163,24 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
-            Project project = await _projectService.FindAsync(projectId);
+            Project project = await projectService.FindAsync(projectId);
             if(project == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update project.",
+                    Detail = "The specified project could not be found in the database.",
+                    Instance = "6A123609-19A1-47F0-B789-3D8F2A52C0C6"
+                };
+                return NotFound(problem);
             }
 
-            _mapper.Map(projectResource, project);
+            mapper.Map(projectResource, project);
 
-            _projectService.Update(project);
-            _projectService.Save();
+            projectService.Update(project);
+            projectService.Save();
 
-            return Ok(_mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
         /// <summary>
@@ -153,12 +191,18 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            if(await _projectService.FindAsync(projectId) == null)
+            if(await projectService.FindAsync(projectId) == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
+                };
+                return NotFound(problem);
             }
-            await _projectService.RemoveAsync(projectId);
-            _projectService.Save();
+            await projectService.RemoveAsync(projectId);
+            projectService.Save();
             return Ok();
         }
 
