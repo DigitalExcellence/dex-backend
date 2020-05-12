@@ -164,7 +164,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed to save the new role.",
-                    Detail = "There was a problem while saving the project to the database.",
+                    Detail = "There was a problem while saving the role to the database.",
                     Instance = "D56DBE55-57A1-4655-99C5-4F4ECEEE3BE4"
                 };
                 return BadRequest(problem);
