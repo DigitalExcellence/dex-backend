@@ -58,6 +58,14 @@ namespace Configuration
         public FrontendConfig Frontend { get; set; }
 
         public SwaggerConfig Swagger { get; set; }
+
+        /// <summary>
+        /// Gets or sets the fhict oidc.
+        /// </summary>
+        /// <value>
+        /// The ffhict oidc.
+        /// </value>
+        public FhictOIDConfig FfhictOIDC { get; set; }
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -67,6 +75,7 @@ namespace Configuration
             Validator.ValidateObject(Api, new ValidationContext(Api), true);
             Validator.ValidateObject(Fhict, new ValidationContext(Fhict), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
+            Validator.ValidateObject(FfhictOIDC, new ValidationContext(FfhictOIDC), true);
         }
 
         /// <summary>
@@ -211,6 +220,54 @@ namespace Configuration
             public List<string> PostLogoutUrisSwagger { get; set; }
         }
 
+
+        /// <summary>
+        /// Contains the Fontys SSO configuration.
+        /// </summary>
+        public class FhictOIDConfig
+        {
+            /// <summary>
+            /// Gets or sets the fhict identity URL.
+            /// </summary>
+            /// <value>
+            /// The fhict identity URL.
+            /// </value>
+            [Required, Url]
+            public string Authority { get; set; }
+            /// <summary>
+            /// Gets or sets the fhict client identifier.
+            /// </summary>
+            /// <value>
+            /// The fhict client identifier.
+            /// </value>
+            [Required]
+            public string ClientId { get; set; }
+            /// <summary>
+            /// Gets or sets the fhict client secret.
+            /// </summary>
+            /// <value>
+            /// The fhict client secret.
+            /// </value>
+            [Required]
+            public string ClientSecret { get; set; }
+            /// <summary>
+            /// Gets or sets the fhict scopes.
+            /// </summary>
+            /// <value>
+            /// The fhict scopes.
+            /// </value>
+            [Required]
+            public string Scopes { get; set; }
+            /// <summary>
+            /// Gets or sets the fhict redirect URI.
+            /// </summary>
+            /// <value>
+            /// The fhict redirect URI.
+            /// </value>
+            [Required, Url]
+            public string RedirectUri { get; set; }
+
+        }
     }
 
 }

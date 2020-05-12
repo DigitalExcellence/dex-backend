@@ -97,7 +97,7 @@ namespace IdentityServer
         /// <summary>
         ///     Post processing of external authentication
         /// </summary>
-        [HttpGet]
+        [HttpPost("callback/fhict")]
         public async Task<IActionResult> Callback()
         {
             // read external identity from the temporary cookie
