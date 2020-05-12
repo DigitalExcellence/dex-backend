@@ -15,40 +15,22 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using Models;
 
-namespace Models
+namespace API.Resources
 {
 
-    public class User
+    /// <summary>
+    ///     The view model of a role
+    /// </summary>
+    public class RoleResource
     {
-
-        public User()
-        {
-            Projects = new List<Project>();
-            Services = new List<LinkedService>();
-        }
-
-        public int Id { get; set; }
-
-        [Required]
+        // Role name
         public string Name { get; set; }
-
-        public Role Role { get; set; }
-
-        [Required]
-        public string Email { get; set; }
-
-        [Required]
-        public string IdentityId { get; set; }
-
-        public List<Project> Projects { get; set; }
-
-        public List<LinkedService> Services { get; set; }
-
-        public string ProfileUrl { get; set; }
-
+        // List of Allowed scopes.
+        public List<RoleScope> Scopes { get; set; }
     }
 
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -18,6 +18,7 @@
 using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Defaults;
 using System;
 using System.Collections.Generic;
 
@@ -29,7 +30,6 @@ namespace Data.Helpers
     /// </summary>
     public static class Seed
     {
-
         /// <summary>
         ///     Seed random users into the database using fake date from Bogus
         /// </summary>
@@ -52,6 +52,124 @@ namespace Data.Helpers
             }
             return users;
         }
+        public static void SeedRoles(this ModelBuilder modelBuilder, List<User> users)
+        {
+            modelBuilder.Entity<Role>(b =>
+            {
+                b.HasData(new Role
+                {
+                    Id = 1,
+                    Name = "RegisteredUser",
+
+                });
+            });
+            modelBuilder.Entity<RoleScope>(b =>
+                b.HasData(new
+                {
+                    RoleId = 1,
+                    Id = 1,
+                    Scope = nameof(Defaults.Scopes.ProjectWrite)
+                },
+                new
+                {
+                    RoleId = 1,
+                    Id = 2,
+                    Scope = nameof(Defaults.Scopes.UserWrite)
+                }));
+
+            modelBuilder.Entity<Role>(b =>
+            {
+                b.HasData(new Role
+                {
+                    Id = 2,
+                    Name = "PR",
+
+                });
+            });
+            modelBuilder.Entity<RoleScope>(b =>
+
+                b.HasData(new
+                {
+                    RoleId = 2,
+                    Id = 3,
+                    Scope = nameof(Defaults.Scopes.HighlightWrite)
+                }));
+
+            modelBuilder.Entity<Role>(b =>
+            {
+                b.HasData(new Role
+                {
+                    Id = 3,
+                    Name = "Administrator",
+
+                });
+            });
+            modelBuilder.Entity<RoleScope>(b =>
+                b.HasData(
+                new {
+                    RoleId = 3,
+                    Id = 4,
+                    Scope = nameof(Defaults.Scopes.ProjectWrite)
+                },
+                new
+                {
+                    RoleId = 3,
+                    Id = 5,
+                    Scope = nameof(Defaults.Scopes.UserWrite)
+                },
+                new
+                {
+                    RoleId = 3,
+                    Id = 6,
+                    Scope = nameof(Defaults.Scopes.UserRead)
+                },
+                new
+                {
+                    RoleId = 3,
+                    Id = 7,
+                    Scope = nameof(Defaults.Scopes.RoleRead)
+                },
+                new
+                {
+                    RoleId = 3,
+                    Id = 8,
+                    Scope = nameof(Defaults.Scopes.RoleWrite)
+                },
+                new
+                {
+                    RoleId = 3,
+                    Id = 9,
+                    Scope = nameof(Defaults.Scopes.HighlightWrite)
+                }));
+
+            modelBuilder.Entity<User>().HasData(
+                new
+                {
+                    Id = 31,
+                    IdentityId = "1",
+                    Name = "Regular User",
+                    Email = "a@b.c",
+                    RoleId = 1
+                },
+                new
+                {
+                    Id = 32,
+                    IdentityId = "2",
+                    Name = "PR User",
+                    Email = "a@b.c",
+                    RoleId = 2
+                },
+                new
+                {
+                    Id = 33,
+                    IdentityId = "88421113",
+                    Name = "Administrator",
+                    Email = "a@b.c",
+                    RoleId = 3,
+                }
+            );
+        }
+
 
         /// <summary>
         ///     Seed random projects into the database using fake date from Bogus

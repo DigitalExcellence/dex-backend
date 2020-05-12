@@ -5,10 +5,7 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20200419124410_HighlightBooleanRemoval.cs" />
-    <Compile Remove="Migrations\20200419124410_HighlightBooleanRemoval.Designer.cs" />
-  </ItemGroup>
+
 
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
