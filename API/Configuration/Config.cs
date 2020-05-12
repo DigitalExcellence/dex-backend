@@ -50,7 +50,7 @@ namespace API.Configuration
         public IdentityServerConfig IdentityServer { get; set; }
 
         /// <summary>
-        /// Gets or sets the swagger.
+        /// Gets or sets the swagger configuration.
         /// </summary>
         /// <value>
         /// The swagger.
