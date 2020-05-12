@@ -15,49 +15,21 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Models;
+using System;
+using System.Collections.Generic;
 
 namespace API.Resources
 {
 
     /// <summary>
-    ///     the view model result of user.
+    ///     The view model result of role
     /// </summary>
-    public class UserResourceResult
+    public class RoleResourceResult : RoleResource
     {
-
         /// <summary>
-        ///     This gets or sets the Id
+        ///     Get or Set the Id of a Role
         /// </summary>
         public int Id { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Name
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Email
-        /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Identity Id of an external provider
-        /// </summary>
-        public string IdentityId { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the ProfileUrl
-        /// </summary>
-        public string ProfileUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the role.
-        /// </summary>
-        /// <value>
-        /// The role.
-        /// </value>
-        public Role Role { get; set; }
 
     }
 

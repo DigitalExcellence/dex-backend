@@ -48,6 +48,9 @@ namespace API.Configuration
 
             CreateMap<HighlightResource, Highlight>();
             CreateMap<Highlight, HighlightResourceResult>();
+
+            CreateMap<RoleResource, Role>();
+            CreateMap<Role, RoleResourceResult>();
         }
 
     }

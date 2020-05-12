@@ -28,9 +28,16 @@ namespace IdentityServer.Configuration
     public static class IdentityConfig
     {
 
-        public static IEnumerable<IdentityResource> Ids =>
-            new IdentityResource[] {new IdentityResources.OpenId(), new IdentityResources.Profile()};
-
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+                new IdentityResources.Email()
+            };
+        }
+        
         public static IEnumerable<ApiResource> Apis =>
             new[]
             {
@@ -68,7 +75,9 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.ProjectRead),
                                nameof(Defaults.Scopes.ProjectWrite),
                                nameof(Defaults.Scopes.UserWrite),
-                               nameof(Defaults.Scopes.UserRead)
+                               nameof(Defaults.Scopes.UserRead),
+                               nameof(Defaults.Scopes.HighlightRead),
+                               nameof(Defaults.Scopes.HighlightWrite)
                            }
                        },
 
@@ -95,12 +104,8 @@ namespace IdentityServer.Configuration
                             {
                                 IdentityServerConstants.StandardScopes.OpenId,
                                 IdentityServerConstants.StandardScopes.Profile,
-                                nameof(Defaults.Scopes.ProjectRead),
-                                nameof(Defaults.Scopes.ProjectWrite),
-                                nameof(Defaults.Scopes.UserWrite),
-                                nameof(Defaults.Scopes.UserRead),
-                                nameof(Defaults.Scopes.HighlightRead),
-                                nameof(Defaults.Scopes.HighlightWrite)
+                                IdentityServerConstants.StandardScopes.Email,
+                                "dex-api"
                             },
                            AllowAccessTokensViaBrowser = true
 
@@ -118,6 +123,8 @@ namespace IdentityServer.Configuration
                            PostLogoutRedirectUris = config.Swagger.PostLogoutUrisSwagger,
                            AllowedScopes = new List<string>
                             {
+                                IdentityServerConstants.StandardScopes.OpenId,
+                                IdentityServerConstants.StandardScopes.Profile,
                                 nameof(Defaults.Scopes.ProjectRead),
                                 nameof(Defaults.Scopes.ProjectWrite),
                                 nameof(Defaults.Scopes.UserWrite),
