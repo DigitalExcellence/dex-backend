@@ -30,15 +30,12 @@ namespace Models
             Services = new List<LinkedService>();
         }
 
-        public User(int userId) : this()
-        {
-            Id = userId;
-        }
-
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
+
+        public Role Role { get; set; }
 
         [Required]
         public string Email { get; set; }

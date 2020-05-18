@@ -41,11 +41,11 @@ namespace IdentityServer
     public class ExternalController : Controller
     {
 
-        private readonly IClientStore _clientStore;
-        private readonly IEventService _events;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly ILogger<ExternalController> _logger;
-        private readonly TestUserStore _users;
+        private readonly IClientStore clientStore;
+        private readonly IEventService events;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly ILogger<ExternalController> logger;
+        private readonly TestUserStore users;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -56,25 +56,25 @@ namespace IdentityServer
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? new TestUserStore(TestUsers.Users);
+            this.users = users ?? new TestUserStore(TestUsers.Users);
 
-            _interaction = interaction;
-            _clientStore = clientStore;
-            _logger = logger;
-            _events = events;
+            this.interaction = interaction;
+            this.clientStore = clientStore;
+            this.logger = logger;
+            this.events = events;
         }
 
         /// <summary>
         ///     initiate roundtrip to external authentication provider
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> Challenge(string provider, string returnUrl)
+        public IActionResult Challenge(string provider, string returnUrl)
         {
             if(string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
 
             // validate returnUrl - either it is a valid OIDC URL or back to a local page
             if(Url.IsLocalUrl(returnUrl) == false &&
-               _interaction.IsValidReturnUrl(returnUrl) == false)
+               interaction.IsValidReturnUrl(returnUrl) == false)
             {
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
@@ -108,10 +108,10 @@ namespace IdentityServer
                 throw new Exception("External authentication error");
             }
 
-            if(_logger.IsEnabled(LogLevel.Debug))
+            if(logger.IsEnabled(LogLevel.Debug))
             {
                 IEnumerable<string> externalClaims = result.Principal.Claims.Select(c => $"{c.Type}: {c.Value}");
-                _logger.LogDebug("External claims: {@claims}", externalClaims);
+                logger.LogDebug("External claims: {@claims}", externalClaims);
             }
 
             // lookup our user and external provider info
@@ -153,8 +153,8 @@ namespace IdentityServer
             string returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
             // check if external login is in the context of an OIDC request
-            AuthorizationRequest context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            await _events.RaiseAsync(new UserLoginSuccessEvent(provider,
+            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl);
+            await events.RaiseAsync(new UserLoginSuccessEvent(provider,
                                                                providerUserId,
                                                                user.SubjectId,
                                                                user.Username,
@@ -163,7 +163,7 @@ namespace IdentityServer
 
             if(context != null)
             {
-                if(await _clientStore.IsPkceClientAsync(context.ClientId))
+                if(await clientStore.IsPkceClientAsync(context.ClientId))
                 {
                     // if the client is PKCE then we assume it's native, so this change in how to
                     // return the response is for better UX for the end user.
@@ -194,14 +194,14 @@ namespace IdentityServer
             string providerUserId = userIdClaim.Value;
 
             // find external user
-            TestUser user = _users.FindByExternalProvider(provider, providerUserId);
+            TestUser user = users.FindByExternalProvider(provider, providerUserId);
 
             return (user, provider, providerUserId, claims);
         }
 
         private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
         {
-            TestUser user = _users.AutoProvisionUser(provider, providerUserId, claims.ToList());
+            TestUser user = users.AutoProvisionUser(provider, providerUserId, claims.ToList());
             return user;
         }
 

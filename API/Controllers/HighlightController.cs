@@ -61,7 +61,13 @@ namespace API.Controllers
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync();
             if(!highlights.Any())
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting highlights.",
+                    Detail = "The database does not contain any highlights.",
+                    Instance = "FC6A4F97-C815-4A92-8A73-2ECF1729B161"
+                };
+                return NotFound(problem);
             }
 
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
@@ -77,13 +83,25 @@ namespace API.Controllers
         {
             if(highlightId < 0)
             {
-                return BadRequest("Invalid highlight Id");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting highlight.",
+                    Detail = "the highlight id cannot be smaller then 0.",
+                    Instance = "BBC86ABA-142B-4BEB-801B-03100C08500B"
+                };
+                return BadRequest(problem);
             }
 
             Highlight highlight = await highlightService.FindAsync(highlightId);
             if(highlight == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting highlight.",
+                    Detail = "The database does not contain a highlight with this id.",
+                    Instance = "1EA0824A-D017-4BAB-9606-2872487D1EDA"
+                };
+                return NotFound(problem);
             }
 
             return Ok(mapper.Map<Highlight, HighlightResourceResult>(highlight));
@@ -96,11 +114,17 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        public async Task<IActionResult> CreateHighlightAsync(HighlightResource highlightResource)
+        public IActionResult CreateHighlightAsync(HighlightResource highlightResource)
         {
             if(highlightResource == null)
             {
-                return BadRequest("Highlight is null");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed creating highlight.",
+                    Detail = "The highlight resource is null.",
+                    Instance = "2206D5EC-9E20-44A7-A729-0205BEA994E5"
+                };
+                return BadRequest(problem);
             }
             Highlight highlight = mapper.Map<HighlightResource, Highlight>(highlightResource);
             try
@@ -110,7 +134,13 @@ namespace API.Controllers
                 return Created(nameof(CreateHighlightAsync), mapper.Map<Highlight, HighlightResourceResult>(highlight));
             } catch
             {
-                return BadRequest("Could not Create the Highlight");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed Saving highlight.",
+                    Detail = "Failed saving the highlight to the database.",
+                    Instance = "764E41C3-06A5-47D6-9642-C9E8A0B7CFC7"
+                };
+                return BadRequest(problem);
             }
         }
 
@@ -128,7 +158,13 @@ namespace API.Controllers
             Highlight highlight = await highlightService.FindAsync(highlightId);
             if(highlight == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the highlight.",
+                    Detail = "The database does not contain a highlight with that id.",
+                    Instance = "795CDB7E-DB46-4A24-8F12-7557BDD79D15"
+                };
+                return NotFound(problem);
             }
 
             mapper.Map(highlightResource, highlight);
@@ -138,7 +174,6 @@ namespace API.Controllers
 
             return Ok(mapper.Map<Highlight, HighlightResourceResult>(highlight));
         }
-
 
         /// <summary>
         ///     Removes a highlight by id
@@ -151,13 +186,17 @@ namespace API.Controllers
         {
             if(await highlightService.FindAsync(highlightId) == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting highlight.",
+                    Detail = "The database does not contain a highlight with that id.",
+                    Instance = "E5B9B140-8B1C-434A-913B-4DB460342BE1"
+                };
+                return NotFound(problem);
             }
             await highlightService.RemoveAsync(highlightId);
             highlightService.Save();
             return Ok();
         }
-
     }
-
 }

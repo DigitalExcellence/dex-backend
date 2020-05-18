@@ -36,28 +36,28 @@ namespace IdentityServer
     public class HomeController : Controller
     {
 
-        private readonly IWebHostEnvironment _environment;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly ILogger _logger;
+        private readonly IWebHostEnvironment environment;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly ILogger logger;
 
         public HomeController(IIdentityServerInteractionService interaction,
                               IWebHostEnvironment environment,
                               ILogger<HomeController> logger)
         {
-            _interaction = interaction;
-            _environment = environment;
-            _logger = logger;
+            this.interaction = interaction;
+            this.environment = environment;
+            this.logger = logger;
         }
 
         public IActionResult Index()
         {
-            if(_environment.IsDevelopment())
+            if(environment.IsDevelopment())
             {
                 // only show in development
                 return View();
             }
 
-            _logger.LogInformation("Homepage is disabled in production. Returning 404.");
+            logger.LogInformation("Homepage is disabled in production. Returning 404.");
             return NotFound();
         }
 
@@ -69,12 +69,12 @@ namespace IdentityServer
             ErrorViewModel vm = new ErrorViewModel();
 
             // retrieve error details from identityserver
-            ErrorMessage message = await _interaction.GetErrorContextAsync(errorId);
+            ErrorMessage message = await interaction.GetErrorContextAsync(errorId);
             if(message != null)
             {
                 vm.Error = message;
 
-                if(!_environment.IsDevelopment())
+                if(!environment.IsDevelopment())
                 {
                     // only show in development
                     message.ErrorDescription = null;
