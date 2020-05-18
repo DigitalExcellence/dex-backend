@@ -191,7 +191,6 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            //TODO CALL SERVICE
             List<Project> projects = (List<Project>) await projectService.GetAllWithUsersAsync();
             projects.ForEach(delegate(Project project) {
                 if(project.UserId.Equals(userId))
