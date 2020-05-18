@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "00e58bc3-a4d6-4c62-a484-a3f70dc823a3",
+		"_postman_id": "c7b0c87d-4656-4421-bb6f-fc87e559ee46",
 		"name": "Digital-Excellence-API",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -15,7 +15,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "67c0e6bd-9f13-4cb0-91f3-e9cf378f85f0",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var userName = pm.environment.get(\"userName\");",
@@ -41,7 +41,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"identityId\": \"{{userId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
@@ -70,7 +76,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "6df5085c-b4cc-46f3-92f7-e4eebfc0ba60",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var userId = parseInt(pm.environment.get(\"userId\"));",
@@ -106,9 +112,15 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{apiUrl}}/api/User/{{userId}}",
+							"raw": "{{apiUrl}}/api/User/{{userId}}?",
 							"host": [
 								"{{apiUrl}}"
 							],
@@ -116,6 +128,12 @@
 								"api",
 								"User",
 								"{{userId}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null
+								}
 							]
 						}
 					},
@@ -127,7 +145,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "a03e71c5-df47-4007-83fe-b59105757edf",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var userName = pm.environment.get(\"userNameUpdated\");",
@@ -159,7 +177,13 @@
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"name\": \"{{userNameUpdated}}\",\r\n  \"email\": \"postmantest_email\",\r\n  \"identityId\": \"postmantest_identityId\"\r\n}",
@@ -189,7 +213,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "c28b3b52-10e9-4120-be38-aafb4e951ec7",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var userId = parseInt(pm.environment.get(\"userId\"));",
@@ -226,7 +250,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{apiUrl}}/api/User/{{userId}}",
 							"host": [
@@ -236,6 +266,13 @@
 								"api",
 								"User",
 								"{{userId}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -253,7 +290,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "e24d4603-52f5-46b6-b964-319afcec9cca",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var userId = parseInt(pm.environment.get(\"userId\"));",
@@ -294,7 +331,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
@@ -323,7 +366,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "ca254560-ffcc-4769-9d60-2d242a5efb27",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var userId = parseInt(pm.environment.get(\"userId\"));",
@@ -371,7 +414,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{apiUrl}}/api/Project",
 							"host": [
@@ -391,7 +440,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "af55f5fc-7e07-4dd3-880c-cf21c822858f",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var projectId = parseInt(pm.environment.get(\"projectId\"));",
@@ -436,7 +485,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{apiUrl}}/api/Project/{{projectId}}",
 							"host": [
@@ -457,7 +512,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "3a0f6c57-ac19-48be-83fe-d8e772100e97",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var projectName = pm.environment.get(\"projectNameUpdated\");",
@@ -489,7 +544,13 @@
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
@@ -519,7 +580,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "6b6ca11c-996c-452e-a137-2ec21383372b",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"var userId = parseInt(pm.environment.get(\"userId\"));",
@@ -565,7 +626,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{apiUrl}}/api/Project/{{projectId}}",
 							"host": [
@@ -592,7 +659,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "21f90cd5-d4e0-45d5-ba4c-a3b201078aee",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"",
@@ -616,7 +683,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{apiUrl}}/api/Search/internal/1",
 							"host": [
@@ -644,7 +717,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "af152ee4-551e-40ec-aa3b-7ac321e6eb37",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"",
@@ -662,7 +735,13 @@
 					],
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{apiUrl}}/api/Project/{{projectId}}",
 							"host": [
@@ -683,7 +762,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "24e92e98-3709-4178-8e4f-b27f88fc82d1",
+								"id": "bb4148aa-9972-4f49-ab64-267c5601447f",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"",
@@ -701,7 +780,13 @@
 					],
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "StudentId",
+								"value": "88421113",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{apiUrl}}/api/User/{{userId}}",
 							"host": [
@@ -744,7 +829,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "43e0d64e-b209-4284-a582-13246f4b4408",
+				"id": "974efd04-8cc3-4a51-9f55-23881dc94f06",
 				"type": "text/javascript",
 				"exec": [
 					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
@@ -788,7 +873,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "eee2d2ef-5e51-4d88-b237-722b347c7188",
+				"id": "83c72b77-223a-4db4-bb23-1a18bb10c038",
 				"type": "text/javascript",
 				"exec": [
 					""
