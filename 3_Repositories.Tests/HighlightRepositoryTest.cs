@@ -18,7 +18,7 @@ namespace Repositories.Tests
         /// Test if highlights are retrieved correctly
         /// </summary>
         /// <param name="highlights"></param>
-        /// <returns></returns>
+        /// <returns>A set of 10 highlights, all containing a project.</returns>
         [Test]
         public async Task GetAllWithUserAsyncTest_GoodFlow(
             [HighlightDataSource(10)]List<Highlight> highlights, [ProjectDataSource(10)] List<Project> projects)
