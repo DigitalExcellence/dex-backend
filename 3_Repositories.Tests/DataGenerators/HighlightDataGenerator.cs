@@ -8,8 +8,15 @@ using System.Text;
 
 namespace Repositories.Tests.DataGenerators
 {
+    /// <summary>
+    /// FakeDataGenerator for the highlights
+    /// </summary>
     public class HighlightDataGenerator : FakeDataGenerator<Highlight>
     {
+        /// <summary>
+        /// Initializes the highlightDataGenerator
+        /// and define dataGenerator options
+        /// </summary>
         public HighlightDataGenerator()
         {
             Faker = new Faker<Highlight>()
