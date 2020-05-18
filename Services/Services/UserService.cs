@@ -69,7 +69,6 @@ namespace Services.Services
         {
             return Repository.UserHasScope(identityId, scope);
         }
-
     }
 
 }

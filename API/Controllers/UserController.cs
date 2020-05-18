@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Services.Services;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -37,15 +39,18 @@ namespace API.Controllers
 
         private readonly IMapper mapper;
         private readonly IUserService userService;
+        private readonly IProjectService projectService;
 
         /// <summary>
         ///     Initialize a new instance of UserController
         /// </summary>
         /// <param name="userService"></param>
+        /// <param name="projectService"></param>
         /// <param name="mapper"></param>
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IProjectService projectService, IMapper mapper)
         {
             this.userService = userService;
+            this.projectService = projectService;
             this.mapper = mapper;
         }
 
@@ -147,6 +152,7 @@ namespace API.Controllers
         ///     Gets the student information.
         /// </summary>
         /// <returns></returns>
+        [ObsoleteAttribute("This endpoint will soon be deprecated. Use [Post] {userId}/allData.")]
         [HttpDelete("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         public async Task<IActionResult> DeleteAccount(int userId)
@@ -166,5 +172,45 @@ namespace API.Controllers
             userService.Save();
             return Ok();
         }
+
+        /// <summary>
+        ///     Delete all user data
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete("{userId}/allData")]
+        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
+        public async Task<IActionResult> DeleteAllUserData(int userId)
+        {
+            if(await userService.FindAsync(userId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this student id.",
+                    Instance = "TODO-CHANGE-TO-GENERATED-INSTANCE-CODE"
+                };
+                return NotFound(problem);
+            }
+            //TODO CALL SERVICE
+            List<Project> projects = (List<Project>) await projectService.GetAllWithUsersAsync();
+            projects.ForEach(delegate(Project project) {
+                if(project.UserId.Equals(userId))
+                {
+                    project.UserId = -1;
+                    project.User = null;
+                    projectService.Update(project);
+                }
+            });
+            await userService.RemoveAsync(userId);
+            userService.Save();
+            projectService.Save();
+            return Ok();
+        }
+
+
+
+
+
+
     }
 }
