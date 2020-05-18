@@ -11,7 +11,7 @@ using System.Text;
 namespace Repositories.Tests.DataSources
 {
     /// <summary>
-    /// Attribute to generate projects
+    /// Attribute to generate highlights
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
     public class HighlightDataSourceAttribute : Attribute, IParameterDataSource
@@ -20,7 +20,7 @@ namespace Repositories.Tests.DataSources
         private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// Initializes collaboratorDataSourceAttribute
+        /// Initializes highlightDataSourceAttribute
         /// </summary>
         public HighlightDataSourceAttribute()
         {
@@ -28,8 +28,8 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Initializes projectDataSourceAttribute
-        /// and setting the amount of projects to be generated
+        /// Initializes highlightDataSourceAttribute
+        /// and setting the amount of highlights to be generated
         /// </summary>
         public HighlightDataSourceAttribute(int amount) : this()
         {

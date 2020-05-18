@@ -42,7 +42,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Test whether the repository method is called and no changes have been applied to the object assuming no lights were provided
+        /// Test whether the repository method is called and no changes have been applied to the object assuming no highlights were provided
         /// </summary>
         /// <returns></returns>
         [Test]
@@ -66,6 +66,32 @@ namespace Services.Tests
 
         }
 
+
+        /// <summary>
+        /// Test whether the repository method is called if no project is provided and no changes have been applied to the object assuming no highlights were provided
+        /// </summary>
+        /// <returns></returns>
+        [Test]
+        public async Task GetHighlightsAsync_HighlightWithoutProject([HighlightDataSource] Highlight highlight)
+        {
+            List<Highlight> highlights = new List<Highlight>();
+            highlights.Add(highlight);
+            RepositoryMock.Setup(
+                repository => repository.GetHighlightsAsync())
+                .Returns(
+                    Task.FromResult(highlights)
+                );
+
+            List<Highlight> retrievedHighlights = await Service.GetHighlightsAsync();
+
+            Assert.DoesNotThrow(() => {
+                RepositoryMock.Verify(repository => repository.GetHighlightsAsync(), Times.Once);
+            });
+            Assert.AreEqual(highlights, retrievedHighlights);
+            Assert.AreEqual(1, retrievedHighlights.Count);
+            if(retrievedHighlights.Find(hl => hl.Project == null) != null)
+                Assert.Fail();
+        }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]

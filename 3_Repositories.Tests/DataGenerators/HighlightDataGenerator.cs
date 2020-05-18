@@ -6,12 +6,12 @@ using System;
 namespace Repositories.Tests.DataGenerators
 {
     /// <summary>
-    /// FakeDataGenerator for the projects
+    /// FakeDataGenerator for the highlights
     /// </summary>
     public class HighlightDataGenerator : FakeDataGenerator<Highlight>
     {
         /// <summary>
-        /// Initializes the projectDataGenerator
+        /// Initializes the highlightDataGenerator
         /// and define dataGenerator options
         /// </summary>
         public HighlightDataGenerator()
