@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed user from search result resource - [#129](https://github.com/DigitalExcellence/dex-backend/issues/129)
+
 ### Fixed
 
 ### Security
