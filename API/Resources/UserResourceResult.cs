@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
+
 namespace API.Resources
 {
 
@@ -48,6 +50,14 @@ namespace API.Resources
         ///     This gets or sets the ProfileUrl
         /// </summary>
         public string ProfileUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the role.
+        /// </summary>
+        /// <value>
+        /// The role.
+        /// </value>
+        public Role Role { get; set; }
 
     }
 

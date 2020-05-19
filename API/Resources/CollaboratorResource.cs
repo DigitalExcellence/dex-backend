@@ -17,7 +17,9 @@
 
 namespace API.Resources
 {
-
+    /// <summary>
+    ///     The view model of a collaborator
+    /// </summary>
     public class CollaboratorResource
     {
 

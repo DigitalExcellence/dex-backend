@@ -37,20 +37,20 @@ namespace IdentityServer
     public class GrantsController : Controller
     {
 
-        private readonly IClientStore _clients;
-        private readonly IEventService _events;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IResourceStore _resources;
+        private readonly IClientStore clients;
+        private readonly IEventService events;
+        private readonly IIdentityServerInteractionService interaction;
+        private readonly IResourceStore resources;
 
         public GrantsController(IIdentityServerInteractionService interaction,
                                 IClientStore clients,
                                 IResourceStore resources,
                                 IEventService events)
         {
-            _interaction = interaction;
-            _clients = clients;
-            _resources = resources;
-            _events = events;
+            this.interaction = interaction;
+            this.clients = clients;
+            this.resources = resources;
+            this.events = events;
         }
 
         /// <summary>
@@ -69,23 +69,23 @@ namespace IdentityServer
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Revoke(string clientId)
         {
-            await _interaction.RevokeUserConsentAsync(clientId);
-            await _events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId));
+            await interaction.RevokeUserConsentAsync(clientId);
+            await events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId));
 
             return RedirectToAction("Index");
         }
 
         private async Task<GrantsViewModel> BuildViewModelAsync()
         {
-            IEnumerable<Consent> grants = await _interaction.GetAllUserConsentsAsync();
+            IEnumerable<Consent> grants = await interaction.GetAllUserConsentsAsync();
 
             List<GrantViewModel> list = new List<GrantViewModel>();
             foreach(Consent grant in grants)
             {
-                Client client = await _clients.FindClientByIdAsync(grant.ClientId);
+                Client client = await clients.FindClientByIdAsync(grant.ClientId);
                 if(client != null)
                 {
-                    Resources resources = await _resources.FindResourcesByScopeAsync(grant.Scopes);
+                    Resources resources = await this.resources.FindResourcesByScopeAsync(grant.Scopes);
 
                     GrantViewModel item = new GrantViewModel
                                           {

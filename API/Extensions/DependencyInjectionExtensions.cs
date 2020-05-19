@@ -16,6 +16,7 @@
 */
 
 using Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
@@ -52,6 +53,12 @@ namespace API.Extensions
 
             services.AddScoped<IEmbedService, EmbedService>();
             services.AddScoped<IEmbedRepository, EmbedRepository>();
+            
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+
+
+            services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
             return services;
         }
 

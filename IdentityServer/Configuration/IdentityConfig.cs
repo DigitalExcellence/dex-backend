@@ -28,9 +28,16 @@ namespace IdentityServer.Configuration
     public static class IdentityConfig
     {
 
-        public static IEnumerable<IdentityResource> Ids =>
-            new IdentityResource[] {new IdentityResources.OpenId(), new IdentityResources.Profile()};
-
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+                new IdentityResources.Email()
+            };
+        }
+        
         public static IEnumerable<ApiResource> Apis =>
             new[]
             {
@@ -71,6 +78,8 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.ProjectWrite),
                                nameof(Defaults.Scopes.UserWrite),
                                nameof(Defaults.Scopes.UserRead),
+                               nameof(Defaults.Scopes.HighlightRead),
+                               nameof(Defaults.Scopes.HighlightWrite),
                                nameof(Defaults.Scopes.EmbedWrite),
                                nameof(Defaults.Scopes.EmbedRead)
                            }
@@ -96,19 +105,37 @@ namespace IdentityServer.Configuration
                            PostLogoutRedirectUris = config.Frontend.PostLogoutUrisFrontend,
 
                            AllowedScopes = new List<string>
-                                           {
-                                               IdentityServerConstants.StandardScopes.OpenId,
-                                               IdentityServerConstants.StandardScopes.Profile,
-                                               nameof(Defaults.Scopes.ProjectRead),
-                                               nameof(Defaults.Scopes.ProjectWrite),
-                                               nameof(Defaults.Scopes.UserWrite),
-                                               nameof(Defaults.Scopes.UserRead),
-                                               nameof(Defaults.Scopes.HighlightRead),
-                                               nameof(Defaults.Scopes.HighlightWrite)
-                                           },
+                            {
+                                IdentityServerConstants.StandardScopes.OpenId,
+                                IdentityServerConstants.StandardScopes.Profile,
+                                IdentityServerConstants.StandardScopes.Email,
+                                "dex-api"
+                            },
                            AllowAccessTokensViaBrowser = true
 
                            // AllowOfflineAccess = true
+                       },
+
+                       new Client
+                       {
+                           ClientId = "Swagger-UI",
+                           ClientName = "Swagger UI",
+                           AllowedGrantTypes = GrantTypes.Implicit,
+                           AllowAccessTokensViaBrowser = true,
+                           AlwaysIncludeUserClaimsInIdToken = true,
+                           RedirectUris = config.Swagger.RedirectUrisSwagger,
+                           PostLogoutRedirectUris = config.Swagger.PostLogoutUrisSwagger,
+                           AllowedScopes = new List<string>
+                            {
+                                IdentityServerConstants.StandardScopes.OpenId,
+                                IdentityServerConstants.StandardScopes.Profile,
+                                nameof(Defaults.Scopes.ProjectRead),
+                                nameof(Defaults.Scopes.ProjectWrite),
+                                nameof(Defaults.Scopes.UserWrite),
+                                nameof(Defaults.Scopes.UserRead),
+                                nameof(Defaults.Scopes.HighlightRead),
+                                nameof(Defaults.Scopes.HighlightWrite)
+                            },
                        }
                    };
         }

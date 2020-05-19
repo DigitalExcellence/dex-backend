@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System.Collections.Generic;
 using Data.Configurations;
 using Data.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,9 @@ namespace Data
         public DbSet<Highlight> Highlight { get; set; }
 
         public DbSet<EmbeddedProject> EmbeddedProject { get; set; }
+        
+        public DbSet<Role> Role { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -45,8 +49,12 @@ namespace Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
 
+            List<User> seededUsers = modelBuilder.SeedUsers();
+            List<Project> seededProjects = modelBuilder.SeedProjects(seededUsers);
             // Database seeding for demo
-            modelBuilder.SeedCollaborators(modelBuilder.SeedProjects(modelBuilder.SeedUsers()));
+            modelBuilder.SeedCollaborators(seededProjects);
+
+            modelBuilder.SeedRoles(seededUsers);
         }
 
     }

@@ -35,52 +35,81 @@ namespace API.Controllers
     public class SearchController : ControllerBase
     {
 
-        private readonly IMapper _mapper;
+        private readonly IMapper mapper;
 
-        private readonly ISearchService _searchService;
+        private readonly ISearchService searchService;
 
+        /// <summary>
+        ///     Initialize a new instance of SearchController
+        /// </summary>
+        /// <param name="searchService"></param>
+        /// <param name="mapper"></param>
         public SearchController(ISearchService searchService, IMapper mapper)
         {
-            _searchService = searchService;
-            _mapper = mapper;
+            this.searchService = searchService;
+            this.mapper = mapper;
         }
 
         /// <summary>
         ///     Search for projects
         /// </summary>
         /// <param name="query">The search query</param>
+        /// <param name="parameters"></param>
         /// <returns>Search results</returns>
         [HttpGet("internal/{query}")]
         public async Task<IActionResult> SearchInternalProjects(string query,
                                                                 [FromQuery] SearchRequestParamsResource parameters)
         {
-            if(query.Length < 0) return BadRequest("Query required");
+            ProblemDetails problem = new ProblemDetails
+            {
+                Title = "Invalid search request."
+            };
+            if(query.Length < 0)
+            {
+                problem.Detail = "The Query parameter cannot be empty.";
+                problem.Instance = "13A59FAE-E98F-42B3-AFD4-84F3019EC790";
+                return BadRequest(problem);
+            }
             if(parameters.Page != null &&
                parameters.Page < 1)
-                return BadRequest("Invalid page number");
+            {
+                problem.Detail = "The page number cannot be smaller then 1.";
+                problem.Instance = "65EB6EF1-2CF4-4F7B-8A0A-C047C701337A";
+                return BadRequest(problem);
+            }
             if(parameters.SortBy != null &&
                parameters.SortBy != "name" &&
                parameters.SortBy != "created" &&
                parameters.SortBy != "updated")
-                return BadRequest("Invalid sort value: Use \"name\", \"created\" or \"updated\"");
+            {
+                problem.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\".";
+                problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
+                return BadRequest(problem);
+            }
             if(parameters.SortDirection != null &&
                parameters.SortDirection != "asc" &&
                parameters.SortDirection != "desc")
-                return BadRequest("Invalid sort direction: Use \"asc\" or \"desc\"");
+            {
+                problem.Detail = "Invalid sort direction: Use \"asc\" or \"desc\".";
+                problem.Instance = "3EE043D5-070B-443A-A951-B252A1BB8EF9";
+                return BadRequest(problem);
+            }
 
-            SearchParams searchParams = _mapper.Map<SearchRequestParamsResource, SearchParams>(parameters);
-            IEnumerable<Project> projects = await _searchService.SearchInternalProjects(query, searchParams);
+            SearchParams searchParams = mapper.Map<SearchRequestParamsResource, SearchParams>(parameters);
+            IEnumerable<Project> projects = await searchService.SearchInternalProjects(query, searchParams);
             IEnumerable<SearchResultResource> searchResults =
-                _mapper.Map<IEnumerable<Project>, IEnumerable<SearchResultResource>>(projects);
+                mapper.Map<IEnumerable<Project>, IEnumerable<SearchResultResource>>(projects);
 
-            SearchResultsResource searchResultsResource = new SearchResultsResource();
-            searchResultsResource.Results = searchResults.ToArray();
-            searchResultsResource.Query = query;
-            searchResultsResource.Count = searchResults.Count();
-            searchResultsResource.TotalCount = await _searchService.SearchInternalProjectsCount(query, searchParams);
-            searchResultsResource.Page = searchParams.Page;
-            searchResultsResource.TotalPages =
-                await _searchService.SearchInternalProjectsTotalPages(query, searchParams);
+            SearchResultsResource searchResultsResource = new SearchResultsResource()
+            {
+                Results = searchResults.ToArray(),
+                Query = query,
+                Count = searchResults.Count(),
+                TotalCount = await searchService.SearchInternalProjectsCount(query, searchParams),
+                Page = searchParams.Page,
+                TotalPages =
+                await searchService.SearchInternalProjectsTotalPages(query, searchParams)
+            };
 
             return Ok(searchResultsResource);
         }
