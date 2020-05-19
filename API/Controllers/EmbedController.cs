@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -41,16 +42,21 @@ namespace API.Controllers
 
         private readonly IEmbedService embedService;
         private readonly IMapper mapper;
-
+        private readonly IProjectService projectService;
+        private readonly IUserService userService;
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbedController"/> class.
         /// </summary>
         /// <param name="embedService">The embed service.</param>
         /// <param name="mapper">The mapper.</param>
-        public EmbedController(IEmbedService embedService, IMapper mapper)
+        /// <param name="projectService"></param>
+        /// <param name="userService"></param>
+        public EmbedController(IEmbedService embedService, IMapper mapper, IProjectService projectService, IUserService userService)
         {
             this.embedService = embedService;
             this.mapper = mapper;
+            this.projectService = projectService;
+            this.userService = userService;
         }
 
 
@@ -66,7 +72,13 @@ namespace API.Controllers
 
             if(!embeddedProjects.Any())
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "No Embedded Projects found.",
+                    Detail = "There are no Embedded projects in the database.",
+                    Instance = "FEA62EAE-3D3C-4CE7-BDD8-6B273D56068D"
+                };
+                return NotFound(problem);
             }
             return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
 
@@ -84,7 +96,13 @@ namespace API.Controllers
             EmbeddedProject embeddedProject = await embedService.FindAsync(new Guid(guid));
             if(embeddedProject == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "No Embedded Project found.",
+                    Detail = "There is no embedded project with this GUID.",
+                    Instance = "DA33DBE1-55DC-4574-B62F-C7A76A7309CF"
+                };
+                return NotFound(problem);
             }
             return Ok(mapper.Map<Project, ProjectResourceResult>(embeddedProject.Project));
         }
@@ -95,15 +113,47 @@ namespace API.Controllers
         /// <param name="embedResource"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = nameof(Defaults.Scopes.EmbedWrite))]
+        [Authorize]
         public async Task<IActionResult> CreateEmbeddedProject(EmbeddedProjectResource embedResource)
         {
             if(embedResource == null)
             {
-                return BadRequest("embed is null");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "the embed resource is not valid.",
+                    Detail = "The embed resource is null.",
+                    Instance = "48C4A6DD-30AD-434F-BE98-694AA9F80140"
+                };
+                return BadRequest(problem);
             }
             EmbeddedProject embeddedProject = mapper.Map<EmbeddedProjectResource, EmbeddedProject>(embedResource);
-            // Do user validation about the rights of the project
+
+            Project project = await projectService.FindAsync(embedResource.ProjectId);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Project does not exist.",
+                    Detail = "There is no project with this project ID.",
+                    Instance = "644FE34C-FC98-4BE9-8BB7-D0773409F636"
+                };
+                return BadRequest(problem);
+            }
+
+            string identity = HttpContext.User.GetStudentId(HttpContext);
+            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
+            User user = await userService.GetUserByIdentityIdAsync(identity);
+
+            if(!(project.UserId == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User is not allowed to create an embed project.",
+                    Detail = "The user does not own the project and does not have enough privileges to add an embed project.",
+                    Instance = "D6E83BEC-D9FA-4C86-9FA7-7D74DE0F5B23"
+                };
+                return BadRequest(problem);
+            }
 
             //Ensure we have a non existing Guid
             Guid guid;
@@ -124,26 +174,52 @@ namespace API.Controllers
                 return Created(nameof(CreateEmbeddedProject), mapper.Map<EmbeddedProject, EmbeddedProjectResourceResult>(embeddedProject));
             } catch
             {
-                return BadRequest("Could not Create the Embedded project");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Could not create the Embedded project.",
+                    Detail = "The database failed to save the embed project.",
+                    Instance = "D481A8DD-B507-4AC5-A2CB-16EBEF758097"
+                };
+                return BadRequest(problem);
             }
         }
 
         /// <summary>
-        /// Deletes the highlight.
+        /// Deletes the embeddedProject.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns></returns>
         [HttpDelete("{guid}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.EmbedWrite))]
-        public async Task<IActionResult> DeleteHighlight(string guid)
+        [Authorize]
+        public async Task<IActionResult> DeleteEmbeddedProject(string guid)
         {
             EmbeddedProject embeddedProject = await embedService.FindAsync(new Guid(guid));
             if( embeddedProject == null)
             {
-                return NotFound();
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Embedded project not found.",
+                    Detail = "There was no embedded project found with this GUID.",
+                    Instance = "35730158-1DED-4767-9C70-253C7A975715"
+                };
+                return NotFound(problem);
             }
 
-            //TODO validate permissions.
+            
+            string identity = HttpContext.User.GetStudentId(HttpContext);
+            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
+
+            if(!(embeddedProject.User.IdentityId == identity || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User is not allowed to delete the embedded project.",
+                    Detail = "The user does not own the project and does not have enough privileges to delete an embed project.",
+                    Instance = "35730158-1DED-4767-9C70-253C7A975715"
+                };
+                return BadRequest(problem);
+            }
+
             await embedService.RemoveAsync(embeddedProject.Id);
             embedService.Save();
             return Ok();

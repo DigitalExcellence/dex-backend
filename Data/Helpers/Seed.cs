@@ -140,7 +140,20 @@ namespace Data.Helpers
                     RoleId = 3,
                     Id = 9,
                     Scope = nameof(Defaults.Scopes.HighlightWrite)
-                }));
+                },
+                new
+                {
+                    RoleId = 3,
+                    Id = 10,
+                    Scope = nameof(Defaults.Scopes.EmbedRead)
+                }, new
+                {
+                    RoleId = 3,
+                    Id = 11,
+                    Scope = nameof(Defaults.Scopes.EmbedWrite)
+                }
+
+                ));
 
             modelBuilder.Entity<User>().HasData(
                 new
