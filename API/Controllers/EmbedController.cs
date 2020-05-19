@@ -166,6 +166,8 @@ namespace API.Controllers
                 }
             }
             embeddedProject.Guid = guid;
+            embeddedProject.User = user;
+
 
             try
             {
