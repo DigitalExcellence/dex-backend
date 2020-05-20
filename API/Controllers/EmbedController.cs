@@ -152,7 +152,7 @@ namespace API.Controllers
                     Detail = "The user does not own the project and does not have enough privileges to add an embed project.",
                     Instance = "D6E83BEC-D9FA-4C86-9FA7-7D74DE0F5B23"
                 };
-                return BadRequest(problem);
+                return Unauthorized(problem);
             }
 
             //Ensure we have a non existing Guid
@@ -219,7 +219,7 @@ namespace API.Controllers
                     Detail = "The user does not own the project and does not have enough privileges to delete an embed project.",
                     Instance = "35730158-1DED-4767-9C70-253C7A975715"
                 };
-                return BadRequest(problem);
+                return Unauthorized(problem);
             }
 
             await embedService.RemoveAsync(embeddedProject.Id);
