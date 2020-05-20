@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200504131144_add_authorization_role_feature")]
-    partial class add_authorization_role_feature
+    [Migration("20200520133907_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,12 +107,15 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.Role", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("id");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Role");
                 });
@@ -124,7 +127,7 @@ namespace _4_Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("Roleid")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Scope")
@@ -132,7 +135,7 @@ namespace _4_Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Roleid");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("RoleScope");
                 });
@@ -159,12 +162,12 @@ namespace _4_Data.Migrations
                     b.Property<string>("ProfileUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Roleid")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Roleid");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("User");
                 });
@@ -200,14 +203,14 @@ namespace _4_Data.Migrations
                 {
                     b.HasOne("Models.Role", null)
                         .WithMany("Scopes")
-                        .HasForeignKey("Roleid");
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("Models.User", b =>
                 {
                     b.HasOne("Models.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("Roleid");
+                        .HasForeignKey("RoleId");
                 });
 #pragma warning restore 612, 618
         }

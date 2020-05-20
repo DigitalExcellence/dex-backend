@@ -18,6 +18,7 @@
 using API.Configuration;
 using API.Extensions;
 using Data;
+using Data.Helpers;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -201,7 +202,7 @@ namespace API
         {
             
 
-            UpdateDatabase(app);
+            UpdateDatabase(app,env);
             if(env.IsDevelopment())
             {
                 //app.UseBrowserLink();
@@ -294,7 +295,7 @@ namespace API
         /// Initializes the database
         /// </summary>
         /// <param name="app"></param>
-        private static void UpdateDatabase(IApplicationBuilder app)
+        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env)
         {
             using(IServiceScope serviceScope = app.ApplicationServices
                                                   .GetRequiredService<IServiceScopeFactory>()
@@ -303,11 +304,57 @@ namespace API
                 using(ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     context.Database.Migrate();
+                    if(!context.Role.Any())
+                    {
+                        // seed roles
+                        context.AddRange(Seed.SeedRoles());
+                        context.SaveChanges();
+                    }
+                    if(!context.User.Any())
+                    {
+                        // seed admin
+                        List<Role> roles = context.Role.ToList();
+                        context.User.Add(Seed.SeedAdminUser(roles));
+                        context.SaveChanges();
+
+                        if(!env.IsProduction())
+                        {
+                            //Seed random users
+                            context.User.AddRange(Seed.SeedUsers());
+                            context.SaveChanges();
+
+                        }
+                    }
+
+                    if(!env.IsProduction())
+                    {
+                        if(!context.Project.Any())
+                        {
+                            //Seed projects
+                            List<User> users = context.User.ToList();
+                            context.Project.AddRange(Seed.SeedProjects(users));
+                            context.SaveChanges();
+
+                        }
+                        if(!context.Collaborators.Any())
+                        {
+                            //seed collaborators
+                            List<Project> projects = context.Project.ToList();
+                            context.Collaborators.AddRange(Seed.SeedCollaborators(projects));
+                            context.SaveChanges();
+
+                        }
+                        if(!context.Highlight.Any())
+                        {
+                            List<Project> projects = context.Project.ToList();
+                            context.Highlight.AddRange(Seed.SeedHighlights(projects));
+                            context.SaveChanges();
+                        }
+                        // TODO seed embedded projects
+                    }
                 }
             }
         }
-
-
     }
 
 }
