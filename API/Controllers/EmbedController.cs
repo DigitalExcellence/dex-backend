@@ -49,8 +49,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="embedService">The embed service.</param>
         /// <param name="mapper">The mapper.</param>
-        /// <param name="projectService"></param>
-        /// <param name="userService"></param>
+        /// <param name="projectService">The Project service</param>
+        /// <param name="userService">The User service</param>
         public EmbedController(IEmbedService embedService, IMapper mapper, IProjectService projectService, IUserService userService)
         {
             this.embedService = embedService;
@@ -110,7 +110,7 @@ namespace API.Controllers
         /// <summary>
         ///     Creates a embedded project
         /// </summary>
-        /// <param name="embedResource"></param>
+        /// <param name="embedResource">EmbedResource</param>
         /// <returns></returns>
         [HttpPost]
         [Authorize]

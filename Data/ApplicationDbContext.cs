@@ -23,22 +23,57 @@ using Models;
 
 namespace Data
 {
-
+    /// <summary>
+    /// ApplicationDatabaseContext
+    /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class ApplicationDbContext : DbContext
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        /// <value>
+        /// The user.
+        /// </value>
         public DbSet<User> User { get; set; }
 
+        /// <summary>
+        /// Gets or sets the project.
+        /// </summary>
+        /// <value>
+        /// The project.
+        /// </value>
         public DbSet<Project> Project { get; set; }
-
+        /// <summary>
+        /// Gets or sets the collaborators.
+        /// </summary>
+        /// <value>
+        /// The collaborators.
+        /// </value>
         public DbSet<Collaborator> Collaborators { get; set; }
-
+        /// <summary>
+        /// Gets or sets the highlight.
+        /// </summary>
+        /// <value>
+        /// The highlight.
+        /// </value>
         public DbSet<Highlight> Highlight { get; set; }
-
+        /// <summary>
+        /// Gets or sets the embedded project.
+        /// </summary>
+        /// <value>
+        /// The embedded project.
+        /// </value>
         public DbSet<EmbeddedProject> EmbeddedProject { get; set; }
-        
+        /// <summary>
+        /// Gets or sets the role.
+        /// </summary>
+        /// <value>
+        /// The role.
+        /// </value>
         public DbSet<Role> Role { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
