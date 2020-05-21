@@ -161,7 +161,7 @@ namespace API.Controllers
             while(true)
             {
                 guid = Guid.NewGuid();
-                if(await embedService.IsNonExistingGuid(guid))
+                if(await embedService.IsNonExistingGuidAsync(guid))
                 {
                     break;
                 }

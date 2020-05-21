@@ -44,7 +44,7 @@ namespace Repositories
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns></returns>
-        Task<bool> IsNonExistingGuid(Guid guid);
+        Task<bool> IsNonExistingGuidAsync(Guid guid);
     }
     /// <summary>
     /// EmbedRepository
@@ -94,7 +94,7 @@ namespace Repositories
         /// <returns>
         ///   <c>true</c> if [is non existing unique identifier] [the specified unique identifier]; otherwise, <c>false</c>.
         /// </returns>
-        public async Task<bool> IsNonExistingGuid(Guid guid)
+        public async Task<bool> IsNonExistingGuidAsync(Guid guid)
         {
             return await GetDbSet<EmbeddedProject>()
                 .Where(e => e.Guid == guid)

@@ -43,7 +43,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns></returns>
-        Task<bool> IsNonExistingGuid(Guid guid);
+        Task<bool> IsNonExistingGuidAsync(Guid guid);
     }
     /// <summary>
     /// EmbedService
@@ -86,9 +86,9 @@ namespace Services.Services
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns></returns>
-        public async Task<bool> IsNonExistingGuid(Guid guid)
+        public async Task<bool> IsNonExistingGuidAsync(Guid guid)
         {
-            return await Repository.IsNonExistingGuid(guid);
+            return await Repository.IsNonExistingGuidAsync(guid);
         }
     }
 
