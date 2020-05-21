@@ -188,7 +188,7 @@ namespace API.Controllers
                     Detail = "The user is not allowed to edit the project.",
                     Instance = "2E765D18-8EBC-4117-8F9E-B800E8967038"
                 };
-                return BadRequest(problem);
+                return Unauthorized(problem);
             }
 
             projectService.Update(project);
@@ -228,7 +228,7 @@ namespace API.Controllers
                     Detail = "The user is not allowed to delete the project.",
                     Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
                 };
-                return BadRequest(problem);
+                return Unauthorized(problem);
             }
 
             await projectService.RemoveAsync(projectId);
