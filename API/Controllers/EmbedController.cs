@@ -104,7 +104,8 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            return Ok(mapper.Map<Project, ProjectResourceResult>(embeddedProject.Project));
+            Project project = await projectService.FindWithUserAndCollaboratorsAsync(embeddedProject.ProjectId);
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
         /// <summary>
