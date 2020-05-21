@@ -1,805 +1,2282 @@
 {
 	"info": {
-		"_postman_id": "c7b0c87d-4656-4421-bb6f-fc87e559ee46",
+		"_postman_id": "96043577-360a-48d7-a0ba-19ff42cdb2f7",
 		"name": "Digital-Excellence-API",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "User",
+			"name": "Non-ACL",
 			"item": [
 				{
-					"name": "User-CreateUser",
-					"event": [
+					"name": "User",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "67c0e6bd-9f13-4cb0-91f3-e9cf378f85f0",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var userName = pm.environment.get(\"userName\");",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Status code is 201\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Check created UserName\", function () {",
-									"    pm.environment.set(\"userId\", jsonData.id);",
-									"    pm.expect(jsonData.name).to.eql(userName);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"identityId\": \"{{userId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{apiUrl}}/api/User",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"User"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User-GetUser",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "6df5085c-b4cc-46f3-92f7-e4eebfc0ba60",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var userId = parseInt(pm.environment.get(\"userId\"));",
-									"var userName = pm.environment.get(\"userName\");",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"Check previously created UserId with id \" + userId, function () {",
-									"    pm.expect(jsonData.id).to.eql(userId);",
-									"});",
-									"",
-									"pm.test(\"Check previously created UserName with id \" + userId, function () {",
-									"    pm.expect(jsonData.name).to.eql(userName);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/User/{{userId}}?",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"User",
-								"{{userId}}"
-							],
-							"query": [
+							"name": "User-CreateUser",
+							"event": [
 								{
-									"key": "",
-									"value": null
+									"listen": "test",
+									"script": {
+										"id": "84d925a4-3106-48fa-ab96-b87bb583fcf4",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Check created UserName\", function () {",
+											"    pm.environment.set(\"identityId\", jsonData.id);",
+											"    pm.expect(jsonData.name).to.eql(userName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User-UpdateUser",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "a03e71c5-df47-4007-83fe-b59105757edf",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var userName = pm.environment.get(\"userNameUpdated\");",
-									"pm.environment.set(\"userName\", userName);",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"Check updated postmantest UserName\", function () {",
-									"    pm.expect(jsonData.name).to.eql(userName);",
-									"});"
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{userNameUpdated}}\",\r\n  \"email\": \"postmantest_email\",\r\n  \"identityId\": \"postmantest_identityId\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"identityId\": \"{{userId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{apiUrl}}/api/User/{{userId}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"User",
-								"{{userId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "User-GetUpdatedUser",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "c28b3b52-10e9-4120-be38-aafb4e951ec7",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var userId = parseInt(pm.environment.get(\"userId\"));",
-									"var userName = pm.environment.get(\"userName\")",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \"+ responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"Updated UserId\", function () {",
-									"    pm.expect(jsonData.id).to.eql(userId);",
-									"});",
-									"",
-									"pm.test(\"Updated UserName\", function(){",
-									"   pm.expect(jsonData.name).to.eql(userName);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/User/{{userId}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"User",
-								"{{userId}}"
-							],
-							"query": [
+							"name": "User-GetUser",
+							"event": [
 								{
-									"key": "",
-									"value": null,
-									"disabled": true
+									"listen": "test",
+									"script": {
+										"id": "7fe025de-bd7f-46ed-b6d7-4d1e4f0858b4",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Check previously created Identity Id with id \" + identityId, function () {",
+											"    pm.expect(jsonData.id).to.eql(identityId);",
+											"});",
+											"",
+											"pm.test(\"Check previously created UserName with id \" + userName, function () {",
+											"    pm.expect(jsonData.name).to.eql(userName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Project",
-			"item": [
-				{
-					"name": "Project-CreateProject",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "e24d4603-52f5-46b6-b964-319afcec9cca",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var userId = parseInt(pm.environment.get(\"userId\"));",
-									"var userName = pm.environment.get(\"userName\");",
-									"var projectName = pm.environment.get(\"projectName\");",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.environment.set(\"projectId\", jsonData.id);",
-									"",
-									"pm.test(\"Status code is 201\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"ProjectName is set correctly\", function(){",
-									"    pm.expect(jsonData.name).to.eql(projectName);",
-									"});",
-									"",
-									"pm.test(\"UserId is set correctly\", function(){",
-									"    pm.expect(jsonData.userId).to.eql(userId);",
-									"});",
-									"",
-									"pm.test(\"User.Name is correct\", function () {",
-									"    pm.expect(jsonData.user.name).to.eql(userName);",
-									"});",
-									"",
-									"pm.test(\"User.ID is correct\", function(){",
-									"    pm.expect(jsonData.user.id).to.eql(userId);",
-									"});"
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{identityId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{identityId}}"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{apiUrl}}/api/Project",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Project-GetAllProjects",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "ca254560-ffcc-4769-9d60-2d242a5efb27",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var userId = parseInt(pm.environment.get(\"userId\"));",
-									"var projectName = pm.environment.get(\"projectName\");",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"var foundAt;",
-									"",
-									"function findProject(jsonData, name){",
-									"    for(var i = 0; i < jsonData.length; i++){",
-									"        if(jsonData[i].name == name){",
-									"            return i;",
-									"        }",
-									"    }",
-									"    return -1;",
-									"}",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"Project is in list\", function(){",
-									"    foundAt = findProject(jsonData, projectName);",
-									"    pm.expect(foundAt).to.not.eql(-1);",
-									"});",
-									"",
-									"pm.test(\"ProjectName is set correctly\", function () {",
-									"    pm.expect(jsonData[foundAt].name).to.eql(projectName);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/Project",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Project-GetProject",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "af55f5fc-7e07-4dd3-880c-cf21c822858f",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var projectId = parseInt(pm.environment.get(\"projectId\"));",
-									"var projectName = pm.environment.get(\"projectName\");",
-									"var userId = parseInt(pm.environment.get(\"userId\"));",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"ProjectName is set correctly\", function () {",
-									"    pm.expect(jsonData.name).to.eql(projectName);",
-									"});",
-									"",
-									"pm.test(\"UserId is set correctly\", function(){",
-									"    pm.expect(jsonData.userId).to.eql(userId);",
-									"});",
-									"",
-									"pm.test(\"User.Name is correct\", function () {",
-									"    pm.expect(jsonData.user.name).to.eql(userName);",
-									"});",
-									"",
-									"pm.test(\"User.ID is correct\", function(){",
-									"    pm.expect(jsonData.user.id).to.eql(userId);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectId}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project",
-								"{{projectId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Project-UpdateProject",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "3a0f6c57-ac19-48be-83fe-d8e772100e97",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var projectName = pm.environment.get(\"projectNameUpdated\");",
-									"pm.environment.set(\"projectName\", projectName);",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"ProjectName is set correctly\", function () {",
-									"    pm.expect(jsonData.name).to.eql(projectName);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "User-UpdateUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "47491fbb-1986-43e0-b07e-49c40c2c9113",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userName = pm.environment.get(\"userNameUpdated\");",
+											"pm.environment.set(\"userName\", userName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Check updated postmantest UserName\", function () {",
+											"    pm.expect(jsonData.name).to.eql(userName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{userNameUpdated}}\",\r\n  \"email\": \"postmantest_email\",\r\n  \"identityId\": \"postmantest_identityId\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{identityId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{identityId}}"
+									]
+								}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectId}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project",
-								"{{projectId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Project-GetUpdatedProject",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "6b6ca11c-996c-452e-a137-2ec21383372b",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"var userId = parseInt(pm.environment.get(\"userId\"));",
-									"var userName = pm.environment.get(\"userName\");",
-									"var projectId = parseInt(pm.environment.get(\"projectId\"));",
-									"var projectName = pm.environment.get(\"projectName\");",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"ProjectName is set correctly\", function () {",
-									"    pm.expect(jsonData.name).to.eql(projectName);",
-									"});",
-									"",
-									"pm.test(\"UserId is set correctly\", function(){",
-									"    pm.expect(jsonData.userId).to.eql(userId);",
-									"});",
-									"",
-									"pm.test(\"User.Name is correct\", function () {",
-									"    pm.expect(jsonData.user.name).to.eql(userName);",
-									"});",
-									"",
-									"pm.test(\"User.ID is correct\", function(){",
-									"    pm.expect(jsonData.user.id).to.eql(userId);",
-									"});"
+							"name": "User-GetUpdatedUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c1e02e7f-75a3-41cb-bf00-193d0327714e",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\")",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Updated identityId\", function () {",
+											"    pm.expect(jsonData.id).to.eql(identityId);",
+											"});",
+											"",
+											"pm.test(\"Updated UserName\", function () {",
+											"    pm.expect(jsonData.name).to.eql(userName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript"
-							}
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{identityId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{identityId}}"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectId}}",
-							"host": [
-								"{{apiUrl}}"
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Project",
+					"item": [
+						{
+							"name": "Project-CreateProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "07345129-8c06-48c7-9567-7a6a1a01b7c6",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});",
+											"",
+											"pm.test(\"IdentityId is set correctly\", function () {",
+											"    pm.expect(jsonData.identityId).to.eql(identityId);",
+											"});",
+											"",
+											"pm.test(\"User.Name is correct\", function () {",
+											"    pm.expect(jsonData.user.name).to.eql(userName);",
+											"});",
+											"",
+											"pm.test(\"User.ID is correct\", function () {",
+											"    pm.expect(jsonData.user.identityId).to.eql(identityId);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"api",
-								"Project",
-								"{{projectId}}"
-							]
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetAllProjects",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e1979519-5704-4cbb-95e0-90e03b373274",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"var foundAt;",
+											"",
+											"function findProject(jsonData, name) {",
+											"    for (var i = 0; i < jsonData.length; i++) {",
+											"        if (jsonData[i].name == name) {",
+											"            return i;",
+											"        }",
+											"    }",
+											"    return -1;",
+											"}",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Project is in list\", function () {",
+											"    foundAt = findProject(jsonData, projectName);",
+											"    pm.expect(foundAt).to.not.eql(-1);",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData[foundAt].name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f0a0e2b9-19d6-44e5-9a9c-4ad81be7cd10",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});",
+											"",
+											"pm.test(\"IdentityId is set correctly\", function () {",
+											"    pm.expect(jsonData.identityId).to.eql(identityId);",
+											"});",
+											"",
+											"pm.test(\"User.Name is correct\", function () {",
+											"    pm.expect(jsonData.user.name).to.eql(userName);",
+											"});",
+											"",
+											"pm.test(\"User.IdentityId is correct\", function () {",
+											"    pm.expect(jsonData.user.identityId).to.eql(identityId);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-UpdateProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b15cd14d-e1f5-4f0e-aa5b-e029d4012fac",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectName = pm.environment.get(\"projectNameUpdated\");",
+											"pm.environment.set(\"projectName\", projectName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetUpdatedProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a7386242-3c7d-44d0-9490-22df91a2cb38",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});",
+											"",
+											"pm.test(\"UserId is set correctly\", function () {",
+											"    pm.expect(jsonData.userId).to.eql(userId);",
+											"});",
+											"",
+											"pm.test(\"User.Name is correct\", function () {",
+											"    pm.expect(jsonData.user.name).to.eql(userName);",
+											"});",
+											"",
+											"pm.test(\"User.IdentityId is correct\", function () {",
+											"    pm.expect(jsonData.user.identityId).to.eql(identityId);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Search",
+					"item": [
+						{
+							"name": "Search-SearchInternal",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ee2f9232-29b6-4097-ae48-67aca16b742e",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Search/internal/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Search",
+										"internal",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Cleanup",
+					"item": [
+						{
+							"name": "Project-DeleteProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "644b67c1-7c65-4e93-9317-437bcd75119b",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-DeleteUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "200e2e7a-fa2d-4e1a-baef-94de99ce73cb",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{bobUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{identityId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{identityId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Search",
+			"name": "ACL",
 			"item": [
 				{
-					"name": "Search-SearchInternal",
-					"event": [
+					"name": "User",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "21f90cd5-d4e0-45d5-ba4c-a3b201078aee",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.ok;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});"
+							"name": "User-CreateUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "588cc2a0-c54c-46b7-9936-d15d8f2fda54",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript"
-							}
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"identityId\": \"{{userId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-CreateUser-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3e003046-3476-4c15-8e55-d2679ed0b98a",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"identityId\": \"{{userId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-GetUser-Other",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "991c689c-dad2-439d-a873-1be3e4c5fc12",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{bobUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{bobUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-GetUser-Self",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "30d98f1f-5bbe-4d23-b0a1-27a6daa400a1",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"type": "text",
+										"value": "{{aliceUserId}}"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{aliceUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{aliceUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-GetUser-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "921c85c8-8f5a-44b1-9023-47c2569c6553",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{aliceUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{aliceUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-UpdateUser-Self",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "bbbe985e-792b-44ef-8d81-9150d121b43c",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userName = pm.environment.get(\"userNameUpdated\");",
+											"pm.environment.set(\"userName\", userName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Check updated postmantest UserName\", function () {",
+											"    pm.expect(jsonData.name).to.eql(userName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"alicez\",\r\n  \"email\": \"AliceSmith@email.com\",\r\n  \"identityId\": \"818727\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{aliceUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{aliceUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-UpdateUser-Other",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9fc77561-b860-4c02-b282-b378f12f0ecb",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userName = pm.environment.get(\"userNameUpdated\");",
+											"pm.environment.set(\"userName\", userName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Check updated postmantest UserName\", function () {",
+											"    pm.expect(jsonData.name).to.eql(userName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "StudentId",
+										"type": "text",
+										"value": "{{aliceUserId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{bobUserId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{bobUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{bobUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-UpdateUser-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9cd58f32-6189-4d1f-991a-c47a951ba40e",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userName = pm.environment.get(\"userNameUpdated\");",
+											"pm.environment.set(\"userName\", userName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"Check updated postmantest UserName\", function () {",
+											"    pm.expect(jsonData.name).to.eql(userName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{bobUserId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{bobUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{bobUserId}}"
+									]
+								}
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/Search/internal/1",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Search",
-								"internal",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Cleanup",
-			"item": [
-				{
-					"name": "Project-DeleteProject",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "af152ee4-551e-40ec-aa3b-7ac321e6eb37",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectId}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project",
-								"{{projectId}}"
-							]
-						}
-					},
-					"response": []
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "User-DeleteUser",
-					"event": [
+					"name": "Project",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "bb4148aa-9972-4f49-ab64-267c5601447f",
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});"
+							"name": "Project-CreateProject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "edbecc7d-20bd-448b-8095-25b8becdb00b",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId\", jsonData.id);",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript"
-							}
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-CreateProject-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b4f67c3a-ef8c-4d48-9f44-3d72d07d77b1",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var userId = parseInt(pm.environment.get(\"userId\"));",
+											"var userName = pm.environment.get(\"userName\");",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId\", jsonData.id);",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetAllProjects",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "fb1c8c9e-ad3e-475f-92cc-0a8656206609",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"var foundAt;",
+											"",
+											"function findProject(jsonData, name) {",
+											"    for (var i = 0; i < jsonData.length; i++) {",
+											"        if (jsonData[i].name == name) {",
+											"            return i;",
+											"        }",
+											"    }",
+											"    return -1;",
+											"}",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetAllProjects-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "080ab56c-2db8-4f5c-931c-8433bdda8d33",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"var foundAt;",
+											"",
+											"function findProject(jsonData, name) {",
+											"    for (var i = 0; i < jsonData.length; i++) {",
+											"        if (jsonData[i].name == name) {",
+											"            return i;",
+											"        }",
+											"    }",
+											"    return -1;",
+											"}",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetProject-Self",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ef4796f3-81b3-4c90-acfb-9a669283f9a1",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetProject-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "945bc5ac-411b-49c9-8be8-5efdc1e70138",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-GetProject-Other",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a34fabf7-2ed3-4356-98c2-2e68ab148b30",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+											"var projectName = pm.environment.get(\"projectName\");",
+											"var userId = parseInt(pm.environment.get(\"userId\"));",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"type": "text",
+										"value": "{{aliceUserId}}"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-UpdateProject-Self",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "665ee306-725d-4cbd-95ad-67de2cbfd284",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectName = pm.environment.get(\"projectNameUpdated\");",
+											"pm.environment.set(\"projectName\", projectName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "StudentId",
+										"type": "text",
+										"value": "{{aliceUserId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-UpdateProject-Other",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "1af58e7d-3c3f-4ad2-991f-2ebedf276a1c",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectName = pm.environment.get(\"projectNameUpdated\");",
+											"pm.environment.set(\"projectName\", projectName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "StudentId",
+										"type": "text",
+										"value": "{{aliceUserId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-UpdateProject-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3527dfce-ab6f-4cd1-9b48-373d8330009a",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"var projectName = pm.environment.get(\"projectNameUpdated\");",
+											"pm.environment.set(\"projectName\", projectName);",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"    pm.response.to.be.ok;",
+											"    pm.response.to.be.withBody;",
+											"    pm.response.to.be.json;",
+											"});",
+											"",
+											"pm.test(\"ProjectName is set correctly\", function () {",
+											"    pm.expect(jsonData.name).to.eql(projectName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "StudentId",
-								"value": "88421113",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/User/{{userId}}",
-							"host": [
-								"{{apiUrl}}"
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Search",
+					"item": [
+						{
+							"name": "Search-SearchInternal",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "562887a4-95ab-48eb-9dd6-846e0160844f",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"api",
-								"User",
-								"{{userId}}"
-							]
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "88421113",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Search/internal/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Search",
+										"internal",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search-SearchInternal-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "982164c8-8f7a-4819-a8df-0c4807abee3f",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.ok;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/Search/internal/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Search",
+										"internal",
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Cleanup",
+					"item": [
+						{
+							"name": "Project-DeleteProject-Other",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6056a480-2f26-4f03-abdc-ef5fccb57c54",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-DeleteProject-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "05281f44-5ab6-4317-a51c-12c7e994762b",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-DeleteProject-Self",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "902b7cde-c44b-40cc-8c44-19f493f8e098",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "StudentId",
+										"type": "text",
+										"value": "{{aliceUserId}}"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-DeleteUser-Other",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e235b6a3-8322-4145-9b71-effee24c22f4",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "StudentId",
+										"value": "{{aliceUserId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{bobUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{bobUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-DeleteUser-Self",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "82183e3b-7778-4d11-ae86-3677e11318c9",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "StudentId",
+										"type": "text",
+										"value": "{{aliceUserId}}"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{aliceUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{aliceUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User-DeleteUser-Guest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3b77317f-83df-44d0-8dde-d659af7dda83",
+										"exec": [
+											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											"",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{aliceUserId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{aliceUserId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -829,7 +2306,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "974efd04-8cc3-4a51-9f55-23881dc94f06",
+				"id": "aa750ad5-678f-4a20-8995-ccc347297be9",
 				"type": "text/javascript",
 				"exec": [
 					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
@@ -873,7 +2350,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "83c72b77-223a-4db4-bb23-1a18bb10c038",
+				"id": "6186b1cf-a9ed-4400-820b-3c892df7faf0",
 				"type": "text/javascript",
 				"exec": [
 					""
