@@ -320,9 +320,9 @@ namespace API
                         if(!env.IsProduction())
                         {
                             //Seed random users
+                            context.User.Add(Seed.SeedPrUser(roles));
                             context.User.AddRange(Seed.SeedUsers());
                             context.SaveChanges();
-
                         }
                     }
 

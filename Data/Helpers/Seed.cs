@@ -114,6 +114,19 @@ namespace Data.Helpers
             return user;
         }
         /// <summary>
+        /// Seeds the pr user.
+        /// </summary>
+        /// <param name="roles">The roles.</param>
+        /// <returns></returns>
+        public static User SeedPrUser(List<Role> roles)
+        {
+            Role PrRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
+            User user = new User();
+            user.IdentityId = "985632147";
+            user.Email = "Pr@dex.software";
+            user.Name = "Pr jerry";
+        }
+        /// <summary>
         ///     Seed random projects into the database using fake date from Bogus
         /// </summary>
         public static List<Project> SeedProjects(List<User> users)

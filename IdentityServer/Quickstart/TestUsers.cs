@@ -71,6 +71,50 @@ namespace IdentityServer
                                                          new Claim(JwtClaimTypes.Scope,
                                                                    nameof(Defaults.Scopes.HighlightWrite))
                                                      }
+                                                 },
+                                                 new TestUser
+                                                 {
+                                                     SubjectId = "985632147",
+                                                     Username = "jerry",
+                                                     Password = "jerry",
+                                                     Claims =
+                                                     {
+                                                         new Claim(JwtClaimTypes.Name, "jerry Smith"),
+                                                         new Claim(JwtClaimTypes.GivenName, "jerry"),
+                                                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                                                         new Claim(JwtClaimTypes.Email, "jerrySmith@email.com"),
+                                                         new Claim(JwtClaimTypes.EmailVerified,
+                                                                   "true",
+                                                                   ClaimValueTypes.Boolean),
+                                                         new Claim(JwtClaimTypes.WebSite, "http://jerry.com"),
+                                                         new Claim(JwtClaimTypes.Address,
+                                                                   @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }",
+                                                                   IdentityServerConstants.ClaimValueTypes.Json),
+                                                         new Claim(JwtClaimTypes.Scope,
+                                                                   nameof(Defaults.Scopes.HighlightWrite))
+                                                     }
+                                                 },
+                                                 new TestUser
+                                                 {
+                                                     SubjectId = "147852369",
+                                                     Username = "berry",
+                                                     Password = "berry",
+                                                     Claims =
+                                                     {
+                                                         new Claim(JwtClaimTypes.Name, "berry Smith"),
+                                                         new Claim(JwtClaimTypes.GivenName, "berry"),
+                                                         new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                                                         new Claim(JwtClaimTypes.Email, "berrySmith@email.com"),
+                                                         new Claim(JwtClaimTypes.EmailVerified,
+                                                                   "true",
+                                                                   ClaimValueTypes.Boolean),
+                                                         new Claim(JwtClaimTypes.WebSite, "http://berry.com"),
+                                                         new Claim(JwtClaimTypes.Address,
+                                                                   @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }",
+                                                                   IdentityServerConstants.ClaimValueTypes.Json),
+                                                         new Claim(JwtClaimTypes.Scope,
+                                                                   nameof(Defaults.Scopes.HighlightWrite))
+                                                     }
                                                  }
                                              };
 
