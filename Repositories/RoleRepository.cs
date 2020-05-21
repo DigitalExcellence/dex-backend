@@ -29,15 +29,35 @@ namespace Repositories
 
     public interface IRoleRepository : IRepository<Role>
     {
-
+        /// <summary>
+        /// Gets all asynchronous.
+        /// </summary>
+        /// <returns></returns>
         Task<List<Role>> GetAllAsync();
-    }
+        /// <summary>
+        /// Finds the name of the by.
+        /// </summary>
+        /// <returns></returns>
+        Task<Role> FindByName(string roleName);
 
+    }
+    /// <summary>
+    /// Role Repository
+    /// </summary>
+    /// <seealso cref="Repositories.Base.Repository{Models.Role}" />
+    /// <seealso cref="Repositories.IRoleRepository" />
     public class RoleRepository : Repository<Role>, IRoleRepository
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoleRepository"/> class.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
         public RoleRepository(DbContext dbContext) : base(dbContext) { }
-
+        /// <summary>
+        /// Finds the asynchronous.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public override Task<Role> FindAsync(int id)
         {
             return GetDbSet<Role>()
@@ -45,13 +65,29 @@ namespace Repositories
                    .Include(p => p.Scopes)
                    .SingleOrDefaultAsync();
         }
-
+        /// <summary>
+        /// Gets all asynchronous.
+        /// </summary>
+        /// <returns></returns>
         public Task<List<Role>> GetAllAsync()
         {
             return GetDbSet<Role>()
                    .Include(p => p.Scopes)
                    .ToListAsync();
         }
+        /// <summary>
+        /// Finds the name of the by.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <returns></returns>
+        public Task<Role> FindByName(string roleName)
+        {
+            return GetDbSet<Role>()
+                   .Include(p => p.Scopes)
+                   .Where(r => r.Name == roleName)
+                   .SingleOrDefaultAsync();
+        }
+
     }
 
 }
