@@ -29,10 +29,30 @@ namespace Services.Services
 
     public interface IRoleService : IService<Role>
     {
-
+        /// <summary>
+        /// Gets all asynchronous.
+        /// </summary>
+        /// <returns></returns>
         Task<List<Role>> GetAllAsync();
+        /// <summary>
+        /// Gets the valid scopes.
+        /// </summary>
+        /// <returns></returns>
         List<string> GetValidScopes();
-        bool isValidScope(string scope);
+        /// <summary>
+        /// Determines whether [is valid scope] [the specified scope].
+        /// </summary>
+        /// <param name="scope">The scope.</param>
+        /// <returns>
+        ///   <c>true</c> if [is valid scope] [the specified scope]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsValidScope(string scope);
+        /// <summary>
+        /// Finds the name of the by.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <returns></returns>
+        Task<Role> FindByName(string roleName);
 
     }
 
@@ -76,10 +96,20 @@ namespace Services.Services
         /// <returns>
         ///   <c>true</c> if [is valid scope] [the specified scope]; otherwise, <c>false</c>.
         /// </returns>
-        public bool isValidScope(string scope)
+        public bool IsValidScope(string scope)
         {
             List<string> scopes = GetValidScopes();
             return scopes.Contains(scope);
+        }
+
+        /// <summary>
+        /// Finds the name of the by.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <returns></returns>
+        public Task<Role> FindByName(string roleName)
+        {
+            return Repository.FindByName(roleName);
         }
 
     }

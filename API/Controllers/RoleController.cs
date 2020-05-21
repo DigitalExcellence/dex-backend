@@ -141,7 +141,7 @@ namespace API.Controllers
 
             foreach(RoleScope roleScope in role.Scopes)
             {
-                if(roleService.isValidScope(roleScope.Scope) == false)
+                if(roleService.IsValidScope(roleScope.Scope) == false)
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
@@ -198,7 +198,7 @@ namespace API.Controllers
 
             foreach(RoleScope roleScope in role.Scopes)
             {
-                if(!roleService.isValidScope(roleScope.Scope))
+                if(!roleService.IsValidScope(roleScope.Scope))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
