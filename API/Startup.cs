@@ -163,8 +163,10 @@ namespace API
 
                                 { "HighlightWrite", "Highlight write operations" },
                                 { "HighlightRead", "Highlight read operations" },
+                              
                                 { "profile", "Profile information" },
                                 { "openid", "Open id information" }
+
                             }
                         }
                     }
@@ -178,7 +180,8 @@ namespace API
                         },
                         new[] { "" }
                     }
-                }); ;
+                });
+
             });
 
             // Add application services.
@@ -285,8 +288,6 @@ namespace API
             });
 
             app.UseStaticFiles();
-
-            
         }
 
         /// <summary>
