@@ -15,12 +15,14 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
+using RestSharp;
 using Services.Services;
 using System.Threading.Tasks;
 
@@ -49,6 +51,28 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets the current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            string studentId = HttpContext.User.GetStudentId(HttpContext);
+            User user = await userService.GetUserByIdentityIdAsync(studentId);
+            if(user == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed getting the user account.",
+                     Detail = "The user could not be found in the database.",
+                     Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                };
+                return NotFound(problem);
+            }
+            return Ok(mapper.Map<User, UserResourceResult>(user));
+        }
 
         /// <summary>
         ///     Get a user account.
