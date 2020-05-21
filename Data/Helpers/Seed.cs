@@ -16,7 +16,6 @@
 */
 
 using Bogus;
-using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
 using System;
@@ -58,7 +57,7 @@ namespace Data.Helpers
             List<Role> roles = new List<Role>();
             Role registeredUserRole = new Role()
             {
-                Name = "RegisteredUser",
+                Name = nameof(Defaults.Roles.RegisteredUser),
                 Scopes = new List<RoleScope>()
                 {
                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
@@ -70,7 +69,7 @@ namespace Data.Helpers
 
             Role prRole = new Role()
             {
-                Name = "PR",
+                Name = nameof(Defaults.Roles.PrUser),
                 Scopes = new List<RoleScope>()
                 {
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
@@ -81,7 +80,7 @@ namespace Data.Helpers
 
             Role administratorRole = new Role()
             {
-                Name = "Administrator",
+                Name = nameof(Defaults.Roles.Administrator),
                 Scopes = new List<RoleScope>()
                 {
                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
@@ -104,7 +103,7 @@ namespace Data.Helpers
         /// <returns></returns>
         public static User SeedAdminUser(List<Role> roles)
         {
-            Role adminRole = roles.Find(i => i.Name == "Administrator");
+            Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
 
             User user = new User();
             user.Role = adminRole;
