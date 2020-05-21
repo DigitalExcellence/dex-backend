@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Return Unauthorized instead of Bad Request when not allowed to perform action in controller - [#132](https://github.com/DigitalExcellence/dex-backend/issues/132)
-
+- get user from the session & add current user to project. - [#139](https://github.com/DigitalExcellence/dex-backend/issues/139)
 ### Deprecated
 
 ### Removed
