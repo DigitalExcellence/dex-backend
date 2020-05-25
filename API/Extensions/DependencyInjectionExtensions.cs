@@ -51,6 +51,9 @@ namespace API.Extensions
 
             services.AddScoped<ISearchService, SearchService>();
 
+            services.AddScoped<IEmbedService, EmbedService>();
+            services.AddScoped<IEmbedRepository, EmbedRepository>();
+            
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
