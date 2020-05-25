@@ -16,40 +16,49 @@
 */
 
 using System;
+using Models;
 
 namespace API.Resources
 {
 
     /// <summary>
-    ///     Resource to show single Search Result
+    /// Embedded project resource result
     /// </summary>
-    public class SearchResultResource
+    /// <seealso cref="API.Resources.EmbeddedProjectResource" />
+    public class EmbeddedProjectResourceResult: EmbeddedProjectResource
     {
 
         /// <summary>
-        ///     Get or Set the project Id
+        /// Gets or sets the identifier.
         /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
         public int Id { get; set; }
 
         /// <summary>
-        ///     Get or Set the name of the project
+        /// Gets or sets the project.
         /// </summary>
-        public string Name { get; set; }
+        /// <value>
+        /// The project.
+        /// </value>
+        public Project Project { get; set; }
 
         /// <summary>
-        ///     Get or Set a short description of the project
+        /// Gets or sets the unique identifier.
         /// </summary>
-        public string ShortDescription { get; set; }
+        /// <value>
+        /// The unique identifier.
+        /// </value>
+        public Guid Guid { get; set; }
 
         /// <summary>
-        ///     Get or Set the created date from the project
+        /// Gets or sets the user.
         /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        ///     Get or Set the last updated date from the project
-        /// </summary>
-        public DateTime Updated { get; set; }
+        /// <value>
+        /// The user.
+        /// </value>
+        public User User { get; set; }
 
     }
 

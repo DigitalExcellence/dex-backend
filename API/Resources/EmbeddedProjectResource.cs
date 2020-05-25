@@ -21,35 +21,15 @@ namespace API.Resources
 {
 
     /// <summary>
-    ///     Resource to show single Search Result
+    ///     The view model of a highlight
     /// </summary>
-    public class SearchResultResource
+    public class EmbeddedProjectResource
     {
 
         /// <summary>
-        ///     Get or Set the project Id
+        ///     This gets or sets the the id of the project that this highlight is associated with
         /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        ///     Get or Set the name of the project
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     Get or Set a short description of the project
-        /// </summary>
-        public string ShortDescription { get; set; }
-
-        /// <summary>
-        ///     Get or Set the created date from the project
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        ///     Get or Set the last updated date from the project
-        /// </summary>
-        public DateTime Updated { get; set; }
+        public int ProjectId { get; set; }
 
     }
 

@@ -72,6 +72,11 @@ namespace Models.Defaults
             [Description("This scope gives write access to the Role namespace")]
             public const string RoleWrite = "role:write";
 
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedWrite = "embed:write";
+
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedRead = "embed:read";
         }
 
     }
