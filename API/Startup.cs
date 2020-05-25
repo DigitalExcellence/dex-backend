@@ -126,6 +126,12 @@ namespace API
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.RoleWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
+                    
+                o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+
             });
 
             services.AddCors();
