@@ -18,6 +18,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Models.Defaults;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,8 +48,8 @@ namespace API.Extensions
     /// </summary>
     public class AuthorizeScopeFilter : IAuthorizationFilter
     {
-
         private readonly Claim claim;
+
 
         /// <summary>
         /// </summary>
@@ -63,10 +64,12 @@ namespace API.Extensions
         /// <param name="context"></param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+
+            var userService = context.HttpContext.RequestServices.GetService(typeof(UserService)) as UserService;        
             bool hasClaim = context.HttpContext.User.Claims.Any(c => c.Type == claim.Type && c.Value == claim.Value);
 
             //Get all scopes from the user
-            IEnumerable<Claim> scopes =
+                IEnumerable<Claim> scopes =
                 context.HttpContext.User.FindAll("scope");
             bool hasIdentityClaim = false;
 

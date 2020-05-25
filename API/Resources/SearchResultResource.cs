@@ -32,11 +32,6 @@ namespace API.Resources
         public int Id { get; set; }
 
         /// <summary>
-        ///     Get or Set associated user from the project
-        /// </summary>
-        public UserResourceResult User { get; set; }
-
-        /// <summary>
         ///     Get or Set the name of the project
         /// </summary>
         public string Name { get; set; }

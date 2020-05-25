@@ -66,6 +66,12 @@ namespace Models.Defaults
             [Description("This scope gives write access to the highlight namespace")]
             public const string HighlightWrite = "highlight:write";
 
+            [Description("This scope gives read access to the Role namespace")]
+            public const string RoleRead = "role:read";
+
+            [Description("This scope gives write access to the Role namespace")]
+            public const string RoleWrite = "role:write";
+
         }
 
     }
