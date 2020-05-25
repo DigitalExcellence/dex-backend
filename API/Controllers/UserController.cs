@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Services.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -37,15 +38,17 @@ namespace API.Controllers
 
         private readonly IMapper mapper;
         private readonly IUserService userService;
+        private readonly IProjectService projectService;
 
         /// <summary>
         ///     Initialize a new instance of UserController
         /// </summary>
         /// <param name="userService"></param>
         /// <param name="mapper"></param>
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IProjectService projectService, IMapper mapper)
         {
             this.userService = userService;
+            this.projectService = projectService;
             this.mapper = mapper;
         }
 
@@ -165,6 +168,32 @@ namespace API.Controllers
             await userService.RemoveAsync(userId);
             userService.Save();
             return Ok();
+        }
+
+        /// <summary>
+        ///     Collect all user data
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{userId}/allData")]
+        [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
+        public async Task<IActionResult> CollectAllUserData(int userId)
+        {
+            UserData userData = new UserData();
+            if(await userService.FindAsync(userId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this student id.",
+                    Instance = "TODO-CHANGE-TO-GENERATED-INSTANCE-CODE"
+                };
+                return NotFound(problem);
+            } else
+            {
+                //Gather all data of the existing user and add it to the UserData model.
+                userData.User = await userService.FindAsync(userId);
+            }
+            return Ok(userData);
         }
     }
 }
