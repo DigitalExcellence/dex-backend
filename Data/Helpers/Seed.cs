@@ -120,12 +120,16 @@ namespace Data.Helpers
         /// <returns></returns>
         public static User SeedPrUser(List<Role> roles)
         {
-            Role PrRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
-            User user = new User();
-            user.IdentityId = "985632147";
-            user.Email = "Pr@dex.software";
-            user.Name = "Pr jerry";
+            Role prRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
+            User user = new User
+            {
+                IdentityId = "985632147",
+                Email = "Pr@dex.software",
+                Name = "Pr jerry"
+            };
+            return user;
         }
+
         /// <summary>
         ///     Seed random projects into the database using fake date from Bogus
         /// </summary>

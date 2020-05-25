@@ -156,17 +156,7 @@ namespace API
                             AuthorizationUrl = new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize"),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "ProjectWrite", "Project write operations" },
-                                { "ProjectRead", "Project read operations" },
-
-                                { "UserWrite", "User write operations" },
-                                { "UserRead", "User read operations" },
-
-                                { "HighlightWrite", "Highlight write operations" },
-                                { "HighlightRead", "Highlight read operations" },
-                              
-                                { "profile", "Profile information" },
-                                { "openid", "Open id information" }
+                                { "ProjectWrite", "There is a scope needed" },
 
                             }
                         }
