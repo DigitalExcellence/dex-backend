@@ -63,6 +63,7 @@ namespace Repositories.Tests
         /// <summary>
         /// User that was not in repo not found
         /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task RemoveUserAsync_NotFound()
         {
