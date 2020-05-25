@@ -51,6 +51,9 @@ namespace API.Configuration
 
             CreateMap<RoleResource, Role>();
             CreateMap<Role, RoleResourceResult>();
+
+            CreateMap<EmbeddedProjectResource, EmbeddedProject>();
+            CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
         }
 
     }
