@@ -37,7 +37,7 @@ namespace _4_Data.Migrations
                         column: x => x.RoleId,
                         principalTable: "Role",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,7 +47,7 @@ namespace _4_Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
-                    RoleId = table.Column<int>(nullable: true),
+                    RoleId = table.Column<int>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     IdentityId = table.Column<string>(nullable: false),
                     ProfileUrl = table.Column<string>(nullable: true)

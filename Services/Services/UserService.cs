@@ -36,6 +36,8 @@ namespace Services.Services
 
         bool UserHasScope(string identityId, string scope);
 
+        bool UserWithRoleExists(Role role);
+
     }
 
     public class UserService : Service<User>, IUserService
@@ -68,6 +70,11 @@ namespace Services.Services
         public bool UserHasScope(string identityId, string scope)
         {
             return Repository.UserHasScope(identityId, scope);
+        }
+
+        public bool UserWithRoleExists(Role role)
+        {
+            return Repository.UserWithRoleExists(role);
         }
 
     }

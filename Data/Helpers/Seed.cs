@@ -31,8 +31,9 @@ namespace Data.Helpers
         /// <summary>
         ///     Seed random users into the database using fake date from Bogus
         /// </summary>
-        public static List<User> SeedUsers()
+        public static List<User> SeedUsers(List<Role> roles)
         {
+            Role registeredUserRole = roles.Find(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
             List<User> users = new List<User>();
             for(int i = 0; i < 30; i++)
             {
@@ -41,7 +42,7 @@ namespace Data.Helpers
                                          .RuleFor(s => s.Email, f => f.Internet.Email());
 
                 User user = userToFake.Generate();
-
+                user.Role = registeredUserRole;
                 user.IdentityId = (i + 2).ToString();
 
                 users.Add(user);
@@ -125,8 +126,10 @@ namespace Data.Helpers
             {
                 IdentityId = "985632147",
                 Email = "Pr@dex.software",
-                Name = "Pr jerry"
+                Name = "Pr jerry",
+                Role = prRole
             };
+
             return user;
         }
 

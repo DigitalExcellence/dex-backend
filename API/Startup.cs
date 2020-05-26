@@ -22,17 +22,13 @@ using Data.Helpers;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
@@ -288,9 +284,10 @@ namespace API
         }
 
         /// <summary>
-        /// Initializes the database
+        /// Updates the database.
         /// </summary>
-        /// <param name="app"></param>
+        /// <param name="app">The application.</param>
+        /// <param name="env">The env.</param>
         private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env)
         {
             using(IServiceScope serviceScope = app.ApplicationServices
@@ -306,10 +303,11 @@ namespace API
                         context.AddRange(Seed.SeedRoles());
                         context.SaveChanges();
                     }
+                    List<Role> roles = context.Role.ToList();
                     if(!context.User.Any())
                     {
                         // seed admin
-                        List<Role> roles = context.Role.ToList();
+                        
                         context.User.Add(Seed.SeedAdminUser(roles));
                         context.SaveChanges();
 
@@ -317,7 +315,7 @@ namespace API
                         {
                             //Seed random users
                             context.User.Add(Seed.SeedPrUser(roles));
-                            context.User.AddRange(Seed.SeedUsers());
+                            context.User.AddRange(Seed.SeedUsers(roles));
                             context.SaveChanges();
                         }
                     }

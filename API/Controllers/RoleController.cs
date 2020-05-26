@@ -225,7 +225,8 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
         public async Task<IActionResult> DeleteRole(int roleId)
         {
-            if(await roleService.FindAsync(roleId) == null)
+            Role role = await roleService.FindAsync(roleId);
+            if(role == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -235,7 +236,19 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            await roleService.RemoveAsync(roleId);
+
+            if(userService.UserWithRoleExists(role))
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Role is still assigned.",
+                     Detail = "The role is still assigned to a user.",
+                     Instance = "46E4AD0A-5947-4F9B-8001-A4D77CBC1A92"
+                };
+                return BadRequest(problem);
+            };
+
+            roleService.Remove(role);
             roleService.Save();
             return Ok();
         }
