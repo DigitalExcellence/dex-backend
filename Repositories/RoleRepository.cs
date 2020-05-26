@@ -52,6 +52,18 @@ namespace Repositories
                    .Include(p => p.Scopes)
                    .ToListAsync();
         }
+
+        public override async Task RemoveAsync(int id)
+        {
+            Role roleToDelete = await GetDbSet<Role>()
+                .Where(r => r.Id == id)
+                .Include(r => r.Scopes)
+                .SingleOrDefaultAsync();
+
+            GetDbSet<RoleScope>().RemoveRange(roleToDelete.Scopes);
+            GetDbSet<Role>().Remove(roleToDelete);
+        }
+
     }
 
 }

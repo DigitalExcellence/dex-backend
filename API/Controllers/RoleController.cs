@@ -248,7 +248,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             };
 
-            roleService.Remove(role);
+            await roleService.RemoveAsync(role.Id);
             roleService.Save();
             return Ok();
         }
