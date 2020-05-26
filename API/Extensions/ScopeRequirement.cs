@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Models;
 using Services.Services;
 
 namespace API.Extensions
@@ -34,7 +29,7 @@ namespace API.Extensions
     }
 
     /// <summary>
-    /// This handler is called every time authorize is called with a policy created by the scoperequirement class.
+    /// This handler is called every time authorize is called with a policy created by the scope requirement class.
     /// </summary>
     public class ScopeRequirementHandler : AuthorizationHandler<ScopeRequirement>
     {
