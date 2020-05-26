@@ -291,34 +291,5 @@ namespace API.Controllers
 
             return Ok(mapper.Map<User, UserResourceResult>(user));
         }
-
-        /// <summary>
-        /// Removes the role.
-        /// </summary>
-        /// <param name="userId">The user identifier.</param>
-        /// <returns></returns>
-        [HttpDelete("RemoveRole")]
-        [Authorize(Policy = nameof(Defaults.Scopes.RoleWrite))]
-        public async Task<IActionResult> RemoveRole(int userId)
-        {
-            User user = await userService.FindAsync(userId);
-            if(user == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to remove role.",
-                    Detail = "The user could not be found in the database.",
-                    Instance = "16243FD2-7256-40B7-90D2-70FFDDA4A6E6"
-                };
-                return NotFound(problem);
-            }
-
-            user.Role = null;
-            userService.Update(user);
-            userService.Save();
-
-            return Ok(mapper.Map<User, UserResourceResult>(user));
-        }
-
     }
 }
