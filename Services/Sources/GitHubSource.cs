@@ -46,6 +46,12 @@ namespace Services.Sources
             throw new NotImplementedException();
 
         }
+
+        public bool ProjectUrlMatches(string url)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Searches the specified search term.
         /// </summary>
@@ -55,9 +61,5 @@ namespace Services.Sources
         {
             throw new NotImplementedException();
         }
-
-
-       
     }
-
 }

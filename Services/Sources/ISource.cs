@@ -22,7 +22,7 @@ namespace Services.Sources
 
     public interface ISource
     {
-
+        bool ProjectUrlMatches(string url);
         void Search(string searchTerm);
 
         void GetSource(string url);

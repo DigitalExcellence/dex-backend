@@ -21,6 +21,7 @@ using RestSharp;
 using Services.Sources.Resources;
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Services.Sources
 {
@@ -69,6 +70,13 @@ namespace Services.Sources
             }
 
             return project;
+        }
+
+        public bool ProjectUrlMatches(string url)
+        {
+            Regex rx = new Regex(@"^https?:\/\/gitlab.com\/.+\/.+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            MatchCollection matches = rx.Matches(url);
+            return rx.IsMatch(url);
         }
 
         /// <summary>

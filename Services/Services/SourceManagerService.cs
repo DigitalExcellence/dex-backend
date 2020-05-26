@@ -52,20 +52,16 @@ namespace Services.Services
         /// <returns></returns>
         public Project FetchProject(string repoUrl)
         {
-
-            if(repoUrl.StartsWith("https://github.com"))
-            {
-                return gitHubSource.GetProjectInformation(repoUrl);
-            } else if(repoUrl.StartsWith("https://gitlab.com"))
+            if(gitLabSource.ProjectUrlMatches(repoUrl))
             {
                 return gitLabSource.GetProjectInformation(repoUrl);
-            } else
+            }
+            else
             {
                 return null;
             }
         }
 
     }
-
-    }
+}
 
