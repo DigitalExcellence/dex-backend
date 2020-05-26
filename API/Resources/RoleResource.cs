@@ -27,9 +27,19 @@ namespace API.Resources
     /// </summary>
     public class RoleResource
     {
-        // Role name
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name { get; set; }
-        // List of Allowed scopes.
+        /// <summary>
+        /// Gets or sets the scopes.
+        /// </summary>
+        /// <value>
+        /// The scopes.
+        /// </value>
         public List<RoleScope> Scopes { get; set; }
     }
 
