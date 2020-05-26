@@ -40,7 +40,7 @@ namespace API.Extensions
     {
 
         /// <summary>
-        ///     Gets the student identifier asynchronous.
+        /// Gets the student identifier asynchronous.
         /// </summary>
         /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
@@ -87,7 +87,6 @@ namespace API.Extensions
         /// <summary>
         /// Gets the context user.
         /// </summary>
-        /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
         /// <param name="userService">The user service.</param>
         /// <returns></returns>
