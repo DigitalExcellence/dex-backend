@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200520133907_Initial")]
-    partial class Initial
+    [Migration("20200526082115_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,31 @@ namespace _4_Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Collaborators");
+                });
+
+            modelBuilder.Entity("Models.EmbeddedProject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EmbeddedProject");
                 });
 
             modelBuilder.Entity("Models.Highlight", b =>
@@ -177,6 +202,21 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.Project", null)
                         .WithMany("Collaborators")
                         .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.EmbeddedProject", b =>
+                {
+                    b.HasOne("Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

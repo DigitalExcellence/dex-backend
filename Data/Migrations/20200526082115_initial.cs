@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _4_Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -110,6 +110,33 @@ namespace _4_Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmbeddedProject",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    ProjectId = table.Column<int>(nullable: false),
+                    Guid = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmbeddedProject", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmbeddedProject_Project_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Project",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmbeddedProject_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Highlight",
                 columns: table => new
                 {
@@ -136,6 +163,16 @@ namespace _4_Data.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmbeddedProject_ProjectId",
+                table: "EmbeddedProject",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmbeddedProject_UserId",
+                table: "EmbeddedProject",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Highlight_ProjectId",
                 table: "Highlight",
                 column: "ProjectId");
@@ -160,6 +197,9 @@ namespace _4_Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Collaborators");
+
+            migrationBuilder.DropTable(
+                name: "EmbeddedProject");
 
             migrationBuilder.DropTable(
                 name: "Highlight");
