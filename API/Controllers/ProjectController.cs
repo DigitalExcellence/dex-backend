@@ -245,14 +245,14 @@ namespace API.Controllers
         /// </summary>
         /// <param name="sourceUrl">The source URL.</param>
         /// <returns></returns>
-        [HttpGet("/wizard")]
+        [HttpGet("wizard")]
         [Authorize]
         public async Task<IActionResult> GetWizardInformation(string sourceUrl)
         {
             Project project = sourceManagerService.FetchProject(sourceUrl);
             if(project == null)
             {
-                return NoContent();
+                return NotFound();
             }
             return Ok(project);
         }
