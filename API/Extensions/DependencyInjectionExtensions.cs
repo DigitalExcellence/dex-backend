@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Services.Services;
+using Services.Sources;
 
 namespace API.Extensions
 {
@@ -59,6 +60,11 @@ namespace API.Extensions
 
 
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
+
+            services.AddScoped<SourceManagerService, SourceManagerService>();
+            services.AddScoped<GitHubSource, GitHubSource>();
+            services.AddScoped<GitLabSource, GitLabSource>();
+
             return services;
         }
 

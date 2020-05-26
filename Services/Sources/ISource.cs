@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
+
 namespace Services.Sources
 {
 
@@ -24,6 +26,8 @@ namespace Services.Sources
         void Search(string searchTerm);
 
         void GetSource(string url);
+
+        Project GetProjectInformation(string url);
 
     }
 

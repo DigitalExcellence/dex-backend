@@ -43,18 +43,21 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly SourceManagerService sourceManagerService;
 
         /// <summary>
-        /// Initialize a new instance of ProjectController
+        /// Initializes a new instance of the <see cref="ProjectController"/> class.
         /// </summary>
-        /// <param name="projectService"></param>
-        /// <param name="userService"></param>
-        /// <param name="mapper"></param>
-        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
+        /// <param name="projectService">The project service.</param>
+        /// <param name="userService">The user service.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="sourceManagerService">The source manager service.</param>
+        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper, SourceManagerService sourceManagerService)
         {
             this.projectService = projectService;
             this.userService = userService;
             this.mapper = mapper;
+            this.sourceManagerService = sourceManagerService;
         }
 
         /// <summary>
@@ -234,6 +237,24 @@ namespace API.Controllers
             await projectService.RemoveAsync(projectId);
             projectService.Save();
             return Ok();
+        }
+
+
+        /// <summary>
+        /// Gets the wizard information.
+        /// </summary>
+        /// <param name="sourceUrl">The source URL.</param>
+        /// <returns></returns>
+        [HttpGet("/wizard")]
+        [Authorize]
+        public async Task<IActionResult> GetWizardInformation(string sourceUrl)
+        {
+            Project project = sourceManagerService.FetchProject(sourceUrl);
+            if(project == null)
+            {
+                return NoContent();
+            }
+            return Ok(project);
         }
     }
 }
