@@ -249,6 +249,16 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetWizardInformation(string sourceUrl)
         {
+            if(string.IsNullOrEmpty(sourceUrl))
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Source url is null or empty.",
+                     Detail = "the incoming source url is not valid.",
+                     Instance = "6D63D9FA-91D6-42D5-9ACB-461FBEB0D2ED"
+                };
+                return BadRequest(problem);
+            }
             Project project = sourceManagerService.FetchProject(sourceUrl);
             if(project == null)
             {
