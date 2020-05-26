@@ -64,7 +64,6 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                     new RoleScope(nameof(Defaults.Scopes.UserWrite)),
                 }
-                
             };
             roles.Add(registeredUserRole);
 
@@ -75,7 +74,6 @@ namespace Data.Helpers
                 {
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                 }
-
             };
             roles.Add(prRole);
 
@@ -91,7 +89,6 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                 }
-
             };
             roles.Add(administratorRole);
 
@@ -106,11 +103,13 @@ namespace Data.Helpers
         {
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
 
-            User user = new User();
-            user.Role = adminRole;
-            user.IdentityId = "88421113";
-            user.Email = "Administrator@dex.software";
-            user.Name = "Administrator bob";
+            User user = new User
+            {
+                Role = adminRole,
+                IdentityId = "88421113",
+                Email = "Administrator@dex.software",
+                Name = "Administrator bob"
+            };
 
             return user;
         }

@@ -24,10 +24,8 @@ using System.Security.Claims;
 
 namespace IdentityServer
 {
-
-    public class TestUsers
+    public static class TestUsers
     {
-
         public static List<TestUser> Users = new List<TestUser>
                                              {
                                                  new TestUser
@@ -67,7 +65,6 @@ namespace IdentityServer
                                                          new Claim(JwtClaimTypes.GivenName, "jerry"),
                                                          new Claim(JwtClaimTypes.FamilyName, "Smith"),
                                                          new Claim(JwtClaimTypes.Email, "jerrySmith@email.com"),
-
                                                      }
                                                  },
                                                  new TestUser
@@ -84,7 +81,5 @@ namespace IdentityServer
                                                      }
                                                  }
                                              };
-
     }
-
 }

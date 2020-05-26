@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -27,6 +27,8 @@ namespace Services.Base
         Task<TEntity> FindAsync(int id);
 
         void Add(TEntity entity);
+
+        Task AddAsync(TEntity entity);
 
         void AddRange(IEnumerable<TEntity> entities);
 

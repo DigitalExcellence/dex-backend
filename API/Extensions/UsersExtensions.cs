@@ -32,10 +32,8 @@ using System.Security.Principal;
 
 namespace API.Extensions
 {
-
     internal static class UsersExtensions
     {
-
         /// <summary>
         ///     Gets the student identifier asynchronous.
         /// </summary>
@@ -69,7 +67,7 @@ namespace API.Extensions
             } else
             {
                 string sub = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Equals("sub"))
-                                            .Value;
+                                            ?.Value;
                 if(sub == null)
                 {
                     throw new NotSupportedException("The jwt doesn't have a sub");
@@ -81,8 +79,7 @@ namespace API.Extensions
             return studentId;
         }
 
-
-        public static User GetUserInformationAsync(this HttpContext actionContext, Config config)
+        public static User GetUserInformation(this HttpContext actionContext, Config config)
         {
             string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
             if(string.IsNullOrEmpty(bearerToken))
@@ -122,7 +119,5 @@ namespace API.Extensions
 
             //return Student.ConvertStudentPcnToCompatibleVersion(iUserPrincipal.Identity.Name);
         }
-
     }
-
 }
