@@ -63,7 +63,10 @@ namespace Services.Sources
             project.Name = resourceResult.name;
             project.ShortDescription = resourceResult.description;
             project.Uri = url;
-            project.Description = FetchReadme(resourceResult.readme_url);
+            if(!string.IsNullOrEmpty(resourceResult.readme_url))
+            {
+                project.Description = FetchReadme(resourceResult.readme_url);
+            }
 
             return project;
         }
