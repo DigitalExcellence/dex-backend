@@ -53,10 +53,8 @@ namespace Services.Sources
         /// <returns></returns>
         public Project GetProjectInformation(string url)
         {
-            string serializedUrl = this.gitlabApiUrl +
-                            new StringBuilder(url)
-                                .Replace("https://gitlab.com/", "")
-                                .Replace("/", "%2F");
+            url = Regex.Replace(url, @"^((https?):\/\/)?(www.)?gitlab\.com\/", "");
+            string serializedUrl = this.gitlabApiUrl + url.Replace("/", "%2F");
 
             Project project = new Project();
 
@@ -74,7 +72,7 @@ namespace Services.Sources
 
         public bool ProjectUrlMatches(string url)
         {
-            Regex rx = new Regex(@"^https?:\/\/gitlab.com\/.+\/.+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex rx = new Regex(@"^((https?):\/\/)?(www.)?gitlab\.com\/.+\/.+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             MatchCollection matches = rx.Matches(url);
             return rx.IsMatch(url);
         }
