@@ -17,6 +17,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Defaults;
 using Repositories.Base;
 using System;
 using System.Collections.Generic;
@@ -52,19 +53,40 @@ namespace Repositories
 
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
-        public override Task<Project> FindAsync(int id)
+        private Project RedactUser(Project project)
         {
-            return GetDbSet<Project>()
+            if(project?.User?.IsPublic == false)
+            {
+                project.User.Email = Defaults.Privacy.RedactedEmail;
+            }
+            return project;
+        }
+        private List<Project> RedactUser(List<Project> projects)
+        {
+            for(int i = 0; i < projects.Count; i++)
+            {
+                projects[i] = RedactUser(projects[i]);
+            }
+            return projects;
+        }
+
+        public override async Task<Project> FindAsync(int id)
+        {
+            Project project = await GetDbSet<Project>()
                    .Where(s => s.Id == id)
                    .Include(p => p.Collaborators)
                    .SingleOrDefaultAsync();
+
+            return RedactUser(project);
         }
 
-        public Task<List<Project>> GetAllWithUsersAsync()
+        public async Task<List<Project>> GetAllWithUsersAsync()
         {
-            return GetDbSet<Project>()
+            List<Project> projects = await GetDbSet<Project>()
                    .Include(p => p.User)
                    .ToListAsync();
+
+            return RedactUser(projects);
         }
 
         /// <summary>
@@ -125,7 +147,8 @@ namespace Repositories
                     queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
                 }
             }
-            return await queryable.ToListAsync();
+            List<Project> projects = await queryable.ToListAsync();
+            return RedactUser(projects);
         }
 
         public virtual async Task<int> SearchCountAsync(string query)
@@ -143,13 +166,15 @@ namespace Repositories
                          .CountAsync();
         }
 
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
-            return GetDbSet<Project>()
-                   .Include(project => project.User)
-                   .Include(project => project.Collaborators)
-                   .Where(project => project.Id == id)
+            Project project = await GetDbSet<Project>()
+                   .Include(p => p.User)
+                   .Include(p => p.Collaborators)
+                   .Where(p => p.Id == id)
                    .FirstOrDefaultAsync();
+
+            return RedactUser(project);
         }
 
     }

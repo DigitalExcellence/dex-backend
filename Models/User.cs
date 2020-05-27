@@ -49,6 +49,7 @@ namespace Models
 
         public string ProfileUrl { get; set; }
 
+        public bool IsPublic { get; set; }
     }
 
 }

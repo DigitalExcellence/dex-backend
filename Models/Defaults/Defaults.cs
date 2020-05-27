@@ -23,6 +23,13 @@ namespace Models.Defaults
     public static class Defaults
     {
 
+        public static class Privacy
+        {
+
+            public const string RedactedEmail = "<Redacted>";
+
+        }
+
         public static class Roles
         {
 

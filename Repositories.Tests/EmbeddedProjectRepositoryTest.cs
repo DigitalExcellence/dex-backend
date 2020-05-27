@@ -1,4 +1,5 @@
 using Models;
+using Models.Defaults;
 using NuGet.Frameworks;
 using NUnit.Framework;
 using Repositories.Tests.Base;
@@ -26,9 +27,9 @@ namespace Repositories.Tests
         protected new IEmbedRepository Repository => (IEmbedRepository) base.Repository;
 
         /// <summary>
-        /// Determines whether [is non existing unique identifier asynchronous unique identifier exists] [the specified project].
+        /// Determines whether [is non existing unique identifier asynchronous unique identifier exists] [the specified embeddedProject].
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="project">The embeddedProject.</param>
         [Test]
         public async Task IsNonExistingGuidAsync_guid_exists([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -42,9 +43,9 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Determines whether /[is non existing unique identifier asynchronous unique identifier non existing] [the specified project].
+        /// Determines whether /[is non existing unique identifier asynchronous unique identifier non existing] [the specified embeddedProject].
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="project">The embeddedProject.</param>
         [Test]
         public async Task IsNonExistingGuidAsync_guid_non_existing([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -97,9 +98,9 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets the embedded project goodflow.
+        /// Gets the embedded embeddedProject goodflow.
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="project">The embeddedProject.</param>
         /// <param name="embeddedProjects">The embedded projects.</param>
         [Test]
         public async Task GetEmbeddedProject_goodflow([EmbeddedDataSource]EmbeddedProject project, [EmbeddedDataSource(100)]List<EmbeddedProject> embeddedProjects)
@@ -115,15 +116,131 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets the embedded projects no project.
+        /// Gets the embedded projects no embeddedProject.
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="project">The embeddedProject.</param>
         [Test]
         public async Task GetEmbeddedProjects_noProject([EmbeddedDataSource]EmbeddedProject project)
         {
             // Test
             Assert.IsNull( await Repository.GetEmbeddedProjectAsync(project.Guid));
         }
+
+        /// <summary>
+        /// Finds the asynchronous user is public true.
+        /// </summary>
+        /// <param name="project">The embeddedProject.</param>
+        [Test]
+        public async Task FindAsync_User_IsPublic_True([EmbeddedDataSource]EmbeddedProject project)
+        {
+            project.User.IsPublic = true;
+            // Seed
+            DbContext.Add(project);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            EmbeddedProject actualProject = await Repository.FindAsync(project.Id);
+            Assert.AreEqual(project.User.Email, actualProject.User.Email);
+        }
+
+        /// <summary>
+        /// Finds the asynchronous user is public false.
+        /// </summary>
+        /// <param name="project">The embeddedProject.</param>
+        [Test]
+        public async Task FindAsync_User_IsPublic_False([EmbeddedDataSource]EmbeddedProject project)
+        {
+            project.User.IsPublic = false;
+            // Seed
+            DbContext.Add(project);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            EmbeddedProject actualProject = await Repository.FindAsync(project.Id);
+            Assert.AreEqual( actualProject.User.Email, Defaults.Privacy.RedactedEmail);
+        }
+
+        /// <summary>
+        /// Gets the embedded embeddedProject asynchronous user is public true.
+        /// </summary>
+        /// <param name="project">The embeddedProject.</param>
+        [Test]
+        public async Task GetEmbeddedProjectAsync_User_IsPublic_True([EmbeddedDataSource]EmbeddedProject project)
+        {
+            project.User.IsPublic = true;
+            // Seed
+            DbContext.Add(project);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            EmbeddedProject actualProject = await Repository.GetEmbeddedProjectAsync(project.Guid);
+            Assert.AreEqual(actualProject.User.Email, project.User.Email);
+        }
+
+        /// <summary>
+        /// Gets the embedded project asynchronous user is public false.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        [Test]
+        public async Task GetEmbeddedProjectAsync_User_IsPublic_False([EmbeddedDataSource]EmbeddedProject project)
+        {
+            project.User.IsPublic = false;
+            // Seed
+            DbContext.Add(project);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            EmbeddedProject actualProject = await Repository.GetEmbeddedProjectAsync(project.Guid);
+            Assert.AreEqual(actualProject.User.Email, Defaults.Privacy.RedactedEmail);
+        }
+
+        /// <summary>
+        /// Gets the embedded project asynchronous project user is public true.
+        /// </summary>
+        /// <param name="embeddedProject">The embedded project.</param>
+        /// <param name="project">The project.</param>
+        /// <param name="user">The user.</param>
+        [Test]
+        public async Task GetEmbeddedProjectAsync_ProjectUser_IsPublic_True([EmbeddedDataSource]EmbeddedProject embeddedProject, [ProjectDataSource]Project project, [UserDataSource]User user)
+        {
+            user.IsPublic = true;
+            project.User = user;
+            embeddedProject.Project = project;
+            // Seed
+            DbContext.Add(user);
+            DbContext.Add(project);
+            DbContext.Add(embeddedProject);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            EmbeddedProject actualProject = await Repository.GetEmbeddedProjectAsync(embeddedProject.Guid);
+            Assert.AreEqual(actualProject.Project.User.Email, embeddedProject.Project.User.Email);
+        }
+
+        /// <summary>
+        /// Gets the embedded project asynchronous project user is public false.
+        /// </summary>
+        /// <param name="embeddedProject">The embedded project.</param>
+        /// <param name="project">The project.</param>
+        /// <param name="user">The user.</param>
+        [Test]
+        public async Task GetEmbeddedProjectAsync_ProjectUser_IsPublic_False([EmbeddedDataSource]EmbeddedProject embeddedProject, [ProjectDataSource]Project project, [UserDataSource]User user)
+        {
+            user.IsPublic = false;
+            project.User = user;
+            embeddedProject.Project = project;
+            // Seed
+            DbContext.Add(user);
+            DbContext.Add(project);
+            DbContext.Add(embeddedProject);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            EmbeddedProject actualProject = await Repository.GetEmbeddedProjectAsync(embeddedProject.Guid);
+            Assert.AreEqual(actualProject.Project.User.Email, Defaults.Privacy.RedactedEmail);
+        }
+
+
     }
 
 }
