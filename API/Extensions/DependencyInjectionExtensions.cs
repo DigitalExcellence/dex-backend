@@ -24,13 +24,11 @@ using Services.Services;
 
 namespace API.Extensions
 {
-
     /// <summary>
     ///     DependencyInjectionExtensions
     /// </summary>
     public static class DependencyInjectionExtensions
     {
-
         /// <summary>
         ///     Adds all the services and repositories.
         /// </summary>
@@ -53,15 +51,12 @@ namespace API.Extensions
 
             services.AddScoped<IEmbedService, EmbedService>();
             services.AddScoped<IEmbedRepository, EmbedRepository>();
-            
+
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
-
 
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
             return services;
         }
-
     }
-
 }

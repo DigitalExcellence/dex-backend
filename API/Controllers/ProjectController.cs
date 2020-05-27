@@ -24,14 +24,11 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Services.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
     ///     This controller handles the CRUD projects
     /// </summary>
@@ -39,7 +36,6 @@ namespace API.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
@@ -64,8 +60,8 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProjects()
         {
-            List<Project> projects = await projectService.GetAllWithUsersAsync();
-            if(!projects.Any())
+            List<Project> projects = await projectService.GetAllWithUsersAsync().ConfigureAwait(false);
+            if(projects.Count == 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -78,7 +74,6 @@ namespace API.Controllers
 
             return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
         }
-
 
         /// <summary>
         ///     Get a project.
@@ -98,7 +93,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId);
+            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId).ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -132,7 +127,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-            project.User = await HttpContext.GetContextUser(userService);
+            project.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             try
             {
                 projectService.Add(project);
@@ -160,7 +155,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
-            Project project = await projectService.FindAsync(projectId);
+            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -174,7 +169,7 @@ namespace API.Controllers
 
             mapper.Map(projectResource, project);
 
-            User user = await HttpContext.GetContextUser(userService);
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
@@ -201,7 +196,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            Project project = await projectService.FindAsync(projectId);
+            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -213,7 +208,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
             
-            User user = await HttpContext.GetContextUser(userService);
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
@@ -227,7 +222,7 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            await projectService.RemoveAsync(projectId);
+            await projectService.RemoveAsync(projectId).ConfigureAwait(false);
             projectService.Save();
             return Ok();
         }

@@ -20,7 +20,6 @@ using System.Collections.Generic;
 
 namespace API.Resources
 {
-
     /// <summary>
     ///     The view model of a project
     /// </summary>
@@ -60,7 +59,5 @@ namespace API.Resources
         ///     This gets or sets the Updated time of the project
         /// </summary>
         public DateTime Updated { get; set; }
-
     }
-
 }

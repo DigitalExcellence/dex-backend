@@ -21,7 +21,6 @@ using Models;
 
 namespace API.Resources
 {
-
     /// <summary>
     ///     The view model of a role
     /// </summary>
@@ -40,7 +39,6 @@ namespace API.Resources
         /// <value>
         /// The scopes.
         /// </value>
-        public List<RoleScope> Scopes { get; set; }
+        public List<RoleScopeResource> Scopes { get; set; }
     }
-
 }

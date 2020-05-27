@@ -35,10 +35,8 @@ using System.Threading.Tasks;
 
 namespace API.Extensions
 {
-
     internal static class UsersExtensions
     {
-
         /// <summary>
         /// Gets the student identifier asynchronous.
         /// </summary>
@@ -72,7 +70,7 @@ namespace API.Extensions
             } else
             {
                 string sub = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Equals("sub"))
-                                            .Value;
+                                            ?.Value;
                 if(sub == null)
                 {
                     throw new NotSupportedException("The jwt doesn't have a sub");
@@ -98,12 +96,12 @@ namespace API.Extensions
 
 
         /// <summary>
-        /// Gets the user information asynchronous.
+        /// Gets the user information synchronous.
         /// </summary>
         /// <param name="actionContext">The action context.</param>
         /// <param name="config">The configuration.</param>
         /// <returns></returns>
-        public static User GetUserInformationAsync(this HttpContext actionContext, Config config)
+        public static User GetUserInformation(this HttpContext actionContext, Config config)
         {
             string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
             if(string.IsNullOrEmpty(bearerToken))
@@ -132,5 +130,4 @@ namespace API.Extensions
             return newUser ;
         }
     }
-
 }
