@@ -191,12 +191,11 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            List<Project> projects = (List<Project>) await projectService.GetAllWithUsersAsync();
+            List<Project> projects = await projectService.GetAllWithUsersAsync();
             projects.ForEach(delegate(Project project) {
                 if(project.UserId.Equals(userId))
                 {
                     project.UserId = -1;
-                    project.User = null;
                     projectService.Update(project);
                 }
             });
