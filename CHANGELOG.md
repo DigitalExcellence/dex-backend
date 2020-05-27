@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added example unittests for other contributors [#74] (https://github.com/DigitalExcellence/dex-backend/issues/74)
 - Added highlighted filter to search endpoint - [#57](https://github.com/DigitalExcellence/dex-backend/issues/57)
 - Added roles and authorization validation. - [#107](https://github.com/DigitalExcellence/dex-backend/issues/107)
-
+- Added an endpoint for deleting all userdata within DeX. - [#107](https://github.com/DigitalExcellence/dex-backend/issues/77)
 ### Changed
 
 ### Deprecated
