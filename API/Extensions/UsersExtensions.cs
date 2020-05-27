@@ -40,17 +40,20 @@ namespace API.Extensions
     {
 
         /// <summary>
-        /// Gets the student identifier asynchronous.
+        /// Gets the identity identifier.
         /// </summary>
         /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
         /// <returns></returns>
-        /// <exception cref="Exception">The back-end header isn't added!</exception>
+        /// <exception cref="Exception">
+        /// User is not authenticated!
+        /// or
+        /// The back-end header isn't added!
+        /// </exception>
         /// <exception cref="NotSupportedException">The jwt doesn't have a sub</exception>
-        /// <exception cref="System.Exception">The back-end header isn't added!</exception>
-        public static string GetStudentId(this ClaimsPrincipal claimsPrincipal, HttpContext actionContext)
+        public static string GetIdentityId(this ClaimsPrincipal claimsPrincipal, HttpContext actionContext)
         {
-            string studentId;
+            string identityId;
 
             if(claimsPrincipal.Identities.Any(i => !i.IsAuthenticated))
             {
@@ -59,16 +62,16 @@ namespace API.Extensions
 
             if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication))
             {
-                string studentIdHeader = actionContext.Request.Headers.SingleOrDefault(h => h.Key == "StudentId")
+                string identityIdHeader = actionContext.Request.Headers.SingleOrDefault(h => h.Key == "IdentityId")
                                                       .Value
                                                       .FirstOrDefault();
 
-                if(string.IsNullOrWhiteSpace(studentIdHeader))
+                if(string.IsNullOrWhiteSpace(identityIdHeader))
                 {
                     throw new Exception("The back-end header isn't added!");
                 }
 
-                studentId = studentIdHeader;
+                identityId = identityIdHeader;
             } else
             {
                 string sub = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Equals("sub"))
@@ -81,7 +84,7 @@ namespace API.Extensions
                 return sub;
             }
 
-            return studentId;
+            return identityId;
         }
 
         /// <summary>
@@ -92,7 +95,7 @@ namespace API.Extensions
         /// <returns></returns>
         public static async Task<User> GetContextUser(this HttpContext actionContext, IUserService userService)
         {
-            string identityProverId = actionContext.User.GetStudentId(actionContext);
+            string identityProverId = actionContext.User.GetIdentityId(actionContext);
             return await userService.GetUserByIdentityIdAsync(identityProverId);
         }
 

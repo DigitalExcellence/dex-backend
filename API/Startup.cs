@@ -245,7 +245,7 @@ namespace API
             app.UseAuthorization();
 
 
-            //StudentInfo
+            //UserInfo
             app.UseWhen(context =>
                 context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
                 {
@@ -254,8 +254,8 @@ namespace API
                         DbContext dbContext = context.RequestServices.GetService<DbContext>();
                         IUserService userService =
                             context.RequestServices.GetService<IUserService>();
-                        string studentId = context.User.GetStudentId(context);
-                        if(await userService.GetUserByIdentityIdAsync(studentId) == null)
+                        string identityId = context.User.GetIdentityId(context);
+                        if(await userService.GetUserByIdentityIdAsync(identityId) == null)
                         {
                             User newUser = context.GetUserInformationAsync(Config);
                             if(newUser == null)
@@ -265,7 +265,7 @@ namespace API
                                 {
                                     Name = "Developer",
                                     Email = "Developer@DEX.com",
-                                    IdentityId = studentId
+                                    IdentityId = identityId
                                 };
                                 userService.Add(newUser);
 
