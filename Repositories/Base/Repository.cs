@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 *
 * This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@ namespace Repositories.Base
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-
         protected Repository(DbContext dbContext)
         {
             DbContext = dbContext;
@@ -35,14 +34,17 @@ namespace Repositories.Base
 
         public virtual async Task<TEntity> FindAsync(int id)
         {
-            return await DbSet.FindAsync(id);
+            return await DbSet.FindAsync(id).ConfigureAwait(false);
         }
 
         public virtual void Add(TEntity entity)
         {
             DbSet.Add(entity);
         }
-
+        public virtual async Task AddAsync(TEntity entity)
+        {
+            await DbSet.AddAsync(entity).ConfigureAwait(false);
+        }
         public virtual void AddRange(IEnumerable<TEntity> entities)
         {
             DbSet.AddRange(entities);
@@ -56,7 +58,7 @@ namespace Repositories.Base
 
         public virtual async Task RemoveAsync(int id)
         {
-            TEntity entity = await FindAsync(id);
+            TEntity entity = await FindAsync(id).ConfigureAwait(false);
             if(entity == null)
             {
                 throw new KeyNotFoundException($"Id: {id} not found");
@@ -79,7 +81,7 @@ namespace Repositories.Base
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.ToListAsync().ConfigureAwait(false);
         }
 
         public virtual void Save()
@@ -91,7 +93,5 @@ namespace Repositories.Base
         {
             return DbContext.Set<T>();
         }
-
     }
-
 }

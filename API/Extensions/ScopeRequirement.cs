@@ -54,7 +54,6 @@ namespace API.Extensions
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ScopeRequirement requirement)
         {
             string studentId = httpContextAccessor.HttpContext.User.GetStudentId(httpContextAccessor.HttpContext);
-            
             if(string.IsNullOrEmpty(studentId))
             {
                 return Task.CompletedTask;
