@@ -135,9 +135,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-
-            User user = await userService.GetUserAsync(projectResource.UserId);
-            project.User = user;
+            project.User = await HttpContext.GetContextUser(userService);
             try
             {
                 projectService.Add(project);
@@ -179,9 +177,8 @@ namespace API.Controllers
 
             mapper.Map(projectResource, project);
 
-            string identity = HttpContext.User.GetStudentId(HttpContext);
-            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.ProjectWrite));
-            User user = await userService.GetUserByIdentityIdAsync(identity);
+            User user = await HttpContext.GetContextUser(userService);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
             {
@@ -219,9 +216,8 @@ namespace API.Controllers
                 return NotFound(problem);
             }
             
-            string identity = HttpContext.User.GetStudentId(HttpContext);
-            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.ProjectWrite));
-            User user = await userService.GetUserByIdentityIdAsync(identity);
+            User user = await HttpContext.GetContextUser(userService);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
             {

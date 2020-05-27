@@ -21,7 +21,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Configuration
 {
-
+    /// <summary>
+    /// Config class
+    /// </summary>
+    /// <seealso cref="NetEscapades.Configuration.Validation.IValidatable" />
     public class Config : IValidatable
     {
 
