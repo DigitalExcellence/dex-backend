@@ -59,8 +59,8 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            string studentId = HttpContext.User.GetStudentId(HttpContext);
-            User user = await userService.GetUserByIdentityIdAsync(studentId);
+            string identityId = HttpContext.User.GetIdentityId(HttpContext);
+            User user = await userService.GetUserByIdentityIdAsync(identityId);
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
