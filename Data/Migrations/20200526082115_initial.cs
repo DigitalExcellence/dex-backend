@@ -26,8 +26,8 @@ namespace _4_Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Scope = table.Column<string>(nullable: true),
-                    RoleId = table.Column<int>(nullable: true)
+                    Scope = table.Column<string>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
