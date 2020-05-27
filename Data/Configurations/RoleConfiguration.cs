@@ -15,33 +15,19 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models;
 
-namespace Services.Base
+namespace Data.Configurations
 {
 
-    public interface IService<TEntity> where TEntity : class
+    internal class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
+        public void Configure(EntityTypeBuilder<Role> builder)
+        {
 
-        Task<TEntity> FindAsync(int id);
-
-        void Add(TEntity entity);
-
-        Task AddAsync(TEntity entity);
-
-        void AddRange(IEnumerable<TEntity> entities);
-
-        void Update(TEntity entity);
-
-        Task RemoveAsync(int id);
-
-        void Remove(TEntity entity);
-
-        Task<IEnumerable<TEntity>> GetAll();
-
-        void Save();
-
+        }
     }
 
 }

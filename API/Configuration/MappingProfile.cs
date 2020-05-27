@@ -21,13 +21,11 @@ using Models;
 
 namespace API.Configuration
 {
-
     /// <summary>
     ///     This profiles adds every resource mapping.
     /// </summary>
     public class MappingProfile : Profile
     {
-
         /// <summary>
         ///     Create a map for every resource mapping.
         /// </summary>
@@ -54,8 +52,9 @@ namespace API.Configuration
 
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
+
+            CreateMap<RoleScopeResource, RoleScope>();
+            CreateMap<RoleScope, RoleScopeResource>();
         }
-
     }
-
 }

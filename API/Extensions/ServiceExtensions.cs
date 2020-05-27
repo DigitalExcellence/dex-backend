@@ -22,13 +22,11 @@ using System.Reflection;
 
 namespace API.Extensions
 {
-
     /// <summary>
     ///     ServicesExtensions
     /// </summary>
     public static class ServicesExtensions
     {
-
         /// <summary>
         ///     Adds the policies.
         /// </summary>
@@ -55,7 +53,5 @@ namespace API.Extensions
 
             return services;
         }
-
     }
-
 }

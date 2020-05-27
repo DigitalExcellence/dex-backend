@@ -83,13 +83,6 @@ namespace Data
             //modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
-
-            List<User> seededUsers = modelBuilder.SeedUsers();
-            List<Project> seededProjects = modelBuilder.SeedProjects(seededUsers);
-            // Database seeding for demo
-            modelBuilder.SeedCollaborators(seededProjects);
-
-            modelBuilder.SeedRoles(seededUsers);
         }
 
     }

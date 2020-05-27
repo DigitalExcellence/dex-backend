@@ -30,6 +30,10 @@ namespace Models.Defaults
             public const string Student = "Student";
             public const string Teacher = "Teacher";
 
+            public const string RegisteredUser = "RegisteredUser";
+            public const string PrUser = "PrUser";
+            public const string Administrator = "Administrator";
+
         }
 
         public static class Claims { }
