@@ -52,12 +52,16 @@ namespace Repositories
         {
             return await GetDbSet<User>()
                          .Where(s => s.Id == userId)
+                         .Include(u => u.Role)
+                         .ThenInclude(u => u.Scopes)
                          .SingleOrDefaultAsync();
         }
         public async Task<User> GetUserByIdentityIdAsync(string identityId)
         {
             return await GetDbSet<User>()
                          .Where(s => s.IdentityId == identityId)
+                         .Include(u => u.Role)
+                         .ThenInclude(u => u.Scopes)
                          .SingleOrDefaultAsync();
         }
 
