@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added roles and authorization validation. - [#107](https://github.com/DigitalExcellence/dex-backend/issues/107)
 - Added unittests for UserRepository - [#121] (https://github.com/DigitalExcellence/dex-backend/issues/121)
 - Added unittests for UserService - [#121] (https://github.com/DigitalExcellence/dex-backend/issues/121)
+- Added Wizard Controller and service - [#127] (https://github.com/DigitalExcellence/dex-backend/issues/127)
+- Added Wizard GitLab metadata - [#125] (https://github.com/DigitalExcellence/dex-backend/issues/125)
+- Added Wizard GitHub Metadata - [#126] (https://github.com/DigitalExcellence/dex-backend/issues/126)
 
 ### Changed
 
