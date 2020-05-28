@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Run docker compose build
         run:  docker-compose -f docker-compose.deploy.yml build
       - name: Docker login
@@ -17,7 +17,7 @@ jobs:
       - name: Push docker images to dockerhub
         run:  docker-compose -f docker-compose.deploy.yml push
 
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Push to server 
       - uses: appleboy/ssh-action@master
         with:
