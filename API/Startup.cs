@@ -18,20 +18,17 @@
 using API.Configuration;
 using API.Extensions;
 using Data;
+using Data.Helpers;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
@@ -45,13 +42,11 @@ using System.Threading.Tasks;
 
 namespace API
 {
-
     /// <summary>
     ///     Startup file
     /// </summary>
     public class Startup
     {
-
         /// <summary>
         ///     Constructor for Startup file
         /// </summary>
@@ -85,7 +80,7 @@ namespace API
             services.AddDbContext<ApplicationDbContext>(o =>
             {
                 o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
-                               sqlOptions => { sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null); });
+                               sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
             services.AddAutoMapper();
 
@@ -125,6 +120,11 @@ namespace API
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.RoleWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
             });
 
             services.AddCors();
@@ -144,7 +144,7 @@ namespace API
                             Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
                         }
                     });
-                o.IncludeXmlComments($@"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml");
+                o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml");
                 o.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
@@ -155,16 +155,7 @@ namespace API
                             AuthorizationUrl = new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize"),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "ProjectWrite", "Project write operations" },
-                                { "ProjectRead", "Project read operations" },
-
-                                { "UserWrite", "User write operations" },
-                                { "UserRead", "User read operations" },
-
-                                { "HighlightWrite", "Highlight write operations" },
-                                { "HighlightRead", "Highlight read operations" },
-                                { "profile", "Profile information" },
-                                { "openid", "Open id information" }
+                                { "dex-api", "Resource scope" },
                             }
                         }
                     }
@@ -178,7 +169,7 @@ namespace API
                         },
                         new[] { "" }
                     }
-                }); ;
+                });
             });
 
             // Add application services.
@@ -187,7 +178,6 @@ namespace API
             services.AddProblemDetails();
         }
 
-        
         /// <summary>
         ///     Configures the specified application.
         ///     This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -196,9 +186,7 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
-
-            UpdateDatabase(app);
+            UpdateDatabase(app,env);
             if(env.IsDevelopment())
             {
                 //app.UseBrowserLink();
@@ -235,7 +223,6 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             //StudentInfo
             app.UseWhen(context =>
                 context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
@@ -246,9 +233,9 @@ namespace API
                         IUserService userService =
                             context.RequestServices.GetService<IUserService>();
                         string studentId = context.User.GetStudentId(context);
-                        if(await userService.GetUserByIdentityIdAsync(studentId) == null)
+                        if(await userService.GetUserByIdentityIdAsync(studentId).ConfigureAwait(false) == null)
                         {
-                            User newUser = context.GetUserInformationAsync(Config);
+                            User newUser = context.GetUserInformation(Config);
                             if(newUser == null)
                             {
                                 // Then it probably belongs swagger so we set the username as developer.
@@ -259,18 +246,16 @@ namespace API
                                     IdentityId = studentId
                                 };
                                 userService.Add(newUser);
-
                             } else
                             {
                                 userService.Add(newUser);
                             }
-                            await dbContext.SaveChangesAsync();
+                            await dbContext.SaveChangesAsync().ConfigureAwait(false);
                         }
 
-                        await next();
+                        await next().ConfigureAwait(false);
                     });
                 });
-
 
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
@@ -285,28 +270,66 @@ namespace API
             });
 
             app.UseStaticFiles();
-
-            
         }
 
         /// <summary>
-        /// Initializes the database
+        /// Updates the database.
         /// </summary>
-        /// <param name="app"></param>
-        private static void UpdateDatabase(IApplicationBuilder app)
+        /// <param name="app">The application.</param>
+        /// <param name="env">The env.</param>
+        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using(IServiceScope serviceScope = app.ApplicationServices
+            using IServiceScope serviceScope = app.ApplicationServices
                                                   .GetRequiredService<IServiceScopeFactory>()
-                                                  .CreateScope())
+                                                  .CreateScope();
+            using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            context.Database.Migrate();
+            if(!context.Role.Any())
             {
-                using(ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+                // seed roles
+                context.AddRange(Seed.SeedRoles());
+                context.SaveChanges();
+            }
+            List<Role> roles = context.Role.ToList();
+            if(!context.User.Any())
+            {
+                // seed admin
+                context.User.Add(Seed.SeedAdminUser(roles));
+                context.SaveChanges();
+
+                if(!env.IsProduction())
                 {
-                    context.Database.Migrate();
+                    //Seed random users
+                    context.User.Add(Seed.SeedPrUser(roles));
+                    context.User.AddRange(Seed.SeedUsers(roles));
+                    context.SaveChanges();
                 }
             }
+
+            if(!env.IsProduction())
+            {
+                if(!context.Project.Any())
+                {
+                    //Seed projects
+                    List<User> users = context.User.ToList();
+                    context.Project.AddRange(Seed.SeedProjects(users));
+                    context.SaveChanges();
+                }
+                if(!context.Collaborators.Any())
+                {
+                    //seed collaborators
+                    List<Project> projects = context.Project.ToList();
+                    context.Collaborators.AddRange(Seed.SeedCollaborators(projects));
+                    context.SaveChanges();
+                }
+                if(!context.Highlight.Any())
+                {
+                    List<Project> projects = context.Project.ToList();
+                    context.Highlight.AddRange(Seed.SeedHighlights(projects));
+                    context.SaveChanges();
+                }
+                // TODO seed embedded projects
+            }
         }
-
-
     }
-
 }

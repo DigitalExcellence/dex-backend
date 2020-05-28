@@ -32,13 +32,11 @@ using System.Threading.Tasks;
 
 namespace IdentityServer
 {
-
     /// <summary>
     ///     Startup file for Identity Server
     /// </summary>
     public class Startup
     {
-
         /// <summary>
         ///     Startup constructor
         /// </summary>
@@ -188,9 +186,7 @@ namespace IdentityServer
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
-
     }
-
 }

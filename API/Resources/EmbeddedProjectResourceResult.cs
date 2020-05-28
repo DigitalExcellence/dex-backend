@@ -16,29 +16,50 @@
 */
 
 using System;
-using System.Collections.Generic;
 using Models;
 
 namespace API.Resources
 {
+
     /// <summary>
-    ///     The view model of a role
+    /// Embedded project resource result
     /// </summary>
-    public class RoleResource
+    /// <seealso cref="API.Resources.EmbeddedProjectResource" />
+    public class EmbeddedProjectResourceResult: EmbeddedProjectResource
     {
+
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the identifier.
         /// </summary>
         /// <value>
-        /// The name.
+        /// The identifier.
         /// </value>
-        public string Name { get; set; }
+        public int Id { get; set; }
+
         /// <summary>
-        /// Gets or sets the scopes.
+        /// Gets or sets the project.
         /// </summary>
         /// <value>
-        /// The scopes.
+        /// The project.
         /// </value>
-        public List<RoleScopeResource> Scopes { get; set; }
+        public Project Project { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier.
+        /// </summary>
+        /// <value>
+        /// The unique identifier.
+        /// </value>
+        public Guid Guid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        /// <value>
+        /// The user.
+        /// </value>
+        public User User { get; set; }
+
     }
+
 }
