@@ -76,7 +76,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets all with users asynchronous test is public email false.
+        /// Test getallwithusersasync function to see if it adheres the ispublic flag on the project user.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="user">The user.</param>
@@ -98,7 +98,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets all with users asynchronous test is public email false.
+        /// Test getallwithusersasync function to see if it adheres the ispublic flag on the project user.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="user">The user.</param>

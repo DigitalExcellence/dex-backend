@@ -94,7 +94,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Finds the asynchronous.
+        /// Finds the embeddedproject with the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>

@@ -127,7 +127,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Finds the asynchronous user is public true.
+        /// test if the function findasync finds an embedded project and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
         /// <param name="project">The embeddedProject.</param>
         [Test]
@@ -144,7 +144,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Finds the asynchronous user is public false.
+        /// test if the function findasync finds an embedded project and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
         /// <param name="project">The embeddedProject.</param>
         [Test]
@@ -161,7 +161,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets the embedded embeddedProject asynchronous user is public true.
+        /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
         /// <param name="project">The embeddedProject.</param>
         [Test]
@@ -178,7 +178,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets the embedded project asynchronous user is public false.
+        /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
         /// <param name="project">The project.</param>
         [Test]
@@ -195,7 +195,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets the embedded project asynchronous project user is public true.
+        /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted. on the project user.
         /// </summary>
         /// <param name="embeddedProject">The embedded project.</param>
         /// <param name="project">The project.</param>
@@ -218,7 +218,7 @@ namespace Repositories.Tests
         }
 
         /// <summary>
-        /// Gets the embedded project asynchronous project user is public false.
+        /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted. on the project user.
         /// </summary>
         /// <param name="embeddedProject">The embedded project.</param>
         /// <param name="project">The project.</param>

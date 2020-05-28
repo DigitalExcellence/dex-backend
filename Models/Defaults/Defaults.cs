@@ -22,10 +22,14 @@ namespace Models.Defaults
 
     public static class Defaults
     {
-
+        /// <summary>
+        /// Pivacy consts
+        /// </summary>
         public static class Privacy
         {
-
+            /// <summary>
+            /// The email string when user flag IsPublic is set to false.
+            /// </summary>
             public const string RedactedEmail = "<Redacted>";
 
         }
