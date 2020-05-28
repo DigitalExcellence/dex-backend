@@ -7,29 +7,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    env:
-      PRODUCTION_CONNECTION_STRING: ${{ secrets.PRODUCTION_CONNECTION_STRING }}
-      PRODUCTION_API_FRONTEND_CLIENT_ID: ${{ secrets.PRODUCTION_API_FRONTEND_CLIENT_ID }}
-      PRODUCTION_API_FRONTEND_CLIENT_SECRET: ${{ secrets.PRODUCTION_API_FRONTEND_CLIENT_SECRET }}
-      PRODUCTION_DATABASE_PASSWORD: ${{ secrets.PRODUCTION_DATABASE_PASSWORD }}
-      PRODUCTION_IDENTITY_APPLICATIONS: ${{ secrets.PRODUCTION_IDENTITY_APPLICATIONS }}
 
     steps:
       - uses: actions/checkout@v1
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with: 
-          dotnet-version: 3.1.101
+      - name: Run docker compose build
+        run:  docker-compose -f docker-compose.deploy.yml build
+      - name: Docker login
+        run:  docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Push docker images to dockerhub
+        run:  docker-compose -f docker-compose.deploy.yml push
 
-      # dotnet build and publish
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-      - name: dotnet publish
-        run: dotnet publish -c Release
-
-      # docker compose up
-      - name: Build the docker-compose stack
-        run: docker-compose up
-      - name: Check running containers
-        run: docker ps -a
+      - uses: actions/checkout@v1
+      - name: Push to server 
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_VPS_IP }}
+          username: ${{ secrets.PRODUCTION_VPS_USERNAME }}
+          password: ${{ secrets.PRODUCTION_VPS_PASSWORD }}
+          script: cd ~/docker_compose && docker-compose down && docker-compose pull && docker-compose up --build -d

@@ -1,21 +1,25 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
-
-ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
-
-ARG BuildConfiguration=Release
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 
 WORKDIR /app
 
-COPY bin/Release/PublishOutput/ .
+COPY . ./
 
-ENV ConnectionStrings__DefaultConnection = ' '
+ENV ConnectionStrings__DefaultConnection = ''
 
-ENV App__Frontend__FrontendUrl = ' '
+ENV App__Frontend__FrontendUrl = ''
 
-ENV App__Frontend__ClientId = ' '
+ENV App__Frontend__ClientId = ''
 
-ENV App__Frontend__ClientSecret = ' '
+ENV App__Frontend__ClientSecret = ''
 
-ENV App__IdentityServer__IdentityUrl = ' '
+ENV App__IdentityServer__IdentityUrl = ''
+
+RUN dotnet publish API/1_API.csproj -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+
+WORKDIR /app
+
+COPY --from=build-env /app/out .
 
 ENTRYPOINT ["dotnet", "1_API.dll"]

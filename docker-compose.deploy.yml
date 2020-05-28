@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Data/Dockerfile
+    environment: 
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+    image: digitalexcellence/database
+    networks:
+      mssql-network:
+        ipv4_address: 172.16.238.2
+
+  api:
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    depends_on:
+      - db
+    environment:   
+      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
+      - App__Frontend__FrontendUrl=${FRONTEND_URL}
+      - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
+      - App__IdentityServer__IdentityUrl=${IDENTITY_URL}
+    image:  digitalexcellence/api
+    networks:
+      - mssql-network
+
+  identity:
+    build:
+      context: .
+      dockerfile: IdentityServer/Dockerfile
+    environment:
+      - App__Self__JwtAuthority=${JWT_AUTHORITY}
+      - App__Api__DeXApiUrl=${API_URL}
+      - App__Api__ClientId=${API_CLIENT_ID}
+      - App__Api__ClientSecret=${API_CLIENT_SECRET}
+      - App__Frontend__RedirectUriFrontend=${REDIRECT_URI_FRONTEND}
+      - App__Frontend__RedirectUriFrontendPostman=${REDIRECT_URI_FRONTEND_POSTMAN}
+      - App__Frontend__PostLogoutUrisFrontend=${POST_LOGOUT_URIS_FRONTEND}
+      - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}      
+      - App__swagger__RedirectUrisSwagger=${REDIRECT_URIS_SWAGGER}
+      - App__swagger__PostLogoutUrisSwagger=${POST_LOGOUT_URIS_SWAGGER}
+    image: digitalexcellence/identity
+
+networks:
+  mssql-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+    external: false

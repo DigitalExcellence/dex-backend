@@ -95,13 +95,13 @@ namespace Configuration
             public int DeleteTokenLifeTimeInDays { get; set; }
 
             /// <summary>
-            ///     Gets or sets the identity applications.
+            ///     Gets or sets the issuer uri.
             /// </summary>
             /// <value>
-            ///     The identity applications.
+            ///     The issuer uri.
             /// </value>
-            public List<Dictionary<string, string>> IdentityApplications { get; set; }
-
+            [Required]
+            public string IssuerUri { get; set; }
         }
 
         /// <summary>
@@ -119,6 +119,23 @@ namespace Configuration
             [Url]
             public string DeXApiUrl { get; set; }
 
+            /// <summary>
+            ///     Gets or sets the client identifier.
+            /// </summary>
+            /// <value>
+            ///     The client identifier.
+            /// </value>
+            [Required]
+            public string ClientId { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the client secret.
+            /// </summary>
+            /// <value>
+            ///     The client secret.
+            /// </value>
+            [Required]
+            public string ClientSecret { get; set; }
         }
 
         /// <summary>
@@ -179,13 +196,25 @@ namespace Configuration
         public class FrontendConfig
         {
             /// <summary>
-            ///     Gets or sets the redirect urls of the frontend
+            ///     Gets or sets the redirect uri of the frontend.
             /// </summary>
-            public List<string> RedirectUrisFrontend { get; set; }
+            public string RedirectUriFrontend { get; set; }
             /// <summary>
-            ///     Gets or sets the post logouts urls
+            ///     Gets or sets the redirect uri for Postman.
             /// </summary>
-            public List<string> PostLogoutUrisFrontend { get; set; }
+            public string RedirectUriPostman { get; set; }
+            /// <summary>
+            ///     Gets or sets the post logouts uri.
+            /// </summary>
+            public string PostLogoutUriFrontend { get; set; }
+            /// <summary>
+            ///     Gets or sets the client identifier.
+            /// </summary>
+            public string ClientId { get; set; }
+            /// <summary>
+            ///     Gets or sets the client secret.
+            /// </summary>
+            public string ClientSecret { get; set; }
 
         }
 
@@ -200,7 +229,7 @@ namespace Configuration
             /// <value>
             /// The redirect uris swagger.
             /// </value>
-            public List<string> RedirectUrisSwagger { get; set; }
+            public string RedirectUrisSwagger { get; set; }
 
             /// <summary>
             /// Gets or sets the post logout uris swagger.
@@ -208,7 +237,7 @@ namespace Configuration
             /// <value>
             /// The post logout uris swagger.
             /// </value>
-            public List<string> PostLogoutUrisSwagger { get; set; }
+            public string PostLogoutUrisSwagger { get; set; }
         }
 
     }

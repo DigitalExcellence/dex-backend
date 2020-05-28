@@ -60,7 +60,7 @@ namespace IdentityServer.Configuration
         public static IEnumerable<Client> Clients(Config config)
         {
             return new[]
-                   {
+            {
                        // machine to machine client (Identity -> API)
                        new Client
                        {
@@ -68,9 +68,7 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.ClientCredentials,
                            ClientSecrets =
                            {
-                               new Secret(config.Self.IdentityApplications.Single(a => a["Key"]
-                                                                                      .Equals("dex-api"))["Value"]
-                                                .Sha256())
+                               new Secret(config.Api.ClientSecret.Sha256())
                            },
                            AllowedScopes =
                            {
@@ -92,17 +90,21 @@ namespace IdentityServer.Configuration
                            ClientName = "Digital Excellence Angular Frontend",
                            ClientSecrets =
                            {
-                               new Secret(config.Self.IdentityApplications.Single(a => a["Key"]
-                                                                                      .Equals("dex-frontend"))["Value"].Sha256())
+                               new Secret(config.Frontend.ClientSecret.Sha256())
                            },
                            AllowedGrantTypes = GrantTypes.Implicit,
                            RequirePkce = true,
 
                            // where to redirect to after login
-                           RedirectUris = config.Frontend.RedirectUrisFrontend,
+                           RedirectUris = new List<string> {
+                               config.Frontend.RedirectUriFrontend,
+                               config.Frontend.RedirectUriPostman
+                           },
 
                            // where to redirect to after logout
-                           PostLogoutRedirectUris = config.Frontend.PostLogoutUrisFrontend,
+                           PostLogoutRedirectUris = new List<string> {
+                               config.Frontend.PostLogoutUriFrontend
+                           },
 
                            AllowedScopes = new List<string>
                             {
@@ -123,10 +125,14 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.Implicit,
                            AllowAccessTokensViaBrowser = true,
                            AlwaysIncludeUserClaimsInIdToken = true,
-                           RedirectUris = config.Swagger.RedirectUrisSwagger,
-                           PostLogoutRedirectUris = config.Swagger.PostLogoutUrisSwagger,
+                           RedirectUris = new List<string> {
+                               config.Swagger.RedirectUrisSwagger
+                           },
+                           PostLogoutRedirectUris = new List<string> {
+                               config.Swagger.PostLogoutUrisSwagger
+                           },
                            AllowedScopes = new List<string>
-                            {
+                           {
                                 IdentityServerConstants.StandardScopes.OpenId,
                                 IdentityServerConstants.StandardScopes.Profile,
                                 nameof(Defaults.Scopes.ProjectRead),
