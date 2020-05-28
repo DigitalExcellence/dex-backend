@@ -29,25 +29,32 @@ namespace Services.Sources
         /// <summary>
         /// Gets the source.
         /// </summary>
-        /// <param name="url">The URL.</param>
+        /// <param name="uri">The URI of the source project.</param>
         /// <exception cref="NotImplementedException"></exception>
-        public void GetSource(string url)
+        public void GetSource(Uri uri)
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// Gets the project information.
         /// </summary>
-        /// <param name="url">The URL.</param>
+        /// <param name="uri">The URI.</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Project GetProjectInformation(string url)
+        public Project GetProjectInformation(Uri uri)
         {
             throw new NotImplementedException();
 
         }
 
-        public bool ProjectUrlMatches(string url)
+        /// <summary>
+        /// Projects the URI matches.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool ProjectURIMatches(Uri uri)
         {
             throw new NotImplementedException();
         }

@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
 using Models;
 using Services.Sources;
 
@@ -41,20 +42,20 @@ namespace Services.Services
         /// <param name="githubSource">The github source.</param>
         public SourceManagerService(GitLabSource gitlabSource, GitHubSource githubSource)
         {
-            this.gitLabSource = gitlabSource;
-            this.gitHubSource = githubSource;
+            gitLabSource = gitlabSource;
+            gitHubSource = githubSource;
 
         }
         /// <summary>
         /// Fetches the project.
         /// </summary>
-        /// <param name="repoUrl">The repo URL.</param>
+        /// <param name="sourceURI">The source URI.</param>
         /// <returns></returns>
-        public Project FetchProject(string repoUrl)
+        public Project FetchProject(Uri sourceURI)
         {
-            if(gitLabSource.ProjectUrlMatches(repoUrl))
+            if(gitLabSource.ProjectURIMatches(sourceURI))
             {
-                return gitLabSource.GetProjectInformation(repoUrl);
+                return gitLabSource.GetProjectInformation(sourceURI);
             }
             else
             {

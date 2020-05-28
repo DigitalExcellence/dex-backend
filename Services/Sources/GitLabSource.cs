@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using Services.Sources.Resources;
 using System;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -34,14 +35,14 @@ namespace Services.Sources
         /// <summary>
         /// The gitlab API URL
         /// </summary>
-        private readonly string gitlabApiUrl = "https://gitlab.com/api/v4/projects/";
+        private readonly string gitlabApiUri = "/api/v4/projects/";
 
         /// <summary>
         /// Gets the source.
         /// </summary>
-        /// <param name="url">The URL.</param>
+        /// <param name="uri">The URI.</param>
         /// <exception cref="NotImplementedException"></exception>
-        public void GetSource(string url)
+        public void GetSource(Uri uri)
         {
             throw new NotImplementedException();
         }
@@ -49,19 +50,30 @@ namespace Services.Sources
         /// <summary>
         /// Gets the project information.
         /// </summary>
-        /// <param name="url">The URL.</param>
+        /// <param name="sourceUri">The source URI.</param>
         /// <returns></returns>
-        public Project GetProjectInformation(string url)
+        public Project GetProjectInformation(Uri sourceUri)
         {
-            url = Regex.Replace(url, @"^((https?):\/\/)?(www.)?gitlab\.com\/", "");
-            string serializedUrl = this.gitlabApiUrl + url.Replace("/", "%2F");
+            // Create valid URL
+            try
+            {
+                Uri.TryCreate(sourceUri.AbsoluteUri, UriKind.Absolute, out sourceUri);
+            } catch(InvalidOperationException)
+            {
+                Uri.TryCreate("https://" + sourceUri.ToString(), UriKind.Absolute, out sourceUri);
+            }
+            string domain = sourceUri.GetLeftPart(UriPartial.Authority);
+            
+            // Get the project path without the prefix slash.
+            string projectPath = sourceUri.AbsoluteUri.Replace(domain, "").Substring(1);
+            Uri serializedUrl = new Uri(domain + gitlabApiUri + projectPath.Replace("/", "%2F"));
 
             Project project = new Project();
 
             GitLabResourceResult resourceResult = FetchRepo(serializedUrl);
             project.Name = resourceResult.name;
             project.ShortDescription = resourceResult.description;
-            project.Uri = url;
+            project.Uri = resourceResult.web_url;
             if(!string.IsNullOrEmpty(resourceResult.readme_url))
             {
                 project.Description = FetchReadme(resourceResult.readme_url);
@@ -70,11 +82,47 @@ namespace Services.Sources
             return project;
         }
 
-        public bool ProjectUrlMatches(string url)
+
+        public bool ProjectURIMatches(Uri sourceUri)
         {
-            Regex rx = new Regex(@"^((https?):\/\/)?(www.)?gitlab\.com\/.+\/.+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            MatchCollection matches = rx.Matches(url);
-            return rx.IsMatch(url);
+            //Create a valid URL
+            try
+            {
+                Uri.TryCreate(sourceUri.AbsoluteUri, UriKind.Absolute, out sourceUri);
+            } catch(InvalidOperationException)
+            {
+                Uri.TryCreate("https://" + sourceUri.ToString(), UriKind.Absolute, out sourceUri);
+            }
+            /*
+             * This regex matches the following url schemas:
+             * http://domain.com/group/project
+             * https://domain.com/group/project
+             * http://www.domain.com/group/project
+             * https://www.domain.com/group/project
+             * domain.com/group/project
+             * www.domain.com/group/project
+             * http://domain.com:123/group/project
+             * https://domain.com:123/group/project
+             * http://1.2.3.4/group/project
+             * https://1.2.3.4/group/project
+             * http://1.2.3.4:123/group/project
+             * https://1.2.3.4:123/group/project
+             * 1.2.3.4/group/project
+             * 1.2.3.4:123/group/project
+            */
+            bool domainMatch = new Regex(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)(:\d+)?\/.+\/.+", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(sourceUri.AbsoluteUri).Success;
+            if(domainMatch)
+            {
+                RestClient client = new RestClient(sourceUri);
+                RestRequest request = new RestRequest(Method.GET);
+                request.AddHeader("accept", "*/*");
+                IRestResponse response = client.Execute(request);
+                return response.Content.Contains("<meta content=\"GitLab\" property=\"og:site_name\">");
+                
+            } else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -90,11 +138,11 @@ namespace Services.Sources
         /// <summary>
         /// Fetches the repo.
         /// </summary>
-        /// <param name="repoUrl">The repo URL.</param>
+        /// <param name="sourceUri">The source URI.</param>
         /// <returns></returns>
-        private GitLabResourceResult FetchRepo(string repoUrl)
+        private GitLabResourceResult FetchRepo(Uri sourceUri)
         {
-            RestClient client = new RestClient(repoUrl);
+            RestClient client = new RestClient(sourceUri);
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);
             return JsonConvert.DeserializeObject<GitLabResourceResult>(response.Content);
@@ -107,7 +155,7 @@ namespace Services.Sources
         /// <returns></returns>
         private string FetchReadme(string readmeUrl)
         {
-            readmeUrl = readmeUrl.Replace("-/blob", "-/raw");
+            readmeUrl = readmeUrl.Replace("blob", "raw");
             RestClient client = new RestClient(readmeUrl);
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);

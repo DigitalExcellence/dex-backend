@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
 using Models;
 
 namespace Services.Sources
@@ -22,12 +23,12 @@ namespace Services.Sources
 
     public interface ISource
     {
-        bool ProjectUrlMatches(string url);
+        bool ProjectURIMatches(Uri uri);
         void Search(string searchTerm);
 
-        void GetSource(string url);
+        void GetSource(Uri uri);
 
-        Project GetProjectInformation(string url);
+        Project GetProjectInformation(Uri uri);
 
     }
 
