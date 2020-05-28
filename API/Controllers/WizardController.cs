@@ -55,7 +55,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
         /// <returns></returns>
-        [HttpGet("wizard")]
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetWizardInformation(Uri sourceURI)
         {
