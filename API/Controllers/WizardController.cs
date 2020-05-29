@@ -75,6 +75,16 @@ namespace API.Controllers
             {
                 return NotFound();
             }
+            if(project.Name == null && project.ShortDescription == null && project.Description == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Project not found.",
+                    Detail = "the incoming source url aims at a gitlab which is either not instanciated or is a group.",
+                    Instance = "E56D89C5-8760-4503-839C-F695092C79BF"
+                };
+                return BadRequest(problem);
+            }
             return Ok(project);
         }
     }
