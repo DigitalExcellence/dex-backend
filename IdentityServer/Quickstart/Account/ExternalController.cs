@@ -15,7 +15,9 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Configuration;
 using IdentityModel;
+using IdentityServer.Quickstart.Account;
 using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Models;
@@ -27,11 +29,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace IdentityServer
 {
@@ -44,12 +52,13 @@ namespace IdentityServer
         private readonly IIdentityServerInteractionService interaction;
         private readonly ILogger<ExternalController> logger;
         private readonly TestUserStore users;
-
+        private readonly Config config;
         public ExternalController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IEventService events,
             ILogger<ExternalController> logger,
+            Config config,
             TestUserStore users = null)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
@@ -60,6 +69,7 @@ namespace IdentityServer
             this.clientStore = clientStore;
             this.logger = logger;
             this.events = events;
+            this.config = config;
         }
 
         /// <summary>
@@ -77,7 +87,6 @@ namespace IdentityServer
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
             }
-
             // start challenge and roundtrip the return URL and scheme 
             AuthenticationProperties props = new AuthenticationProperties
                                              {
@@ -89,14 +98,138 @@ namespace IdentityServer
                                                  }
                                              };
 
+            HttpContext.Response.Cookies.Append("returnUrl", returnUrl);
+
             return Challenge(props, provider);
+        }
+
+        /// <summary>
+        /// The callback endpoint for the fontys single sign on.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="state">The state.</param>
+        /// <param name="session_state">State of the session.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">
+        /// The FHICT didn't return a correct response. Is the FHICT server accessible? - new Exception("Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException)
+        /// or
+        /// Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage
+        /// </exception>
+        [HttpPost("/external/callback/fhict")]
+        public async Task<IActionResult> Callback(string code, string state, string session_state)
+        {
+            // Get the return url for the frontend from the cookies.
+            string returnUrl = HttpContext.Request.Cookies["returnUrl"];
+            HttpContext.Response.Cookies.Delete("returnUrl");
+
+            //Request an accesstoken and idtoken from the authority.
+            RestClient client = new RestClient(config.FfhictOIDC.Authority + "/connect/token");
+            RestRequest request = new RestRequest(Method.POST);
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddParameter("grant_type", "authorization_code");
+            request.AddParameter("code", code);
+            request.AddParameter("redirect_uri",config.FfhictOIDC.RedirectUri);
+            request.AddParameter("client_id", config.FfhictOIDC.ClientId);
+            request.AddParameter("client_secret", config.FfhictOIDC.ClientSecret);
+            IRestResponse response = client.Execute(request);
+
+            if(response.StatusCode != HttpStatusCode.OK)
+            {
+                return BadRequest("Could not validate the identity server authentication.");
+            }
+
+            // Parse the content to get the access token.
+            ExternalConnectToken fhictToken = JsonConvert.DeserializeObject<ExternalConnectToken>(response.Content);
+
+            if(string.IsNullOrWhiteSpace(fhictToken.access_token))
+            {
+                throw new Exception("The FHICT didn't return a correct response. Is the FHICT server accessible?", new Exception("Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException));
+            }
+
+
+            JwtSecurityToken jwt = new JwtSecurityToken(fhictToken.access_token);
+            
+            string idp = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("idp")).Value;
+            string sub = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("sub")).Value;
+            string name = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("name")).Value;
+            string iss = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("iss")).Value;
+            string schema = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("schema")).Value;
+
+            ExternalResult result = new ExternalResult();
+            result.Schema = iss;
+            result.Claims = jwt.Claims;
+            result.ReturnUrl = returnUrl;
+            result.IdToken = fhictToken.id_token;
+
+            // lookup our user and external provider info
+            (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) = FindUserFromExternalProvider(result);
+
+            if(user == null)
+            {
+                //Retrieve more user information from the external source.
+                // Get User information
+                RestClient informationClient = new RestClient($"{iss}/connect/userinfo");
+                RestRequest informationRequest = new RestRequest(Method.GET);
+                informationRequest.AddHeader("Authorization", $"Bearer {fhictToken.access_token}");
+                IRestResponse informationResponse = informationClient.Execute(informationRequest);
+                ExternalUserInfo userinfo =  JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
+
+                List<Claim> claimsList = claims.ToList();
+                claimsList.Add(new Claim("email", userinfo.preferred_username));
+                claimsList.Add(new Claim("idp", idp));
+                claimsList.Add(new Claim("name", userinfo.preferred_username));
+
+                // simply auto-provisions new external user
+                user = AutoProvisionUser(provider, providerUserId, claimsList);
+            }
+
+            // this allows us to collect any additional claims or properties
+            // for the specific protocols used and store them in the local auth cookie.
+            // this is typically used to store data needed for signout from those protocols.
+            List<Claim> additionalLocalClaims = new List<Claim>();
+            AuthenticationProperties localSignInProps = new AuthenticationProperties();
+            ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
+
+            // issue authentication cookie for user
+            IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
+            {
+                DisplayName = user.Username,
+                IdentityProvider = provider,
+                AdditionalClaims = additionalLocalClaims
+            };
+
+            await HttpContext.SignInAsync(isuser, localSignInProps).ConfigureAwait(false);
+
+            // delete temporary cookie used during external authentication
+            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+
+            // check if external login is in the context of an OIDC request
+            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
+            await events.RaiseAsync(new UserLoginSuccessEvent(provider,
+                                                               providerUserId,
+                                                               user.SubjectId,
+                                                               user.Username,
+                                                               true,
+                                                               context?.ClientId)).ConfigureAwait(false);
+
+            if(context != null)
+            {
+                if(await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
+                {
+                    // if the client is PKCE then we assume it's native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return this.LoadingPage("Redirect", returnUrl);
+                }
+            }
+
+            return Redirect(returnUrl);
         }
 
         /// <summary>
         ///     Post processing of external authentication
         /// </summary>
-        [HttpPost("callback/fhict")]
-        public async Task<IActionResult> Callback()
+        [HttpGet]
+        public async Task<IActionResult> DefaultCallback()
         {
             // read external identity from the temporary cookie
             AuthenticateResult result =
@@ -114,7 +247,7 @@ namespace IdentityServer
 
             // lookup our user and external provider info
             (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) =
-                FindUserFromExternalProvider(result);
+                FindUserFromExternalProvider(null);
 
             //TODO: Call our API and add the user to our database
             //TODO: Calling our API, requires the identity server to be authenticated, is this done with ClientCredential flow?
@@ -132,7 +265,7 @@ namespace IdentityServer
             // this is typically used to store data needed for signout from those protocols.
             List<Claim> additionalLocalClaims = new List<Claim>();
             AuthenticationProperties localSignInProps = new AuthenticationProperties();
-            ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
+            ProcessLoginCallbackForOidc(null, additionalLocalClaims, localSignInProps);
 
             // issue authentication cookie for user
             IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
@@ -172,23 +305,28 @@ namespace IdentityServer
             return Redirect(returnUrl);
         }
 
-        private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims)
-            FindUserFromExternalProvider(AuthenticateResult result)
-        {
-            ClaimsPrincipal externalUser = result.Principal;
 
+        
+
+
+        
+
+        
+
+        private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(ExternalResult result)
+        {
             // try to determine the unique id of the external user (issued by the provider)
             // the most common claim type for that are the sub claim and the NameIdentifier
             // depending on the external provider, some other claim type might be used
-            Claim userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
-                                externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
+            Claim userIdClaim = result.Claims.Where(c => c.Type == JwtClaimTypes.Subject).FirstOrDefault() ??
+                                result.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault() ??
                                 throw new Exception("Unknown userid");
 
             // remove the user id claim so we don't include it as an extra claim if/when we provision the user
-            List<Claim> claims = externalUser.Claims.ToList();
+            List<Claim> claims = result.Claims.ToList();
             claims.Remove(userIdClaim);
 
-            string provider = result.Properties.Items["scheme"];
+            string provider = result.Schema;
             string providerUserId = userIdClaim.Value;
 
             // find external user
@@ -203,20 +341,20 @@ namespace IdentityServer
             return user;
         }
 
-        private void ProcessLoginCallbackForOidc(AuthenticateResult externalResult,
+        private void ProcessLoginCallbackForOidc(ExternalResult externalResult,
                                                  List<Claim> localClaims,
                                                  AuthenticationProperties localSignInProps)
         {
             // if the external system sent a session id claim, copy it over
             // so we can use it for single sign-out
-            Claim sid = externalResult.Principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
+            Claim sid = externalResult.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
             if(sid != null)
             {
                 localClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
             }
 
             // if the external provider issued an id_token, we'll keep it for signout
-            string idToken = externalResult.Properties.GetTokenValue("id_token");
+            string idToken = externalResult.IdToken;
             if(idToken != null)
             {
                 localSignInProps.StoreTokens(new[]

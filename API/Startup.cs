@@ -235,19 +235,25 @@ namespace API
                         string studentId = context.User.GetStudentId(context);
                         if(await userService.GetUserByIdentityIdAsync(studentId).ConfigureAwait(false) == null)
                         {
+                            IRoleService roleService = context.RequestServices.GetService<IRoleService>();
+                            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
+
                             User newUser = context.GetUserInformation(Config);
                             if(newUser == null)
                             {
+
                                 // Then it probably belongs swagger so we set the username as developer.
                                 newUser = new User()
                                 {
                                     Name = "Developer",
                                     Email = "Developer@DEX.com",
-                                    IdentityId = studentId
+                                    IdentityId = studentId,
+                                    Role = registeredUserRole
                                 };
                                 userService.Add(newUser);
                             } else
                             {
+                                newUser.Role = registeredUserRole;
                                 userService.Add(newUser);
                             }
                             await dbContext.SaveChangesAsync().ConfigureAwait(false);

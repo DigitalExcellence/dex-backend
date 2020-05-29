@@ -60,6 +60,12 @@ namespace IdentityServer
         /// </summary>
         public Config Config { get; }
 
+        /// <summary>
+        /// Gets the environment.
+        /// </summary>
+        /// <value>
+        /// The environment.
+        /// </value>
         public IWebHostEnvironment Environment { get; }
 
         /// <summary>
@@ -89,7 +95,7 @@ namespace IdentityServer
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             builder.AddTestUsers(TestUsers.Users);
 
-
+            services.AddSingleton(Config);
 
             // sets the authentication schema.
             services.AddAuthentication(options =>
@@ -141,14 +147,6 @@ namespace IdentityServer
                                                       };
                     })
                     .AddCookie();
-            // services.AddAuthentication()
-            //     .AddOpenIdConnect("FHICT", "Fontys FHICT", options =>
-            //     {
-            //         options.ClientId = "";
-            //         options.ClientSecret = "";
-            //         options.Authority = "";
-            //         // ...
-            //     });
 
             //TODO: Have some sort of certificate on the production servers
             // not recommended for production - you need to store your key material somewhere secure
@@ -158,6 +156,8 @@ namespace IdentityServer
             {
                 builder.AddDeveloperSigningCredential();
             }
+
+            // TODO tighten cors
             services.AddCors(options =>
             {
                 options.AddPolicy("dex-api",
