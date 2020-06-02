@@ -15,31 +15,43 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Configuration;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Models;
 using Models.Defaults;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
+using Services.Services;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading.Tasks;
 
 namespace API.Extensions
 {
-
     internal static class UsersExtensions
     {
-
         /// <summary>
-        ///     Gets the student identifier asynchronous.
+        /// Gets the identity identifier.
         /// </summary>
         /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
         /// <returns></returns>
-        /// <exception cref="Exception">The back-end header isn't added!</exception>
+        /// <exception cref="Exception">
+        /// User is not authenticated!
+        /// or
+        /// The back-end header isn't added!
+        /// </exception>
         /// <exception cref="NotSupportedException">The jwt doesn't have a sub</exception>
-        /// <exception cref="System.Exception">The back-end header isn't added!</exception>
-        public static int GetStudentId(this ClaimsPrincipal claimsPrincipal, HttpContext actionContext)
+        public static string GetIdentityId(this ClaimsPrincipal claimsPrincipal, HttpContext actionContext)
         {
-            int studentId;
+            string identityId;
 
             if(claimsPrincipal.Identities.Any(i => !i.IsAuthenticated))
             {
@@ -48,43 +60,77 @@ namespace API.Extensions
 
             if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication))
             {
-                string studentIdHeader = actionContext.Request.Headers.SingleOrDefault(h => h.Key == "StudentId")
+                string identityIdHeader = actionContext.Request.Headers.SingleOrDefault(h => h.Key == "IdentityId")
                                                       .Value
                                                       .FirstOrDefault();
 
-                if(string.IsNullOrWhiteSpace(studentIdHeader))
+                if(string.IsNullOrWhiteSpace(identityIdHeader))
                 {
                     throw new Exception("The back-end header isn't added!");
                 }
 
-                studentId = Convert.ToInt32(studentIdHeader);
+                identityId = identityIdHeader;
             } else
             {
                 string sub = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.Equals("sub"))
-                                            .Value;
+                                            ?.Value;
                 if(sub == null)
                 {
                     throw new NotSupportedException("The jwt doesn't have a sub");
                 }
 
-                return Convert.ToInt32(sub);
+                return sub;
             }
 
-            return studentId;
+            return identityId;
         }
 
         /// <summary>
-        ///     Gets the name of the student.
+        /// Gets the context user.
         /// </summary>
-        /// <param name="iUserPrincipal">The i user principal.</param>
+        /// <param name="actionContext">The action context.</param>
+        /// <param name="userService">The user service.</param>
         /// <returns></returns>
-        public static string GetStudentName(this IPrincipal iUserPrincipal)
+        public static async Task<User> GetContextUser(this HttpContext actionContext, IUserService userService)
         {
-            return iUserPrincipal.Identity.Name;
-
-            //return Student.ConvertStudentPcnToCompatibleVersion(iUserPrincipal.Identity.Name);
+            string identityProverId = actionContext.User.GetIdentityId(actionContext);
+            return await userService.GetUserByIdentityIdAsync(identityProverId);
         }
 
-    }
 
+        /// <summary>
+        /// Gets the user information synchronous.
+        /// </summary>
+        /// <param name="actionContext">The action context.</param>
+        /// <param name="config">The configuration.</param>
+        /// <returns></returns>
+        public static User GetUserInformation(this HttpContext actionContext, Config config)
+        {
+            string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
+            if(string.IsNullOrEmpty(bearerToken))
+            {
+                return null;
+            }
+            // Not sure maybe has to be retrieved from the originating identity server aka from the token iss.
+            RestClient client = new RestClient(config.IdentityServer.IdentityUrl + "/connect/userinfo");
+            RestRequest request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", bearerToken);
+            IRestResponse response = client.Execute(request);
+            JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
+            if(jsonResponse == null ||
+               !jsonResponse.ContainsKey("name") ||
+               !jsonResponse.ContainsKey("email") ||
+               !jsonResponse.ContainsKey("sub"))
+            {
+                return null;
+            }
+            User newUser = new User()
+            {
+                Name = (string) jsonResponse["name"],
+                Email = (string) jsonResponse["email"],
+                IdentityId = (string) jsonResponse["sub"]
+            };
+            return newUser ;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -23,33 +23,39 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-
     public interface IUserService : IService<User>
     {
-
         Task<User> GetUserAsync(int userId);
+        Task<User> GetUserByIdentityIdAsync(string identityId);
 
         Task<bool> RemoveUserAsync(int userId);
 
         User GetUserByUsername(string upn);
 
+        bool UserHasScope(string identityId, string scope);
+
+        bool UserWithRoleExists(Role role);
     }
 
     public class UserService : Service<User>, IUserService
     {
-
         public UserService(IUserRepository repository) : base(repository) { }
 
         protected new IUserRepository Repository => (IUserRepository) base.Repository;
 
         public async Task<User> GetUserAsync(int userId)
         {
-            return await Repository.GetUserAsync(userId);
+            return await Repository.GetUserAsync(userId).ConfigureAwait(false);
+        }
+
+        public async Task<User> GetUserByIdentityIdAsync(string identityId)
+        {
+            return await Repository.GetUserByIdentityIdAsync(identityId).ConfigureAwait(false);
         }
 
         public async Task<bool> RemoveUserAsync(int userId)
         {
-            return await Repository.RemoveUserAsync(userId);
+            return await Repository.RemoveUserAsync(userId).ConfigureAwait(false);
         }
 
         public User GetUserByUsername(string upn)
@@ -57,6 +63,14 @@ namespace Services.Services
             throw new NotImplementedException();
         }
 
-    }
+        public bool UserHasScope(string identityId, string scope)
+        {
+            return Repository.UserHasScope(identityId, scope);
+        }
 
+        public bool UserWithRoleExists(Role role)
+        {
+            return Repository.UserWithRoleExists(role);
+        }
+    }
 }

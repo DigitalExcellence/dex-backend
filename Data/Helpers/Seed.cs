@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -16,47 +16,126 @@
 */
 
 using Bogus;
-using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Defaults;
 using System;
 using System.Collections.Generic;
 
 namespace Data.Helpers
 {
-
     /// <summary>
     ///     Class for helpers to seed data into the database
     /// </summary>
     public static class Seed
     {
-
         /// <summary>
         ///     Seed random users into the database using fake date from Bogus
         /// </summary>
-        public static List<User> SeedUsers(this ModelBuilder modelBuilder)
+        public static List<User> SeedUsers(List<Role> roles)
         {
+            Role registeredUserRole = roles.Find(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
             List<User> users = new List<User>();
             for(int i = 0; i < 30; i++)
             {
                 Faker<User> userToFake = new Faker<User>()
-                                         .RuleFor(s => s.Id, i + 1)
                                          .RuleFor(s => s.Name, f => f.Name.FirstName())
                                          .RuleFor(s => s.Email, f => f.Internet.Email());
 
                 User user = userToFake.Generate();
-
+                user.Role = registeredUserRole;
                 user.IdentityId = (i + 2).ToString();
-                modelBuilder.Entity<User>()
-                            .HasData(user);
+
                 users.Add(user);
             }
             return users;
+        }
+        /// <summary>
+        /// Seeds the roles.
+        /// </summary>
+        /// <returns></returns>
+        public static List<Role> SeedRoles()
+        {
+            List<Role> roles = new List<Role>();
+            Role registeredUserRole = new Role()
+            {
+                Name = nameof(Defaults.Roles.RegisteredUser),
+                Scopes = new List<RoleScope>()
+                {
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.UserWrite)),
+                }
+            };
+            roles.Add(registeredUserRole);
+
+            Role prRole = new Role()
+            {
+                Name = nameof(Defaults.Roles.PrUser),
+                Scopes = new List<RoleScope>()
+                {
+                    new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
+                }
+            };
+            roles.Add(prRole);
+
+            Role administratorRole = new Role()
+            {
+                Name = nameof(Defaults.Roles.Administrator),
+                Scopes = new List<RoleScope>()
+                {
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.UserWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.UserRead)),
+                    new RoleScope(nameof(Defaults.Scopes.RoleRead)),
+                    new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
+                }
+            };
+            roles.Add(administratorRole);
+
+            return roles;
+        }
+        /// <summary>
+        /// Seeds the admin user.
+        /// </summary>
+        /// <param name="roles">The roles.</param>
+        /// <returns></returns>
+        public static User SeedAdminUser(List<Role> roles)
+        {
+            Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
+
+            User user = new User
+            {
+                Role = adminRole,
+                IdentityId = "88421113",
+                Email = "Administrator@dex.software",
+                Name = "Administrator bob"
+            };
+
+            return user;
+        }
+        /// <summary>
+        /// Seeds the pr user.
+        /// </summary>
+        /// <param name="roles">The roles.</param>
+        /// <returns></returns>
+        public static User SeedPrUser(List<Role> roles)
+        {
+            Role prRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
+            User user = new User
+            {
+                IdentityId = "985632147",
+                Email = "Pr@dex.software",
+                Name = "Pr jerry",
+                Role = prRole
+            };
+
+            return user;
         }
 
         /// <summary>
         ///     Seed random projects into the database using fake date from Bogus
         /// </summary>
-        public static List<Project> SeedProjects(this ModelBuilder modelBuilder, List<User> users)
+        public static List<Project> SeedProjects(List<User> users)
         {
             if(users.Count < 1) return null;
             List<Project> projects = new List<Project>();
@@ -65,7 +144,6 @@ namespace Data.Helpers
             {
                 User user = users[r.Next(0, users.Count - 1)];
                 Faker<Project> projectToFake = new Faker<Project>()
-                                               .RuleFor(s => s.Id, i + 1)
                                                .RuleFor(s => s.UserId, user.Id)
                                                .RuleFor(s => s.Uri, f => f.Internet.Url())
                                                .RuleFor(s => s.Name, f => f.Commerce.ProductName())
@@ -76,8 +154,6 @@ namespace Data.Helpers
                 project.Created = DateTime.Now.AddDays(-2);
                 project.Updated = DateTime.Now;
                 projects.Add(project);
-                modelBuilder.Entity<Project>()
-                            .HasData(project);
             }
 
             return projects;
@@ -86,12 +162,12 @@ namespace Data.Helpers
         /// <summary>
         ///     Seed random Collaborators into the database using fake date from Bogus
         /// </summary>
-        public static void SeedCollaborators(this ModelBuilder modelBuilder, List<Project> projects)
+        public static List<Collaborator> SeedCollaborators(List<Project> projects)
         {
+            List<Collaborator> collaborators = new List<Collaborator>();
             foreach(Project project in projects)
             {
                 Faker<Collaborator> collaboratorToFake = new Faker<Collaborator>()
-                                                         .RuleFor(s => s.Id, f => f.Random.Number(1, 9999))
                                                          .RuleFor(c => c.FullName, f => f.Name.FullName())
                                                          .RuleFor(c => c.Role, f => f.Name.JobTitle());
 
@@ -99,11 +175,33 @@ namespace Data.Helpers
                 Collaborator collaborator2 = collaboratorToFake.Generate();
                 collaborator.ProjectId = project.Id;
                 collaborator2.ProjectId = project.Id;
-                modelBuilder.Entity<Collaborator>()
-                            .HasData(collaborator, collaborator2);
+
+                collaborators.Add(collaborator);
+                collaborators.Add(collaborator2);
             }
+            return collaborators;
         }
+        /// <summary>
+        /// Seeds the highlights.
+        /// </summary>
+        /// <param name="projects">The projects.</param>
+        /// <returns></returns>
+        public static List<Highlight> SeedHighlights(List<Project> projects)
+        {
+            List<Highlight> highlights = new List<Highlight>();
 
+            for(int i = 0; i < 5 && i < projects.Count; i++)
+            {
+                Highlight highlight = new Highlight
+                {
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddYears(2),
+                    Project = projects[i]
+                };
+                highlights.Add(highlight);
+            }
+
+            return highlights;
+        }
     }
-
 }

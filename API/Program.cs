@@ -46,6 +46,11 @@ namespace API
                          .MinimumLevel.Override("System", LogEventLevel.Warning)
                          .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                          .Enrich.FromLogContext()
+                         .WriteTo.Sentry(s =>
+                         {
+                             s.MinimumBreadcrumbLevel = LogEventLevel.Debug;
+                             s.MinimumEventLevel = LogEventLevel.Error;
+                         })
                          .WriteTo.Console(outputTemplate:
                                           "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                           theme: AnsiConsoleTheme.Literate)
@@ -84,6 +89,7 @@ namespace API
                                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
                               config.AddEnvironmentVariables();
                           })
+                          .UseSentry()
                           .UseStartup<Startup>()
                           .UseKestrel(o => o.AddServerHeader = false)
                           .UseSerilog();

@@ -18,6 +18,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Models.Defaults;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,31 +27,30 @@ using System.Security.Claims;
 
 namespace API.Extensions
 {
-
     /// <summary>
     ///     Easily grab scopes
     /// </summary>
     public class AuthorizeScopeAttribute : TypeFilterAttribute
     {
-
         /// <summary>
+        /// Authorization attribute that is depricated.
         /// </summary>
         /// <param name="claimValue"></param>
         public AuthorizeScopeAttribute(string claimValue) : base(typeof(AuthorizeScopeFilter))
         {
             Arguments = new object[] {new Claim("scope", claimValue)};
         }
-
     }
 
     /// <summary>
+    /// Depricated attribute filter.
     /// </summary>
     public class AuthorizeScopeFilter : IAuthorizationFilter
     {
-
         private readonly Claim claim;
 
         /// <summary>
+        /// Filter constructor.
         /// </summary>
         /// <param name="claim"></param>
         public AuthorizeScopeFilter(Claim claim)
@@ -59,14 +59,16 @@ namespace API.Extensions
         }
 
         /// <summary>
+        /// On authorization check, check for the scopes.
         /// </summary>
         /// <param name="context"></param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            UserService userService = context.HttpContext.RequestServices.GetService(typeof(UserService)) as UserService;
             bool hasClaim = context.HttpContext.User.Claims.Any(c => c.Type == claim.Type && c.Value == claim.Value);
 
             //Get all scopes from the user
-            IEnumerable<Claim> scopes =
+                IEnumerable<Claim> scopes =
                 context.HttpContext.User.FindAll("scope");
             bool hasIdentityClaim = false;
 
@@ -106,7 +108,5 @@ namespace API.Extensions
                 context.Result = new ForbidResult();
             }
         }
-
     }
-
 }

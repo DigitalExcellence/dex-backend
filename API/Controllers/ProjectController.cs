@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -23,14 +24,11 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Services.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
     ///     This controller handles the CRUD projects
     /// </summary>
@@ -38,13 +36,12 @@ namespace API.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
 
         /// <summary>
-        ///     Initialize a new instance of ProjectController
+        /// Initialize a new instance of ProjectController
         /// </summary>
         /// <param name="projectService"></param>
         /// <param name="userService"></param>
@@ -63,8 +60,8 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProjects()
         {
-            List<Project> projects = await projectService.GetAllWithUsersAsync();
-            if(!projects.Any())
+            List<Project> projects = await projectService.GetAllWithUsersAsync().ConfigureAwait(false);
+            if(projects.Count == 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -77,7 +74,6 @@ namespace API.Controllers
 
             return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
         }
-
 
         /// <summary>
         ///     Get a project.
@@ -97,7 +93,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId);
+            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId).ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -117,7 +113,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        [Authorize]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
         {
             if(projectResource == null)
@@ -131,11 +127,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-
-            //TODO: When login in frontend is functioning, get the user from JWT information
-            User user = await userService.GetUserAsync(1);
-            project.User = user;
-            project.UserId = user.Id;
+            project.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             try
             {
                 projectService.Add(project);
@@ -160,10 +152,10 @@ namespace API.Controllers
         /// <param name="projectResource"></param>
         /// <returns></returns>
         [HttpPut("{projectId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        [Authorize]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
-            Project project = await projectService.FindAsync(projectId);
+            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -177,9 +169,22 @@ namespace API.Controllers
 
             mapper.Map(projectResource, project);
 
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+
+            if(!(project.UserId == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to edit the project.",
+                    Detail = "The user is not allowed to edit the project.",
+                    Instance = "2E765D18-8EBC-4117-8F9E-B800E8967038"
+                };
+                return Unauthorized(problem);
+            }
+
             projectService.Update(project);
             projectService.Save();
-
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
@@ -188,10 +193,11 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("{projectId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        [Authorize]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            if(await projectService.FindAsync(projectId) == null)
+            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
+            if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -201,11 +207,24 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            await projectService.RemoveAsync(projectId);
+            
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+
+            if(!(project.UserId == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the project.",
+                    Detail = "The user is not allowed to delete the project.",
+                    Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
+                };
+                return Unauthorized(problem);
+            }
+
+            await projectService.RemoveAsync(projectId).ConfigureAwait(false);
             projectService.Save();
             return Ok();
         }
-
     }
-
 }
