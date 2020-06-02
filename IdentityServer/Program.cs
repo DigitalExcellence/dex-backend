@@ -42,11 +42,6 @@ namespace IdentityServer
                          {
                              s.MinimumBreadcrumbLevel = LogEventLevel.Debug;
                              s.MinimumEventLevel = LogEventLevel.Error;
-                             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
-                             {
-                                 IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                                 s.Dsn = new Dsn(config.GetSection("App:Sentry:IdentityDsn").Value);
-                             }
                          })
                          .WriteTo.Console(outputTemplate:
                                           "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
