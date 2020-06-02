@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unittests for UserRepository - [#121] (https://github.com/DigitalExcellence/dex-backend/issues/121)
 - Added unittests for UserService - [#121] (https://github.com/DigitalExcellence/dex-backend/issues/121)
 - Added an endpoint to get information about the current user - [#141](https://github.com/DigitalExcellence/dex-backend/issues/141)
+- Added pagination to the get all projects endpoint - [#156](https://github.com/DigitalExcellence/dex-backend/issues/156)
+- Added sorting to the get all projects endpoint - [#157](https://github.com/DigitalExcellence/dex-backend/issues/157)
+- Added filtering to the get all projects endpoint - [#161](https://github.com/DigitalExcellence/dex-backend/issues/161)
 
 ### Changed
 
