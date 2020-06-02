@@ -25,7 +25,7 @@ namespace Services.Tests
         public async Task GetUserAsync_GoodFlow()
         {
             int userId = 1;
-            User user = new User(userId);
+            User user = new User();
 
             RepositoryMock.Setup(
                repository => repository.GetUserAsync(userId))
