@@ -24,7 +24,7 @@ services:
       - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=${IDENTITY_URL}
-      - App__Sentry__ApiDsn=${SENTRY_API_DSN}
+      - SENTRY_DSN = ${SENTRY_DSN}
     image:  digitalexcellence/stagingapi
     networks:
       - mssql-network
@@ -45,7 +45,7 @@ services:
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}      
       - App__swagger__RedirectUrisSwagger=${REDIRECT_URIS_SWAGGER}
       - App__swagger__PostLogoutUrisSwagger=${POST_LOGOUT_URIS_SWAGGER}
-      - App__Sentry__IdentityDsn=${SENTRY_IDENTITY_DSN}
+      - SENTRY_DSN = ${SENTRY_DSN}
     image: digitalexcellence/stagingidentity
 
 networks:

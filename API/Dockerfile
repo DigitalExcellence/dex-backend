@@ -14,7 +14,7 @@ ENV App__Frontend__ClientSecret = ''
 
 ENV App__IdentityServer__IdentityUrl = ''
 
-ENV App__Sentry__ApiDsn = ''
+ENV SENTRY_DSN = ''
 
 RUN dotnet publish API/1_API.csproj -c Release -o out
 
