@@ -26,6 +26,8 @@ ENV App__swagger__RedirectUrisSwagger = ''
 
 ENV App__swagger__PostLogoutUrisSwagger = ''
 
+ENV App__Sentry__IdentityDsn = ''
+
 RUN dotnet tool install --tool-path ./ dotnet-certificate-tool
 
 RUN dotnet publish IdentityServer/6_IdentityServer.csproj -c Release -o out
