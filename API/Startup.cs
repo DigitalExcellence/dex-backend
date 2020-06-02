@@ -247,7 +247,7 @@ namespace API
                                 {
                                     Name = "Developer",
                                     Email = "Developer@DEX.com",
-                                    IdentityId = studentId,
+                                    IdentityId = identityId,
                                     Role = registeredUserRole
                                 };
                                 userService.Add(newUser);
