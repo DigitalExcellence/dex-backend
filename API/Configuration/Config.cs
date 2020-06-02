@@ -60,6 +60,14 @@ namespace API.Configuration
         public SwaggerConfig Swagger { get; set; }
 
         /// <summary>
+        /// Gets or sets the Sentry configuration.
+        /// </summary>
+        /// <value>
+        /// The Sentry configuration.
+        /// </value>
+        public SentryConfig Sentry { get; set; }
+
+        /// <summary>
         ///     Validates this instance.
         /// </summary>
         public void Validate()
@@ -67,6 +75,7 @@ namespace API.Configuration
             Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
             Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
+            Validator.ValidateObject(Sentry, new ValidationContext(Sentry), true);
         }
     }
 
@@ -133,5 +142,19 @@ namespace API.Configuration
         /// </value>
         [Required]
         public string ClientId { get; set; }
+    }
+
+    /// <summary>
+    /// Contains the Sentry configuration.
+    /// </summary>
+    public class SentryConfig
+    {
+        /// <summary>
+        /// Gets or sets the api dsn.
+        /// </summary>
+        /// <value>
+        /// The api dsn.
+        /// </value>
+        public string ApiDsn { get; set; }
     }
 }

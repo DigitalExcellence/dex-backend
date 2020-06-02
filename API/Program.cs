@@ -18,6 +18,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Sentry;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -50,6 +51,11 @@ namespace API
                          {
                              s.MinimumBreadcrumbLevel = LogEventLevel.Debug;
                              s.MinimumEventLevel = LogEventLevel.Error;
+                             if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+                             {
+                                 IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                                 s.Dsn = new Dsn(config.GetSection("App:Sentry:ApiDsn").Value);
+                             }
                          })
                          .WriteTo.Console(outputTemplate:
                                           "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",

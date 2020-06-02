@@ -58,6 +58,15 @@ namespace Configuration
         public FrontendConfig Frontend { get; set; }
 
         public SwaggerConfig Swagger { get; set; }
+
+        /// <summary>
+        ///     Gets or sets Sentry.
+        /// </summary>
+        /// <value>
+        ///     The Sentry config.
+        /// </value>
+        public SentryConfig Sentry { get; set; }
+
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -67,6 +76,7 @@ namespace Configuration
             Validator.ValidateObject(Api, new ValidationContext(Api), true);
             Validator.ValidateObject(Fhict, new ValidationContext(Fhict), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
+            Validator.ValidateObject(Sentry, new ValidationContext(Sentry), true);
         }
 
         /// <summary>
@@ -238,6 +248,20 @@ namespace Configuration
             /// The post logout uris swagger.
             /// </value>
             public string PostLogoutUrisSwagger { get; set; }
+        }
+
+        /// <summary>
+        /// Contains the Sentry configuration.
+        /// </summary>
+        public class SentryConfig
+        {
+            /// <summary>
+            /// Gets or sets the Sentry dsn for Identity.
+            /// </summary>
+            /// <value>
+            /// The Sentry dsn for identity.
+            /// </value>
+            public string IdentityDsn { get; set; }
         }
 
     }
