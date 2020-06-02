@@ -177,7 +177,7 @@ namespace IdentityServer
                 List<Claim> claimsList = claims.ToList();
                 claimsList.Add(new Claim("email", userinfo.preferred_username));
                 claimsList.Add(new Claim("idp", idp));
-                claimsList.Add(new Claim("name", userinfo.preferred_username));
+                claimsList.Add(new Claim("name", userinfo.name));
 
                 // simply auto-provisions new external user
                 user = AutoProvisionUser(provider, providerUserId, claimsList);
@@ -249,9 +249,6 @@ namespace IdentityServer
             (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) =
                 FindUserFromExternalProvider(null);
 
-            //TODO: Call our API and add the user to our database
-            //TODO: Calling our API, requires the identity server to be authenticated, is this done with ClientCredential flow?
-            //TODO: Since we do not want users to register, we can remove the part from below, correct?
             if(user == null)
             {
                 // this might be where you might initiate a custom workflow for user registration
