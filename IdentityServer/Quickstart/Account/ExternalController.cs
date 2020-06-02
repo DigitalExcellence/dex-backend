@@ -301,15 +301,13 @@ namespace IdentityServer
 
             return Redirect(returnUrl);
         }
-
-
         
-
-
-        
-
-        
-
+        /// <summary>
+        /// Finds the user from external provider.
+        /// </summary>
+        /// <param name="result">The ExternalResult information.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Unknown userid</exception>
         private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(ExternalResult result)
         {
             // try to determine the unique id of the external user (issued by the provider)
@@ -332,12 +330,25 @@ namespace IdentityServer
             return (user, provider, providerUserId, claims);
         }
 
+        /// <summary>
+        /// Automatic user provisioning.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="providerUserId">The provider user identifier.</param>
+        /// <param name="claims">The claims.</param>
+        /// <returns></returns>
         private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
         {
             TestUser user = users.AutoProvisionUser(provider, providerUserId, claims.ToList());
             return user;
         }
 
+        /// <summary>
+        /// Processes the login callback for oidc.
+        /// </summary>
+        /// <param name="externalResult">The external result.</param>
+        /// <param name="localClaims">The local claims.</param>
+        /// <param name="localSignInProps">The local sign in props.</param>
         private void ProcessLoginCallbackForOidc(ExternalResult externalResult,
                                                  List<Claim> localClaims,
                                                  AuthenticationProperties localSignInProps)
