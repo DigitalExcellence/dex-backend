@@ -31,6 +31,7 @@ namespace Repositories.Tests.DataSources
         /// Initializes highlightDataSourceAttribute
         /// and setting the amount of highlights to be generated
         /// </summary>
+        /// <param name="amount">Amount of highlights to be produced.</param>
         public HighlightDataSourceAttribute(int amount) : this()
         {
             amountToGenerate = amount;

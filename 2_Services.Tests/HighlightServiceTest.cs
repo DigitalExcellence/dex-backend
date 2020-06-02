@@ -20,6 +20,7 @@ namespace Services.Tests
         /// <summary>
         /// Test whether the repository method is called and no changes have been applied to the object
         /// </summary>
+        /// <param name="highlights">A set of 10 highlights which contain a project.</param>
         /// <returns></returns>
         [Test]
         public async Task GetHighlightsAsync_GoodFlow([HighlightDataSource(10)] List<Highlight> highlights)
@@ -70,6 +71,7 @@ namespace Services.Tests
         /// <summary>
         /// Test whether the repository method is called if no project is provided and no changes have been applied to the object assuming no highlights were provided
         /// </summary>
+        /// <param name="highlight">A single highlight with no project bound to it.</param>
         /// <returns></returns>
         [Test]
         public async Task GetHighlightsAsync_HighlightWithoutProject([HighlightDataSource] Highlight highlight)
