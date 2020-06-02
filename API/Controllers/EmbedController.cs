@@ -141,7 +141,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            string identity = HttpContext.User.GetStudentId(HttpContext);
+            string identity = HttpContext.User.GetIdentityId(HttpContext);
             bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
             User user = await userService.GetUserByIdentityIdAsync(identity);
 
@@ -209,7 +209,7 @@ namespace API.Controllers
             }
 
             
-            string identity = HttpContext.User.GetStudentId(HttpContext);
+            string identity = HttpContext.User.GetIdentityId(HttpContext);
             bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
 
             if(!(embeddedProject.User.IdentityId == identity || isAllowed))
