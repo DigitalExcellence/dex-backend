@@ -15,33 +15,18 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System;
 
-namespace Services.Base
+namespace API.Resources
 {
-
-    public interface IService<TEntity> where TEntity : class
+    /// <summary>
+    ///     The view model of a highlight
+    /// </summary>
+    public class EmbeddedProjectResource
     {
-
-        Task<TEntity> FindAsync(int id);
-
-        void Add(TEntity entity);
-
-        Task AddAsync(TEntity entity);
-
-        void AddRange(IEnumerable<TEntity> entities);
-
-        void Update(TEntity entity);
-
-        Task RemoveAsync(int id);
-
-        void Remove(TEntity entity);
-
-        Task<IEnumerable<TEntity>> GetAll();
-
-        void Save();
-
+        /// <summary>
+        ///     This gets or sets the id of the project that this highlight is associated with
+        /// </summary>
+        public int ProjectId { get; set; }
     }
-
 }

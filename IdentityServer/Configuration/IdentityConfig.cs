@@ -52,7 +52,9 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.UserWrite)),
                         new Scope(nameof(Defaults.Scopes.UserRead)),
                         new Scope(nameof(Defaults.Scopes.HighlightWrite)),
-                        new Scope(nameof(Defaults.Scopes.HighlightRead))
+                        new Scope(nameof(Defaults.Scopes.HighlightRead)),
+                        new Scope(nameof(Defaults.Scopes.EmbedWrite)),
+                        new Scope(nameof(Defaults.Scopes.EmbedRead)),
                     }
                 }
             };
@@ -79,13 +81,14 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.UserWrite),
                                nameof(Defaults.Scopes.UserRead),
                                nameof(Defaults.Scopes.HighlightRead),
-                               nameof(Defaults.Scopes.HighlightWrite)
+                               nameof(Defaults.Scopes.HighlightWrite),
+                               nameof(Defaults.Scopes.EmbedWrite),
+                               nameof(Defaults.Scopes.EmbedRead)
                            },
                            Claims = new List<Claim>
                                     {
                                         new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
                                     },
-                           
                        },
 
                        // interactive ASP.NET Core MVC client
@@ -132,12 +135,7 @@ namespace IdentityServer.Configuration
                             {
                                 IdentityServerConstants.StandardScopes.OpenId,
                                 IdentityServerConstants.StandardScopes.Profile,
-                                nameof(Defaults.Scopes.ProjectRead),
-                                nameof(Defaults.Scopes.ProjectWrite),
-                                nameof(Defaults.Scopes.UserWrite),
-                                nameof(Defaults.Scopes.UserRead),
-                                nameof(Defaults.Scopes.HighlightRead),
-                                nameof(Defaults.Scopes.HighlightWrite)
+                                "dex-api",
                             },
                        }
                    };

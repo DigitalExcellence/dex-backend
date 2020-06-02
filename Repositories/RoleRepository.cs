@@ -18,15 +18,12 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repositories
 {
-
     public interface IRoleRepository : IRepository<Role>
     {
         /// <summary>
@@ -88,6 +85,16 @@ namespace Repositories
                    .SingleOrDefaultAsync();
         }
 
-    }
 
+        public override async Task RemoveAsync(int id)
+        {
+            Role roleToDelete = await GetDbSet<Role>()
+                .Where(r => r.Id == id)
+                .Include(r => r.Scopes)
+                .SingleOrDefaultAsync().ConfigureAwait(false);
+
+            GetDbSet<RoleScope>().RemoveRange(roleToDelete.Scopes);
+            GetDbSet<Role>().Remove(roleToDelete);
+        }
+    }
 }

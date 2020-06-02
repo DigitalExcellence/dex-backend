@@ -15,12 +15,14 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
+using RestSharp;
 using Services.Services;
 using System.Threading.Tasks;
 
@@ -49,6 +51,28 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets the current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            string identityId = HttpContext.User.GetIdentityId(HttpContext);
+            User user = await userService.GetUserByIdentityIdAsync(identityId);
+            if(user == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed getting the user account.",
+                     Detail = "The user could not be found in the database.",
+                     Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                };
+                return NotFound(problem);
+            }
+            return Ok(mapper.Map<User, UserResourceResult>(user));
+        }
 
         /// <summary>
         ///     Get a user account.
@@ -144,7 +168,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Gets the student information.
+        ///     Delete the user account.
         /// </summary>
         /// <returns></returns>
         [HttpDelete("{userId}")]
@@ -156,7 +180,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this student id.",
+                    Detail = "The database does not contain a user with this user id.",
                     Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
                 };
                 return NotFound(problem);
