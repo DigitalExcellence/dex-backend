@@ -7,7 +7,7 @@ services:
       dockerfile: Data/Dockerfile
     environment: 
       - MSSQL_SA_PASSWORD=${DB_PASSWORD}
-    image: digitalexcellence/database
+    image: digitalexcellence/stagingdb
     networks:
       mssql-network:
         ipv4_address: 172.16.238.2
@@ -25,7 +25,7 @@ services:
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=${IDENTITY_URL}
       - App__Sentry__ApiDsn=${SENTRY_API_DSN}
-    image:  digitalexcellence/api
+    image:  digitalexcellence/stagingapi
     networks:
       - mssql-network
 
@@ -46,7 +46,7 @@ services:
       - App__swagger__RedirectUrisSwagger=${REDIRECT_URIS_SWAGGER}
       - App__swagger__PostLogoutUrisSwagger=${POST_LOGOUT_URIS_SWAGGER}
       - App__Sentry__IdentityDsn=${SENTRY_IDENTITY_DSN}
-    image: digitalexcellence/identity
+    image: digitalexcellence/stagingidentity
 
 networks:
   mssql-network:
