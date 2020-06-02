@@ -59,8 +59,8 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            string studentId = HttpContext.User.GetStudentId(HttpContext);
-            User user = await userService.GetUserByIdentityIdAsync(studentId);
+            string identityId = HttpContext.User.GetIdentityId(HttpContext);
+            User user = await userService.GetUserByIdentityIdAsync(identityId);
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -168,7 +168,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Gets the student information.
+        ///     Delete the user account.
         /// </summary>
         /// <returns></returns>
         [HttpDelete("{userId}")]
@@ -180,7 +180,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this student id.",
+                    Detail = "The database does not contain a user with this user id.",
                     Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
                 };
                 return NotFound(problem);
