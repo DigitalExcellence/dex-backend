@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unittests for UserRepository - [#121] (https://github.com/DigitalExcellence/dex-backend/issues/121)
 - Added unittests for UserService - [#121] (https://github.com/DigitalExcellence/dex-backend/issues/121)
 - Added an endpoint to get information about the current user - [#141](https://github.com/DigitalExcellence/dex-backend/issues/141)
+- Support for fontys login - [#66](https://github.com/DigitalExcellence/dex-backend/issues/66)
 
 ### Changed
 
