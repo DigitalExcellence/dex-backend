@@ -1,3 +1,4 @@
+using API.Resources;
 using Models;
 using Moq;
 using NUnit.Framework;
@@ -25,15 +26,22 @@ namespace Services.Tests
         public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
             RepositoryMock.Setup(
-                repository => repository.GetAllWithUsersAsync(null, null, null, true, null))
+                repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, null))
                 .Returns(
                     Task.FromResult(projects)
                 );
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync();
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new Params()
+                                                                                 {
+                                                                                     Page = null,
+                                                                                     AmountOnPage = null,
+                                                                                     Highlighted = null,
+                                                                                     SortBy = null,
+                                                                                     SortDirection = "asc"
+                                                                                 });
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, null, true, null), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, null), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
