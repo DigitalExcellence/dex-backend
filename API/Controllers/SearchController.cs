@@ -97,10 +97,10 @@ namespace API.Controllers
 
             Params searchParams = mapper.Map<RequestParamsResource, Params>(parameters);
             IEnumerable<Project> projects = await searchService.SearchInternalProjects(query, searchParams);
-            IEnumerable<SearchResultResource> searchResults =
-                mapper.Map<IEnumerable<Project>, IEnumerable<SearchResultResource>>(projects);
+            IEnumerable<ProjectResultResource> searchResults =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
 
-            SearchResultsResource searchResultsResource = new SearchResultsResource()
+            ProjectResultsResource searchResultsResource = new ProjectResultsResource()
             {
                 Results = searchResults.ToArray(),
                 Query = query,

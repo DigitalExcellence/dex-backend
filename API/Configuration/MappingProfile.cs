@@ -40,7 +40,7 @@ namespace API.Configuration
             CreateMap<CollaboratorResource, Collaborator>();
             CreateMap<Collaborator, CollaboratorResourceResult>();
 
-            CreateMap<Project, SearchResultResource>();
+            CreateMap<Project, ProjectResultResource>();
 
             CreateMap<RequestParamsResource, Params>();
 
