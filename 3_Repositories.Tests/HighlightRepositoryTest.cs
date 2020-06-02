@@ -60,6 +60,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Test if no highlights are retrieved when no project is provided.
         /// </summary>
+        /// <param name="highlight">A highlight object with no project bound to it.</param>
         /// <returns></returns>
         [Test]
         public async Task GetAllWithUserAsyncTest_NoProjectInHighlight([HighlightDataSource] Highlight highlight)
