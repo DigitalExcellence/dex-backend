@@ -65,7 +65,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Source uri is null or empty.",
-                    Detail = "the incoming source url is not valid.",
+                    Detail = "The incoming source uri is not valid.",
                     Instance = "6D63D9FA-91D6-42D5-9ACB-461FBEB0D2ED"
                 };
                 return BadRequest(problem);
@@ -80,7 +80,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Project not found.",
-                    Detail = "the incoming source url aims at a gitlab which is either not instanciated or is a group.",
+                    Detail = "The incoming source uri aims at a gitlab which is either not instantiated or is a group.",
                     Instance = "E56D89C5-8760-4503-839C-F695092C79BF"
                 };
                 return BadRequest(problem);
