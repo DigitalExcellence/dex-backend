@@ -15,10 +15,12 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-namespace API.Resources
+namespace Models
 {
-
-    public class Params
+    /// <summary>
+    /// This class contains all the parameters used to filter, sort and paginate projects
+    /// </summary>
+    public class ProjectFilterParams
     {
 
         /// <summary>

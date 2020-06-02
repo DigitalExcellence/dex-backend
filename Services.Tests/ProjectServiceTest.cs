@@ -1,4 +1,3 @@
-using API.Resources;
 using Models;
 using Moq;
 using NUnit.Framework;
@@ -31,7 +30,7 @@ namespace Services.Tests
                     Task.FromResult(projects)
                 );
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new Params()
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new ProjectFilterParams()
                                                                                  {
                                                                                      Page = null,
                                                                                      AmountOnPage = null,

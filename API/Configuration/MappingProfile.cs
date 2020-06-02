@@ -42,7 +42,7 @@ namespace API.Configuration
 
             CreateMap<Project, ProjectResultResource>();
 
-            CreateMap<RequestParamsResource, Params>();
+            CreateMap<ProjectFilterParamsResource, ProjectFilterParams>();
 
             CreateMap<HighlightResource, Highlight>();
             CreateMap<Highlight, HighlightResourceResult>();

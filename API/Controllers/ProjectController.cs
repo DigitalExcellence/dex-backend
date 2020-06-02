@@ -57,42 +57,42 @@ namespace API.Controllers
         /// <summary>
         ///     Get all projects.
         /// </summary>
-        /// <param name="parameters">The parameters to narrow down the projects</param>
+        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllProjects([FromQuery] RequestParamsResource parameters)
+        public async Task<IActionResult> GetAllProjects([FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
                                      {
                                          Title = "Invalid search request."
                                      };
-            if(parameters.Page != null &&
-               parameters.Page < 1)
+            if(projectFilterParamsResource.Page != null &&
+               projectFilterParamsResource.Page < 1)
             {
                 problem.Detail = "The page number cannot be smaller then 1.";
                 problem.Instance = "65EB6EF1-2CF4-4F7B-8A0A-C047C701337A";
                 return BadRequest(problem);
             }
-            if(parameters.SortBy != null &&
-               parameters.SortBy != "name" &&
-               parameters.SortBy != "created" &&
-               parameters.SortBy != "updated")
+            if(projectFilterParamsResource.SortBy != null &&
+               projectFilterParamsResource.SortBy != "name" &&
+               projectFilterParamsResource.SortBy != "created" &&
+               projectFilterParamsResource.SortBy != "updated")
             {
                 problem.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\".";
                 problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
                 return BadRequest(problem);
             }
-            if(parameters.SortDirection != null &&
-               parameters.SortDirection != "asc" &&
-               parameters.SortDirection != "desc")
+            if(projectFilterParamsResource.SortDirection != null &&
+               projectFilterParamsResource.SortDirection != "asc" &&
+               projectFilterParamsResource.SortDirection != "desc")
             {
                 problem.Detail = "Invalid sort direction: Use \"asc\" or \"desc\".";
                 problem.Instance = "3EE043D5-070B-443A-A951-B252A1BB8EF9";
                 return BadRequest(problem);
             }
 
-            Params mappedParameters = mapper.Map<RequestParamsResource, Params>(parameters);
-            IEnumerable<Project> projects = await projectService.GetAllWithUsersAsync(mappedParameters);
+            ProjectFilterParams projectFilterParams = mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+            IEnumerable<Project> projects = await projectService.GetAllWithUsersAsync(projectFilterParams);
             IEnumerable<ProjectResultResource> results =
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
 
@@ -100,10 +100,10 @@ namespace API.Controllers
                                                            {
                                                                Results = results.ToArray(),
                                                                Count = results.Count(),
-                                                               TotalCount = await projectService.ProjectsCount(mappedParameters),
-                                                               Page = mappedParameters.Page,
+                                                               TotalCount = await projectService.ProjectsCount(projectFilterParams),
+                                                               Page = projectFilterParams.Page,
                                                                TotalPages =
-                                                                   await projectService.GetProjectsTotalPages(mappedParameters)
+                                                                   await projectService.GetProjectsTotalPages(projectFilterParams)
                                                            };
 
             return Ok(resultsResource);

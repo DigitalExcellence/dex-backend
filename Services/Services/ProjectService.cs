@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using API.Resources;
 using Models;
 using Repositories;
 using Services.Base;
@@ -30,13 +29,28 @@ namespace Services.Services
     public interface IProjectService : IService<Project>
     {
 
-        Task<List<Project>> GetAllWithUsersAsync(Params parameters);
+        /// <summary>
+        /// Get a list of all the projects
+        /// </summary>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>A list of all the projects</returns>
+        Task<List<Project>> GetAllWithUsersAsync(ProjectFilterParams projectFilterParams);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
-        Task<int> ProjectsCount(Params searchParams);
+        /// <summary>
+        ///     Get the number of projects
+        /// </summary>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>The number of projects</returns>
+        Task<int> ProjectsCount(ProjectFilterParams projectFilterParams);
 
-        Task<int> GetProjectsTotalPages(Params searchParams);
+        /// <summary>
+        ///     Get the total number of pages for the results
+        /// </summary>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>The total number of pages for the results</returns>
+        Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
     }
 
@@ -50,24 +64,24 @@ namespace Services.Services
         /// <summary>
         /// Get a list of all the projects
         /// </summary>
-        /// <param name="parameters">The parameters to narrow down the results</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        public Task<List<Project>> GetAllWithUsersAsync(Params parameters)
+        public Task<List<Project>> GetAllWithUsersAsync(ProjectFilterParams projectFilterParams)
         {
-            if(!parameters.AmountOnPage.HasValue ||
-               parameters.AmountOnPage <= 0)
-                parameters.AmountOnPage = 20;
+            if(!projectFilterParams.AmountOnPage.HasValue ||
+               projectFilterParams.AmountOnPage <= 0)
+                projectFilterParams.AmountOnPage = 20;
 
             int? skip = null;
             int? take = null;
-            if(parameters.Page.HasValue)
+            if(projectFilterParams.Page.HasValue)
             {
-                skip = parameters.AmountOnPage * (parameters.Page - 1);
-                take = parameters.AmountOnPage;
+                skip = projectFilterParams.AmountOnPage * (projectFilterParams.Page - 1);
+                take = projectFilterParams.AmountOnPage;
             }
 
             Expression<Func<Project, object>> orderBy;
-            switch(parameters.SortBy)
+            switch(projectFilterParams.SortBy)
             {
                 case "name":
                     orderBy = project => project.Name;
@@ -80,32 +94,32 @@ namespace Services.Services
                     break;
             }
 
-            bool orderByDirection = parameters.SortDirection == "asc";
-            return Repository.GetAllWithUsersAsync(skip, take, orderBy, orderByDirection, parameters.Highlighted);
+            bool orderByDirection = projectFilterParams.SortDirection == "asc";
+            return Repository.GetAllWithUsersAsync(skip, take, orderBy, orderByDirection, projectFilterParams.Highlighted);
         }
 
         /// <summary>
         ///     Get the number of projects
         /// </summary>
-        /// <param name="parameters">The parameters to narrow down the results</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The number of projects</returns>
-        public virtual async Task<int> ProjectsCount(Params parameters)
+        public virtual async Task<int> ProjectsCount(ProjectFilterParams projectFilterParams)
         {
-            return await Repository.CountAsync(parameters.Highlighted);
+            return await Repository.CountAsync(projectFilterParams.Highlighted);
         }
 
         /// <summary>
         ///     Get the total number of pages for the results
         /// </summary>
-        /// <param name="parameters">The parameters to narrow down the results</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The total number of pages for the results</returns>
-        public virtual async Task<int> GetProjectsTotalPages(Params parameters)
+        public virtual async Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams)
         {
-            if(parameters.AmountOnPage == null ||
-               parameters.AmountOnPage <= 0)
-                parameters.AmountOnPage = 20;
-            int count = await ProjectsCount(parameters);
-            return (int) Math.Ceiling(count / (decimal) parameters.AmountOnPage);
+            if(projectFilterParams.AmountOnPage == null ||
+               projectFilterParams.AmountOnPage <= 0)
+                projectFilterParams.AmountOnPage = 20;
+            int count = await ProjectsCount(projectFilterParams);
+            return (int) Math.Ceiling(count / (decimal) projectFilterParams.AmountOnPage);
         }
 
         public Task<Project> FindWithUserAndCollaboratorsAsync(int id)

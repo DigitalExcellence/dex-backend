@@ -21,9 +21,9 @@ namespace API.Resources
 {
 
     /// <summary>
-    ///     Resource to describe parameters for projects request
+    /// This resource contains all the query parameters used to filter, sort and paginate projects
     /// </summary>
-    public class RequestParamsResource
+    public class ProjectFilterParamsResource
     {
 
         /// <summary>
