@@ -35,12 +35,10 @@ using System.Threading.Tasks;
 
 namespace IdentityServer
 {
-
     [SecurityHeaders]
     [AllowAnonymous]
     public class ExternalController : Controller
     {
-
         private readonly IClientStore clientStore;
         private readonly IEventService events;
         private readonly IIdentityServerInteractionService interaction;
@@ -73,8 +71,8 @@ namespace IdentityServer
             if(string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
 
             // validate returnUrl - either it is a valid OIDC URL or back to a local page
-            if(Url.IsLocalUrl(returnUrl) == false &&
-               interaction.IsValidReturnUrl(returnUrl) == false)
+            if(!Url.IsLocalUrl(returnUrl) &&
+               !interaction.IsValidReturnUrl(returnUrl))
             {
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
@@ -102,7 +100,7 @@ namespace IdentityServer
         {
             // read external identity from the temporary cookie
             AuthenticateResult result =
-                await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+                await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
             if(result?.Succeeded != true)
             {
                 throw new Exception("External authentication error");
@@ -144,26 +142,26 @@ namespace IdentityServer
                                             AdditionalClaims = additionalLocalClaims
                                         };
 
-            await HttpContext.SignInAsync(isuser, localSignInProps);
+            await HttpContext.SignInAsync(isuser, localSignInProps).ConfigureAwait(false);
 
             // delete temporary cookie used during external authentication
-            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
 
             // retrieve return URL
             string returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
             // check if external login is in the context of an OIDC request
-            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl);
+            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
             await events.RaiseAsync(new UserLoginSuccessEvent(provider,
                                                                providerUserId,
                                                                user.SubjectId,
                                                                user.Username,
                                                                true,
-                                                               context?.ClientId));
+                                                               context?.ClientId)).ConfigureAwait(false);
 
             if(context != null)
             {
-                if(await clientStore.IsPkceClientAsync(context.ClientId))
+                if(await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
                 {
                     // if the client is PKCE then we assume it's native, so this change in how to
                     // return the response is for better UX for the end user.
@@ -218,20 +216,18 @@ namespace IdentityServer
             }
 
             // if the external provider issued an id_token, we'll keep it for signout
-            string id_token = externalResult.Properties.GetTokenValue("id_token");
-            if(id_token != null)
+            string idToken = externalResult.Properties.GetTokenValue("id_token");
+            if(idToken != null)
             {
                 localSignInProps.StoreTokens(new[]
                                              {
                                                  new AuthenticationToken
                                                  {
                                                      Name = "id_token",
-                                                     Value = id_token
+                                                     Value = idToken
                                                  }
                                              });
             }
         }
-
     }
-
 }

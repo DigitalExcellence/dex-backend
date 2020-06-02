@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -21,10 +21,8 @@ using System.Threading.Tasks;
 
 namespace Services.Base
 {
-
     public abstract class Service<TEntity> : IService<TEntity> where TEntity : class
     {
-
         protected Service(IRepository<TEntity> repository)
         {
             Repository = repository;
@@ -34,12 +32,17 @@ namespace Services.Base
 
         public virtual async Task<TEntity> FindAsync(int id)
         {
-            return await Repository.FindAsync(id);
+            return await Repository.FindAsync(id).ConfigureAwait(false);
         }
 
         public virtual void Add(TEntity entity)
         {
             Repository.Add(entity);
+        }
+
+        public virtual async Task AddAsync(TEntity entity)
+        {
+            await Repository.AddAsync(entity).ConfigureAwait(false);
         }
 
         public virtual void AddRange(IEnumerable<TEntity> entities)
@@ -64,14 +67,12 @@ namespace Services.Base
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            return await Repository.GetAll();
+            return await Repository.GetAll().ConfigureAwait(false);
         }
 
         public virtual void Save()
         {
             Repository.Save();
         }
-
     }
-
 }

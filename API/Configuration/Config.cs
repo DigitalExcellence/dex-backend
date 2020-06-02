@@ -21,10 +21,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Configuration
 {
-
+    /// <summary>
+    /// Config class
+    /// </summary>
+    /// <seealso cref="NetEscapades.Configuration.Validation.IValidatable" />
     public class Config : IValidatable
     {
-
         /// <summary>
         ///     Gets or sets the original configuration.
         /// </summary>
@@ -50,66 +52,86 @@ namespace API.Configuration
         public IdentityServerConfig IdentityServer { get; set; }
 
         /// <summary>
+        /// Gets or sets the swagger configuration.
+        /// </summary>
+        /// <value>
+        /// The swagger.
+        /// </value>
+        public SwaggerConfig Swagger { get; set; }
+
+        /// <summary>
         ///     Validates this instance.
         /// </summary>
         public void Validate()
         {
             Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
             Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
+            Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
         }
-
-        /// <summary>
-        /// </summary>
-        public class FrontendConfig
-        {
-
-            /// <summary>
-            ///     Gets or sets the front end.
-            /// </summary>
-            /// <value>
-            ///     The front end.
-            /// </value>
-            [Required]
-            [Url]
-            public string FrontendUrl { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the client identifier.
-            /// </summary>
-            /// <value>
-            ///     The client identifier.
-            /// </value>
-            [Required]
-            public string ClientId { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the client secret.
-            /// </summary>
-            /// <value>
-            ///     The client secret.
-            /// </value>
-            [Required]
-            public string ClientSecret { get; set; }
-
-        }
-
-        /// <summary>
-        /// </summary>
-        public class IdentityServerConfig
-        {
-
-            /// <summary>
-            ///     Gets or sets the identity URL.
-            /// </summary>
-            /// <value>
-            ///     The identity URL.
-            /// </value>
-            [Required]
-            [Url]
-            public string IdentityUrl { get; set; }
-
-        }
-
     }
 
+    /// <summary>
+    /// Configuration settings for the frontend.
+    /// </summary>
+    public class FrontendConfig
+    {
+        /// <summary>
+        ///     Gets or sets the front end.
+        /// </summary>
+        /// <value>
+        ///     The front end.
+        /// </value>
+        [Required]
+        [Url]
+        public string FrontendUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the client identifier.
+        /// </summary>
+        /// <value>
+        ///     The client identifier.
+        /// </value>
+        [Required]
+        public string ClientId { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the client secret.
+        /// </summary>
+        /// <value>
+        ///     The client secret.
+        /// </value>
+        [Required]
+        public string ClientSecret { get; set; }
+    }
+
+    /// <summary>
+    /// Contains the identity server configuration.
+    /// </summary>
+    public class IdentityServerConfig
+    {
+        /// <summary>
+        ///     Gets or sets the identity URL.
+        /// </summary>
+        /// <value>
+        ///     The identity URL.
+        /// </value>
+        [Required]
+        [Url]
+        public string IdentityUrl { get; set; }
+    }
+
+    /// <summary>
+    /// Contains the swagger configuration.
+    /// </summary>
+    public class SwaggerConfig
+    {
+        /// <summary>
+        /// Gets or sets the client identifier.
+        /// </summary>
+        /// <value>
+        /// The client identifier.
+        /// </value>
+        [Required]
+        public string ClientId { get; set; }
+    }
 }

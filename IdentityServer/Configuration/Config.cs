@@ -57,6 +57,7 @@ namespace Configuration
         /// </value>
         public FrontendConfig Frontend { get; set; }
 
+        public SwaggerConfig Swagger { get; set; }
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -65,6 +66,7 @@ namespace Configuration
             Validator.ValidateObject(Self, new ValidationContext(Self), true);
             Validator.ValidateObject(Api, new ValidationContext(Api), true);
             Validator.ValidateObject(Fhict, new ValidationContext(Fhict), true);
+            Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
         }
 
         /// <summary>
@@ -185,6 +187,28 @@ namespace Configuration
             /// </summary>
             public List<string> PostLogoutUrisFrontend { get; set; }
 
+        }
+
+        /// <summary>
+        /// Contains the swagger configuration.
+        /// </summary>
+        public class SwaggerConfig
+        {
+            /// <summary>
+            /// Gets or sets the redirect uris swagger.
+            /// </summary>
+            /// <value>
+            /// The redirect uris swagger.
+            /// </value>
+            public List<string> RedirectUrisSwagger { get; set; }
+
+            /// <summary>
+            /// Gets or sets the post logout uris swagger.
+            /// </summary>
+            /// <value>
+            /// The post logout uris swagger.
+            /// </value>
+            public List<string> PostLogoutUrisSwagger { get; set; }
         }
 
     }

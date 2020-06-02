@@ -25,13 +25,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace IdentityServer
 {
-
     /// <summary>
     ///     Startup file for Identity Server
     /// </summary>
     public class Startup
     {
-
         /// <summary>
         ///     Startup constructor
         /// </summary>
@@ -79,7 +77,7 @@ namespace IdentityServer
                                                      .AddTestUsers(TestUsers.Users);
 
             // in-memory, code config
-            builder.AddInMemoryIdentityResources(IdentityConfig.Ids);
+            builder.AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources());
             builder.AddInMemoryApiResources(IdentityConfig.Apis);
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             builder.AddTestUsers(TestUsers.Users);
@@ -93,10 +91,12 @@ namespace IdentityServer
             //         // ...
             //     });
 
+            //TODO: Have some sort of certificate on the production servers
+            // not recommended for production - you need to store your key material somewhere secure
+            builder.AddDeveloperSigningCredential();
+
             if(Environment.IsDevelopment())
             {
-                //TODO: Have some sort of certificate on the production servers
-                // not recommended for production - you need to store your key material somewhere secure
                 builder.AddDeveloperSigningCredential();
             }
             services.AddCors(options =>
@@ -127,9 +127,7 @@ namespace IdentityServer
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
-
     }
-
 }
