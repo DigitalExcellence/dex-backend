@@ -30,7 +30,13 @@ namespace Repositories
     public interface IProjectRepository : IRepository<Project>
     {
 
-        Task<List<Project>> GetAllWithUsersAsync();
+        Task<List<Project>> GetAllWithUsersAsync(
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null
+            );
 
         Task<IEnumerable<Project>> SearchAsync(
             string query,
@@ -60,11 +66,59 @@ namespace Repositories
                    .SingleOrDefaultAsync();
         }
 
-        public Task<List<Project>> GetAllWithUsersAsync()
+        private IQueryable<Project> ApplyFilters(
+            IQueryable<Project> queryable,
+            int? skip,
+            int? take,
+            Expression<Func<Project, object>> orderBy,
+            bool orderByAsc,
+            bool? highlighted
+            )
         {
-            return GetDbSet<Project>()
-                   .Include(p => p.User)
-                   .ToListAsync();
+            if(orderBy != null)
+            {
+                if(orderByAsc)
+                {
+                    queryable = queryable.OrderBy(orderBy);
+                } else
+                {
+                    queryable = queryable.OrderByDescending(orderBy);
+                }
+            }
+            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
+            if(take.HasValue) queryable = queryable.Take(take.Value);
+            if(highlighted.HasValue)
+            {
+                IEnumerable<int> highlightedQueryable = DbContext.Set<Highlight>()
+                                                                 .Where(h => h.StartDate <= DateTime.Now ||
+                                                                             h.StartDate == null)
+                                                                 .Where(h => h.EndDate >= DateTime.Now ||
+                                                                             h.EndDate == null)
+                                                                 .Select(h => h.ProjectId)
+                                                                 .ToList();
+                if(highlighted.Value)
+                {
+                    queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id));
+                } else
+                {
+                    queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
+                }
+            }
+            return queryable;
+        }
+
+        public virtual async Task<List<Project>> GetAllWithUsersAsync(
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null
+            )
+        {
+            IQueryable<Project> queryable = DbSet
+                .Include(p => p.User);
+            queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
+            return await queryable.ToListAsync();
         }
 
         /// <summary>
@@ -96,35 +150,7 @@ namespace Repositories
                                                        p.Id.ToString()
                                                         .Equals(query) ||
                                                        p.User.Name.Contains(query));
-            if(orderBy != null)
-            {
-                if(orderByAsc)
-                {
-                    queryable = queryable.OrderBy(orderBy);
-                } else
-                {
-                    queryable = queryable.OrderByDescending(orderBy);
-                }
-            }
-            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
-            if(take.HasValue) queryable = queryable.Take(take.Value);
-            if(highlighted.HasValue)
-            {
-                IEnumerable<int> highlightedQueryable = DbContext.Set<Highlight>()
-                                                       .Where(h => h.StartDate <= DateTime.Now ||
-                                                                   h.StartDate == null)
-                                                       .Where(h => h.EndDate >= DateTime.Now ||
-                                                                   h.EndDate == null)
-                                                       .Select(h => h.ProjectId)
-                                                       .ToList();
-                if(highlighted.Value)
-                {
-                    queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id));
-                } else
-                {
-                    queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
-                }
-            }
+            queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
             return await queryable.ToListAsync();
         }
 

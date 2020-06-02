@@ -25,7 +25,7 @@ namespace Services.Tests
         public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
             RepositoryMock.Setup(
-                repository => repository.GetAllWithUsersAsync())
+                repository => repository.GetAllWithUsersAsync(null, null, null, true, null))
                 .Returns(
                     Task.FromResult(projects)
                 );
@@ -33,7 +33,7 @@ namespace Services.Tests
             List<Project> retrievedProjects = await Service.GetAllWithUsersAsync();
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, null, true, null), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
