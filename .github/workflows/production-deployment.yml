@@ -17,7 +17,7 @@ jobs:
       - name: Push docker images to dockerhub
         run:  docker-compose -f docker-compose.deploy.yml push
       - name: Push to server 
-      - uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PRODUCTION_VPS_IP }}
           username: ${{ secrets.PRODUCTION_VPS_USERNAME }}
