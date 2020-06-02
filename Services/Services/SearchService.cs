@@ -29,11 +29,11 @@ namespace Services.Services
     public interface ISearchService
     {
 
-        Task<IEnumerable<Project>> SearchInternalProjects(string query, SearchParams searchParams);
+        Task<IEnumerable<Project>> SearchInternalProjects(string query, Params searchParams);
 
-        Task<int> SearchInternalProjectsCount(string query, SearchParams searchParams);
+        Task<int> SearchInternalProjectsCount(string query, Params searchParams);
 
-        Task<int> SearchInternalProjectsTotalPages(string query, SearchParams searchParams);
+        Task<int> SearchInternalProjectsTotalPages(string query, Params searchParams);
 
     }
 
@@ -53,7 +53,7 @@ namespace Services.Services
         /// <param name="query">The search query</param>
         /// <param name="searchParams">The parameters to narrow down the search results</param>
         /// <returns>The projects that match the search query</returns>
-        public virtual async Task<IEnumerable<Project>> SearchInternalProjects(string query, SearchParams searchParams)
+        public virtual async Task<IEnumerable<Project>> SearchInternalProjects(string query, Params searchParams)
         {
             if(!searchParams.AmountOnPage.HasValue ||
                searchParams.AmountOnPage <= 0)
@@ -92,7 +92,7 @@ namespace Services.Services
         /// <param name="query">The search query</param>
         /// <param name="searchParams">The parameters to narrow down the search results</param>
         /// <returns>The number of projects that match the search query</returns>
-        public virtual async Task<int> SearchInternalProjectsCount(string query, SearchParams searchParams)
+        public virtual async Task<int> SearchInternalProjectsCount(string query, Params searchParams)
         {
             return await projectRepository.SearchCountAsync(query);
         }
@@ -103,7 +103,7 @@ namespace Services.Services
         /// <param name="query">The search query</param>
         /// <param name="searchParams">The parameters to narrow down the search results</param>
         /// <returns>The projects that match the search query</returns>
-        public virtual async Task<int> SearchInternalProjectsTotalPages(string query, SearchParams searchParams)
+        public virtual async Task<int> SearchInternalProjectsTotalPages(string query, Params searchParams)
         {
             if(searchParams.AmountOnPage == null ||
                searchParams.AmountOnPage <= 0)
