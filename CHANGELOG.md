@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added sorting to the get all projects endpoint - [#157](https://github.com/DigitalExcellence/dex-backend/issues/157)
 - Added filtering to the get all projects endpoint - [#161](https://github.com/DigitalExcellence/dex-backend/issues/161)
 - Added error tracking and monitoring with Sentry - [#136](https://github.com/DigitalExcellence/dex-backend/issues/136)
+- Support for fontys login - [#66](https://github.com/DigitalExcellence/dex-backend/issues/66)
 
 ### Changed
 

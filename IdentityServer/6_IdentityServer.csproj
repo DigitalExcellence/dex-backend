@@ -7,10 +7,12 @@
 
     <ItemGroup>
         <PackageReference Include="IdentityServer4" Version="3.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.3" />
         <PackageReference Include="NetEscapades.Configuration.Validation" Version="2.0.0" />
         <PackageReference Include="Sentry.AspNetCore" Version="2.1.1" />
         <PackageReference Include="Sentry.Serilog" Version="2.1.1" />
+        <PackageReference Include="RestSharp" Version="106.11.4" />
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
         <PackageReference Include="System.Security.Principal.Windows" Version="4.3.0" />
     </ItemGroup>
