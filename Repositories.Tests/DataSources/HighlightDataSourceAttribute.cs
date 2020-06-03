@@ -10,7 +10,6 @@ using System.Text;
 
 namespace Repositories.Tests.DataSources
 {
-{
     /// <summary>
     /// Attribute to generate highlights
     /// </summary>
