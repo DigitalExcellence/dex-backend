@@ -64,7 +64,7 @@ namespace API.Controllers
             {
                 Title = "Invalid search request."
             };
-            if(query.Length < 0)
+            if(string.IsNullOrEmpty(query))
             {
                 problem.Detail = "The Query parameter cannot be empty.";
                 problem.Instance = "13A59FAE-E98F-42B3-AFD4-84F3019EC790";
