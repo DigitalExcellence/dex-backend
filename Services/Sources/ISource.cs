@@ -15,15 +15,20 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
+using Models;
+
 namespace Services.Sources
 {
 
     public interface ISource
     {
-
+        bool ProjectURIMatches(Uri uri);
         void Search(string searchTerm);
 
-        void GetSource(string url);
+        void GetSource(Uri uri);
+
+        Project GetProjectInformation(Uri uri);
 
     }
 

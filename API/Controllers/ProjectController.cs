@@ -42,11 +42,11 @@ namespace API.Controllers
         private readonly IUserService userService;
 
         /// <summary>
-        /// Initialize a new instance of ProjectController
+        /// Initializes a new instance of the <see cref="ProjectController"/> class.
         /// </summary>
-        /// <param name="projectService"></param>
-        /// <param name="userService"></param>
-        /// <param name="mapper"></param>
+        /// <param name="projectService">The project service.</param>
+        /// <param name="userService">The user service.</param>
+        /// <param name="mapper">The mapper.</param>
         public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
         {
             this.projectService = projectService;

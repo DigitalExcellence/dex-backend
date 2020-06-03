@@ -15,24 +15,58 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
 using System;
 
 namespace Services.Sources
 {
-
+    /// <summary>
+    /// GitHubSource
+    /// </summary>
+    /// <seealso cref="Services.Sources.ISource" />
     public class GitHubSource : ISource
     {
-
-        public void GetSource(string url)
+        /// <summary>
+        /// Gets the source.
+        /// </summary>
+        /// <param name="uri">The URI of the source project.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public void GetSource(Uri uri)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the project information.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Project GetProjectInformation(Uri uri)
+        {
+            throw new NotImplementedException();
+
+        }
+
+        /// <summary>
+        /// Projects the URI matches.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool ProjectURIMatches(Uri uri)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Searches the specified search term.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <exception cref="NotImplementedException"></exception>
         public void Search(string searchTerm)
         {
             throw new NotImplementedException();
         }
-
     }
-
 }
