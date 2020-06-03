@@ -78,8 +78,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Test getallwithusersasync function to see if it adheres the ispublic flag on the project user.
         /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="user">The user.</param>
+        /// <param name="project">The project that will be seeded.</param>
+        /// <param name="user">The user that will be seeded.</param>
         [Test]
         public async Task GetAllWithUsersAsyncTest_IsPublicEmail_False(
             [ProjectDataSource]Project project, [UserDataSource]User user)
@@ -100,8 +100,8 @@ namespace Repositories.Tests
         /// <summary>
         /// Test getallwithusersasync function to see if it adheres the ispublic flag on the project user.
         /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="user">The user.</param>
+        /// <param name="project">The project that will be seeded.</param>
+        /// <param name="user">The user that will be seeded.</param>
         [Test]
         public async Task GetAllWithUsersAsyncTest_IsPublicEmail_True(
             [ProjectDataSource]Project project, [UserDataSource]User user)
@@ -372,7 +372,7 @@ namespace Repositories.Tests
         /// </summary>
         /// <param name="projects">The project which are used as data to test</param>
         /// <param name="users">The users which are used as data to test</param>
-        /// <param name="collaborators">The collaborators which are used as data to test</param>
+        /// <param name="collaborators">The collaborator that will be seededs which are used as data to test</param>
         /// <returns></returns>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_GoodFlow(
@@ -410,9 +410,9 @@ namespace Repositories.Tests
         /// <summary>
         /// Finds the with user and collaborators asynchronous test is public true.
         /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="user">The user.</param>
-        /// <param name="collaborator">The collaborator.</param>
+        /// <param name="project">The project that will be seeded.</param>
+        /// <param name="user">The user that will be seeded.</param>
+        /// <param name="collaborator">The collaborator that will be seeded.</param>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_IsPublic_True(
             [ProjectDataSource]Project project,
@@ -445,8 +445,8 @@ namespace Repositories.Tests
         /// Finds the with user and collaborators asynchronous test is public true.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// <param name="user">The user.</param>
-        /// <param name="collaborator">The collaborator.</param>
+        /// <param name="user">The user that will be seeded.</param>
+        /// <param name="collaborator">The collaborator that will be seeded.</param>
         [Test]
         public async Task FindWithUserAndCollaboratorsAsyncTest_IsPublic_False(
             [ProjectDataSource]Project project,

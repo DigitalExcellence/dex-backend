@@ -23,7 +23,7 @@ namespace Models.Defaults
     public static class Defaults
     {
         /// <summary>
-        /// Pivacy consts
+        /// This class contains default values for a user profile when the isPublic flag of set profile is set to false
         /// </summary>
         public static class Privacy
         {
