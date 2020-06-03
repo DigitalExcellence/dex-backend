@@ -12,7 +12,8 @@ namespace IdentityServer.Quickstart.Account
     public class ExternalUserInfo
     {
         /// <summary>
-        /// Gets or sets the sub.
+        /// Gets or sets the subject id.
+        /// This is the token identifier
         /// </summary>
         /// <value>
         /// The sub.

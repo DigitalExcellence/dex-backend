@@ -106,10 +106,10 @@ namespace IdentityServer
         /// <summary>
         /// The callback endpoint for the fontys single sign on.
         /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="state">The state.</param>
+        /// <param name="code">The authorization code.</param>
+        /// <param name="state">The authorization state.</param>
         /// <param name="session_state">State of the session.</param>
-        /// <returns></returns>
+        /// <returns>Redirection to the callback url.</returns>
         /// <exception cref="Exception">
         /// The FHICT didn't return a correct response. Is the FHICT server accessible? - new Exception("Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException)
         /// or
@@ -226,8 +226,10 @@ namespace IdentityServer
         }
 
         /// <summary>
-        ///     Post processing of external authentication
+        /// Default callback function.
         /// </summary>
+        /// <returns>Redirection to the callback url.</returns>
+        /// <exception cref="Exception">External authentication error</exception>
         [HttpGet]
         public async Task<IActionResult> DefaultCallback()
         {
@@ -306,7 +308,7 @@ namespace IdentityServer
         /// Finds the user from external provider.
         /// </summary>
         /// <param name="result">The ExternalResult information.</param>
-        /// <returns></returns>
+        /// <returns>The user from the identity server, the external provider uri, The external user id, the claims</returns>
         /// <exception cref="System.Exception">Unknown userid</exception>
         private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(ExternalResult result)
         {
@@ -333,10 +335,10 @@ namespace IdentityServer
         /// <summary>
         /// Automatic user provisioning.
         /// </summary>
-        /// <param name="provider">The provider.</param>
+        /// <param name="provider">The external provider name.</param>
         /// <param name="providerUserId">The provider user identifier.</param>
         /// <param name="claims">The claims.</param>
-        /// <returns></returns>
+        /// <returns>The provisioned user</returns>
         private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
         {
             TestUser user = users.AutoProvisionUser(provider, providerUserId, claims.ToList());
@@ -346,9 +348,9 @@ namespace IdentityServer
         /// <summary>
         /// Processes the login callback for oidc.
         /// </summary>
-        /// <param name="externalResult">The external result.</param>
-        /// <param name="localClaims">The local claims.</param>
-        /// <param name="localSignInProps">The local sign in props.</param>
+        /// <param name="externalResult">The result model got from the external identity server.</param>
+        /// <param name="localClaims">The extra claims our identity server can add.</param>
+        /// <param name="localSignInProps">Properties that the identity server can add for self use.</param>
         private void ProcessLoginCallbackForOidc(ExternalResult externalResult,
                                                  List<Claim> localClaims,
                                                  AuthenticationProperties localSignInProps)
