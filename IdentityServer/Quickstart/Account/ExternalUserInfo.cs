@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace IdentityServer.Quickstart.Account
 {
@@ -16,6 +17,7 @@ namespace IdentityServer.Quickstart.Account
         /// <value>
         /// The sub.
         /// </value>
+        [JsonProperty("sub")]
         public string sub { get; set; }
         /// <summary>
         /// Gets or sets the name.
@@ -23,55 +25,63 @@ namespace IdentityServer.Quickstart.Account
         /// <value>
         /// The name.
         /// </value>
-        public string name { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
         /// <summary>
         /// Gets or sets the name of the family.
         /// </summary>
         /// <value>
         /// The name of the family.
         /// </value>
-        public string family_name { get; set; }
+        [JsonProperty("family_name")]
+        public string FamilyName { get; set; }
         /// <summary>
         /// Gets or sets the name of the given.
         /// </summary>
         /// <value>
         /// The name of the given.
         /// </value>
-        public string given_name { get; set; }
+        [JsonProperty("given_name")]
+        public string GivenName { get; set; }
         /// <summary>
         /// Gets or sets the preferred username.
         /// </summary>
         /// <value>
         /// The preferred username.
         /// </value>
-        public string preferred_username { get; set; }
+        [JsonProperty("preferred_username")]
+        public string PreferredUsername { get; set; }
         /// <summary>
         /// Gets or sets the profile.
         /// </summary>
         /// <value>
         /// The profile.
         /// </value>
-        public string profile { get; set; }
+        [JsonProperty("profile")]
+        public string Profile { get; set; }
         /// <summary>
         /// Gets or sets the updated at.
         /// </summary>
         /// <value>
         /// The updated at.
         /// </value>
-        public string updated_at { get; set; }
+        [JsonProperty("updated_at")]
+        public string UpdatedAt { get; set; }
         /// <summary>
         /// Gets or sets the email.
         /// </summary>
         /// <value>
         /// The email.
         /// </value>
-        public string email { get; set; }
+        [JsonProperty("email")]
+        public string Email { get; set; }
         /// <summary>
         /// Gets or sets the role.
         /// </summary>
         /// <value>
         /// The role.
         /// </value>
-        public string[] role { get; set; }
+        [JsonProperty("role")]
+        public string[] Role { get; set; }
     }
 }

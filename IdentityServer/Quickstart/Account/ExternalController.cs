@@ -141,13 +141,13 @@ namespace IdentityServer
             // Parse the content to get the access token.
             ExternalConnectToken fhictToken = JsonConvert.DeserializeObject<ExternalConnectToken>(response.Content);
 
-            if(string.IsNullOrWhiteSpace(fhictToken.access_token))
+            if(string.IsNullOrWhiteSpace(fhictToken.AccessToken))
             {
                 throw new Exception("The FHICT didn't return a correct response. Is the FHICT server accessible?", new Exception("Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException));
             }
 
 
-            JwtSecurityToken jwt = new JwtSecurityToken(fhictToken.access_token);
+            JwtSecurityToken jwt = new JwtSecurityToken(fhictToken.AccessToken);
             
             string idp = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("idp")).Value;
             string sub = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("sub")).Value;
@@ -159,7 +159,7 @@ namespace IdentityServer
             result.Schema = iss;
             result.Claims = jwt.Claims;
             result.ReturnUrl = returnUrl;
-            result.IdToken = fhictToken.id_token;
+            result.IdToken = fhictToken.IdToken;
 
             // lookup our user and external provider info
             (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) = FindUserFromExternalProvider(result);
@@ -170,14 +170,14 @@ namespace IdentityServer
                 // Get User information
                 RestClient informationClient = new RestClient($"{iss}/connect/userinfo");
                 RestRequest informationRequest = new RestRequest(Method.GET);
-                informationRequest.AddHeader("Authorization", $"Bearer {fhictToken.access_token}");
+                informationRequest.AddHeader("Authorization", $"Bearer {fhictToken.AccessToken}");
                 IRestResponse informationResponse = informationClient.Execute(informationRequest);
                 ExternalUserInfo userinfo =  JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
 
                 List<Claim> claimsList = claims.ToList();
-                claimsList.Add(new Claim("email", userinfo.preferred_username));
+                claimsList.Add(new Claim("email", userinfo.PreferredUsername));
                 claimsList.Add(new Claim("idp", idp));
-                claimsList.Add(new Claim("name", userinfo.name));
+                claimsList.Add(new Claim("name", userinfo.Name));
 
                 // simply auto-provisions new external user
                 user = AutoProvisionUser(provider, providerUserId, claimsList);
