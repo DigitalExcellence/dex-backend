@@ -75,6 +75,98 @@ namespace Repositories.Tests
         }
 
         /// <summary>
+        /// Check if the get all projects is able to skip the correct amount of projects
+        /// </summary>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
+        /// <returns></returns>
+        [Test]
+        public async Task GetAllSkipTakeAsyncTest_GoodFlow(
+            [ProjectDataSource(100)]List<Project> projects,
+            [UserDataSource(100)]List<User> users)
+        {
+            // Set project - user relation
+            // Set some properties to be able to search
+            // And seed database
+            projects = SetStaticTestData(projects, users);
+
+            DbContext.AddRange(projects);
+            await DbContext.SaveChangesAsync();
+
+            List<Project> retrieved;
+
+            // Tests
+            retrieved = await Repository.GetAllWithUsersAsync(0, 1);
+            Assert.AreEqual(1, retrieved.Count, "Get all with skip take failed");
+
+            retrieved = await Repository.GetAllWithUsersAsync(0, 10);
+            Assert.AreEqual(10, retrieved.Count, "Get all with skip take failed");
+
+            retrieved = await Repository.GetAllWithUsersAsync(10, 10);
+            Assert.AreEqual(10, retrieved.Count, "Get all with skip take failed");
+        }
+
+        /// <summary>
+        /// Check if the get all projects is returning no projects when skipping all the projects in the result
+        /// </summary>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
+        /// <returns></returns>
+        [Test]
+        public async Task GetAllSkipTakeAsyncTest_BadFlow_SkipAllProjects(
+            [ProjectDataSource(100)]List<Project> projects,
+            [UserDataSource(100)]List<User> users)
+        {
+            // Set project - user relation
+            // Set some properties to be able to search
+            // And seed database
+            projects = SetStaticTestData(projects, users);
+
+            DbContext.AddRange(projects);
+            await DbContext.SaveChangesAsync();
+
+            // Tests
+            List<Project> retrieved = (List<Project>)await Repository.GetAllWithUsersAsync(1000, 10);
+            Assert.AreEqual(0, retrieved.Count);
+        }
+
+        /// <summary>
+        /// Check if the count is counting the correct amount of projects
+        /// </summary>
+        /// <param name="projects">The projects which are used as data to test</param>
+        /// <param name="users">The users which are used as data to test</param>
+        /// <returns></returns>
+        [Test]
+        public async Task CountAsyncTest_GoodFlow(
+            [ProjectDataSource(100)]List<Project> projects,
+            [UserDataSource(100)]List<User> users)
+        {
+            // Set project - user relation
+            // Set some properties to be able to search
+            // And seed database
+            projects = SetStaticTestData(projects, users);
+
+            DbContext.AddRange(projects);
+            await DbContext.SaveChangesAsync();
+
+            // Tests
+            int retrieved = await Repository.CountAsync();
+            Assert.AreEqual(100, retrieved);
+        }
+
+        /// <summary>
+        /// Check if the count is returning 0 when there are no projects in the database
+        /// </summary>
+        /// <returns></returns>
+        [Test]
+        public async Task CountAsyncTest_BadFlow_NoProjects()
+        {
+            // Tests
+            int retrieved = await Repository.CountAsync();
+            Assert.AreEqual(0, retrieved);
+        }
+
+        /// <summary>
         /// Check if the search is returning the correct projects based on the search terms
         /// </summary>
         /// <param name="projects">The projects which are used as data to test</param>
