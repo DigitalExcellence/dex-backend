@@ -53,7 +53,7 @@ namespace IdentityServer.Quickstart.Account
         [JsonProperty("preferred_username")]
         public string PreferredUsername { get; set; }
         /// <summary>
-        /// Gets or sets the profile.
+        /// Gets or sets the link to the external user profile.
         /// </summary>
         /// <value>
         /// The profile.
