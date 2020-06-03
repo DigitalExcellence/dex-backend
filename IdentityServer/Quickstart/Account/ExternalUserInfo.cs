@@ -36,10 +36,10 @@ namespace IdentityServer.Quickstart.Account
         [JsonProperty("family_name")]
         public string FamilyName { get; set; }
         /// <summary>
-        /// Gets or sets the name of the given.
+        /// Gets or sets the given name of the external user.
         /// </summary>
         /// <value>
-        /// The name of the given.
+        /// The given name of the external user.
         /// </value>
         [JsonProperty("given_name")]
         public string GivenName { get; set; }
