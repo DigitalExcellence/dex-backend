@@ -67,7 +67,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Gets the embedded projects goodflow.
         /// </summary>
-        /// <param name="embeddedProjects">The embedded projects.</param>
+        /// <param name="embeddedProjects">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task GetEmbeddedProjects_goodflow([EmbeddedDataSource(100)]List<EmbeddedProject> embeddedProjects)
         {
@@ -101,7 +101,7 @@ namespace Repositories.Tests
         /// Gets the embedded embeddedProject goodflow.
         /// </summary>
         /// <param name="project">The embeddedProject that will be seeded.</param>
-        /// <param name="embeddedProjects">The embedded projects.</param>
+        /// <param name="embeddedProjects">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task GetEmbeddedProject_goodflow([EmbeddedDataSource]EmbeddedProject project, [EmbeddedDataSource(100)]List<EmbeddedProject> embeddedProjects)
         {
@@ -220,7 +220,7 @@ namespace Repositories.Tests
         /// <summary>
         /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted. on the project user.
         /// </summary>
-        /// <param name="embeddedProject">The embedded project.</param>
+        /// <param name="embeddedProject">The embedded project that will be seeded.</param>
         /// <param name="project">The project that will be seeded.</param>
         /// <param name="user">The user that will be seeded.</param>
         [Test]
