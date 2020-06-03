@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace IdentityServer
 {
@@ -87,6 +88,22 @@ namespace IdentityServer
                                         new
                                         {
                                             provider = vm.ExternalLoginScheme,
+                                            returnUrl
+                                        });
+            }
+
+            // get the provider parameter from the return url
+            int idx = vm.ReturnUrl.IndexOf('?');
+            string query = idx >= 0 ? vm.ReturnUrl.Substring(idx) : "";
+            string providerSchema = HttpUtility.ParseQueryString(query).Get("provider");
+
+            if(vm.VisibleExternalProviders.Where(i => i.AuthenticationScheme == providerSchema).FirstOrDefault() != null)
+            {
+                return RedirectToAction("Challenge",
+                                        "External",
+                                        new
+                                        {
+                                            provider = providerSchema,
                                             returnUrl
                                         });
             }
