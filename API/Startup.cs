@@ -129,7 +129,9 @@ namespace API
 
             services.AddCors();
             services.AddControllersWithViews()
-                    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>());
+                    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
+                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                ;
 
             services.AddSwaggerGen(o =>
             {
@@ -223,7 +225,7 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //StudentInfo
+            //UserInfo
             app.UseWhen(context =>
                 context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
                 {
@@ -232,22 +234,28 @@ namespace API
                         DbContext dbContext = context.RequestServices.GetService<DbContext>();
                         IUserService userService =
                             context.RequestServices.GetService<IUserService>();
-                        string studentId = context.User.GetStudentId(context);
-                        if(await userService.GetUserByIdentityIdAsync(studentId).ConfigureAwait(false) == null)
+                        string identityId = context.User.GetIdentityId(context);
+                        if(await userService.GetUserByIdentityIdAsync(identityId).ConfigureAwait(false) == null)
                         {
+                            IRoleService roleService = context.RequestServices.GetService<IRoleService>();
+                            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
+
                             User newUser = context.GetUserInformation(Config);
                             if(newUser == null)
                             {
+
                                 // Then it probably belongs swagger so we set the username as developer.
                                 newUser = new User()
                                 {
                                     Name = "Developer",
                                     Email = "Developer@DEX.com",
-                                    IdentityId = studentId
+                                    IdentityId = identityId,
+                                    Role = registeredUserRole
                                 };
                                 userService.Add(newUser);
                             } else
                             {
+                                newUser.Role = registeredUserRole;
                                 userService.Add(newUser);
                             }
                             await dbContext.SaveChangesAsync().ConfigureAwait(false);

@@ -49,6 +49,13 @@ namespace Models
 
         public string ProfileUrl { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the user profile is public.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is public; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsPublic { get; set; }
     }
 
 }
