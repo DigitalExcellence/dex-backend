@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -36,6 +36,11 @@ namespace IdentityServer
                          .MinimumLevel.Override("System", LogEventLevel.Warning)
                          .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                          .Enrich.FromLogContext()
+                         .WriteTo.Sentry(s =>
+                         {
+                             s.MinimumBreadcrumbLevel = LogEventLevel.Debug;
+                             s.MinimumEventLevel = LogEventLevel.Error;
+                         })
                          .WriteTo.Console(outputTemplate:
                                           "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                                           theme: AnsiConsoleTheme.Literate)
@@ -64,6 +69,7 @@ namespace IdentityServer
                        .ConfigureWebHostDefaults(webBuilder =>
                        {
                            webBuilder.UseStartup<Startup>();
+                           webBuilder.UseSentry();
                            webBuilder.UseSerilog();
                        });
         }

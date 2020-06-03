@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -25,6 +25,7 @@ using Models;
 using Models.Defaults;
 using Services.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -56,23 +57,56 @@ namespace API.Controllers
         /// <summary>
         ///     Get all projects.
         /// </summary>
+        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllProjects()
+        public async Task<IActionResult> GetAllProjects([FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
-            List<Project> projects = await projectService.GetAllWithUsersAsync().ConfigureAwait(false);
-            if(projects.Count == 0)
+            ProblemDetails problem = new ProblemDetails
+                                     {
+                                         Title = "Invalid search request."
+                                     };
+            if(projectFilterParamsResource.Page != null &&
+               projectFilterParamsResource.Page < 1)
             {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting all projects.",
-                    Detail = "There where no projects found in the database.",
-                    Instance = "1B9B7B05-1EBA-49B0-986F-B54EBA70EC0D"
-                };
-                return NotFound(problem);
+                problem.Detail = "The page number cannot be smaller then 1.";
+                problem.Instance = "65EB6EF1-2CF4-4F7B-8A0A-C047C701337A";
+                return BadRequest(problem);
+            }
+            if(projectFilterParamsResource.SortBy != null &&
+               projectFilterParamsResource.SortBy != "name" &&
+               projectFilterParamsResource.SortBy != "created" &&
+               projectFilterParamsResource.SortBy != "updated")
+            {
+                problem.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\".";
+                problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
+                return BadRequest(problem);
+            }
+            if(projectFilterParamsResource.SortDirection != null &&
+               projectFilterParamsResource.SortDirection != "asc" &&
+               projectFilterParamsResource.SortDirection != "desc")
+            {
+                problem.Detail = "Invalid sort direction: Use \"asc\" or \"desc\".";
+                problem.Instance = "3EE043D5-070B-443A-A951-B252A1BB8EF9";
+                return BadRequest(problem);
             }
 
-            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResourceResult>>(projects));
+            ProjectFilterParams projectFilterParams = mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+            IEnumerable<Project> projects = await projectService.GetAllWithUsersAsync(projectFilterParams);
+            IEnumerable<ProjectResultResource> results =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
+
+            ProjectResultsResource resultsResource = new ProjectResultsResource()
+                                                           {
+                                                               Results = results.ToArray(),
+                                                               Count = results.Count(),
+                                                               TotalCount = await projectService.ProjectsCount(projectFilterParams),
+                                                               Page = projectFilterParams.Page,
+                                                               TotalPages =
+                                                                   await projectService.GetProjectsTotalPages(projectFilterParams)
+                                                           };
+
+            return Ok(resultsResource);
         }
 
         /// <summary>
@@ -207,7 +241,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            
+
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
 

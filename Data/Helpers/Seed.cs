@@ -60,10 +60,6 @@ namespace Data.Helpers
             {
                 Name = nameof(Defaults.Roles.RegisteredUser),
                 Scopes = new List<RoleScope>()
-                {
-                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.UserWrite)),
-                }
             };
             roles.Add(registeredUserRole);
 
