@@ -91,8 +91,6 @@ namespace Services.Tests
             });
             Assert.AreEqual(highlights, retrievedHighlights);
             Assert.AreEqual(1, retrievedHighlights.Count);
-            if(retrievedHighlights.Find(hl => hl.Project == null) != null)
-                Assert.Fail();
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
