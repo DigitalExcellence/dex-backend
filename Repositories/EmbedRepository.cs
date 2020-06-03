@@ -33,18 +33,18 @@ namespace Repositories
         /// Gets the embedded project asynchronous.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>The embeddedProject with the specified guid.</returns>
         Task<EmbeddedProject> GetEmbeddedProjectAsync(Guid guid);
         /// <summary>
         /// Gets the embedded projects asynchronous.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>All the embeddedProjects</returns>
         Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync();
         /// <summary>
         /// Determines whether [is non existing unique identifier] [the specified unique identifier].
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>A boolean if the guid already exists return false else return true.</returns>
         Task<bool> IsNonExistingGuidAsync(Guid guid);
     }
     /// <summary>
@@ -64,7 +64,7 @@ namespace Repositories
         /// Redacts the user.
         /// </summary>
         /// <param name="embeddedProject">The embedded project.</param>
-        /// <returns></returns>
+        /// <returns>The embedded project with the selected fields redacted.</returns>
         private EmbeddedProject RedactUser(EmbeddedProject embeddedProject)
         {
             if(embeddedProject?.Project?.User?.IsPublic == false)
@@ -83,7 +83,7 @@ namespace Repositories
         /// Redacts the user.
         /// </summary>
         /// <param name="embeddedProjects">The embedded projects.</param>
-        /// <returns></returns>
+        /// <returns>List of embedded projects with the selected fields redacted.</returns>
         private List<EmbeddedProject> RedactUser(List<EmbeddedProject> embeddedProjects)
         {
             for(int i = 0; i < embeddedProjects.Count; i++)
@@ -97,7 +97,7 @@ namespace Repositories
         /// Finds the embeddedproject with the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <returns></returns>
+        /// <returns>The embedded project with the specified identifier.</returns>
         public override async Task<EmbeddedProject> FindAsync(int id)
         {
             EmbeddedProject embeddedProject = await GetDbSet<EmbeddedProject>()
@@ -111,7 +111,7 @@ namespace Repositories
         /// Gets the embedded embeddedProject asynchronous.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>The embedded project with the specified guid.</returns>
         public async Task<EmbeddedProject> GetEmbeddedProjectAsync(Guid guid)
         {
             EmbeddedProject embeddedProject = await GetDbSet<EmbeddedProject>()
@@ -127,7 +127,7 @@ namespace Repositories
         /// <summary>
         /// Gets the embedded embeddedProjects asynchronous.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns all the embededProjects.</returns>
         public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync()
         {
             List<EmbeddedProject> embeddedProjects = await GetDbSet<EmbeddedProject>()

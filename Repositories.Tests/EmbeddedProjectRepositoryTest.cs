@@ -29,7 +29,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Determines whether [is non existing unique identifier asynchronous unique identifier exists] [the specified embeddedProject].
         /// </summary>
-        /// <param name="project">The embeddedProject.</param>
+        /// <param name="project">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task IsNonExistingGuidAsync_guid_exists([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -45,7 +45,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Determines whether /[is non existing unique identifier asynchronous unique identifier non existing] [the specified embeddedProject].
         /// </summary>
-        /// <param name="project">The embeddedProject.</param>
+        /// <param name="project">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task IsNonExistingGuidAsync_guid_non_existing([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -100,7 +100,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Gets the embedded embeddedProject goodflow.
         /// </summary>
-        /// <param name="project">The embeddedProject.</param>
+        /// <param name="project">The embeddedProject that will be seeded.</param>
         /// <param name="embeddedProjects">The embedded projects.</param>
         [Test]
         public async Task GetEmbeddedProject_goodflow([EmbeddedDataSource]EmbeddedProject project, [EmbeddedDataSource(100)]List<EmbeddedProject> embeddedProjects)
@@ -118,7 +118,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Gets the embedded projects no embeddedProject.
         /// </summary>
-        /// <param name="project">The embeddedProject.</param>
+        /// <param name="project">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task GetEmbeddedProjects_noProject([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -129,7 +129,7 @@ namespace Repositories.Tests
         /// <summary>
         /// test if the function findasync finds an embedded project and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
-        /// <param name="project">The embeddedProject.</param>
+        /// <param name="project">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task FindAsync_User_IsPublic_True([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -146,7 +146,7 @@ namespace Repositories.Tests
         /// <summary>
         /// test if the function findasync finds an embedded project and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
-        /// <param name="project">The embeddedProject.</param>
+        /// <param name="project">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task FindAsync_User_IsPublic_False([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -163,7 +163,7 @@ namespace Repositories.Tests
         /// <summary>
         /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
-        /// <param name="project">The embeddedProject.</param>
+        /// <param name="project">The embeddedProject that will be seeded.</param>
         [Test]
         public async Task GetEmbeddedProjectAsync_User_IsPublic_True([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -180,7 +180,7 @@ namespace Repositories.Tests
         /// <summary>
         /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted.
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="project">The project that will be seeded.</param>
         [Test]
         public async Task GetEmbeddedProjectAsync_User_IsPublic_False([EmbeddedDataSource]EmbeddedProject project)
         {
@@ -197,9 +197,9 @@ namespace Repositories.Tests
         /// <summary>
         /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted. on the project user.
         /// </summary>
-        /// <param name="embeddedProject">The embedded project.</param>
-        /// <param name="project">The project.</param>
-        /// <param name="user">The user.</param>
+        /// <param name="embeddedProject">The embeddedProject that will be seeded.</param>
+        /// <param name="project">The project that will be seeded.</param>
+        /// <param name="user">The user that will be seeded.</param>
         [Test]
         public async Task GetEmbeddedProjectAsync_ProjectUser_IsPublic_True([EmbeddedDataSource]EmbeddedProject embeddedProject, [ProjectDataSource]Project project, [UserDataSource]User user)
         {
@@ -221,8 +221,8 @@ namespace Repositories.Tests
         /// test if the function getEmbeddedProjectasync finds an embedded project by the guid and adheres to the IsPublic flag meaning if the flag is false the email field should be redacted. on the project user.
         /// </summary>
         /// <param name="embeddedProject">The embedded project.</param>
-        /// <param name="project">The project.</param>
-        /// <param name="user">The user.</param>
+        /// <param name="project">The project that will be seeded.</param>
+        /// <param name="user">The user that will be seeded.</param>
         [Test]
         public async Task GetEmbeddedProjectAsync_ProjectUser_IsPublic_False([EmbeddedDataSource]EmbeddedProject embeddedProject, [ProjectDataSource]Project project, [UserDataSource]User user)
         {
