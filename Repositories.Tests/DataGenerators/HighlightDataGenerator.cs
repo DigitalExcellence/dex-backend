@@ -1,7 +1,10 @@
 using Bogus;
 using Models;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataGenerators.Base;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Repositories.Tests.DataGenerators
 {
