@@ -45,6 +45,9 @@ services:
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}      
       - App__swagger__RedirectUrisSwagger=${REDIRECT_URIS_SWAGGER}
       - App__swagger__PostLogoutUrisSwagger=${POST_LOGOUT_URIS_SWAGGER}
+      - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
+      - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
+      - App__FfhictOIDC__RedirectUri=${FFHICTOIDC_REDIRECT_URI}
       - SENTRY_DSN=${SENTRY_DSN}
     image: digitalexcellence/stagingidentity
 

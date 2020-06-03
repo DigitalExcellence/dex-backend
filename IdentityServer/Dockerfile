@@ -26,6 +26,12 @@ ENV App__swagger__RedirectUrisSwagger = ''
 
 ENV App__swagger__PostLogoutUrisSwagger = ''
 
+ENV App__FfhictOIDC__ClientId = ''
+
+ENV App__FfhictOIDC__ClientSecret = ''
+
+ENV App__FfhictOIDC__RedirectUri = ''
+
 ENV SENTRY_DSN = ''
 
 RUN dotnet tool install --tool-path ./ dotnet-certificate-tool
