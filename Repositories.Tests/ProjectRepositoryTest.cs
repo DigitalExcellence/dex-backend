@@ -536,7 +536,7 @@ namespace Repositories.Tests
         /// <summary>
         /// Finds the with user and collaborators asynchronous test is public true.
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="project">The project that will be seeded.</param>
         /// <param name="user">The user that will be seeded.</param>
         /// <param name="collaborator">The collaborator that will be seeded.</param>
         [Test]
