@@ -17,13 +17,19 @@
 
 using Configuration;
 using IdentityServer.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+
+
+
+
 
 namespace IdentityServer
 {
@@ -55,6 +61,12 @@ namespace IdentityServer
         /// </summary>
         public Config Config { get; }
 
+        /// <summary>
+        /// Gets the environment.
+        /// </summary>
+        /// <value>
+        /// The environment.
+        /// </value>
         public IWebHostEnvironment Environment { get; }
 
         /// <summary>
@@ -88,14 +100,58 @@ namespace IdentityServer
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             builder.AddTestUsers(TestUsers.Users);
 
-            // services.AddAuthentication()
-            //     .AddOpenIdConnect("FHICT", "Fontys FHICT", options =>
-            //     {
-            //         options.ClientId = "";
-            //         options.ClientSecret = "";
-            //         options.Authority = "";
-            //         // ...
-            //     });
+            services.AddSingleton(Config);
+
+            // sets the authentication schema.
+            services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    })
+                    // Adds Fontys Single Sign On authentication.
+                    .AddOpenIdConnect("oidc", "Fontys", options =>
+                        {
+                            options.ClientId = Config.FfhictOIDC.ClientId;
+                            options.ClientSecret = Config.FfhictOIDC.ClientSecret;
+                            options.Authority = Config.FfhictOIDC.Authority;
+                            options.ResponseType = "code";
+                            options.Scope.Clear();
+
+                            string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
+                            foreach(string scope in scopes)
+                            {
+                                options.Scope.Add(scope);
+                            }
+
+                            // Set this flow to get the refresh token.
+                            // options.Scope.Add("offline_access");
+
+                            options.SaveTokens = true;
+                            options.GetClaimsFromUserInfoEndpoint = true;
+
+                            // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
+                            options.Events.OnRedirectToIdentityProvider = async n =>
+                            {
+                                n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
+                                await Task.FromResult(0);
+                            };
+                        }
+                        // Add jwt validation this is so that the DGS can authenticate.
+                    ).AddJwtBearer(o =>
+                    {
+                        o.SaveToken = true;
+                        o.Authority = Config.Self.JwtAuthority;
+                        o.RequireHttpsMetadata = false;
+                        o.TokenValidationParameters = new TokenValidationParameters()
+                                                      {
+                                                          ValidateActor = false,
+                                                          ValidateAudience = false,
+                                                          NameClaimType = "name",
+                                                          RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                                                      };
+                    })
+                    .AddCookie();
 
             if(Environment.IsDevelopment())
             {
@@ -110,13 +166,14 @@ namespace IdentityServer
                     "Let's Encrypt Authority X3",
                     false
                 );
-                if (certCollection.Count > 0)
+                if(certCollection.Count > 0)
                 {
                     X509Certificate2 certificate = certCollection[0];
                     builder.AddSigningCredential(certificate);
                 }
             }
 
+            // TODO tighten cors
             services.AddCors(options =>
             {
                 options.AddPolicy("dex-api",

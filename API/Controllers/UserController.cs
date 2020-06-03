@@ -144,9 +144,24 @@ namespace API.Controllers
         /// <param name="userResource"></param>
         /// <returns></returns>
         [HttpPut("{userId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
+        [Authorize]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
+
+            if(currentUser.Id != userId && !isAllowed)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed to edit the user.",
+                     Detail = "The user is not allowed to edit this user.",
+                     Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
+                 };
+                return Unauthorized(problem);
+            }
+
+
             User user = await userService.FindAsync(userId);
             if(user == null)
             {
@@ -172,9 +187,24 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete("{userId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
+        [Authorize]
         public async Task<IActionResult> DeleteAccount(int userId)
         {
+
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
+
+            if(user.Id != userId && !isAllowed)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed to delete the user.",
+                     Detail = "The user is not allowed to delete this user.",
+                     Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
+                 };
+                return Unauthorized(problem);
+            }
+
             if(await userService.FindAsync(userId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
