@@ -24,6 +24,7 @@ using Models;
 using Models.Defaults;
 using RestSharp;
 using Services.Services;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -39,16 +40,19 @@ namespace API.Controllers
 
         private readonly IMapper mapper;
         private readonly IUserService userService;
+        private readonly IRoleService roleService;
 
         /// <summary>
         ///     Initialize a new instance of UserController
         /// </summary>
         /// <param name="userService"></param>
         /// <param name="mapper"></param>
-        public UserController(IUserService userService, IMapper mapper)
+        /// <param name="roleService"></param>
+        public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
         {
             this.userService = userService;
             this.mapper = mapper;
+            this.roleService = roleService;
         }
 
         /// <summary>
@@ -117,14 +121,17 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
-        public IActionResult CreateAccount([FromBody] UserResource accountResource)
+        public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
         {
             User user = mapper.Map<UserResource, User>(accountResource);
+            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
+            user.Role = registeredUserRole;
+
             try
             {
                 userService.Add(user);
                 userService.Save();
-                return Created(nameof(CreateAccount), mapper.Map<User, UserResourceResult>(user));
+                return Created(nameof(CreateAccountAsync), mapper.Map<User, UserResourceResult>(user));
             } catch
             {
                 ProblemDetails problem = new ProblemDetails

@@ -78,7 +78,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="highlightId"></param>
         /// <returns></returns>
-        [HttpGet("{projectId}")]
+        [HttpGet("{highlightId}")]
         public async Task<IActionResult> GetHighlight(int highlightId)
         {
             if(highlightId < 0)

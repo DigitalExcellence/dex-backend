@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Defaults;
 using Services.Services;
 using static Models.Defaults.Defaults;
 
@@ -230,6 +231,16 @@ namespace API.Controllers
                     Instance = "CBC4C09D-DFEA-44D8-A310-2CE149BAD498"
                 };
                 return NotFound(problem);
+            }
+            if(role.Name == nameof(Defaults.Roles.Administrator) || role.Name == nameof(Defaults.Roles.RegisteredUser))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Not allowed.",
+                    Detail = "For the stability of the program we need atleast the registered user role and the admin role so these are not deletable..",
+                    Instance = "CBC4C09D-DFEA-44D8-A310-2CE14123D498"
+                };
+                return Unauthorized(problem);
             }
 
             if(userService.UserWithRoleExists(role))
