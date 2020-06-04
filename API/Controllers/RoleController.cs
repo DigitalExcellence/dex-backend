@@ -40,7 +40,7 @@ namespace API.Controllers
         ///     Get all Roles.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("Roles")]
+        [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public async Task<IActionResult> GetAllRoles()
         {

@@ -190,6 +190,33 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Deletes the current account.
+        /// </summary>
+        /// <returns>Not found when the user does not exist. OK if everything went welll.</returns>
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteAccount()
+        {
+
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                };
+                return NotFound(problem);
+            }
+
+            await userService.RemoveAsync(user.Id);
+            userService.Save();
+            return Ok();
+        }
+
+        /// <summary>
         ///     Delete the user account.
         /// </summary>
         /// <returns></returns>
