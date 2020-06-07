@@ -129,7 +129,9 @@ namespace API
 
             services.AddCors();
             services.AddControllersWithViews()
-                    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>());
+                    .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
+                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                ;
 
             services.AddSwaggerGen(o =>
             {
