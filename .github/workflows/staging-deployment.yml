@@ -1,7 +1,7 @@
 name: Staging Deployment
 
-on: 
-  push:
+on:
+  pull_request:
     branches: [ develop ]
 
 jobs:
