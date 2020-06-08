@@ -32,7 +32,6 @@ namespace Models
 
         public int Id { get; set; }
 
-        [Required]
         public User User { get; set; }
 
         public int UserId { get; set; }
