@@ -19,15 +19,13 @@ using System;
 
 namespace API.Resources
 {
-
     /// <summary>
     ///     The view model of a highlight
     /// </summary>
     public class HighlightResource
     {
-
         /// <summary>
-        ///     This gets or sets the the id of the project that this highlight is associated with
+        ///     This gets or sets the id of the project that this highlight is associated with
         /// </summary>
         public int ProjectId { get; set; }
 
@@ -40,7 +38,5 @@ namespace API.Resources
         ///     This gets or sets the end date that highlight should end
         /// </summary>
         public DateTime? EndDate { get; set; }
-
     }
-
 }

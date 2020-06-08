@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using API.Resources;
 using Models;
 using Repositories;
 using System;
@@ -29,11 +28,29 @@ namespace Services.Services
     public interface ISearchService
     {
 
-        Task<IEnumerable<Project>> SearchInternalProjects(string query, SearchParams searchParams);
+        /// <summary>
+        ///     Search for projects in the internal database
+        /// </summary>
+        /// <param name="query">The search query</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>The projects that match the search query</returns>
+        Task<IEnumerable<Project>> SearchInternalProjects(string query, ProjectFilterParams projectFilterParams);
 
-        Task<int> SearchInternalProjectsCount(string query, SearchParams searchParams);
+        /// <summary>
+        ///     Get the number of projects that match the search query
+        /// </summary>
+        /// <param name="query">The search query</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>The number of projects that match the search query</returns>
+        Task<int> SearchInternalProjectsCount(string query, ProjectFilterParams projectFilterParams);
 
-        Task<int> SearchInternalProjectsTotalPages(string query, SearchParams searchParams);
+        /// <summary>
+        ///     Search for projects in the internal database
+        /// </summary>
+        /// <param name="query">The search query</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>The projects that match the search query</returns>
+        Task<int> SearchInternalProjectsTotalPages(string query, ProjectFilterParams projectFilterParams);
 
     }
 
@@ -51,24 +68,24 @@ namespace Services.Services
         ///     Search for projects in the internal database
         /// </summary>
         /// <param name="query">The search query</param>
-        /// <param name="searchParams">The parameters to narrow down the search results</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The projects that match the search query</returns>
-        public virtual async Task<IEnumerable<Project>> SearchInternalProjects(string query, SearchParams searchParams)
+        public virtual async Task<IEnumerable<Project>> SearchInternalProjects(string query, ProjectFilterParams projectFilterParams)
         {
-            if(!searchParams.AmountOnPage.HasValue ||
-               searchParams.AmountOnPage <= 0)
-                searchParams.AmountOnPage = 20;
+            if(!projectFilterParams.AmountOnPage.HasValue ||
+               projectFilterParams.AmountOnPage <= 0)
+                projectFilterParams.AmountOnPage = 20;
 
             int? skip = null;
             int? take = null;
-            if(searchParams.Page.HasValue)
+            if(projectFilterParams.Page.HasValue)
             {
-                skip = searchParams.AmountOnPage * (searchParams.Page - 1);
-                take = searchParams.AmountOnPage;
+                skip = projectFilterParams.AmountOnPage * (projectFilterParams.Page - 1);
+                take = projectFilterParams.AmountOnPage;
             }
 
             Expression<Func<Project, object>> orderBy;
-            switch(searchParams.SortBy)
+            switch(projectFilterParams.SortBy)
             {
                 case "name":
                     orderBy = project => project.Name;
@@ -81,18 +98,18 @@ namespace Services.Services
                     break;
             }
 
-            bool orderByDirection = searchParams.SortDirection == "asc";
+            bool orderByDirection = projectFilterParams.SortDirection == "asc";
 
-            return await projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection, searchParams.Highlighted);
+            return await projectRepository.SearchAsync(query, skip, take, orderBy, orderByDirection, projectFilterParams.Highlighted);
         }
 
         /// <summary>
         ///     Get the number of projects that match the search query
         /// </summary>
         /// <param name="query">The search query</param>
-        /// <param name="searchParams">The parameters to narrow down the search results</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The number of projects that match the search query</returns>
-        public virtual async Task<int> SearchInternalProjectsCount(string query, SearchParams searchParams)
+        public virtual async Task<int> SearchInternalProjectsCount(string query, ProjectFilterParams projectFilterParams)
         {
             return await projectRepository.SearchCountAsync(query);
         }
@@ -101,15 +118,15 @@ namespace Services.Services
         ///     Search for projects in the internal database
         /// </summary>
         /// <param name="query">The search query</param>
-        /// <param name="searchParams">The parameters to narrow down the search results</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The projects that match the search query</returns>
-        public virtual async Task<int> SearchInternalProjectsTotalPages(string query, SearchParams searchParams)
+        public virtual async Task<int> SearchInternalProjectsTotalPages(string query, ProjectFilterParams projectFilterParams)
         {
-            if(searchParams.AmountOnPage == null ||
-               searchParams.AmountOnPage <= 0)
-                searchParams.AmountOnPage = 20;
-            int count = await SearchInternalProjectsCount(query, searchParams);
-            return (int) Math.Ceiling(count / (decimal) searchParams.AmountOnPage);
+            if(projectFilterParams.AmountOnPage == null ||
+               projectFilterParams.AmountOnPage <= 0)
+                projectFilterParams.AmountOnPage = 20;
+            int count = await SearchInternalProjectsCount(query, projectFilterParams);
+            return (int) Math.Ceiling(count / (decimal) projectFilterParams.AmountOnPage);
         }
 
     }

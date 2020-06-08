@@ -15,12 +15,14 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
+using RestSharp;
 using Services.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -52,6 +54,28 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets the current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            string identityId = HttpContext.User.GetIdentityId(HttpContext);
+            User user = await userService.GetUserByIdentityIdAsync(identityId);
+            if(user == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed getting the user account.",
+                     Detail = "The user could not be found in the database.",
+                     Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                };
+                return NotFound(problem);
+            }
+            return Ok(mapper.Map<User, UserResourceResult>(user));
+        }
 
         /// <summary>
         ///     Get a user account.
@@ -123,9 +147,24 @@ namespace API.Controllers
         /// <param name="userResource"></param>
         /// <returns></returns>
         [HttpPut("{userId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
+        [Authorize]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
+
+            if(currentUser.Id != userId && !isAllowed)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed to edit the user.",
+                     Detail = "The user is not allowed to edit this user.",
+                     Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
+                 };
+                return Unauthorized(problem);
+            }
+
+
             User user = await userService.FindAsync(userId);
             if(user == null)
             {
@@ -154,6 +193,21 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         public async Task<IActionResult> DeleteAllUserData(int userId)
         {
+
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
+
+            if(user.Id != userId && !isAllowed)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed to delete the user.",
+                     Detail = "The user is not allowed to delete this user.",
+                     Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
+                 };
+                return Unauthorized(problem);
+            }
+
             if(await userService.FindAsync(userId) == null)
             {
                 ProblemDetails problem = new ProblemDetails

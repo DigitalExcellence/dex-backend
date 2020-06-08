@@ -20,7 +20,6 @@ using System.Collections.Generic;
 
 namespace API.Resources
 {
-
     /// <summary>
     ///     The view model result of role
     /// </summary>
@@ -30,7 +29,5 @@ namespace API.Resources
         ///     Get or Set the Id of a Role
         /// </summary>
         public int Id { get; set; }
-
     }
-
 }
