@@ -147,12 +147,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Gets the student information.
+        ///     Delete all data bound to a user.
         /// </summary>
         /// <returns></returns>
         [HttpDelete("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
-        public async Task<IActionResult> DeleteAccount(int userId)
+        public async Task<IActionResult> DeleteAllUserData(int userId)
         {
             if(await userService.FindAsync(userId) == null)
             {
@@ -160,7 +160,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with this student id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                    Instance = "TODO-CHANGE-TO-GENERATED-INSTANCE-CODE"
                 };
                 return NotFound(problem);
             }
