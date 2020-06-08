@@ -214,7 +214,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with this student id.",
-                    Instance = "TODO-CHANGE-TO-GENERATED-INSTANCE-CODE"
+                    Instance = "E32B3F68-C62B-4EA8-BCD0-4EB2B0A4ABB8"
                 };
                 return NotFound(problem);
             }
@@ -239,7 +239,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with this student id.",
-                    Instance = "TODO-CHANGE-TO-GENERATED-INSTANCE-CODE"
+                    Instance = "6154D4BD-853A-41BB-A513-E6782BAF534B"
                 };
                 return NotFound(problem);
             } else
