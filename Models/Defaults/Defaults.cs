@@ -22,6 +22,17 @@ namespace Models.Defaults
 
     public static class Defaults
     {
+        /// <summary>
+        /// This class contains default values for a user profile when the isPublic flag of set profile is set to false
+        /// </summary>
+        public static class Privacy
+        {
+            /// <summary>
+            /// The email string when user flag IsPublic is set to false.
+            /// </summary>
+            public const string RedactedEmail = "<Redacted>";
+
+        }
 
         public static class Roles
         {
@@ -29,6 +40,10 @@ namespace Models.Defaults
             public const string BackendApplication = "BackendApplication";
             public const string Student = "Student";
             public const string Teacher = "Teacher";
+
+            public const string RegisteredUser = "RegisteredUser";
+            public const string PrUser = "PrUser";
+            public const string Administrator = "Administrator";
 
         }
 
@@ -72,6 +87,11 @@ namespace Models.Defaults
             [Description("This scope gives write access to the Role namespace")]
             public const string RoleWrite = "role:write";
 
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedWrite = "embed:write";
+
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedRead = "embed:read";
         }
 
     }

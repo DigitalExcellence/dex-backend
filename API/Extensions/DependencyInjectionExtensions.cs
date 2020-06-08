@@ -21,16 +21,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Services.Services;
+using Services.Sources;
 
 namespace API.Extensions
 {
-
     /// <summary>
     ///     DependencyInjectionExtensions
     /// </summary>
     public static class DependencyInjectionExtensions
     {
-
         /// <summary>
         ///     Adds all the services and repositories.
         /// </summary>
@@ -51,14 +50,19 @@ namespace API.Extensions
 
             services.AddScoped<ISearchService, SearchService>();
 
+            services.AddScoped<IEmbedService, EmbedService>();
+            services.AddScoped<IEmbedRepository, EmbedRepository>();
+
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
-
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
+
+            services.AddScoped<SourceManagerService, SourceManagerService>();
+            services.AddScoped<GitHubSource, GitHubSource>();
+            services.AddScoped<GitLabSource, GitLabSource>();
+
             return services;
         }
-
     }
-
 }

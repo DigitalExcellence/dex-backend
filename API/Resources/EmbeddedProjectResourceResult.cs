@@ -15,44 +15,50 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
+using Models;
+
 namespace API.Resources
 {
 
     /// <summary>
-    ///     Resource to show for multiple Search Results
+    /// Embedded project resource result
     /// </summary>
-    public class SearchResultsResource
+    /// <seealso cref="API.Resources.EmbeddedProjectResource" />
+    public class EmbeddedProjectResourceResult: EmbeddedProjectResource
     {
 
         /// <summary>
-        ///     Get or Set with an Array of Search Result Resources
+        /// Gets or sets the identifier.
         /// </summary>
-        public SearchResultResource[] Results { get; set; }
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public int Id { get; set; }
 
         /// <summary>
-        ///     Get or Set Query String
+        /// Gets or sets the project.
         /// </summary>
-        public string Query { get; set; }
+        /// <value>
+        /// The project.
+        /// </value>
+        public Project Project { get; set; }
 
         /// <summary>
-        ///     Get or Set Count
+        /// Gets or sets the unique identifier.
         /// </summary>
-        public int Count { get; set; }
+        /// <value>
+        /// The unique identifier.
+        /// </value>
+        public Guid Guid { get; set; }
 
         /// <summary>
-        ///     Get or Set Total Count
+        /// Gets or sets the user.
         /// </summary>
-        public int TotalCount { get; set; }
-
-        /// <summary>
-        ///     Get or Set Page of Search Result
-        /// </summary>
-        public int? Page { get; set; }
-
-        /// <summary>
-        ///     Get or Set the total amount of pages of Search Result
-        /// </summary>
-        public int TotalPages { get; set; }
+        /// <value>
+        /// The user.
+        /// </value>
+        public User User { get; set; }
 
     }
 

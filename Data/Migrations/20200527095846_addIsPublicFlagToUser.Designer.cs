@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200504131144_add_authorization_role_feature")]
-    partial class add_authorization_role_feature
+    [Migration("20200527095846_addIsPublicFlagToUser")]
+    partial class addIsPublicFlagToUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,31 @@ namespace _4_Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Collaborators");
+                });
+
+            modelBuilder.Entity("Models.EmbeddedProject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EmbeddedProject");
                 });
 
             modelBuilder.Entity("Models.Highlight", b =>
@@ -107,12 +132,15 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.Role", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("id");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Role");
                 });
@@ -124,7 +152,7 @@ namespace _4_Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("Roleid")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Scope")
@@ -132,7 +160,7 @@ namespace _4_Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Roleid");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("RoleScope");
                 });
@@ -152,6 +180,9 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -159,12 +190,12 @@ namespace _4_Data.Migrations
                     b.Property<string>("ProfileUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Roleid")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Roleid");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("User");
                 });
@@ -174,6 +205,21 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.Project", null)
                         .WithMany("Collaborators")
                         .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.EmbeddedProject", b =>
+                {
+                    b.HasOne("Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -200,14 +246,14 @@ namespace _4_Data.Migrations
                 {
                     b.HasOne("Models.Role", null)
                         .WithMany("Scopes")
-                        .HasForeignKey("Roleid");
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("Models.User", b =>
                 {
                     b.HasOne("Models.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("Roleid");
+                        .HasForeignKey("RoleId");
                 });
 #pragma warning restore 612, 618
         }

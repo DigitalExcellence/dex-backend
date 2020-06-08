@@ -17,6 +17,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Defaults;
 using Repositories.Base;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,15 @@ namespace Repositories
     public interface IProjectRepository : IRepository<Project>
     {
 
-        Task<List<Project>> GetAllWithUsersAsync();
+        Task<List<Project>> GetAllWithUsersAsync(
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null
+            );
+
+        Task<int> CountAsync(bool? highlighted = null);
 
         Task<IEnumerable<Project>> SearchAsync(
             string query,
@@ -41,7 +50,7 @@ namespace Repositories
             bool? highlighted = null
         );
 
-        Task<int> SearchCountAsync(string query);
+        Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
@@ -52,19 +61,109 @@ namespace Repositories
 
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
-        public override Task<Project> FindAsync(int id)
+        private Project RedactUser(Project project)
         {
-            return GetDbSet<Project>()
+            if(project?.User?.IsPublic == false)
+            {
+                project.User.Email = Defaults.Privacy.RedactedEmail;
+            }
+            return project;
+        }
+        private List<Project> RedactUser(List<Project> projects)
+        {
+            for(int i = 0; i < projects.Count; i++)
+            {
+                projects[i] = RedactUser(projects[i]);
+            }
+            return projects;
+        }
+
+        public override async Task<Project> FindAsync(int id)
+        {
+            Project project = await GetDbSet<Project>()
                    .Where(s => s.Id == id)
                    .Include(p => p.Collaborators)
                    .SingleOrDefaultAsync();
+
+            return RedactUser(project);
         }
 
-        public Task<List<Project>> GetAllWithUsersAsync()
+        private IQueryable<Project> ApplyFilters(
+            IQueryable<Project> queryable,
+            int? skip,
+            int? take,
+            Expression<Func<Project, object>> orderBy,
+            bool orderByAsc,
+            bool? highlighted
+            )
         {
-            return GetDbSet<Project>()
-                   .Include(p => p.User)
-                   .ToListAsync();
+            if(orderBy != null)
+            {
+                if(orderByAsc)
+                {
+                    queryable = queryable.OrderBy(orderBy);
+                } else
+                {
+                    queryable = queryable.OrderByDescending(orderBy);
+                }
+            }
+            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
+            if(take.HasValue) queryable = queryable.Take(take.Value);
+            if(highlighted.HasValue)
+            {
+                IEnumerable<int> highlightedQueryable = DbContext.Set<Highlight>()
+                                                                 .Where(h => h.StartDate <= DateTime.Now ||
+                                                                             h.StartDate == null)
+                                                                 .Where(h => h.EndDate >= DateTime.Now ||
+                                                                             h.EndDate == null)
+                                                                 .Select(h => h.ProjectId)
+                                                                 .ToList();
+                if(highlighted.Value)
+                {
+                    queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id));
+                } else
+                {
+                    queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
+                }
+            }
+            return queryable;
+        }
+
+        /// <summary>
+        ///     Get the projects in the database
+        /// </summary>
+        /// <param name="skip">The number of projects to skip</param>
+        /// <param name="take">The number of projects to return</param>
+        /// <param name="orderBy">The property to order the projects by</param>
+        /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">Filter highlighted projects</param>
+        /// <returns>The projects filtered by the parameters</returns>
+        public virtual async Task<List<Project>> GetAllWithUsersAsync(
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null
+            )
+        {
+            IQueryable<Project> queryable = DbSet
+                .Include(p => p.User);
+            queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
+
+            List<Project> projects = await queryable.ToListAsync();
+            return RedactUser(projects);
+        }
+
+        /// <summary>
+        /// Count the amount of projects matching the filters
+        /// </summary>
+        /// <param name="highlighted">The highlighted filter</param>
+        /// <returns>The amount of projects matching the filters</returns>
+        public virtual async Task<int> CountAsync(bool? highlighted = null)
+        {
+            IQueryable<Project> queryable = DbSet;
+            queryable = ApplyFilters(queryable, null, null, null, true, highlighted);
+            return await queryable.CountAsync();
         }
 
         /// <summary>
@@ -96,60 +195,41 @@ namespace Repositories
                                                        p.Id.ToString()
                                                         .Equals(query) ||
                                                        p.User.Name.Contains(query));
-            if(orderBy != null)
-            {
-                if(orderByAsc)
-                {
-                    queryable = queryable.OrderBy(orderBy);
-                } else
-                {
-                    queryable = queryable.OrderByDescending(orderBy);
-                }
-            }
-            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
-            if(take.HasValue) queryable = queryable.Take(take.Value);
-            if(highlighted.HasValue)
-            {
-                IEnumerable<int> highlightedQueryable = DbContext.Set<Highlight>()
-                                                       .Where(h => h.StartDate <= DateTime.Now ||
-                                                                   h.StartDate == null)
-                                                       .Where(h => h.EndDate >= DateTime.Now ||
-                                                                   h.EndDate == null)
-                                                       .Select(h => h.ProjectId)
-                                                       .ToList();
-                if(highlighted.Value)
-                {
-                    queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id));
-                } else
-                {
-                    queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
-                }
-            }
+            queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
             return await queryable.ToListAsync();
         }
 
-        public virtual async Task<int> SearchCountAsync(string query)
+        /// <summary>
+        /// Count the amount of projects matching the filters and the search query
+        /// </summary>
+        /// <param name="query">The search query</param>
+        /// <param name="highlighted">The highlighted filter</param>
+        /// <returns>The amount of projects matching the filters</returns>
+        public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
         {
-            return await DbSet
-                         .Include(p => p.User)
-                         .Where(p =>
-                                    p.Name.Contains(query) ||
-                                    p.Description.Contains(query) ||
-                                    p.ShortDescription.Contains(query) ||
-                                    p.Uri.Contains(query) ||
-                                    p.Id.ToString()
-                                     .Equals(query) ||
-                                    p.User.Name.Contains(query))
-                         .CountAsync();
+            IQueryable<Project> queryable = DbSet
+                                            .Include(p => p.User)
+                                            .Where(p =>
+                                                       p.Name.Contains(query) ||
+                                                       p.Description.Contains(query) ||
+                                                       p.ShortDescription.Contains(query) ||
+                                                       p.Uri.Contains(query) ||
+                                                       p.Id.ToString()
+                                                        .Equals(query) ||
+                                                       p.User.Name.Contains(query));
+            queryable = ApplyFilters(queryable, null, null, null, true, highlighted);
+            return await queryable.CountAsync();
         }
 
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
-            return GetDbSet<Project>()
-                   .Include(project => project.User)
-                   .Include(project => project.Collaborators)
-                   .Where(project => project.Id == id)
+            Project project = await GetDbSet<Project>()
+                   .Include(p => p.User)
+                   .Include(p => p.Collaborators)
+                   .Where(p => p.Id == id)
                    .FirstOrDefaultAsync();
+
+            return RedactUser(project);
         }
 
     }
