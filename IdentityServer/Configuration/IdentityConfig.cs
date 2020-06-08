@@ -98,6 +98,8 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.Implicit,
                            RequirePkce = true,
 
+                           RequireConsent = false,
+
                            // where to redirect to after login
                            RedirectUris = config.Frontend.RedirectUrisFrontend,
 
