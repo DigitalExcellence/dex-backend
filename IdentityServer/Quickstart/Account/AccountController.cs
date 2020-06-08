@@ -93,6 +93,10 @@ namespace IdentityServer
             }
 
             // get the provider parameter from the return url
+            if(vm.ReturnUrl == null)
+            {
+                vm.ReturnUrl = "";
+            }
             int idx = vm.ReturnUrl.IndexOf('?');
             string query = idx >= 0 ? vm.ReturnUrl.Substring(idx) : "";
             string providerSchema = HttpUtility.ParseQueryString(query).Get("provider");
