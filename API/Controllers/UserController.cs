@@ -191,7 +191,6 @@ namespace API.Controllers
         ///     Delete the user account.
         /// </summary>
         /// <returns></returns>
-        [ObsoleteAttribute("This endpoint will soon be deprecated. Use [Post] {userId}/allData.")]
         [HttpDelete("{userId}")]
         [Authorize]
         public async Task<IActionResult> DeleteAccount(int userId)
@@ -222,34 +221,12 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            await userService.RemoveAsync(userId);
-            userService.Save();
-            return Ok();
-        }
-
-        /// <summary>
-        ///     Delete all user data
-        /// </summary>
-        /// <returns></returns>
-        [HttpDelete("{userId}/allData")]
-        [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
-        public async Task<IActionResult> DeleteAllUserData(int userId)
-        {
-            if(await userService.FindAsync(userId) == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this student id.",
-                    Instance = "TODO-CHANGE-TO-GENERATED-INSTANCE-CODE"
-                };
-                return NotFound(problem);
-            }
-            List<Project> projects = await projectService.GetAllWithUsersAsync();
-            projects.ForEach(delegate(Project project) {
+            List<Project> projects = await projectService.GetAllWithUsersAsync(new ProjectFilterParams() { });
+            projects.ForEach(delegate (Project project) {
                 if(project.UserId.Equals(userId))
                 {
                     project.UserId = -1;
+                    project.User = null;
                     projectService.Update(project);
                 }
             });
@@ -258,11 +235,5 @@ namespace API.Controllers
             projectService.Save();
             return Ok();
         }
-
-
-
-
-
-
     }
 }
