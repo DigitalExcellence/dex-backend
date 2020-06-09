@@ -106,7 +106,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting role.",
-                    Detail = "The roule could not be found in the database.",
+                    Detail = "The role could not be found in the database.",
                     Instance = "1739EFA6-3F31-4C88-B596-74DA403AC51B"
                 };
                 return NotFound(problem);
@@ -143,7 +143,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                     {
                         Title = "Failed to create a new role.",
-                        Detail = $"The specied scope: {roleScope.Scope} is not valid.",
+                        Detail = $"The specified scope: {roleScope.Scope} is not valid.",
                         Instance = "1F40D851-8A4C-41F6-917C-D876970D825F"
                     };
                     return BadRequest(problem);
@@ -237,7 +237,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Not allowed.",
-                    Detail = "For the stability of the program we need atleast the registered user role and the admin role so these are not deletable..",
+                    Detail = "For the stability of the program we need at least the registered user role and the admin role so these are not deletable..",
                     Instance = "CBC4C09D-DFEA-44D8-A310-2CE14123D498"
                 };
                 return Unauthorized(problem);
