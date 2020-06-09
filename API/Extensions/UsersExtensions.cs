@@ -58,7 +58,7 @@ namespace API.Extensions
                 throw new Exception("User is not authenticated!");
             }
 
-            if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication))
+            if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication) || claimsPrincipal.HasClaim("client_role", Defaults.Roles.BackendApplication))
             {
                 string identityIdHeader = actionContext.Request.Headers.SingleOrDefault(h => h.Key == "IdentityId")
                                                       .Value
