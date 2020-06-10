@@ -90,7 +90,7 @@
 							{
 								"key": "IdentityId",
 								"type": "text",
-								"value": "{{bobUserId}}"
+								"value": "{{administratorUserIdentityId}}"
 							}
 						],
 						"body": {
@@ -141,7 +141,7 @@
 													"",
 													"var jsonData = pm.response.json();",
 													"",
-													"pm.environment.set(\"userId\", jsonData.id);",
+													"pm.environment.set(\"createdUserId\", jsonData.id);",
 													"pm.environment.set(\"identityId\", jsonData.id);",
 													"",
 													"pm.test(\"Status code is 201\", function () {",
@@ -172,7 +172,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -243,7 +243,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -302,7 +302,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -374,7 +374,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -407,10 +407,10 @@
 												"id": "92286030-b50f-4fb4-a051-6bff2352977d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var bobIdentityId = parseInt(pm.environment.get(\"bobUserId\"));",
+													"var bobIdentityId = parseInt(pm.environment.get(\"administratorUserIdentityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
-													"pm.environment.set(\"bobSelfUserId\", jsonData.id);",
+													"pm.environment.set(\"administratorUserId\", jsonData.id);",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
@@ -440,7 +440,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -472,7 +472,7 @@
 												"id": "c6f57352-8a8e-4958-8ddb-5aa36dff1555",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var bobSelfUserId = parseInt(pm.environment.get(\"bobSelfUserId\"));",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
@@ -502,8 +502,8 @@
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
 													"});",
 													"",
-													"pm.test(\"Identity ID is correct and matching: \" + bobSelfUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(bobSelfUserId);",
+													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
+													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -516,7 +516,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -598,7 +598,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -625,7 +625,7 @@
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = parseInt(pm.environment.get(\"projectId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
-													"var bobSelfUserId = parseInt(pm.environment.get(\"bobSelfUserId\"));",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -652,8 +652,8 @@
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
 													"});",
 													"",
-													"pm.test(\"Identity ID is correct and matching: \" + bobSelfUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(bobSelfUserId);",
+													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
+													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -666,7 +666,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -725,7 +725,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -760,7 +760,7 @@
 												"id": "caf09139-3b1f-44ec-a54e-c715b9a10a54",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var bobSelfUserId = parseInt(pm.environment.get(\"bobSelfUserId\"));",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
@@ -788,8 +788,8 @@
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
 													"});",
 													"",
-													"pm.test(\"Identity ID is correct and matching: \" + bobSelfUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(bobSelfUserId);",
+													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
+													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -802,7 +802,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -855,7 +855,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -933,7 +933,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -1010,7 +1010,7 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{bobUserId}}",
+												"value": "{{administratorUserIdentityId}}",
 												"type": "text"
 											}
 										],
@@ -1071,7 +1071,7 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{bobUserId}}",
+												"value": "{{administratorUserIdentityId}}",
 												"type": "text"
 											}
 										],
@@ -1142,7 +1142,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -1217,7 +1217,7 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{bobUserId}}",
+												"value": "{{administratorUserIdentityId}}",
 												"type": "text"
 											}
 										],
@@ -1272,7 +1272,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1335,7 +1335,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -1413,7 +1413,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1470,7 +1470,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1524,7 +1524,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1578,7 +1578,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1650,7 +1650,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -1732,7 +1732,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1797,7 +1797,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1856,7 +1856,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -1914,7 +1914,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -1981,7 +1981,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2039,12 +2039,12 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"createdUserId\": {{createdUserId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2052,7 +2052,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Role/setRole?userId={{userId}}&roleId={{roleId}}",
+											"raw": "{{apiUrl}}/api/Role/setRole?createdUserId={{createdUserId}}&roleId={{roleId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -2063,8 +2063,8 @@
 											],
 											"query": [
 												{
-													"key": "userId",
-													"value": "{{userId}}",
+													"key": "createdUserId",
+													"value": "{{createdUserId}}",
 													"description": "Id of the user that we want to update"
 												},
 												{
@@ -2118,18 +2118,18 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -2172,7 +2172,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2237,7 +2237,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2298,7 +2298,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2356,7 +2356,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2401,7 +2401,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2446,7 +2446,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2491,7 +2491,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2536,18 +2536,18 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -2581,7 +2581,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2639,7 +2639,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2690,7 +2690,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2741,7 +2741,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2792,7 +2792,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2843,7 +2843,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -2883,7 +2883,7 @@
 												"id": "6e7b35bf-4ed0-4b61-a5d2-15c4487f4da0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var bobSelfUserId = parseInt(pm.environment.get(\"bobSelfUserId\"));",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
@@ -2913,8 +2913,8 @@
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
 													"});",
 													"",
-													"pm.test(\"Identity ID is correct and matching: \" + bobSelfUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(bobSelfUserId);",
+													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
+													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -2927,7 +2927,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -3006,7 +3006,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -3070,7 +3070,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -3271,7 +3271,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{bobUserId}}\r\n}",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -4523,7 +4523,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"createdUserId\": {{createdUserId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -4531,7 +4531,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Role/setRole?userId={{userId}}&roleId=1",
+											"raw": "{{apiUrl}}/api/Role/setRole?createdUserId={{createdUserId}}&roleId=1",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -4542,8 +4542,8 @@
 											],
 											"query": [
 												{
-													"key": "userId",
-													"value": "{{userId}}",
+													"key": "createdUserId",
+													"value": "{{createdUserId}}",
 													"description": "Id of the user that we want to update"
 												},
 												{
@@ -4797,7 +4797,7 @@
 													"",
 													"var jsonData = pm.response.json();",
 													"",
-													"pm.environment.set(\"userId\", jsonData.id);",
+													"pm.environment.set(\"createdUserId\", jsonData.id);",
 													"pm.environment.set(\"identityId\", jsonData.id);",
 													"",
 													"pm.test(\"Status code is 201\", function () {",
@@ -4828,7 +4828,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -4862,7 +4862,7 @@
 												"id": "0d98fe40-aeef-4a0d-8395-2e0cc0dcd9c7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var bobSelfUserId = parseInt(pm.environment.get(\"bobSelfUserId\"));",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
@@ -4893,8 +4893,8 @@
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
 													"});",
 													"",
-													"pm.test(\"Identity ID is correct and matching: \" + bobSelfUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(bobSelfUserId);",
+													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
+													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4907,7 +4907,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -4986,7 +4986,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -5051,7 +5051,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -5124,7 +5124,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -5214,12 +5214,12 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"{{userId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -5275,18 +5275,18 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -5301,10 +5301,10 @@
 												"id": "2ec1f049-7852-4c12-b14c-5676145aa9ec",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var aliceIdentityId = parseInt(pm.environment.get(\"aliceUserId\"));",
+													"var aliceIdentityId = parseInt(pm.environment.get(\"registeredUserIdentityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
-													"pm.environment.set(\"aliceSelfUserId\", jsonData.id);",
+													"pm.environment.set(\"registeredUserId\", jsonData.id);",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
@@ -5334,7 +5334,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -5391,12 +5391,12 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{aliceUserId}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{registeredUserIdentityId}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -5404,14 +5404,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{aliceSelfUserId}}",
+											"raw": "{{apiUrl}}/api/User/{{registeredUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{aliceSelfUserId}}"
+												"{{registeredUserId}}"
 											]
 										}
 									},
@@ -5453,12 +5453,12 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{bobUserId}}\r\n}",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -5466,14 +5466,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -5518,7 +5518,7 @@
 												"id": "86539b96-8145-4705-a095-eac8c76f9a0e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var aliceSelfUserId = pm.environment.get(\"aliceSelfUserId\");",
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -5536,8 +5536,8 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});",
 													"",
-													"pm.test(\"Identity Id is set correctly and matches: \" + aliceSelfUserId, function () {",
-													"    pm.expect(jsonData.user.id).to.eql(aliceSelfUserId);",
+													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -5550,7 +5550,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -5632,7 +5632,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -5689,7 +5689,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -5739,7 +5739,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -5797,7 +5797,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -5857,7 +5857,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -5929,7 +5929,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -5990,7 +5990,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -6051,7 +6051,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6108,7 +6108,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6183,7 +6183,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -6261,7 +6261,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6322,7 +6322,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6374,7 +6374,7 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{aliceUserId}}",
+												"value": "{{registeredUserIdentityId}}",
 												"type": "text"
 											}
 										],
@@ -6444,7 +6444,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -6505,7 +6505,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6557,7 +6557,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6610,7 +6610,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6663,7 +6663,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -6725,12 +6725,12 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"createdUserId\": {{createdUserId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -6738,7 +6738,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Role/setRole?userId={{userId}}&roleId={{roleId}}",
+											"raw": "{{apiUrl}}/api/Role/setRole?createdUserId={{createdUserId}}&roleId={{roleId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -6749,8 +6749,8 @@
 											],
 											"query": [
 												{
-													"key": "userId",
-													"value": "{{userId}}",
+													"key": "createdUserId",
+													"value": "{{createdUserId}}",
 													"description": "Id of the user that we want to update"
 												},
 												{
@@ -6804,7 +6804,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6865,7 +6865,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6927,7 +6927,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -6978,7 +6978,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -7029,7 +7029,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -7074,7 +7074,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -7125,7 +7125,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -7176,7 +7176,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -7227,18 +7227,18 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -7271,7 +7271,7 @@
 													"",
 													"var jsonData = pm.response.json();",
 													"",
-													"pm.environment.set(\"userId\", jsonData.id);",
+													"pm.environment.set(\"createdUserId\", jsonData.id);",
 													"pm.environment.set(\"identityId\", jsonData.id);",
 													"",
 													"pm.test(\"Status code is 201\", function () {",
@@ -7302,7 +7302,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -7336,7 +7336,7 @@
 												"id": "1f6db9e0-da19-4cf6-8dd9-9b7d9ff4b550",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var bobSelfUserId = parseInt(pm.environment.get(\"bobSelfUserId\"));",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
@@ -7367,8 +7367,8 @@
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
 													"});",
 													"",
-													"pm.test(\"Identity ID is correct and matching: \" + bobSelfUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(bobSelfUserId);",
+													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
+													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -7381,7 +7381,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -7460,7 +7460,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -7524,7 +7524,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -7597,7 +7597,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{bobUserId}}"
+												"value": "{{administratorUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -7692,7 +7692,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"{{userId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -7752,14 +7752,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -7931,7 +7931,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{bobUserId}}\r\n}",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -7939,14 +7939,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -9489,7 +9489,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"userId\": {{userId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"createdUserId\": {{createdUserId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9497,7 +9497,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Role/setRole?userId={{userId}}&roleId={{roleId}}",
+											"raw": "{{apiUrl}}/api/Role/setRole?createdUserId={{createdUserId}}&roleId={{roleId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -9508,8 +9508,8 @@
 											],
 											"query": [
 												{
-													"key": "userId",
-													"value": "{{userId}}",
+													"key": "createdUserId",
+													"value": "{{createdUserId}}",
 													"description": "Id of the user that we want to update"
 												},
 												{
@@ -9624,7 +9624,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{aliceUserId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -10033,14 +10033,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{userId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{userId}}"
+												"{{createdUserId}}"
 											]
 										}
 									},
