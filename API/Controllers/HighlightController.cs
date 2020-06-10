@@ -54,7 +54,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get all highlights.
+        ///     Get all active highlights.
         /// </summary>
         /// <returns></returns>
         [HttpGet]

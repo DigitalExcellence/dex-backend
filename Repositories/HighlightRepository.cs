@@ -58,7 +58,7 @@ namespace Repositories
         /// <summary>
         /// Redacts the user email property of the highlighted project.
         /// </summary>
-        /// <param name="highlight">The highlight objects.</param>
+        /// <param name="highlights">List of highlight objects.</param>
         /// <returns>redacted highlight objects.</returns>
         private List<Highlight> RedactUser(List<Highlight> highlights)
         {
