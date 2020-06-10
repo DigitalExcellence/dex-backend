@@ -19,8 +19,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,7 +116,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        public IActionResult CreateHighlightAsync(HighlightResource highlightResource)
+        public IActionResult CreateHighlight(HighlightResource highlightResource)
         {
             if(highlightResource == null)
             {
@@ -131,9 +133,11 @@ namespace API.Controllers
             {
                 highlightService.Add(highlight);
                 highlightService.Save();
-                return Created(nameof(CreateHighlightAsync), mapper.Map<Highlight, HighlightResourceResult>(highlight));
-            } catch
+                return Created(nameof(CreateHighlight), mapper.Map<Highlight, HighlightResourceResult>(highlight));
+            } catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed Saving highlight.",

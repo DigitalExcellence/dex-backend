@@ -33,6 +33,47 @@ namespace Repositories
     {
         public RoleRepository(DbContext dbContext) : base(dbContext) { }
 
+        public override void Update(Role role)
+        {
+            Role existingRole = GetDbSet<Role>()
+                                 .Where(p => p.Id == role.Id)
+                                 .Include(p => p.Scopes)
+                                 .SingleOrDefault();
+            if(existingRole == null) return;
+
+            DbContext.Entry(existingRole).CurrentValues.SetValues(role);
+
+            foreach(RoleScope existingScope in existingRole.Scopes.ToList())
+            {
+                // delete children
+                if(role.Scopes.All(c => c.Id != existingScope.Id))
+                {
+                    GetDbSet<RoleScope>()
+                        .Remove(existingScope);
+                }
+                // add or update
+                foreach(RoleScope newRoleScope in role.Scopes)
+                {
+                    RoleScope existingRoleScope = existingRole.Scopes
+                                                       .SingleOrDefault(c => c.Id == newRoleScope.Id);
+                    //update
+                    if(existingRoleScope != null)
+                    {
+                        DbContext.Entry(existingRoleScope).CurrentValues.SetValues(newRoleScope);
+                    }
+                    //add
+                    else
+                    {
+                        RoleScope newScope = new RoleScope(newRoleScope.Scope)
+                                             {
+                                                 RoleId = role.Id
+                                             };
+                        existingRole.Scopes.Add(newScope);
+                    }
+                }
+                DbContext.SaveChanges();
+            }
+        }
         public override Task<Role> FindAsync(int id)
         {
             return GetDbSet<Role>()

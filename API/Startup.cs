@@ -32,6 +32,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
@@ -234,7 +235,15 @@ namespace API
                         DbContext dbContext = context.RequestServices.GetService<DbContext>();
                         IUserService userService =
                             context.RequestServices.GetService<IUserService>();
-                        string identityId = context.User.GetIdentityId(context);
+                        string identityId = "";
+                        try
+                        {
+                            identityId = context.User.GetIdentityId(context);
+                        } catch(UnauthorizedAccessException e)
+                        {
+                            Log.Logger.Error(e, "User is not authorized.");
+                            await next();
+                        }
                         if(await userService.GetUserByIdentityIdAsync(identityId).ConfigureAwait(false) == null)
                         {
                             IRoleService roleService = context.RequestServices.GetService<IRoleService>();
@@ -243,7 +252,6 @@ namespace API
                             User newUser = context.GetUserInformation(Config);
                             if(newUser == null)
                             {
-
                                 // Then it probably belongs swagger so we set the username as developer.
                                 newUser = new User()
                                 {

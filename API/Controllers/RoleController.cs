@@ -5,8 +5,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using static Models.Defaults.Defaults;
 
@@ -156,8 +158,10 @@ namespace API.Controllers
                 roleService.Save();
                 return Created(nameof(CreateRoleAsync), mapper.Map<Role, RoleResourceResult>(role));
             }
-            catch
+            catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed to save the new role.",
@@ -178,8 +182,8 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> UpdateRole(int roleId, RoleResource roleResource)
         {
-            Role role = await roleService.FindAsync(roleId).ConfigureAwait(false);
-            if(role == null)
+            Role currentRole = await roleService.FindAsync(roleId).ConfigureAwait(false);
+            if(currentRole == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -189,10 +193,8 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-
-            mapper.Map(roleResource, role);
-
-            foreach(RoleScope roleScope in role.Scopes)
+            mapper.Map<RoleResource, Role>(roleResource,currentRole);
+            foreach(RoleScope roleScope in currentRole.Scopes)
             {
                 if(!roleService.isValidScope(roleScope.Scope))
                 {
@@ -206,10 +208,11 @@ namespace API.Controllers
                 }
             }
 
-            roleService.Update(role);
+
+            roleService.Update(currentRole);
             roleService.Save();
 
-            return Ok(mapper.Map<Role, RoleResourceResult>(role));
+            return Ok(mapper.Map<Role, RoleResourceResult>(currentRole));
         }
 
         /// <summary>

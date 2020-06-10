@@ -2,9 +2,7 @@ using Models;
 using NUnit.Framework;
 using Repositories.Tests.Base;
 using Repositories.Tests.DataSources;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Repositories.Tests
@@ -12,12 +10,13 @@ namespace Repositories.Tests
     [TestFixture]
     public class HighlightRepositoryTest : RepositoryTest<Highlight, HighlightRepository>
     {
-        protected new IHighlightRepository Repository => (IHighlightRepository) base.Repository;
+        protected new IHighlightRepository Repository => base.Repository;
 
         /// <summary>
         /// Test if highlights are retrieved correctly
         /// </summary>
         /// <param name="highlights">A set of 10 highlights, all containing a project.</param>
+        /// <param name="projects"></param>
         /// <returns></returns>
         [Test]
         public async Task GetAllWithUserAsyncTest_GoodFlow(
@@ -45,11 +44,7 @@ namespace Repositories.Tests
         [Test]
         public async Task GetAllWithUserAsyncTest_NoHighlights()
         {
-            List<Highlight> highlights = new List<Highlight>();
-
-            // Seed database
-            DbContext.AddRange(highlights);
-            await DbContext.SaveChangesAsync();
+            //No seeding needed
 
             // Test
             List<Highlight> retrieved = await Repository.GetHighlightsAsync();
@@ -65,6 +60,7 @@ namespace Repositories.Tests
         [Test]
         public async Task GetAllWithUserAsyncTest_NoProjectInHighlight([HighlightDataSource] Highlight highlight)
         {
+            highlight.Project = null;
             // Seed database
             DbContext.Add(highlight);
             await DbContext.SaveChangesAsync();

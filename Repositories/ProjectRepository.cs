@@ -63,6 +63,8 @@ namespace Repositories
 
         private Project RedactUser(Project project)
         {
+            if(project == null) return null;
+
             if(project?.User?.IsPublic == false)
             {
                 project.User.Email = Defaults.Privacy.RedactedEmail;

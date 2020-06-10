@@ -46,6 +46,8 @@ namespace Repositories
         /// <returns>redacted highlight object.</returns>
         private Highlight RedactUser(Highlight highlight)
         {
+            if(highlight == null) return highlight;
+
             if(highlight.Project?.User?.IsPublic == false)
             {
                 highlight.Project.User.Email = Defaults.Privacy.RedactedEmail;

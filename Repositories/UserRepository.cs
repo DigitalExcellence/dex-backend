@@ -151,8 +151,7 @@ namespace Repositories
                              .Include(s => s.Role)
                              .ThenInclude(s => s.Scopes)
                              .SingleOrDefault();
-            
-            if(user == null || user.Role == null)
+            if(user?.Role == null)
             {
                 return false;
             }

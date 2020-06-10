@@ -30,7 +30,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -39,7 +38,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace IdentityServer
 {
@@ -146,20 +144,17 @@ namespace IdentityServer
                 throw new Exception("The FHICT didn't return a correct response. Is the FHICT server accessible?", new Exception("Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException));
             }
 
-
             JwtSecurityToken jwt = new JwtSecurityToken(fhictToken.AccessToken);
-            
             string idp = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("idp")).Value;
-            string sub = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("sub")).Value;
-            string name = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("name")).Value;
             string iss = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("iss")).Value;
-            string schema = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("schema")).Value;
 
-            ExternalResult result = new ExternalResult();
-            result.Schema = iss;
-            result.Claims = jwt.Claims;
-            result.ReturnUrl = returnUrl;
-            result.IdToken = fhictToken.IdToken;
+            ExternalResult result = new ExternalResult
+            {
+                Schema = iss,
+                Claims = jwt.Claims,
+                ReturnUrl = returnUrl,
+                IdToken = fhictToken.IdToken
+            };
 
             // lookup our user and external provider info
             (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) = FindUserFromExternalProvider(result);
@@ -303,7 +298,6 @@ namespace IdentityServer
 
             return Redirect(returnUrl);
         }
-        
         /// <summary>
         /// Finds the user from external provider.
         /// </summary>
@@ -315,8 +309,8 @@ namespace IdentityServer
             // try to determine the unique id of the external user (issued by the provider)
             // the most common claim type for that are the sub claim and the NameIdentifier
             // depending on the external provider, some other claim type might be used
-            Claim userIdClaim = result.Claims.Where(c => c.Type == JwtClaimTypes.Subject).FirstOrDefault() ??
-                                result.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault() ??
+            Claim userIdClaim = result.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Subject) ??
+                                result.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier) ??
                                 throw new Exception("Unknown userid");
 
             // remove the user id claim so we don't include it as an extra claim if/when we provision the user

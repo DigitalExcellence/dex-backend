@@ -20,16 +20,17 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
 using RestSharp;
+using Serilog;
 using Services.Services;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
     ///     This controller handles the user settings.
     /// </summary>
@@ -37,7 +38,6 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
         private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
@@ -132,8 +132,10 @@ namespace API.Controllers
                 userService.Add(user);
                 userService.Save();
                 return Created(nameof(CreateAccountAsync), mapper.Map<User, UserResourceResult>(user));
-            } catch
+            } catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed to create user account.",
@@ -168,7 +170,6 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-
             User user = await userService.FindAsync(userId);
             if(user == null)
             {
@@ -197,7 +198,6 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteAccount()
         {
-
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
             if(await userService.FindAsync(user.Id) == null)
@@ -224,7 +224,6 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteAccount(int userId)
         {
-
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
 

@@ -26,13 +26,11 @@ using System.IO;
 
 namespace API
 {
-
     /// <summary>
     ///     Program.cs
     /// </summary>
-    public class Program
+    public static class Program
     {
-
         /// <summary>
         ///     Main of API
         /// </summary>
@@ -94,7 +92,5 @@ namespace API
                           .UseKestrel(o => o.AddServerHeader = false)
                           .UseSerilog();
         }
-
     }
-
 }

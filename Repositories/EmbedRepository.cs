@@ -67,6 +67,8 @@ namespace Repositories
         /// <returns>The embedded project with the selected fields redacted.</returns>
         private EmbeddedProject RedactUser(EmbeddedProject embeddedProject)
         {
+            if(embeddedProject == null) return embeddedProject;
+
             if(embeddedProject?.Project?.User?.IsPublic == false)
             {
                 embeddedProject.Project.User.Email = Defaults.Privacy.RedactedEmail;

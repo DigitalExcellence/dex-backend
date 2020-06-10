@@ -20,9 +20,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -167,8 +168,11 @@ namespace API.Controllers
                 projectService.Add(project);
                 projectService.Save();
                 return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
-            } catch
+            } catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
+
                 ProblemDetails problem = new ProblemDetails()
                 {
                     Title = "Failed to save new project.",

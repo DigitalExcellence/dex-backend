@@ -43,7 +43,7 @@ namespace API.Extensions
         /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
         /// <returns></returns>
-        /// <exception cref="Exception">
+        /// <exception cref="UnauthorizedAccessException">
         /// User is not authenticated!
         /// or
         /// The back-end header isn't added!
@@ -55,7 +55,7 @@ namespace API.Extensions
 
             if(claimsPrincipal.Identities.Any(i => !i.IsAuthenticated))
             {
-                throw new Exception("User is not authenticated!");
+                throw new UnauthorizedAccessException("User is not authenticated!");
             }
 
             if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication) || claimsPrincipal.HasClaim("client_role", Defaults.Roles.BackendApplication))
@@ -66,7 +66,7 @@ namespace API.Extensions
 
                 if(string.IsNullOrWhiteSpace(identityIdHeader))
                 {
-                    throw new Exception("The back-end header isn't added!");
+                    throw new UnauthorizedAccessException("The back-end header isn't added!");
                 }
 
                 identityId = identityIdHeader;
@@ -76,7 +76,7 @@ namespace API.Extensions
                                             ?.Value;
                 if(sub == null)
                 {
-                    throw new NotSupportedException("The jwt doesn't have a sub");
+                    throw new NotSupportedException("The jwt doesn't have a subject identifier.");
                 }
 
                 return sub;
@@ -97,7 +97,6 @@ namespace API.Extensions
             return await userService.GetUserByIdentityIdAsync(identityProverId);
         }
 
-
         /// <summary>
         /// Gets the user information synchronous.
         /// </summary>
@@ -117,10 +116,9 @@ namespace API.Extensions
             request.AddHeader("Authorization", bearerToken);
             IRestResponse response = client.Execute(request);
             JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
-            if(jsonResponse == null ||
-               !jsonResponse.ContainsKey("name") ||
-               !jsonResponse.ContainsKey("email") ||
-               !jsonResponse.ContainsKey("sub"))
+            if(jsonResponse?.ContainsKey("name") != true ||
+               jsonResponse?.ContainsKey("email") != true ||
+               jsonResponse?.ContainsKey("sub") != true)
             {
                 return null;
             }
