@@ -110,7 +110,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get a Highlight by project id
         /// </summary>
-        /// <param name="projectId"></param>
+        /// <param name="projectId">The project identifier to retrieve the corresponding highlights</param>
         /// <returns></returns>
         [HttpGet("Project/{projectId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
