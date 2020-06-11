@@ -50,7 +50,7 @@ namespace Services.Services
         /// Fetches the project.
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
-        /// <returns></returns>
+        /// <returns>The project.</returns>
         public Project FetchProject(Uri sourceURI)
         {
             if(gitLabSource.ProjectURIMatches(sourceURI))

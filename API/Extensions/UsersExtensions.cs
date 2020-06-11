@@ -42,7 +42,7 @@ namespace API.Extensions
         /// </summary>
         /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
-        /// <returns></returns>
+        /// <returns>The users identity id as string</returns>
         /// <exception cref="UnauthorizedAccessException">
         /// User is not authenticated!
         /// or
@@ -90,7 +90,7 @@ namespace API.Extensions
         /// </summary>
         /// <param name="actionContext">The action context.</param>
         /// <param name="userService">The user service.</param>
-        /// <returns></returns>
+        /// <returns>The current users user object.</returns>
         public static async Task<User> GetContextUser(this HttpContext actionContext, IUserService userService)
         {
             string identityProverId = actionContext.User.GetIdentityId(actionContext);
@@ -99,10 +99,11 @@ namespace API.Extensions
 
         /// <summary>
         /// Gets the user information synchronous.
+        /// this is triggered when a user makes a request who does not have an account already.
         /// </summary>
         /// <param name="actionContext">The action context.</param>
         /// <param name="config">The configuration.</param>
-        /// <returns></returns>
+        /// <returns>The user object with information retrieved from the identity server</returns>
         public static User GetUserInformation(this HttpContext actionContext, Config config)
         {
             string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();

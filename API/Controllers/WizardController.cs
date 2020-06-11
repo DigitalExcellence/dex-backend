@@ -50,7 +50,7 @@ namespace API.Controllers
         /// Gets the wizard information.
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
-        /// <returns></returns>
+        /// <returns>The filled in Project.</returns>
         [HttpGet]
         [Authorize]
         public IActionResult GetWizardInformation(Uri sourceURI)

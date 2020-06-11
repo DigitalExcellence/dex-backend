@@ -56,7 +56,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get all active highlights.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of Highlight resource results.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllHighlights()
         {
@@ -79,7 +79,7 @@ namespace API.Controllers
         /// Gets the highlight by the identifier.
         /// </summary>
         /// <param name="highlightId">The highlight identifier.</param>
-        /// <returns></returns>
+        /// <returns>A Highlight resource result.</returns>
         [HttpGet("{highlightId}")]
         public async Task<IActionResult> GetHighlight(int highlightId)
         {
@@ -113,7 +113,7 @@ namespace API.Controllers
         /// Creates the highlight.
         /// </summary>
         /// <param name="highlightResource">The highlight resource.</param>
-        /// <returns></returns>
+        /// <returns>The created highlight resource result.</returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public IActionResult CreateHighlight(HighlightResource highlightResource)
@@ -153,7 +153,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="highlightId">The highlight identifier.</param>
         /// <param name="highlightResource">The highlight resource.</param>
-        /// <returns></returns>
+        /// <returns>The updated highlight resource result.</returns>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public async Task<IActionResult> UpdateHighlight(int highlightId,
@@ -183,7 +183,7 @@ namespace API.Controllers
         /// Deletes the highlight by the identifier.
         /// </summary>
         /// <param name="highlightId">The highlight identifier.</param>
-        /// <returns></returns>
+        /// <returns> Status code 200.</returns>
         [HttpDelete("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public async Task<IActionResult> DeleteHighlight(int highlightId)

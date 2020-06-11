@@ -58,7 +58,7 @@ namespace API.Controllers
         /// <summary>
         /// Gets the current user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The current user as user resource result.</returns>
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
@@ -82,7 +82,7 @@ namespace API.Controllers
         ///     Get a user account.
         /// </summary>
         /// <param name="userId">the useridentifier.</param>
-        /// <returns></returns>
+        /// <returns>The user resource result.</returns>
         [HttpGet("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
         public async Task<IActionResult> GetUser(int userId)
@@ -118,7 +118,7 @@ namespace API.Controllers
         /// Creates the account asynchronous.
         /// </summary>
         /// <param name="accountResource">The account resource.</param>
-        /// <returns></returns>
+        /// <returns>The created user as user resource result.</returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
@@ -151,7 +151,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="userResource">The user resource.</param>
-        /// <returns></returns>
+        /// <returns>The updated user as user resource result.</returns>
         [HttpPut("{userId}")]
         [Authorize]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
@@ -219,7 +219,7 @@ namespace API.Controllers
         /// <summary>
         ///     Delete the user account.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Statuscode 200</returns>
         [HttpDelete("{userId}")]
         [Authorize]
         public async Task<IActionResult> DeleteAccount(int userId)

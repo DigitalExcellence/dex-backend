@@ -62,7 +62,7 @@ namespace API.Controllers
         /// <summary>
         /// Gets all embedded projects.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of embedded projects Resource Result.</returns>
         [HttpGet]
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
@@ -86,7 +86,7 @@ namespace API.Controllers
         /// Gets the embedded project.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>The project resource result</returns>
         [HttpGet("{guid}")]
         public async Task<IActionResult> GetEmbeddedProject(string guid)
         {
@@ -138,7 +138,7 @@ namespace API.Controllers
         ///     Creates a embedded project
         /// </summary>
         /// <param name="embedResource">EmbedResource</param>
-        /// <returns></returns>
+        /// <returns>The embedded project resource result.</returns>
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateEmbeddedProject(EmbeddedProjectResource embedResource)
@@ -216,7 +216,7 @@ namespace API.Controllers
         /// Deletes the embeddedProject.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>Status code 200</returns>
         [HttpDelete("{guid}")]
         [Authorize]
         public async Task<IActionResult> DeleteEmbeddedProject(string guid)

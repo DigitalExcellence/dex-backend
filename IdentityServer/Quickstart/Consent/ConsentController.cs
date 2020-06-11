@@ -63,7 +63,7 @@ namespace IdentityServer
         /// Indexes the specified return URL.
         /// </summary>
         /// <param name="returnUrl">The return URL.</param>
-        /// <returns></returns>
+        /// <returns>The index view.</returns>
         [HttpGet]
         public async Task<IActionResult> Index(string returnUrl)
         {

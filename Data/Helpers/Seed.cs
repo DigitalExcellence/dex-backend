@@ -52,7 +52,7 @@ namespace Data.Helpers
         /// <summary>
         /// Seeds the roles.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The list of roles that will be seeded.</returns>
         public static List<Role> SeedRoles()
         {
             List<Role> roles = new List<Role>();
@@ -98,7 +98,7 @@ namespace Data.Helpers
         /// Seeds the admin user.
         /// </summary>
         /// <param name="roles">The roles.</param>
-        /// <returns></returns>
+        /// <returns>Returns the admin user that will be seeded.</returns>
         public static User SeedAdminUser(List<Role> roles)
         {
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
@@ -117,7 +117,7 @@ namespace Data.Helpers
         /// Seeds the pr user.
         /// </summary>
         /// <param name="roles">The roles.</param>
-        /// <returns></returns>
+        /// <returns>Returns the PR user that will be seeded.</returns>
         public static User SeedPrUser(List<Role> roles)
         {
             Role prRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
@@ -185,7 +185,7 @@ namespace Data.Helpers
         /// Seeds the highlights.
         /// </summary>
         /// <param name="projects">The projects.</param>
-        /// <returns></returns>
+        /// <returns>Returns a list of project highlights that wil be seeded.</returns>
         public static List<Highlight> SeedHighlights(List<Project> projects)
         {
             List<Highlight> highlights = new List<Highlight>();

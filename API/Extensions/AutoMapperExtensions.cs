@@ -30,7 +30,7 @@ namespace API.Extensions
         ///     Adds the autoMapper.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <returns></returns>
+        /// <returns>The services.</returns>
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
             // Auto Mapper Configurations

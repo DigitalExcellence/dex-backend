@@ -34,33 +34,33 @@ namespace Repositories
         /// Gets the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns>The task that will get the User object.</returns>
         Task<User> GetUserAsync(int userId);
         /// <summary>
         /// Gets the user by identity identifier asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns>The task that will return the user object with that specified external identifier.</returns>
         Task<User> GetUserByIdentityIdAsync(string userId);
 
         /// <summary>
         /// Removes the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns>Returns if the user is removed</returns>
         Task<bool> RemoveUserAsync(int userId);
         /// <summary>
         /// Users the has scope.
         /// </summary>
         /// <param name="identityId">The identity identifier.</param>
         /// <param name="scope">The scope.</param>
-        /// <returns></returns>
+        /// <returns>true if the user that has this scope.</returns>
         bool UserHasScope(string identityId, string scope);
         /// <summary>
         /// Users the with role exists.
         /// </summary>
         /// <param name="roleName">Name of the role.</param>
-        /// <returns></returns>
+        /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
 
     }
@@ -81,7 +81,7 @@ namespace Repositories
         /// Finds the asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns>Returns the user object.</returns>
         public override async Task<User> FindAsync(int userId)
         {
             return await GetDbSet<User>()
@@ -94,7 +94,7 @@ namespace Repositories
         /// Gets the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns>Returns the found user object.</returns>
         public async Task<User> GetUserAsync(int userId)
         {
             return await GetDbSet<User>()
@@ -107,7 +107,7 @@ namespace Repositories
         /// Gets the user by identity identifier asynchronous.
         /// </summary>
         /// <param name="identityId">The identity identifier.</param>
-        /// <returns></returns>
+        /// <returns>Returns the found user object.</returns>
         public async Task<User> GetUserByIdentityIdAsync(string identityId)
         {
             return await GetDbSet<User>()
@@ -121,7 +121,7 @@ namespace Repositories
         /// Removes the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns>if the user is removed.</returns>
         public async Task<bool> RemoveUserAsync(int userId)
         {
             User user = await GetDbSet<User>()
@@ -143,7 +143,7 @@ namespace Repositories
         /// </summary>
         /// <param name="identityId">The identity identifier.</param>
         /// <param name="scope">The scope.</param>
-        /// <returns></returns>
+        /// <returns>true if a user has the given scope.</returns>
         public bool UserHasScope(string identityId, string scope)
         {
             User user = GetDbSet<User>()
@@ -169,7 +169,7 @@ namespace Repositories
         /// Users the with role exists.
         /// </summary>
         /// <param name="roleName">Name of the role.</param>
-        /// <returns></returns>
+        /// <returns>true if a user exists with the given role.</returns>
         public bool UserWithRoleExists(Role role)
         {
             return GetDbSet<User>()

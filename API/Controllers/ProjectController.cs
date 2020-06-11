@@ -59,7 +59,7 @@ namespace API.Controllers
         ///     Get all projects.
         /// </summary>
         /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
-        /// <returns></returns>
+        /// <returns>The project result resource.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllProjects([FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
@@ -113,7 +113,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get a project.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The project resource result.</returns>
         [HttpGet("{projectId}")]
         public async Task<IActionResult> GetProject(int projectId)
         {
@@ -146,7 +146,7 @@ namespace API.Controllers
         /// <summary>
         ///     Create a Project.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The project resource result.</returns>
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
@@ -188,7 +188,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project identifier.</param>
         /// <param name="projectResource">The project resource.</param>
-        /// <returns></returns>
+        /// <returns>The project resource result.</returns>
         [HttpPut("{projectId}")]
         [Authorize]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
@@ -229,7 +229,7 @@ namespace API.Controllers
         /// <summary>
         ///     deletes a project.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Status code 200.</returns>
         [HttpDelete("{projectId}")]
         [Authorize]
         public async Task<IActionResult> DeleteProject(int projectId)

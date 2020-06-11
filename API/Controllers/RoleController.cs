@@ -41,7 +41,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get all Roles.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of role resource results.</returns>
         [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public async Task<IActionResult> GetAllRoles()
@@ -64,7 +64,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get all Scopes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of valid scopes.</returns>
         [HttpGet("Scopes")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public IActionResult GetAllPossibleScopes()
@@ -86,7 +86,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get a Role.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The role resource result.</returns>
         [HttpGet("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public async Task<IActionResult> GetRole(int roleId)
@@ -121,7 +121,7 @@ namespace API.Controllers
         /// Creates the role asynchronous.
         /// </summary>
         /// <param name="roleResource">The role resource.</param>
-        /// <returns></returns>
+        /// <returns>The created role resource result.</returns>
         [HttpPost]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> CreateRoleAsync([FromBody]RoleResource roleResource)
@@ -177,7 +177,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
         /// <param name="roleResource">The role resource.</param>
-        /// <returns></returns>
+        /// <returns>The updated role resource result.</returns>
         [HttpPut("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> UpdateRole(int roleId, RoleResource roleResource)
@@ -219,7 +219,7 @@ namespace API.Controllers
         /// Deletes the role.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
-        /// <returns></returns>
+        /// <returns>Statuscode 200.</returns>
         [HttpDelete("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> DeleteRole(int roleId)
@@ -267,7 +267,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="roleId">The role identifier.</param>
-        /// <returns></returns>
+        /// <returns>The user resource result.</returns>
         [HttpPut("setRole")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> SetRole(int userId, int roleId)

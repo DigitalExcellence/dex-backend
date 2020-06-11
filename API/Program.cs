@@ -35,7 +35,7 @@ namespace API
         /// Mains the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns></returns>
+        /// <returns>The exit code of the program.</returns>
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -75,7 +75,7 @@ namespace API
         /// Creates the host builder.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns></returns>
+        /// <returns>The webhostbuilder instance.</returns>
         public static IWebHostBuilder CreateHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)

@@ -52,7 +52,7 @@ namespace API.Extensions
         /// </summary>
         /// <param name="context">The authorization context.</param>
         /// <param name="requirement">The requirement to evaluate.</param>
-        /// <returns></returns>
+        /// <returns>CompletedTask.</returns>
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ScopeRequirement requirement)
         {
             string identityId;
