@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the migrations and seeding of the data - [#134](https://github.com/DigitalExcellence/dex-backend/issues/134)
 - Get user from the session & add current user to project. - [#139](https://github.com/DigitalExcellence/dex-backend/issues/139)
 - Changed Student reference to be named identity. - [#145](https://github.com/DigitalExcellence/dex-backend/issues/145)
+- Changed the login flow to the identity to support direct access to external providers. - [#165](https://github.com/DigitalExcellence/dex-backend/issues/165)
 
 ### Deprecated
 

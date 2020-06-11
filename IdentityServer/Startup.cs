@@ -105,7 +105,7 @@ namespace IdentityServer
                         options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     })
                     // Adds Fontys Single Sign On authentication.
-                    .AddOpenIdConnect("oidc", "Fontys", options =>
+                    .AddOpenIdConnect("FHICT", "Fontys", options =>
                         {
                             options.ClientId = Config.FfhictOIDC.ClientId;
                             options.ClientSecret = Config.FfhictOIDC.ClientSecret;
