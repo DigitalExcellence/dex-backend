@@ -60,9 +60,9 @@ namespace IdentityServer
         }
 
         /// <summary>
-        ///     Shows the consent screen
+        /// Indexes the specified return URL.
         /// </summary>
-        /// <param name="returnUrl"></param>
+        /// <param name="returnUrl">The return URL.</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Index(string returnUrl)

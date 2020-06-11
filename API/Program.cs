@@ -32,9 +32,9 @@ namespace API
     public static class Program
     {
         /// <summary>
-        ///     Main of API
+        /// Mains the specified arguments.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">The arguments.</param>
         /// <returns></returns>
         public static int Main(string[] args)
         {
@@ -72,9 +72,9 @@ namespace API
         }
 
         /// <summary>
-        ///     Host Builder
+        /// Creates the host builder.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">The arguments.</param>
         /// <returns></returns>
         public static IWebHostBuilder CreateHostBuilder(string[] args)
         {

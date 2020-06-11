@@ -26,11 +26,11 @@ namespace API.Controllers
         private readonly IRoleService roleService;
 
         /// <summary>
-        /// Initialize a new instance of RoleController
+        /// Initializes a new instance of the <see cref="RoleController"/> class.
         /// </summary>
-        /// <param name="roleService"></param>
-        /// <param name="userService"></param>
-        /// <param name="mapper"></param>
+        /// <param name="roleService">The role service.</param>
+        /// <param name="userService">The user service.</param>
+        /// <param name="mapper">The mapper.</param>
         public RoleController(IRoleService roleService, IUserService userService, IMapper mapper)
         {
             this.roleService = roleService;

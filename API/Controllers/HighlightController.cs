@@ -43,10 +43,10 @@ namespace API.Controllers
         private readonly IMapper mapper;
 
         /// <summary>
-        ///     Initialize a new instance of HighlightController
+        /// Initializes a new instance of the <see cref="HighlightController"/> class.
         /// </summary>
-        /// <param name="highlightService"></param>
-        /// <param name="mapper"></param>
+        /// <param name="highlightService">The highlight service.</param>
+        /// <param name="mapper">The mapper.</param>
         public HighlightController(IHighlightService highlightService, IMapper mapper)
         {
             this.highlightService = highlightService;
@@ -76,9 +76,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get a Highlight by id
+        /// Gets the highlight by the identifier.
         /// </summary>
-        /// <param name="highlightId"></param>
+        /// <param name="highlightId">The highlight identifier.</param>
         /// <returns></returns>
         [HttpGet("{highlightId}")]
         public async Task<IActionResult> GetHighlight(int highlightId)
@@ -110,9 +110,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Creates a highlight
+        /// Creates the highlight.
         /// </summary>
-        /// <param name="highlightResource"></param>
+        /// <param name="highlightResource">The highlight resource.</param>
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
@@ -149,10 +149,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Update the Highlight
+        /// Updates the highlight.
         /// </summary>
-        /// <param name="highlightId"></param>
-        /// <param name="highlightResource"></param>
+        /// <param name="highlightId">The highlight identifier.</param>
+        /// <param name="highlightResource">The highlight resource.</param>
         /// <returns></returns>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
@@ -180,9 +180,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Removes a highlight by id
+        /// Deletes the highlight by the identifier.
         /// </summary>
-        /// <param name="highlightId"></param>
+        /// <param name="highlightId">The highlight identifier.</param>
         /// <returns></returns>
         [HttpDelete("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]

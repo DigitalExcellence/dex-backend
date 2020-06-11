@@ -184,10 +184,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Update the Project
+        /// Updates the project with the specified identifier. 
         /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="projectResource"></param>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="projectResource">The project resource.</param>
         /// <returns></returns>
         [HttpPut("{projectId}")]
         [Authorize]

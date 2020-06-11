@@ -43,11 +43,11 @@ namespace API.Controllers
         private readonly IRoleService roleService;
 
         /// <summary>
-        ///     Initialize a new instance of UserController
+        /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
-        /// <param name="userService"></param>
-        /// <param name="mapper"></param>
-        /// <param name="roleService"></param>
+        /// <param name="userService">The user service.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="roleService">The role service.</param>
         public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
         {
             this.userService = userService;
@@ -81,7 +81,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get a user account.
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="userId">the useridentifier.</param>
         /// <returns></returns>
         [HttpGet("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
@@ -115,9 +115,9 @@ namespace API.Controllers
 
 
         /// <summary>
-        ///     Create a user account.
+        /// Creates the account asynchronous.
         /// </summary>
-        /// <param name="accountResource"></param>
+        /// <param name="accountResource">The account resource.</param>
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
@@ -147,10 +147,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Update the User account.
+        /// Updates the account.
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="userResource"></param>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="userResource">The user resource.</param>
         /// <returns></returns>
         [HttpPut("{userId}")]
         [Authorize]
