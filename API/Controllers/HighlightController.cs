@@ -121,7 +121,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting highlights.",
-                    Detail = "the project id cannot be smaller then 0.",
+                    Detail = "The project id cannot be smaller than 0.",
                     Instance = "744F5E01-FC84-4D4A-9A73-0D7C48886A30"
                 };
                 return BadRequest(problem);
