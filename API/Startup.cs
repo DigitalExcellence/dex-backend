@@ -305,7 +305,7 @@ namespace API
                 context.User.Add(Seed.SeedAdminUser(roles));
                 context.SaveChanges();
 
-                if(env.IsProduction())
+                if(!env.IsProduction())
                 {
                     //Seed random users
                     context.User.Add(Seed.SeedPrUser(roles));
@@ -314,7 +314,7 @@ namespace API
                 }
             }
 
-            if(env.IsProduction())
+            if(!env.IsProduction())
             {
                 if(!context.Project.Any())
                 {
