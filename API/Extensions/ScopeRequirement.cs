@@ -61,7 +61,7 @@ namespace API.Extensions
                 identityId = httpContextAccessor.HttpContext.User.GetIdentityId(httpContextAccessor.HttpContext);
             } catch(UnauthorizedAccessException e)
             {
-                Log.Logger.Error(e, "User is not authenticated.");
+                Log.Information(e, "User is not authenticated.");
                 return Task.CompletedTask;
             }
 
