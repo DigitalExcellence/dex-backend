@@ -213,7 +213,7 @@ namespace Configuration
             /// </summary>
             public string RedirectUriPostman { get; set; }
             /// <summary>
-            ///     Gets or sets the post logouts uri.
+            ///     Gets or sets the post logouts uri of the Frontend.
             /// </summary>
             public string PostLogoutUriFrontend { get; set; }
             /// <summary>
