@@ -108,6 +108,39 @@ namespace API.Controllers
         }
 
         /// <summary>
+        ///     Get a Highlight by project id
+        /// </summary>
+        /// <param name="projectId">The project identifier to retrieve the corresponding highlights</param>
+        /// <returns></returns>
+        [HttpGet("Project/{projectId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
+        public async Task<IActionResult> GetHighlightsByProjectId(int projectId)
+        {
+            if(projectId < 0)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting highlights.",
+                    Detail = "The project id cannot be smaller than 0.",
+                    Instance = "744F5E01-FC84-4D4A-9A73-0D7C48886A30"
+                };
+                return BadRequest(problem);
+            }
+            IEnumerable<Highlight> highlights = await highlightService.GetHighlightsByProjectIdAsync(projectId);
+            if(!highlights.Any())
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting highlights.",
+                    Detail = "The database does not contain highlights with this project id.",
+                    Instance = "D8D040F1-7B29-40AF-910B-D1B1CE809ADC"
+                };
+                return NotFound(problem);
+            }
+            return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
+        }
+
+        /// <summary>
         ///     Creates a highlight
         /// </summary>
         /// <param name="highlightResource"></param>

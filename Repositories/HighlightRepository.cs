@@ -30,6 +30,7 @@ namespace Repositories
     {
 
         Task<List<Highlight>> GetHighlightsAsync();
+        Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId);
 
     }
 
@@ -47,6 +48,13 @@ namespace Repositories
                          .ToListAsync();
         }
 
+        public async Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId)
+        {
+            return await GetDbSet<Highlight>()
+                         .Where(s => s.ProjectId == projectId)
+                         .Include(p => p.Project)
+                         .ToListAsync();
+        }
     }
 
 }
