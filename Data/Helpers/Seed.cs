@@ -68,6 +68,7 @@ namespace Data.Helpers
                 Name = nameof(Defaults.Roles.PrUser),
                 Scopes = new List<RoleScope>()
                 {
+                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                 }
             };
@@ -83,6 +84,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.UserRead)),
                     new RoleScope(nameof(Defaults.Scopes.RoleRead)),
                     new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
