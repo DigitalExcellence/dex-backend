@@ -1,3 +1,5 @@
+### What is Digital Excellence
+
 Digital-Excellence  
 A lot of employees and students of FHICT create a lot of nice products. As a hobby, for their work or because of a school project. These can be software solutions, small scripts, research papers, thesis but possibly also project ideas and proposals for others to pick up. Unfortunately, most of them remain private and are not known by the majority of the population. The goal of the DeX-platform (short: DeX) is to make all this work more findable and thus improving collaboration.  
   
@@ -22,3 +24,5 @@ It can be a central place where all project proposals can be gathered. Internshi
 SUGGEST  
 DeX can suggest interesting projects for you as a person, based on interest such as techniques, a certain topic or based on the collaborators which (some of them) you follow and/or share the same interests. This way you will be informed and up-to-date with the latest news and trends.  
  
+### Getting Started
+[This](https://github.com/DigitalExcellence/dex-backend/wiki/Getting-Started) wiki article describes the steps and tools that are necessary in order to run the backend services locally.

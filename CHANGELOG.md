@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for fontys login - [#66](https://github.com/DigitalExcellence/dex-backend/issues/66)
 - Added flag to indicate if email is public, show redacted email if not public - [#138](https://github.com/DigitalExcellence/dex-backend/issues/138)
 - Added an endpoint to get highlights by a project identifier - [#174](https://github.com/DigitalExcellence/dex-backend/issues/174)
+- Automated the deployment to our environments - [#60](https://github.com/DigitalExcellence/dex-backend/issues/60)
+- Added docker compose to get the backend services running locally - [#179](https://github.com/DigitalExcellence/dex-backend/issues/179)
 
 ### Changed
 
