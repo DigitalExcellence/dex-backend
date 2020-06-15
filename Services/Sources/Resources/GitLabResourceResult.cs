@@ -8,7 +8,7 @@ namespace Services.Sources.Resources
     /// <summary>
     /// Viewmodel for gitlab
     /// </summary>
-    internal class GitLabResourceResult
+    public class GitLabResourceResult
     {
         /// <summary>
         /// Gets or sets the identifier.
