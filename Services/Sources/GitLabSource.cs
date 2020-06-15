@@ -51,7 +51,7 @@ namespace Services.Sources
         /// Gets the project information.
         /// </summary>
         /// <param name="sourceUri">The source URI.</param>
-        /// <returns></returns>
+        /// <returns>the project object filled with information retrieved online.</returns>
         public Project GetProjectInformation(Uri sourceUri)
         {
             // Create valid URL
@@ -139,7 +139,7 @@ namespace Services.Sources
         /// Fetches the repo.
         /// </summary>
         /// <param name="sourceUri">The source URI.</param>
-        /// <returns></returns>
+        /// <returns>Returns the gitlabresourceresult.</returns>
         private GitLabResourceResult FetchRepo(Uri sourceUri)
         {
             RestClient client = new RestClient(sourceUri);
@@ -152,7 +152,7 @@ namespace Services.Sources
         /// Fetches the readme.
         /// </summary>
         /// <param name="readmeUrl">The readme URL.</param>
-        /// <returns></returns>
+        /// <returns>the readme content.</returns>
         private string FetchReadme(string readmeUrl)
         {
             readmeUrl = readmeUrl.Replace("blob", "raw");

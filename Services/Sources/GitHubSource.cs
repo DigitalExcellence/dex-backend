@@ -40,7 +40,7 @@ namespace Services.Sources
         /// Gets the project information.
         /// </summary>
         /// <param name="uri">The URI.</param>
-        /// <returns></returns>
+        /// <returns>The project object.</returns>
         /// <exception cref="NotImplementedException"></exception>
         public Project GetProjectInformation(Uri uri)
         {
@@ -52,7 +52,7 @@ namespace Services.Sources
         /// Projects the URI matches.
         /// </summary>
         /// <param name="uri">The URI.</param>
-        /// <returns></returns>
+        /// <returns>true if the project uri matches.</returns>
         /// <exception cref="NotImplementedException"></exception>
         public bool ProjectURIMatches(Uri uri)
         {

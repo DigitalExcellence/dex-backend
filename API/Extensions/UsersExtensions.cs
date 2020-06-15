@@ -42,8 +42,8 @@ namespace API.Extensions
         /// </summary>
         /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception">
+        /// <returns>The users identity id as string</returns>
+        /// <exception cref="UnauthorizedAccessException">
         /// User is not authenticated!
         /// or
         /// The back-end header isn't added!
@@ -55,10 +55,10 @@ namespace API.Extensions
 
             if(claimsPrincipal.Identities.Any(i => !i.IsAuthenticated))
             {
-                throw new Exception("User is not authenticated!");
+                throw new UnauthorizedAccessException("User is not authenticated!");
             }
 
-            if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication))
+            if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication) || claimsPrincipal.HasClaim("client_role", Defaults.Roles.BackendApplication))
             {
                 string identityIdHeader = actionContext.Request.Headers.SingleOrDefault(h => h.Key == "IdentityId")
                                                       .Value
@@ -66,7 +66,7 @@ namespace API.Extensions
 
                 if(string.IsNullOrWhiteSpace(identityIdHeader))
                 {
-                    throw new Exception("The back-end header isn't added!");
+                    throw new UnauthorizedAccessException("The back-end header isn't added!");
                 }
 
                 identityId = identityIdHeader;
@@ -76,7 +76,7 @@ namespace API.Extensions
                                             ?.Value;
                 if(sub == null)
                 {
-                    throw new NotSupportedException("The jwt doesn't have a sub");
+                    throw new NotSupportedException("The jwt doesn't have a subject identifier.");
                 }
 
                 return sub;
@@ -90,20 +90,20 @@ namespace API.Extensions
         /// </summary>
         /// <param name="actionContext">The action context.</param>
         /// <param name="userService">The user service.</param>
-        /// <returns></returns>
+        /// <returns>The current users user object.</returns>
         public static async Task<User> GetContextUser(this HttpContext actionContext, IUserService userService)
         {
             string identityProverId = actionContext.User.GetIdentityId(actionContext);
             return await userService.GetUserByIdentityIdAsync(identityProverId);
         }
 
-
         /// <summary>
         /// Gets the user information synchronous.
+        /// this is triggered when a user makes a request who does not have an account already.
         /// </summary>
         /// <param name="actionContext">The action context.</param>
         /// <param name="config">The configuration.</param>
-        /// <returns></returns>
+        /// <returns>The user object with information retrieved from the identity server</returns>
         public static User GetUserInformation(this HttpContext actionContext, Config config)
         {
             string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
@@ -117,10 +117,9 @@ namespace API.Extensions
             request.AddHeader("Authorization", bearerToken);
             IRestResponse response = client.Execute(request);
             JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
-            if(jsonResponse == null ||
-               !jsonResponse.ContainsKey("name") ||
-               !jsonResponse.ContainsKey("email") ||
-               !jsonResponse.ContainsKey("sub"))
+            if(jsonResponse?.ContainsKey("name") != true ||
+               jsonResponse?.ContainsKey("email") != true ||
+               jsonResponse?.ContainsKey("sub") != true)
             {
                 return null;
             }

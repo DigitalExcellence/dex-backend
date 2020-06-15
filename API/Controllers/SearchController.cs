@@ -40,10 +40,10 @@ namespace API.Controllers
         private readonly ISearchService searchService;
 
         /// <summary>
-        ///     Initialize a new instance of SearchController
+        /// Initializes a new instance of the <see cref="SearchController"/> class.
         /// </summary>
-        /// <param name="searchService"></param>
-        /// <param name="mapper"></param>
+        /// <param name="searchService">The search service.</param>
+        /// <param name="mapper">The mapper.</param>
         public SearchController(ISearchService searchService, IMapper mapper)
         {
             this.searchService = searchService;

@@ -67,6 +67,8 @@ namespace Repositories
         /// <returns>The embedded project with the selected fields redacted.</returns>
         private EmbeddedProject RedactUser(EmbeddedProject embeddedProject)
         {
+            if(embeddedProject == null) return embeddedProject;
+
             if(embeddedProject?.Project?.User?.IsPublic == false)
             {
                 embeddedProject.Project.User.Email = Defaults.Privacy.RedactedEmail;
@@ -94,7 +96,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Finds the embeddedproject with the specified identifier.
+        /// Finds the embedded project with the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>The embedded project with the specified identifier.</returns>
@@ -127,7 +129,7 @@ namespace Repositories
         /// <summary>
         /// Gets the embedded embeddedProjects asynchronous.
         /// </summary>
-        /// <returns>Returns all the embededProjects.</returns>
+        /// <returns>Returns all the Embedded Projects.</returns>
         public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync()
         {
             List<EmbeddedProject> embeddedProjects = await GetDbSet<EmbeddedProject>()
