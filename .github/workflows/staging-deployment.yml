@@ -1,35 +1,25 @@
-name: staging-deployment
+name: Staging Deployment
 
-on: 
+on:
   push:
     branches: [ develop ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    env:
-      STAGING_CONNECTION_STRING: ${{ secrets.STAGING_CONNECTION_STRING }}
-      STAGING_API_FRONTEND_CLIENT_ID: ${{ secrets.STAGING_API_FRONTEND_CLIENT_ID }}
-      STAGING_API_FRONTEND_CLIENT_SECRET: ${{ secrets.STAGING_API_FRONTEND_CLIENT_SECRET }}
-      STAGING_DATABASE_PASSWORD: ${{ secrets.STAGING_DATABASE_PASSWORD }}
-      STAGING_IDENTITY_APPLICATIONS: ${{ secrets.STAGING_IDENTITY_APPLICATIONS }}
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with: 
-          dotnet-version: 3.1.101
-
-      # dotnet build and publish
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-      - name: dotnet publish
-        run: dotnet publish -c Release
-
-      # docker compose up
-      - name: Build the docker-compose stack
-        run: docker-compose -f docker-compose.staging.yml up 
-      - name: Check running containers
-        run: docker ps -a
+      - uses: actions/checkout@v2
+      - name: Run docker compose build
+        run:  docker-compose -f docker-compose.deploy.yml build
+      - name: Docker login 
+        run:  docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Push docker images to dockerhub
+        run:  docker-compose -f docker-compose.deploy.yml push
+      - name: Push to server 
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGING_VPS_IP }}
+          username: ${{ secrets.STAGING_VPS_USERNAME }}
+          password: ${{ secrets.STAGING_VPS_PASSWORD }}
+          script: cd ~/docker_compose && docker-compose down && docker-compose pull && docker-compose up --build -d

@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+
+ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+
+ENV App__Self__IssuerUri = ''
+
+ARG BuildConfiguration=Debug
+
+WORKDIR /app
+
+COPY . ./
+
+RUN dotnet dev-certs https -ep ./dex-identity.pfx -p W64x4AD8dNj9kImdX3tayS
+
+RUN dotnet build
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+
+WORKDIR /app
+
+COPY --from=build-env /app/IdentityServer/bin/Debug/netcoreapp3.1 .
+COPY --from=build-env /app/dex-identity.pfx . 
+
+ENTRYPOINT ["dotnet", "6_IdentityServer.dll", "--environment=Development"]

@@ -24,6 +24,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 
@@ -86,6 +87,10 @@ namespace IdentityServer
                                                              true;
                                                          options.Events.RaiseFailureEvents = true;
                                                          options.Events.RaiseSuccessEvents = true;
+                                                         if(Environment.IsDevelopment())
+                                                         {
+                                                             options.IssuerUri = Config.Self.IssuerUri;
+                                                         }
                                                      })
                                                      .AddTestUsers(TestUsers.Users);
 
@@ -148,13 +153,24 @@ namespace IdentityServer
                     })
                     .AddCookie();
 
-            //TODO: Have some sort of certificate on the production servers
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
-
             if(Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+                certStore.Open(OpenFlags.ReadOnly);
+                X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                    X509FindType.FindByIssuerName,
+                    "Let's Encrypt Authority X3",
+                    false
+                );
+                if(certCollection.Count > 0)
+                {
+                    X509Certificate2 certificate = certCollection[0];
+                    builder.AddSigningCredential(certificate);
+                }
             }
 
             // TODO tighten cors
