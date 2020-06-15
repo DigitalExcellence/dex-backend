@@ -23,6 +23,9 @@ jobs:
     - name: Test
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=OpenCover /p:Exclude=\"[xunit.*]*,[*]*.Migrations.*\"
 
+    - name: Report
+      run: ~/.dotnet/tools/reportgenerator "-reports:*Tests/coverage.opencover.xml" "-targetdir:coverage-reports"
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
