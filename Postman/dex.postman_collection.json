@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "956c61a5-38bc-40fc-af73-72a9a719a0ef",
+		"_postman_id": "784ccf9d-164f-49e4-a27b-86bae97d613b",
 		"name": "Digital-Excellence-API",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -15,7 +15,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8a884b45-dbf1-4b03-aa56-b3f154dec72b",
+								"id": "364da45c-6737-4831-8125-44242173850c",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\") + 5000);",
 									"",
@@ -64,7 +64,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "09cb0a3b-5452-4478-8d1e-38dc1fae0473",
+								"id": "eadfe6ba-c467-4a89-90dd-81bbf8f4ec99",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"",
@@ -134,7 +134,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5e438cec-d7da-40c0-81d1-26ee6867539e",
+												"id": "b9e5ab7d-e7c9-47ad-a62e-df94768e968b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userName\");",
@@ -203,7 +203,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "216b5cae-8424-4f8b-b058-4278da40ba8c",
+												"id": "95efc753-695f-4984-8d20-74fa983028de",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var createdUserId = parseInt(pm.environment.get(\"createdUserId\"));",
@@ -271,7 +271,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f7a7a5c2-dcd8-44e3-b002-33b80c50cd47",
+												"id": "70cd234a-41ae-4724-8a44-9b1039e706b5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userNameUpdated\");",
@@ -339,7 +339,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a4abe613-fcab-4b78-99e0-b6385f17f5b0",
+												"id": "3f2e6c67-b821-4250-b569-4dc36d59b796",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var createdUserId = parseInt(pm.environment.get(\"createdUserId\"));",
@@ -414,7 +414,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "920e11b5-99c4-4344-9e25-bd6da5f35f82",
+												"id": "8caf8d20-49d4-4821-8d4e-c2479fbc86bf",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserIdentityId = parseInt(pm.environment.get(\"administratorUserIdentityId\"));",
@@ -479,7 +479,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "10adf212-d007-48c7-ae03-b1f9da60f92c",
+												"id": "2801e414-0602-4385-b72e-2ab0f8cb48f0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -557,7 +557,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8b4e0b84-460a-474d-be03-97bf92cbb06d",
+												"id": "aaf6ebae-9feb-4266-8da4-9e5af94e8c34",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -630,7 +630,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "22fab287-60c2-4e8a-892c-d592fa58814f",
+												"id": "9c908a81-41e6-44e0-a1de-46a54bd0e1fa",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = parseInt(pm.environment.get(\"projectId\"));",
@@ -699,7 +699,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6784a335-e7f2-48b9-b133-3374497bfc60",
+												"id": "5ad2f876-05ed-4b41-9add-000627d3cade",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectNameUpdated\");",
@@ -767,7 +767,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "df4dcffa-d540-4481-9ace-5c9b0ad66afb",
+												"id": "fdf7f11f-36b1-4ebb-8f7b-d50a6233646a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -835,7 +835,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6335ee7c-61b1-4710-9ccd-c7478f354dba",
+												"id": "47664131-f9d5-4382-9ce9-e91ae8efade2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -895,7 +895,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "cdf4e662-c7ec-4d60-b657-418c7b4d4515",
+												"id": "755ec180-ad75-4cd5-8958-63842a6a4bdd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -924,7 +924,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "e514ef30-6c19-4939-a7f0-47cbc4640f4b",
+												"id": "23b98fb4-e74c-4962-a1a4-0d1dbe46b2eb",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -974,7 +974,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8032680a-037f-4200-8017-4378339de4a4",
+												"id": "abfa6a81-b7f7-4ad1-81a9-822c7b9b5301",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = pm.environment.get(\"projectId\");",
@@ -1043,7 +1043,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2d007031-ab58-4ced-b314-9a4d06049d66",
+												"id": "340a13fa-8289-4f56-bcea-b4a951e51037",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -1100,12 +1100,99 @@
 									"response": []
 								},
 								{
+									"name": "Highlight-GetHighlight-ByProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "a07cf5e0-df01-444a-afd7-d37884b8246f",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+													"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+													"var highlightId = parseInt(pm.environment.get(\"highlightId\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"var foundAt;",
+													"",
+													"function findHighlightId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"function findProjectId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].project.id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Project is in list and matching: \" + projectId, function () {",
+													"    foundAt = findProjectId(jsonData, projectId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});",
+													"",
+													"pm.test(\"Highlight is in list and matching:\" + highlightId, function () {",
+													"    foundAt = findHighlightId(jsonData, highlightId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/Project/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"Project",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Highlight-UpdateHighlight-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "559e20fd-9c5d-4580-9414-4b44d3fc25c9",
+												"id": "307cf21b-0a58-4cd8-961f-0d2bd68aaf22",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var highlightStartDate = pm.environment.get(\"highlightStartDate\");",
@@ -1137,7 +1224,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "67b56a65-5a13-4d21-841b-fe8ab88a159e",
+												"id": "686836a4-146a-43c0-a420-f2a8d53074fe",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
@@ -1184,7 +1271,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2ef2ce0c-b7df-498a-8af6-481c5a6e3939",
+												"id": "6b772615-714e-457e-91c2-258a29b42896",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var highlightUpdateTimestamp = pm.environment.get(\"current_timestamp\");",
@@ -1251,7 +1338,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "67142ff8-04b8-492b-9a07-d7d3a743419d",
+												"id": "bdbe9f28-0f0d-415d-9282-d12c940e2d92",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1312,7 +1399,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5ec33f56-ba87-4889-8f15-85898188b467",
+												"id": "b3e8a3bd-52bc-4fc4-8b68-25ee75d3eef9",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1376,7 +1463,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b23bbc00-4c84-41ec-b44a-1c0bb54b2cd1",
+												"id": "c1441017-ae46-4d89-8927-bb6ab0285033",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embedGuid = pm.environment.get(\"embedGuid\");",
@@ -1445,7 +1532,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9804d263-c864-4102-bacf-3b9ac525aeb7",
+												"id": "cfab4db4-a563-440d-bed4-376bfef12dcd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embeddedProjectId = parseInt(pm.environment.get(\"embeddedProjectId\"))",
@@ -1503,7 +1590,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "19cc304b-a15c-4abb-a8ec-20f29d529625",
+												"id": "7553d974-f264-4e0c-a72c-52af2aaa29c0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1557,7 +1644,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "df03ff9a-7811-4808-b6e3-e9319dfa09cb",
+												"id": "1c8d2e09-0a9b-45fa-9353-0b9e9e1ed691",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1618,7 +1705,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d5170eed-2a35-4bc8-a065-e7d0b00cce69",
+												"id": "1c247c86-149f-4e51-bca6-ea00e8eb1a41",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var scopeName = pm.environment.get(\"scopeName\");",
@@ -1691,7 +1778,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "fc944fb5-55d1-404b-8e93-310449a56bfa",
+												"id": "5b551492-ec67-42b7-85f9-bb5fc66bede9",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleName = pm.environment.get(\"roleName\");",
@@ -1764,7 +1851,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6ba8fc58-ff58-4ff7-a2d8-5785814a9d46",
+												"id": "e0b36bd6-e1ef-471a-8b8f-bcc76a7846a7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -1830,7 +1917,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f5e9a2c9-d6bb-43a6-bc2d-52c7ca48be4c",
+												"id": "3d5f29f7-35e7-4c9b-a79c-7ebfe25ec06f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleId = parseInt(pm.environment.get(\"roleId\"));",
@@ -1889,7 +1976,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3313b766-5eb3-4df9-8a9a-f950683e7d8e",
+												"id": "5ff8cf19-497d-4f7b-b9d0-4fd56d73b46f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedRoleName = pm.environment.get(\"updatedRoleName\");",
@@ -1956,7 +2043,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "86dfb447-b860-4c07-82ec-04e9b7e51228",
+												"id": "5de2dd9f-3288-4b9b-b60e-da5bd119e77f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedRoleName = pm.environment.get(\"updatedRoleName\");",
@@ -2014,7 +2101,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b3ede86d-2ee1-40f3-b3fb-5aed1ec0a7f6",
+												"id": "ee2187a8-2243-4169-b1fb-b76f4076c08e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleId = parseInt(pm.environment.get(\"roleId\"));",
@@ -2093,7 +2180,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2d849bdd-27fe-497d-8236-18c26532698d",
+												"id": "0233cfb8-5e21-44f1-8d88-a5847ed6925a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleId = parseInt(pm.environment.get(\"roleId\"));",
@@ -2151,7 +2238,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "bd5c3e25-0457-40f9-91dc-9a02a1bde2cf",
+												"id": "7af99290-309e-436f-af23-f67b4faa5d7b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2212,7 +2299,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9d766f36-6d05-469b-86af-65981f19298b",
+												"id": "cabbf7d4-dba9-4589-86f5-59109f249fbe",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -2278,7 +2365,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d304265f-c344-46f0-93f2-8c65f02e71cd",
+												"id": "2ebb270b-6ad9-4702-a2d3-e8fe7258d277",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\")) + 1000;",
 													"",
@@ -2344,7 +2431,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "bb6b1690-57eb-4108-b52d-9c5858af43ea",
+												"id": "cb532c88-eac0-4f17-8faf-b6ba2844b790",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2389,7 +2476,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "12358335-bad4-4d48-a9f6-b94a28eff86f",
+												"id": "b56f3bdc-3158-4e0d-b3e7-a3bcf477999e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2434,7 +2521,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d7ea46cd-d0c8-4975-aa63-97ec0f7f3ac0",
+												"id": "016804b8-75f8-401b-92b6-e12c16765e7a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2479,7 +2566,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "ac71f737-a979-4d89-a3ea-839b4d63df8e",
+												"id": "4b5829b3-1bb5-447c-a8d7-685c703f841c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2524,7 +2611,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "523c3a9d-1be0-48e3-946c-9b55096b3899",
+												"id": "e628c40f-0315-4175-9b62-09c8a8abe3da",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2569,7 +2656,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "da702ddc-7ffc-49bf-adc0-1260c76df90c",
+												"id": "db973f58-f6bb-45e2-8ec8-0c7e585c4c3b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2621,7 +2708,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "095ad6d7-8a30-4489-9c12-f8670f4d4e1d",
+												"id": "acbc60c5-ac8b-4412-930f-7599e681e363",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2672,7 +2759,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "83fe3731-407b-4ddf-bf35-d3579f465624",
+												"id": "948aad61-9567-4c0d-b22a-2703f590b8e7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2723,7 +2810,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a69176da-7ba1-4d53-a6c2-38f376a42855",
+												"id": "19b067db-8991-4b18-83c8-8c9ca4de140b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2774,7 +2861,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3652f170-6fbd-4b5a-97ed-58c99a532b42",
+												"id": "50e3d1d1-28b0-43e8-b079-41ad3090ee4c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2825,7 +2912,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d0ca10af-da89-4fcf-97bf-5d06e5d57558",
+												"id": "390a29b0-87b2-4e92-afb1-47952c209834",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2890,7 +2977,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d4874e9c-f132-428a-a531-e6c450335959",
+												"id": "2c614dc5-6741-4e79-96b7-78eae6a773a3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -2968,7 +3055,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "44ba0a1e-2010-43af-97cd-db420f924c7d",
+												"id": "a7569692-b88c-4a40-95e3-6872afc58143",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -2997,7 +3084,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "e6f132ef-9ce2-45b7-907a-b45061710db6",
+												"id": "f227829e-ef10-4ff5-a3b2-909005215a2f",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -3047,7 +3134,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8d7681a0-b783-4e9d-a880-87d1e8e6ad6f",
+												"id": "f02ed5a9-c3fc-460a-9559-65d5098d8d63",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3111,7 +3198,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "0d41ca4e-975b-4f1e-aaa8-b45d9b91e0e6",
+										"id": "779589b8-2297-4049-874f-67f17df2d71f",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3121,7 +3208,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "7ec2290f-8f34-4928-98e2-ef0ffafafbc1",
+										"id": "4774e940-3242-49cb-95bd-905e62f96530",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3141,7 +3228,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b476c5b8-5492-4b3c-b0a3-8b704a702bb0",
+												"id": "78ce9c88-6b00-4431-bf74-a296299e40fc",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3199,7 +3286,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3bef1615-b3a7-46ec-9234-11f96e1f8daf",
+												"id": "879b6aac-ce1f-44c2-bcd3-5ddf395ab683",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3249,7 +3336,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "717bf97c-7b05-4d03-b93e-d90b0d6cbfe3",
+												"id": "0fe893ee-dcd8-4b71-a5e3-a5764864ec75",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3308,7 +3395,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "61e5fd7f-b6eb-44b5-ab4e-7ce37fc5eeda",
+												"id": "4ff78873-1f07-46e3-8e78-d17d615ee51e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3357,7 +3444,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "be256bbc-387e-47ca-8a5d-20329385a7f5",
+										"id": "15cd30e0-b4ff-44d9-87cf-86c3ace72ab3",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3367,7 +3454,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "15431839-fa45-488b-b503-249143e86e2a",
+										"id": "1bb508e9-046e-4ac5-a14c-467c07638dfb",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3387,7 +3474,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f08bc43f-bafc-44c1-be7f-781ac7217e19",
+												"id": "9baa38b7-3f14-4ee5-8200-7e6c0853713c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3447,7 +3534,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1ab78bde-9e47-4853-a731-ae153c92b71c",
+												"id": "1e746ffb-26b9-4833-8b51-a1c479a944fc",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -3517,7 +3604,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d33018b0-d8dd-4e7c-8ab5-a9848a93b04a",
+												"id": "b58ef07a-9356-4192-b5d6-0185404c05ea",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -3572,7 +3659,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "135c3825-be26-44d5-a4d1-8c9ce7a95236",
+												"id": "da89f210-2d42-4c11-9776-644b72890e63",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3629,7 +3716,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "04ebb94c-d3e5-4bd7-86f0-482148995476",
+												"id": "fcdbeda2-0ac4-4236-858b-405fcaa5d4b9",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3678,7 +3765,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "eb76d550-c71f-4403-b820-135d853d6eb0",
+										"id": "686f8d60-4e1a-437c-aca3-432a5784b697",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3688,7 +3775,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "d058e037-2bdf-4aef-bfdf-d724fbf79b54",
+										"id": "6e269208-9764-4b45-bc29-da3171323a4e",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3708,7 +3795,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b29e2ba9-8015-444f-a009-1cfffb5686e0",
+												"id": "6a73aadb-4b31-43b6-b7c9-b6b09ea10576",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3735,7 +3822,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "dc837e3e-173d-4fa9-9edf-e3529ec01137",
+												"id": "7f2558c1-7d5e-4bd3-9cf7-56857ace10b6",
 												"exec": [
 													""
 												],
@@ -3774,7 +3861,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2ce74456-0e96-4ae7-892f-cf119c9836f8",
+												"id": "d782af79-d34d-4a5d-a693-4dfbf6b542b3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var jsonData = pm.response.json();",
@@ -3819,7 +3906,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "33b712c5-ba32-4dd6-bb5b-9649eed49da2",
+												"id": "93747704-4e17-469c-a112-0c10114adf9e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var highlightId = parseInt(pm.environment.get(\"highlightId\"));",
@@ -3869,12 +3956,61 @@
 									"response": []
 								},
 								{
+									"name": "Highlight-GetHighlight-ByProject-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "29daa025-3ec3-4f89-83f3-ddf32f53b6ae",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/Project/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"Project",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Highlight-UpdateHighlight-Guest",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "07ec2143-e0bc-482a-9efa-e87532a2df5f",
+												"id": "324d5575-63e3-4967-8041-e852aa486792",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3901,7 +4037,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "6dd51ebc-91ce-4484-9153-735c13706b16",
+												"id": "9d629c3d-aead-4c89-93eb-a0c544417d75",
 												"exec": [
 													""
 												],
@@ -3941,7 +4077,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a4f6d5fd-0b53-497a-b6a5-37a0a629fd9e",
+												"id": "a4e0268f-910f-41e1-beac-0881a7284185",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3990,7 +4126,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "c488a4ef-afd3-4178-a884-bf8db64c2a97",
+										"id": "05604b76-63c6-4080-b619-65696383c5a0",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4000,7 +4136,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "85da9f5b-c545-4849-be8d-6ca149866c33",
+										"id": "c64857dd-a36e-4eeb-b05c-36c095f8b5f0",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4020,7 +4156,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e97fa90d-a297-4f13-9e32-4d5eb313c67b",
+												"id": "18d80730-cbcd-4e30-b3ab-207727acd196",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4075,7 +4211,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5578bf80-f693-4d33-bc44-a9ab1913f56b",
+												"id": "e5833310-1bf2-44d0-8926-45bfc30ff3b0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4121,7 +4257,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "67320724-af40-4f85-8f7d-013d020e71ef",
+												"id": "46d7114b-c02a-4561-827d-73553bda7a76",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4168,7 +4304,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f4d5e3c1-5814-4cae-92f2-58a68b87bc07",
+												"id": "3438eabc-f236-4f16-a386-f8d9a764cd38",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4217,7 +4353,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "5624f249-5b92-4876-9569-2e36c7320d4a",
+										"id": "b6c48bcf-b872-4397-bb74-59a51cec0390",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4227,7 +4363,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "722acd0f-19a5-4234-897a-2328d1d330bf",
+										"id": "091d9523-4e43-4a37-aeb2-1457199085f4",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4247,7 +4383,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "06347eb6-273a-4161-881f-3db1aafadf48",
+												"id": "b5417ad5-6651-4d55-bcf8-5916dfd2e77a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4303,7 +4439,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d195e5d5-867b-41a2-b1df-06e6299843ad",
+												"id": "5dce9b7b-30e9-4eed-b938-2a6e4ceb9641",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4350,7 +4486,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "566e81c7-4acb-4fb2-9b00-481788f19cf6",
+												"id": "8e542ac2-83e6-4a3e-84c4-a97c9ff7ee98",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4398,7 +4534,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "78c7ae98-f2c2-429c-a114-3cb229f3adf7",
+												"id": "73206b14-7d8e-49b2-b11e-b5bae90fbb31",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4446,7 +4582,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4ada57b8-5cd9-4e41-a9cf-b7efbba38f09",
+												"id": "d91fff72-0006-47f4-98fd-4139ce78eed0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4503,7 +4639,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5956a272-b7d4-4770-a695-13b355fe1fc7",
+												"id": "7e6d83f8-165c-43d0-998a-a7115502a5ef",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4574,7 +4710,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "43a444c8-0466-45f4-abfd-bc5f09796b93",
+										"id": "04caf851-e180-497a-a294-f1413a58e59b",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4584,7 +4720,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "47e4fccc-e231-4d4c-bc57-e2589332721b",
+										"id": "c0147669-7484-4f2f-a1e7-508841db907b",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4604,7 +4740,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c66f6392-3b16-49b8-8cdb-833f3ab305e3",
+												"id": "16e2983e-5daa-466b-90a6-604cbbadde1b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4655,7 +4791,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "816709c8-2985-4107-9626-0f1bf3be8223",
+										"id": "834219f3-f7ad-4e14-830f-a6d0ed6060c4",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4665,7 +4801,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "6a2aadb7-1dcc-4727-89c4-6fdb3455cb7c",
+										"id": "ec69e37c-2dd6-488a-a670-88426bb18f86",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4685,7 +4821,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "776b88dd-5764-4d2e-a041-1810402b41c4",
+												"id": "751c5d5f-084f-4208-8c38-a8073874fa89",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4741,7 +4877,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "a77cf619-d3e5-4f2f-8836-99fe9b8bb8a7",
+										"id": "999b5fe4-a622-44e0-a9cc-0c675ed38f17",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4751,7 +4887,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "99aa9a56-584f-4673-9666-9fa77b5fb834",
+										"id": "1db72838-5382-4568-93a8-c01f49c609cf",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4767,7 +4903,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "b4146769-e22b-4199-a53b-02265927b262",
+								"id": "68218c11-56e6-4b50-b47f-697efd89aa05",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -4777,7 +4913,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "54b328c0-33b8-4a72-864f-4d66231466f0",
+								"id": "7699b207-13bd-483c-a189-bcbfe7673b11",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -4800,7 +4936,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1405fd18-a63a-47fa-91d5-335a3ab3e723",
+												"id": "faadbc14-a4e6-4f31-b83f-2bc7b9d4b64b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userName\");",
@@ -4869,7 +5005,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e1bed595-bd2b-4067-8e2e-989d7260b55b",
+												"id": "c0d38167-9036-49ce-8392-e8ecb5ae076b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -4948,7 +5084,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "768038ee-b42c-4174-ba11-4504383931b3",
+												"id": "f040d5b7-5b17-48f4-bf55-4df8732164e0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -4977,7 +5113,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "cb05a572-b7a7-4c75-b16e-bdf88fa4094b",
+												"id": "e2e1c275-8b2c-4bca-8369-5f03d4fa2d16",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -5027,7 +5163,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e07d3379-1016-47c6-bd1b-017b1d42d90b",
+												"id": "07ba1fbd-7fdd-4c44-86b3-5bf1df31f222",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5092,7 +5228,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "840604de-f2f9-4d44-be40-6a289ba5a859",
+												"id": "e1c13450-f9b8-4020-92cf-69e9278627f2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var scopeName = pm.environment.get(\"scopeName\");",
@@ -5165,7 +5301,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "5a01f43f-a324-4d19-87f3-3541e32075a1",
+										"id": "2f9f0fab-1f66-4470-82aa-ff1de05d4867",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5175,7 +5311,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "b0d5f650-d885-4be0-ae2d-998abc537b03",
+										"id": "9ee01706-b053-4a2c-9dbc-829efcb2fe3f",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5195,7 +5331,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4d385ec6-e1ee-436a-add9-ab1f3761f0e9",
+												"id": "5b155930-65b5-465b-bbf0-0fe58dfe21c7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var jsonData = pm.response.json();",
@@ -5255,7 +5391,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3389c34f-3022-42b9-970c-3f8334bb313d",
+												"id": "7a7cf55c-3ec3-4b7c-84c6-1a59644c2f4e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5308,7 +5444,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "45003632-1992-4de0-b3d6-e8579aef83cc",
+												"id": "903eaa22-a423-4b28-8cc4-5d27c103e478",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var aliceIdentityId = parseInt(pm.environment.get(\"registeredUserIdentityId\"));",
@@ -5366,7 +5502,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5cf47e98-2ec7-4ec9-8875-1c76ab7eeb9d",
+												"id": "5130b097-e0f5-4622-8d96-5b3309b42e68",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
@@ -5433,7 +5569,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4bedaacd-f553-4321-9dd8-57bfac5715d9",
+												"id": "a8a01cd6-e910-4069-a9b2-12cb25393907",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5495,7 +5631,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "e9efccf5-8c0d-4c52-bca6-19aaa21eed7a",
+										"id": "9f79b712-f904-4de0-9bf0-3edcd7735d58",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5505,7 +5641,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "e29faad3-ac56-4ff3-b81a-ae1e4359f474",
+										"id": "32b7f4c1-88bf-4c39-ad52-e03e732a798c",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5525,7 +5661,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5fa56caf-3df0-44ed-beba-de62e2c716f6",
+												"id": "436878ee-d75b-4cf0-aefc-d48a2a95c124",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
@@ -5591,7 +5727,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6797eb8d-80ef-40ac-a1bd-9d91037f6ea5",
+												"id": "8f2337fc-a175-4ae9-9383-8de92e1ef5f9",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -5664,7 +5800,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "47f70b77-4793-4221-ae1e-b94627123414",
+												"id": "6eb7ded4-5774-43a2-9637-008b1ed4cf45",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -5722,7 +5858,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "378fa746-a326-498e-b571-215ccde354db",
+												"id": "051a9a50-e4bc-4264-aa89-fd7588b5d7d8",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"pm.test(\"Status code is 200\", function () {",
@@ -5772,7 +5908,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "eef605eb-b0f4-419b-a75a-a46eb316e368",
+												"id": "0475cb80-8adb-44dd-b155-adec68e5054b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectNameUpdated\");",
@@ -5839,7 +5975,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a14e3f4c-2505-4e0f-a343-c6523d11ff7d",
+												"id": "4259f6c5-d679-4523-a745-6eda21b7e7c9",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5906,7 +6042,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1d829188-46fa-4ac1-b42f-8414f9d0b885",
+												"id": "98e56434-13ab-4585-a4dd-22f91736c3ca",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5970,7 +6106,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "7e37624c-ad64-4912-a3d7-a60c1a2354a7",
+												"id": "2df94f1e-feb0-4da0-b259-91ebcdccdf46",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6031,7 +6167,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "00772efa-f31b-40dc-85d9-111feeea2854",
+												"id": "ab02fb36-6930-44fa-aa60-af519fc09d4d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6083,7 +6219,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "283a4e17-5be8-4ee0-8cf3-62711126a238",
+												"id": "b28d8d04-eec6-46c4-8597-74787a7daecb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embeddedProjectId = parseInt(pm.environment.get(\"embeddedProjectId\"))",
@@ -6148,7 +6284,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "03fc83a8-c4f0-4e09-a511-94756a817f7e",
+												"id": "186f49e1-07d1-456e-8635-3e24b7bf0186",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6174,7 +6310,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "b987e33c-b412-4f15-8106-2b4c46bd3dbe",
+												"id": "e27e810c-2d61-485f-b079-08b0f7dd6f7d",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -6224,7 +6360,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "dd3ab9f7-4fd0-4c80-9c94-da2e13985ce0",
+												"id": "e805e048-48ef-44d5-a197-c584c0550ea6",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = pm.environment.get(\"adminProjectId\");",
@@ -6293,7 +6429,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "dfff5fcf-8032-4669-9ab5-740309a21e37",
+												"id": "485ca64d-62f4-4b7f-8474-bba454ddd555",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -6350,12 +6486,67 @@
 									"response": []
 								},
 								{
+									"name": "Highlight-GetHighlight-ByProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "092c31aa-7baf-4b9b-8cb6-87e5837fdb26",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.forbidden;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/Project/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"Project",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Highlight-UpdateHighlight-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "7a8b79f3-6baf-4095-99a2-9bd6102dc588",
+												"id": "342b81d4-b129-480e-8cfb-8ceed629ec38",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6424,7 +6615,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "fd4e3dfc-ed0f-4171-ab1c-170d202e61a9",
+												"id": "1904016d-c73e-436e-81ab-c90bd1b47a40",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6485,7 +6676,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "922a51cb-fe45-487f-afcd-d7d096733be0",
+												"id": "f62f5da1-48d2-4feb-9409-a3993bb7060d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6537,7 +6728,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "877b66a5-74dc-459d-bc13-3b7b7b565059",
+												"id": "f8dab87d-9cb1-42f5-a0ea-225ecf8a808a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6590,7 +6781,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8038770a-ec56-4fa2-b255-a57020661ea2",
+												"id": "b1fdba8f-ab77-487f-a9e0-3450da24d92b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6643,7 +6834,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3af2178f-f63a-4557-bc67-beaea5684f86",
+												"id": "7ef21931-870a-43d2-a2d6-ec9037c39e49",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6705,7 +6896,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8db00023-1454-4ff4-a98f-309888c3b148",
+												"id": "3632f3c7-c4c2-4dd9-a025-c0d9d9cc4bba",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6786,7 +6977,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "365dfb68-d0d0-4603-a960-cd471c1415fe",
+												"id": "7d842883-c706-4258-88fc-939675e1f6fb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6845,7 +7036,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1bbed27b-bd54-4f40-9f97-0d41168619c9",
+												"id": "bb0242c2-37d3-4fb7-9720-04dbf6c8992e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\")) + 1000;",
 													"",
@@ -6911,7 +7102,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e79b3f97-94ce-4565-ac0f-07a6ae31892b",
+												"id": "8c45680e-217f-4c47-a5ef-1d2ae5c9a54f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6960,7 +7151,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a0964b12-3668-4273-9ca7-e13109189395",
+												"id": "689b78b6-b1df-40ca-86fd-342637fab1d3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7011,7 +7202,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c487a03c-864c-44b7-8ef7-35860776e07a",
+												"id": "2fd69241-7a89-4dcc-8e3b-0c382e1c2728",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7062,7 +7253,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c0255ce2-cd70-47d7-9de5-a8cf7c16feae",
+												"id": "c61d090c-a0d2-4635-88da-073b7c08808f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7107,7 +7298,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e153cbdc-b85b-405a-90ab-f433af1ea127",
+												"id": "02f1cacd-5eed-411c-9c50-c492885b481f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7158,7 +7349,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "fd77f38d-d33c-4d89-9c17-6b18441f7fd3",
+												"id": "dd81ee0a-c095-4834-924a-35adaff9eab2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7209,7 +7400,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f430e4b8-3f01-4bf3-8796-596c57a51913",
+												"id": "3dd21d9b-2f8d-445f-864f-02d1ee7560a3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7274,7 +7465,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c6c82ee7-391b-4463-90b8-c0e8d5560352",
+												"id": "6e252ba1-658e-41fa-a178-e9ed4d7c2e95",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userName\");",
@@ -7343,7 +7534,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9812aba4-d320-4c53-ac6d-fbea2b50592d",
+												"id": "fe31f3b0-49f0-4a9e-9943-633f55c4ccea",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -7422,7 +7613,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "ec7753dd-27a8-4ddc-b23a-adce312f09fc",
+												"id": "0659e2d0-db0d-4f61-84f0-9ad7565ba833",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -7451,7 +7642,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "866182f6-d3d8-4905-8a05-0f6edbdd0615",
+												"id": "738426f2-2364-4fdc-b4bf-4a96deba1e55",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -7501,7 +7692,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "af761232-8575-403c-a5f6-de549430a38a",
+												"id": "8afacf07-a77c-4974-a7bb-413a034668f1",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7565,7 +7756,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "ecee51ef-0d27-47ee-8c55-4b6f5d1b5d35",
+												"id": "80bb74fc-6d91-473d-a6df-fdc69a31adf8",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var scopeName = pm.environment.get(\"scopeName\");",
@@ -7638,7 +7829,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "6edd6bed-68ea-4b31-91b5-d35857fb2518",
+										"id": "fb515525-144c-4194-b42d-bf6cecaef38a",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -7648,7 +7839,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "a0aeba95-9874-4dcc-8373-f4356ecba16e",
+										"id": "8cbdc8de-d2d2-4464-8aae-e8de30fafe2c",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -7668,7 +7859,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5b6aae2c-9311-486a-b3d9-b63da7058ec7",
+												"id": "64d16216-b4d8-4d82-8f0d-d501737d2059",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var jsonData = pm.response.json();",
@@ -7728,7 +7919,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "7dfdadcd-bfce-4cb1-a2e7-2912e28c8914",
+												"id": "78e4401c-ae78-4567-b5c5-52cadf7e26c2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7781,7 +7972,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "76564a97-4947-4d33-8529-a1f0ac4ac802",
+												"id": "c401d88c-4f36-45cd-9247-147036bb46b2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var prUserIdentityId = parseInt(pm.environment.get(\"prUserIdentityId\"));",
@@ -7839,7 +8030,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "46aef954-9a23-4509-a8bf-8562a6e45dd1",
+												"id": "601a8ac4-2c56-40b9-8a73-cdf10bc6dcef",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedPrUserEmail = pm.environment.get(\"updatedPrUserEmail\");",
@@ -7906,7 +8097,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6a577005-04cc-44d7-af63-ad3e1c53aa47",
+												"id": "aa4877be-3cfb-4f24-b644-489d4707e36b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7968,7 +8159,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "493b8ad7-7dfb-4303-a273-bcb38a551967",
+										"id": "d79d9921-0eaf-4d33-9f5c-d832d9e6c08d",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -7978,7 +8169,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "057c5859-ffc4-499e-9a1f-babb9f3d0237",
+										"id": "9d42dd7f-3893-4409-b0b0-ba04072ecd36",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -7998,7 +8189,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "611dd846-14ed-47b4-b103-17f8b76896c5",
+												"id": "fbcde5ae-4e01-4800-8d9d-e1087e4a2c84",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var PrUserId = pm.environment.get(\"PrUserId\");",
@@ -8064,7 +8255,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8b37965a-9d89-45ec-8006-b395c8c17d86",
+												"id": "1a6cbfe4-66bf-48e0-9b73-8c4248e7d341",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -8137,7 +8328,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e04593a5-4a67-4933-bd38-1ed5ce147209",
+												"id": "c1e3191e-746e-49fc-ae9c-aa2b36657b96",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -8195,7 +8386,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e2571169-cdc6-480f-9a31-b0b7d25f769e",
+												"id": "5ca8206b-d616-4365-acf7-679b351d42c3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"pm.test(\"Status code is 200\", function () {",
@@ -8245,7 +8436,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d40f1f56-6892-4e6e-826c-1598832d4942",
+												"id": "ad7c8f6c-1ad5-4710-973a-db8f73b7963b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectNameUpdated\");",
@@ -8312,7 +8503,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2eac1a6d-14eb-4d96-8abb-4da1255cad21",
+												"id": "ae639394-3fae-4cf8-a8c5-f15f1326d31b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8379,7 +8570,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "cad8e8b5-a49a-47d5-a625-1b66e2db6840",
+												"id": "1dfca1f0-a7a8-49f1-ac45-8989fb9efecb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8443,7 +8634,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "702bc1c8-d3f0-4d18-8c3a-f7c0b707df0a",
+												"id": "c648e8d6-ab92-46b0-aee8-42ed87b030b5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8507,7 +8698,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e09fcf24-fb7c-460a-83b4-d0aa4a99d9be",
+												"id": "ea3d149d-a7da-47c1-87ec-9521cd615088",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8559,7 +8750,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1491d221-9384-4935-9e84-a713a99ed7d3",
+												"id": "b478e4b6-5b85-4bc7-bc4f-b438810af5ee",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embeddedProjectId = parseInt(pm.environment.get(\"embeddedProjectId\"))",
@@ -8617,7 +8808,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "36757832-19ae-4c0d-afd6-f70ce947ad4a",
+												"id": "5d9c4942-554b-4dc7-8576-47f16e6cf7b7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var otherEmbeddedProjectId = parseInt(pm.environment.get(\"otherEmbeddedProjectId\"))",
@@ -8682,7 +8873,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "ddafdd08-7012-4a08-8610-20533aadf5e5",
+												"id": "4f0b831e-d08d-4573-ad34-7c108e88b852",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8710,7 +8901,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "73909512-16b9-4920-8ee8-c1899a6e8a0e",
+												"id": "6825b3dd-0c4b-49c1-980f-f306814644d9",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -8760,7 +8951,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8194cfbb-048f-4b7b-a91f-74e328ef8ac2",
+												"id": "7afa1c3c-f1a2-40fa-abf1-694655f68f5e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -8817,12 +9008,99 @@
 									"response": []
 								},
 								{
+									"name": "Highlight-GetHighlight-ByProject-Self-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "813d2aa2-ecd7-482d-b5eb-c4640cc84d2a",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+													"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+													"var highlightId = parseInt(pm.environment.get(\"highlightId\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"var foundAt;",
+													"",
+													"function findHighlightId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"function findProjectId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].project.id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Project is in list and matching: \" + projectId, function () {",
+													"    foundAt = findProjectId(jsonData, projectId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});",
+													"",
+													"pm.test(\"Highlight is in list and matching:\" + highlightId, function () {",
+													"    foundAt = findHighlightId(jsonData, highlightId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/Project/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"Project",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Highlight-UpdateHighlight-Self-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "602bc83c-7485-4aa0-8666-ddf5a7e8fd3d",
+												"id": "f27d897e-e099-4f50-9690-f5e7b2e1e7e0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8848,7 +9126,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "3fa3770b-e3f6-41d3-b20e-a02439890092",
+												"id": "b881de4a-c46c-421a-ab4f-b1577ebe8062",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
@@ -8895,7 +9173,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6a6dcb08-ec7c-4a73-a0d4-a06c643f34d8",
+												"id": "eab42749-8df8-48c1-9ef8-0cf6898124e3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8922,7 +9200,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "2fee8cfb-b0f6-4ed7-b1fc-e293658b2fd4",
+												"id": "2aa4d15b-a160-43a1-915e-a412f0264b39",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -8972,7 +9250,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e78a893b-3bb3-4a47-a039-d4c3689a7b69",
+												"id": "827befaa-7af2-498d-9560-8686b4e82006",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -9029,12 +9307,99 @@
 									"response": []
 								},
 								{
+									"name": "Highlight-GetHighlight-ByProject-Other-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "611139ab-d175-496a-be41-91804222c774",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+													"var adminProjectId = parseInt(pm.environment.get(\"adminProjectId\"));",
+													"var adminHighlightId = parseInt(pm.environment.get(\"adminHighlightId\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"var foundAt;",
+													"",
+													"function findHighlightId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"function findProjectId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].project.id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Project is in list and matching: \" + adminProjectId, function () {",
+													"    foundAt = findProjectId(jsonData, adminProjectId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});",
+													"",
+													"pm.test(\"Highlight is in list and matching:\" + adminHighlightId, function () {",
+													"    foundAt = findHighlightId(jsonData, adminHighlightId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/Project/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"Project",
+												"{{adminProjectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Highlight-UpdateHighlight-Other-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "bd0d63f9-f719-4ed7-b445-7f0cdebaa21e",
+												"id": "0ec65e59-7cb7-4df1-af5a-1ce2fce123c7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9060,7 +9425,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "9d15cd8c-3d11-4d20-bd09-16bed6306e8c",
+												"id": "ea9871bc-3005-46bc-af50-47585914a7ae",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
@@ -9107,7 +9472,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "68b2d1f7-ac1f-41fb-86a1-1afecca8ca24",
+												"id": "ffc5ad5d-fe09-4f34-bd59-54003b374b07",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = pm.environment.get(\"adminProjectId\");",
@@ -9183,7 +9548,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "473381d7-76bf-484c-bf3a-cbe3b999243f",
+												"id": "2e226ddb-b724-4ca9-bf70-aa68548c6bd5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9244,7 +9609,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d0fffe88-6985-4139-813e-752135ebe58c",
+												"id": "ff990f08-9fcc-4b49-a14d-00b18345a5fd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9296,7 +9661,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "47989413-7153-4d29-b013-e6c7f9441854",
+												"id": "89f248fc-3bdd-411e-81ee-1e85d1e84503",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9349,7 +9714,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2d79f9b6-bb92-4897-8c45-ddd41eff7ed7",
+												"id": "f27271de-94f1-4848-bbe1-a20397c9946f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9402,7 +9767,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "26000771-a9ae-448f-bd0d-4c8ed4c0b190",
+												"id": "a17bc6cf-37d8-4f87-af5d-fd17311e6d6f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9464,7 +9829,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e24a3ca0-b749-4d03-94b9-953d9f077296",
+												"id": "a965024b-508d-48be-961f-8b204e681bb5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9545,7 +9910,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "715f0b95-8047-4b07-942d-c10a0b994cf7",
+												"id": "6eb03093-c39e-44c4-b041-59d9b8572e0c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9604,7 +9969,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "00f7a0e3-1ea2-43ae-a044-52a75e6447eb",
+												"id": "3761f2c3-6136-4043-8bec-fb01193975fc",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\")) + 1000;",
 													"",
@@ -9670,7 +10035,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1ab878a6-3126-46c1-b005-a91a28a24a94",
+												"id": "2f69d3e4-25ef-4615-a284-537693bbb88f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9719,7 +10084,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e8002aff-c43f-4fe6-afe4-90682f6a9473",
+												"id": "e165b706-a9c3-41bd-b291-e24ac4381b70",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9768,7 +10133,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c841e42c-af73-4848-be11-536dd7f4dc0d",
+												"id": "30cde24d-b050-46c1-ac1a-103c2cd4fe38",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9813,7 +10178,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a3038ab9-63e9-4246-8122-ec4132da4095",
+												"id": "0396144d-69b1-4010-ac2d-55cb3ee941b2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9858,7 +10223,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8dcab8b8-ad34-4e9e-9cfb-27245afb4bb9",
+												"id": "447b3221-43fc-49b6-8db9-d1fa71c741a5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9903,7 +10268,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "97b02ae9-e67e-42c7-89d3-765b50952e36",
+												"id": "e6000052-0f4c-405d-8238-853dc4400d9f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9956,7 +10321,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "83050877-ae98-45e8-ae57-c811122c5180",
+												"id": "c6e7ec76-fbb5-4ae5-8c85-ae422c90be95",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10009,7 +10374,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4c1e81fe-6fee-473c-a97e-b6a5064aa398",
+												"id": "c8bdbb3b-6780-457c-9621-8a9375c29080",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10092,7 +10457,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "96106fd1-ef73-4710-a525-fb2deb67f55b",
+				"id": "55d5199b-1737-4ac7-b4c9-ecb86f667241",
 				"type": "text/javascript",
 				"exec": [
 					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
@@ -10136,7 +10501,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "84fc0889-c67e-41d3-9bf1-c987991d1555",
+				"id": "b3a6aade-e59e-45fa-a17d-6042b26f69db",
 				"type": "text/javascript",
 				"exec": [
 					""
