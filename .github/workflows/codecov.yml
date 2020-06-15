@@ -21,7 +21,7 @@ jobs:
       run: dotnet build
 
     - name: Test
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=OpenCover /p:Exclude=\"[xunit.*]*,[*]*.Migrations.*\"
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=OpenCover /p:Exclude=\"[*]*Microsoft.NET.Test.*,[*]*Data.*,[*]*Models.*,[*]*Repositories.Tests.*,[*]*Services.Sources.Resources.*\"
 
     - name: Report
       run: ~/.dotnet/tools/reportgenerator "-reports:*Tests/coverage.opencover.xml" "-targetdir:coverage-reports" -reporttypes:Cobertura
