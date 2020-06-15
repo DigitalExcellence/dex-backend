@@ -33,6 +33,7 @@ namespace API.Configuration
         {
             CreateMap<UserResource, User>();
             CreateMap<User, UserResourceResult>();
+            CreateMap<User, LimitedUserResourceResult>();
 
             CreateMap<ProjectResource, Project>();
             CreateMap<Project, ProjectResourceResult>();

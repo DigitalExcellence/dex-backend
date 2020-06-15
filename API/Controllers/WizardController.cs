@@ -28,7 +28,6 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
     ///     The controller that handles search requests
     /// </summary>
@@ -36,30 +35,26 @@ namespace API.Controllers
     [ApiController]
     public class WizardController : ControllerBase
     {
-
         private readonly SourceManagerService sourceManagerService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
-        /// <param name="mapper">The mapper.</param>
         /// <param name="sourceManagerService">The source manager service.</param>
-        public WizardController(IMapper mapper, SourceManagerService sourceManagerService)
+        public WizardController(SourceManagerService sourceManagerService)
         {
             this.sourceManagerService = sourceManagerService;
-
         }
 
         /// <summary>
         /// Gets the wizard information.
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
-        /// <returns></returns>
+        /// <returns>The filled in Project.</returns>
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetWizardInformation(Uri sourceURI)
+        public IActionResult GetWizardInformation(Uri sourceURI)
         {
-
             if(sourceURI == null)
             {
                 ProblemDetails problem = new ProblemDetails

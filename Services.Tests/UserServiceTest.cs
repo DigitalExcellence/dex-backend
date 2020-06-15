@@ -42,7 +42,7 @@ namespace Services.Tests
         /// <summary>
         /// Test if repository method is called
         /// </summary>
-        /// <returns></returns>
+        /// <returns> assert if removeuser does not thow exceptions.</returns>
         [Test]
         public async Task RemoveUserAsync_GoodFlow()
         {

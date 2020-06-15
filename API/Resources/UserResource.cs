@@ -40,11 +40,6 @@ namespace API.Resources
         public string IdentityId { get; set; }
 
         /// <summary>
-        ///     This gets or sets the linked services
-        /// </summary>
-        public LinkedServiceResource[] Services { get; set; }
-
-        /// <summary>
         ///     This gets or sets the ProfileUrl
         /// </summary>
         public string ProfileUrl { get; set; }

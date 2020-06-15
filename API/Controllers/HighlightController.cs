@@ -19,8 +19,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,10 +43,10 @@ namespace API.Controllers
         private readonly IMapper mapper;
 
         /// <summary>
-        ///     Initialize a new instance of HighlightController
+        /// Initializes a new instance of the <see cref="HighlightController"/> class.
         /// </summary>
-        /// <param name="highlightService"></param>
-        /// <param name="mapper"></param>
+        /// <param name="highlightService">The highlight service.</param>
+        /// <param name="mapper">The mapper.</param>
         public HighlightController(IHighlightService highlightService, IMapper mapper)
         {
             this.highlightService = highlightService;
@@ -52,9 +54,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get all highlights.
+        ///     Get all active highlights.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of Highlight resource results.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllHighlights()
         {
@@ -74,11 +76,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get a Highlight by id
+        /// Gets the highlight by the identifier.
         /// </summary>
-        /// <param name="highlightId"></param>
-        /// <returns></returns>
-        [HttpGet("{projectId}")]
+        /// <param name="highlightId">The highlight identifier.</param>
+        /// <returns>A Highlight resource result.</returns>
+        [HttpGet("{highlightId}")]
         public async Task<IActionResult> GetHighlight(int highlightId)
         {
             if(highlightId < 0)
@@ -143,11 +145,11 @@ namespace API.Controllers
         /// <summary>
         ///     Creates a highlight
         /// </summary>
-        /// <param name="highlightResource"></param>
-        /// <returns></returns>
+        /// <param name="highlightResource">The highlight resource.</param>
+        /// <returns>The created highlight resource result.</returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        public IActionResult CreateHighlightAsync(HighlightResource highlightResource)
+        public IActionResult CreateHighlight(HighlightResource highlightResource)
         {
             if(highlightResource == null)
             {
@@ -164,9 +166,11 @@ namespace API.Controllers
             {
                 highlightService.Add(highlight);
                 highlightService.Save();
-                return Created(nameof(CreateHighlightAsync), mapper.Map<Highlight, HighlightResourceResult>(highlight));
-            } catch
+                return Created(nameof(CreateHighlight), mapper.Map<Highlight, HighlightResourceResult>(highlight));
+            } catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed Saving highlight.",
@@ -178,11 +182,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Update the Highlight
+        /// Updates the highlight.
         /// </summary>
-        /// <param name="highlightId"></param>
-        /// <param name="highlightResource"></param>
-        /// <returns></returns>
+        /// <param name="highlightId">The highlight identifier.</param>
+        /// <param name="highlightResource">The highlight resource.</param>
+        /// <returns>The updated highlight resource result.</returns>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public async Task<IActionResult> UpdateHighlight(int highlightId,
@@ -209,10 +213,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Removes a highlight by id
+        /// Deletes the highlight by the identifier.
         /// </summary>
-        /// <param name="highlightId"></param>
-        /// <returns></returns>
+        /// <param name="highlightId">The highlight identifier.</param>
+        /// <returns> Status code 200.</returns>
         [HttpDelete("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         public async Task<IActionResult> DeleteHighlight(int highlightId)

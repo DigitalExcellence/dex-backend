@@ -26,18 +26,16 @@ using System.IO;
 
 namespace API
 {
-
     /// <summary>
     ///     Program.cs
     /// </summary>
-    public class Program
+    public static class Program
     {
-
         /// <summary>
-        ///     Main of API
+        /// Mains the specified arguments.
         /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
+        /// <param name="args">The arguments.</param>
+        /// <returns>The exit code of the program.</returns>
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -74,10 +72,10 @@ namespace API
         }
 
         /// <summary>
-        ///     Host Builder
+        /// Creates the host builder.
         /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
+        /// <param name="args">The arguments.</param>
+        /// <returns>The webhostbuilder instance.</returns>
         public static IWebHostBuilder CreateHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
@@ -94,7 +92,5 @@ namespace API
                           .UseKestrel(o => o.AddServerHeader = false)
                           .UseSerilog();
         }
-
     }
-
 }

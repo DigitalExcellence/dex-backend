@@ -33,9 +33,10 @@ namespace API.Extensions
     public class AuthorizeScopeAttribute : TypeFilterAttribute
     {
         /// <summary>
-        /// Authorization attribute that is depricated.
+        /// Currently depricated
+        /// Initializes a new instance of the <see cref="AuthorizeScopeAttribute"/> class.
         /// </summary>
-        /// <param name="claimValue"></param>
+        /// <param name="claimValue">The claim value.</param>
         public AuthorizeScopeAttribute(string claimValue) : base(typeof(AuthorizeScopeFilter))
         {
             Arguments = new object[] {new Claim("scope", claimValue)};
@@ -50,18 +51,18 @@ namespace API.Extensions
         private readonly Claim claim;
 
         /// <summary>
-        /// Filter constructor.
+        /// Initializes a new instance of the <see cref="AuthorizeScopeFilter"/> class.
         /// </summary>
-        /// <param name="claim"></param>
+        /// <param name="claim">The claim.</param>
         public AuthorizeScopeFilter(Claim claim)
         {
             this.claim = claim;
         }
 
         /// <summary>
-        /// On authorization check, check for the scopes.
+        /// Called early in the filter pipeline to confirm request is authorized.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext" />The current context.</param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             UserService userService = context.HttpContext.RequestServices.GetService(typeof(UserService)) as UserService;

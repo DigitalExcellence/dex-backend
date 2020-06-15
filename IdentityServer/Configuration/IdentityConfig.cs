@@ -16,11 +16,13 @@
 */
 
 using Configuration;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Models.Defaults;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace IdentityServer.Configuration
 {
@@ -82,7 +84,11 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.HighlightWrite),
                                nameof(Defaults.Scopes.EmbedWrite),
                                nameof(Defaults.Scopes.EmbedRead)
-                           }
+                           },
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                    }
                        },
 
                        // interactive ASP.NET Core MVC client

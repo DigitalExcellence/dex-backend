@@ -15,19 +15,30 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Microsoft.EntityFrameworkCore;
 using Models;
-using Repositories.Base;
 
-namespace Repositories
+namespace API.Resources
 {
-
-    public interface IStatisticsRepository : IRepository<Statistic> { }
-
-    public class StatisticsRepository : Repository<Statistic>, IStatisticsRepository
+    /// <summary>
+    ///     the view model result of user.
+    /// </summary>
+    public class LimitedUserResourceResult
     {
 
-        public StatisticsRepository(DbContext dbContext) : base(dbContext) { }
+        /// <summary>
+        ///     This gets or sets the Id
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        ///     This gets or sets the Name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        ///     This gets or sets the Email
+        /// </summary>
+        public string Email { get; set; }
 
     }
 
