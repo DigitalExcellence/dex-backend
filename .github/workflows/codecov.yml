@@ -14,16 +14,22 @@ jobs:
       with:
         dotnet-version: 3.1.101
 
+    - name: Tools
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
     - name: Build
       run: dotnet build
 
     - name: Test
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=OpenCover /p:Exclude=\"[xunit.*]*,[*]*.Migrations.*\"
 
+    - name: Report
+      run: ~/.dotnet/tools/reportgenerator "-reports:*Tests/coverage.opencover.xml" "-targetdir:coverage-reports" -reporttypes:XMLSummary
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
-        file: ./coverage/results.xml
+        file: ./coverage-reports/Summary.xml
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: true
