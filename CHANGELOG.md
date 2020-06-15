@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added an endpoint to get highlights by a project identifier - [#174](https://github.com/DigitalExcellence/dex-backend/issues/174)
 - Added a user self delete endpoint, allowing users to delete their own account - [#154](https://github.com/DigitalExcellence/dex-backend/issues/154)
 - Added ability for users with PR role to now create en see embeds for all projects - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Added unit testing for the GitLab source - [#181](https://github.com/DigitalExcellence/dex-backend/issues/181)
+- Added unit testing for the GitHub source - [#182](https://github.com/DigitalExcellence/dex-backend/issues/182)
 
 ### Changed
 
