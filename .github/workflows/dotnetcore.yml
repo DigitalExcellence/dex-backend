@@ -1,12 +1,10 @@
-name: .NET Core
-
+name: Codecov
 on:
   pull_request:
     branches: [ develop ]
 
 jobs:
-  build:
-
+  run:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,9 +13,23 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    - name: Install dependencies
-      run: dotnet restore
+
+    - name: Tools
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build
+
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=OpenCover /p:Exclude=\"[*]*Microsoft.NET.Test.*,[*]*Data.*,[*]*Models.*,[*]*Repositories.Tests.*,[*]*Services.Sources.Resources.*\"
+
+    - name: Report
+      run: ~/.dotnet/tools/reportgenerator "-reports:*Tests/coverage.opencover.xml" "-targetdir:coverage-reports" -reporttypes:Cobertura
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage-reports/Cobertura.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
