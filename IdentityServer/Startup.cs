@@ -38,10 +38,10 @@ namespace IdentityServer
     public class Startup
     {
         /// <summary>
-        ///     Startup constructor
+        /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
-        /// <param name="configuration"></param>
-        /// <param name="environment"></param>
+        /// <param name="configuration">The configuration from appsettings.</param>
+        /// <param name="environment">The environment.</param>
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Config = configuration.GetSection("App")
@@ -69,9 +69,9 @@ namespace IdentityServer
         public IWebHostEnvironment Environment { get; }
 
         /// <summary>
-        ///     Configure services for the identity server
+        /// Configures the services.
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
@@ -171,9 +171,9 @@ namespace IdentityServer
         }
 
         /// <summary>
-        ///     Configure the application
+        /// Configures the specified application.
         /// </summary>
-        /// <param name="app"></param>
+        /// <param name="app">The application builder instance.</param>
         public void Configure(IApplicationBuilder app)
         {
             if(Environment.IsDevelopment())

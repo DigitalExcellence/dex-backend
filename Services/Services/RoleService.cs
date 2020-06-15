@@ -46,7 +46,7 @@ namespace Services.Services
         /// <summary>
         /// Gets all asynchronous.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of all roles.</returns>
         public Task<List<Role>> GetAllAsync()
         {
             return Repository.GetAllAsync();
@@ -54,7 +54,7 @@ namespace Services.Services
         /// <summary>
         /// Gets the valid scopes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of valid scopes.</returns>
         public List<string> GetValidScopes()
         {
             // Via reflection this gets the object type itself, then gets all the public static fields and for each field append the name to the valid scope name.

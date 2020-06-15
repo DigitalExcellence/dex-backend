@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using Services.Services;
+using System;
 
 namespace API.Extensions
 {
@@ -50,10 +52,19 @@ namespace API.Extensions
         /// </summary>
         /// <param name="context">The authorization context.</param>
         /// <param name="requirement">The requirement to evaluate.</param>
-        /// <returns></returns>
+        /// <returns>CompletedTask.</returns>
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ScopeRequirement requirement)
         {
-            string identityId = httpContextAccessor.HttpContext.User.GetIdentityId(httpContextAccessor.HttpContext);
+            string identityId;
+            try
+            {
+                identityId = httpContextAccessor.HttpContext.User.GetIdentityId(httpContextAccessor.HttpContext);
+            } catch(UnauthorizedAccessException e)
+            {
+                Log.Information(e, "User is not authenticated.");
+                return Task.CompletedTask;
+            }
+
             if(string.IsNullOrEmpty(identityId))
             {
                 return Task.CompletedTask;

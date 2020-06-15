@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added flag to indicate if email is public, show redacted email if not public - [#138](https://github.com/DigitalExcellence/dex-backend/issues/138)
 - Added Integration tests using Postman, also tests different access control levels - [#40](https://github.com/DigitalExcellence/dex-backend/issues/40) 
 - Added an endpoint to get highlights by a project identifier - [#174](https://github.com/DigitalExcellence/dex-backend/issues/174)
+- Added a user self delete endpoint, allowing users to delete their own account - [#154](https://github.com/DigitalExcellence/dex-backend/issues/154)
+- Added ability for users with PR role to now create en see embeds for all projects - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
 
 ### Changed
 
@@ -38,13 +40,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Get user from the session & add current user to project. - [#139](https://github.com/DigitalExcellence/dex-backend/issues/139)
 - Changed Student reference to be named identity. - [#145](https://github.com/DigitalExcellence/dex-backend/issues/145)
 - Changed the login flow to the identity to support direct access to external providers. - [#165](https://github.com/DigitalExcellence/dex-backend/issues/165)
+- Changed endpoint to return all roles from /api/role/roles to /api/role - [#168](https://github.com/DigitalExcellence/dex-backend/issues/168)
+- Improved logging on exceptions and removed some possible null reference exception flows - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Changed how much information about a user is being returned when requesting project for instance - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
 
 ### Deprecated
 
 ### Removed
 
 - Removed user from search result resource - [#129](https://github.com/DigitalExcellence/dex-backend/issues/129)
+- Removed linked service resource inside the user resource, it was not being used - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Removed Internet Information Services webserver from the launchsettings, we only want to use Kestrel - [#105](https://github.com/DigitalExcellence/dex-backend/issues/105)
 
 ### Fixed
+
+- Fixed Get Highlight endpoint using wrong parameter, project id instead of highlight id - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Fixed newly created users not having any role, leading to authorization issues - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Fixed Get Highlight not returning a project - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Fixed issue where retrieving highlights would not redact user information - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Fixed issue where backend applications like Postman were unable to make requests due to UserExtension not checking for client_role - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Fixed issue where incorrect guid validation would lead to internal server errors - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Fixed issue where users were able to delete some roles that were critical for the platform - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- Fixed role update endpoint returning internal server error - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+
 
 ### Security

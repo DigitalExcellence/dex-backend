@@ -5,7 +5,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Defaults;
+using Serilog;
 using Services.Services;
 using static Models.Defaults.Defaults;
 
@@ -23,11 +26,11 @@ namespace API.Controllers
         private readonly IRoleService roleService;
 
         /// <summary>
-        /// Initialize a new instance of RoleController
+        /// Initializes a new instance of the <see cref="RoleController"/> class.
         /// </summary>
-        /// <param name="roleService"></param>
-        /// <param name="userService"></param>
-        /// <param name="mapper"></param>
+        /// <param name="roleService">The role service.</param>
+        /// <param name="userService">The user service.</param>
+        /// <param name="mapper">The mapper.</param>
         public RoleController(IRoleService roleService, IUserService userService, IMapper mapper)
         {
             this.roleService = roleService;
@@ -38,8 +41,8 @@ namespace API.Controllers
         /// <summary>
         ///     Get all Roles.
         /// </summary>
-        /// <returns></returns>
-        [HttpGet("Roles")]
+        /// <returns>A list of role resource results.</returns>
+        [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public async Task<IActionResult> GetAllRoles()
         {
@@ -61,7 +64,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get all Scopes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of valid scopes.</returns>
         [HttpGet("Scopes")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public IActionResult GetAllPossibleScopes()
@@ -83,7 +86,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get a Role.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The role resource result.</returns>
         [HttpGet("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public async Task<IActionResult> GetRole(int roleId)
@@ -105,7 +108,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting role.",
-                    Detail = "The roule could not be found in the database.",
+                    Detail = "The role could not be found in the database.",
                     Instance = "1739EFA6-3F31-4C88-B596-74DA403AC51B"
                 };
                 return NotFound(problem);
@@ -118,7 +121,7 @@ namespace API.Controllers
         /// Creates the role asynchronous.
         /// </summary>
         /// <param name="roleResource">The role resource.</param>
-        /// <returns></returns>
+        /// <returns>The created role resource result.</returns>
         [HttpPost]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> CreateRoleAsync([FromBody]RoleResource roleResource)
@@ -142,7 +145,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                     {
                         Title = "Failed to create a new role.",
-                        Detail = $"The specied scope: {roleScope.Scope} is not valid.",
+                        Detail = $"The specified scope: {roleScope.Scope} is not valid.",
                         Instance = "1F40D851-8A4C-41F6-917C-D876970D825F"
                     };
                     return BadRequest(problem);
@@ -155,8 +158,10 @@ namespace API.Controllers
                 roleService.Save();
                 return Created(nameof(CreateRoleAsync), mapper.Map<Role, RoleResourceResult>(role));
             }
-            catch
+            catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed to save the new role.",
@@ -172,13 +177,13 @@ namespace API.Controllers
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
         /// <param name="roleResource">The role resource.</param>
-        /// <returns></returns>
+        /// <returns>The updated role resource result.</returns>
         [HttpPut("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> UpdateRole(int roleId, RoleResource roleResource)
         {
-            Role role = await roleService.FindAsync(roleId).ConfigureAwait(false);
-            if(role == null)
+            Role currentRole = await roleService.FindAsync(roleId).ConfigureAwait(false);
+            if(currentRole == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -188,10 +193,8 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-
-            mapper.Map(roleResource, role);
-
-            foreach(RoleScope roleScope in role.Scopes)
+            mapper.Map<RoleResource, Role>(roleResource,currentRole);
+            foreach(RoleScope roleScope in currentRole.Scopes)
             {
                 if(!roleService.isValidScope(roleScope.Scope))
                 {
@@ -205,17 +208,18 @@ namespace API.Controllers
                 }
             }
 
-            roleService.Update(role);
+
+            roleService.Update(currentRole);
             roleService.Save();
 
-            return Ok(mapper.Map<Role, RoleResourceResult>(role));
+            return Ok(mapper.Map<Role, RoleResourceResult>(currentRole));
         }
 
         /// <summary>
         /// Deletes the role.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
-        /// <returns></returns>
+        /// <returns>Statuscode 200.</returns>
         [HttpDelete("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> DeleteRole(int roleId)
@@ -230,6 +234,16 @@ namespace API.Controllers
                     Instance = "CBC4C09D-DFEA-44D8-A310-2CE149BAD498"
                 };
                 return NotFound(problem);
+            }
+            if(role.Name == nameof(Defaults.Roles.Administrator) || role.Name == nameof(Defaults.Roles.RegisteredUser))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Not allowed.",
+                    Detail = "For the stability of the program we need at least the registered user role and the admin role so these are not deletable..",
+                    Instance = "CBC4C09D-DFEA-44D8-A310-2CE14123D498"
+                };
+                return Unauthorized(problem);
             }
 
             if(userService.UserWithRoleExists(role))
@@ -253,7 +267,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="roleId">The role identifier.</param>
-        /// <returns></returns>
+        /// <returns>The user resource result.</returns>
         [HttpPut("setRole")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         public async Task<IActionResult> SetRole(int userId, int roleId)

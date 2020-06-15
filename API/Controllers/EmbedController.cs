@@ -20,8 +20,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -30,7 +32,6 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
     /// Embedded iframe controller
     /// </summary>
@@ -39,7 +40,6 @@ namespace API.Controllers
     [ApiController]
     public class EmbedController : ControllerBase
     {
-
         private readonly IEmbedService embedService;
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
@@ -59,11 +59,10 @@ namespace API.Controllers
             this.userService = userService;
         }
 
-
         /// <summary>
         /// Gets all embedded projects.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of embedded projects Resource Result.</returns>
         [HttpGet]
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
@@ -81,19 +80,46 @@ namespace API.Controllers
                 return NotFound(problem);
             }
             return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
-
         }
 
         /// <summary>
         /// Gets the embedded project.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>The project resource result</returns>
         [HttpGet("{guid}")]
         public async Task<IActionResult> GetEmbeddedProject(string guid)
         {
+            if(string.IsNullOrEmpty(guid))
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "No Guid specified.",
+                     Detail = "There was no guid specified.",
+                     Instance = "DA33DBE1-55DC-4574-B65F-C7A76A7309CF"
+                 };
+                return BadRequest(problem);
+            }
 
-            EmbeddedProject embeddedProject = await embedService.FindAsync(new Guid(guid));
+            Guid validGuid;
+            try
+            {
+                validGuid = new Guid(guid);
+            }
+            catch(FormatException e)
+            {
+                Log.Logger.Error(e,"Guid format error");
+
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "The given guid was not a valid guid.",
+                     Detail = "The format of the guid was not valid, see  https://github.com/DigitalExcellence/dex-backend/wiki/Specific-error-details for a detailed explanation.",
+                     Instance = "DA33DBE1-55DC-4574-B62F-C7B76A7309CF"
+                 };
+                return NotFound(problem);
+            }
+
+            EmbeddedProject embeddedProject = await embedService.FindAsync(validGuid).ConfigureAwait(false);
             if(embeddedProject == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -112,7 +138,7 @@ namespace API.Controllers
         ///     Creates a embedded project
         /// </summary>
         /// <param name="embedResource">EmbedResource</param>
-        /// <returns></returns>
+        /// <returns>The embedded project resource result.</returns>
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateEmbeddedProject(EmbeddedProjectResource embedResource)
@@ -161,22 +187,21 @@ namespace API.Controllers
             while(true)
             {
                 guid = Guid.NewGuid();
-                if(await embedService.IsNonExistingGuidAsync(guid))
-                {
-                    break;
-                }
+                if(!await embedService.IsNonExistingGuidAsync(guid)) continue;
+                break;
             }
             embeddedProject.Guid = guid;
             embeddedProject.User = user;
-
 
             try
             {
                 embedService.Add(embeddedProject);
                 embedService.Save();
                 return Created(nameof(CreateEmbeddedProject), mapper.Map<EmbeddedProject, EmbeddedProjectResourceResult>(embeddedProject));
-            } catch
+            } catch(DbUpdateException e)
             {
+                Log.Logger.Error(e,"Database exception");
+
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Could not create the Embedded project.",
@@ -191,7 +216,7 @@ namespace API.Controllers
         /// Deletes the embeddedProject.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>Status code 200</returns>
         [HttpDelete("{guid}")]
         [Authorize]
         public async Task<IActionResult> DeleteEmbeddedProject(string guid)
@@ -208,7 +233,6 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            
             string identity = HttpContext.User.GetIdentityId(HttpContext);
             bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
 
@@ -227,7 +251,5 @@ namespace API.Controllers
             embedService.Save();
             return Ok();
         }
-
     }
-
 }
