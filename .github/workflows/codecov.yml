@@ -1,7 +1,7 @@
 name: Codecov
 on:
-  push:
-    branches: [ feature/unittest-pipeline ]
+  pull_request:
+    branches: [ develop ]
 
 jobs:
   run:
