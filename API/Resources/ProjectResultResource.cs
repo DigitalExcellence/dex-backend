@@ -51,6 +51,10 @@ namespace API.Resources
         /// </summary>
         public DateTime Updated { get; set; }
 
+        /// <summary>
+        ///     Get or Set the owner of the project
+        /// </summary>
+        public LimitedUserResourceResult User { get; set; }
     }
 
 }
