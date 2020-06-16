@@ -43,6 +43,11 @@ namespace Repositories.Base
 
         public virtual TEntity UpdateCreatedField(TEntity entity)
         {
+            if(entity == null)
+            {
+                return entity;
+
+            }
             PropertyInfo createdProperty = entity.GetType().GetProperty("Created", BindingFlags.Public | BindingFlags.Instance);
             if(createdProperty != null && createdProperty.CanWrite)
             {
@@ -53,6 +58,11 @@ namespace Repositories.Base
 
         public virtual TEntity UpdateUpdatedField(TEntity entity)
         {
+            if(entity == null)
+            {
+                return entity;
+
+            }
             PropertyInfo updatedProperty = entity.GetType().GetProperty("Updated", BindingFlags.Public | BindingFlags.Instance);
             if(updatedProperty != null && updatedProperty.CanWrite)
             {
