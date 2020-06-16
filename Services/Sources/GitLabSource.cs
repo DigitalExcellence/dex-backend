@@ -21,7 +21,6 @@ using RestSharp;
 using Services.Sources.Resources;
 using System;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Services.Sources
@@ -32,6 +31,20 @@ namespace Services.Sources
     /// <seealso cref="ISource" />
     public class GitLabSource : ISource
     {
+        /// <summary>
+        /// The rest client
+        /// </summary>
+        private readonly IRestClientFactory restClientFactory;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GitLabSource"/> class.
+        /// </summary>
+        /// <param name="restClientFactory"></param>
+        public GitLabSource(IRestClientFactory restClientFactory)
+        {
+            this.restClientFactory = restClientFactory;
+        }
+
         /// <summary>
         /// The gitlab API URL
         /// </summary>
@@ -71,6 +84,10 @@ namespace Services.Sources
             Project project = new Project();
 
             GitLabResourceResult resourceResult = FetchRepo(serializedUrl);
+            if(resourceResult == null)
+            {
+                return project;
+            }
             project.Name = resourceResult.name;
             project.ShortDescription = resourceResult.description;
             project.Uri = resourceResult.web_url;
@@ -111,18 +128,14 @@ namespace Services.Sources
              * 1.2.3.4:123/group/project
             */
             bool domainMatch = new Regex(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)(:\d+)?\/.+\/.+", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(sourceUri.AbsoluteUri).Success;
-            if(domainMatch)
-            {
-                RestClient client = new RestClient(sourceUri);
-                RestRequest request = new RestRequest(Method.GET);
-                request.AddHeader("accept", "*/*");
-                IRestResponse response = client.Execute(request);
-                return response.Content.Contains("<meta content=\"GitLab\" property=\"og:site_name\">");
-                
-            } else
-            {
-                return false;
-            }
+
+            if(!domainMatch) return false;
+
+            IRestClient client = restClientFactory.Create(sourceUri);
+            RestRequest request = new RestRequest(Method.GET);
+            request.AddHeader("accept", "*/*");
+            IRestResponse response = client.Execute(request);
+            return response.Content.Contains("<meta content=\"GitLab\" property=\"og:site_name\">");
         }
 
         /// <summary>
@@ -140,11 +153,15 @@ namespace Services.Sources
         /// </summary>
         /// <param name="sourceUri">The source URI.</param>
         /// <returns>Returns the gitlabresourceresult.</returns>
-        private GitLabResourceResult FetchRepo(Uri sourceUri)
+        public GitLabResourceResult FetchRepo(Uri sourceUri)
         {
-            RestClient client = new RestClient(sourceUri);
+            IRestClient client = restClientFactory.Create(sourceUri);
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);
+            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
+            {
+                return null;
+            }
             return JsonConvert.DeserializeObject<GitLabResourceResult>(response.Content);
         }
 
@@ -153,10 +170,11 @@ namespace Services.Sources
         /// </summary>
         /// <param name="readmeUrl">The readme URL.</param>
         /// <returns>the readme content.</returns>
-        private string FetchReadme(string readmeUrl)
+        public string FetchReadme(string readmeUrl)
         {
             readmeUrl = readmeUrl.Replace("blob", "raw");
-            RestClient client = new RestClient(readmeUrl);
+
+            IRestClient client = restClientFactory.Create(new Uri(readmeUrl));
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);
             return response.Content;

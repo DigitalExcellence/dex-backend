@@ -58,6 +58,8 @@ namespace API.Extensions
 
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
 
+            services.AddScoped<IRestClientFactory, RestClientFactory>();
+
             services.AddScoped<SourceManagerService, SourceManagerService>();
             services.AddScoped<GitHubSource, GitHubSource>();
             services.AddScoped<GitLabSource, GitLabSource>();
