@@ -35,13 +35,13 @@ namespace API.Controllers
     [ApiController]
     public class WizardController : ControllerBase
     {
-        private readonly SourceManagerService sourceManagerService;
+        private readonly ISourceManagerService sourceManagerService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
         /// <param name="sourceManagerService">The source manager service.</param>
-        public WizardController(SourceManagerService sourceManagerService)
+        public WizardController(ISourceManagerService sourceManagerService)
         {
             this.sourceManagerService = sourceManagerService;
         }

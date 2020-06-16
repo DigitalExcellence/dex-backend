@@ -20,11 +20,47 @@ using System;
 
 namespace Services.Sources
 {
+
+    public interface IGitHubSource : ISource
+    {
+
+        /// <summary>
+        /// Gets the source.
+        /// </summary>
+        /// <param name="uri">The URI of the source project.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        void GetSource(Uri uri);
+
+        /// <summary>
+        /// Gets the project information.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns>The project object.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        Project GetProjectInformation(Uri uri);
+
+        /// <summary>
+        /// Projects the URI matches.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <returns>true if the project uri matches.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        bool ProjectURIMatches(Uri uri);
+
+        /// <summary>
+        /// Searches the specified search term.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        void Search(string searchTerm);
+
+    }
+
     /// <summary>
     /// GitHubSource
     /// </summary>
     /// <seealso cref="Services.Sources.ISource" />
-    public class GitHubSource : ISource
+    public class GitHubSource : IGitHubSource
     {
         /// <summary>
         /// The rest client factory

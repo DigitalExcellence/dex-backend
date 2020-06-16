@@ -25,11 +25,54 @@ using System.Text.RegularExpressions;
 
 namespace Services.Sources
 {
+
+    public interface IGitLabSource : ISource
+    {
+
+        /// <summary>
+        /// Gets the source.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        void GetSource(Uri uri);
+
+        /// <summary>
+        /// Gets the project information.
+        /// </summary>
+        /// <param name="sourceUri">The source URI.</param>
+        /// <returns>the project object filled with information retrieved online.</returns>
+        Project GetProjectInformation(Uri sourceUri);
+
+        bool ProjectURIMatches(Uri sourceUri);
+
+        /// <summary>
+        /// Searches the specified search term.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        void Search(string searchTerm);
+
+        /// <summary>
+        /// Fetches the repo.
+        /// </summary>
+        /// <param name="sourceUri">The source URI.</param>
+        /// <returns>Returns the gitlabresourceresult.</returns>
+        GitLabResourceResult FetchRepo(Uri sourceUri);
+
+        /// <summary>
+        /// Fetches the readme.
+        /// </summary>
+        /// <param name="readmeUrl">The readme URL.</param>
+        /// <returns>the readme content.</returns>
+        string FetchReadme(string readmeUrl);
+
+    }
+
     /// <summary>
     /// GitlabSource
     /// </summary>
     /// <seealso cref="ISource" />
-    public class GitLabSource : ISource
+    public class GitLabSource : IGitLabSource
     {
         /// <summary>
         /// The rest client
