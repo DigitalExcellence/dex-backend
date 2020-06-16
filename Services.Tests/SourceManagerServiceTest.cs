@@ -21,7 +21,7 @@ namespace Services.Tests
         /// <summary>
         /// The source manager service
         /// </summary>
-        private SourceManagerService sourceManagerService;
+        private ISourceManagerService sourceManagerService;
         /// <summary>
         /// The git lab mock
         /// </summary>

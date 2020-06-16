@@ -29,7 +29,7 @@ namespace Services.Sources
         /// </summary>
         /// <param name="uri">The URI of the source project.</param>
         /// <exception cref="NotImplementedException"></exception>
-        void GetSource(Uri uri);
+        new void GetSource(Uri uri);
 
         /// <summary>
         /// Gets the project information.
@@ -37,7 +37,7 @@ namespace Services.Sources
         /// <param name="uri">The URI.</param>
         /// <returns>The project object.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        Project GetProjectInformation(Uri uri);
+        new Project GetProjectInformation(Uri uri);
 
         /// <summary>
         /// Projects the URI matches.
@@ -45,14 +45,14 @@ namespace Services.Sources
         /// <param name="uri">The URI.</param>
         /// <returns>true if the project uri matches.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        bool ProjectURIMatches(Uri uri);
+        new bool ProjectURIMatches(Uri uri);
 
         /// <summary>
         /// Searches the specified search term.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <exception cref="NotImplementedException"></exception>
-        void Search(string searchTerm);
+        new void Search(string searchTerm);
 
     }
 

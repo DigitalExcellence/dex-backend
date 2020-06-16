@@ -34,23 +34,23 @@ namespace Services.Sources
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <exception cref="NotImplementedException"></exception>
-        void GetSource(Uri uri);
+        new void GetSource(Uri uri);
 
         /// <summary>
         /// Gets the project information.
         /// </summary>
         /// <param name="sourceUri">The source URI.</param>
         /// <returns>the project object filled with information retrieved online.</returns>
-        Project GetProjectInformation(Uri sourceUri);
+        new Project GetProjectInformation(Uri sourceUri);
 
-        bool ProjectURIMatches(Uri sourceUri);
+        new bool ProjectURIMatches(Uri sourceUri);
 
         /// <summary>
         /// Searches the specified search term.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <exception cref="NotImplementedException"></exception>
-        void Search(string searchTerm);
+        new void Search(string searchTerm);
 
         /// <summary>
         /// Fetches the repo.
