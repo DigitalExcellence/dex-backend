@@ -61,14 +61,31 @@ namespace Repositories
 
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        /// Redact user email from the Project if isPublic setting is set to false
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns>
+        /// Project with possibly redacted email depending on setting
+        /// </returns>
         private Project RedactUser(Project project)
         {
+            if(project == null) return null;
+
             if(project?.User?.IsPublic == false)
             {
                 project.User.Email = Defaults.Privacy.RedactedEmail;
             }
             return project;
         }
+        /// <summary>
+        /// Redact user email from the Projects in the list.
+        /// Email will only be redacted if isPublic setting is set to false.
+        /// </summary>
+        /// <param name="projects">The projects.</param>
+        /// <returns>
+        /// List of Projects with possibly redacted email depending on setting
+        /// </returns>
         private List<Project> RedactUser(List<Project> projects)
         {
             for(int i = 0; i < projects.Count; i++)
@@ -78,6 +95,13 @@ namespace Repositories
             return projects;
         }
 
+        /// <summary>
+        /// Find the project async by project id
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Project with possibly redacted email
+        /// </returns>
         public override async Task<Project> FindAsync(int id)
         {
             Project project = await GetDbSet<Project>()
@@ -88,6 +112,18 @@ namespace Repositories
             return RedactUser(project);
         }
 
+        /// <summary>
+        /// Apply query parameters and find project based on these filters
+        /// </summary>
+        /// <param name="queryable">The linq queryable object.</param>
+        /// <param name="skip">The amount of objects to skip.</param>
+        /// <param name="take">The amount of objects to take.</param>
+        /// <param name="orderBy">The order by expression.</param>
+        /// <param name="orderByAsc">if set to <c>true</c> [order by asc].</param>
+        /// <param name="highlighted">Boolean if the project should show highlighted.</param>
+        /// <returns>
+        /// IQueryable Projects based on the given filters
+        /// </returns>
         private IQueryable<Project> ApplyFilters(
             IQueryable<Project> queryable,
             int? skip,
@@ -221,6 +257,14 @@ namespace Repositories
             return await queryable.CountAsync();
         }
 
+        /// <summary>
+        /// Retrieve project with user and collaborators async.
+        /// Project will be redacted if user has that setting configured.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>
+        /// Possibly redacted Project object with user and collaborators
+        /// </returns>
         public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
             Project project = await GetDbSet<Project>()

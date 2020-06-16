@@ -31,7 +31,7 @@ namespace API.Extensions
         ///     Adds the policies.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <returns></returns>
+        /// <returns>The services.</returns>
         public static IServiceCollection AddPolicies(this IServiceCollection services)
         {
             services.Configure<AuthorizationOptions>(o =>

@@ -19,7 +19,7 @@ namespace Repositories.Tests.Base
     /// </summary>
     /// <typeparam name="TDomain">Modelclass which is used to test</typeparam>
     /// <typeparam name="TRepository">Repository which should be tested</typeparam>
-    public abstract class RepositoryTest<TDomain, TRepository> 
+    public abstract class RepositoryTest<TDomain, TRepository>
         where TDomain : class
         where TRepository : class, IRepository<TDomain>
     {
@@ -40,10 +40,10 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        // Add the given entity to the database
-        // EF Core will give the entity automatically an id
-        // Check which id the entity has and use this id to retrieve it from the database again
-        // Check if all the properties of the retrieved entity match to the properties of the original entity
+        /// Add the given entity to the database
+        /// EF Core will give the entity automatically an id
+        /// Check which id the entity has and use this id to retrieve it from the database again
+        /// Check if all the properties of the retrieved entity match to the properties of the original entity
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -53,7 +53,16 @@ namespace Repositories.Tests.Base
             await DbContext.SaveChangesAsync();
 
             Type type = entity.GetType();
-            int id = (int)type.GetProperty("Id").GetValue(entity);
+            PropertyInfo property = type.GetProperty("Id");
+            int id;
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            }
+            else
+            {
+                id = (int)property.GetValue(entity);
+            }
 
             TDomain retrieved = await Repository.FindAsync(id);
 
@@ -89,7 +98,16 @@ namespace Repositories.Tests.Base
             Repository.Add(entity);
             await DbContext.SaveChangesAsync();
 
-            int id = (int)entity.GetType().GetProperty("Id").GetValue(entity);
+            PropertyInfo property = entity.GetType().GetProperty("Id");
+            int id;
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                id = (int) property.GetValue(entity);
+            }
+
             Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
         }
 
@@ -122,7 +140,15 @@ namespace Repositories.Tests.Base
 
             foreach (TDomain entity in entities)
             {
-                int id = (int)type.GetProperty("Id").GetValue(entity);
+                PropertyInfo property = type.GetProperty("Id");
+                int id;
+                if(property == null)
+                {
+                    throw new Exception("Id property does not exist");
+                } else
+                {
+                    id = (int) property.GetValue(entity);
+                }
                 Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
             }
         }
@@ -142,10 +168,7 @@ namespace Repositories.Tests.Base
         /// </summary>
         public virtual void AddRangeTest_BadFlow_Null()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                Repository.AddRange(null);
-            });
+            Assert.Throws<ArgumentNullException>(() => Repository.AddRange(null));
         }
 
         /// <summary>
@@ -164,7 +187,15 @@ namespace Repositories.Tests.Base
             await DbContext.SaveChangesAsync();
 
             Type type = entity.GetType();
-            int id = (int)type.GetProperty("Id").GetValue(entity);
+            PropertyInfo property = type.GetProperty("Id");
+            int id;
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                id = (int) property.GetValue(entity);
+            }
 
             Repository.Update(entity);
             await DbContext.SaveChangesAsync();
@@ -184,7 +215,15 @@ namespace Repositories.Tests.Base
             Repository.Add(entity);
             await DbContext.SaveChangesAsync();
 
-            entity.GetType().GetProperty("Id").SetValue(updateEntity, -1);
+            Type type = entity.GetType();
+            PropertyInfo property = type.GetProperty("Id");
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                property.SetValue(updateEntity, -1);
+            }
 
             Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
             {
@@ -220,8 +259,17 @@ namespace Repositories.Tests.Base
         {
             Repository.Add(entity);
             await DbContext.SaveChangesAsync();
-            int id = (int) entity.GetType().GetProperty("Id").GetValue(entity);
 
+            Type type = entity.GetType();
+            PropertyInfo property = type.GetProperty("Id");
+            int id;
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                id = (int) property.GetValue(entity);
+            }
             await Repository.RemoveAsync(id);
             await DbContext.SaveChangesAsync();
 
@@ -239,10 +287,7 @@ namespace Repositories.Tests.Base
             Repository.Add(entity);
             await DbContext.SaveChangesAsync();
 
-            Assert.ThrowsAsync<KeyNotFoundException>(async () =>
-            {
-                await Repository.RemoveAsync(-1);
-            });
+            Assert.ThrowsAsync<KeyNotFoundException>(async () => await Repository.RemoveAsync(-1));
         }
 
         /// <summary>
@@ -267,10 +312,8 @@ namespace Repositories.Tests.Base
         /// <returns></returns>
         public virtual async Task GetAllAsyncTest_Badflow_Empty()
         {
-            List<TDomain> entities = new List<TDomain>();
-            await DbContext.AddRangeAsync(entities);
-            await DbContext.SaveChangesAsync();
-            
+            // No seeding needed.
+
             List<TDomain> retrievedEntities = (List<TDomain>)await Repository.GetAll();
             Assert.AreEqual(0, retrievedEntities.Count);
         }

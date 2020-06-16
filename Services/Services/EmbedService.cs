@@ -31,18 +31,18 @@ namespace Services.Services
         /// Finds the asynchronous.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>The found embeddedProject.</returns>
         Task<EmbeddedProject> FindAsync(Guid guid);
         /// <summary>
         /// Gets the embedded projects asynchronous.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of all the embeddedProjects.</returns>
         Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync();
         /// <summary>
         /// Determines whether [is non existing unique identifier] [the specified unique identifier].
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>true if there are no embedded projects with the given guid.</returns>
         Task<bool> IsNonExistingGuidAsync(Guid guid);
     }
     /// <summary>
@@ -68,7 +68,7 @@ namespace Services.Services
         /// Finds the asynchronous.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>The found embeddedProject.</returns>
         public async Task<EmbeddedProject> FindAsync(Guid guid)
         {
             return await Repository.GetEmbeddedProjectAsync(guid);
@@ -76,7 +76,7 @@ namespace Services.Services
         /// <summary>
         /// Gets the embedded projects asynchronous.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of all embeddedProjects.</returns>
         public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync()
         {
             return await Repository.GetEmbeddedProjectsAsync();
@@ -85,7 +85,7 @@ namespace Services.Services
         /// Determines whether [is non existing unique identifier] [the specified unique identifier].
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns></returns>
+        /// <returns>true if there are no embedded projects with the given guid.</returns>
         public async Task<bool> IsNonExistingGuidAsync(Guid guid)
         {
             return await Repository.IsNonExistingGuidAsync(guid);

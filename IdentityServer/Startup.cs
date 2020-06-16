@@ -24,6 +24,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 
@@ -38,10 +39,10 @@ namespace IdentityServer
     public class Startup
     {
         /// <summary>
-        ///     Startup constructor
+        /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
-        /// <param name="configuration"></param>
-        /// <param name="environment"></param>
+        /// <param name="configuration">The configuration from appsettings.</param>
+        /// <param name="environment">The environment.</param>
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Config = configuration.GetSection("App")
@@ -69,9 +70,9 @@ namespace IdentityServer
         public IWebHostEnvironment Environment { get; }
 
         /// <summary>
-        ///     Configure services for the identity server
+        /// Configures the services.
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
@@ -86,6 +87,10 @@ namespace IdentityServer
                                                              true;
                                                          options.Events.RaiseFailureEvents = true;
                                                          options.Events.RaiseSuccessEvents = true;
+                                                         if(Environment.IsDevelopment())
+                                                         {
+                                                             options.IssuerUri = Config.Self.IssuerUri;
+                                                         }
                                                      })
                                                      .AddTestUsers(TestUsers.Users);
 
@@ -148,13 +153,24 @@ namespace IdentityServer
                     })
                     .AddCookie();
 
-            //TODO: Have some sort of certificate on the production servers
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
-
             if(Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+                certStore.Open(OpenFlags.ReadOnly);
+                X509Certificate2Collection certCollection = certStore.Certificates.Find(
+                    X509FindType.FindByIssuerName,
+                    "Let's Encrypt Authority X3",
+                    false
+                );
+                if(certCollection.Count > 0)
+                {
+                    X509Certificate2 certificate = certCollection[0];
+                    builder.AddSigningCredential(certificate);
+                }
             }
 
             // TODO tighten cors
@@ -171,9 +187,9 @@ namespace IdentityServer
         }
 
         /// <summary>
-        ///     Configure the application
+        /// Configures the specified application.
         /// </summary>
-        /// <param name="app"></param>
+        /// <param name="app">The application builder instance.</param>
         public void Configure(IApplicationBuilder app)
         {
             if(Environment.IsDevelopment())

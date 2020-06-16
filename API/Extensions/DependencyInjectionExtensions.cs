@@ -34,7 +34,7 @@ namespace API.Extensions
         ///     Adds all the services and repositories.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <returns></returns>
+        /// <returns>The services.</returns>
         public static IServiceCollection AddServicesAndRepositories(this IServiceCollection services)
         {
             services.AddScoped<DbContext, ApplicationDbContext>();
@@ -57,6 +57,8 @@ namespace API.Extensions
             services.AddScoped<IRoleRepository, RoleRepository>();
 
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
+
+            services.AddScoped<IRestClientFactory, RestClientFactory>();
 
             services.AddScoped<SourceManagerService, SourceManagerService>();
             services.AddScoped<GitHubSource, GitHubSource>();
