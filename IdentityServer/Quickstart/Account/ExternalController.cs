@@ -26,8 +26,10 @@ using IdentityServer4.Stores;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -57,13 +59,12 @@ namespace IdentityServer
             IEventService events,
             ILogger<ExternalController> logger,
             Config config,
-            TestUserStore users = null)
+            TestUserStore users,
+            IWebHostEnvironment env)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            // this.users = users ?? new TestUserStore(TestUsers.Users);
-            this.users = users;
-
+            this.users = users ?? new TestUserStore(TestUsers.GetTestUsers(env.IsProduction()));
             this.interaction = interaction;
             this.clientStore = clientStore;
             this.logger = logger;
