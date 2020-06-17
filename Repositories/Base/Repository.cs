@@ -90,7 +90,6 @@ namespace Repositories.Base
             List<TEntity> entityList = entities.ToList();
             for(int i = 0; i < entityList.Count; i++)
             {
-
                 entityList[i] = UpdateCreatedField(entityList[i]);
                 entityList[i] = UpdateUpdatedField(entityList[i]);
             }
