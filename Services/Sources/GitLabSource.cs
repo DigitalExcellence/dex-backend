@@ -28,30 +28,6 @@ namespace Services.Sources
 
     public interface IGitLabSource : ISource
     {
-
-        /// <summary>
-        /// Gets the source.
-        /// </summary>
-        /// <param name="uri">The URI.</param>
-        /// <exception cref="NotImplementedException"></exception>
-        new void GetSource(Uri uri);
-
-        /// <summary>
-        /// Gets the project information.
-        /// </summary>
-        /// <param name="sourceUri">The source URI.</param>
-        /// <returns>the project object filled with information retrieved online.</returns>
-        new Project GetProjectInformation(Uri sourceUri);
-
-        new bool ProjectURIMatches(Uri sourceUri);
-
-        /// <summary>
-        /// Searches the specified search term.
-        /// </summary>
-        /// <param name="searchTerm">The search term.</param>
-        /// <exception cref="NotImplementedException"></exception>
-        new void Search(string searchTerm);
-
         /// <summary>
         /// Fetches the repo.
         /// </summary>
@@ -65,7 +41,6 @@ namespace Services.Sources
         /// <param name="readmeUrl">The readme URL.</param>
         /// <returns>the readme content.</returns>
         string FetchReadme(string readmeUrl);
-
     }
 
     /// <summary>
