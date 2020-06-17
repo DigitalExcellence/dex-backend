@@ -133,18 +133,6 @@ namespace Repositories
             bool? highlighted
             )
         {
-            if(orderBy != null)
-            {
-                if(orderByAsc)
-                {
-                    queryable = queryable.OrderBy(orderBy);
-                } else
-                {
-                    queryable = queryable.OrderByDescending(orderBy);
-                }
-            }
-            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
-            if(take.HasValue) queryable = queryable.Take(take.Value);
             if(highlighted.HasValue)
             {
                 IEnumerable<int> highlightedQueryable = DbContext.Set<Highlight>()
@@ -162,6 +150,18 @@ namespace Repositories
                     queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
                 }
             }
+            if(orderBy != null)
+            {
+                if(orderByAsc)
+                {
+                    queryable = queryable.OrderBy(orderBy);
+                } else
+                {
+                    queryable = queryable.OrderByDescending(orderBy);
+                }
+            }
+            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
+            if(take.HasValue) queryable = queryable.Take(take.Value);
             return queryable;
         }
 
