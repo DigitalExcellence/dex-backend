@@ -63,8 +63,8 @@ namespace IdentityServer
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            this.users = users ?? new TestUserStore(TestUsers.Users);
-
+            // this.users = users ?? new TestUserStore(TestUsers.Users);
+            this.users = users;
             this.interaction = interaction;
             this.clientStore = clientStore;
             this.schemeProvider = schemeProvider;

@@ -17,6 +17,7 @@
 
 using Configuration;
 using IdentityServer.Configuration;
+using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -79,6 +81,7 @@ namespace IdentityServer
             services.AddOidcStateDataFormatterCache();
 
             services.AddControllersWithViews();
+            List<TestUser> testUsers = TestUsers.GetTestUsers(Environment.IsProduction());
 
             IIdentityServerBuilder builder = services.AddIdentityServer(options =>
                                                      {
@@ -92,13 +95,13 @@ namespace IdentityServer
                                                              options.IssuerUri = Config.Self.IssuerUri;
                                                          }
                                                      })
-                                                     .AddTestUsers(TestUsers.Users);
+                                                     .AddTestUsers(testUsers);
 
             // in-memory, code config
             builder.AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources());
             builder.AddInMemoryApiResources(IdentityConfig.Apis);
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
-            builder.AddTestUsers(TestUsers.Users);
+            builder.AddTestUsers(testUsers);
 
             services.AddSingleton(Config);
 
