@@ -60,9 +60,9 @@ namespace API.Extensions
 
             services.AddScoped<IRestClientFactory, RestClientFactory>();
 
-            services.AddScoped<SourceManagerService, SourceManagerService>();
-            services.AddScoped<GitHubSource, GitHubSource>();
-            services.AddScoped<GitLabSource, GitLabSource>();
+            services.AddScoped<ISourceManagerService, SourceManagerService>();
+            services.AddScoped<IGitHubSource, GitHubSource>();
+            services.AddScoped<IGitLabSource, GitLabSource>();
 
             return services;
         }

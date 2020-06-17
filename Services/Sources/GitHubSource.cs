@@ -20,11 +20,14 @@ using System;
 
 namespace Services.Sources
 {
+
+    public interface IGitHubSource : ISource {}
+
     /// <summary>
     /// GitHubSource
     /// </summary>
     /// <seealso cref="Services.Sources.ISource" />
-    public class GitHubSource : ISource
+    public class GitHubSource : IGitHubSource
     {
         /// <summary>
         /// The rest client factory

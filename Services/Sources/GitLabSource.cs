@@ -25,11 +25,29 @@ using System.Text.RegularExpressions;
 
 namespace Services.Sources
 {
+
+    public interface IGitLabSource : ISource
+    {
+        /// <summary>
+        /// Fetches the repo.
+        /// </summary>
+        /// <param name="sourceUri">The source URI.</param>
+        /// <returns>Returns the gitlabresourceresult.</returns>
+        GitLabResourceResult FetchRepo(Uri sourceUri);
+
+        /// <summary>
+        /// Fetches the readme.
+        /// </summary>
+        /// <param name="readmeUrl">The readme URL.</param>
+        /// <returns>the readme content.</returns>
+        string FetchReadme(string readmeUrl);
+    }
+
     /// <summary>
     /// GitlabSource
     /// </summary>
     /// <seealso cref="ISource" />
-    public class GitLabSource : ISource
+    public class GitLabSource : IGitLabSource
     {
         /// <summary>
         /// The rest client
