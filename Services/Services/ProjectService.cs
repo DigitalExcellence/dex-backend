@@ -62,9 +62,9 @@ namespace Services.Services
 
         protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
 
-
         public override void Add(Project entity)
         {
+            /// Sanitze description before exceuting default behaviour.
             HtmlSanitizer sanitizer = new HtmlSanitizer();
             entity.Description = sanitizer.Sanitize(entity.Description);
             base.Add(entity);
@@ -72,6 +72,7 @@ namespace Services.Services
 
         public override void Update(Project entity)
         {
+            /// Sanitze description before exceuting default behaviour.
             HtmlSanitizer sanitizer = new HtmlSanitizer();
             entity.Description = sanitizer.Sanitize(entity.Description);
             base.Update(entity);
