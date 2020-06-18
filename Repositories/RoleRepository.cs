@@ -18,7 +18,9 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,11 +37,19 @@ namespace Repositories
 
         public override void Update(Role role)
         {
+            if(role == null)
+            {
+                throw new ArgumentNullException("Role argument is null");
+            }
             Role existingRole = GetDbSet<Role>()
                                  .Where(p => p.Id == role.Id)
                                  .Include(p => p.Scopes)
                                  .SingleOrDefault();
-            if(existingRole == null) return;
+
+            if(existingRole == null)
+            {
+                throw new DbUpdateConcurrencyException("Cannot update non existing object..");
+            };
 
             DbContext.Entry(existingRole).CurrentValues.SetValues(role);
 
@@ -96,7 +106,16 @@ namespace Repositories
                 .Include(r => r.Scopes)
                 .SingleOrDefaultAsync().ConfigureAwait(false);
 
-            GetDbSet<RoleScope>().RemoveRange(roleToDelete.Scopes);
+            if(roleToDelete == null)
+            {
+                throw new KeyNotFoundException($"Id: {id} not found");
+            }
+
+            if(roleToDelete.Scopes != null)
+            {
+                GetDbSet<RoleScope>().RemoveRange(roleToDelete.Scopes);
+            }
+
             GetDbSet<Role>().Remove(roleToDelete);
         }
     }
