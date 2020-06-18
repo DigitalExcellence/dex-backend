@@ -33,11 +33,7 @@ namespace Services.Tests
         {
             // Mock the repository
             RepositoryMock = new Mock<IProjectRepository>();
-
-            // Create the service with reflection
-            Type serviceType = typeof(SearchService);
-            ConstructorInfo serviceCtor = serviceType.GetConstructor(new[] { typeof(IProjectRepository) });
-            Service = (ISearchService) serviceCtor.Invoke(new object[] { RepositoryMock.Object });
+            Service = new SearchService(RepositoryMock.Object);
         }
 
         /// <summary>
