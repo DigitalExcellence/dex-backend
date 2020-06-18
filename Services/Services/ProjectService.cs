@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 *
 * This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Ganss.XSS;
 using Models;
 using Repositories;
 using Services.Base;
@@ -60,6 +61,21 @@ namespace Services.Services
         public ProjectService(IProjectRepository repository) : base(repository) { }
 
         protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
+
+
+        public override void Add(Project entity)
+        {
+            HtmlSanitizer sanitizer = new HtmlSanitizer();
+            entity.Description = sanitizer.Sanitize(entity.Description);
+            base.Add(entity);
+        }
+
+        public override void Update(Project entity)
+        {
+            HtmlSanitizer sanitizer = new HtmlSanitizer();
+            entity.Description = sanitizer.Sanitize(entity.Description);
+            base.Update(entity);
+        }
 
         /// <summary>
         /// Get a list of all the projects
