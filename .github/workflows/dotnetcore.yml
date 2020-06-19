@@ -27,9 +27,9 @@ jobs:
       with:
         buildCommand: dotnet build .
         testCommand: dotnet test .
-        projectKey: a-project-key
-        projectName: a-project-name
-        sonarOrganisation: an-org
+        projectKey: dex-backend
+        projectName: DeX Backend
+        sonarOrganisation: digitalexcellence
         beginArguments: >
             /d:sonar.verbose="true"
             /d:sonar.cs.opencover.reportsPaths='"/path/to/coverage.xml","/path/to/coverage.2.xml"'
@@ -37,4 +37,4 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+
