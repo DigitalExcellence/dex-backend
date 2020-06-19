@@ -16,15 +16,22 @@
 */
 
 using Configuration;
+using Data;
 using IdentityServer.Configuration;
+using IdentityServer.Quickstart;
+using IdentityServer4.Services;
 using IdentityServer4.Test;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Repositories;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -104,6 +111,19 @@ namespace IdentityServer
             builder.AddTestUsers(testUsers);
 
             services.AddSingleton(Config);
+
+
+            services.AddDbContext<IdentityDbContext>(o =>
+            {
+                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                               sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
+            });
+
+            services.AddTransient<IIdentityUserRepository, IIdentityUserRepository>();
+            services.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
+            services.AddTransient<IProfileService, ProfileService>();
+
+
 
             // sets the authentication schema.
             services.AddAuthentication(options =>
