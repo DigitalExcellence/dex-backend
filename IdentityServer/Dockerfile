@@ -6,6 +6,8 @@ COPY . ./
 
 ENV App__Self__JwtAuthority = ''
 
+ENV App__Self__PublicOrigin = ''
+
 ENV App__Api__DeXApiUrl = ''
 
 ENV App__Api__ClientId = ''

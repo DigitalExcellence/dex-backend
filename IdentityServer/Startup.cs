@@ -94,6 +94,10 @@ namespace IdentityServer
                                                          {
                                                              options.IssuerUri = Config.Self.IssuerUri;
                                                          }
+                                                         else
+                                                         {
+                                                             options.PublicOrigin = Config.Self.PublicOrigin;
+                                                         }
                                                      })
                                                      .AddTestUsers(testUsers);
 
