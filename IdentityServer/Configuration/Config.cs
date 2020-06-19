@@ -111,6 +111,14 @@ namespace Configuration
             /// </value>
             [Required]
             public string IssuerUri { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the public origin.
+            /// </summary>
+            /// <value>
+            ///     The public origin.
+            /// </value>
+            public string PublicOrigin { get; set; }
         }
 
         /// <summary>
