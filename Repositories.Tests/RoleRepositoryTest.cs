@@ -50,6 +50,21 @@ namespace Repositories.Tests
             Assert.IsEmpty(roles);
         }
 
+        /// <summary>
+        /// Test if role with scope relations are retrieved correctly when a role doesnt have scopes..
+        /// </summary>
+        /// <param name="role">The role which is used as data to test.</param>
+        [Test]
+        public async Task GetAllAsync_no_Scopes([RoleDataSource] Role role)
+        {
+            role.Scopes = new List<RoleScope>();
+            DbContext.Add(role);
+            await DbContext.SaveChangesAsync();
+
+            List<Role> retrievedRoles = await Repository.GetAllAsync();
+            Assert.AreEqual(new List<Role>(){role},retrievedRoles);
+        }
+
         ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]
         public override Task AddAsyncTest_GoodFlow([RoleDataSource]Role entity)
