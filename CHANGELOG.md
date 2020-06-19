@@ -37,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unit testing for the GitLab source - [#181](https://github.com/DigitalExcellence/dex-backend/issues/181)
 - Added unit testing for the GitHub source - [#182](https://github.com/DigitalExcellence/dex-backend/issues/182)
 - Added unit testing for the source manager - [#173](https://github.com/DigitalExcellence/dex-backend/issues/173)
+- Added unit testing for the role service & repository - [#172](https://github.com/DigitalExcellence/dex-backend/issues/172)
+- Added unit testing for the Search service - [#183](https://github.com/DigitalExcellence/dex-backend/issues/183)
+- Added sanitization for project Description - [#198](https://github.com/DigitalExcellence/dex-backend/issues/198)
+- Added redirection to the frontend after logout from the identity server - [#216](https://github.com/DigitalExcellence/dex-backend/issues/216)
 
 ### Changed
 
@@ -70,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed role update endpoint returning internal server error - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
 - Fixed issue where the user was not returned on the /api/Project endpoint (which returns all the projects) - [#169](https://github.com/DigitalExcellence/dex-backend/issues/169)
 - Fixed issue where the projects endpoint returned unexpected results when using filters - [#185](https://github.com/DigitalExcellence/dex-backend/issues/185)
-
+- Fixed issue where most fields in the open-id configuration of our environments used http instead of https - [#210](https://github.com/DigitalExcellence/dex-backend/issues/210)
+- Fixed issue where the project update endpoint would update the project user - [#213](https://github.com/DigitalExcellence/dex-backend/issues/213)
 
 ### Security

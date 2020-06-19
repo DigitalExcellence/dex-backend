@@ -237,5 +237,63 @@ namespace Services.Tests
         {
             base.Update(entity);
         }
+
+        /// <summary>
+        ///  Test wheter the save method removes unsanitary strings from the description.
+        /// </summary>
+        [Test]
+        public void SaveSanitizationInvalidDescription([ProjectDataSource] Project project)
+        {
+            string descriptionToSanitize = "<script>alert(1)</script>";
+            string descriptionAfterSanitization = "";
+
+            project.Description = descriptionToSanitize;
+            Service.Add(project);
+
+            Assert.AreEqual(descriptionAfterSanitization, project.Description);
+        }
+
+        /// <summary>
+        ///  Test wheter the save method does not remove sanitary strings from the description.
+        /// </summary>
+        [Test]
+        public void SaveSanitizationValidDescription([ProjectDataSource] Project project)
+        {
+            string descriptionToSanitize = "<p>test</p>";
+
+            project.Description = descriptionToSanitize;
+            Service.Add(project);
+
+            Assert.AreEqual(descriptionToSanitize, project.Description);
+        }
+
+        /// <summary>
+        ///  Test wheter the update method removes unsanitary strings from the description.
+        /// </summary>
+        [Test]
+        public void UpdateSanitizationInvalidDescription([ProjectDataSource] Project project)
+        {
+            string descriptionToSanitize = "<script>alert(1)</script>";
+            string descriptionAfterSanitization = "";
+
+            project.Description = descriptionToSanitize;
+            Service.Update(project);
+
+            Assert.AreEqual(descriptionAfterSanitization, project.Description);
+        }
+
+        /// <summary>
+        ///  Test wheter the update method does not remove sanitary strings from the description.
+        /// </summary>
+        [Test]
+        public void UpdateSanitizationValidDescription([ProjectDataSource] Project project)
+        {
+            string descriptionToSanitize = "<p>test</p>";
+
+            project.Description = descriptionToSanitize;
+            Service.Update(project);
+
+            Assert.AreEqual(descriptionToSanitize, project.Description);
+        }
     }
 }
