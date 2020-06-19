@@ -21,7 +21,6 @@ using IdentityServer.Configuration;
 using IdentityServer.Quickstart;
 using IdentityServer4.Services;
 using IdentityServer4.Test;
-using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,8 +30,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
+using Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -84,46 +85,39 @@ namespace IdentityServer
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
-            services.AddOidcStateDataFormatterCache();
-
-            services.AddControllersWithViews();
-            List<TestUser> testUsers = TestUsers.GetTestUsers(Environment.IsProduction());
-
-            IIdentityServerBuilder builder = services.AddIdentityServer(options =>
-                                                     {
-                                                         options.Events.RaiseErrorEvents = true;
-                                                         options.Events.RaiseInformationEvents =
-                                                             true;
-                                                         options.Events.RaiseFailureEvents = true;
-                                                         options.Events.RaiseSuccessEvents = true;
-                                                         if(Environment.IsDevelopment())
-                                                         {
-                                                             options.IssuerUri = Config.Self.IssuerUri;
-                                                         }
-                                                     })
-                                                     .AddTestUsers(testUsers);
-
-            // in-memory, code config
-            builder.AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources());
-            builder.AddInMemoryApiResources(IdentityConfig.Apis);
-            builder.AddInMemoryClients(IdentityConfig.Clients(Config));
-            builder.AddTestUsers(testUsers);
-
-            services.AddSingleton(Config);
-
-
             services.AddDbContext<IdentityDbContext>(o =>
             {
                 o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
 
-            services.AddTransient<IIdentityUserRepository, IIdentityUserRepository>();
-            services.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
-            services.AddTransient<IProfileService, ProfileService>();
+            services.AddScoped<DbContext, IdentityDbContext>();
+            services.AddScoped<IIdentityUserService, IdentityUserService>();
+            services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();
 
+            // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
+            services.AddOidcStateDataFormatterCache();
 
+            services.AddControllersWithViews();
+
+            IIdentityServerBuilder builder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents =
+                    true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                if(Environment.IsDevelopment())
+                {
+                    options.IssuerUri = Config.Self.IssuerUri;
+                }
+            });
+
+            builder.AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources());
+            builder.AddInMemoryApiResources(IdentityConfig.Apis);
+            builder.AddInMemoryClients(IdentityConfig.Clients(Config));
+            builder.Services.AddTransient<IProfileService, ProfileService>();
+            services.AddSingleton(Config);
 
             // sets the authentication schema.
             services.AddAuthentication(options =>
@@ -213,8 +207,10 @@ namespace IdentityServer
         /// Configures the specified application.
         /// </summary>
         /// <param name="app">The application builder instance.</param>
-        public void Configure(IApplicationBuilder app)
+        /// <param name="env">The environmental variable.</param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            UpdateDatabase(app, env);
             if(Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -226,6 +222,25 @@ namespace IdentityServer
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+        }
+
+        /// <summary>
+        /// Updates the database.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="env">The environmental variable.</param>
+        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            using IServiceScope serviceScope = app.ApplicationServices
+                                                  .GetRequiredService<IServiceScopeFactory>()
+                                                  .CreateScope();
+            using IdentityDbContext context = serviceScope.ServiceProvider.GetService<IdentityDbContext>();
+            context.Database.Migrate();
+            if(!context.IdentityUser.Any())
+            {
+                context.IdentityUser.AddRange(TestUsers.GetDefaultIdentityUsers(env.IsProduction()));
+                context.SaveChanges();
+            }
         }
     }
 }

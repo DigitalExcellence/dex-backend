@@ -5,9 +5,7 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
-
-
-    <ItemGroup>
+ <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.2" />
@@ -24,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
+    <Folder Include="Configurations\IdentityMigrations\" />
   </ItemGroup>
 
 </Project>

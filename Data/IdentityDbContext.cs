@@ -30,7 +30,7 @@ namespace Data
     public class IdentityDbContext : DbContext
     {
 
-        public IdentityDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public IdentityDbContext(DbContextOptions<IdentityDbContext> options) : base(options) { }
 
         /// <summary>
         /// Gets or sets the user.
