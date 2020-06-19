@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed role update endpoint returning internal server error - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
 - Fixed issue where the user was not returned on the /api/Project endpoint (which returns all the projects) - [#169](https://github.com/DigitalExcellence/dex-backend/issues/169)
 - Fixed issue where the projects endpoint returned unexpected results when using filters - [#185](https://github.com/DigitalExcellence/dex-backend/issues/185)
+- Fixed issue where most fields in the open-id configuration of our environments used http instead of https - [#210](https://github.com/DigitalExcellence/dex-backend/issues/210)
 
 
 ### Security
