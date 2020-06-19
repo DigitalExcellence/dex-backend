@@ -285,13 +285,16 @@ namespace Repositories
             entity = UpdateUpdatedField(entity);
 
             DbSet.Attach(entity);
+            if(entity.User != null)
+            {
+                DbContext.Entry(entity.User)
+                         .Property(x => x.Email)
+                         .IsModified = false;
 
-            DbContext.Entry(entity.User)
-                     .Property(x => x.Email)
-                     .IsModified = false;
+                DbContext.Entry(entity.User)
+                         .State = EntityState.Unchanged;
 
-            DbContext.Entry(entity.User)
-                     .State = EntityState.Unchanged;
+            }
 
             DbSet.Update(entity);
         }
