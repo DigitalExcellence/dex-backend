@@ -40,15 +40,6 @@ namespace Data
         /// </value>
         public DbSet<IdentityUser> IdentityUser { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            //modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
-            // modelBuilder.ApplyConfiguration(new UserConfiguration());
-            // modelBuilder.ApplyConfiguration(new ProjectConfiguration());
-        }
-
     }
 
 }

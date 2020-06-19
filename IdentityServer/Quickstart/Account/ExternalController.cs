@@ -88,14 +88,14 @@ namespace IdentityServer
             }
             // start challenge and roundtrip the return URL and scheme 
             AuthenticationProperties props = new AuthenticationProperties
-                                             {
-                                                 RedirectUri = Url.Action(nameof(Callback)),
-                                                 Items =
+            {
+                RedirectUri = Url.Action(nameof(Callback)),
+                Items =
                                                  {
                                                      {"returnUrl", returnUrl},
                                                      {"scheme", provider}
                                                  }
-                                             };
+            };
 
             HttpContext.Response.Cookies.Append("returnUrl", returnUrl);
 
@@ -127,7 +127,7 @@ namespace IdentityServer
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "authorization_code");
             request.AddParameter("code", code);
-            request.AddParameter("redirect_uri",config.FfhictOIDC.RedirectUri);
+            request.AddParameter("redirect_uri", config.FfhictOIDC.RedirectUri);
             request.AddParameter("client_id", config.FfhictOIDC.ClientId);
             request.AddParameter("client_secret", config.FfhictOIDC.ClientSecret);
             IRestResponse response = client.Execute(request);
@@ -168,23 +168,23 @@ namespace IdentityServer
                 RestRequest informationRequest = new RestRequest(Method.GET);
                 informationRequest.AddHeader("Authorization", $"Bearer {fhictToken.AccessToken}");
                 IRestResponse informationResponse = informationClient.Execute(informationRequest);
-                ExternalUserInfo userinfo =  JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
+                ExternalUserInfo userinfo = JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
 
                 List<Claim> claimsList = claims.ToList();
                 claimsList.Add(new Claim("email", userinfo.PreferredUsername));
                 claimsList.Add(new Claim("idp", idp));
                 claimsList.Add(new Claim("name", userinfo.Name));
                 IdentityUser toInsertuser = new IdentityUser()
-                                            {
-                                                ProviderId = provider,
-                                                ExternalSubjectId = providerUserId,
-                                                Email = userinfo.Email,
-                                                Firstname = userinfo.GivenName,
-                                                Lastname = userinfo.FamilyName,
-                                                Name = userinfo.Name,
-                                                Username = userinfo.PreferredUsername,
-                                                ExternalProfileUrl = userinfo.Profile
-                                            };
+                {
+                    ProviderId = provider,
+                    ExternalSubjectId = providerUserId,
+                    Email = userinfo.Email,
+                    Firstname = userinfo.GivenName,
+                    Lastname = userinfo.FamilyName,
+                    Name = userinfo.Name,
+                    Username = userinfo.PreferredUsername,
+                    ExternalProfileUrl = userinfo.Profile
+                };
 
                 // simply auto-provisions new external user
                 user = await identityUserService.AutoProvisionUser(toInsertuser);
@@ -274,11 +274,11 @@ namespace IdentityServer
 
             // issue authentication cookie for user
             IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
-                                        {
-                                            DisplayName = user.Username,
-                                            IdentityProvider = provider,
-                                            AdditionalClaims = additionalLocalClaims
-                                        };
+            {
+                DisplayName = user.Username,
+                IdentityProvider = provider,
+                AdditionalClaims = additionalLocalClaims
+            };
 
             await HttpContext.SignInAsync(isuser, localSignInProps).ConfigureAwait(false);
 
