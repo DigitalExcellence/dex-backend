@@ -35,6 +35,12 @@ namespace Repositories
     {
         public RoleRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        /// Updates the specified role.
+        /// </summary>
+        /// <param name="role">The role.</param>
+        /// <exception cref="ArgumentNullException">Role argument is null</exception>
+        /// <exception cref="DbUpdateConcurrencyException">Cannot update non existing object..</exception>
         public override void Update(Role role)
         {
             if(role == null)
@@ -84,6 +90,12 @@ namespace Repositories
                 DbContext.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// Find role by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>The retrieved role.</returns>
         public override Task<Role> FindAsync(int id)
         {
             return GetDbSet<Role>()
@@ -92,6 +104,10 @@ namespace Repositories
                    .SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Gets all the roles with scopes.
+        /// </summary>
+        /// <returns>A list of all roles and scopes.</returns>
         public Task<List<Role>> GetAllAsync()
         {
             return GetDbSet<Role>()
@@ -99,6 +115,11 @@ namespace Repositories
                    .ToListAsync();
         }
 
+        /// <summary>
+        /// Remove the role with the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <exception cref="KeyNotFoundException">Id: {id} not found</exception>
         public override async Task RemoveAsync(int id)
         {
             Role roleToDelete = await GetDbSet<Role>()
