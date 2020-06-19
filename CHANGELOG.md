@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed endpoint to return all roles from /api/role/roles to /api/role - [#168](https://github.com/DigitalExcellence/dex-backend/issues/168)
 - Improved logging on exceptions and removed some possible null reference exception flows - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
 - Changed how much information about a user is being returned when requesting project for instance - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
+- The project update doesnt update the project user anymore - [#213](https://github.com/DigitalExcellence/dex-backend/issues/213)
 
 ### Deprecated
 
