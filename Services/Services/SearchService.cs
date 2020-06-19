@@ -111,7 +111,7 @@ namespace Services.Services
         /// <returns>The number of projects that match the search query</returns>
         public virtual async Task<int> SearchInternalProjectsCount(string query, ProjectFilterParams projectFilterParams)
         {
-            return await projectRepository.SearchCountAsync(query);
+            return await projectRepository.SearchCountAsync(query, projectFilterParams.Highlighted);
         }
 
         /// <summary>
