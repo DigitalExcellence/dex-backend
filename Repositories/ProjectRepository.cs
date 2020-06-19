@@ -276,6 +276,29 @@ namespace Repositories
             return RedactUser(project);
         }
 
+        /// <summary>
+        /// Updates the specified entity excluding the user object.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        public override void Update(Project entity)
+        {
+            entity = UpdateUpdatedField(entity);
+
+            DbSet.Attach(entity);
+            if(entity.User != null)
+            {
+                DbContext.Entry(entity.User)
+                         .Property(x => x.Email)
+                         .IsModified = false;
+
+                DbContext.Entry(entity.User)
+                         .State = EntityState.Unchanged;
+
+            }
+
+            DbSet.Update(entity);
+        }
+
     }
 
 }
