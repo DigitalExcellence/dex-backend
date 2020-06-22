@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## Release v.0.6-beta - 22-06-2020
+
+### Added
+
 - Added this very changelog - [#71](https://github.com/DigitalExcellence/dex-backend/issues/71)
 - Setup basic unit test framework to ensure that the core functionality of the application works - [#65](https://github.com/DigitalExcellence/dex-backend/issues/65)
 - Added example unittests for other contributors [#74](https://github.com/DigitalExcellence/dex-backend/issues/74)
@@ -53,8 +67,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved logging on exceptions and removed some possible null reference exception flows - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
 - Changed how much information about a user is being returned when requesting project for instance - [#178](https://github.com/DigitalExcellence/dex-backend/issues/178)
 
-### Deprecated
-
 ### Removed
 
 - Removed user from search result resource - [#129](https://github.com/DigitalExcellence/dex-backend/issues/129)
@@ -75,5 +87,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed issue where the projects endpoint returned unexpected results when using filters - [#185](https://github.com/DigitalExcellence/dex-backend/issues/185)
 - Fixed issue where most fields in the open-id configuration of our environments used http instead of https - [#210](https://github.com/DigitalExcellence/dex-backend/issues/210)
 - Fixed issue where the project update endpoint would update the project user - [#213](https://github.com/DigitalExcellence/dex-backend/issues/213)
-
-### Security
