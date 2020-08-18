@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . ./
 
+ENV ConnectionStrings__DefaultConnection = ''
+
 ENV App__Self__JwtAuthority = ''
 
 ENV App__Self__PublicOrigin = ''

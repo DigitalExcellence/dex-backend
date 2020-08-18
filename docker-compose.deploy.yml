@@ -34,6 +34,7 @@ services:
       context: .
       dockerfile: IdentityServer/Dockerfile
     environment:
+      - ConnectionStrings__DefaultConnection=${IDENTITY_CONNECTION_STRING}
       - App__Self__JwtAuthority=${JWT_AUTHORITY}
       - App__Api__DeXApiUrl=${API_URL}
       - App__Api__ClientId=${API_CLIENT_ID}

@@ -42,14 +42,6 @@ namespace Configuration
         public ApiConfig Api { get; set; }
 
         /// <summary>
-        ///     Gets or sets the fhict.
-        /// </summary>
-        /// <value>
-        ///     The fhict.
-        /// </value>
-        public FhictConfig Fhict { get; set; }
-
-        /// <summary>
         ///     Gets or sets the frontend
         /// </summary>
         /// <value>
@@ -73,7 +65,6 @@ namespace Configuration
         {
             Validator.ValidateObject(Self, new ValidationContext(Self), true);
             Validator.ValidateObject(Api, new ValidationContext(Api), true);
-            Validator.ValidateObject(Fhict, new ValidationContext(Fhict), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
             Validator.ValidateObject(FfhictOIDC, new ValidationContext(FfhictOIDC), true);
         }
@@ -155,59 +146,6 @@ namespace Configuration
             public string ClientSecret { get; set; }
         }
 
-        /// <summary>
-        /// </summary>
-        public class FhictConfig
-        {
-
-            /// <summary>
-            ///     Gets or sets the fhict identity URL.
-            /// </summary>
-            /// <value>
-            ///     The fhict identity URL.
-            /// </value>
-            [Required]
-            [Url]
-            public string FhictIdentityUrl { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict client identifier.
-            /// </summary>
-            /// <value>
-            ///     The fhict client identifier.
-            /// </value>
-            [Required]
-            public string FhictClientId { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict client secret.
-            /// </summary>
-            /// <value>
-            ///     The fhict client secret.
-            /// </value>
-            [Required]
-            public string FhictClientSecret { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict scopes.
-            /// </summary>
-            /// <value>
-            ///     The fhict scopes.
-            /// </value>
-            [Required]
-            public string FhictScopes { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict redirect URI.
-            /// </summary>
-            /// <value>
-            ///     The fhict redirect URI.
-            /// </value>
-            [Required]
-            [Url]
-            public string FhictRedirectUri { get; set; }
-
-        }
         /// <summary>
         /// </summary>
         public class FrontendConfig

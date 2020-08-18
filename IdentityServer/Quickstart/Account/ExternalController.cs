@@ -29,10 +29,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Models;
 using Newtonsoft.Json;
 using RestSharp;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -51,20 +52,18 @@ namespace IdentityServer
         private readonly IEventService events;
         private readonly IIdentityServerInteractionService interaction;
         private readonly ILogger<ExternalController> logger;
-        private readonly TestUserStore users;
         private readonly Config config;
+        private readonly IIdentityUserService identityUserService;
+
         public ExternalController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IEventService events,
             ILogger<ExternalController> logger,
             Config config,
-            IWebHostEnvironment env,
-            TestUserStore users = null)
+            IIdentityUserService identityUserService)
         {
-            // if the TestUserStore is not in DI, then we'll just use the global users collection
-            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            this.users = users ?? new TestUserStore(TestUsers.GetTestUsers(env.IsProduction()));
+            this.identityUserService = identityUserService;
             this.interaction = interaction;
             this.clientStore = clientStore;
             this.logger = logger;
@@ -89,14 +88,14 @@ namespace IdentityServer
             }
             // start challenge and roundtrip the return URL and scheme 
             AuthenticationProperties props = new AuthenticationProperties
-                                             {
-                                                 RedirectUri = Url.Action(nameof(Callback)),
-                                                 Items =
+            {
+                RedirectUri = Url.Action(nameof(Callback)),
+                Items =
                                                  {
                                                      {"returnUrl", returnUrl},
                                                      {"scheme", provider}
                                                  }
-                                             };
+            };
 
             HttpContext.Response.Cookies.Append("returnUrl", returnUrl);
 
@@ -128,7 +127,7 @@ namespace IdentityServer
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "authorization_code");
             request.AddParameter("code", code);
-            request.AddParameter("redirect_uri",config.FfhictOIDC.RedirectUri);
+            request.AddParameter("redirect_uri", config.FfhictOIDC.RedirectUri);
             request.AddParameter("client_id", config.FfhictOIDC.ClientId);
             request.AddParameter("client_secret", config.FfhictOIDC.ClientSecret);
             IRestResponse response = client.Execute(request);
@@ -159,7 +158,7 @@ namespace IdentityServer
             };
 
             // lookup our user and external provider info
-            (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) = FindUserFromExternalProvider(result);
+            (IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims) = await FindUserFromExternalProvider(result);
 
             if(user == null)
             {
@@ -169,15 +168,26 @@ namespace IdentityServer
                 RestRequest informationRequest = new RestRequest(Method.GET);
                 informationRequest.AddHeader("Authorization", $"Bearer {fhictToken.AccessToken}");
                 IRestResponse informationResponse = informationClient.Execute(informationRequest);
-                ExternalUserInfo userinfo =  JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
+                ExternalUserInfo userinfo = JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
 
                 List<Claim> claimsList = claims.ToList();
                 claimsList.Add(new Claim("email", userinfo.PreferredUsername));
                 claimsList.Add(new Claim("idp", idp));
                 claimsList.Add(new Claim("name", userinfo.Name));
+                IdentityUser toInsertuser = new IdentityUser()
+                {
+                    ProviderId = provider,
+                    ExternalSubjectId = providerUserId,
+                    Email = userinfo.Email,
+                    Firstname = userinfo.GivenName,
+                    Lastname = userinfo.FamilyName,
+                    Name = userinfo.Name,
+                    Username = userinfo.PreferredUsername,
+                    ExternalProfileUrl = userinfo.Profile
+                };
 
                 // simply auto-provisions new external user
-                user = AutoProvisionUser(provider, providerUserId, claimsList);
+                user = await identityUserService.AutoProvisionUser(toInsertuser);
             }
 
             // this allows us to collect any additional claims or properties
@@ -190,7 +200,7 @@ namespace IdentityServer
             // issue authentication cookie for user
             IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
             {
-                DisplayName = user.Username,
+                DisplayName = user.Name,
                 IdentityProvider = provider,
                 AdditionalClaims = additionalLocalClaims
             };
@@ -208,7 +218,6 @@ namespace IdentityServer
                                                                user.Username,
                                                                true,
                                                                context?.ClientId)).ConfigureAwait(false);
-
             if(context != null)
             {
                 if(await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
@@ -245,15 +254,15 @@ namespace IdentityServer
             }
 
             // lookup our user and external provider info
-            (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) =
-                FindUserFromExternalProvider(null);
+            (IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims) =
+                await FindUserFromExternalProvider(null);
 
             if(user == null)
             {
                 // this might be where you might initiate a custom workflow for user registration
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
-                user = AutoProvisionUser(provider, providerUserId, claims);
+                user = await identityUserService.AutoProvisionUser(provider, providerUserId, claims.ToList());
             }
 
             // this allows us to collect any additional claims or properties
@@ -265,11 +274,11 @@ namespace IdentityServer
 
             // issue authentication cookie for user
             IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
-                                        {
-                                            DisplayName = user.Username,
-                                            IdentityProvider = provider,
-                                            AdditionalClaims = additionalLocalClaims
-                                        };
+            {
+                DisplayName = user.Username,
+                IdentityProvider = provider,
+                AdditionalClaims = additionalLocalClaims
+            };
 
             await HttpContext.SignInAsync(isuser, localSignInProps).ConfigureAwait(false);
 
@@ -306,7 +315,7 @@ namespace IdentityServer
         /// <param name="result">The ExternalResult information.</param>
         /// <returns>The user from the identity server, the external provider uri, The external user id, the claims</returns>
         /// <exception cref="System.Exception">Unknown userid</exception>
-        private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(ExternalResult result)
+        private async Task<(IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims)> FindUserFromExternalProvider(ExternalResult result)
         {
             // try to determine the unique id of the external user (issued by the provider)
             // the most common claim type for that are the sub claim and the NameIdentifier
@@ -323,22 +332,9 @@ namespace IdentityServer
             string providerUserId = userIdClaim.Value;
 
             // find external user
-            TestUser user = users.FindByExternalProvider(provider, providerUserId);
+            IdentityUser user = await identityUserService.FindByExternalProvider(provider, providerUserId);
 
             return (user, provider, providerUserId, claims);
-        }
-
-        /// <summary>
-        /// Automatic user provisioning.
-        /// </summary>
-        /// <param name="provider">The external provider name.</param>
-        /// <param name="providerUserId">The provider user identifier.</param>
-        /// <param name="claims">The claims.</param>
-        /// <returns>The provisioned user</returns>
-        private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
-        {
-            TestUser user = users.AutoProvisionUser(provider, providerUserId, claims.ToList());
-            return user;
         }
 
         /// <summary>
