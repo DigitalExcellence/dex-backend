@@ -30,6 +30,12 @@ namespace API.Resources
         public int ProjectId { get; set; }
 
         /// <summary>
+        ///     This gets or sets the description of the project that this highlight is associated with
+        /// </summary>
+        public string Description { get; set; }
+
+
+        /// <summary>
         ///     This gets or sets the start date that the highlight should start
         /// </summary>
         public DateTime? StartDate { get; set; }
