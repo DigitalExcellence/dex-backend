@@ -27,7 +27,8 @@ namespace Repositories
 
     public interface IFileRepository : IRepository<File>
     {
-        Task<List<File>> getFileByFileIDAsync(int fileId);
+        Task<List<File>> GetFileByFileIDAsync(int fileId);
+        
 
     }
 
@@ -36,10 +37,9 @@ namespace Repositories
 
         public FileRepository(DbContext dbContext) : base(dbContext) { }
 
-        public Task<List<File>> getFileByFileIDAsync(int fileId)
+        Task<List<File>> IFileRepository.GetFileByFileIDAsync(int fileId)
         {
             throw new NotImplementedException();
         }
-
     }
 }
