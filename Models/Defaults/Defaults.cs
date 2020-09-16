@@ -1,42 +1,99 @@
-﻿using System;
-using System.Collections.Generic;
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+* 
+* This program is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU Lesser General Public License as published 
+* by the Free Software Foundation version 3 of the License.
+* 
+* This program is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU Lesser General Public License for more details.
+* 
+* You can find a copy of the GNU Lesser General Public License 
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using System.ComponentModel;
-using System.Text;
 
 namespace Models.Defaults
 {
+
     public static class Defaults
     {
-        public static class Roles
+        /// <summary>
+        /// This class contains default values for a user profile when the isPublic flag of set profile is set to false
+        /// </summary>
+        public static class Privacy
         {
-            public const string BackendApplication = "BackendApplication";
-            public const string Student = "Student";
-            public const string StudentAndBackendApps = BackendApplication + ", " + Student;
+            /// <summary>
+            /// The email string when user flag IsPublic is set to false.
+            /// </summary>
+            public const string RedactedEmail = "<Redacted>";
+
         }
 
-        public static class Claims
+        public static class Roles
         {
-            public const string StudentPcn = "studentpcn";
-            public const string Classes = "classes";
-            public const string IsStudentRegistered = "is_student_registered";
+
+            public const string BackendApplication = "BackendApplication";
+            public const string Student = "Student";
+            public const string Teacher = "Teacher";
+
+            public const string RegisteredUser = "RegisteredUser";
+            public const string PrUser = "PrUser";
+            public const string Administrator = "Administrator";
+
         }
+
+        public static class Claims { }
 
         public static class ScopeCategories
         {
-            [Description("This scope category gives read access to the Student Data namespace")]
-            public const string StudentDataRead = Scopes.StudentRead;
 
-            [Description("This scope category gives access to the Student Data namespace")]
-            public const string StudentDataWrite = Scopes.StudentWrite;
+            [Description("This scope category gives read access to the entire API namespace")]
+            public const string ApiDataRead = Scopes.ProjectRead + " " + Scopes.UserRead;
+
+            [Description("This scope category gives write access to the entire API namespace")]
+            public const string ApiDataWrite = Scopes.ProjectWrite + " " + Scopes.UserWrite;
+
         }
 
         public static class Scopes
         {
-            [Description("This scope gives read access to the student namespace")]
-            public const string StudentRead = "student:read";
 
-            [Description("This scope gives write access to the student namespace")]
-            public const string StudentWrite = "student:write";
+            [Description("This scope gives read access to the project namespace")]
+            public const string ProjectRead = "project:read";
+
+            [Description("This scope gives write access to the project namespace")]
+            public const string ProjectWrite = "project:write";
+
+            [Description("This scope gives read access to the user namespace")]
+            public const string UserRead = "user:read";
+
+            [Description("This scope gives write access to the user namespace")]
+            public const string UserWrite = "user:write";
+
+            [Description("This scope gives read access to the highlight namespace")]
+            public const string HighlightRead = "highlight:read";
+
+            [Description("This scope gives write access to the highlight namespace")]
+            public const string HighlightWrite = "highlight:write";
+
+            [Description("This scope gives read access to the Role namespace")]
+            public const string RoleRead = "role:read";
+
+            [Description("This scope gives write access to the Role namespace")]
+            public const string RoleWrite = "role:write";
+
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedWrite = "embed:write";
+
+            [Description("This scope gives write access to the embed namespace")]
+            public const string EmbedRead = "embed:read";
         }
+
     }
+
 }

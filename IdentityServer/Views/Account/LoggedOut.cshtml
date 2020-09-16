@@ -1,0 +1,50 @@
+﻿<!--
+Digital Excellence Copyright (C) 2020 Brend Smits
+ 
+This program is free software: you can redistribute it and/or modify 
+it under the terms of the GNU Lesser General Public License as published 
+by the Free Software Foundation version 3 of the License.
+ 
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty 
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU Lesser General Public License for more details.
+ 
+You can find a copy of the GNU Lesser General Public License 
+along with this program, in the LICENSE.md file in the root project directory.
+If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+-->
+@model LoggedOutViewModel
+
+@{
+    // set this so the layout rendering sees an anonymous user
+    ViewData["signed-out"] = true;
+}
+
+<div class="page-header logged-out">
+    <h1>
+        Logout
+        <small>You are now logged out</small>
+    </h1>
+
+    @if(Model.PostLogoutRedirectUri != null)
+    {
+        <div>
+            Click <a class="PostLogoutRedirectUri" href="@Model.PostLogoutRedirectUri">here</a> to return to the
+            <span>@Model.ClientName</span> application.
+        </div>
+    }
+
+    @if(Model.SignOutIframeUrl != null)
+    {
+        <iframe width="0" height="0" class="signout" src="@Model.SignOutIframeUrl"></iframe>
+    }
+</div>
+
+@section scripts
+{
+    @if(Model.AutomaticRedirectAfterSignOut)
+    {
+        <script src="~/js/signout-redirect.js"></script>
+    }
+}

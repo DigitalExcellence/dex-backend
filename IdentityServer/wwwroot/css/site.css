@@ -1,0 +1,85 @@
+﻿body { margin-top: 65px; }
+
+.navbar-header {
+    position: relative;
+    top: -4px;
+}
+
+.navbar-brand > .icon-banner {
+    display: inline;
+    position: relative;
+    top: -2px;
+}
+
+.icon {
+    position: relative;
+    top: -10px;
+}
+
+.logged-out iframe {
+    display: none;
+    height: 0;
+    width: 0;
+}
+
+.page-consent .client-logo { float: left; }
+
+.page-consent .client-logo img {
+    height: 80px;
+    width: 80px;
+}
+
+.page-consent .consent-buttons { margin-top: 25px; }
+
+.page-consent .consent-form .consent-scopecheck {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.page-consent .consent-form .consent-description { margin-left: 25px; }
+
+.page-consent .consent-form .consent-description label { font-weight: normal; }
+
+.page-consent .consent-form .consent-remember { padding-left: 16px; }
+
+.grants .page-header { margin-bottom: 10px; }
+
+.grants .grant {
+    border-bottom: 1px solid lightgray;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.grants .grant img {
+    height: 100px;
+    width: 100px;
+}
+
+.grants .grant .clientname {
+    font-size: 140%;
+    font-weight: bold;
+}
+
+.grants .grant .granttype {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.grants .grant .created {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.grants .grant .expires {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.grants .grant li {
+    display: inline;
+    list-style-type: none;
+}
+
+.grants .grant li:after { content: ', '; }
+
+.grants .grant li:last-child:after { content: ''; }
