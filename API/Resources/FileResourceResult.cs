@@ -17,28 +17,36 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Models
+namespace API.Resources
 {
-    public class File
+    /// <summary>
+    /// File resource resource result
+    /// </summary>
+    /// <seealso cref="API.Resources.FileResourceResult" />
+    public class FileResourceResult
     {
-
-        public File(string path, DateTime uploadDateTime, string name, int uploaderId)
-        {
-            Path = path;
-            UploadDateTime = uploadDateTime;
-            Name = name;
-            UploaderId = uploaderId;
-        }
-
+        /// <summary>
+        /// Id of File
+        /// </summary>
         public int Id { get; set; }
-        [Required]
+        /// <summary>
+        /// Path of file
+        /// </summary>
         public string Path { get; set; }
+        /// <summary>
+        /// Upload Date and time
+        /// </summary>
         public DateTime UploadDateTime { get; set; }
+        /// <summary>
+        /// File name
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        ///  Id of uploader
+        /// </summary>
         public int UploaderId { get; set; }
-        
     }
 }

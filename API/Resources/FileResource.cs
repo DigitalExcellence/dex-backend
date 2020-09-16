@@ -15,30 +15,28 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Models
+namespace API.Resources
 {
-    public class File
+
+    /// <summary>
+    /// Embedded project resource result
+    /// </summary>
+    /// <seealso cref="API.Resources.FileResource" />
+    public class FileResource
     {
-
-        public File(string path, DateTime uploadDateTime, string name, int uploaderId)
-        {
-            Path = path;
-            UploadDateTime = uploadDateTime;
-            Name = name;
-            UploaderId = uploaderId;
-        }
-
-        public int Id { get; set; }
-        [Required]
-        public string Path { get; set; }
-        public DateTime UploadDateTime { get; set; }
+        /// <summary>
+        /// IFormFile 
+        /// </summary>
+        public IFormFile File { get; set; }
         public string Name { get; set; }
+        public DateTime UploadDateTime { get; set; }
         public int UploaderId { get; set; }
-        
+
     }
 }

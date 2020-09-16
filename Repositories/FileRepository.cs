@@ -21,13 +21,16 @@ using Repositories.Base;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Repositories
 {
 
     public interface IFileRepository : IRepository<File>
     {
-        Task<List<File>> GetFileByFileIDAsync(int fileId);
+
+        Task<List<File>> GetFilesAsync();
+        Task<List<File>> GetFileByFileIdAsync(int fileId);
         
 
     }
@@ -37,9 +40,18 @@ namespace Repositories
 
         public FileRepository(DbContext dbContext) : base(dbContext) { }
 
-        Task<List<File>> IFileRepository.GetFileByFileIDAsync(int fileId)
+        public async Task<List<File>> GetFileByFileIdAsync(int fileId)
         {
-            throw new NotImplementedException();
+            return await GetDbSet<File>()
+                         .Where(s => s.Id == fileId)
+                         .ToListAsync();
+        }
+
+        public async Task<List<File>> GetFilesAsync()
+        {
+            return await GetDbSet<File>()
+                                .ToListAsync();
+            
         }
     }
 }

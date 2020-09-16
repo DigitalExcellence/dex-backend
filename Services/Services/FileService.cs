@@ -28,7 +28,10 @@ namespace Services.Services
     public interface IFileService : IService<File>
     {
 
-        Task<List<File>> getFileByFileIDAsync(int fileId);
+        Task<List<File>> GetFileByFileIdAsync(int fileId);
+        Task<List<File>> GetFilesAsync();
+
+        void UploadSingleFile(File entity);
 
     }
 
@@ -38,12 +41,34 @@ namespace Services.Services
 
         protected new IFileRepository Repository => (IFileRepository) base.Repository;
 
-
-        //  Todo: Make Async
-        public Task<List<File>> getFileByFileIDAsync(int fileId)
+        public async Task<List<File>> GetFileByFileIdAsync(int fileId)
         {
-            throw new NotImplementedException();
+            return await Repository.GetFileByFileIdAsync(fileId).ConfigureAwait(false);
         }
+
+        public async Task<List<File>> GetFilesAsync()
+        {
+            return await Repository.GetFilesAsync();
+        }
+
+        public override void Add(File entity)
+        {
+            base.Add(entity);
+        }
+
+        public override void Update(File entity)
+        {
+            base.Update(entity);
+        }
+
+        public void UploadSingleFile(File entity)
+        {
+            Repository.Add(entity);
+            Repository.Save();
+        }
+
+
+
     }
 
 }

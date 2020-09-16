@@ -15,13 +15,27 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
+using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Models;
+using RestSharp;
 using Services.Services;
+using System.Collections;
+using System.Collections.Specialized;
+using System.IO;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
+using File = Models.File;
 
 namespace API.Controllers
 {
@@ -51,5 +65,64 @@ namespace API.Controllers
             this.projectService = projectService;
             this.userService = userService;
         }
+
+        /// <summary>
+        /// Get all files
+        /// </summary>
+        /// <returns>A response and list of files.</returns>
+        [HttpGet]
+        public async Task<IActionResult> GetFilesAsync()
+        {
+            IEnumerable<File> files = await fileService.GetFilesAsync();
+            if(!files.Any())
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting files.",
+                                             Detail = "The database does not contain any files.",
+                                             Instance = "47525791-57C4-4DE2-91B1-90086D893112"
+                };
+                return NotFound(problem);
+            }
+
+            return Ok(mapper.Map<IEnumerable<File>, IEnumerable<FileResourceResult>>(files));
+        }
+
+        /// <summary>
+        /// Uploads a single file
+        /// </summary>
+        /// <param name="fileResource"></param>
+        /// <returns>HTTP Response</returns>
+        [HttpPost]
+        public async Task<IActionResult> UploadSingleFile()
+        {
+            IFormFile fileItem = HttpContext.Request.Form.Files["File"];
+            string name = HttpContext.Request.Form["Name"];
+
+            if(fileItem == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed posting file.",
+                                             Detail = "File is null.",
+                                             Instance = "ACD46F17-A239-4353-92A5-0B81AA0A96E9"
+                                         };
+                return NotFound(problem);
+            }
+
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "FileFolder",
+                                    name);
+            await using(Stream stream = new FileStream(path, FileMode.Create))
+            {
+                await fileItem.CopyToAsync(stream);
+            }
+
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            File file = new File(path, DateTime.Now, name, user.Id);
+            fileService.UploadSingleFile(file);
+
+            return Ok(file);
+        }
+
     }
 }
