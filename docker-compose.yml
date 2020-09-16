@@ -15,7 +15,10 @@ services:
     build:
       context: .
       dockerfile: IdentityServer/Dockerfile.dev
+    depends_on:
+      - db
     environment: 
+      - ConnectionStrings__DefaultConnection=Server=172.16.238.2;Database=master;User=sa;Password=Dexcelence!1;
       - App__Self__IssuerUri=https://172.16.238.3:5004
       - App__Api__DeXApiUrl=https://172.16.238.4
       - ASPNETCORE_URLS=https://+;
