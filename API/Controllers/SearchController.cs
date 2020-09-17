@@ -22,19 +22,19 @@ using Models;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
-    ///     The controller that handles search requests
+    /// The controller that handles search requests
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class SearchController : ControllerBase
     {
-
         private readonly IMapper mapper;
 
         private readonly ISearchService searchService;
@@ -51,12 +51,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Search for projects
+        /// Search for projects
         /// </summary>
         /// <param name="query">The search query</param>
         /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
         /// <returns>Search results</returns>
+        /// <response code="200">Returns search results</response>
+        /// <response code="400">If search request is invalid</response>
         [HttpGet("internal/{query}")]
+        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> SearchInternalProjects(string query,
                                                                 [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {

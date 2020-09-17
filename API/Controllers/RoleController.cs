@@ -10,15 +10,17 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System.Net;
 using static Models.Defaults.Defaults;
 
 namespace API.Controllers
 {
     /// <summary>
-    ///     This controller handles the CRUD roles
+    /// This controller handles the CRUD roles
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class RoleController : ControllerBase
     {
         private readonly IMapper mapper;
@@ -39,11 +41,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get all Roles.
+        /// Get all Roles.
         /// </summary>
         /// <returns>A list of role resource results.</returns>
+        /// <response code="200">Returns a list of role resource results</response>
+        /// <response code="404">If no roles are found</response>
         [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
+        [ProducesResponseType(typeof(IEnumerable<RoleResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetAllRoles()
         {
             List<Role> roles = await roleService.GetAllAsync().ConfigureAwait(false);
@@ -62,11 +68,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get all Scopes.
+        /// Get all Scopes.
         /// </summary>
         /// <returns>A list of valid scopes.</returns>
+        /// <response code="200">Returns a list of scopes</response>
+        /// <response code="404">If no scopes are found</response>
         [HttpGet("Scopes")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
+        [ProducesResponseType(typeof(List<string>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public IActionResult GetAllPossibleScopes()
         {
             List<string> scopeList = roleService.GetValidScopes();
@@ -84,11 +94,17 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get a Role.
+        /// Get a Role.
         /// </summary>
         /// <returns>The role resource result.</returns>
+        /// <response code="200">Returns the role resource result with the specified id</response>
+        /// <response code="400">If the specified role id is invalid</response>
+        /// <response code="404">If no role is found with the specified role id</response>
         [HttpGet("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
+        [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetRole(int roleId)
         {
             if(roleId < 0)
@@ -122,8 +138,12 @@ namespace API.Controllers
         /// </summary>
         /// <param name="roleResource">The role resource.</param>
         /// <returns>The created role resource result.</returns>
+        /// <response code="201">Returns the created role resource result</response>
+        /// <response code="400">If unable to create role</response>
         [HttpPost]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
+        [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateRoleAsync([FromBody]RoleResource roleResource)
         {
             if(roleResource == null)
@@ -178,8 +198,14 @@ namespace API.Controllers
         /// <param name="roleId">The role identifier.</param>
         /// <param name="roleResource">The role resource.</param>
         /// <returns>The updated role resource result.</returns>
+        /// <response code="200">Returns the updated role resource result</response>
+        /// <response code="400">If a role scope is not valid</response>
+        /// <response code="404">If the role with the specified id could not be found</response>
         [HttpPut("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
+        [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateRole(int roleId, RoleResource roleResource)
         {
             Role currentRole = await roleService.FindAsync(roleId).ConfigureAwait(false);
@@ -220,8 +246,17 @@ namespace API.Controllers
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
         /// <returns>Statuscode 200.</returns>
+        /// <response code="200">Returns status code 200. Role with specified id is deleted</response>
+        /// <response code="400">If the role is assigned to a user</response>
+        /// <response code="401">If the user is not allowed to delete roles</response>
+        /// <response code="404">If the role with the specified id could not be found</response>
         [HttpDelete("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteRole(int roleId)
         {
             Role role = await roleService.FindAsync(roleId).ConfigureAwait(false);
@@ -268,8 +303,12 @@ namespace API.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <param name="roleId">The role identifier.</param>
         /// <returns>The user resource result.</returns>
+        /// <response code="200">Sets specified role for specified user</response>
+        /// <response code="404">If specified role or user could not be found</response>
         [HttpPut("setRole")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
+        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> SetRole(int userId, int roleId)
         {
             Role role = await roleService.FindAsync(roleId).ConfigureAwait(false);

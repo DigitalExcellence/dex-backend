@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -28,6 +28,7 @@ using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -38,6 +39,7 @@ namespace API.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class EmbedController : ControllerBase
     {
         private readonly IEmbedService embedService;
@@ -63,7 +65,11 @@ namespace API.Controllers
         /// Gets all embedded projects.
         /// </summary>
         /// <returns>A list of embedded projects Resource Result.</returns>
+        /// <response code="200">Returns a list of embedded project resource results</response>
+        /// <response code="404">If there are no embedded project resource results</response>
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<EmbeddedProjectResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
@@ -87,7 +93,13 @@ namespace API.Controllers
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>The project resource result</returns>
+        /// <response code="200">Returns project resource results with the specified guid</response>
+        /// <response code="400">If the guid is not specified</response>
+        /// <response code="404">If no project could be found with the specified guid</response>
         [HttpGet("{guid}")]
+        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetEmbeddedProject(string guid)
         {
             if(string.IsNullOrEmpty(guid))
@@ -135,12 +147,18 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Creates a embedded project
+        /// Creates a embedded project
         /// </summary>
         /// <param name="embedResource">EmbedResource</param>
         /// <returns>The embedded project resource result.</returns>
+        /// <response code="201">Returns the created embedded project resource result</response>
+        /// <response code="400">Unable to create the embedded project</response>
+        /// <response code="401">If the user is not allowed to create an embed project.</response>
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> CreateEmbeddedProject(EmbeddedProjectResource embedResource)
         {
             if(embedResource == null)
@@ -217,8 +235,14 @@ namespace API.Controllers
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>Status code 200</returns>
+        /// <response code="200">Returns status code 200. The embedded project is deleted</response>
+        /// <response code="401">If the user is not allowed to delete the embedded project</response>
+        /// <response code="404">If the embedded project could not be found with the specified guid</response>
         [HttpDelete("{guid}")]
         [Authorize]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> DeleteEmbeddedProject(string guid)
         {
             EmbeddedProject embeddedProject = await embedService.FindAsync(new Guid(guid));
