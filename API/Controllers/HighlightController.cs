@@ -161,9 +161,12 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+
             Highlight highlight = mapper.Map<HighlightResource, Highlight>(highlightResource);
+
             try
             {
+                
                 highlightService.Add(highlight);
                 highlightService.Save();
                 return Created(nameof(CreateHighlight), mapper.Map<Highlight, HighlightResourceResult>(highlight));
@@ -179,6 +182,7 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+            
         }
 
         /// <summary>
