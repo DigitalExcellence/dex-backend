@@ -51,6 +51,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IFileUploader fileUploader;
         /// <summary>
         /// Initializes a new instance of the <see cref="FileController"/> class.
         /// </summary>
@@ -58,12 +59,14 @@ namespace API.Controllers
         /// <param name="mapper">The mapper.</param>
         /// <param name="projectService">The Project service</param>
         /// <param name="userService">The User service</param>
-        public FileController(IFileService fileService, IMapper mapper, IProjectService projectService, IUserService userService)
+        /// /// <param name="fileUploader">The file uploader extension</param>
+        public FileController(IFileService fileService, IMapper mapper, IProjectService projectService, IFileUploader fileUploader, IUserService userService)
         {
             this.fileService = fileService;
             this.mapper = mapper;
             this.projectService = projectService;
             this.userService = userService;
+            this.fileUploader = fileUploader;
         }
 
         /// <summary>
@@ -91,13 +94,11 @@ namespace API.Controllers
         /// <summary>
         /// Uploads a single file
         /// </summary>
-        /// <param name="fileResource"></param>
         /// <returns>HTTP Response</returns>
         [HttpPost]
         public async Task<IActionResult> UploadSingleFile()
         {
             IFormFile fileItem = HttpContext.Request.Form.Files["File"];
-            string name = HttpContext.Request.Form["Name"];
 
             if(fileItem == null)
             {
@@ -110,15 +111,10 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "FileFolder",
-                                    name);
-            await using(Stream stream = new FileStream(path, FileMode.Create))
-            {
-                await fileItem.CopyToAsync(stream);
-            }
+            string path = await fileUploader.UploadSingleFile(fileItem);
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            File file = new File(path, DateTime.Now, name, user.Id);
+            File file = new File(path, fileItem.Name, user.Id);
             fileService.UploadSingleFile(file);
 
             return Ok(file);

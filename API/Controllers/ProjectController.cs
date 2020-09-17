@@ -19,6 +19,7 @@ using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -41,17 +42,23 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IFileService fileService;
+        private IFileUploader fileUploader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class.
         /// </summary>
         /// <param name="projectService">The project service.</param>
         /// <param name="userService">The user service.</param>
+        /// <param name="fileService">The fileservice.</param>
+        /// <param name="fileUploader">The fileuploader.</param>
         /// <param name="mapper">The mapper.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
+        public ProjectController(IProjectService projectService, IUserService userService, IFileService fileService, IFileUploader fileUploader, IMapper mapper)
         {
             this.projectService = projectService;
             this.userService = userService;
+            this.fileService = fileService;
+            this.fileUploader = fileUploader;
             this.mapper = mapper;
         }
 
@@ -263,6 +270,55 @@ namespace API.Controllers
             await projectService.RemoveAsync(projectId).ConfigureAwait(false);
             projectService.Save();
             return Ok();
+        }
+
+        /// <summary>
+        /// Upload Image that belongs to a project
+        /// </summary>
+        /// <returns>Status code 200</returns>
+        [HttpPost]
+        [Route("UploadImage")]
+        public async Task<IActionResult> UploadProjectImage()
+        {
+            IFormFile fileItem = HttpContext.Request.Form.Files["File"];
+            int projectId = int.Parse(HttpContext.Request.Form["ProjectId"]);
+
+            if(fileItem == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed posting file.",
+                                             Detail = "File is null.",
+                                             Instance = "2F309E3F-EF49-42C2-8A45-7155A1F2B907"
+                };
+                return NotFound(problem);
+            }
+
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            try
+            {
+                string path = await fileUploader.UploadSingleFile(fileItem);
+                File file = new File(path, fileItem.Name, user.Id);
+                fileService.UploadSingleFile(file);
+
+                Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId)
+                                                      .ConfigureAwait(false);
+                project.ProjectIconFileId = file;
+                projectService.Update(project);
+                return Ok(project);
+            } catch
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed posting file or updating project",
+                                             Detail = "Failed posting file or updating project.",
+                                             Instance = "AD9E0FF5-BF36-4285-9AD1-18CFF3293F7E"
+                };
+                return NotFound(problem);
+            }
+
+            
         }
     }
 }

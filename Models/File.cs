@@ -25,10 +25,9 @@ namespace Models
     public class File
     {
 
-        public File(string path, DateTime uploadDateTime, string name, int uploaderId)
+        public File(string path, string name, int uploaderId)
         {
             Path = path;
-            UploadDateTime = uploadDateTime;
             Name = name;
             UploaderId = uploaderId;
         }

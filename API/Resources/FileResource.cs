@@ -16,6 +16,7 @@
 */
 
 using Microsoft.AspNetCore.Http;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +35,18 @@ namespace API.Resources
         /// IFormFile 
         /// </summary>
         public IFormFile File { get; set; }
+        /// <summary>
+        /// Name of file
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Date and time of uploading
+        /// </summary>
         public DateTime UploadDateTime { get; set; }
+
+        /// <summary>
+        /// UploaderId of file
+        /// </summary>
         public int UploaderId { get; set; }
 
     }

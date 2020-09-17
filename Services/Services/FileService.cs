@@ -63,6 +63,7 @@ namespace Services.Services
 
         public void UploadSingleFile(File entity)
         {
+            entity.UploadDateTime = DateTime.Now;
             Repository.Add(entity);
             Repository.Save();
         }

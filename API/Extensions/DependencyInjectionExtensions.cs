@@ -60,6 +60,8 @@ namespace API.Extensions
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IFileRepository, FileRepository>();
 
+            services.AddScoped<IFileUploader, FileUploader>();
+
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
 
             services.AddScoped<IRestClientFactory, RestClientFactory>();
