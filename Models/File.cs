@@ -25,11 +25,15 @@ namespace Models
     public class File
     {
 
-        public File(string path, string name, int uploaderId)
+        public File()
+        {
+        }
+
+        public File(string path, string name, User uploader)
         {
             Path = path;
             Name = name;
-            UploaderId = uploaderId;
+            Uploader = uploader;
         }
 
         public int Id { get; set; }
@@ -37,7 +41,7 @@ namespace Models
         public string Path { get; set; }
         public DateTime UploadDateTime { get; set; }
         public string Name { get; set; }
-        public int UploaderId { get; set; }
-        
+        public User Uploader { get; set; }
+
     }
 }

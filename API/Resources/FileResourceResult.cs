@@ -47,6 +47,6 @@ namespace API.Resources
         /// <summary>
         ///  Id of uploader
         /// </summary>
-        public int UploaderId { get; set; }
+        public UserResourceResult Uploader { get; set; }
     }
 }

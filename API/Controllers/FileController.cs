@@ -18,6 +18,7 @@
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -80,10 +81,10 @@ namespace API.Controllers
             if(!files.Any())
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting files.",
-                                             Detail = "The database does not contain any files.",
-                                             Instance = "47525791-57C4-4DE2-91B1-90086D893112"
+                {
+                    Title = "Failed getting files.",
+                    Detail = "The database does not contain any files.",
+                    Instance = "47525791-57C4-4DE2-91B1-90086D893112"
                 };
                 return NotFound(problem);
             }
@@ -96,6 +97,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns>HTTP Response</returns>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> UploadSingleFile()
         {
             IFormFile fileItem = HttpContext.Request.Form.Files["File"];
@@ -103,19 +105,43 @@ namespace API.Controllers
             if(fileItem == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed posting file.",
-                                             Detail = "File is null.",
-                                             Instance = "ACD46F17-A239-4353-92A5-0B81AA0A96E9"
-                                         };
+                {
+                    Title = "Failed posting file.",
+                    Detail = "File is null.",
+                    Instance = "ACD46F17-A239-4353-92A5-0B81AA0A96E9"
+                };
                 return NotFound(problem);
             }
 
             string path = await fileUploader.UploadSingleFile(fileItem);
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            File file = new File(path, fileItem.Name, user.Id);
+            File file = new File(path, fileItem.Name, user);
             fileService.UploadSingleFile(file);
+
+            return Ok(file);
+        }
+
+        /// <summary>
+        /// Find file by id
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns> File </returns>
+        [HttpGet("{fileId}")]
+        public async Task<IActionResult> GetSingleFile(int fileId)
+        {
+            File file = await fileService.FindAsync(fileId);
+
+            if(file == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "File could not be found.",
+                    Detail = "File could not be found.",
+                    Instance = "875B6402-D771-45EC-AB56-3DE0CDD446D6"
+                };
+                return NotFound(problem);
+            }
 
             return Ok(file);
         }
