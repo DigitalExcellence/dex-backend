@@ -164,7 +164,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="highlightResource">The highlight resource.</param>
         /// <returns>The created highlight resource result.</returns>
-        /// <response code="200">Returns the created highlight resource result</response>
+        /// <response code="201">Returns the created highlight resource result</response>
         /// <response code="400">If highlight resource is not specified or failed saving highlight to database</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
@@ -187,7 +187,6 @@ namespace API.Controllers
 
             try
             {
-
                 highlightService.Add(highlight);
                 highlightService.Save();
                 return Created(nameof(CreateHighlight), mapper.Map<Highlight, HighlightResourceResult>(highlight));
