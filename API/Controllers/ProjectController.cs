@@ -37,7 +37,6 @@ namespace API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Produces("application/json")]
     public class ProjectController : ControllerBase
     {
         private readonly IMapper mapper;

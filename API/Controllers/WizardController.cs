@@ -15,26 +15,20 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using API.Resources;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     /// <summary>
-    ///     The controller that handles search requests
+    /// The controller that handles search requests
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Produces("application/json")]
     public class WizardController : ControllerBase
     {
         private readonly ISourceManagerService sourceManagerService;

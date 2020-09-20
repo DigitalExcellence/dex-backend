@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +7,9 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using static Models.Defaults.Defaults;
 
 namespace API.Controllers
@@ -20,7 +19,6 @@ namespace API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Produces("application/json")]
     public class RoleController : ControllerBase
     {
         private readonly IMapper mapper;

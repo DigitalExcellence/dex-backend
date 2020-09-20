@@ -23,7 +23,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
-using RestSharp;
 using Serilog;
 using Services.Services;
 using System.Linq;
@@ -37,7 +36,6 @@ namespace API.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Produces("application/json")]
     public class UserController : ControllerBase
     {
         private readonly IMapper mapper;

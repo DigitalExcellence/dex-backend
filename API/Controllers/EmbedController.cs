@@ -39,7 +39,6 @@ namespace API.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
-    [Produces("application/json")]
     public class EmbedController : ControllerBase
     {
         private readonly IEmbedService embedService;
