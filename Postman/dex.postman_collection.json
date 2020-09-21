@@ -740,7 +740,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"fileId\" : 3\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -877,6 +877,46 @@
 												"api",
 												"Project",
 												"98989"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-Upload-Image-Administrator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "/C:/Users/Niray/Desktop/angular-226066.png"
+												},
+												{
+													"key": "ProjectId",
+													"value": "1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/UploadImage",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"UploadImage"
 											]
 										}
 									},
@@ -1106,6 +1146,93 @@
 											"listen": "test",
 											"script": {
 												"id": "7620b4e0-46e5-417f-9f0a-38f70a2a27d8",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
+													"var projectId = parseInt(pm.environment.get(\"projectId\"));",
+													"var highlightId = parseInt(pm.environment.get(\"highlightId\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"var foundAt;",
+													"",
+													"function findHighlightId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"function findProjectId(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].project.id == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Project is in list and matching: \" + projectId, function () {",
+													"    foundAt = findProjectId(jsonData, projectId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});",
+													"",
+													"pm.test(\"Highlight is in list and matching:\" + highlightId, function () {",
+													"    foundAt = findHighlightId(jsonData, highlightId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/Project/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"Project",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Highlight-GetHighlight-ByProject-Administrator Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "e2f71037-c9dc-471c-af03-e6a4ed884b74",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -2952,6 +3079,122 @@
 												"api",
 												"Highlight",
 												"{{highlightId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "File",
+							"item": [
+								{
+									"name": "Post-File-Administrator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "/C:/Users/Niray/Desktop/angular-226066.png"
+												},
+												{
+													"key": "Name",
+													"value": "AngularIcon",
+													"type": "text",
+													"disabled": true
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get-Files-Adminstrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "81c12ccd-bbb8-4812-bd04-0cd536e73163",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var fileId = pm.environment.get(\"fileId\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"var foundAt;\r",
+													"\r",
+													"function findItem(jsonData, item) {\r",
+													"    for (var i = 0; i < jsonData.length; i++) {\r",
+													"        if (jsonData[i].id == item) {\r",
+													"            return i;\r",
+													"        }\r",
+													"    }\r",
+													"    return -1;\r",
+													"}\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"File is in list and matching: \" + fileId, function () {\r",
+													"    foundAt = findItem(jsonData, fileId);\r",
+													"    pm.expect(foundAt).to.not.eql(-1);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
 											]
 										}
 									},
@@ -4893,6 +5136,135 @@
 											""
 										]
 									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "File",
+							"item": [
+								{
+									"name": "Get-Files-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "9d2cbee0-a55f-419b-b83c-7935f57578a4",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var fileId = pm.environment.get(\"fileId\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"var foundAt;\r",
+													"\r",
+													"function findItem(jsonData, item) {\r",
+													"    for (var i = 0; i < jsonData.length; i++) {\r",
+													"        if (jsonData[i].id == item) {\r",
+													"            return i;\r",
+													"        }\r",
+													"    }\r",
+													"    return -1;\r",
+													"}\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"File is in list and matching: \" + fileId, function () {\r",
+													"    foundAt = findItem(jsonData, fileId);\r",
+													"    pm.expect(foundAt).to.not.eql(-1);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Post-File-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "19b3d11e-6e99-409a-8b57-e1ad160ed660",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.unauthorized;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "/C:/Users/Niray/Desktop/angular-226066.png"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"protocolProfileBehavior": {},
@@ -7440,6 +7812,121 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "File",
+							"item": [
+								{
+									"name": "Post-File-Registered",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "/C:/Users/Niray/Desktop/angular-226066.png"
+												},
+												{
+													"key": "Name",
+													"value": "AngularIcon",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get-Files-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c610771e-cf59-4510-bedf-b891ce8fa815",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var fileId = pm.environment.get(\"fileId\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"var foundAt;\r",
+													"\r",
+													"function findItem(jsonData, item) {\r",
+													"    for (var i = 0; i < jsonData.length; i++) {\r",
+													"        if (jsonData[i].id == item) {\r",
+													"            return i;\r",
+													"        }\r",
+													"    }\r",
+													"    return -1;\r",
+													"}\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"File is in list and matching: \" + fileId, function () {\r",
+													"    foundAt = findItem(jsonData, fileId);\r",
+													"    pm.expect(foundAt).to.not.eql(-1);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
 											]
 										}
 									},
@@ -10416,6 +10903,121 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "File",
+							"item": [
+								{
+									"name": "Get-Files-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "cf2fa958-2e43-4e12-bf2e-3b8300dec03a",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var fileId = pm.environment.get(\"fileId\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"var foundAt;\r",
+													"\r",
+													"function findItem(jsonData, item) {\r",
+													"    for (var i = 0; i < jsonData.length; i++) {\r",
+													"        if (jsonData[i].id == item) {\r",
+													"            return i;\r",
+													"        }\r",
+													"    }\r",
+													"    return -1;\r",
+													"}\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"File is in list and matching: \" + fileId, function () {\r",
+													"    foundAt = findItem(jsonData, fileId);\r",
+													"    pm.expect(foundAt).to.not.eql(-1);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Post-File-PR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "/C:/Users/Niray/Desktop/angular-226066.png"
+												},
+												{
+													"key": "Name",
+													"value": "AngularIcon",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
 											]
 										}
 									},
