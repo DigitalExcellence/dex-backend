@@ -17,6 +17,7 @@
 
 using API.Configuration;
 using API.Extensions;
+using API.Filters;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
@@ -136,6 +137,7 @@ namespace API
 
             services.AddSwaggerGen(o =>
             {
+                o.OperationFilter<DefaultOperationFilter>();
                 o.SwaggerDoc("v1",
                     new OpenApiInfo
                     {
