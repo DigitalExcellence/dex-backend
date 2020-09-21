@@ -155,7 +155,7 @@ namespace API.Controllers
         /// <response code="401">If the user is not allowed to create an embed project.</response>
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(EmbeddedProjectResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> CreateEmbeddedProject(EmbeddedProjectResource embedResource)
@@ -239,7 +239,7 @@ namespace API.Controllers
         /// <response code="404">If the embedded project could not be found with the specified guid</response>
         [HttpDelete("{guid}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> DeleteEmbeddedProject(string guid)

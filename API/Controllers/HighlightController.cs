@@ -248,7 +248,7 @@ namespace API.Controllers
         /// <response code="404">If no highlight is found with the specified id</response>
         [HttpDelete("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteHighlight(int highlightId)
         {
