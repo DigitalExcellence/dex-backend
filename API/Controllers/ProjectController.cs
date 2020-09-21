@@ -228,6 +228,24 @@ namespace API.Controllers
             }
 
             mapper.Map(projectResource, project);
+            File file = null;
+            if(projectResource.FileId != 0)
+            {
+                file = await fileService.FindAsync(projectResource.FileId);
+                project.ProjectIcon = file;
+            }
+
+            if(projectResource.FileId != 0 && file == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "File was not found.",
+                                             Detail = "The specified file was not found while updating project.",
+                                             Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                                         };
+                return BadRequest(problem);
+            }
+
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));

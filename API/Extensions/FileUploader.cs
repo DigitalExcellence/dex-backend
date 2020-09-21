@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using File = Models.File;
 
 namespace API.Extensions
 {
@@ -19,6 +20,7 @@ namespace API.Extensions
         /// <param name="file"></param>
         /// <returns></returns>
         Task<string> UploadSingleFile(IFormFile file);
+        bool DeleteFile(File file);
 
     }
 
@@ -28,7 +30,7 @@ namespace API.Extensions
     public class FileUploader : IFileUploader
     {
 
-        private static readonly string UploadPath = Directory.GetCurrentDirectory() + "FileFolder";
+        private static readonly string UploadPath = Directory.GetCurrentDirectory() + "\\files\\";
 
         /// <summary>
         /// Uploads single file
@@ -39,14 +41,31 @@ namespace API.Extensions
         {
             try
             {
-                await using Stream stream = new FileStream(UploadPath + file.Name, FileMode.Create);
-                await file.CopyToAsync(stream);
-                return UploadPath + file.Name;
+                using(Stream sourceStream = file.OpenReadStream())
+                {
+                    using(FileStream destinationStream = System.IO.File.Create(UploadPath + file.FileName))
+                    {
+                        await sourceStream.CopyToAsync(destinationStream);
+                    }
+                }
+
+                return UploadPath + file.FileName;
             } catch(Exception e)
             {
                 Log.Logger.Error(e, "Unexpected error");
                 throw e;
             }
+        }
+
+        public bool DeleteFile(File file)
+        {
+            if(System.IO.File.Exists(Path.Combine(UploadPath, file.Name)))
+            {
+                System.IO.File.Delete(Path.Combine(UploadPath, file.Name));
+                return true;
+            }
+
+            return false;
         }
 
     }

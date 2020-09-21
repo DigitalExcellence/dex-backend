@@ -333,4 +333,7 @@ profile
 
 
 IdentityServer/tempkey.rsa
-/API/FileFolder
+
+/API/files/*
+!/API/files/.gitkeep
+/API/filesangular-226066.png

@@ -119,7 +119,7 @@ namespace API.Controllers
             File file = new File(path, fileItem.Name, user);
             fileService.UploadSingleFile(file);
 
-            return Ok(file);
+            return Ok(mapper.Map<File, FileResourceResult>(file));
         }
 
         /// <summary>
