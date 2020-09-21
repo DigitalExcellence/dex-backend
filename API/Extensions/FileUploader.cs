@@ -15,11 +15,16 @@ namespace API.Extensions
     public interface IFileUploader
     {
         /// <summary>
-        /// Method that uploads the file to the file server
+        /// Uploads single file
         /// </summary>
         /// <param name="file"></param>
-        /// <returns></returns>
+        /// <returns> path of file location </returns>
         Task<string> UploadSingleFile(IFormFile file);
+        /// <summary>
+        /// Method deletes the file from the file server
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns> Bool which tells if file is deleted succesfully or not </returns>
         bool DeleteFile(File file);
 
     }
@@ -57,6 +62,11 @@ namespace API.Extensions
             }
         }
 
+        /// <summary>
+        /// Method deletes the file from the file server
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns> Bool which tells if file is deleted succesfully or not </returns>
         public bool DeleteFile(File file)
         {
             if(System.IO.File.Exists(Path.Combine(UploadPath, file.Name)))
