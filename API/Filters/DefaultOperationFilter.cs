@@ -19,6 +19,8 @@ namespace API.Filters
         /// <param name="context">Filter context</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            // If there already is a consume attribute, this won't be overridden
+            // So only if nothing is configured, the default will be set to application/json
             bool hasConsumeAttribute = context.MethodInfo.GetCustomAttributes(true)
                                               .Union(context.MethodInfo.GetCustomAttributes(true))
                                               .OfType<ConsumesAttribute>()
