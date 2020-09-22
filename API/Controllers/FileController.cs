@@ -75,6 +75,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns>A response and list of files.</returns>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetFilesAsync()
         {
             IEnumerable<File> files = await fileService.GetFilesAsync();
@@ -98,11 +99,9 @@ namespace API.Controllers
         /// <returns>HTTP Response</returns>
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> UploadSingleFile()
+        public async Task<IActionResult> UploadSingleFile([FromForm] FileResource fileResource)
         {
-            IFormFile fileItem = HttpContext.Request.Form.Files["File"];
-
-            if(fileItem == null)
+            if(fileResource.File == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -112,14 +111,25 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
+            try
+            {
+                string path = await fileUploader.UploadSingleFile(fileResource.File);
+                User user = await HttpContext.GetContextUser(userService)
+                                             .ConfigureAwait(false);
+                File file = new File(path, fileResource.File.FileName, user);
+                fileService.UploadSingleFile(file);
 
-            string path = await fileUploader.UploadSingleFile(fileItem);
-
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            File file = new File(path, fileItem.Name, user);
-            fileService.UploadSingleFile(file);
-
-            return Ok(mapper.Map<File, FileResourceResult>(file));
+                return Ok(mapper.Map<File, FileResourceResult>(file));
+            } catch(FileExistException fileExistException)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = fileExistException.Message,
+                                             Detail = "Please rename filename.",
+                                             Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
+                };
+                return BadRequest(problem);
+            }
         }
 
         /// <summary>
@@ -144,6 +154,48 @@ namespace API.Controllers
             }
 
             return Ok(file);
+        }
+
+        /// <summary>
+        /// Deletes single file
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        [HttpDelete("{fileId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteSingleFile(int fileId)
+        {
+            File file = await fileService.FindAsync(fileId);
+
+            if(file == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "File could not be found.",
+                                             Detail = "File could not be found.",
+                                             Instance = "875B6402-D771-45EC-AB56-3DE0CDD446D6"
+                                         };
+                return NotFound(problem);
+            }
+            try
+            {
+                await fileService.RemoveAsync(fileId)
+                                    .ConfigureAwait(false);
+                fileService.Save();
+                fileUploader.DeleteFile(file);
+                return Ok();
+            } catch(FileNotFoundException)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "File could not be deleted because the path does not exist.",
+                                             Detail = "File could not be found.",
+                                             Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
+                                         };
+
+                return NotFound(problem);
+            } 
+            
         }
 
     }

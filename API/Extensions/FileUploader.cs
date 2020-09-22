@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,21 @@ using File = Models.File;
 
 namespace API.Extensions
 {
+    /// <summary>
+    /// File already exists exception
+    /// </summary>
+    [Serializable]
+    public class FileExistException : Exception
+    {
+        /// <summary>
+        /// File already exist constructor
+        /// </summary>
+        /// <param name="name"></param>
+        public FileExistException(string name)
+            : base(String.Format("File {0} already exists", name))
+        { }
+    }
+
     /// <summary>
     /// Interface for file uploader
     /// </summary>
@@ -24,8 +40,7 @@ namespace API.Extensions
         /// Method deletes the file from the file server
         /// </summary>
         /// <param name="file"></param>
-        /// <returns> Bool which tells if file is deleted succesfully or not </returns>
-        bool DeleteFile(File file);
+        void DeleteFile(File file);
 
     }
 
@@ -46,15 +61,20 @@ namespace API.Extensions
         {
             try
             {
-                using(Stream sourceStream = file.OpenReadStream())
+                if(!System.IO.File.Exists(UploadPath + file.FileName))
                 {
-                    using(FileStream destinationStream = System.IO.File.Create(UploadPath + file.FileName))
+                    await using(Stream sourceStream = file.OpenReadStream())
                     {
-                        await sourceStream.CopyToAsync(destinationStream);
+                        await using(FileStream destinationStream = System.IO.File.Create(UploadPath + file.FileName))
+                        {
+                            await sourceStream.CopyToAsync(destinationStream);
+                        }
                     }
+
+                    return UploadPath + file.FileName;
                 }
 
-                return UploadPath + file.FileName;
+                throw new FileExistException(file.FileName);
             } catch(Exception e)
             {
                 Log.Logger.Error(e, "Unexpected error");
@@ -67,15 +87,14 @@ namespace API.Extensions
         /// </summary>
         /// <param name="file"></param>
         /// <returns> Bool which tells if file is deleted succesfully or not </returns>
-        public bool DeleteFile(File file)
+        public void DeleteFile(File file)
         {
             if(System.IO.File.Exists(Path.Combine(UploadPath, file.Name)))
             {
                 System.IO.File.Delete(Path.Combine(UploadPath, file.Name));
-                return true;
+                return;
             }
-
-            return false;
+            throw new FileNotFoundException(file.Name);
         }
 
     }

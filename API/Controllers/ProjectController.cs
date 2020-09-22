@@ -274,84 +274,38 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
+            Project project = await projectService.FindAsync(projectId)
+                                                  .ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to delete the project.",
-                    Detail = "The project could not be found in the database.",
-                    Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
-                };
+                                         {
+                                             Title = "Failed to delete the project.",
+                                             Detail = "The project could not be found in the database.",
+                                             Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
+                                         };
                 return NotFound(problem);
             }
 
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to delete the project.",
-                    Detail = "The user is not allowed to delete the project.",
-                    Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
-                };
+                                         {
+                                             Title = "Failed to delete the project.",
+                                             Detail = "The user is not allowed to delete the project.",
+                                             Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
+                                         };
                 return Unauthorized(problem);
             }
 
-            await projectService.RemoveAsync(projectId).ConfigureAwait(false);
+            await projectService.RemoveAsync(projectId)
+                                .ConfigureAwait(false);
             projectService.Save();
             return Ok();
-        }
-
-        /// <summary>
-        /// Upload Image that belongs to a project
-        /// </summary>
-        /// <returns>Status code 200</returns>
-        [HttpPost]
-        [Route("UploadImage")]
-        public async Task<IActionResult> UploadProjectImage()
-        {
-            IFormFile fileItem = HttpContext.Request.Form.Files["File"];
-            int projectId = int.Parse(HttpContext.Request.Form["ProjectId"]);
-
-            if(fileItem == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed posting file.",
-                    Detail = "File is null.",
-                    Instance = "2F309E3F-EF49-42C2-8A45-7155A1F2B907"
-                };
-                return NotFound(problem);
-            }
-
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-
-            try
-            {
-                string path = await fileUploader.UploadSingleFile(fileItem);
-                File file = new File(path, fileItem.Name, user);
-                fileService.UploadSingleFile(file);
-
-                Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId)
-                                                      .ConfigureAwait(false);
-                project.ProjectIcon = file;
-                projectService.Update(project);
-                return Ok(project);
-            } catch
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed posting file or updating project",
-                    Detail = "Failed posting file or updating project.",
-                    Instance = "AD9E0FF5-BF36-4285-9AD1-18CFF3293F7E"
-                };
-                return NotFound(problem);
-            }
-
-
         }
     }
 }

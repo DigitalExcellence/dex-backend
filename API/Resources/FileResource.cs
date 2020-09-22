@@ -48,6 +48,9 @@ namespace API.Resources
         /// UploaderId of file
         /// </summary>
         public User Uploader { get; set; }
-
+        /// <summary>
+        /// Id of project
+        /// </summary>
+        public int ProjectId { get; set; }
     }
 }

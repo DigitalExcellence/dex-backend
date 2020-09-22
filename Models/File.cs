@@ -24,10 +24,7 @@ namespace Models
 {
     public class File
     {
-
-        public File()
-        {
-        }
+        public File() { }
 
         public File(string path, string name, User uploader)
         {
