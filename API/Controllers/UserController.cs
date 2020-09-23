@@ -59,8 +59,8 @@ namespace API.Controllers
         /// Gets the current user.
         /// </summary>
         /// <returns>The current user as user resource result.</returns>
-        /// <response code="200">Returns the current user as a user resource result</response>
-        /// <response code="404">If the user could not be found</response>
+        /// <response code="200">Returns the current user as a user resource result.</response>
+        /// <response code="404">If the user could not be found.</response>
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
@@ -87,9 +87,9 @@ namespace API.Controllers
         /// </summary>
         /// <param name="userId">the useridentifier.</param>
         /// <returns>The user resource result.</returns>
-        /// <response code="200">Return the user resource result with the specified user id</response>
-        /// <response code="400">If user id is invalid</response>
-        /// <response code="404">If the user with the specified id could not be found</response>
+        /// <response code="200">Return the user resource result with the specified user id.</response>
+        /// <response code="400">If user id is invalid.</response>
+        /// <response code="404">If the user with the specified id could not be found.</response>
         [HttpGet("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
@@ -129,8 +129,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="accountResource">The account resource.</param>
         /// <returns>The created user as user resource result.</returns>
-        /// <response code="200">Returns the created user resource result</response>
-        /// <response code="400">If failed to save the user to the database</response>
+        /// <response code="200">Returns the created user resource result.</response>
+        /// <response code="400">If failed to save the user to the database.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.Created)]
@@ -166,9 +166,9 @@ namespace API.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <param name="userResource">The user resource.</param>
         /// <returns>The updated user as user resource result.</returns>
-        /// <response code="200">Returns the updated user as user resource result</response>
-        /// <response code="401">If the user is not allowed to update the account</response>
-        /// <response code="404">If the user with the specified id could not be found</response>
+        /// <response code="200">Returns the updated user as user resource result.</response>
+        /// <response code="401">If the user is not allowed to update the account.</response>
+        /// <response code="404">If the user with the specified id could not be found.</response>
         [HttpPut("{userId}")]
         [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
@@ -214,8 +214,8 @@ namespace API.Controllers
         /// Deletes the current account.
         /// </summary>
         /// <returns>Not found when the user does not exist. OK if everything went well.</returns>
-        /// <response code="200">Returns status code 200. The current account is deleted</response>
-        /// <response code="404">If the current account could not be found</response>
+        /// <response code="200">Returns status code 200. The current account is deleted.</response>
+        /// <response code="404">If the current account could not be found.</response>
         [HttpDelete]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
@@ -243,10 +243,10 @@ namespace API.Controllers
         /// <summary>
         /// Delete the user account.
         /// </summary>
-        /// <returns>Statuscode 200</returns>
-        /// <response code="200">Returns status code 200. The account with the specified id is deleted</response>
-        /// <response code="401">If the user is not allowed to delete the account</response>
-        /// <response code="404">If the user with the specified id could not be found</response>
+        /// <returns>Status code 200.</returns>
+        /// <response code="200">Returns status code 200. The account with the specified id is deleted.</response>
+        /// <response code="401">If the user is not allowed to delete the account.</response>
+        /// <response code="404">If the user with the specified id could not be found.</response>
         [HttpDelete("{userId}")]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]

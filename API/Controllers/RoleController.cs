@@ -15,7 +15,7 @@ using static Models.Defaults.Defaults;
 namespace API.Controllers
 {
     /// <summary>
-    /// This controller handles the CRUD roles
+    /// This controller handles the CRUD roles.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -42,8 +42,8 @@ namespace API.Controllers
         /// Get all Roles.
         /// </summary>
         /// <returns>A list of role resource results.</returns>
-        /// <response code="200">Returns a list of role resource results</response>
-        /// <response code="404">If no roles are found</response>
+        /// <response code="200">Returns a list of role resource results.</response>
+        /// <response code="404">If no roles are found.</response>
         [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         [ProducesResponseType(typeof(IEnumerable<RoleResourceResult>), (int) HttpStatusCode.OK)]
@@ -69,8 +69,8 @@ namespace API.Controllers
         /// Get all Scopes.
         /// </summary>
         /// <returns>A list of valid scopes.</returns>
-        /// <response code="200">Returns a list of scopes</response>
-        /// <response code="404">If no scopes are found</response>
+        /// <response code="200">Returns a list of scopes.</response>
+        /// <response code="404">If no scopes are found.</response>
         [HttpGet("Scopes")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         [ProducesResponseType(typeof(List<string>), (int) HttpStatusCode.OK)]
@@ -95,9 +95,9 @@ namespace API.Controllers
         /// Get a Role.
         /// </summary>
         /// <returns>The role resource result.</returns>
-        /// <response code="200">Returns the role resource result with the specified id</response>
-        /// <response code="400">If the specified role id is invalid</response>
-        /// <response code="404">If no role is found with the specified role id</response>
+        /// <response code="200">Returns the role resource result with the specified id.</response>
+        /// <response code="400">If the specified role id is invalid.</response>
+        /// <response code="404">If no role is found with the specified role id.</response>
         [HttpGet("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
@@ -136,8 +136,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="roleResource">The role resource.</param>
         /// <returns>The created role resource result.</returns>
-        /// <response code="201">Returns the created role resource result</response>
-        /// <response code="400">If unable to create role</response>
+        /// <response code="201">Returns the created role resource result.</response>
+        /// <response code="400">If unable to create role.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.Created)]
@@ -196,9 +196,9 @@ namespace API.Controllers
         /// <param name="roleId">The role identifier.</param>
         /// <param name="roleResource">The role resource.</param>
         /// <returns>The updated role resource result.</returns>
-        /// <response code="200">Returns the updated role resource result</response>
-        /// <response code="400">If a role scope is not valid</response>
-        /// <response code="404">If the role with the specified id could not be found</response>
+        /// <response code="200">Returns the updated role resource result.</response>
+        /// <response code="400">If a role scope is not valid.</response>
+        /// <response code="404">If the role with the specified id could not be found.</response>
         [HttpPut("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
@@ -243,11 +243,11 @@ namespace API.Controllers
         /// Deletes the role.
         /// </summary>
         /// <param name="roleId">The role identifier.</param>
-        /// <returns>Statuscode 200.</returns>
-        /// <response code="200">Returns status code 200. Role with specified id is deleted</response>
-        /// <response code="400">If the role is assigned to a user</response>
-        /// <response code="401">If the user is not allowed to delete roles</response>
-        /// <response code="404">If the role with the specified id could not be found</response>
+        /// <returns>Status code 200.</returns>
+        /// <response code="200">Returns status code 200. Role with specified id is deleted.</response>
+        /// <response code="400">If the role is assigned to a user.</response>
+        /// <response code="401">If the user is not allowed to delete roles.</response>
+        /// <response code="404">If the role with the specified id could not be found.</response>
         [HttpDelete("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         [ProducesResponseType((int) HttpStatusCode.OK)]
@@ -301,8 +301,8 @@ namespace API.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <param name="roleId">The role identifier.</param>
         /// <returns>The user resource result.</returns>
-        /// <response code="200">Sets specified role for specified user</response>
-        /// <response code="404">If specified role or user could not be found</response>
+        /// <response code="200">Sets specified role for specified user.</response>
+        /// <response code="404">If specified role or user could not be found.</response>
         [HttpPut("setRole")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]

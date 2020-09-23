@@ -7,20 +7,20 @@ namespace API.Filters
 {
     /// <summary>
     /// Filter for all endpoints to make sure that the response
-    /// media type will be set to 'application/json'
+    /// media type will be set to 'application/json'.
     /// </summary>
     public class DefaultOperationFilter : IOperationFilter
     {
         /// <summary>
         /// Foreach http status code keep the media type for application/json
-        /// and remove the other media types
+        /// and remove the other media types.
         /// </summary>
         /// <param name="operation">API Operation</param>
         /// <param name="context">Filter context</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            // If there already is a consume attribute, this won't be overridden
-            // So only if nothing is configured, the default will be set to application/json
+            // If there already is a consume attribute, this won't be overridden,
+            // so only if nothing is configured, the default will be set to application/json.
             bool hasConsumeAttribute = context.MethodInfo.GetCustomAttributes(true)
                                               .Union(context.MethodInfo.GetCustomAttributes(true))
                                               .OfType<ConsumesAttribute>()

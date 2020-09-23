@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     /// <summary>
-    /// The controller that handles search requests
+    /// The controller that handles search requests.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -50,13 +50,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Search for projects
+        /// Search for projects.
         /// </summary>
-        /// <param name="query">The search query</param>
-        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
-        /// <returns>Search results</returns>
-        /// <response code="200">Returns search results</response>
-        /// <response code="400">If search request is invalid</response>
+        /// <param name="query">The search query.</param>
+        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects.</param>
+        /// <returns>Search results.</returns>
+        /// <response code="200">Returns search results.</response>
+        /// <response code="400">If search request is invalid.</response>
         [HttpGet("internal/{query}")]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]

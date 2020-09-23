@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     /// <summary>
-    /// This controller handles the CRUD projects
+    /// This controller handles the CRUD projects.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -59,10 +59,10 @@ namespace API.Controllers
         /// <summary>
         /// Get all projects.
         /// </summary>
-        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
+        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects.</param>
         /// <returns>The project result resource.</returns>
-        /// <response code="200">Returns the Project Result Resource</response>
-        /// <response code="400">If values inside project filter params resource are invalid</response>
+        /// <response code="200">Returns the Project Result Resource.</response>
+        /// <response code="400">If values inside project filter params resource are invalid.</response>
         [HttpGet]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -119,9 +119,9 @@ namespace API.Controllers
         ///     Get a project.
         /// </summary>
         /// <returns>The project resource result.</returns>
-        /// <response code="200">Returns the project resource result with the given Id</response>
-        /// <response code="400">If the specified id is invalid</response>
-        /// <response code="404">If the project could not be found with the specified id</response>
+        /// <response code="200">Returns the project resource result with the given id.</response>
+        /// <response code="400">If the specified id is invalid.</response>
+        /// <response code="404">If the project could not be found with the specified id.</response>
         [HttpGet("{projectId}")]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -155,11 +155,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Create a Project.
+        /// Create a Project.
         /// </summary>
         /// <returns>The project resource result.</returns>
-        /// <response code="200">Returns the created project resource result</response>
-        /// <response code="400">If project resource is not specified or failed to save project to the database</response>
+        /// <response code="200">Returns the created project resource result.</response>
+        /// <response code="400">If project resource is not specified or failed to save project to the database.</response>
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
@@ -204,9 +204,9 @@ namespace API.Controllers
         /// <param name="projectId">The project identifier.</param>
         /// <param name="projectResource">The project resource.</param>
         /// <returns>The project resource result.</returns>
-        /// <response code="200">Returns the updated project resource result</response>
-        /// <response code="401">If project is not owned by the user or the user has not the correct permission to update</response>
-        /// <response code="404">If project to update is not found</response>
+        /// <response code="200">Returns the updated project resource result.</response>
+        /// <response code="401">If project is not owned by the user or the user has not the correct permission to update.</response>
+        /// <response code="404">If project to update is not found.</response>
         [HttpPut("{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
@@ -251,9 +251,9 @@ namespace API.Controllers
         /// deletes a project.
         /// </summary>
         /// <returns>Status code 200.</returns>
-        /// <response code="200">Returns 200, project is deleted</response>
-        /// <response code="401">If project is not owned by the user or the user has not the correct permission to delete</response>
-        /// <response code="404">If project to delete was not found</response>
+        /// <response code="200">Returns 200, project is deleted.</response>
+        /// <response code="401">If project is not owned by the user or the user has not the correct permission to delete.</response>
+        /// <response code="404">If project to delete was not found.</response>
         [HttpDelete("{projectId}")]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]

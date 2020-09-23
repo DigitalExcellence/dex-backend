@@ -33,7 +33,7 @@ namespace API.Controllers
 {
 
     /// <summary>
-    /// Highlight controller for highlights
+    /// Highlight controller for highlights.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -57,8 +57,8 @@ namespace API.Controllers
         /// Get all active highlights.
         /// </summary>
         /// <returns>A list of Highlight resource results.</returns>
-        /// <response code="200">Returns a list Highlight resource results</response>
-        /// <response code="404">If there are no highlights found</response>
+        /// <response code="200">Returns a list Highlight resource results.</response>
+        /// <response code="404">If there are no highlights found.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
@@ -84,9 +84,9 @@ namespace API.Controllers
         /// </summary>
         /// <param name="highlightId">The highlight identifier.</param>
         /// <returns>A Highlight resource result.</returns>
-        /// <response code="200">Returns the highlight resource result with the specified id</response>
-        /// <response code="400">If highlight id is not valid</response>
-        /// <response code="404">If there is no highlight found with the specified id</response>
+        /// <response code="200">Returns the highlight resource result with the specified id.</response>
+        /// <response code="400">If highlight id is not valid.</response>
+        /// <response code="404">If there is no highlight found with the specified id.</response>
         [HttpGet("{highlightId}")]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -120,13 +120,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get a Highlight by project id
+        /// Get a Highlight by project id.
         /// </summary>
-        /// <param name="projectId">The project identifier to retrieve the corresponding highlights</param>
+        /// <param name="projectId">The project identifier to retrieve the corresponding highlights.</param>
         /// <returns></returns>
-        /// <response code="200">Returns a list of highlight resource results from a project</response>
-        /// <response code="400">If the specified project id is not valid</response>
-        /// <response code="404">If there are no highlight resource results found with the specified project id</response>
+        /// <response code="200">Returns a list of highlight resource results from a project.</response>
+        /// <response code="400">If the specified project id is not valid.</response>
+        /// <response code="404">If there are no highlight resource results found with the specified project id.</response>
         [HttpGet("Project/{projectId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
         [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
@@ -159,12 +159,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Creates a highlight
+        /// Creates a highlight.
         /// </summary>
         /// <param name="highlightResource">The highlight resource.</param>
         /// <returns>The created highlight resource result.</returns>
-        /// <response code="201">Returns the created highlight resource result</response>
-        /// <response code="400">If highlight resource is not specified or failed saving highlight to database</response>
+        /// <response code="201">Returns the created highlight resource result.</response>
+        /// <response code="400">If highlight resource is not specified or failed saving highlight to database.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.Created)]
@@ -210,8 +210,8 @@ namespace API.Controllers
         /// <param name="highlightId">The highlight identifier.</param>
         /// <param name="highlightResource">The highlight resource.</param>
         /// <returns>The updated highlight resource result.</returns>
-        /// <response code="200">Returns the updated highlight resource result</response>
-        /// <response code="404">If no highlight is found with the specified highlight id</response>
+        /// <response code="200">Returns the updated highlight resource result.</response>
+        /// <response code="404">If no highlight is found with the specified highlight id.</response>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
@@ -244,8 +244,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="highlightId">The highlight identifier.</param>
         /// <returns> Status code 200.</returns>
-        /// <response code="200">Status code 200. The highlight is deleted</response>
-        /// <response code="404">If no highlight is found with the specified id</response>
+        /// <response code="200">Status code 200. The highlight is deleted.</response>
+        /// <response code="404">If no highlight is found with the specified id.</response>
         [HttpDelete("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType((int) HttpStatusCode.OK)]

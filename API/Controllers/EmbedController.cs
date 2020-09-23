@@ -34,7 +34,7 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     /// <summary>
-    /// Embedded iframe controller
+    /// Embedded iframe controller.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
@@ -50,8 +50,8 @@ namespace API.Controllers
         /// </summary>
         /// <param name="embedService">The embed service.</param>
         /// <param name="mapper">The mapper.</param>
-        /// <param name="projectService">The Project service</param>
-        /// <param name="userService">The User service</param>
+        /// <param name="projectService">The Project service.</param>
+        /// <param name="userService">The User service.</param>
         public EmbedController(IEmbedService embedService, IMapper mapper, IProjectService projectService, IUserService userService)
         {
             this.embedService = embedService;
@@ -64,8 +64,8 @@ namespace API.Controllers
         /// Gets all embedded projects.
         /// </summary>
         /// <returns>A list of embedded projects Resource Result.</returns>
-        /// <response code="200">Returns a list of embedded project resource results</response>
-        /// <response code="404">If there are no embedded project resource results</response>
+        /// <response code="200">Returns a list of embedded project resource results.</response>
+        /// <response code="404">If there are no embedded project resource results.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<EmbeddedProjectResourceResult>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
@@ -91,10 +91,10 @@ namespace API.Controllers
         /// Gets the embedded project.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns>The project resource result</returns>
-        /// <response code="200">Returns project resource results with the specified guid</response>
-        /// <response code="400">If the guid is not specified</response>
-        /// <response code="404">If no project could be found with the specified guid</response>
+        /// <returns>The project resource result.</returns>
+        /// <response code="200">Returns project resource results with the specified guid.</response>
+        /// <response code="400">If the guid is not specified.</response>
+        /// <response code="404">If no project could be found with the specified guid.</response>
         [HttpGet("{guid}")]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -146,12 +146,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Creates a embedded project
+        /// Creates a embedded project.
         /// </summary>
-        /// <param name="embedResource">EmbedResource</param>
+        /// <param name="embedResource">EmbedResource.</param>
         /// <returns>The embedded project resource result.</returns>
-        /// <response code="201">Returns the created embedded project resource result</response>
-        /// <response code="400">Unable to create the embedded project</response>
+        /// <response code="201">Returns the created embedded project resource result.</response>
+        /// <response code="400">Unable to create the embedded project.</response>
         /// <response code="401">If the user is not allowed to create an embed project.</response>
         [HttpPost]
         [Authorize]
@@ -199,7 +199,7 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            //Ensure we have a non existing Guid
+            //Ensure we have a non existing Guid.
             Guid guid;
             while(true)
             {
@@ -233,10 +233,10 @@ namespace API.Controllers
         /// Deletes the embeddedProject.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
-        /// <returns>Status code 200</returns>
-        /// <response code="200">Returns status code 200. The embedded project is deleted</response>
-        /// <response code="401">If the user is not allowed to delete the embedded project</response>
-        /// <response code="404">If the embedded project could not be found with the specified guid</response>
+        /// <returns>Status code 200.</returns>
+        /// <response code="200">Returns status code 200. The embedded project is deleted.</response>
+        /// <response code="401">If the user is not allowed to delete the embedded project.</response>
+        /// <response code="404">If the embedded project could not be found with the specified guid.</response>
         [HttpDelete("{guid}")]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]

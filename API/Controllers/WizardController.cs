@@ -25,7 +25,7 @@ using System.Net;
 namespace API.Controllers
 {
     /// <summary>
-    /// The controller that handles search requests
+    /// The controller that handles search requests.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -47,9 +47,9 @@ namespace API.Controllers
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
         /// <returns>The filled in Project.</returns>
-        /// <response code="200">Returns the project with the specified source Uri</response>
-        /// <response code="400">If source Uri is not specified</response>
-        /// <response code="404">If the project could not be found with the specified source Uri</response>
+        /// <response code="200">Returns the project with the specified source Uri.</response>
+        /// <response code="400">If source Uri is not specified.</response>
+        /// <response code="404">If the project could not be found with the specified source Uri.</response>
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
