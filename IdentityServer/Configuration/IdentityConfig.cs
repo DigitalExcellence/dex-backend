@@ -106,7 +106,8 @@ namespace IdentityServer.Configuration
                            // where to redirect to after login
                            RedirectUris = new List<string> {
                                config.Frontend.RedirectUriFrontend,
-                               config.Frontend.RedirectUriPostman
+                               config.Frontend.RedirectUriPostman,
+                               config.Frontend.RefreshUriFrontend
                            },
 
                            // where to redirect to after logout
