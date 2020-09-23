@@ -152,7 +152,7 @@ namespace API.Controllers
         /// <returns>The embedded project resource result.</returns>
         /// <response code="201">Returns the created embedded project resource result.</response>
         /// <response code="400">Unable to create the embedded project.</response>
-        /// <response code="401">If the user is not allowed to create an embed project.</response>
+        /// <response code="401">If the user is not allowed to create an embedded project.</response>
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(EmbeddedProjectResourceResult), (int) HttpStatusCode.Created)]

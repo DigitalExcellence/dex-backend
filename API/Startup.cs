@@ -143,7 +143,7 @@ namespace API
                     {
                         Title = "Dex API",
                         Version = "v1",
-                        Description = "Dex API Swagger surface.  Dex is a platform for students to share and work on projects. Share, work on and create new projects on Dex",
+                        Description = "Dex API Swagger surface. DeX provides a platform for students, teachers and employees to share and work on projects and ideas. Find, create, share and work on projects and ideas on DeX",
                         License = new OpenApiLicense
                         {
                             Name = "GNU Lesser General Public License v3.0",
