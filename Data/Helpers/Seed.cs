@@ -52,7 +52,7 @@ namespace Data.Helpers
         /// <summary>
         /// Seeds the roles.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The list of roles that will be seeded.</returns>
         public static List<Role> SeedRoles()
         {
             List<Role> roles = new List<Role>();
@@ -68,6 +68,9 @@ namespace Data.Helpers
                 Name = nameof(Defaults.Roles.PrUser),
                 Scopes = new List<RoleScope>()
                 {
+                    new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
+                    new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                 }
             };
@@ -83,6 +86,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.UserRead)),
                     new RoleScope(nameof(Defaults.Scopes.RoleRead)),
                     new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
@@ -96,7 +100,7 @@ namespace Data.Helpers
         /// Seeds the admin user.
         /// </summary>
         /// <param name="roles">The roles.</param>
-        /// <returns></returns>
+        /// <returns>Returns the admin user that will be seeded.</returns>
         public static User SeedAdminUser(List<Role> roles)
         {
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
@@ -115,7 +119,7 @@ namespace Data.Helpers
         /// Seeds the pr user.
         /// </summary>
         /// <param name="roles">The roles.</param>
-        /// <returns></returns>
+        /// <returns>Returns the PR user that will be seeded.</returns>
         public static User SeedPrUser(List<Role> roles)
         {
             Role prRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
@@ -183,19 +187,21 @@ namespace Data.Helpers
         /// Seeds the highlights.
         /// </summary>
         /// <param name="projects">The projects.</param>
-        /// <returns></returns>
+        /// <returns>Returns a list of project highlights that wil be seeded.</returns>
         public static List<Highlight> SeedHighlights(List<Project> projects)
         {
             List<Highlight> highlights = new List<Highlight>();
 
             for(int i = 0; i < 5 && i < projects.Count; i++)
             {
-                Highlight highlight = new Highlight
-                {
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddYears(2),
-                    Project = projects[i]
-                };
+                Faker<Highlight> fakeHighLight = new Faker<Highlight>()
+                                                 .RuleFor(s => s.Description, f => f.Lorem.Sentence(5))
+                                                 .RuleFor(s => s.StartDate, DateTime.Now)
+                                                 .RuleFor(s => s.EndDate, DateTime.Now.AddYears(2))
+                                                 .RuleFor(s => s.Project, projects[i]);
+
+                Highlight highlight = fakeHighLight.Generate();
+
                 highlights.Add(highlight);
             }
 

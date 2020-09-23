@@ -20,9 +20,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +59,7 @@ namespace API.Controllers
         ///     Get all projects.
         /// </summary>
         /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
-        /// <returns></returns>
+        /// <returns>The project result resource.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllProjects([FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
@@ -112,7 +113,7 @@ namespace API.Controllers
         /// <summary>
         ///     Get a project.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The project resource result.</returns>
         [HttpGet("{projectId}")]
         public async Task<IActionResult> GetProject(int projectId)
         {
@@ -145,7 +146,7 @@ namespace API.Controllers
         /// <summary>
         ///     Create a Project.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The project resource result.</returns>
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
@@ -167,8 +168,11 @@ namespace API.Controllers
                 projectService.Add(project);
                 projectService.Save();
                 return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
-            } catch
+            } catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
+
                 ProblemDetails problem = new ProblemDetails()
                 {
                     Title = "Failed to save new project.",
@@ -180,11 +184,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Update the Project
+        /// Updates the project with the specified identifier. 
         /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="projectResource"></param>
-        /// <returns></returns>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="projectResource">The project resource.</param>
+        /// <returns>The project resource result.</returns>
         [HttpPut("{projectId}")]
         [Authorize]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
@@ -225,7 +229,7 @@ namespace API.Controllers
         /// <summary>
         ///     deletes a project.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Status code 200.</returns>
         [HttpDelete("{projectId}")]
         [Authorize]
         public async Task<IActionResult> DeleteProject(int projectId)

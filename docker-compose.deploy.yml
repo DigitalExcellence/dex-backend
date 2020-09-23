@@ -1,0 +1,62 @@
+version: '3.7'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Data/Dockerfile
+    environment: 
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+    image: digitalexcellence/database
+    networks:
+      mssql-network:
+        ipv4_address: 172.16.238.2
+
+  api:
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    depends_on:
+      - db
+    environment:   
+      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
+      - App__Frontend__FrontendUrl=${FRONTEND_URL}
+      - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
+      - App__IdentityServer__IdentityUrl=${IDENTITY_URL}
+      - SENTRY_DSN=${SENTRY_DSN}
+    image:  digitalexcellence/api
+    networks:
+      - mssql-network
+
+  identity:
+    build:
+      context: .
+      dockerfile: IdentityServer/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=${IDENTITY_CONNECTION_STRING}
+      - App__Self__JwtAuthority=${JWT_AUTHORITY}
+      - App__Api__DeXApiUrl=${API_URL}
+      - App__Api__ClientId=${API_CLIENT_ID}
+      - App__Api__ClientSecret=${API_CLIENT_SECRET}
+      - App__Frontend__RedirectUriFrontend=${REDIRECT_URI_FRONTEND}
+      - App__Frontend__RedirectUriFrontendPostman=${REDIRECT_URI_FRONTEND_POSTMAN}
+      - App__Frontend__PostLogoutUrisFrontend=${POST_LOGOUT_URIS_FRONTEND}
+      - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}      
+      - App__swagger__RedirectUrisSwagger=${REDIRECT_URIS_SWAGGER}
+      - App__swagger__PostLogoutUrisSwagger=${POST_LOGOUT_URIS_SWAGGER}
+      - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
+      - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
+      - App__FfhictOIDC__RedirectUri=${FFHICTOIDC_REDIRECT_URI}
+      - SENTRY_DSN=${SENTRY_DSN}
+    image: digitalexcellence/identity
+
+networks:
+  mssql-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+    external: false

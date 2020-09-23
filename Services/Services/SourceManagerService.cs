@@ -22,25 +22,40 @@ using Services.Sources;
 namespace Services.Services
 {
     /// <summary>
+    /// The source manager interface.
+    /// </summary>
+    public interface ISourceManagerService
+    {
+
+        /// <summary>
+        /// Fetches the project.
+        /// </summary>
+        /// <param name="sourceURI">The source URI.</param>
+        /// <returns>The project.</returns>
+        Project FetchProject(Uri sourceURI);
+
+    }
+
+    /// <summary>
     /// SourceManagerService
     /// </summary>
-    public class SourceManagerService
+    public class SourceManagerService : ISourceManagerService
     {
         /// <summary>
         /// The git lab source
         /// </summary>
-        private readonly ISource gitLabSource;
+        private readonly IGitLabSource gitLabSource;
         /// <summary>
         /// The git hub source
         /// </summary>
-        private readonly ISource gitHubSource;
+        private readonly IGitHubSource gitHubSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SourceManagerService"/> class.
         /// </summary>
         /// <param name="gitlabSource">The gitlab source.</param>
         /// <param name="githubSource">The github source.</param>
-        public SourceManagerService(GitLabSource gitlabSource, GitHubSource githubSource)
+        public SourceManagerService(IGitLabSource gitlabSource, IGitHubSource githubSource)
         {
             gitLabSource = gitlabSource;
             gitHubSource = githubSource;
@@ -50,7 +65,7 @@ namespace Services.Services
         /// Fetches the project.
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
-        /// <returns></returns>
+        /// <returns>The project.</returns>
         public Project FetchProject(Uri sourceURI)
         {
             if(gitLabSource.ProjectURIMatches(sourceURI))

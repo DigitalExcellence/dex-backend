@@ -1,6 +1,6 @@
 [*]
 charset = utf-8
-end_of_line = crlf
+end_of_line = lf
 trim_trailing_whitespace = true
 insert_final_newline = true
 indent_style = space
@@ -527,3 +527,8 @@ resharper_xml_wrap_text = false
 
 # IDE1006: Naming Styles
 dotnet_diagnostic.IDE1006.severity = warning
+
+# Disable the configure await message
+dotnet_diagnostic.RCS1090.severity = none
+# Disable the remove redundant whiteline message
+dotnet_diagnostic.RCS1036.severity = none

@@ -16,6 +16,7 @@
 */
 
 using IdentityModel;
+using IdentityServer.Quickstart;
 using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
@@ -25,12 +26,17 @@ using IdentityServer4.Stores;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using Models;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace IdentityServer
 {
@@ -46,24 +52,20 @@ namespace IdentityServer
     [AllowAnonymous]
     public class AccountController : Controller
     {
-
         private readonly IClientStore clientStore;
         private readonly IEventService events;
         private readonly IIdentityServerInteractionService interaction;
         private readonly IAuthenticationSchemeProvider schemeProvider;
-        private readonly TestUserStore users;
+        private readonly IIdentityUserService identityUserService;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            TestUserStore users = null)
+            IIdentityUserService identityUserService)
         {
-            // if the TestUserStore is not in DI, then we'll just use the global users collection
-            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            this.users = users ?? new TestUserStore(TestUsers.Users);
-
+            this.identityUserService = identityUserService;
             this.interaction = interaction;
             this.clientStore = clientStore;
             this.schemeProvider = schemeProvider;
@@ -87,6 +89,26 @@ namespace IdentityServer
                                         new
                                         {
                                             provider = vm.ExternalLoginScheme,
+                                            returnUrl
+                                        });
+            }
+
+            // get the provider parameter from the return url
+            if(vm.ReturnUrl == null)
+            {
+                vm.ReturnUrl = "";
+            }
+            int idx = vm.ReturnUrl.IndexOf('?');
+            string query = idx >= 0 ? vm.ReturnUrl.Substring(idx) : "";
+            string providerSchema = HttpUtility.ParseQueryString(query).Get("provider");
+
+            if(vm.VisibleExternalProviders.FirstOrDefault(i => i.AuthenticationScheme == providerSchema) != null)
+            {
+                return RedirectToAction("Challenge",
+                                        "External",
+                                        new
+                                        {
+                                            provider = providerSchema,
                                             returnUrl
                                         });
             }
@@ -132,9 +154,10 @@ namespace IdentityServer
             if(ModelState.IsValid)
             {
                 // validate username/password against in-memory store
-                if(users.ValidateCredentials(model.Username, model.Password))
+                if(await identityUserService.ValidateCredentialsAsync(model.Username, model.Password))
                 {
-                    TestUser user = users.FindByUsername(model.Username);
+
+                    IdentityUser user = await identityUserService.FindByUsername(model.Username);
                     await events.RaiseAsync(new UserLoginSuccessEvent(user.Username,
                                                                        user.SubjectId,
                                                                        user.Username,
@@ -152,8 +175,7 @@ namespace IdentityServer
                                     ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
                                 };
                     }
-                    ;
-
+                    
                     // issue authentication cookie with subject ID and username
                     IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
                                                 {
@@ -209,7 +231,7 @@ namespace IdentityServer
             // build a model so the logout page knows what to display
             LogoutViewModel vm = await BuildLogoutViewModelAsync(logoutId);
 
-            if(vm.ShowLogoutPrompt == false)
+            if(!vm.ShowLogoutPrompt)
             {
                 // if the request for logout was properly authenticated from IdentityServer, then
                 // we don't need to show the prompt and can just log the user out directly.

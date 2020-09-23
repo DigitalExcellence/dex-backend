@@ -20,12 +20,29 @@ using System;
 
 namespace Services.Sources
 {
+
+    public interface IGitHubSource : ISource {}
+
     /// <summary>
     /// GitHubSource
     /// </summary>
     /// <seealso cref="Services.Sources.ISource" />
-    public class GitHubSource : ISource
+    public class GitHubSource : IGitHubSource
     {
+        /// <summary>
+        /// The rest client factory
+        /// </summary>
+        private readonly IRestClientFactory restClientFactory;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GitLabSource"/> class.
+        /// </summary>
+        /// <param name="restClientFactory"></param>
+        public GitHubSource(IRestClientFactory restClientFactory)
+        {
+            this.restClientFactory = restClientFactory;
+        }
+
         /// <summary>
         /// Gets the source.
         /// </summary>
@@ -40,7 +57,7 @@ namespace Services.Sources
         /// Gets the project information.
         /// </summary>
         /// <param name="uri">The URI.</param>
-        /// <returns></returns>
+        /// <returns>The project object.</returns>
         /// <exception cref="NotImplementedException"></exception>
         public Project GetProjectInformation(Uri uri)
         {
@@ -52,7 +69,7 @@ namespace Services.Sources
         /// Projects the URI matches.
         /// </summary>
         /// <param name="uri">The URI.</param>
-        /// <returns></returns>
+        /// <returns>true if the project uri matches.</returns>
         /// <exception cref="NotImplementedException"></exception>
         public bool ProjectURIMatches(Uri uri)
         {

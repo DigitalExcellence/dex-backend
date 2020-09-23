@@ -49,15 +49,5 @@ namespace API.Resources
         ///     This gets or sets the collaborators
         /// </summary>
         public ICollection<CollaboratorResource> Collaborators { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Created time of the project
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Updated time of the project
-        /// </summary>
-        public DateTime Updated { get; set; }
     }
 }

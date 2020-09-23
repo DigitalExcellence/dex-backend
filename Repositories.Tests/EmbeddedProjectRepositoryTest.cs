@@ -239,8 +239,5 @@ namespace Repositories.Tests
             EmbeddedProject actualProject = await Repository.GetEmbeddedProjectAsync(embeddedProject.Guid);
             Assert.AreEqual(actualProject.Project.User.Email, Defaults.Privacy.RedactedEmail);
         }
-
-
     }
-
 }

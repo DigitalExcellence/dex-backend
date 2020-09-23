@@ -42,14 +42,6 @@ namespace Configuration
         public ApiConfig Api { get; set; }
 
         /// <summary>
-        ///     Gets or sets the fhict.
-        /// </summary>
-        /// <value>
-        ///     The fhict.
-        /// </value>
-        public FhictConfig Fhict { get; set; }
-
-        /// <summary>
         ///     Gets or sets the frontend
         /// </summary>
         /// <value>
@@ -73,7 +65,6 @@ namespace Configuration
         {
             Validator.ValidateObject(Self, new ValidationContext(Self), true);
             Validator.ValidateObject(Api, new ValidationContext(Api), true);
-            Validator.ValidateObject(Fhict, new ValidationContext(Fhict), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
             Validator.ValidateObject(FfhictOIDC, new ValidationContext(FfhictOIDC), true);
         }
@@ -104,13 +95,21 @@ namespace Configuration
             public int DeleteTokenLifeTimeInDays { get; set; }
 
             /// <summary>
-            ///     Gets or sets the identity applications.
+            ///     Gets or sets the issuer uri.
             /// </summary>
             /// <value>
-            ///     The identity applications.
+            ///     The issuer uri.
             /// </value>
-            public List<Dictionary<string, string>> IdentityApplications { get; set; }
+            [Required]
+            public string IssuerUri { get; set; }
 
+            /// <summary>
+            ///     Gets or sets the public origin.
+            /// </summary>
+            /// <value>
+            ///     The public origin.
+            /// </value>
+            public string PublicOrigin { get; set; }
         }
 
         /// <summary>
@@ -128,73 +127,49 @@ namespace Configuration
             [Url]
             public string DeXApiUrl { get; set; }
 
+            /// <summary>
+            ///     Gets or sets the client identifier.
+            /// </summary>
+            /// <value>
+            ///     The client identifier.
+            /// </value>
+            [Required]
+            public string ClientId { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the client secret.
+            /// </summary>
+            /// <value>
+            ///     The client secret.
+            /// </value>
+            [Required]
+            public string ClientSecret { get; set; }
         }
 
-        /// <summary>
-        /// </summary>
-        public class FhictConfig
-        {
-
-            /// <summary>
-            ///     Gets or sets the fhict identity URL.
-            /// </summary>
-            /// <value>
-            ///     The fhict identity URL.
-            /// </value>
-            [Required]
-            [Url]
-            public string FhictIdentityUrl { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict client identifier.
-            /// </summary>
-            /// <value>
-            ///     The fhict client identifier.
-            /// </value>
-            [Required]
-            public string FhictClientId { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict client secret.
-            /// </summary>
-            /// <value>
-            ///     The fhict client secret.
-            /// </value>
-            [Required]
-            public string FhictClientSecret { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict scopes.
-            /// </summary>
-            /// <value>
-            ///     The fhict scopes.
-            /// </value>
-            [Required]
-            public string FhictScopes { get; set; }
-
-            /// <summary>
-            ///     Gets or sets the fhict redirect URI.
-            /// </summary>
-            /// <value>
-            ///     The fhict redirect URI.
-            /// </value>
-            [Required]
-            [Url]
-            public string FhictRedirectUri { get; set; }
-
-        }
         /// <summary>
         /// </summary>
         public class FrontendConfig
         {
             /// <summary>
-            ///     Gets or sets the redirect urls of the frontend
+            ///     Gets or sets the redirect uri of the frontend.
             /// </summary>
-            public List<string> RedirectUrisFrontend { get; set; }
+            public string RedirectUriFrontend { get; set; }
             /// <summary>
-            ///     Gets or sets the post logouts urls
+            ///     Gets or sets the redirect uri for Postman.
             /// </summary>
-            public List<string> PostLogoutUrisFrontend { get; set; }
+            public string RedirectUriPostman { get; set; }
+            /// <summary>
+            ///     Gets or sets the post logouts uri of the Frontend.
+            /// </summary>
+            public string PostLogoutUriFrontend { get; set; }
+            /// <summary>
+            ///     Gets or sets the client identifier.
+            /// </summary>
+            public string ClientId { get; set; }
+            /// <summary>
+            ///     Gets or sets the client secret.
+            /// </summary>
+            public string ClientSecret { get; set; }
 
         }
 
@@ -209,7 +184,7 @@ namespace Configuration
             /// <value>
             /// The redirect uris swagger.
             /// </value>
-            public List<string> RedirectUrisSwagger { get; set; }
+            public string RedirectUrisSwagger { get; set; }
 
             /// <summary>
             /// Gets or sets the post logout uris swagger.
@@ -217,7 +192,7 @@ namespace Configuration
             /// <value>
             /// The post logout uris swagger.
             /// </value>
-            public List<string> PostLogoutUrisSwagger { get; set; }
+            public string PostLogoutUrisSwagger { get; set; }
         }
 
 

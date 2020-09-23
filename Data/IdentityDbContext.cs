@@ -15,19 +15,30 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System.Collections.Generic;
+using Data.Configurations;
+using Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Repositories.Base;
 
-namespace Repositories
+namespace Data
 {
-
-    public interface IStatisticsRepository : IRepository<Statistic> { }
-
-    public class StatisticsRepository : Repository<Statistic>, IStatisticsRepository
+    /// <summary>
+    /// ApplicationDatabaseContext
+    /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
+    public class IdentityDbContext : DbContext
     {
 
-        public StatisticsRepository(DbContext dbContext) : base(dbContext) { }
+        public IdentityDbContext(DbContextOptions<IdentityDbContext> options) : base(options) { }
+
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        /// <value>
+        /// The user.
+        /// </value>
+        public DbSet<IdentityUser> IdentityUser { get; set; }
 
     }
 

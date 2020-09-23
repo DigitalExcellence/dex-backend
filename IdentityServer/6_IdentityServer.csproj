@@ -9,15 +9,22 @@
         <PackageReference Include="IdentityServer4" Version="3.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="NetEscapades.Configuration.Validation" Version="2.0.0" />
         <PackageReference Include="Sentry.AspNetCore" Version="2.1.1" />
         <PackageReference Include="Sentry.Serilog" Version="2.1.1" />
         <PackageReference Include="RestSharp" Version="106.11.4" />
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-        <PackageReference Include="System.Security.Principal.Windows" Version="4.3.0" />
+        <PackageReference Include="System.Security.Principal.Windows" Version="4.5.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Models\Models.csproj" />
+        <ProjectReference Include="..\Data\4_Data.csproj" />
+        <ProjectReference Include="..\Models\5_Models.csproj" />
+        <ProjectReference Include="..\Repositories\3_Repositories.csproj" />
+        <ProjectReference Include="..\Services\2_Services.csproj" />
     </ItemGroup>
 </Project>

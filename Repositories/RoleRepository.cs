@@ -18,7 +18,9 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,6 +35,67 @@ namespace Repositories
     {
         public RoleRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        /// Updates the specified role.
+        /// </summary>
+        /// <param name="role">The role.</param>
+        /// <exception cref="ArgumentNullException">Role argument is null</exception>
+        /// <exception cref="DbUpdateConcurrencyException">Cannot update non existing object..</exception>
+        public override void Update(Role role)
+        {
+            if(role == null)
+            {
+                throw new ArgumentNullException("Role argument is null");
+            }
+            Role existingRole = GetDbSet<Role>()
+                                 .Where(p => p.Id == role.Id)
+                                 .Include(p => p.Scopes)
+                                 .SingleOrDefault();
+
+            if(existingRole == null)
+            {
+                throw new DbUpdateConcurrencyException("Cannot update non existing object..");
+            };
+
+            DbContext.Entry(existingRole).CurrentValues.SetValues(role);
+
+            foreach(RoleScope existingScope in existingRole.Scopes.ToList())
+            {
+                // delete children
+                if(role.Scopes.All(c => c.Id != existingScope.Id))
+                {
+                    GetDbSet<RoleScope>()
+                        .Remove(existingScope);
+                }
+                // add or update
+                foreach(RoleScope newRoleScope in role.Scopes)
+                {
+                    RoleScope existingRoleScope = existingRole.Scopes
+                                                       .SingleOrDefault(c => c.Id == newRoleScope.Id);
+                    //update
+                    if(existingRoleScope != null)
+                    {
+                        DbContext.Entry(existingRoleScope).CurrentValues.SetValues(newRoleScope);
+                    }
+                    //add
+                    else
+                    {
+                        RoleScope newScope = new RoleScope(newRoleScope.Scope)
+                                             {
+                                                 RoleId = role.Id
+                                             };
+                        existingRole.Scopes.Add(newScope);
+                    }
+                }
+                DbContext.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Find role by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>The retrieved role.</returns>
         public override Task<Role> FindAsync(int id)
         {
             return GetDbSet<Role>()
@@ -41,6 +104,10 @@ namespace Repositories
                    .SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Gets all the roles with scopes.
+        /// </summary>
+        /// <returns>A list of all roles and scopes.</returns>
         public Task<List<Role>> GetAllAsync()
         {
             return GetDbSet<Role>()
@@ -48,6 +115,11 @@ namespace Repositories
                    .ToListAsync();
         }
 
+        /// <summary>
+        /// Remove the role with the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <exception cref="KeyNotFoundException">Id: {id} not found</exception>
         public override async Task RemoveAsync(int id)
         {
             Role roleToDelete = await GetDbSet<Role>()
@@ -55,7 +127,16 @@ namespace Repositories
                 .Include(r => r.Scopes)
                 .SingleOrDefaultAsync().ConfigureAwait(false);
 
-            GetDbSet<RoleScope>().RemoveRange(roleToDelete.Scopes);
+            if(roleToDelete == null)
+            {
+                throw new KeyNotFoundException($"Id: {id} not found");
+            }
+
+            if(roleToDelete.Scopes != null)
+            {
+                GetDbSet<RoleScope>().RemoveRange(roleToDelete.Scopes);
+            }
+
             GetDbSet<Role>().Remove(roleToDelete);
         }
     }

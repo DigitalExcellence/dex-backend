@@ -33,7 +33,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the user
         /// </summary>
-        public UserResourceResult User { get; set; }
+        public LimitedUserResourceResult User { get; set; }
 
         /// <summary>
         ///     This gets or sets the userId

@@ -16,7 +16,11 @@
 */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Repositories.Base
@@ -37,21 +41,65 @@ namespace Repositories.Base
             return await DbSet.FindAsync(id).ConfigureAwait(false);
         }
 
+        public virtual TEntity UpdateCreatedField(TEntity entity)
+        {
+            if(entity == null)
+            {
+                return entity;
+
+            }
+            PropertyInfo createdProperty = entity.GetType().GetProperty("Created", BindingFlags.Public | BindingFlags.Instance);
+            if(createdProperty != null && createdProperty.CanWrite)
+            {
+                createdProperty.SetValue(entity, DateTime.Now, null);
+            }
+            return entity;
+        }
+
+        public virtual TEntity UpdateUpdatedField(TEntity entity)
+        {
+            if(entity == null)
+            {
+                return entity;
+
+            }
+            PropertyInfo updatedProperty = entity.GetType().GetProperty("Updated", BindingFlags.Public | BindingFlags.Instance);
+            if(updatedProperty != null && updatedProperty.CanWrite)
+            {
+                updatedProperty.SetValue(entity, DateTime.Now, null);
+            }
+            return entity;
+        }
+
         public virtual void Add(TEntity entity)
         {
+            entity = UpdateCreatedField(entity);
+            entity = UpdateUpdatedField(entity);
+            
             DbSet.Add(entity);
         }
         public virtual async Task AddAsync(TEntity entity)
         {
+            entity = UpdateCreatedField(entity);
+            entity = UpdateUpdatedField(entity);
+
             await DbSet.AddAsync(entity).ConfigureAwait(false);
         }
         public virtual void AddRange(IEnumerable<TEntity> entities)
         {
-            DbSet.AddRange(entities);
+            List<TEntity> entityList = entities.ToList();
+            for(int i = 0; i < entityList.Count; i++)
+            {
+                entityList[i] = UpdateCreatedField(entityList[i]);
+                entityList[i] = UpdateUpdatedField(entityList[i]);
+            }
+            DbSet.AddRange(entityList);
         }
 
         public virtual void Update(TEntity entity)
         {
+            entity = UpdateUpdatedField(entity);
+
             DbSet.Attach(entity);
             DbSet.Update(entity);
         }

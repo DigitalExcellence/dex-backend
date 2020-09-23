@@ -16,11 +16,13 @@
 */
 
 using Configuration;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Models.Defaults;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace IdentityServer.Configuration
 {
@@ -60,7 +62,7 @@ namespace IdentityServer.Configuration
         public static IEnumerable<Client> Clients(Config config)
         {
             return new[]
-                   {
+            {
                        // machine to machine client (Identity -> API)
                        new Client
                        {
@@ -68,9 +70,7 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.ClientCredentials,
                            ClientSecrets =
                            {
-                               new Secret(config.Self.IdentityApplications.Single(a => a["Key"]
-                                                                                      .Equals("dex-api"))["Value"]
-                                                .Sha256())
+                               new Secret(config.Api.ClientSecret.Sha256())
                            },
                            AllowedScopes =
                            {
@@ -82,7 +82,11 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.HighlightWrite),
                                nameof(Defaults.Scopes.EmbedWrite),
                                nameof(Defaults.Scopes.EmbedRead)
-                           }
+                           },
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                    }
                        },
 
                        // interactive ASP.NET Core MVC client
@@ -92,17 +96,23 @@ namespace IdentityServer.Configuration
                            ClientName = "Digital Excellence Angular Frontend",
                            ClientSecrets =
                            {
-                               new Secret(config.Self.IdentityApplications.Single(a => a["Key"]
-                                                                                      .Equals("dex-frontend"))["Value"].Sha256())
+                               new Secret(config.Frontend.ClientSecret.Sha256())
                            },
                            AllowedGrantTypes = GrantTypes.Implicit,
                            RequirePkce = true,
 
+                           RequireConsent = false,
+
                            // where to redirect to after login
-                           RedirectUris = config.Frontend.RedirectUrisFrontend,
+                           RedirectUris = new List<string> {
+                               config.Frontend.RedirectUriFrontend,
+                               config.Frontend.RedirectUriPostman
+                           },
 
                            // where to redirect to after logout
-                           PostLogoutRedirectUris = config.Frontend.PostLogoutUrisFrontend,
+                           PostLogoutRedirectUris = new List<string> {
+                               config.Frontend.PostLogoutUriFrontend
+                           },
 
                            AllowedScopes = new List<string>
                             {
@@ -123,10 +133,14 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.Implicit,
                            AllowAccessTokensViaBrowser = true,
                            AlwaysIncludeUserClaimsInIdToken = true,
-                           RedirectUris = config.Swagger.RedirectUrisSwagger,
-                           PostLogoutRedirectUris = config.Swagger.PostLogoutUrisSwagger,
+                           RedirectUris = new List<string> {
+                               config.Swagger.RedirectUrisSwagger
+                           },
+                           PostLogoutRedirectUris = new List<string> {
+                               config.Swagger.PostLogoutUrisSwagger
+                           },
                            AllowedScopes = new List<string>
-                            {
+                           {
                                 IdentityServerConstants.StandardScopes.OpenId,
                                 IdentityServerConstants.StandardScopes.Profile,
                                 "dex-api",

@@ -20,17 +20,17 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
 using RestSharp;
+using Serilog;
 using Services.Services;
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
     ///     This controller handles the user settings.
     /// </summary>
@@ -38,28 +38,28 @@ namespace API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
         private readonly IMapper mapper;
         private readonly IUserService userService;
-        private readonly IProjectService projectService;
+        private readonly IRoleService roleService;
 
         /// <summary>
-        ///     Initialize a new instance of UserController
+        /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
-        /// <param name="userService"></param>
-        /// <param name="projectService"></param>
-        /// <param name="mapper"></param>
-        public UserController(IUserService userService, IProjectService projectService, IMapper mapper)
+        /// <param name="userService">The user service.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="roleService">The role service.</param>
+        public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
         {
             this.userService = userService;
             this.projectService = projectService;
             this.mapper = mapper;
+            this.roleService = roleService;
         }
 
         /// <summary>
         /// Gets the current user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The current user as user resource result.</returns>
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
@@ -82,8 +82,8 @@ namespace API.Controllers
         /// <summary>
         ///     Get a user account.
         /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
+        /// <param name="userId">the useridentifier.</param>
+        /// <returns>The user resource result.</returns>
         [HttpGet("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
         public async Task<IActionResult> GetUser(int userId)
@@ -116,22 +116,27 @@ namespace API.Controllers
 
 
         /// <summary>
-        ///     Create a user account.
+        /// Creates the account asynchronous.
         /// </summary>
-        /// <param name="accountResource"></param>
-        /// <returns></returns>
+        /// <param name="accountResource">The account resource.</param>
+        /// <returns>The created user as user resource result.</returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
-        public IActionResult CreateAccount([FromBody] UserResource accountResource)
+        public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
         {
             User user = mapper.Map<UserResource, User>(accountResource);
+            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
+            user.Role = registeredUserRole;
+
             try
             {
                 userService.Add(user);
                 userService.Save();
-                return Created(nameof(CreateAccount), mapper.Map<User, UserResourceResult>(user));
-            } catch
+                return Created(nameof(CreateAccountAsync), mapper.Map<User, UserResourceResult>(user));
+            } catch(DbUpdateException e)
             {
+                Log.Logger.Error(e, "Database exception");
+
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed to create user account.",
@@ -143,11 +148,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Update the User account.
+        /// Updates the account.
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="userResource"></param>
-        /// <returns></returns>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="userResource">The user resource.</param>
+        /// <returns>The updated user as user resource result.</returns>
         [HttpPut("{userId}")]
         [Authorize]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
@@ -165,7 +170,6 @@ namespace API.Controllers
                  };
                 return Unauthorized(problem);
             }
-
 
             User user = await userService.FindAsync(userId);
             if(user == null)
@@ -188,14 +192,39 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Deletes the current account.
+        /// </summary>
+        /// <returns>Not found when the user does not exist. OK if everything went welll.</returns>
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                };
+                return NotFound(problem);
+            }
+
+            await userService.RemoveAsync(user.Id);
+            userService.Save();
+            return Ok();
+        }
+
+        /// <summary>
         ///     Delete the user account.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Statuscode 200</returns>
         [HttpDelete("{userId}")]
         [Authorize]
         public async Task<IActionResult> DeleteAccount(int userId)
         {
-
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
 

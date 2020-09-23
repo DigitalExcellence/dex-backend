@@ -28,6 +28,7 @@ namespace Services.Services
     {
 
         Task<List<Highlight>> GetHighlightsAsync();
+        Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId);
 
     }
 
@@ -43,6 +44,10 @@ namespace Services.Services
             return await Repository.GetHighlightsAsync();
         }
 
+        public async Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId)
+        {
+            return await Repository.GetHighlightsByProjectIdAsync(projectId).ConfigureAwait(false);
+        }
     }
 
 }
