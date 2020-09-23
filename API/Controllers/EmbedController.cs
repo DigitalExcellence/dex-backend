@@ -146,7 +146,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Creates a embedded project.
+        /// Creates an embedded project.
         /// </summary>
         /// <param name="embedResource">EmbedResource.</param>
         /// <returns>The embedded project resource result.</returns>
