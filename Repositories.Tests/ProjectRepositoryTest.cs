@@ -349,8 +349,12 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Tests
+            // Id search
+            List<Project> retrieved = (List<Project>) await Repository.SearchAsync("1", 0, 1);
+            Assert.AreEqual(1, retrieved.Count, "Id search failed");
+
             // Name search
-            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("exName", 10, 10);
+            retrieved = (List<Project>)await Repository.SearchAsync("exName", 10, 10);
             Assert.AreEqual(10, retrieved.Count, "Name search failed");
 
             // Description search
