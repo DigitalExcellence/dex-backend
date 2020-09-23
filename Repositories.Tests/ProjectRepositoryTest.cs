@@ -29,7 +29,8 @@ namespace Repositories.Tests
             {
                 projects[i].User = users[i];
             }
-            DbContext.AddRange(projects);
+
+            await DbContext.AddRangeAsync(projects);
             await DbContext.SaveChangesAsync();
 
             // Test
@@ -230,8 +231,15 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Tests
+            // Id search
+            List<Project> retrieved = (List<Project>) await Repository.SearchAsync("1");
+            foreach(Project project in retrieved)
+            {
+                Assert.True(project.Id.ToString().Contains("1"), "Id search failed");
+            }
+
             // Name search
-            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("exName");
+            retrieved = (List<Project>)await Repository.SearchAsync("exName");
             Assert.AreEqual(50, retrieved.Count, "Name search failed");
 
             // Description search
@@ -312,8 +320,12 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Tests
+            // Id search
+            List<Project> retrieved = (List<Project>) await Repository.SearchAsync("-1");
+            Assert.AreEqual(0, retrieved.Count);
+
             // Name search
-            List<Project> retrieved = (List<Project>)await Repository.SearchAsync("test");
+            retrieved = (List<Project>)await Repository.SearchAsync("test");
             Assert.AreEqual(0, retrieved.Count);
         }
 

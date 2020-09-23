@@ -286,7 +286,8 @@ namespace Repositories
                 project.Description,
                 project.ShortDescription,
                 project.Uri,
-                project.User.Name
+                project.User.Name,
+                project.Id.ToString()
             }
             .Any(text => regex.IsMatch(text));
         }
@@ -305,6 +306,7 @@ namespace Repositories
                             p.Description.Contains(query) ||
                             p.ShortDescription.Contains(query) ||
                             p.Uri.Contains(query) ||
+                            p.Id.ToString().Equals(query) ||
                             p.User.Name.Contains(query));
         }
     }
