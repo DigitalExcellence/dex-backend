@@ -16,6 +16,7 @@
 */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Models;
 using Models.Defaults;
 using Repositories.Base;
@@ -183,7 +184,8 @@ namespace Repositories
             )
         {
             IQueryable<Project> queryable = DbSet
-                .Include(p => p.User);
+                                            .Include(p => p.User)
+                                            .Include(p => p.ProjectIcon);
             queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
 
             List<Project> projects = await queryable.ToListAsync();
@@ -270,6 +272,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                    .Include(p => p.User)
                    .Include(p => p.Collaborators)
+                   .Include(p => p.ProjectIcon)
                    .Where(p => p.Id == id)
                    .FirstOrDefaultAsync();
 
