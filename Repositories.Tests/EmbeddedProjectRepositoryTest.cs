@@ -239,5 +239,79 @@ namespace Repositories.Tests
             EmbeddedProject actualProject = await Repository.GetEmbeddedProjectAsync(embeddedProject.Guid);
             Assert.AreEqual(actualProject.Project.User.Email, Defaults.Privacy.RedactedEmail);
         }
+
+        /// <summary>
+        /// Test if the function GetEmbeddedProjectsByOwnerAsync finds the embedded project with the given user and not the rest.
+        /// </summary>
+        /// <param name="embeddedProject">The embedded project that will be filtered for.</param>
+        /// <param name="embeddedProject">The embedded projects that will be seeded.</param>
+        [Test]
+        public async Task GetEmbeddedProjectsByOwnerAsync_goodflow([EmbeddedDataSource] EmbeddedProject embeddedProject,
+                                                          [EmbeddedDataSource(100)]
+                                                          List<EmbeddedProject> embeddedProjects)
+        {
+            // Seed
+            DbContext.AddRange(embeddedProjects);
+            DbContext.Add(embeddedProject);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            IEnumerable<EmbeddedProject> actualEmbeddedProject =
+                await Repository.GetEmbeddedProjectsByOwnerAsync(embeddedProject.User);
+
+            Assert.Contains(embeddedProject,actualEmbeddedProject.ToList());
+            Assert.IsTrue(actualEmbeddedProject.Count() == 1);
+        }
+
+        /// <summary>
+        /// Test if the function GetEmbeddedProjectsByOwnerAsync finds the embedded project with the given user and not the rest.
+        /// </summary>
+        /// <param name="embeddedProject">The embedded project that will be filtered for.</param>
+        /// <param name="embeddedProject">The embedded projects that will be seeded.</param>
+        /// <param name="embeddedProjects">The user that will be filtered for.</param>
+        [Test]
+        public async Task GetEmbeddedProjectsByOwnerAsync_goodflow_multiple_projects([EmbeddedDataSource(2)] List<EmbeddedProject> embeddedProject,
+                                                                   [EmbeddedDataSource(100)] List<EmbeddedProject> embeddedProjects,
+                                                                   [UserDataSource] User user)
+        {
+            foreach(EmbeddedProject project in embeddedProject)
+            {
+                project.User = user;
+            }
+
+            // Seed
+            DbContext.AddRange(embeddedProjects);
+            DbContext.AddRange(embeddedProject);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            IEnumerable<EmbeddedProject> actualEmbeddedProject =
+                await Repository.GetEmbeddedProjectsByOwnerAsync(user);
+
+            Assert.Contains(embeddedProject[0], actualEmbeddedProject.ToList());
+            Assert.Contains(embeddedProject[1], actualEmbeddedProject.ToList());
+            Assert.IsTrue(actualEmbeddedProject.Count() == 2);
+        }
+
+        /// <summary>
+        /// Test if the function GetEmbeddedProjectsByOwnerAsync returns an empty ienumerable on no projects found.
+        /// </summary>
+        /// <param name="embeddedProjects">A list of mock mebeddedProjects.</param>
+        /// <param name="user">The user that will be filtered for.</param>
+        [Test]
+        public async Task GetEmbeddedProjectsByOwnerAsync_noProjects([EmbeddedDataSource(100)] List<EmbeddedProject> embeddedProjects,
+                                                                                     [UserDataSource] User user)
+        {
+
+            // Seed
+            DbContext.AddRange(embeddedProjects);
+            await DbContext.SaveChangesAsync();
+
+            // Test
+            IEnumerable<EmbeddedProject> actualEmbeddedProject =
+                await Repository.GetEmbeddedProjectsByOwnerAsync(user);
+
+            Assert.IsEmpty(actualEmbeddedProject);
+        }
     }
 }

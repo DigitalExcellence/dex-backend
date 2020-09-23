@@ -54,6 +54,15 @@ namespace Repositories
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
+        /// <summary>
+        /// Gets the projects that contain a reference (owner or collaborator) to the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>
+        /// A list of projects with a reference to the specified user.
+        /// </returns>
+        Task<List<Project>> GetProjectsByReferencedUser(User user);
+
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -274,6 +283,23 @@ namespace Repositories
                    .FirstOrDefaultAsync();
 
             return RedactUser(project);
+        }
+
+        /// <summary>
+        /// Gets the projects that contain a reference (owner or collaborator) to the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>
+        /// A list of projects with a reference to the specified user.
+        /// </returns>
+        public async Task<List<Project>> GetProjectsByReferencedUser(User user)
+        {
+            // TODO: Implement where for collaborators when it becomes a user object.
+            List<Project> projects = await GetDbSet<Project>()
+                  .Include(p => p.User)
+                  .Where(p => p.User == user)
+                  .ToListAsync();
+            return RedactUser(projects);
         }
 
         /// <summary>

@@ -46,6 +46,14 @@ namespace Repositories
         /// <param name="guid">The unique identifier.</param>
         /// <returns>A boolean if the guid already exists return false else return true.</returns>
         Task<bool> IsNonExistingGuidAsync(Guid guid);
+
+        /// <summary>
+        /// Gets the embedded projects created by the user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of embedded projects created by the user.</returns>
+        Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsByOwnerAsync(User user);
+
     }
     /// <summary>
     /// EmbedRepository
@@ -153,6 +161,21 @@ namespace Repositories
                 .Where(e => e.Guid == guid)
                 .FirstOrDefaultAsync() == null;
         }
+
+        /// <summary>
+        /// Gets the embedded projects created by the user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of embedded projects created by the user.</returns>
+        public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsByOwnerAsync(User user)
+        {
+            List<EmbeddedProject> embeddedProjects = await GetDbSet<EmbeddedProject>()
+               .Include(u => u.User)
+               .Where(e => e.User == user)
+               .ToListAsync();
+            return RedactUser(embeddedProjects);
+    }
+
     }
 
 }

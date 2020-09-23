@@ -47,6 +47,54 @@ namespace Services.Tests
         }
 
         /// <summary>
+        /// Test whether the repository method is called and no changes have been applied to the object
+        /// </summary>
+        /// <param name="projects">The projects which are used as data to test</param>
+        [Test]
+        public async Task GetProjectByReferencedUser([ProjectDataSource(10)] List<Project> projects)
+        {
+            User firstUser = projects[0]
+                .User;
+            RepositoryMock.Setup(
+                              repository => repository.GetProjectsByReferencedUser(firstUser))
+                          .Returns(
+                              Task.FromResult( new List<Project>(){projects[0]} )
+                          );
+
+            List<Project> retrievedProjects = await Service.GetProjectsByReferencedUser(firstUser);
+
+            Assert.DoesNotThrow(() => {
+                RepositoryMock.Verify(repository => repository.GetProjectsByReferencedUser(firstUser), Times.Once);
+            });
+
+            Assert.AreEqual(new List<Project>() { projects[0] }, retrievedProjects);
+        }
+
+        /// <summary>
+        /// Test whether the repository method is called and no changes have been applied to the object
+        /// </summary>
+        /// <param name="projects">The projects which are used as data to test</param>
+        [Test]
+        public async Task GetProjectByReferencedUser_noProjects([ProjectDataSource(10)] List<Project> projects)
+        {
+            User firstUser = projects[0]
+                .User;
+            RepositoryMock.Setup(
+                              repository => repository.GetProjectsByReferencedUser(firstUser))
+                          .Returns(
+                              Task.FromResult(new List<Project>())
+                          );
+
+            List<Project> retrievedProjects = await Service.GetProjectsByReferencedUser(firstUser);
+
+            Assert.DoesNotThrow(() => {
+                RepositoryMock.Verify(repository => repository.GetProjectsByReferencedUser(firstUser), Times.Once);
+            });
+
+            Assert.IsEmpty(retrievedProjects);
+        }
+
+        /// <summary>
         /// Test whether the repository method is called with the orderBy created parameter and ordering ascending and no changes have been applied to the projects
         /// </summary>
         /// <param name="projects">The projects which are used as data to test</param>

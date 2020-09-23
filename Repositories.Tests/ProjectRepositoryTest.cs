@@ -641,6 +641,48 @@ namespace Repositories.Tests
             Assert.AreEqual(0, retrieved.Collaborators.Count);
         }
 
+        /// <summary>
+        /// Gets the projects by referenced user goodflow.
+        /// </summary>
+        /// <param name="projects">The projects.</param>
+        /// <param name="project">The project that should be found.</param>
+        [Test]
+        public async Task GetProjectsByReferencedUser_Goodflow([ProjectDataSource(100)] List<Project> projects,
+                                                               [ProjectDataSource] Project project,
+                                                               [UserDataSource] User user)
+        {
+            // Seeding
+            project.User = user;
+
+            DbContext.Add(project);
+            DbContext.AddRange(projects);
+            await DbContext.SaveChangesAsync();
+
+            // Testing
+            List<Project> retrievedProjects = await Repository.GetProjectsByReferencedUser(user);
+
+            Assert.IsTrue(retrievedProjects.Count == 1);
+            Assert.Contains(project, retrievedProjects);
+        }
+
+        /// <summary>
+        /// Gets the projects by referenced user badflow.
+        /// </summary>
+        /// <param name="projects">The projects.</param>
+        /// <param name="project">The project that should be found.</param>
+        [Test]
+        public async Task GetProjectsByReferencedUser_noProjects([ProjectDataSource(100)] List<Project> projects,
+                                                               [UserDataSource] User user)
+        {
+            // Seeding
+            DbContext.AddRange(projects);
+            await DbContext.SaveChangesAsync();
+
+            // Testing
+            List<Project> retrievedProjects = await Repository.GetProjectsByReferencedUser(user);
+
+            Assert.IsEmpty(retrievedProjects);
+        }
 
         ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
         [Test]

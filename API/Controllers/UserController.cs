@@ -26,6 +26,7 @@ using Models.Defaults;
 using RestSharp;
 using Serilog;
 using Services.Services;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,18 +42,24 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly IProjectService projectService;
+        private readonly IEmbedService embedService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="userService">The user service.</param>
+        /// <param name="projectService">The project service.</param>
+        /// <param name="embedService">The embed service.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="roleService">The role service.</param>
-        public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
+        public UserController(IUserService userService, IProjectService projectService, IEmbedService embedService, IMapper mapper, IRoleService roleService)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
+            this.projectService = projectService;
+            this.embedService = embedService;
         }
 
         /// <summary>
@@ -191,43 +198,40 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Deletes the current account.
+        /// Delete the user account.
         /// </summary>
-        /// <returns>Not found when the user does not exist. OK if everything went welll.</returns>
-        [HttpDelete]
+        /// <returns>Statuscode 200</returns>
+        [HttpDelete("{userId?}")]
         [Authorize]
-        public async Task<IActionResult> DeleteAccount()
+        public async Task<IActionResult> DeleteAccount(int? userId=null)
         {
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
-            if(await userService.FindAsync(user.Id) == null)
+            User toDeleteUser = null;
+            // If no userid is given use the current users userid.
+            if(userId == null)
+            {
+                toDeleteUser = currentUser;
+            } else
+            {
+                toDeleteUser = await userService.FindAsync((int)userId);
+            }
+
+            bool isAllowed = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
+
+            if(toDeleteUser == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
-                };
+                 {
+                     Title = "Failed getting the user account.",
+                     Detail = "The database does not contain a user with this user id.",
+                     Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                 };
                 return NotFound(problem);
             }
 
-            await userService.RemoveAsync(user.Id);
-            userService.Save();
-            return Ok();
-        }
 
-        /// <summary>
-        ///     Delete the user account.
-        /// </summary>
-        /// <returns>Statuscode 200</returns>
-        [HttpDelete("{userId}")]
-        [Authorize]
-        public async Task<IActionResult> DeleteAccount(int userId)
-        {
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
-
-            if(user.Id != userId && !isAllowed)
+            if(currentUser.Id != toDeleteUser.Id && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
                  {
@@ -238,20 +242,37 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            if(await userService.FindAsync(userId) == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
-                };
-                return NotFound(problem);
-            }
 
-            await userService.RemoveAsync(userId);
+            User placeholderUser = await userService.GetUserByIdentityIdAsync("DEX-0");
+
+            // Projects
+            List<Project> projects = await projectService.GetProjectsByReferencedUser(toDeleteUser);
+            foreach(Project project in projects)
+            {
+                // TODO: EXtend with collaborator when that becomes a user object.
+                if(project.UserId == userId)
+                {
+                    project.User = placeholderUser;
+                    projectService.Update(project);
+                }
+            }
+            projectService.Save();
+            
+            //Embedded projects
+            IEnumerable<EmbeddedProject> embeddedProjects = await embedService.GetEmbeddedProjectsByOwnerAsync(toDeleteUser);
+            foreach(EmbeddedProject embeddedProject in embeddedProjects)
+            {
+                await embedService.RemoveAsync(embeddedProject.Id);
+            }
+            embedService.Save();
+
+
+            await userService.RemoveAsync(toDeleteUser.Id);
             userService.Save();
+
             return Ok();
         }
+
+
     }
 }

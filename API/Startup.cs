@@ -311,6 +311,9 @@ namespace API
             {
                 // seed admin
                 context.User.Add(Seed.SeedAdminUser(roles));
+                // seed placeholder user for removed accounts.
+                context.User.Add(Seed.SeedRemovedUser(roles));
+
                 context.SaveChanges();
 
                 if(!env.IsProduction())

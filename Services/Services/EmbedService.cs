@@ -44,6 +44,14 @@ namespace Services.Services
         /// <param name="guid">The unique identifier.</param>
         /// <returns>true if there are no embedded projects with the given guid.</returns>
         Task<bool> IsNonExistingGuidAsync(Guid guid);
+
+        /// <summary>
+        /// Gets the embedded projects created by the user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of embedded projects created by the user.</returns>
+        Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsByOwnerAsync(User user);
+
     }
     /// <summary>
     /// EmbedService
@@ -90,6 +98,16 @@ namespace Services.Services
         {
             return await Repository.IsNonExistingGuidAsync(guid);
         }
+        /// <summary>
+        /// Gets the embedded projects created by the user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of embedded projects created by the user.</returns>
+        public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsByOwnerAsync(User user)
+        {
+            return await Repository.GetEmbeddedProjectsByOwnerAsync(user);
+        }
+
     }
 
 }

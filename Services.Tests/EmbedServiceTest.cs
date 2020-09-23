@@ -164,5 +164,51 @@ namespace Services.Tests
 
             Assert.IsNull(actualEmbeddedProject);
         }
+
+        /// <summary>
+        /// Gets the embedded projects by owner no project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        [Test]
+        public async Task GetEmbeddedProjectsByOwnerAsync_noProjects([EmbeddedDataSource] EmbeddedProject project)
+        {
+            RepositoryMock.Setup(
+                              repository => repository.GetEmbeddedProjectsByOwnerAsync(project.User))
+                          .Returns(
+                              Task.FromResult((IEnumerable<EmbeddedProject>) null)
+                          );
+
+            IEnumerable<EmbeddedProject> actualEmbeddedProject = await Service.GetEmbeddedProjectsByOwnerAsync(project.User);
+
+            Assert.DoesNotThrow(() => {
+                RepositoryMock.Verify(repository => repository.GetEmbeddedProjectsByOwnerAsync(project.User), Times.Once);
+            });
+
+            Assert.IsNull(actualEmbeddedProject);
+        }
+
+
+        /// <summary>
+        /// Gets the embedded projects by owner no project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        [Test]
+        public async Task GetEmbeddedProjectsByOwnerAsync_GoodFlow([EmbeddedDataSource] EmbeddedProject project)
+        {
+            RepositoryMock.Setup(
+                              repository => repository.GetEmbeddedProjectsByOwnerAsync(project.User))
+                          .Returns(
+                              Task.FromResult((IEnumerable<EmbeddedProject>)new List<EmbeddedProject>{ project })
+                          );
+
+            IEnumerable<EmbeddedProject> actualEmbeddedProject = await Service.GetEmbeddedProjectsByOwnerAsync(project.User);
+
+            Assert.DoesNotThrow(() => {
+                RepositoryMock.Verify(repository => repository.GetEmbeddedProjectsByOwnerAsync(project.User), Times.Once);
+            });
+
+            Assert.IsNotNull(actualEmbeddedProject);
+            Assert.AreEqual(actualEmbeddedProject, new List<EmbeddedProject> { project });
+        }
     }
 }

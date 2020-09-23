@@ -94,6 +94,12 @@ namespace Data.Helpers
             };
             roles.Add(administratorRole);
 
+            Role placeHolderRole = new Role()
+            {
+                Name = nameof(Defaults.Roles.Placeholder),
+                Scopes = new List<RoleScope>()
+            };
+            roles.Add(placeHolderRole);
             return roles;
         }
         /// <summary>
@@ -115,6 +121,26 @@ namespace Data.Helpers
 
             return user;
         }
+
+        /// <summary>
+        /// Seeds the Removed user.
+        /// </summary>
+        /// <param name="roles">The roles.</param>
+        /// <returns>Returns the placeholder user for deleted accounts that will be seeded.</returns>
+        public static User SeedRemovedUser(List<Role> roles)
+        {
+            Role placeholderRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Placeholder));
+
+            User user = new User
+                        {
+                            Role = placeholderRole,
+                            IdentityId = "DEX-0",
+                            Email = "RemovedUser@dex.software",
+                            Name = "Removed User"
+                        };
+            return user;
+        }
+
         /// <summary>
         /// Seeds the pr user.
         /// </summary>

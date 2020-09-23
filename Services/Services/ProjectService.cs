@@ -53,6 +53,13 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        /// <summary>
+        /// Gets the projects that contain a reference (owner or collaborator) to the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of projects with a reference to the specified user.</returns>
+        Task<List<Project>> GetProjectsByReferencedUser(User user);
+
     }
 
     public class ProjectService : Service<Project>, IProjectService
@@ -137,6 +144,18 @@ namespace Services.Services
                 projectFilterParams.AmountOnPage = 20;
             int count = await ProjectsCount(projectFilterParams);
             return (int) Math.Ceiling(count / (decimal) projectFilterParams.AmountOnPage);
+        }
+
+        /// <summary>
+        /// Gets the projects that contain a reference (owner or collaborator) to the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>
+        /// A list of projects with a reference to the specified user.
+        /// </returns>
+        public Task<List<Project>> GetProjectsByReferencedUser(User user)
+        {
+            return Repository.GetProjectsByReferencedUser(user);
         }
 
         public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
