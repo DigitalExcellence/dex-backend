@@ -98,9 +98,9 @@ namespace IdentityServer.Configuration
                            {
                                new Secret(config.Frontend.ClientSecret.Sha256())
                            },
-                           AllowedGrantTypes = GrantTypes.Implicit,
+                           AllowedGrantTypes = GrantTypes.Code,
                            RequirePkce = true,
-
+                           RequireClientSecret = false,
                            RequireConsent = false,
 
                            // where to redirect to after login
@@ -122,9 +122,8 @@ namespace IdentityServer.Configuration
                                 IdentityServerConstants.StandardScopes.Email,
                                 "dex-api"
                             },
-                           AllowAccessTokensViaBrowser = true
-
-                           // AllowOfflineAccess = true
+                           AllowAccessTokensViaBrowser = true,
+                           AllowOfflineAccess = true
                        },
 
                        new Client
