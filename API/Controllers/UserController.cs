@@ -41,6 +41,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly IProjectService projectService;
         private readonly IUserFollowedProjectService userFollowedProjectService;
 
         /// <summary>
@@ -49,11 +50,12 @@ namespace API.Controllers
         /// <param name="userService">The user service.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="roleService">The role service.</param>
-        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IUserFollowedProjectService userFollowedProjectService)
+        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IUserFollowedProjectService userFollowedProjectService,IProjectService projectService)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
+            this.projectService = projectService;
             this.userFollowedProjectService = userFollowedProjectService;
         }
 
@@ -220,9 +222,12 @@ namespace API.Controllers
 
         [HttpPost("follow/{projectId}")]
         [Authorize]
-        public async Task<IActionResult> FollowProject([FromBody]UserFollowedProject project)
+        public async Task<IActionResult> FollowProject([FromBody]int userId,int projectId)
         {
-            userFollowedProjectService.Add(project);
+            User user = await userService.FindAsync(userId);
+            Project project = await projectService.FindAsync(projectId);
+            UserFollowedProject userFollowedProject = new UserFollowedProject(project, user);
+            userFollowedProjectService.Add(userFollowedProject);
 
             return Ok();
         }

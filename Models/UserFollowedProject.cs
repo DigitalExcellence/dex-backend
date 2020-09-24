@@ -6,6 +6,12 @@ namespace Models
 {
     public class UserFollowedProject
     {
+        public UserFollowedProject(Project project, User user)
+        {
+            Project = project;
+            User = user;
+        }
+
         public int Id { get; set; }
         public Project Project { get; set; }
         public User User{ get; set; }
