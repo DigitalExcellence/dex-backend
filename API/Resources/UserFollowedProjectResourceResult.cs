@@ -1,16 +1,16 @@
+using Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Models
+namespace API.Resources
 {
-    public class UserFollowedProject
+    public class UserFollowedProjectResourceResult
     {
         public int Id { get; set; }
         public Project Project { get; set; }
-        public User User{ get; set; }
+        public User User { get; set; }
         public int UserId { get; set; }
     }
-
-
 }
