@@ -15,17 +15,19 @@ namespace Services.Services
 
     public class UserFollowedProjectProjectService : Service<UserFollowedProjectRepository>,IUserFollowedProjectService
     {
-        private readonly UserRepository userRepository;
-        private readonly ProjectRepository projectRepository;
+        private readonly IUserRepository userRepository;
+        private readonly IProjectRepository projectRepository;
+        private readonly UserFollowedProjectRepository userFollowedProjectRepository;
 
         public UserFollowedProjectProjectService(UserFollowedProjectRepository repository,UserRepository userRepository,ProjectRepository projectRepository) : base(repository) {
             this.userRepository = userRepository;
             this.projectRepository = projectRepository;
+            this.userFollowedProjectRepository = repository;
             
         }
 
        
-        protected new IUserFollowedProjectRepository userFollowedProjectRepository => (IUserFollowedProjectRepository) base.Repository;
+       // protected new IUserFollowedProjectRepository userFollowedProjectRepository => (IUserFollowedProjectRepository) base.Repository;
 
         public  async void Add(UserFollowedProject userFollowed)
         {

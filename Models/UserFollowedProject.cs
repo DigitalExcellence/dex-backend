@@ -12,6 +12,11 @@ namespace Models
             User = user;
         }
 
+        public UserFollowedProject()
+        {
+
+        }
+
         public int Id { get; set; }
         public Project Project { get; set; }
         public User User{ get; set; }
