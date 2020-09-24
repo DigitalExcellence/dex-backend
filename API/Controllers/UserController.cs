@@ -229,6 +229,7 @@ namespace API.Controllers
             UserFollowedProject userFollowedProject = new UserFollowedProject(project, user);
             userFollowedProjectService.Add(userFollowedProject);
 
+            userFollowedProjectService.Save();
             return Ok();
         }
 
