@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200904113526_DecriptionAddedForHighlightTable")]
+    partial class DecriptionAddedForHighlightTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,28 +204,6 @@ namespace _4_Data.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("Models.UserFollowedProject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserFollowedProjects");
-                });
-
             modelBuilder.Entity("Models.Collaborator", b =>
                 {
                     b.HasOne("Models.Project", null)
@@ -280,19 +260,6 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
-                });
-
-            modelBuilder.Entity("Models.UserFollowedProject", b =>
-                {
-                    b.HasOne("Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("Models.User", "User")
-                        .WithMany("UserFollowedProjects")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

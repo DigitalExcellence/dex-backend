@@ -194,12 +194,14 @@ namespace Data.Helpers
 
             for(int i = 0; i < 5 && i < projects.Count; i++)
             {
-                Highlight highlight = new Highlight
-                {
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddYears(2),
-                    Project = projects[i]
-                };
+                Faker<Highlight> fakeHighLight = new Faker<Highlight>()
+                                                 .RuleFor(s => s.Description, f => f.Lorem.Sentence(5))
+                                                 .RuleFor(s => s.StartDate, DateTime.Now)
+                                                 .RuleFor(s => s.EndDate, DateTime.Now.AddYears(2))
+                                                 .RuleFor(s => s.Project, projects[i]);
+
+                Highlight highlight = fakeHighLight.Generate();
+
                 highlights.Add(highlight);
             }
 

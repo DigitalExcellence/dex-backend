@@ -16,6 +16,7 @@
 */
 
 using Models;
+using System.Collections.Generic;
 
 namespace API.Resources
 {
@@ -59,6 +60,10 @@ namespace API.Resources
         /// </value>
         public Role Role { get; set; }
 
+        /// <summary>
+        /// Gets or sets the followed projects for user
+        /// </summary>
+        public List<UserFollowedProject> UserFollowedProjects { get; set; }
     }
 
 }

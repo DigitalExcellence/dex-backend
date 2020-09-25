@@ -41,6 +41,8 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly IProjectService projectService;
+        private readonly IUserFollowedProjectService userFollowedProjectService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
@@ -48,11 +50,13 @@ namespace API.Controllers
         /// <param name="userService">The user service.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="roleService">The role service.</param>
-        public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
+        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IUserFollowedProjectService userFollowedProjectService,IProjectService projectService)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
+            this.projectService = projectService;
+            this.userFollowedProjectService = userFollowedProjectService;
         }
 
         /// <summary>
@@ -213,6 +217,19 @@ namespace API.Controllers
 
             await userService.RemoveAsync(user.Id);
             userService.Save();
+            return Ok();
+        }
+
+        [HttpPost("follow/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> FollowProject([FromBody]int userId,int projectId)
+        {
+            User user = await userService.FindAsync(userId);
+            Project project = await projectService.FindAsync(projectId);
+            UserFollowedProject userFollowedProject = new UserFollowedProject(project, user);
+            userFollowedProjectService.Add(userFollowedProject);
+
+            userFollowedProjectService.Save();
             return Ok();
         }
 
