@@ -299,6 +299,12 @@ namespace Repositories
 
             }
 
+            if(entity.ProjectIcon == null)
+            {
+                DbContext.Entry(entity)
+                         .Entity.ProjectIconId = null;
+            }
+
             DbSet.Update(entity);
         }
 

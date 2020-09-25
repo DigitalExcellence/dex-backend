@@ -56,6 +56,8 @@ namespace Models
         [Required]
         public DateTime Updated { get; set; }
 
+        public int? ProjectIconId { get; set; }
+
         public File ProjectIcon { get; set; }
 
     }
