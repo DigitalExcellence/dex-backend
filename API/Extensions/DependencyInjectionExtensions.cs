@@ -64,8 +64,8 @@ namespace API.Extensions
             services.AddScoped<IGitHubSource, GitHubSource>();
             services.AddScoped<IGitLabSource, GitLabSource>();
 
-            services.AddScoped<IUserFollowedProjectService, UserFollowedProjectProjectService>();
-            services.AddScoped<IUserFollowedProjectRepository, UserFollowedProjectRepository>();
+            services.AddScoped<IUserProjectService, UserProjectService>();
+            services.AddScoped<IUserProjectRepository, UserProjectRepository>();
 
             return services;
         }

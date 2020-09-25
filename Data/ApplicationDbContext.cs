@@ -76,7 +76,7 @@ namespace Data
         /// </value>
         public DbSet<Role> Role { get; set; }
 
-        public DbSet<UserFollowedProject> UserFollowedProjects { get; set; }
+        public DbSet<UserProject> UserProject { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -42,7 +42,7 @@ namespace API.Controllers
         private readonly IUserService userService;
         private readonly IRoleService roleService;
         private readonly IProjectService projectService;
-        private readonly IUserFollowedProjectService userFollowedProjectService;
+        private readonly IUserProjectService userProjectService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
@@ -50,13 +50,13 @@ namespace API.Controllers
         /// <param name="userService">The user service.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="roleService">The role service.</param>
-        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IUserFollowedProjectService userFollowedProjectService,IProjectService projectService)
+        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IUserProjectService userProjectService, IProjectService projectService)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
             this.projectService = projectService;
-            this.userFollowedProjectService = userFollowedProjectService;
+            this.userProjectService = userProjectService;
         }
 
         /// <summary>
@@ -222,14 +222,14 @@ namespace API.Controllers
 
         [HttpPost("follow/{projectId}")]
         [Authorize]
-        public async Task<IActionResult> FollowProject([FromBody]int userId,int projectId)
+        public async Task<IActionResult> FollowProject(int projectId)
         {
-            User user = await userService.FindAsync(userId);
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             Project project = await projectService.FindAsync(projectId);
-            UserFollowedProject userFollowedProject = new UserFollowedProject(project, user);
-            userFollowedProjectService.Add(userFollowedProject);
+            UserProject userProject = new UserProject(project, user);
+            userProjectService.Add(userProject);
 
-            userFollowedProjectService.Save();
+            userProjectService.Save();
             return Ok();
         }
 

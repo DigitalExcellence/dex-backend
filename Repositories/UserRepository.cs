@@ -88,7 +88,7 @@ namespace Repositories
                              .Where(s => s.Id == userId)
                              .Include(s => s.Role)
                              .ThenInclude(s => s.Scopes)
-                             .Include(f => f.UserFollowedProjects)
+                             .Include(f => f.UserProjects)
                              .SingleOrDefaultAsync();
         }
         /// <summary>
@@ -102,7 +102,7 @@ namespace Repositories
                          .Where(s => s.Id == userId)
                          .Include(u => u.Role)
                          .ThenInclude(u => u.Scopes)
-                         .Include(f => f.UserFollowedProjects)
+                         .Include(f => f.UserProjects)
                          .SingleOrDefaultAsync();
         }
         /// <summary>
@@ -116,7 +116,7 @@ namespace Repositories
                          .Where(s => s.IdentityId == identityId)
                          .Include(u => u.Role)
                          .ThenInclude(u => u.Scopes)
-                         .Include(f => f.UserFollowedProjects)
+                         .Include(f => f.UserProjects)
                          .SingleOrDefaultAsync();
         }
 

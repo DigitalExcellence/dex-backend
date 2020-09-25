@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace API.Resources
 {
-    public class UserFollowedProjectResourceResult
+    public class UserProjectResourceResult
     {
         public int Id { get; set; }
         public Project Project { get; set; }

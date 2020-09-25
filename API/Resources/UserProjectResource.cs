@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace API.Resources
 {
     /// <summary>
-    ///     The view model result of UserFollowedProject
+    ///     The view model result of UserProject
     /// </summary>
-    public class UserFollowedProjectResource
+    public class UserProjectResource
     {
         /// <summary>
-        ///     Get or Set Id of a UserFollowedProject Resource Result
+        ///     Get or Set Id of a userProjectService Resource Result
         /// </summary>
         public int Id { get; set; }
         /// <summary>
