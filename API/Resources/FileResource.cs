@@ -36,10 +36,6 @@ namespace API.Resources
         /// </summary>
         public IFormFile File { get; set; }
         /// <summary>
-        /// Name of file
-        /// </summary>
-        public string Name { get; set; }
-        /// <summary>
         /// Date and time of uploading
         /// </summary>
         public DateTime UploadDateTime { get; set; }

@@ -1,3 +1,4 @@
+using API.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Serilog;
@@ -5,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using File = Models.File;
 
@@ -30,12 +32,23 @@ namespace API.Extensions
     /// </summary>
     public interface IFileUploader
     {
+
+        /// <summary>
+        /// Remove specials characters from string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns> String without special characters</returns>
+        string RemoveSpecialCharacters(string str);
+
+
         /// <summary>
         /// Uploads single file
         /// </summary>
         /// <param name="file"></param>
+        /// <param name="fileName"></param>
         /// <returns> path of file location </returns>
-        Task<string> UploadSingleFile(IFormFile file);
+        Task<string> UploadSingleFile(IFormFile file, string fileName);
+
         /// <summary>
         /// Method deletes the file from the file server
         /// </summary>
@@ -53,28 +66,48 @@ namespace API.Extensions
         private static readonly string UploadPath = Directory.GetCurrentDirectory() + "\\files\\";
 
         /// <summary>
+        /// Removes special characters for string to avoid problems
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns> String without special characters</returns>
+        public string RemoveSpecialCharacters(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach(char c in str)
+            {
+                if((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
+
+
+        /// <summary>
         /// Uploads single file
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="file"> File to upload </param>
+        /// <param name="fileName"> Name of file </param> 
         /// <returns> path of file location </returns>
-        public async Task<string> UploadSingleFile(IFormFile file)
+        public async Task<string> UploadSingleFile(IFormFile file, string fileName)
         {
             try
             {
-                if(!System.IO.File.Exists(UploadPath + file.FileName))
+                if(!System.IO.File.Exists(UploadPath + fileName))
                 {
                     await using(Stream sourceStream = file.OpenReadStream())
                     {
-                        await using(FileStream destinationStream = System.IO.File.Create(UploadPath + file.FileName))
+                        await using(FileStream destinationStream = System.IO.File.Create(UploadPath + fileName))
                         {
                             await sourceStream.CopyToAsync(destinationStream);
                         }
                     }
 
-                    return UploadPath + file.FileName;
+                    return UploadPath + fileName;
                 }
 
-                throw new FileExistException(file.FileName);
+                throw new FileExistException(fileName);
             } catch(Exception e)
             {
                 Log.Logger.Error(e, "Unexpected error");

@@ -26,11 +26,12 @@ namespace Models
     {
         public File() { }
 
-        public File(string path, string name, User uploader)
+        public File(string path, string name, User uploader, DateTime uploadDateTime)
         {
-            Path = path;
-            Name = name;
-            Uploader = uploader;
+            this.Path = path;
+            this.Name = name;
+            this.Uploader = uploader;
+            this.UploadDateTime = uploadDateTime;
         }
 
         public int Id { get; set; }

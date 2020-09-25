@@ -19,23 +19,14 @@ using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Models;
-using RestSharp;
 using Services.Services;
-using System.Collections;
-using System.Collections.Specialized;
+using System;
 using System.IO;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
 using File = Models.File;
 
 namespace API.Controllers
@@ -113,10 +104,15 @@ namespace API.Controllers
             }
             try
             {
-                string path = await fileUploader.UploadSingleFile(fileResource.File);
+                DateTime uploadDateTime = DateTime.Now;
+                int fileExtPos = fileResource.File.FileName.LastIndexOf(".");
+                string extension = fileResource.File.FileName.Substring(fileExtPos);
+                string newFileName = fileUploader.RemoveSpecialCharacters(fileResource.File.FileName.Remove(fileExtPos) + uploadDateTime + extension);
+                string path = await fileUploader.UploadSingleFile(fileResource.File, newFileName);
                 User user = await HttpContext.GetContextUser(userService)
                                              .ConfigureAwait(false);
-                File file = new File(path, fileResource.File.FileName, user);
+
+                File file = new File(path, newFileName, user, uploadDateTime);
                 fileService.UploadSingleFile(file);
 
                 return Ok(mapper.Map<File, FileResourceResult>(file));
