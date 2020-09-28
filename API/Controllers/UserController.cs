@@ -225,7 +225,30 @@ namespace API.Controllers
         public async Task<IActionResult> FollowProject(int projectId)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                };
+                return NotFound(problem);
+            }
+
             Project project = await projectService.FindAsync(projectId);
+
+            if(await projectService.FindAsync(projectId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                };
+                return NotFound(problem);
+            }
             UserProject userProject = new UserProject(project, user);
             userProjectService.Add(userProject);
 

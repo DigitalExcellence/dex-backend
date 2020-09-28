@@ -63,7 +63,7 @@ namespace API.Resources
         /// <summary>
         /// Gets or sets the followed projects for user
         /// </summary>
-        public List<UserProject> UserProjects { get; set; }
+        public List<UserProject> UserProject { get; set; }
     }
 
 }
