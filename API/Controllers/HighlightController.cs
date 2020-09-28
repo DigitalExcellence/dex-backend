@@ -70,7 +70,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                                          {
                                              Title = "Failed getting highlight.",
-                                             Detail = "the highlight id cannot be smaller then 0.",
+                                             Detail = "An unexpected error occurred.",
                                              Instance = "8310EE19-C0E9-4236-AFDD-C1A01F8A78F7"
                                          };
                 return BadRequest(problem);
