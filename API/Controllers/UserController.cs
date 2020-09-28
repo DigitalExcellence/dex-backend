@@ -220,6 +220,11 @@ namespace API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Follows a project with given projectId and gets userId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>200 if success 409 if user already follows project</returns>
         [HttpPost("follow/{projectId}")]
         [Authorize]
         public async Task<IActionResult> FollowProject(int projectId)
@@ -232,7 +237,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with this user id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
                 };
                 return NotFound(problem);
             }
@@ -243,9 +248,9 @@ namespace API.Controllers
                 {
                     Title = "User already follows this project",
                     Detail = "You are already following this project.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
                 };
-                return NotFound(problem);
+                return Conflict(problem);
             }
 
             Project project = await projectService.FindAsync(projectId);
@@ -256,12 +261,64 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the project.",
                     Detail = "The database does not contain a project with this project id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
                 };
                 return NotFound(problem);
             }
             UserProject userProject = new UserProject(project, user);
             userProjectService.Add(userProject);
+
+            userProjectService.Save();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Unfollows project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        [HttpDelete("follow/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> UnfollowProject(int projectId)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
+                return NotFound(problem);
+            }
+
+            if(userProjectService.CheckIfUserFollows(user.Id, projectId)== false)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User is not following this project",
+                    Detail = "You are not following this project.",
+                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
+                };
+                return Conflict(problem);
+            }
+
+            Project project = await projectService.FindAsync(projectId);
+
+            if(await projectService.FindAsync(projectId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
+                return NotFound(problem);
+            }
+            UserProject userProject = new UserProject(project, user);
+            userProjectService.Remove(userProject);
 
             userProjectService.Save();
             return Ok();

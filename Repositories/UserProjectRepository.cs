@@ -51,6 +51,7 @@ namespace Repositories
         );
 
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
+        void Remove(UserProject userProject);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
@@ -103,6 +104,12 @@ namespace Repositories
                 return true;
             }
             return false;
+        }
+
+        void IUserProjectRepository.Remove(UserProject userProject)
+        {
+                GetDbSet<UserProject>()
+                    .Remove(userProject);
         }
     }
 
