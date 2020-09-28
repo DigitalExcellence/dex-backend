@@ -10,6 +10,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using static Models.Defaults.Defaults;
 
 namespace API.Controllers
@@ -46,16 +47,21 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public async Task<IActionResult> GetAllRoles()
         {
-            List<Role> roles = await roleService.GetAllAsync().ConfigureAwait(false);
-            if(roles.Count == 0)
+            List<Role> roles;
+
+            try
+            {
+                roles = await roleService.GetAllAsync()
+                                         .ConfigureAwait(false);
+            } catch(Exception)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting all roles.",
-                    Detail = "There where no roles found in the database.",
-                    Instance = "3EB1E953-96D7-45FE-8C5C-05306AF8D060"
+                                         {
+                                             Title = "Failed getting all roles.",
+                                             Detail = "Unexpected error occurred.",
+                                             Instance = "6010C506-44FA-4616-82C3-BD77F70CC1A9"
                 };
-                return NotFound(problem);
+                return BadRequest(problem);
             }
 
             return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleResourceResult>>(roles));
@@ -69,17 +75,22 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public IActionResult GetAllPossibleScopes()
         {
-            List<string> scopeList = roleService.GetValidScopes();
-            if(scopeList.Count == 0)
+            List<string> scopeList;
+
+            try
+            {
+                scopeList = roleService.GetValidScopes();
+            } catch(Exception)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "No valid Scopes found",
-                    Detail = "There where no valid scopes found.",
-                    Instance = "DEB2161D-A8E7-4AAE-BB0F-CDB3CA5D5B9E"
+                                         {
+                                             Title = "No valid Scopes found",
+                                             Detail = "Unexpected error occurred.",
+                                             Instance = "C796E78E-75C1-4CE3-8E43-4A32997B4852"
                 };
-                return NotFound(problem);
+                return BadRequest(problem);
             }
+            
             return Ok(scopeList);
         }
 

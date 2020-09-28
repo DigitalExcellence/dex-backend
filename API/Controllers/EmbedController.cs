@@ -28,6 +28,7 @@ using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -67,17 +68,20 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
-            IEnumerable<EmbeddedProject> embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
+            IEnumerable<EmbeddedProject> embeddedProjects;
 
-            if(!embeddedProjects.Any())
+            try
+            {
+                embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
+            } catch(Exception)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "No Embedded Projects found.",
-                    Detail = "There are no Embedded projects in the database.",
-                    Instance = "FEA62EAE-3D3C-4CE7-BDD8-6B273D56068D"
+                    Title = "Failed getting embedded porjects.",
+                    Detail = "An unexpected error occurred.",
+                    Instance = "322A1ED6-4AAD-445C-940B-EE9C247B491C"
                 };
-                return NotFound(problem);
+                return BadRequest(problem);
             }
             return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
         }
