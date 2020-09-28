@@ -25,7 +25,8 @@ using System.Net;
 namespace API.Controllers
 {
     /// <summary>
-    /// The controller that handles search requests.
+    /// This class is responsible for handling HTTP requests that are related
+    /// to the wizard, for exampling retrieving.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -36,20 +37,20 @@ namespace API.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
-        /// <param name="sourceManagerService">The source manager service.</param>
+        /// <param name="sourceManagerService">The source manager service which is used to communicate with the logic layer.</param>
         public WizardController(ISourceManagerService sourceManagerService)
         {
             this.sourceManagerService = sourceManagerService;
         }
 
         /// <summary>
-        /// Gets the wizard information.
+        /// This method is responsible for retrieving the wizard information.
         /// </summary>
-        /// <param name="sourceURI">The source URI.</param>
-        /// <returns>The filled in Project.</returns>
-        /// <response code="200">Returns the project with the specified source Uri.</response>
-        /// <response code="400">If source Uri is not specified.</response>
-        /// <response code="404">If the project could not be found with the specified source Uri.</response>
+        /// <param name="sourceURI">The source URI which is used for searching the project.</param>
+        /// <returns>This method returns the filled in project.</returns>
+        /// <response code="200">This endpoint returns the project with the specified source Uri.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the source Uri is not specified.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the project could not be found with the specified source Uri.</response>
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]

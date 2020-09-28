@@ -28,7 +28,8 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     /// <summary>
-    /// The controller that handles search requests.
+    /// This class is responsible for handling HTTP requests that are related
+    /// to the search requests.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -41,8 +42,8 @@ namespace API.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchController"/> class.
         /// </summary>
-        /// <param name="searchService">The search service.</param>
-        /// <param name="mapper">The mapper.</param>
+        /// <param name="searchService">The search service which is used to communicate with the logic layer.</param>
+        /// <param name="mapper">The mapper which is used to convert the resource to the model to the resource result.</param>
         public SearchController(ISearchService searchService, IMapper mapper)
         {
             this.searchService = searchService;
@@ -50,13 +51,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Search for projects.
+        /// This method is responsible for searching and retrieving projects.
         /// </summary>
-        /// <param name="query">The search query.</param>
-        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects.</param>
-        /// <returns>Search results.</returns>
-        /// <response code="200">Returns search results.</response>
-        /// <response code="400">If search request is invalid.</response>
+        /// <param name="query">The search query which is used to search for a project.</param>
+        /// <param name="projectFilterParamsResource">The parameters to filter which is ued to sort and paginate the projects.</param>
+        /// <returns>This method returns the search results.</returns>
+        /// <response code="200">This endpoint returns search results.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the search request is invalid.</response>
         [HttpGet("internal/{query}")]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -116,7 +117,5 @@ namespace API.Controllers
 
             return Ok(searchResultsResource);
         }
-
     }
-
 }

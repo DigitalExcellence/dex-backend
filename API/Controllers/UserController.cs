@@ -32,7 +32,8 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     /// <summary>
-    /// This controller handles the user settings.
+    /// This class is responsible for handling HTTP requests that are related
+    /// to the users, for example creating, retrieving, updating or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -43,11 +44,11 @@ namespace API.Controllers
         private readonly IRoleService roleService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// Initializes a new instance of the <see cref="UserController"/> class
         /// </summary>
-        /// <param name="userService">The user service.</param>
-        /// <param name="mapper">The mapper.</param>
-        /// <param name="roleService">The role service.</param>
+        /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
+        /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
         public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
         {
             this.userService = userService;
@@ -56,11 +57,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Gets the current user.
+        /// The method is responsible for retrieving the current user.
         /// </summary>
         /// <returns>The current user as user resource result.</returns>
-        /// <response code="200">Returns the current user as a user resource result.</response>
-        /// <response code="404">If the user could not be found.</response>
+        /// <response code="200">This endpoint returns the current user.</response>
+        /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
@@ -83,13 +84,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get a user account.
+        /// This method is responsible for retrieving a user account.
         /// </summary>
-        /// <param name="userId">the useridentifier.</param>
-        /// <returns>The user resource result.</returns>
-        /// <response code="200">Return the user resource result with the specified user id.</response>
-        /// <response code="400">If user id is invalid.</response>
-        /// <response code="404">If the user with the specified id could not be found.</response>
+        /// <param name="userId">the user identifier which is used for searching a user.</param>
+        /// <returns>This method returns the user resource result.</returns>
+        /// <response code="200">This endpoint returns the user with the specified user id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the user id is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpGet("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
@@ -125,12 +126,12 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// Creates the account asynchronous.
+        /// This method is responsible for creating the account.
         /// </summary>
-        /// <param name="accountResource">The account resource.</param>
-        /// <returns>The created user as user resource result.</returns>
-        /// <response code="200">Returns the created user resource result.</response>
-        /// <response code="400">If failed to save the user to the database.</response>
+        /// <param name="accountResource">The account resource which is used for creating the account.</param>
+        /// <returns>This method returns the created user as user resource result.</returns>
+        /// <response code="200">This endpoint returns the created user.</response>
+        /// <response code="400">The 400 Bad Request status code is return when saving the user to the database failed.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.Created)]
@@ -161,14 +162,14 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Updates the account.
+        /// This method is responsible for updating the account.
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
-        /// <param name="userResource">The user resource.</param>
-        /// <returns>The updated user as user resource result.</returns>
-        /// <response code="200">Returns the updated user as user resource result.</response>
-        /// <response code="401">If the user is not allowed to update the account.</response>
-        /// <response code="404">If the user with the specified id could not be found.</response>
+        /// <param name="userId">The user identifier which is used for searching the user.</param>
+        /// <param name="userResource">The user resource which is used for updating the user.</param>
+        /// <returns>This method returns the updated user as user resource result.</returns>
+        /// <response code="200">This endpoint returns the updated user.</response>
+        /// <response code="401">The 401 Unauthorized status code is returned when the user is not allowed to update the account.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpPut("{userId}")]
         [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
@@ -211,11 +212,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Deletes the current account.
+        /// This method is responsible for deleting the current account.
         /// </summary>
-        /// <returns>Not found when the user does not exist. OK if everything went well.</returns>
-        /// <response code="200">Returns status code 200. The current account is deleted.</response>
-        /// <response code="404">If the current account could not be found.</response>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The current account is deleted.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the current account could not be found.</response>
         [HttpDelete]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
@@ -241,12 +242,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Delete the user account.
+        /// This method is responsible for deleting a user account.
         /// </summary>
-        /// <returns>Status code 200.</returns>
-        /// <response code="200">Returns status code 200. The account with the specified id is deleted.</response>
-        /// <response code="401">If the user is not allowed to delete the account.</response>
-        /// <response code="404">If the user with the specified id could not be found.</response>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The account with the specified id is deleted.</response>
+        /// <response code="401">The 401 Unauthorized status code is returned when the user is not allowed to delete the account.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpDelete("{userId}")]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
