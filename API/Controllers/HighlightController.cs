@@ -24,6 +24,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,17 +61,21 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllHighlights()
         {
-            IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync();
-            if(!highlights.Any())
+            IEnumerable<Highlight> highlights;
+            try
+            {
+                highlights = await highlightService.GetHighlightsAsync();
+            } catch(Exception)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlights.",
-                    Detail = "The database does not contain any highlights.",
-                    Instance = "FC6A4F97-C815-4A92-8A73-2ECF1729B161"
-                };
-                return NotFound(problem);
+                                         {
+                                             Title = "Failed getting highlight.",
+                                             Detail = "the highlight id cannot be smaller then 0.",
+                                             Instance = "8310EE19-C0E9-4236-AFDD-C1A01F8A78F7"
+                                         };
+                return BadRequest(problem);
             }
+
 
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
         }
