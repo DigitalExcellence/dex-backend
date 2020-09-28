@@ -54,6 +54,8 @@ namespace Repositories
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
+        bool CheckIfUserFollows(int userId,int projectId);
+
     }
 
     public class UserProjectRepository : Repository<UserProject>, IUserProjectRepository
@@ -61,7 +63,7 @@ namespace Repositories
 
         public UserProjectRepository(DbContext dbContext) : base(dbContext) { }
 
-        public void Add(UserProject entity)
+        public override void Add(UserProject entity)
         {
             DbContext.Add(entity);
         }
@@ -89,6 +91,18 @@ namespace Repositories
         public Task<int> SearchCountAsync(string query, bool? highlighted = null)
         {
             throw new NotImplementedException();
+        }
+
+        bool IUserProjectRepository.CheckIfUserFollows(int userId, int projectId)
+        {
+            UserProject userProject = GetDbSet<UserProject>()
+                              .Where(s => (s.UserId == userId) && s.Project.Id == projectId)
+                              .SingleOrDefault();
+            if(userProject != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 

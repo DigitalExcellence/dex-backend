@@ -237,6 +237,17 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
+            if(userProjectService.CheckIfUserFollows(user.Id,projectId))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User already follows this project",
+                    Detail = "You are already following this project.",
+                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                };
+                return NotFound(problem);
+            }
+
             Project project = await projectService.FindAsync(projectId);
 
             if(await projectService.FindAsync(projectId) == null)

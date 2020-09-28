@@ -55,6 +55,8 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        bool CheckIfUserFollows(int userId,int projectId);
+
     }
 
     public class UserProjectService : Service<UserProject>, IUserProjectService
@@ -112,6 +114,15 @@ namespace Services.Services
         public void Update(UserProject entity)
         {
             throw new NotImplementedException();
+        }
+
+        bool IUserProjectService.CheckIfUserFollows(int userId, int projectId)
+        {
+            if(Repository.CheckIfUserFollows(userId,projectId))
+            {
+                return true;
+            }
+            return false;
         }
 
         Task<UserProject> IService<UserProject>.FindAsync(int id)
