@@ -24,6 +24,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Defaults;
 using Services.Services;
 using System;
 using System.IO;
@@ -89,7 +90,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns>HTTP Response</returns>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         public async Task<IActionResult> UploadSingleFile([FromForm] FileResource fileResource)
         {
             if(fileResource.File == null)
@@ -162,17 +163,20 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteSingleFile(int fileId)
         {
             File file = await fileService.FindAsync(fileId);
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
 
-            if(file == null)
+            if(file.Uploader != user)
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
-                                             Title = "File could not be found.",
-                                             Detail = "File could not be found.",
-                                             Instance = "875B6402-D771-45EC-AB56-3DE0CDD446D6"
-                                         };
-                return NotFound(problem);
+                                             Title = "Not authorized.",
+                                             Detail = "You are not the uploader of this file.",
+                                             Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
+                };
+                return Unauthorized(problem);
             }
+
             try
             {
                 await fileService.RemoveAsync(fileId)
