@@ -12,6 +12,8 @@
     <Compile Remove="Migrations\20200929133538_initTable.Designer.cs" />
     <Compile Remove="Migrations\20200929135218_ChangedUserProjectNaming.cs" />
     <Compile Remove="Migrations\20200929135218_ChangedUserProjectNaming.Designer.cs" />
+    <Compile Remove="Migrations\20200929144218_deleteUserFollowedProjectsTable.cs" />
+    <Compile Remove="Migrations\20200929144218_deleteUserFollowedProjectsTable.Designer.cs" />
   </ItemGroup>
 
  <ItemGroup>
