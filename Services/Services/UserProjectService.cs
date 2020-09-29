@@ -101,9 +101,10 @@ namespace Services.Services
             throw new NotImplementedException();
         }
 
-        public override void Remove(UserProject entity)
+        public void Remove(int id)
         {
-            Repository.Remove(entity);
+            //Repository.Remove(entity);
+            Repository.RemoveUserProjectAsync(id);
         }
 
         public void SaveFollowedProjectAsync(int userId, int projectId)

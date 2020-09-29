@@ -5,6 +5,11 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20200929133538_initTable.cs" />
+    <Compile Remove="Migrations\20200929133538_initTable.Designer.cs" />
+  </ItemGroup>
+
  <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

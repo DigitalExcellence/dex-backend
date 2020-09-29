@@ -51,7 +51,10 @@ namespace Repositories
         );
 
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
-        void Remove(UserProject userProject);
+        // void Remove(UserProject userProject);
+
+        Task<bool> RemoveUserProjectAsync(int id);
+
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
@@ -106,10 +109,26 @@ namespace Repositories
             return false;
         }
 
-        void IUserProjectRepository.Remove(UserProject userProject)
+       // void IUserProjectRepository.re(UserProject userProject)
+        //{
+         //       GetDbSet<UserProject>()
+          //          .Remove(userProject);
+       //}
+
+        async Task<bool> IUserProjectRepository.RemoveUserProjectAsync(int id)
         {
+            UserProject userProject = GetDbSet<UserProject>()
+                .Where(s => s.Id == id)
+                .SingleOrDefault();
+
+            if(userProject != null)
+            {
                 GetDbSet<UserProject>()
                     .Remove(userProject);
+                return true;
+            }
+            return false;
+            
         }
     }
 

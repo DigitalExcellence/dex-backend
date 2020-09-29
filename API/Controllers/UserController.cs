@@ -318,7 +318,8 @@ namespace API.Controllers
                 return NotFound(problem);
             }
             UserProject userProject = new UserProject(project, user);
-            userProjectService.Remove(userProject);
+            //userProjectService.Remove(userProject);
+            userProjectService.RemoveAsync(userProject.Id);
 
             userProjectService.Save();
             return Ok();
