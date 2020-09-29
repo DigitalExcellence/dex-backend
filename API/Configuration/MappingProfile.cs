@@ -32,7 +32,7 @@ namespace API.Configuration
         public MappingProfile()
         {
             CreateMap<UserProjectResourceResult, User>()
-                .ForMember(q => q.UserProjects, options => options.MapFrom(q => q.Project.Name))
+                .ForMember(q => q.UserProject, options => options.MapFrom(q => q.Project.Name))
                 .ForAllOtherMembers(o => o.Ignore());
 
             CreateMap<User, UserResourceResult>();

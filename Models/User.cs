@@ -28,7 +28,7 @@ namespace Models
         {
             Projects = new List<Project>();
             Services = new List<LinkedService>();
-            UserProjects = new List<UserProject>();
+            UserProject = new List<UserProject>();
         }
 
         public int Id { get; set; }
@@ -48,7 +48,7 @@ namespace Models
 
         public List<LinkedService> Services { get; set; }
 
-        public List<UserProject> UserProjects { get; set; }
+        public List<UserProject> UserProject { get; set; }
 
         public string ProfileUrl { get; set; }
 

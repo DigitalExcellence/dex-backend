@@ -29,92 +29,23 @@ namespace Services.Services
 
     public interface IUserProjectService : IService<UserProject>
     {
-        void SaveFollowedProjectAsync(int userId, int projectId);
-
-
-        /// <summary>
-        /// Get a list of all the projects
-        /// </summary>
-        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
-        /// <returns>A list of all the projects</returns>
-        Task<List<Project>> GetAllWithUsersAsync(ProjectFilterParams projectFilterParams);
-
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
-
-        /// <summary>
-        ///     Get the number of projects
-        /// </summary>
-        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
-        /// <returns>The number of projects</returns>
-        Task<int> ProjectsCount(ProjectFilterParams projectFilterParams);
-
-        /// <summary>
-        ///     Get the total number of pages for the results
-        /// </summary>
-        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
-        /// <returns>The total number of pages for the results</returns>
-        Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
-
         bool CheckIfUserFollows(int userId,int projectId);
-
     }
 
     public class UserProjectService : Service<UserProject>, IUserProjectService
     {
-
         public UserProjectService(IUserProjectRepository repository) : base(repository) { }
 
         protected new IUserProjectRepository Repository => (IUserProjectRepository) base.Repository;
 
-        public void Add(UserProject entity)
+        public override void Add(UserProject entity)
         {
             Repository.Add(entity);
         }
 
-        public Task AddAsync(UserProject entity)
+        public void Remove(UserProject userProject)
         {
-            throw new NotImplementedException();
-        }
-
-        public void AddRange(IEnumerable<UserProject> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Project>> GetAllWithUsersAsync(ProjectFilterParams projectFilterParams)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> ProjectsCount(ProjectFilterParams projectFilterParams)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(int id)
-        {
-            //Repository.Remove(entity);
-            Repository.RemoveUserProjectAsync(id);
-        }
-
-        public void SaveFollowedProjectAsync(int userId, int projectId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(UserProject entity)
-        {
-            throw new NotImplementedException();
+            Repository.Remove(userProject);
         }
 
         bool IUserProjectService.CheckIfUserFollows(int userId, int projectId)
@@ -125,16 +56,5 @@ namespace Services.Services
             }
             return false;
         }
-
-        Task<UserProject> IService<UserProject>.FindAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<UserProject>> IService<UserProject>.GetAll()
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

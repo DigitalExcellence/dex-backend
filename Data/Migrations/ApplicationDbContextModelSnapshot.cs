@@ -202,7 +202,7 @@ namespace _4_Data.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("Models.UserProject", b =>
+            modelBuilder.Entity("Models.UserFollowedProject", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,7 +221,7 @@ namespace _4_Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserProject");
+                    b.ToTable("UserFollowedProjects");
                 });
 
             modelBuilder.Entity("Models.Collaborator", b =>
@@ -282,14 +282,14 @@ namespace _4_Data.Migrations
                         .HasForeignKey("RoleId");
                 });
 
-            modelBuilder.Entity("Models.UserProject", b =>
+            modelBuilder.Entity("Models.UserFollowedProject", b =>
                 {
                     b.HasOne("Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
                     b.HasOne("Models.User", "User")
-                        .WithMany("UserProjects")
+                        .WithMany("UserFollowedProjects")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

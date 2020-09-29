@@ -17,119 +17,50 @@
 
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.Defaults;
 using Repositories.Base;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Repositories
 {
 
     public interface IUserProjectRepository : IRepository<UserProject>
     {
-
-        Task<List<Project>> GetAllWithUsersAsync(
-            int? skip = null,
-            int? take = null,
-            Expression<Func<Project, object>> orderBy = null,
-            bool orderByAsc = true,
-            bool? highlighted = null
-            );
-
-        Task<int> CountAsync(bool? highlighted = null);
-
-        Task<IEnumerable<Project>> SearchAsync(
-            string query,
-            int? skip = null,
-            int? take = null,
-            Expression<Func<Project, object>> orderBy = null,
-            bool orderByAsc = true,
-            bool? highlighted = null
-        );
-
-        Task<int> SearchCountAsync(string query, bool? highlighted = null);
-        // void Remove(UserProject userProject);
-
-        Task<bool> RemoveUserProjectAsync(int id);
-
-
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
-
         bool CheckIfUserFollows(int userId,int projectId);
-
     }
 
     public class UserProjectRepository : Repository<UserProject>, IUserProjectRepository
     {
-
         public UserProjectRepository(DbContext dbContext) : base(dbContext) { }
 
-        public override void Add(UserProject entity)
+        public override void Add(UserProject userProject)
         {
-            DbContext.Add(entity);
+            DbContext.Add(userProject);
         }
 
-        public Task<int> CountAsync(bool? highlighted = null)
+        public override void Remove(UserProject userProject)
         {
-            throw new NotImplementedException();
-        }
+            UserProject projectToRemove = GetDbSet<UserProject>()
+                .Where
+                (s => s.UserId == userProject.User.Id
+                && s.Project.Id == userProject.Project.Id)
+                .SingleOrDefault();
 
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Project>> GetAllWithUsersAsync(int? skip = null, int? take = null, Expression<Func<Project, object>> orderBy = null, bool orderByAsc = true, bool? highlighted = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Project>> SearchAsync(string query, int? skip = null, int? take = null, Expression<Func<Project, object>> orderBy = null, bool orderByAsc = true, bool? highlighted = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> SearchCountAsync(string query, bool? highlighted = null)
-        {
-            throw new NotImplementedException();
+                GetDbSet<UserProject>()
+                .Remove(projectToRemove);
         }
 
         bool IUserProjectRepository.CheckIfUserFollows(int userId, int projectId)
         {
             UserProject userProject = GetDbSet<UserProject>()
-                              .Where(s => (s.UserId == userId) && s.Project.Id == projectId)
+                              .Where(s => (s.UserId == userId)
+                              && s.Project.Id == projectId)
                               .SingleOrDefault();
+
             if(userProject != null)
             {
                 return true;
             }
             return false;
-        }
-
-       // void IUserProjectRepository.re(UserProject userProject)
-        //{
-         //       GetDbSet<UserProject>()
-          //          .Remove(userProject);
-       //}
-
-        async Task<bool> IUserProjectRepository.RemoveUserProjectAsync(int id)
-        {
-            UserProject userProject = GetDbSet<UserProject>()
-                .Where(s => s.Id == id)
-                .SingleOrDefault();
-
-            if(userProject != null)
-            {
-                GetDbSet<UserProject>()
-                    .Remove(userProject);
-                return true;
-            }
-            return false;
-            
         }
     }
-
 }
