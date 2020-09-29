@@ -90,7 +90,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns>HTTP Response</returns>
         [HttpPost]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        [Authorize]
         public async Task<IActionResult> UploadSingleFile([FromForm] FileResource fileResource)
         {
             if(fileResource.File == null)
@@ -166,7 +166,18 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService)
                                          .ConfigureAwait(false);
 
-            if(file.Uploader != user)
+            if(file == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "File was not found.",
+                                             Detail = "File was not found.",
+                                             Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
+                };
+                return NotFound(problem);
+            }
+
+            if(file.Uploader != user && !userService.UserHasScope(user.IdentityId, Defaults.Roles.Administrator))
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
