@@ -40,6 +40,7 @@ services:
       - App__Api__ClientId=${API_CLIENT_ID}
       - App__Api__ClientSecret=${API_CLIENT_SECRET}
       - App__Frontend__RedirectUriFrontend=${REDIRECT_URI_FRONTEND}
+      - App__Frontend__RefreshUriFrontend=${REFRESH_URI_FRONTEND}
       - App__Frontend__RedirectUriFrontendPostman=${REDIRECT_URI_FRONTEND_POSTMAN}
       - App__Frontend__PostLogoutUrisFrontend=${POST_LOGOUT_URIS_FRONTEND}
       - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}

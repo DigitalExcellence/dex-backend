@@ -98,15 +98,16 @@ namespace IdentityServer.Configuration
                            {
                                new Secret(config.Frontend.ClientSecret.Sha256())
                            },
-                           AllowedGrantTypes = GrantTypes.Implicit,
+                           AllowedGrantTypes = GrantTypes.Code,
                            RequirePkce = true,
-
+                           RequireClientSecret = false,
                            RequireConsent = false,
 
                            // where to redirect to after login
                            RedirectUris = new List<string> {
                                config.Frontend.RedirectUriFrontend,
-                               config.Frontend.RedirectUriPostman
+                               config.Frontend.RedirectUriPostman,
+                               config.Frontend.RefreshUriFrontend
                            },
 
                            // where to redirect to after logout
@@ -121,9 +122,8 @@ namespace IdentityServer.Configuration
                                 IdentityServerConstants.StandardScopes.Email,
                                 "dex-api"
                             },
-                           AllowAccessTokensViaBrowser = true
-
-                           // AllowOfflineAccess = true
+                           AllowAccessTokensViaBrowser = true,
+                           AllowOfflineAccess = true
                        },
 
                        new Client
