@@ -23,9 +23,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Newtonsoft.Json;
 using Serilog;
 using Services.Services;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -184,7 +186,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Updates the project with the specified identifier. 
+        /// Updates the project with the specified identifier.
         /// </summary>
         /// <param name="projectId">The project identifier.</param>
         /// <param name="projectResource">The project resource.</param>
@@ -227,7 +229,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     deletes a project.
+        ///     Deletes a project.
         /// </summary>
         /// <returns>Status code 200.</returns>
         [HttpDelete("{projectId}")]
@@ -263,6 +265,96 @@ namespace API.Controllers
             await projectService.RemoveAsync(projectId).ConfigureAwait(false);
             projectService.Save();
             return Ok();
+        }
+
+        /// <summary>
+        /// Like a project with the specified project identifier and
+        /// the user identifier.
+        /// </summary>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="userId">The user identifier who likes the project.</param>
+        /// <returns>The project resource result.</returns>
+        [HttpPut("{projectId}/like/{userId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
+        public async Task<IActionResult> LikeProject(int projectId, int userId)
+        {
+            try
+            {
+                // Get a project asynchronously with provided the projectID.
+                Project project = await projectService
+                                        .FindAsync(projectId)
+                                        .ConfigureAwait(false);
+                if(project == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                     {
+                         Title = "Failed to like project.",
+                         Detail = "The specified project could not be found in the database.",
+                         Instance = "11CBDCE9-0570-4753-9818-5FDDA813D760"
+                     };
+                    return NotFound(problem);
+                }
+
+                // Create a collection for be able to keep likes.
+                IEnumerable<int> likes = new List<int>();
+
+                /*
+                 * If there are already users who liked the project,
+                 * deserialize the value and append new user to the collection.
+                 * Otherwise, initialize likes collection with the incoming userId.
+                */
+                if(project.Likes != null &&
+                   !project.Likes.Equals(string.Empty))
+                {
+                    likes = JsonConvert
+                        .DeserializeObject<IEnumerable<int>>(project.Likes);
+
+                    likes = likes.Append(userId);
+                }
+                else
+                {
+                    likes = new List<int>()
+                  {
+                      userId
+                  };
+                }
+
+                project.Likes = JsonConvert.SerializeObject(likes);
+
+                try
+                {
+                    projectService.Update(project);
+                    projectService.Save();
+                }
+                catch(DbUpdateException e)
+                {
+                    Log.Logger.Error(e, "Database exception");
+
+                    ProblemDetails problemDetails = new ProblemDetails
+                     {
+                         Title = "Failed to save the updated project.",
+                         Detail = "There was a problem while updating the project to the database.",
+                         Instance = "5F81C793-5323-4691-A7F4-DDE1F11E7FCC"
+                     };
+                    return BadRequest(problemDetails);
+                }
+                return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+
+            }
+            catch(DbException e)
+            {
+                Log.Logger.Error(e, "Database exception");
+
+                ProblemDetails problemDetails = new ProblemDetails()
+                {
+                    Title = "Failed to find the project with specified id => " +
+                            projectId,
+                    Detail =
+                        "There was a problem while trying to find the project in the database.",
+                    Instance = "38373A18-EEBE-4D55-B52A-1BC4303FD3B3"
+                };
+                return BadRequest(problemDetails);
+            }
         }
     }
 }
