@@ -15,10 +15,12 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Extensions;
 using Microsoft.AspNetCore.Http;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +36,9 @@ namespace API.Resources
         /// <summary>
         /// IFormFile 
         /// </summary>
+        [Required(ErrorMessage = "Please add a file")]
+        [AllowedExtensions(new [] { ".jpg", ".png", ".jpeg"})]
+        [MaxFileSize(2097152)]
         public IFormFile File { get; set; }
         /// <summary>
         /// Date and time of uploading
