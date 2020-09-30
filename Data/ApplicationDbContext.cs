@@ -87,7 +87,6 @@ namespace Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         }
-
     }
 
 }

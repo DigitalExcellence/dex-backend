@@ -11,12 +11,11 @@ namespace Models
             User = user;
             FollowedUser = followedUser;
         }
+        public UserUser() { }
 
         public int Id { get; set; }
-
-        public User User { get; set; }
-        public int Userid { get; set; }
-
+        public User User{ get; set; }
         public User FollowedUser { get; set; }
+        public int FollowedUserId { get; set; }
     }
 }

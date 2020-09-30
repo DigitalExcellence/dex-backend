@@ -227,7 +227,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId"></param>
         /// <returns>200 if success 409 if user already follows project</returns>
-        [HttpPost("follow/{projectId}")]
+        [HttpPost("follow/project/{projectId}")]
         [Authorize]
         public async Task<IActionResult> FollowProject(int projectId)
         {
@@ -279,7 +279,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId"></param>
         /// <returns></returns>
-        [HttpDelete("follow/{projectId}")]
+        [HttpDelete("follow/project/{projectId}")]
         [Authorize]
         public async Task<IActionResult> UnfollowProject(int projectId)
         {
@@ -369,7 +369,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="followedUserId"></param>
         /// <returns></returns>
-        [HttpPost("follow/{userId}")]
+        [HttpPost("follow/user/{followedUserId}")]
         [Authorize]
         public async Task<IActionResult> FollowUser(int followedUserId)
         {
@@ -409,8 +409,60 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            UserUser userUser = new UserUser(user, followedUser);
+            UserUser userUser = new UserUser(user,followedUser);
             userUserService.Add(userUser);
+
+            userUserService.Save();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Unfollow user
+        /// </summary>
+        /// <param name="followedUserId"></param>
+        /// <returns></returns>
+        [HttpDelete("follow/user/{followedUserId}")]
+        [Authorize]
+        public async Task<IActionResult> UnfollowUser(int followedUserId)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
+                return NotFound(problem);
+            }
+
+            if(userUserService.CheckIfUserFollows(user.Id, followedUserId) == false)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User is not following this user",
+                    Detail = "You are not following this user.",
+                    Instance = "103E6317-4546-4985-8E39-7D9FD3E14E35"
+                };
+                return Conflict(problem);
+            }
+
+            User followedUser= await userService.FindAsync(followedUserId);
+
+            if(await userService.FindAsync(followedUserId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "ED4E8B26-7D7B-4F5E-BA04-983B5F114FB5"
+                };
+                return NotFound(problem);
+            }
+            UserUser userToUnfollow = new UserUser(user, followedUser);
+            userUserService.Remove(userToUnfollow);
 
             userUserService.Save();
             return Ok();

@@ -41,7 +41,7 @@ namespace Repositories
         {
             UserUser userUnfollow = GetDbSet<UserUser>()
                 .Where
-                (s => s.Userid == userUser.Id
+                (s => s.User.Id == userUser.User.Id
                 && s.FollowedUser.Id == userUser.FollowedUser.Id)
                 .SingleOrDefault();
 
@@ -52,7 +52,7 @@ namespace Repositories
         bool IUserUserRepository.CheckIfUserFollows(int userId, int followedUserId)
         {
             UserUser userUser = GetDbSet<UserUser>()
-                              .Where(s => (s.Userid == userId)
+                              .Where(s => (s.User.Id == userId)
                               && s.FollowedUser.Id == followedUserId)
                               .SingleOrDefault();
 
