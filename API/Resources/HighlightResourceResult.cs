@@ -34,7 +34,14 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets project associated with the highlight
         /// </summary>
-        public Project Project { get; set; }
+        public int ProjectId { get; set; }
+
+        public string ProjectName { get; set; }
+
+        /// <summary>
+        /// This gets or sets the description of the highlight
+        /// </summary>
+        public string Description { get; set; }
 
     }
 
