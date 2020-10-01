@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed issue resulting in people being unable to sign up with a new account - [#231](https://github.com/DigitalExcellence/dex-backend/issues/231)
+- Fixed issue where highlights were sending too much information. - [#205](https://github.com/DigitalExcellence/dex-backend/issues/205)
 
 ## Release v.0.6-beta - 22-06-2020
 
