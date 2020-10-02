@@ -18,6 +18,8 @@ ENV App__Api__ClientSecret = ''
 
 ENV App__Frontend__RedirectUriFrontend = ''
 
+ENV App__Frontend__RefreshUriFrontend = ''
+
 ENV App__Frontend__RedirectUriFrontendPostman = ''
 
 ENV App__Frontend__PostLogoutUrisFrontend = ''
