@@ -54,8 +54,6 @@ namespace Models
 
         [Required]
         public DateTime Updated { get; set; }
-
-        public string Likes { get; set; }
     }
 
 }

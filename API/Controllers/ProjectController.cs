@@ -268,18 +268,37 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Like a project with the specified project identifier and
-        /// the user identifier.
+        /// Like a project with the specified project identifier.
         /// </summary>
         /// <param name="projectId">The project identifier.</param>
-        /// <param name="userId">The user identifier who likes the project.</param>
         /// <returns>The project resource result.</returns>
-        [HttpPut("{projectId}/like/{userId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
-        public async Task<IActionResult> LikeProject(int projectId, int userId)
+        [HttpPut("project/{projectId}/like")]
+        [Authorize]
+        public async Task<IActionResult> LikeProject(int projectId)
         {
             try
             {
+                // Get current user.
+                User currentUser = await HttpContext
+                                         .GetContextUser(userService)
+                                         .ConfigureAwait(false);
+
+                // When user could not be found in the db, throw an error.
+                if(await userService.FindAsync(currentUser.Id) == null)
+                {
+                    ProblemDetails problem = new ProblemDetails()
+                                             {
+                                                 Title = "Service has failed while trying to get the current user.",
+                                                 Detail =
+                                                     "User with the provided user id could not be found in the database",
+                                                 Instance = "838F60C4-CFDD-49B5-936C-9BB6C26A20B9"
+                                             };
+
+                    return NotFound(problem);
+                }
+
+
+
                 // Get a project asynchronously with provided the projectID.
                 Project project = await projectService
                                         .FindAsync(projectId)
@@ -303,6 +322,7 @@ namespace API.Controllers
                  * deserialize the value and append new user to the collection.
                  * Otherwise, initialize likes collection with the incoming userId.
                 */
+                /*
                 if(project.Likes != null &&
                    !project.Likes.Equals(string.Empty))
                 {
@@ -320,6 +340,7 @@ namespace API.Controllers
                 }
 
                 project.Likes = JsonConvert.SerializeObject(likes);
+                */
 
                 try
                 {
