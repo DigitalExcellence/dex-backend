@@ -108,7 +108,7 @@ namespace API.Controllers
                 DateTime uploadDateTime = DateTime.Now;
                 int fileExtPos = fileResource.File.FileName.LastIndexOf(".");
                 string extension = fileResource.File.FileName.Substring(fileExtPos);
-                string newFileName = fileUploader.RemoveSpecialCharacters(fileResource.File.FileName.Remove(fileExtPos) + uploadDateTime + extension);
+                string newFileName = fileUploader.RemoveSpecialCharacters(fileResource.File.FileName.Remove(fileExtPos) + Guid.NewGuid() + extension);
                 string path = await fileUploader.UploadSingleFile(fileResource.File, newFileName);
                 User user = await HttpContext.GetContextUser(userService)
                                              .ConfigureAwait(false);

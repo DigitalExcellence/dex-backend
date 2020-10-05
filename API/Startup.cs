@@ -24,9 +24,11 @@ using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -38,6 +40,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -189,7 +192,7 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            UpdateDatabase(app,env);
+            UpdateDatabase(app, env);
             if(env.IsDevelopment())
             {
                 //app.UseBrowserLink();
@@ -226,52 +229,61 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
+            
+
             //UserInfo
             app.UseWhen(context =>
-                context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
-                {
-                    appBuilder.Use(async (context, next) =>
-                    {
-                        DbContext dbContext = context.RequestServices.GetService<DbContext>();
-                        IUserService userService =
-                            context.RequestServices.GetService<IUserService>();
-                        string identityId = "";
-                        try
+                            context.User.Identities.Any(i => i.IsAuthenticated),
+                        appBuilder =>
                         {
-                            identityId = context.User.GetIdentityId(context);
-                        } catch(UnauthorizedAccessException e)
-                        {
-                            Log.Logger.Error(e, "User is not authorized.");
-                            await next();
-                        }
-                        if(await userService.GetUserByIdentityIdAsync(identityId).ConfigureAwait(false) == null)
-                        {
-                            IRoleService roleService = context.RequestServices.GetService<IRoleService>();
-                            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
-
-                            User newUser = context.GetUserInformation(Config);
-                            if(newUser == null)
+                            appBuilder.Use(async (context, next) =>
                             {
-                                // Then it probably belongs swagger so we set the username as developer.
-                                newUser = new User()
+                                DbContext dbContext = context.RequestServices.GetService<DbContext>();
+                                IUserService userService =
+                                    context.RequestServices.GetService<IUserService>();
+                                string identityId = "";
+                                try
                                 {
-                                    Name = "Developer",
-                                    Email = "Developer@DEX.com",
-                                    IdentityId = identityId,
-                                    Role = registeredUserRole
-                                };
-                                userService.Add(newUser);
-                            } else
-                            {
-                                newUser.Role = registeredUserRole;
-                                userService.Add(newUser);
-                            }
-                            await dbContext.SaveChangesAsync().ConfigureAwait(false);
-                        }
+                                    identityId = context.User.GetIdentityId(context);
+                                } catch(UnauthorizedAccessException e)
+                                {
+                                    Log.Logger.Error(e, "User is not authorized.");
+                                    await next();
+                                }
+                                if(await userService.GetUserByIdentityIdAsync(identityId)
+                                                    .ConfigureAwait(false) ==
+                                   null)
+                                {
+                                    IRoleService roleService = context.RequestServices.GetService<IRoleService>();
+                                    Role registeredUserRole =
+                                        (await roleService.GetAll()).FirstOrDefault(
+                                            i => i.Name == nameof(Defaults.Roles.RegisteredUser));
 
-                        await next().ConfigureAwait(false);
-                    });
-                });
+                                    User newUser = context.GetUserInformation(Config);
+                                    if(newUser == null)
+                                    {
+                                        // Then it probably belongs swagger so we set the username as developer.
+                                        newUser = new User()
+                                                  {
+                                                      Name = "Developer",
+                                                      Email = "Developer@DEX.com",
+                                                      IdentityId = identityId,
+                                                      Role = registeredUserRole
+                                                  };
+                                        userService.Add(newUser);
+                                    } else
+                                    {
+                                        newUser.Role = registeredUserRole;
+                                        userService.Add(newUser);
+                                    }
+                                    await dbContext.SaveChangesAsync()
+                                                   .ConfigureAwait(false);
+                                }
+
+                                await next()
+                                    .ConfigureAwait(false);
+                            });
+                        });
 
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
@@ -285,7 +297,17 @@ namespace API
                 o.OAuthClientId(Config.Swagger.ClientId);
             });
 
+            // using Microsoft.Extensions.FileProviders;
+            // using System.IO;
             app.UseStaticFiles();
+
+            app.UseFileServer(new FileServerOptions
+                              {
+                                  FileProvider = new PhysicalFileProvider(
+                                      Path.Combine(env.WebRootPath, "Resources")),
+                                  RequestPath = "/Resources",
+                                  EnableDirectoryBrowsing = true
+                              });
         }
 
         /// <summary>

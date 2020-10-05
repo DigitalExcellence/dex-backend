@@ -43,7 +43,6 @@ namespace API.Controllers
         private readonly IProjectService projectService;
         private readonly IUserService userService;
         private readonly IFileService fileService;
-        private readonly IFileUploader fileUploader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class.
@@ -53,12 +52,11 @@ namespace API.Controllers
         /// <param name="fileService">The fileservice.</param>
         /// <param name="fileUploader">The fileuploader.</param>
         /// <param name="mapper">The mapper.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IFileService fileService, IFileUploader fileUploader, IMapper mapper)
+        public ProjectController(IProjectService projectService, IUserService userService, IFileService fileService, IMapper mapper)
         {
             this.projectService = projectService;
             this.userService = userService;
             this.fileService = fileService;
-            this.fileUploader = fileUploader;
             this.mapper = mapper;
         }
 

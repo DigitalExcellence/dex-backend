@@ -1,5 +1,10 @@
+using AngleSharp;
+using AngleSharp.Io;
 using API.Resources;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Serilog;
 using System;
@@ -63,7 +68,14 @@ namespace API.Extensions
     public class FileUploader : IFileUploader
     {
 
-        private static readonly string UploadPath = Directory.GetCurrentDirectory() + "\\files\\";
+        private readonly string UploadPath;
+        private readonly string ServerRoot;
+
+        public FileUploader(IWebHostEnvironment env)
+        {
+            UploadPath = Path.Combine(env.WebRootPath, "Resources\\");
+            ServerRoot = Path.Combine("https://localhost:5001/Resources/");
+        }
 
         /// <summary>
         /// Removes special characters for string to avoid problems
@@ -104,7 +116,7 @@ namespace API.Extensions
                         }
                     }
 
-                    return UploadPath + fileName;
+                    return ServerRoot + fileName;
                 }
 
                 throw new FileExistException(fileName);
