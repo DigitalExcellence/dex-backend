@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
 ## [Unreleased]
 
 
@@ -16,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Changed DeX Frontend client to use code flow instead of implicit flow to fix silent refresh - [#246](https://github.com/DigitalExcellence/dex-backend/issues/246)
 
 ### Deprecated
 
@@ -23,7 +25,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
+
 ### Security
+
+
+## Release v.0.6.1-beta - 16-09-2020
+
+### Changed
+
+- Changed all file line endings from CRLF to LF and added the .gitattributes to enforce it - [#163](https://github.com/DigitalExcellence/dex-backend/issues/163)
+
+### Fixed
+
+- Fixed issue resulting in people being unable to sign up with a new account - [#231](https://github.com/DigitalExcellence/dex-backend/issues/231)
 
 ## Release v.0.6-beta - 22-06-2020
 
