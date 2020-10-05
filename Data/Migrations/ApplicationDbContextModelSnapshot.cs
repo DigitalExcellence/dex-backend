@@ -94,6 +94,28 @@ namespace _4_Data.Migrations
                     b.ToTable("Highlight");
                 });
 
+            modelBuilder.Entity("Models.LikedProjectByUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("LikedProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LikedProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LikedProjectsByUsers");
+                });
+
             modelBuilder.Entity("Models.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -231,6 +253,19 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.LikedProjectByUser", b =>
+                {
+                    b.HasOne("Models.Project", "LikedProject")
+                        .WithMany()
+                        .HasForeignKey("LikedProjectId");
+
+                    b.HasOne("Models.User", "CreatorOfProject")
+                        .WithMany("LikedProjectsByUsers")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
