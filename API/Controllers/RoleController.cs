@@ -47,22 +47,8 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         public async Task<IActionResult> GetAllRoles()
         {
-            List<Role> roles;
-
-            try
-            {
-                roles = await roleService.GetAllAsync()
-                                         .ConfigureAwait(false);
-            } catch(Exception)
-            {
-                ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting all roles.",
-                                             Detail = "Unexpected error occurred.",
-                                             Instance = "6010C506-44FA-4616-82C3-BD77F70CC1A9"
-                };
-                return BadRequest(problem);
-            }
+            List<Role> roles = roles = await roleService.GetAllAsync()
+                                                        .ConfigureAwait(false);
 
             return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleResourceResult>>(roles));
         }

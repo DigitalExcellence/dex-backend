@@ -68,21 +68,8 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
-            IEnumerable<EmbeddedProject> embeddedProjects;
+            IEnumerable<EmbeddedProject> embeddedProjects = embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
 
-            try
-            {
-                embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
-            } catch(Exception)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting embedded porjects.",
-                    Detail = "An unexpected error occurred.",
-                    Instance = "322A1ED6-4AAD-445C-940B-EE9C247B491C"
-                };
-                return BadRequest(problem);
-            }
             return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
         }
 

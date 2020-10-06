@@ -61,21 +61,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllHighlights()
         {
-            IEnumerable<Highlight> highlights;
-            try
-            {
-                highlights = await highlightService.GetHighlightsAsync();
-            } catch(Exception)
-            {
-                ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting highlight.",
-                                             Detail = "An unexpected error occurred.",
-                                             Instance = "8310EE19-C0E9-4236-AFDD-C1A01F8A78F7"
-                                         };
-                return BadRequest(problem);
-            }
-
+            IEnumerable<Highlight> highlights = highlights = await highlightService.GetHighlightsAsync();
 
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
         }
