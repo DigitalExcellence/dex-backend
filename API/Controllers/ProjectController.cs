@@ -29,12 +29,14 @@ using Services.Services;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     /// <summary>
-    ///     This controller handles the CRUD projects
+    /// This class is responsible for handling HTTP requests that are related
+    /// to the projects, for example creating, retrieving, updating or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -45,11 +47,11 @@ namespace API.Controllers
         private readonly IUserService userService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectController"/> class.
+        /// Initializes a new instance of the <see cref="ProjectController"/> class
         /// </summary>
-        /// <param name="projectService">The project service.</param>
-        /// <param name="userService">The user service.</param>
-        /// <param name="mapper">The mapper.</param>
+        /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
+        /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
         {
             this.projectService = projectService;
@@ -58,11 +60,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get all projects.
+        /// This method is responsible for retrieving all projects.
         /// </summary>
-        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
-        /// <returns>The project result resource.</returns>
+        /// <param name="projectFilterParamsResource">The parameters to filter which is used to sort and paginate the projects.</param>
+        /// <returns>This method returns the project result resource.</returns>
+        /// <response code="200">This endpoint returns all projects.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when values inside project filter params resource are invalid.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAllProjects([FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
@@ -113,10 +119,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get a project.
+        /// This method is responsible for retrieving a single project.
         /// </summary>
-        /// <returns>The project resource result.</returns>
+        /// <returns>This method returns the project resource result.</returns>
+        /// <response code="200">This endpoint returns the project with the specified id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified id is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the project could not be found with the specified id.</response>
         [HttpGet("{projectId}")]
+        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
         {
             if(projectId < 0)
@@ -146,11 +158,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Create a Project.
+        /// This method is responsible for creating a Project.
         /// </summary>
-        /// <returns>The project resource result.</returns>
+        /// <returns>This method returns the project resource result.</returns>
+        /// <response code="200">This endpoint returns the created project.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the project
+        /// resource is not specified or failed to save project to the database.</response>
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
         {
             if(projectResource == null)
@@ -186,13 +203,19 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Updates the project with the specified identifier.
+        /// This method is responsible for updating the project with the specified identifier.
         /// </summary>
-        /// <param name="projectId">The project identifier.</param>
-        /// <param name="projectResource">The project resource.</param>
-        /// <returns>The project resource result.</returns>
+        /// <param name="projectId">The project identifier which is used for searching the project.</param>
+        /// <param name="projectResource">The project resource which is used for updating the project.</param>
+        /// <returns>This method returns the project resource result.</returns>
+        /// <response code="200">This endpoint returns the updated project.</response>
+        /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
+        /// <response code="404">The 404 not Found status code is returned when the project to update is not found.</response>
         [HttpPut("{projectId}")]
         [Authorize]
+        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
@@ -229,11 +252,17 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Deletes a project.
+        /// This method is responsible for deleting a project.
         /// </summary>
-        /// <returns>Status code 200.</returns>
+        /// <returns>This method returns the status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The project is deleted.</response>
+        /// <response code="401">The 401 Unauthorized status code is returned when the the user has not the correct permission to delete.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the project to delete was not found.</response>
         [HttpDelete("{projectId}")]
         [Authorize]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
