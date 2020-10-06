@@ -113,7 +113,7 @@ namespace _4_Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("LikedProjectsByUsers");
+                    b.ToTable("LikedProjectByUser");
                 });
 
             modelBuilder.Entity("Models.Project", b =>

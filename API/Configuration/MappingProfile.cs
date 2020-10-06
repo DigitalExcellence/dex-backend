@@ -31,6 +31,12 @@ namespace API.Configuration
         /// </summary>
         public MappingProfile()
         {
+            CreateMap<UserProjectLikeResourceResult, User>()
+                .ForMember(user =>
+                               user.LikedProjectsByUsers,
+                           options =>
+                               options.MapFrom(user => user.LikedProject.Name))
+                .ForAllOtherMembers(user => user.Ignore());
             CreateMap<UserResource, User>();
             CreateMap<User, UserResourceResult>();
             CreateMap<User, LimitedUserResourceResult>();

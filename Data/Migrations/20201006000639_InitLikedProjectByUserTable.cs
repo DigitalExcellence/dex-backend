@@ -7,7 +7,7 @@ namespace _4_Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "LikedProjectsByUsers",
+                name: "LikedProjectByUser",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -17,15 +17,15 @@ namespace _4_Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LikedProjectsByUsers", x => x.Id);
+                    table.PrimaryKey("PK_LikedProjectByUser", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LikedProjectsByUsers_Project_LikedProjectId",
+                        name: "FK_LikedProjectByUser_Project_LikedProjectId",
                         column: x => x.LikedProjectId,
                         principalTable: "Project",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_LikedProjectsByUsers_User_UserId",
+                        name: "FK_LikedProjectByUser_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -33,20 +33,20 @@ namespace _4_Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_LikedProjectsByUsers_LikedProjectId",
-                table: "LikedProjectsByUsers",
+                name: "IX_LikedProjectByUser_LikedProjectId",
+                table: "LikedProjectByUser",
                 column: "LikedProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LikedProjectsByUsers_UserId",
-                table: "LikedProjectsByUsers",
+                name: "IX_LikedProjectByUser_UserId",
+                table: "LikedProjectByUser",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "LikedProjectsByUsers");
+                name: "LikedProjectByUser");
         }
     }
 }

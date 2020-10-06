@@ -78,7 +78,7 @@ namespace Data
         /// <summary>
         /// Gets or sets the projects liked by users.
         /// </summary>
-        public DbSet<LikedProjectByUser> LikedProjectsByUsers { get; set; }
+        public DbSet<LikedProjectByUser> LikedProjectByUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

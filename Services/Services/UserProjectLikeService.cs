@@ -44,7 +44,7 @@ namespace Services.Services
             Repository.Add(likedProjectEntity);
         }
 
-        public void Remove(LikedProjectByUser likedProjectByUser)
+        public override void Remove(LikedProjectByUser likedProjectByUser)
         {
             Repository.Remove(likedProjectByUser);
         }

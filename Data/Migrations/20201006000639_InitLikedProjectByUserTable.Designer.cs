@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201005043814_InitLikedProjectByUserTable")]
+    [Migration("20201006000639_InitLikedProjectByUserTable")]
     partial class InitLikedProjectByUserTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,7 +115,7 @@ namespace _4_Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("LikedProjectsByUsers");
+                    b.ToTable("LikedProjectByUser");
                 });
 
             modelBuilder.Entity("Models.Project", b =>
