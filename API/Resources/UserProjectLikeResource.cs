@@ -36,5 +36,4 @@ namespace API.Resources
         /// </value>
         public int UserId { get; set; }
     }
-
 }
