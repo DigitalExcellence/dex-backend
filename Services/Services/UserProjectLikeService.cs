@@ -33,7 +33,7 @@ namespace Services.Services
                                           IUserProjectLikeService
     {
 
-        public UserProjectLikeService(IRepository<LikedProjectByUser> repository) :
+        public UserProjectLikeService(IUserProjectLikeRepository repository) :
             base(repository) { }
 
         private new IUserProjectLikeRepository Repository =>
