@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changed DeX Frontend client to use code flow instead of implicit flow to fix silent refresh - [#246](https://github.com/DigitalExcellence/dex-backend/issues/246)
+- Improved swagger documentation - [#225](https://github.com/DigitalExcellence/dex-backend/issues/225)
 
 ### Deprecated
 
