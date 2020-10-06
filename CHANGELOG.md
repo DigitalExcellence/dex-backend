@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added descriptions for Project Highlights - [#219](https://github.com/DigitalExcellence/dex-backend/issues/219)
+- Added function to follow users and let users follow projects [#228](https://github.com/DigitalExcellence/dex-backend/pull/258)
 
 ### Changed
 
