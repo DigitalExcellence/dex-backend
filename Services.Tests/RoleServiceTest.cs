@@ -86,7 +86,7 @@ namespace Services.Tests
                                              "EmbedWrite",
                                              "EmbedRead"
                                          };
-            bool isValidScope = Service.isValidScope("RoleRead");
+            bool isValidScope = Service.IsValidScope("RoleRead");
 
             Assert.IsTrue(isValidScope);
         }
@@ -97,7 +97,7 @@ namespace Services.Tests
         [Test]
         public void isValidScope_false()
         {
-            bool isValidScope = Service.isValidScope("role:read");
+            bool isValidScope = Service.IsValidScope("role:read");
 
             Assert.IsFalse(isValidScope);
         }

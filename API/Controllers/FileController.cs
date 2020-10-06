@@ -177,15 +177,18 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(file.Uploader != user && !userService.UserHasScope(user.IdentityId, Defaults.Roles.Administrator))
+            if(!file.Uploader.Id.Equals(user.Id))
             {
-                ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Not authorized.",
-                                             Detail = "You are not the uploader of this file.",
-                                             Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
-                };
-                return Unauthorized(problem);
+                if(!userService.UserHasScope(user.IdentityId, Defaults.Roles.Administrator))
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Not authorized.",
+                                                 Detail = "You are not the uploader of this file.",
+                                                 Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
+                                             };
+                    return Unauthorized(problem);
+                }
             }
 
             try

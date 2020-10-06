@@ -68,13 +68,17 @@ namespace API.Extensions
     public class FileUploader : IFileUploader
     {
 
-        private readonly string UploadPath;
-        private readonly string ServerRoot;
+        private readonly string uploadPath;
+        private readonly string serverRoot;
 
+        /// <summary>
+        /// File Uploader
+        /// </summary>
+        /// <param name="env"></param>
         public FileUploader(IWebHostEnvironment env)
         {
-            UploadPath = Path.Combine(env.WebRootPath, "Resources\\");
-            ServerRoot = Path.Combine("https://localhost:5001/Resources/");
+            uploadPath = Path.Combine(env.WebRootPath, "Resources\\");
+            serverRoot = Path.Combine("https://localhost:5001/Resources/");
         }
 
         /// <summary>
@@ -106,17 +110,17 @@ namespace API.Extensions
         {
             try
             {
-                if(!System.IO.File.Exists(UploadPath + fileName))
+                if(!System.IO.File.Exists(uploadPath + fileName))
                 {
                     await using(Stream sourceStream = file.OpenReadStream())
                     {
-                        await using(FileStream destinationStream = System.IO.File.Create(UploadPath + fileName))
+                        await using(FileStream destinationStream = System.IO.File.Create(uploadPath + fileName))
                         {
                             await sourceStream.CopyToAsync(destinationStream);
                         }
                     }
 
-                    return ServerRoot + fileName;
+                    return serverRoot + fileName;
                 }
 
                 throw new FileExistException(fileName);
@@ -134,9 +138,9 @@ namespace API.Extensions
         /// <returns> Bool which tells if file is deleted succesfully or not </returns>
         public void DeleteFile(File file)
         {
-            if(System.IO.File.Exists(Path.Combine(UploadPath, file.Name)))
+            if(System.IO.File.Exists(Path.Combine(uploadPath, file.Name)))
             {
-                System.IO.File.Delete(Path.Combine(UploadPath, file.Name));
+                System.IO.File.Delete(Path.Combine(uploadPath, file.Name));
                 return;
             }
             throw new FileNotFoundException(file.Name);

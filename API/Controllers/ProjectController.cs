@@ -50,7 +50,6 @@ namespace API.Controllers
         /// <param name="projectService">The project service.</param>
         /// <param name="userService">The user service.</param>
         /// <param name="fileService">The fileservice.</param>
-        /// <param name="fileUploader">The fileuploader.</param>
         /// <param name="mapper">The mapper.</param>
         public ProjectController(IProjectService projectService, IUserService userService, IFileService fileService, IMapper mapper)
         {
