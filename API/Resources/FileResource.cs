@@ -40,18 +40,6 @@ namespace API.Resources
         [AllowedExtensions(new [] { ".jpg", ".png", ".jpeg"})]
         [MaxFileSize(2097152)]
         public IFormFile File { get; set; }
-        /// <summary>
-        /// Date and time of uploading
-        /// </summary>
-        public DateTime UploadDateTime { get; set; }
-
-        /// <summary>
-        /// UploaderId of file
-        /// </summary>
-        public User Uploader { get; set; }
-        /// <summary>
-        /// Id of project
-        /// </summary>
-        public int ProjectId { get; set; }
+        
     }
 }

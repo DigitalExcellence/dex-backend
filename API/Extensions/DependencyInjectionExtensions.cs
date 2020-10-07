@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using AngleSharp.Io.Dom;
 using Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;

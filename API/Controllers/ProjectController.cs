@@ -107,8 +107,7 @@ namespace API.Controllers
                 Count = results.Count(),
                 TotalCount = await projectService.ProjectsCount(projectFilterParams),
                 Page = projectFilterParams.Page,
-                TotalPages =
-                                                                   await projectService.GetProjectsTotalPages(projectFilterParams)
+                TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams)
             };
 
             return Ok(resultsResource);
@@ -171,10 +170,10 @@ namespace API.Controllers
             if(projectResource.FileId != 0 && file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File was not found.",
-                                             Detail = "The specified file was not found while creating project.",
-                                             Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
+                {
+                     Title = "File was not found.",
+                     Detail = "The specified file was not found while creating project.",
+                     Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
                 };
                 return BadRequest(problem);
             }
@@ -235,11 +234,11 @@ namespace API.Controllers
             if(projectResource.FileId != 0 && file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File was not found.",
-                                             Detail = "The specified file was not found while updating project.",
-                                             Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
-                                         };
+                 {
+                     Title = "File was not found.",
+                     Detail = "The specified file was not found while updating project.",
+                     Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                 };
                 return BadRequest(problem);
             }
 
@@ -276,11 +275,11 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to delete the project.",
-                                             Detail = "The project could not be found in the database.",
-                                             Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
-                                         };
+                 {
+                     Title = "Failed to delete the project.",
+                     Detail = "The project could not be found in the database.",
+                     Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
+                 };
                 return NotFound(problem);
             }
 
@@ -291,11 +290,11 @@ namespace API.Controllers
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to delete the project.",
-                                             Detail = "The user is not allowed to delete the project.",
-                                             Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
-                                         };
+                 {
+                     Title = "Failed to delete the project.",
+                     Detail = "The user is not allowed to delete the project.",
+                     Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
+                 };
                 return Unauthorized(problem);
             }
 

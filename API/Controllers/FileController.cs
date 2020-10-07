@@ -101,7 +101,7 @@ namespace API.Controllers
                     Detail = "File is null.",
                     Instance = "ACD46F17-A239-4353-92A5-0B81AA0A96E9"
                 };
-                return NotFound(problem);
+                return BadRequest(problem);
             }
             try
             {
@@ -184,7 +184,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                                              {
                                                  Title = "Not authorized.",
-                                                 Detail = "You are not the uploader of this file.",
+                                                 Detail = "You do not have the required permissions to delete this file.",
                                                  Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
                                              };
                     return Unauthorized(problem);

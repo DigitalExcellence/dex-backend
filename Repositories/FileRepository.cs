@@ -25,21 +25,45 @@ using System.Linq;
 
 namespace Repositories
 {
-
+    /// <summary>
+    /// IFileRepository
+    /// </summary>
+    /// /// <seealso cref="Repositories.Base.IRepository{Models.File}" />
     public interface IFileRepository : IRepository<File>
     {
-
+        /// <summary>
+        /// Gets the files asynchronous.
+        /// </summary>
+        /// <returns>The task that will get the files objects.</returns>
         Task<List<File>> GetFilesAsync();
+        /// <summary>
+        /// Gets the file asynchronous.
+        /// </summary>
+        /// <param name="fileId">The file identifier.</param>
+        /// <returns>The task that will get the File object.</returns>
         Task<List<File>> GetFileByFileIdAsync(int fileId);
         
 
     }
 
+    /// <summary>
+    /// FileRepository
+    /// </summary>
+    /// <seealso cref="Repositories.Base.Repository{Models.File}" />
+    /// <seealso cref="Repositories.IFileRepository" />
     public class FileRepository : Repository<File>, IFileRepository
     {
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileRepository"/> class.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
         public FileRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        /// Gets the files asynchronous.
+        /// </summary>
+        /// <returns>The task that will get the files objects.</returns>
         public async Task<List<File>> GetFileByFileIdAsync(int fileId)
         {
             return await GetDbSet<File>()
@@ -47,6 +71,11 @@ namespace Repositories
                          .ToListAsync();
         }
 
+        /// <summary>
+        /// Gets the file asynchronous.
+        /// </summary>
+        /// <param name="fileId">The file identifier.</param>
+        /// <returns>The task that will get the File object.</returns>
         public async Task<List<File>> GetFilesAsync()
         {
             return await GetDbSet<File>()

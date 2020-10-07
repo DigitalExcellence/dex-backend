@@ -297,8 +297,6 @@ namespace API
                 o.OAuthClientId(Config.Swagger.ClientId);
             });
 
-            // using Microsoft.Extensions.FileProviders;
-            // using System.IO;
             app.UseStaticFiles();
 
             app.UseFileServer(new FileServerOptions
