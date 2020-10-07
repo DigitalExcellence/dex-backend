@@ -298,14 +298,6 @@ namespace API
             });
 
             app.UseStaticFiles();
-
-            app.UseFileServer(new FileServerOptions
-                              {
-                                  FileProvider = new PhysicalFileProvider(
-                                      Path.Combine(env.WebRootPath, "Resources")),
-                                  RequestPath = "/Resources",
-                                  EnableDirectoryBrowsing = true
-                              });
         }
 
         /// <summary>

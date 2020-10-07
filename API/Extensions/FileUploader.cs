@@ -28,7 +28,7 @@ namespace API.Extensions
         /// </summary>
         /// <param name="name"></param>
         public FileExistException(string name)
-            : base(String.Format("File {0} already exists", name))
+            : base($"File {name} already exists")
         { }
     }
 
@@ -78,7 +78,6 @@ namespace API.Extensions
         public FileUploader(IWebHostEnvironment env)
         {
             uploadPath = Path.Combine(env.WebRootPath, "Resources\\");
-            serverRoot = Path.Combine("https://localhost:5001/Resources/");
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace API.Extensions
                         }
                     }
 
-                    return serverRoot + fileName;
+                    return fileName;
                 }
 
                 throw new FileExistException(fileName);
@@ -135,7 +134,7 @@ namespace API.Extensions
         /// Method deletes the file from the file server
         /// </summary>
         /// <param name="file"></param>
-        /// <returns> Bool which tells if file is deleted succesfully or not </returns>
+        /// <returns> Bool which tells if file is deleted successfully or not </returns>
         public void DeleteFile(File file)
         {
             if(System.IO.File.Exists(Path.Combine(uploadPath, file.Name)))

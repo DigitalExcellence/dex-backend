@@ -52,7 +52,7 @@ namespace API.Extensions
         /// <returns></returns>
         public string GetErrorMessage()
         {
-            return $"Maximum allowed file size is { maxFileSize} bytes.";
+            return $"Maximum allowed file size is {maxFileSize} bytes.";
         }
 
         /// <summary>
