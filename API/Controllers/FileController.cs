@@ -177,9 +177,10 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(!file.Uploader.Id.Equals(user.Id))
+            if(!file.Uploader.Id.Equals(user.Id) )
             {
-                if(!userService.UserHasScope(user.IdentityId, Defaults.Roles.Administrator))
+                bool userHasScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.FileWrite));
+                if(userHasScope)
                 {
                     ProblemDetails problem = new ProblemDetails
                                              {

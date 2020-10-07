@@ -92,6 +92,10 @@ namespace Models.Defaults
 
             [Description("This scope gives write access to the embed namespace")]
             public const string EmbedRead = "embed:read";
+
+            [Description("This scope gives write access to the file namespace")]
+            public const string FileWrite = "file:write";
+
         }
 
     }
