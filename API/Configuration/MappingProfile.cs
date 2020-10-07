@@ -31,12 +31,25 @@ namespace API.Configuration
         /// </summary>
         public MappingProfile()
         {
-            CreateMap<UserProjectResourceResult, User>()
-                .ForMember(q => q.UserProject, options => options.MapFrom(q => q.Project.Name))
-                .ForAllOtherMembers(o => o.Ignore());
+           // CreateMap<UserProjectResourceResult, User>()
+              //  .ForMember(q => q.UserProject, options => options.MapFrom(q => q.Project.Name))
+              //  .ForAllOtherMembers(o => o.Ignore());
 
             CreateMap<UserUserResourceResult, UserUser>();
-            CreateMap<UserUser, UserUserResource>();
+
+            CreateMap<UserUser, UserUserResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(q => q.FollowedUser.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
+                .ForAllOtherMembers(o => o.Ignore());
+
+            CreateMap<UserProject, UserProjectResourceResult>()
+                .ForMember(q => q.Project.Name, opt => opt.MapFrom(p => p.Project.Name))
+                .ForMember(q => q.Project.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
+                .ForMember(q => q.Project.Uri, opt => opt.MapFrom(p => p.Project.Uri))
+                .ForMember(q => q.Project.Description, opt => opt.MapFrom(p => p.Project.Description))
+                .ForAllOtherMembers(o => o.Ignore());
+                
+
 
             CreateMap<User, UserResourceResult>();
 

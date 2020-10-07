@@ -413,7 +413,9 @@ namespace API.Controllers
             userUserService.Add(userUser);
 
             userUserService.Save();
-            return Ok();
+            //return Ok();
+            return Ok(mapper.Map<UserUser, UserUserResourceResult>(userUser));
+
         }
 
         /// <summary>

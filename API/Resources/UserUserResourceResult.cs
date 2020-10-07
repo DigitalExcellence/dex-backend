@@ -14,19 +14,19 @@ namespace API.Resources
         /// <summary>
         /// PK of UserUser
         /// </summary>
-        public int Id { get; set; }
+        //public int Id { get; set; }
         /// <summary>
         /// Set or get user
         /// </summary>
-        public User User{ get; set; }
+        //public User User{ get; set; }
         /// <summary>
         /// set or get User
         /// </summary>
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// User object to follow
         /// </summary>
-        public User Followeduser { get; set; }
+        public string Name { get; set; }
     }
 }
