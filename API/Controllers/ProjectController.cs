@@ -41,18 +41,22 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IUserProjectService userProjectService;
+
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectController"/> class.
+        /// Initializes a new instance of the <see cref="ProjectController"/> class
         /// </summary>
-        /// <param name="projectService">The project service.</param>
-        /// <param name="userService">The user service.</param>
-        /// <param name="mapper">The mapper.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
+        /// <param name="projectService"></param>
+        /// <param name="userService"></param>
+        /// <param name="mapper"></param>
+        /// <param name="userProjectService"></param>
+        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper,IUserProjectService userProjectService)
         {
             this.projectService = projectService;
             this.userService = userService;
             this.mapper = mapper;
+            this.userProjectService = userProjectService;
         }
 
         /// <summary>
@@ -262,6 +266,110 @@ namespace API.Controllers
 
             await projectService.RemoveAsync(projectId).ConfigureAwait(false);
             projectService.Save();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Follows a project with given projectId and gets userId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>200 if success 409 if user already follows project</returns>
+        [HttpPost("follow/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> FollowProject(int projectId)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
+                return NotFound(problem);
+            }
+
+            if(userProjectService.CheckIfUserFollows(user.Id, projectId))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User already follows this project",
+                    Detail = "You are already following this project.",
+                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
+                };
+                return Conflict(problem);
+            }
+
+            Project project = await projectService.FindAsync(projectId);
+
+            if(await projectService.FindAsync(projectId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
+                return NotFound(problem);
+            }
+            UserProject userProject = new UserProject(project, user);
+            userProjectService.Add(userProject);
+
+            userProjectService.Save();
+            return Ok(mapper.Map<UserProject,UserProjectResourceResult>(userProject));
+        }
+
+        /// <summary>
+        /// Unfollows project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        [HttpDelete("follow/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> UnfollowProject(int projectId)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
+                return NotFound(problem);
+            }
+
+            if(userProjectService.CheckIfUserFollows(user.Id, projectId) == false)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User is not following this project",
+                    Detail = "You are not following this project.",
+                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
+                };
+                return Conflict(problem);
+            }
+
+            Project project = await projectService.FindAsync(projectId);
+
+            if(await projectService.FindAsync(projectId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
+                return NotFound(problem);
+            }
+            UserProject userProject = new UserProject(project, user);
+            userProjectService.Remove(userProject);
+
+            userProjectService.Save();
             return Ok();
         }
     }

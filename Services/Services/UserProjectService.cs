@@ -43,7 +43,7 @@ namespace Services.Services
             Repository.Add(entity);
         }
 
-        public void Remove(UserProject userProject)
+        public override void Remove(UserProject userProject)
         {
             Repository.Remove(userProject);
         }

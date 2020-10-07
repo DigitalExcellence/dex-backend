@@ -12,15 +12,7 @@ namespace API.Resources
     public class UserUserResourceResult
     {
         /// <summary>
-        /// PK of UserUser
-        /// </summary>
-        //public int Id { get; set; }
-        /// <summary>
-        /// Set or get user
-        /// </summary>
-        //public User User{ get; set; }
-        /// <summary>
-        /// set or get User
+        /// Set or gets id
         /// </summary>
         public int Id { get; set; }
 

@@ -12,20 +12,21 @@ namespace API.Resources
     public class UserProjectResourceResult
     {
         /// <summary>
-        /// PK of UserProject
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
         /// Set or get Project
         /// </summary>
-        public Project Project { get; set; }
+        public string Name{ get; set; }
         /// <summary>
         /// set or get User
         /// </summary>
-        public User User { get; set; }
+        public string ShortDescription { get; set; }
         /// <summary>
         /// set or get userId
         /// </summary>
-        public int UserId { get; set; }
+        public string Description{ get; set; }
+
+        /// <summary>
+        /// Uri project
+        /// </summary>
+        public string Uri { get; set; } 
     }
 }
