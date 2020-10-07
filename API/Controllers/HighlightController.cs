@@ -75,7 +75,6 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
         }
 
