@@ -63,7 +63,7 @@ namespace API.Resources
         /// <summary>
         /// Gets or sets the liked projects by registered users.
         /// </summary>
-        public List<LikedProjectByUser> LikedProjectsByUsers { get; set; }
+        public List<UserProjectLikeResourceResult> LikedProjectsByUsers { get; set; }
     }
 
 }

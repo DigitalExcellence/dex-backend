@@ -26,6 +26,7 @@ using Models.Defaults;
 using Serilog;
 using Services.Services;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -43,6 +44,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IUserProjectLikeService userProjectLikeService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class
@@ -50,10 +52,16 @@ namespace API.Controllers
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
+        /// <param name="userProjectLikeService">
+        ///    The service that handles liked project by users
+        ///   which is used to communicate with the logic layer.
+        /// </param>
+        public ProjectController(IProjectService projectService, IUserService userService,
+                                 IUserProjectLikeService userProjectLikeService, IMapper mapper)
         {
             this.projectService = projectService;
             this.userService = userService;
+            this.userProjectLikeService = userProjectLikeService;
             this.mapper = mapper;
         }
 
@@ -292,6 +300,192 @@ namespace API.Controllers
             await projectService.RemoveAsync(projectId).ConfigureAwait(false);
             projectService.Save();
             return Ok();
+        }
+
+        /// <summary>
+        ///     Likes an individual project with the provided projectId.
+        /// </summary>
+        /// <param name="projectId">The project identifier.</param>
+        /// <returns>
+        ///     StatusCode 200 If success,
+        ///     StatusCode 409 If the user already liked the project,
+        ///     StatusCode 404 if the project could not be found.
+        /// </returns>
+        [HttpPost("like/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> LikeProject(int projectId)
+        {
+            User currentUser = await
+                                   HttpContext.GetContextUser(userService)
+                                              .ConfigureAwait(false);
+
+            if(await userService.FindAsync(currentUser.Id) == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                                         {
+                                             Title = "Failed to getting the user account.",
+                                             Detail = "The database does not contain a user with the provided user id.",
+                                             Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                                         };
+                return NotFound(problemDetails);
+            }
+
+            if(userProjectLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                                         {
+                                             Title = "User already liked this project",
+                                             Detail = "You are already liked this project.",
+                                             Instance = "5B0104E2-C864-4ADB-9321-32CD352DC124"
+                                         };
+                return Conflict(problemDetails);
+            }
+
+            Project projectToUnlike = new Project();
+
+            try
+            {
+                projectToUnlike = await projectService.FindAsync(projectId);
+
+                if(await projectService.FindAsync(projectId) == null)
+                {
+                    ProblemDetails problemDetails = new ProblemDetails
+                                                    {
+                                                        Title = "Failed to getting the project.",
+                                                        Detail = "The database does not contain a project with the provided project id.",
+                                                        Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                                                    };
+                    return NotFound(problemDetails);
+                }
+            } catch(DbException e)
+            {
+                Log.Logger.Error(e, "Database exception!");
+
+                ProblemDetails problemDetails = new ProblemDetails()
+                                                {
+                                                    Title =
+                                                        "Could not find the project with provided id =>" + projectId,
+                                                    Detail = "The database failed to retrieve the project.",
+                                                    Instance = "DA92E268-9DFA-4CEE-91BC-E042F3A1AA9C"
+                                                };
+
+                return BadRequest(problemDetails);
+            }
+
+            try
+            {
+                LikedProjectByUser likedProjectByUser =
+                    new LikedProjectByUser(projectToUnlike, currentUser);
+                await userProjectLikeService.AddAsync(likedProjectByUser);
+
+                userProjectLikeService.Save();
+                return Ok(mapper.Map<LikedProjectByUser,
+                              UserProjectLikeResourceResult>(likedProjectByUser));
+            } catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e,"Database exception!");
+
+                ProblemDetails problemDetails = new ProblemDetails
+                                         {
+                                             Title = "Could not create the liked project details.",
+                                             Detail = "The database failed to save the liked project.",
+                                             Instance = "F941879E-6C25-4A35-A962-8E86382E1849"
+                                         };
+                return BadRequest(problemDetails);
+            }
+        }
+
+        /// <summary>
+        ///     Unlikes an individual project with the provided projectId.
+        /// </summary>
+        /// <param name="projectId">The project identifier.</param>
+        /// <returns>
+        ///     StatusCode 200 If success,
+        ///     StatusCode 409 if the user didn't like the project already,
+        ///     StatusCode 404 if the project could not be found.
+        /// </returns>
+        [HttpDelete("like/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> UnlikeProject(int projectId)
+        {
+            User currentUser = await
+                                   HttpContext.GetContextUser(userService)
+                                              .ConfigureAwait(false);
+
+            if(await userService.FindAsync(currentUser.Id) == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                                         {
+                                             Title = "Failed to getting the user account.",
+                                             Detail = "The database does not contain a user with the provided user id.",
+                                             Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                                         };
+                return NotFound(problemDetails);
+            }
+
+            if(!userProjectLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                                         {
+                                             Title = "User didn't liked this project.",
+                                             Detail = "You did not like this project at the moment.",
+                                             Instance = "03590F81-C06D-4707-A646-B9B7F79B8A15"
+                                         };
+                return Conflict(problemDetails);
+            }
+
+            Project projectToLike = new Project();
+
+            try
+            {
+                projectToLike = await projectService.FindAsync(projectId);
+
+                if(await projectService.FindAsync(projectId) == null)
+                {
+                    ProblemDetails problemDetails = new ProblemDetails
+                                                    {
+                                                        Title = "Failed to getting the project.",
+                                                        Detail = "The database does not contain a project with the provided project id.",
+                                                        Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                                                    };
+                    return NotFound(problemDetails);
+                }
+            } catch(DbException e)
+            {
+                Log.Logger.Error(e, "Database exception!");
+
+                ProblemDetails problemDetails = new ProblemDetails()
+                                                {
+                                                    Title =
+                                                        "Could not find the project with provided id =>" + projectId,
+                                                    Detail = "The database failed to retrieve the project.",
+                                                    Instance = "DA92E268-9DFA-4CEE-91BC-E042F3A1AA9C"
+                                                };
+
+                return BadRequest(problemDetails);
+            }
+
+            try
+            {
+                LikedProjectByUser likedProjectByUser =
+                    new LikedProjectByUser(projectToLike, currentUser);
+                userProjectLikeService.Remove(likedProjectByUser);
+
+                userProjectLikeService.Save();
+                return Ok(mapper.Map<LikedProjectByUser,
+                              UserProjectLikeResourceResult>(likedProjectByUser));
+            } catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e,"Database exception!");
+
+                ProblemDetails problemDetails = new ProblemDetails
+                                         {
+                                             Title = "Could not remove the liked project details.",
+                                             Detail = "The database failed to remove the liked project.",
+                                             Instance = "78C59017-5846-4564-9E79-E804E2E29E59"
+                                         };
+                return BadRequest(problemDetails);
+            }
         }
     }
 }

@@ -5,41 +5,42 @@ namespace API.Resources
 
     /// <summary>
     ///     The response result class of the UserProjectLike API request.
+    ///     The response of the API request will be carried-over to the caller
+    ///     by using an instance of this class
     /// </summary>
     public class UserProjectLikeResourceResult
     {
-
         /// <summary>
-        ///     Gets or sets the identifier of the UserProjectLike.
+        ///     Gets or sets the name of the project that being liked.
         /// </summary>
         /// <value>
-        ///     The identifier
+        ///     The string representation of the Project's Name
         /// </value>
-        public int Id { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        ///     Gets or sets the project being liked.
+        ///     Gets or sets the short description of the project that being liked.
         /// </summary>
         /// <value>
-        ///     The Project class instance
+        ///     The string representation of the Project's Short Description
         /// </value>
-        public Project LikedProject { get; set; }
+        public string ShortDescription { get; set; }
 
         /// <summary>
-        ///     Gets or sets the user who created the project.
+        ///     Gets or sets the uri of project that being liked.
         /// </summary>
         /// <value>
-        ///     The User class instance
+        ///    The string representation of the Project's Uri
         /// </value>
-        public User CreatorOfProject { get; set; }
+        public string Uri { get; set; }
 
         /// <summary>
-        ///     Gets or sets the id of the user who liked the project.
+        ///     Gets or sets the description of the project that being liked.
         /// </summary>
         /// <value>
-        ///    The User identifier
+        ///     The string representation of the Project's Description
         /// </value>
-        public int UserId { get; set; }
+        public string Description { get; set; }
 
     }
 }
