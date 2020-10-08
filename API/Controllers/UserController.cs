@@ -54,7 +54,10 @@ namespace API.Controllers
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
-        /// <param name="userProjectLikeService">The service that handles liked project by users which is used to communicate with the logic layer.</param>
+        /// <param name="userProjectLikeService">
+        //    The service that handles liked project by users
+        ///   which is used to communicate with the logic layer.
+        /// </param>
         public UserController(IUserService userService, IMapper mapper,
                               IRoleService roleService, IProjectService projectService,
                               IUserProjectLikeService userProjectLikeService)
