@@ -73,7 +73,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
-            IEnumerable<EmbeddedProject> embeddedProjects = embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
+            IEnumerable<EmbeddedProject> embeddedProjects= await embedService.GetEmbeddedProjectsAsync();
 
             return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
         }

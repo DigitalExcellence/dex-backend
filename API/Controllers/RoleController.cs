@@ -50,7 +50,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<RoleResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllRoles()
         {
-            List<Role> roles = roles = await roleService.GetAllAsync()
+            List<Role> roles = await roleService.GetAllAsync()
                                                         .ConfigureAwait(false);
 
             return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleResourceResult>>(roles));

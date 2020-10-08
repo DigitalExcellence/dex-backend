@@ -63,7 +63,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllHighlights()
         {
-            IEnumerable<Highlight> highlights = highlights = await highlightService.GetHighlightsAsync();
+            IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync();
 
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
         }
