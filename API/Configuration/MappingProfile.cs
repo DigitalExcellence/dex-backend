@@ -43,6 +43,7 @@ namespace API.Configuration
 
             CreateMap<ProjectResource, Project>();
             CreateMap<Project, ProjectResourceResult>();
+            CreateMap<Project, ProjectHighlightResourceResult>();
 
             CreateMap<CollaboratorResource, Collaborator>();
             CreateMap<Collaborator, CollaboratorResourceResult>();
@@ -52,7 +53,9 @@ namespace API.Configuration
             CreateMap<ProjectFilterParamsResource, ProjectFilterParams>();
 
             CreateMap<HighlightResource, Highlight>();
-            CreateMap<Highlight, HighlightResourceResult>();
+            CreateMap<Highlight, HighlightResourceResult>()
+                .ForMember(e => e.Project,
+                           opt => opt.MapFrom(d => d.Project));
 
             CreateMap<RoleResource, Role>();
             CreateMap<Role, RoleResourceResult>();
