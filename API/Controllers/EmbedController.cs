@@ -68,10 +68,8 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of embedded projects resource result.</returns>
         /// <response code="200">This endpoint returns a list with embedded projects.</response>
-        /// <response code="404">The 404 Not Found status code is returned when there are no embedded projects.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<EmbeddedProjectResourceResult>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {

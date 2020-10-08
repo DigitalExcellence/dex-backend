@@ -7,6 +7,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -44,11 +45,9 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of role resource results.</returns>
         /// <response code="200">This endpoint returns a list of roles.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no roles are found.</response>
         [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         [ProducesResponseType(typeof(IEnumerable<RoleResourceResult>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetAllRoles()
         {
             List<Role> roles = roles = await roleService.GetAllAsync()

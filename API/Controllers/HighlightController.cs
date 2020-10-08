@@ -59,10 +59,8 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of highlight resource results.</returns>
         /// <response code="200">This endpoint returns a list highlights.</response>
-        /// <response code="404">The 404 Not Found status code is returned when there are no highlights found.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetAllHighlights()
         {
             IEnumerable<Highlight> highlights = highlights = await highlightService.GetHighlightsAsync();
