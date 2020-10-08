@@ -31,18 +31,7 @@ namespace Repositories
     /// /// <seealso cref="Repositories.Base.IRepository{Models.File}" />
     public interface IFileRepository : IRepository<File>
     {
-        /// <summary>
-        /// Gets the files asynchronous.
-        /// </summary>
-        /// <returns>The task that will get the files objects.</returns>
-        Task<List<File>> GetFilesAsync();
-        /// <summary>
-        /// Gets the file asynchronous.
-        /// </summary>
-        /// <param name="fileId">The file identifier.</param>
-        /// <returns>The task that will get the File object.</returns>
-        Task<List<File>> GetFileByFileIdAsync(int fileId);
-        
+
 
     }
 
@@ -60,27 +49,5 @@ namespace Repositories
         /// <param name="dbContext">The database context.</param>
         public FileRepository(DbContext dbContext) : base(dbContext) { }
 
-        /// <summary>
-        /// Gets the files asynchronous.
-        /// </summary>
-        /// <returns>The task that will get the files objects.</returns>
-        public async Task<List<File>> GetFileByFileIdAsync(int fileId)
-        {
-            return await GetDbSet<File>()
-                         .Where(s => s.Id == fileId)
-                         .ToListAsync();
-        }
-
-        /// <summary>
-        /// Gets the file asynchronous.
-        /// </summary>
-        /// <param name="fileId">The file identifier.</param>
-        /// <returns>The task that will get the File object.</returns>
-        public async Task<List<File>> GetFilesAsync()
-        {
-            return await GetDbSet<File>()
-                                .ToListAsync();
-            
-        }
     }
 }

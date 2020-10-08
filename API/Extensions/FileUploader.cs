@@ -69,7 +69,6 @@ namespace API.Extensions
     {
 
         private readonly string uploadPath;
-        private readonly string serverRoot;
 
         /// <summary>
         /// File Uploader

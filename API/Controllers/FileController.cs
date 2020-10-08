@@ -42,7 +42,6 @@ namespace API.Controllers
 
         private readonly IFileService fileService;
         private readonly IMapper mapper;
-        private readonly IProjectService projectService;
         private readonly IUserService userService;
         private readonly IFileUploader fileUploader;
         /// <summary>
@@ -50,14 +49,12 @@ namespace API.Controllers
         /// </summary>
         /// <param name="fileService">The file service.</param>
         /// <param name="mapper">The mapper.</param>
-        /// <param name="projectService">The Project service</param>
         /// <param name="userService">The User service</param>
         /// /// <param name="fileUploader">The file uploader extension</param>
-        public FileController(IFileService fileService, IMapper mapper, IProjectService projectService, IFileUploader fileUploader, IUserService userService)
+        public FileController(IFileService fileService, IMapper mapper, IFileUploader fileUploader, IUserService userService)
         {
             this.fileService = fileService;
             this.mapper = mapper;
-            this.projectService = projectService;
             this.userService = userService;
             this.fileUploader = fileUploader;
         }
@@ -70,7 +67,7 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetFilesAsync()
         {
-            IEnumerable<File> files = await fileService.GetFilesAsync();
+            IEnumerable<File> files = await fileService.GetAll();
             if(!files.Any())
             {
                 ProblemDetails problem = new ProblemDetails
@@ -114,16 +111,17 @@ namespace API.Controllers
                                              .ConfigureAwait(false);
 
                 File file = new File(path, newFileName, user, uploadDateTime);
-                fileService.UploadSingleFile(file);
+                fileService.Add(file);
+                fileService.Save();
 
                 return Ok(mapper.Map<File, FileResourceResult>(file));
             } catch(FileExistException fileExistException)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = fileExistException.Message,
-                                             Detail = "Please rename filename.",
-                                             Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
+                 {
+                     Title = fileExistException.Message,
+                     Detail = "Please rename filename.",
+                     Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
                 };
                 return BadRequest(problem);
             }
@@ -169,27 +167,25 @@ namespace API.Controllers
             if(file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File was not found.",
-                                             Detail = "File was not found.",
-                                             Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
+                 {
+                     Title = "File was not found.",
+                     Detail = "File was not found.",
+                     Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
                 };
                 return NotFound(problem);
             }
 
-            if(!file.Uploader.Id.Equals(user.Id) )
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.FileWrite));
+            if(!(file.Uploader.Id.Equals(user.Id) || isAllowed))
             {
-                bool userHasScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.FileWrite));
-                if(userHasScope)
-                {
-                    ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Not authorized.",
-                                                 Detail = "You do not have the required permissions to delete this file.",
-                                                 Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
-                                             };
-                    return Unauthorized(problem);
-                }
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Not authorized.",
+                     Detail = "You do not have the required permissions to delete this file.",
+                     Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
+                 };
+                return Unauthorized(problem);
+                
             }
 
             try
@@ -202,11 +198,11 @@ namespace API.Controllers
             } catch(FileNotFoundException)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File could not be deleted because the path does not exist.",
-                                             Detail = "File could not be found.",
-                                             Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
-                                         };
+                 {
+                     Title = "File could not be deleted because the path does not exist.",
+                     Detail = "File could not be found.",
+                     Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
+                 };
 
                 return NotFound(problem);
             } 

@@ -29,22 +29,6 @@ namespace Services.Services
     /// </summary>
     public interface IFileService : IService<File>
     {
-        /// <summary>
-        /// Fetches the file object that mathces with the fileId asynchronous.
-        /// </summary>
-        /// <param name="fileId">the file identifier.</param>
-        /// <returns>File object.</returns>
-        Task<List<File>> GetFileByFileIdAsync(int fileId);
-        /// <summary>
-        /// Fetches all file objects asynchronous.
-        /// </summary>
-        /// <returns>A List of file objects.</returns>
-        Task<List<File>> GetFilesAsync();
-        /// <summary>
-        /// Uploads file information to the database (this is not the actual file).
-        /// </summary>
-        /// <param name="entity">The file object.</param>
-        void UploadSingleFile(File entity);
 
     }
 
@@ -62,34 +46,7 @@ namespace Services.Services
         /// </summary>
         protected new IFileRepository Repository => (IFileRepository) base.Repository;
 
-        /// <summary>
-        /// Fetches the file object that mathces with the fileId asynchronous.
-        /// </summary>
-        /// <param name="fileId">the file identifier.</param>
-        /// <returns>File object.</returns>
-        public async Task<List<File>> GetFileByFileIdAsync(int fileId)
-        {
-            return await Repository.GetFileByFileIdAsync(fileId).ConfigureAwait(false);
-        }
 
-        /// <summary>
-        /// Fetches all file objects asynchronous.
-        /// </summary>
-        /// <returns>A List of file objects.</returns>
-        public async Task<List<File>> GetFilesAsync()
-        {
-            return await Repository.GetFilesAsync();
-        }
-
-        /// <summary>
-        /// Uploads file information to the database (this is not the actual file).
-        /// </summary>
-        /// <param name="entity">The file object.</param>
-        public void UploadSingleFile(File entity)
-        {
-            Repository.Add(entity);
-            Repository.Save();
-        }
     }
 
 }
