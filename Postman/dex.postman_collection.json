@@ -137,32 +137,32 @@
 												{
 													"listen": "test",
 													"script": {
-														"id": "94f54dfd-89dd-45a8-ac76-35c00e370aba",
+														"id": "a3b6c462-7e86-46c8-9d98-05b5dd339313",
 														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-															"var userName = pm.environment.get(\"userName\");\r",
-															"\r",
-															"var jsonData = pm.response.json();\r",
-															"\r",
-															"pm.environment.set(\"createdUserId\", jsonData.id);\r",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);\r",
-															"\r",
-															"pm.test(\"Status code is 201\", function () {\r",
-															"    pm.response.to.have.status(201);\r",
-															"});\r",
-															"\r",
-															"pm.test(\"Response must be valid and have a json body\", function () {\r",
-															"     pm.response.to.be.success;\r",
-															"     pm.response.to.be.withBody;\r",
-															"     pm.response.to.be.json;\r",
-															"});\r",
-															"\r",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-															"});\r",
-															"\r",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {\r",
-															"    pm.expect(jsonData.name).to.eql(userName);\r",
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var userName = \"Hailie\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response must be valid and have a json body\", function () {",
+															"     pm.response.to.be.success;",
+															"     pm.response.to.be.withBody;",
+															"     pm.response.to.be.json;",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															"",
+															"pm.test(\"Check if created Username matches: \" + userName, function () {",
+															"    pm.expect(jsonData.name).to.eql(userName);",
 															"});"
 														],
 														"type": "text/javascript"
@@ -171,11 +171,89 @@
 											],
 											"request": {
 												"method": "POST",
-												"header": [],
-												"url": {
-													"raw": ""
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
 												},
-												"description": "follow a user"
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "User-UnFollowUser-Administrator",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "88c15a99-a0c3-4e47-8fd0-ce9f64208f48",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
 											},
 											"response": []
 										}
@@ -528,6 +606,139 @@
 						{
 							"name": "Project",
 							"item": [
+								{
+									"name": "Follow",
+									"item": [
+										{
+											"name": "Project-FollowProject-Administrator",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "201e6274-7400-4796-a8e8-1f716949998e",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var projectName = \"Generic Metal Ball\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 200\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response must be valid and have a json body\", function () {",
+															"     pm.response.to.be.success;",
+															"     pm.response.to.be.withBody;",
+															"     pm.response.to.be.json;",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															"",
+															"pm.test(\"Check if created Username matches: \" + projectName, function () {",
+															"    pm.expect(jsonData.name).to.eql(projectName);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Project-UnFollowProject-Administrator",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "77bdb6e8-2d5d-4d80-854a-cbd75bc74a2d",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
 								{
 									"name": "Project-CreateProject-Administrator",
 									"event": [
@@ -3278,6 +3489,130 @@
 							"name": "User",
 							"item": [
 								{
+									"name": "Follow",
+									"item": [
+										{
+											"name": "User-FollowUser-Guest",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "f0e5f35a-4a60-4212-9534-a6951d3fe67d",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var userName = \"Hailie\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 401\", function () {",
+															"    pm.response.to.have.status(401);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "User-UnFollowUser-Guest",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "ac49acff-4932-4bc4-a299-84a88c2d43ca",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
+								{
 									"name": "User-CreateUser-Guest",
 									"event": [
 										{
@@ -3639,6 +3974,130 @@
 						{
 							"name": "Project",
 							"item": [
+								{
+									"name": "Follow",
+									"item": [
+										{
+											"name": "Project-FollowProject-Administrator",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "10f720b4-7358-425b-9ae3-fc710f13606f",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var projectName = \"Generic Metal Ball\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 401\", function () {",
+															"    pm.response.to.have.status(401);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															""
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Project-UnFollowProject-Administrator",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "e6514155-994f-4971-84bb-ca8b6dac9877",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
 								{
 									"name": "Project-CreateProject-Guest",
 									"event": [
@@ -5497,6 +5956,139 @@
 							"name": "User",
 							"item": [
 								{
+									"name": "Follow",
+									"item": [
+										{
+											"name": "User-FollowUser-Registered",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "c4255679-9796-4eb1-934b-c81ba7548568",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var userName = \"Hailie\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response must be valid and have a json body\", function () {",
+															"     pm.response.to.be.success;",
+															"     pm.response.to.be.withBody;",
+															"     pm.response.to.be.json;",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															"",
+															"pm.test(\"Check if created Username matches: \" + userName, function () {",
+															"    pm.expect(jsonData.name).to.eql(userName);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "User-UnFollowUser-Registered",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "65dc7b50-8b33-4be3-a0f8-0913a5350531",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
+								{
 									"name": "User-CreateUser-Registered",
 									"event": [
 										{
@@ -6009,6 +6601,139 @@
 						{
 							"name": "Project",
 							"item": [
+								{
+									"name": "Follow",
+									"item": [
+										{
+											"name": "Project-FollowProject-Registered",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "90d3b837-8b90-41bc-ad24-be764de509b0",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var projectName = \"Generic Metal Ball\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 200\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response must be valid and have a json body\", function () {",
+															"     pm.response.to.be.success;",
+															"     pm.response.to.be.withBody;",
+															"     pm.response.to.be.json;",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															"",
+															"pm.test(\"Check if created Username matches: \" + projectName, function () {",
+															"    pm.expect(jsonData.name).to.eql(projectName);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Project-UnFollowProject-Registered",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "ed5d7f2c-f6da-4369-9d7c-c83b504c5a60",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
 								{
 									"name": "Project-CreateProject-Registered",
 									"event": [
@@ -8208,6 +8933,139 @@
 							"name": "User",
 							"item": [
 								{
+									"name": "Follow",
+									"item": [
+										{
+											"name": "User-FollowUser-Registered",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "bebfe0e1-7c12-49b3-a8f8-6f78fe45722c",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var userName = \"Hailie\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 403\", function () {",
+															"    pm.response.to.have.status(403);",
+															"});",
+															"",
+															"pm.test(\"Response must be valid and have a json body\", function () {",
+															"     pm.response.to.be.success;",
+															"     pm.response.to.be.withBody;",
+															"     pm.response.to.be.json;",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															"",
+															"pm.test(\"Check if created Username matches: \" + userName, function () {",
+															"    pm.expect(jsonData.name).to.eql(userName);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "User-UnFollowUser-Registered",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "0207ca5a-12c2-4045-b0c1-b2d0d3577370",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 403\", function () {",
+															"    pm.response.to.have.status(403);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"follow",
+														"{{userIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
+								{
 									"name": "User-CreateUser-PR",
 									"event": [
 										{
@@ -8597,6 +9455,139 @@
 						{
 							"name": "Project",
 							"item": [
+								{
+									"name": "Follow",
+									"item": [
+										{
+											"name": "Project-FollowProject-PR",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "c227fa4b-6d4b-4bc8-88b5-7a113a70ebd0",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"var projectName = \"Generic Metal Ball\"",
+															"",
+															"var jsonData = pm.response.json();",
+															"",
+															"pm.environment.set(\"createdUserId\", jsonData.id);",
+															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
+															"",
+															"pm.test(\"Status code is 200\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response must be valid and have a json body\", function () {",
+															"     pm.response.to.be.success;",
+															"     pm.response.to.be.withBody;",
+															"     pm.response.to.be.json;",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});",
+															"",
+															"pm.test(\"Check if created Username matches: \" + projectName, function () {",
+															"    pm.expect(jsonData.name).to.eql(projectName);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Project-UnFollowProject-PR",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "e44c9331-1716-4417-a614-a2fee9502f0f",
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+															"",
+															"pm.test(\"Status code is 201\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});",
+															"",
+															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"project",
+														"follow",
+														"{{projectIdToFollow}}"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
 								{
 									"name": "Project-CreateProject-PR",
 									"event": [
@@ -10921,6 +11912,13 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f7e8fb98-dff6-4403-a75a-f17a701a2b53",
+			"key": "userIdToFollow",
+			"value": "25"
 		}
 	],
 	"protocolProfileBehavior": {}
