@@ -155,6 +155,10 @@ namespace Configuration
             /// </summary>
             public string RedirectUriFrontend { get; set; }
             /// <summary>
+            ///     Gets or sets the refresh uri of the frontend.
+            /// </summary>
+            public string RefreshUriFrontend { get; set; }
+            /// <summary>
             ///     Gets or sets the redirect uri for Postman.
             /// </summary>
             public string RedirectUriPostman { get; set; }
