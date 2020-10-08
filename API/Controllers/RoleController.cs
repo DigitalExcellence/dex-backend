@@ -61,28 +61,12 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of valid scopes.</returns>
         /// <response code="200">This endpoint returns a list of scopes.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no scopes are found.</response>
         [HttpGet("Scopes")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         [ProducesResponseType(typeof(List<string>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public IActionResult GetAllPossibleScopes()
         {
-            List<string> scopeList;
-
-            try
-            {
-                scopeList = roleService.GetValidScopes();
-            } catch(Exception)
-            {
-                ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "No valid Scopes found",
-                                             Detail = "Unexpected error occurred.",
-                                             Instance = "C796E78E-75C1-4CE3-8E43-4A32997B4852"
-                };
-                return BadRequest(problem);
-            }
+            List<string> scopeList = roleService.GetValidScopes();
             
             return Ok(scopeList);
         }
