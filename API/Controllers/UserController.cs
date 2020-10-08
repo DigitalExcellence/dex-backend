@@ -220,7 +220,6 @@ namespace API.Controllers
             userService.Save();
             return Ok();
         }
-
        
 
         /// <summary>
@@ -306,11 +305,20 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
+            if(user.Id == followedUserId)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "You can not follow yourself",
+                    Detail = "You can not follow yourself",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
+                return NotFound(problem);
+            }
             UserUser userUser = new UserUser(user,followedUser);
             userUserService.Add(userUser);
 
             userUserService.Save();
-            //return Ok();
             return Ok(mapper.Map<UserUser, UserUserResourceResult>(userUser));
 
         }
