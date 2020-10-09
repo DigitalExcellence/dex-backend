@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -24,29 +24,30 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
     /// <summary>
-    ///     Highlight controller for highlights
+    /// This class is responsible for handling HTTP requests that are related
+    /// to the highlights, for example creating, retrieving, updating or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class HighlightController : ControllerBase
     {
-
         private readonly IHighlightService highlightService;
         private readonly IMapper mapper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HighlightController"/> class.
+        /// Initializes a new instance of the <see cref="HighlightController"/> class
         /// </summary>
-        /// <param name="highlightService">The highlight service.</param>
-        /// <param name="mapper">The mapper.</param>
+        /// <param name="highlightService">The highlight service which is used to communicate with the logic layer.</param>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to resource results.</param>
         public HighlightController(IHighlightService highlightService, IMapper mapper)
         {
             this.highlightService = highlightService;
@@ -54,33 +55,31 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get all active highlights.
+        /// This method is responsible for retrieving all active highlights.
         /// </summary>
-        /// <returns>A list of Highlight resource results.</returns>
+        /// <returns>This method returns a list of highlight resource results.</returns>
+        /// <response code="200">This endpoint returns a list highlights.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllHighlights()
         {
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync();
-            if(!highlights.Any())
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlights.",
-                    Detail = "The database does not contain any highlights.",
-                    Instance = "FC6A4F97-C815-4A92-8A73-2ECF1729B161"
-                };
-                return NotFound(problem);
-            }
 
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
         }
 
         /// <summary>
-        /// Gets the highlight by the identifier.
+        /// This method is responsible for retrieving a single highlight by the identifier.
         /// </summary>
-        /// <param name="highlightId">The highlight identifier.</param>
-        /// <returns>A Highlight resource result.</returns>
+        /// <param name="highlightId">The highlight identifier which is used to find the highlight.</param>
+        /// <returns>This method returns a highlight resource result.</returns>
+        /// <response code="200">This endpoint returns the highlight with the specified identifier.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the highlight id is not valid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when there is no highlight found with the specified id.</response>
         [HttpGet("{highlightId}")]
+        [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetHighlight(int highlightId)
         {
             if(highlightId < 0)
@@ -110,12 +109,18 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Get a Highlight by project id
+        /// This method is responsible for retrieving all highlight by project id.
         /// </summary>
-        /// <param name="projectId">The project identifier to retrieve the corresponding highlights</param>
+        /// <param name="projectId">The project identifier which is used to retrieve the corresponding highlights.</param>
         /// <returns></returns>
+        /// <response code="200">This endpoint returns a list of highlights from a project.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified project id is not valid.</response>
+        /// <response code="404">The 404 Not Found status code is return when there are no highlight found with the specified project id.</response>
         [HttpGet("Project/{projectId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
+        [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetHighlightsByProjectId(int projectId)
         {
             if(projectId < 0)
@@ -143,12 +148,17 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Creates a highlight
+        /// This method is responsible for creating a highlight.
         /// </summary>
-        /// <param name="highlightResource">The highlight resource.</param>
-        /// <returns>The created highlight resource result.</returns>
+        /// <param name="highlightResource">The highlight resource which is used to create the highlight.</param>
+        /// <returns>This method returns the created highlight resource result.</returns>
+        /// <response code="201">This endpoint returns the created highlight.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified
+        /// resource is invalid or the highlight could not be saved to the database.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
+        [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public IActionResult CreateHighlight(HighlightResource highlightResource)
         {
             if(highlightResource == null)
@@ -161,7 +171,9 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+
             Highlight highlight = mapper.Map<HighlightResource, Highlight>(highlightResource);
+
             try
             {
                 highlightService.Add(highlight);
@@ -182,13 +194,17 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Updates the highlight.
+        /// This method is responsible for updating the highlight.
         /// </summary>
-        /// <param name="highlightId">The highlight identifier.</param>
-        /// <param name="highlightResource">The highlight resource.</param>
-        /// <returns>The updated highlight resource result.</returns>
+        /// <param name="highlightId">The highlight identifier which is used to find the highlight.</param>
+        /// <param name="highlightResource">The highlight resource which is used to update the highlight.</param>
+        /// <returns>This method return the updated highlight resource result</returns>
+        /// <response code="200">This endpoint returns the updated highlight.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no highlight is found with the specified highlight id.</response>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
+        [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateHighlight(int highlightId,
                                                          [FromBody] HighlightResource highlightResource)
         {
@@ -213,12 +229,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Deletes the highlight by the identifier.
+        /// This method is responsible for deleting the highlight by the identifier.
         /// </summary>
-        /// <param name="highlightId">The highlight identifier.</param>
-        /// <returns> Status code 200.</returns>
+        /// <param name="highlightId">The highlight identifier which is used to find the highlight.</param>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The highlight is deleted.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no highlight is found with the specified id.</response>
         [HttpDelete("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteHighlight(int highlightId)
         {
             if(await highlightService.FindAsync(highlightId) == null)
