@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed a bug where GetAllHighlights endpoint return status code 404 when empty. - [#207](https://github.com/DigitalExcellence/dex-backend/issues/207)
 - Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
 
 ### Security

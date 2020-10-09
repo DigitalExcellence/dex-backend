@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -67,25 +68,13 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of embedded projects resource result.</returns>
         /// <response code="200">This endpoint returns a list with embedded projects.</response>
-        /// <response code="404">The 404 Not Found status code is returned when there are no embedded projects.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<EmbeddedProjectResourceResult>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
-            IEnumerable<EmbeddedProject> embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
+            IEnumerable<EmbeddedProject> embeddedProjects= await embedService.GetEmbeddedProjectsAsync();
 
-            if(!embeddedProjects.Any())
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "No Embedded Projects found.",
-                    Detail = "There are no Embedded projects in the database.",
-                    Instance = "FEA62EAE-3D3C-4CE7-BDD8-6B273D56068D"
-                };
-                return NotFound(problem);
-            }
             return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
         }
 
