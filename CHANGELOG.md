@@ -64,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added error tracking and monitoring with Sentry - [#136](https://github.com/DigitalExcellence/dex-backend/issues/136)
 - Support for fontys login - [#66](https://github.com/DigitalExcellence/dex-backend/issues/66)
 - Added flag to indicate if email is public, show redacted email if not public - [#138](https://github.com/DigitalExcellence/dex-backend/issues/138)
-- Added Integration tests using Postman, also tests different access control levels - [#40](https://github.com/DigitalExcellence/dex-backend/issues/40) 
+- Added Integration tests using Postman, also tests different access control levels - [#40](https://github.com/DigitalExcellence/dex-backend/issues/40)
 - Added an endpoint to get highlights by a project identifier - [#174](https://github.com/DigitalExcellence/dex-backend/issues/174)
 - Automated the deployment to our environments - [#60](https://github.com/DigitalExcellence/dex-backend/issues/60)
 - Added docker compose to get the backend services running locally - [#179](https://github.com/DigitalExcellence/dex-backend/issues/179)
@@ -77,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unit testing for the Search service - [#183](https://github.com/DigitalExcellence/dex-backend/issues/183)
 - Added sanitization for project Description - [#198](https://github.com/DigitalExcellence/dex-backend/issues/198)
 - Added redirection to the frontend after logout from the identity server - [#216](https://github.com/DigitalExcellence/dex-backend/issues/216)
+- Added new endpoint for ability to like and unlike projects - [#229](https://github.com/DigitalExcellence/dex-backend/issues/229)
 
 ### Changed
 
