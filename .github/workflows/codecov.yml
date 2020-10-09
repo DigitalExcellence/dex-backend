@@ -29,11 +29,11 @@ jobs:
       run:  dotnet test
         /p:CollectCoverage=true 
         /p:CoverletOutputFormat=\"json%2ccobertura\"
-        /p:Threshold=0
+        /p:Threshold=40
         /p:ThresHoldType=line 
         /p:ThresholdStat=Total 
-        /p:CoverletOutput='../TestResults/'
-        /p:ExcludeByFile=\"**/models/**/*.cs\"
+        /p:CoverletOutput='../TestResults/' 
+        /p:ExcludeByFile=\"**/models/**/*.cs%2c**/Repositories.Tests/**/*.cs%2c**/Data/**/*.cs%2c**/Services.Tests/**/*.cs\"
         /p:MergeWith="../TestResults/coverage.json"
 
     - name: Upload code coverage to artifacts
