@@ -111,7 +111,7 @@ namespace API.Controllers
                                              .ConfigureAwait(false);
                 File file = new File(newFileName, newFileName, user, uploadDateTime);
 
-                await fileUploader.UploadSingleFile(fileResource.File, newFileName);
+                await fileUploader.CopyFileToDirectory(fileResource.File, newFileName);
 
                 await fileService.AddAsync(file);
                 fileService.Save();
@@ -195,7 +195,7 @@ namespace API.Controllers
                 await fileService.RemoveAsync(fileId)
                                     .ConfigureAwait(false);
                 fileService.Save();
-                fileUploader.DeleteFile(file);
+                fileUploader.DeleteFileFromDirectory(file);
                 return Ok();
             } catch(FileNotFoundException)
             {
