@@ -34,7 +34,7 @@ jobs:
         /p:ThresholdStat=Total 
         /p:CoverletOutput='../TestResults/' 
         /p:ExcludeByFile=\"**/models/**/*.cs%2c**/Microsoft.NET.Test/**/*.cs%2c**/Data/**/*.cs%2c**/3_Repositories.Tests/**/*.cs%2c**/Services.Sources.Resources/**/.cs\"
-        /p:MergeWith='../TestResults/coverage.opencover.xml'
+        /p:MergeWith="../TestResults/coverage.opencover.xml"
 
     - name: Generate report
       run: reportgenerator 
