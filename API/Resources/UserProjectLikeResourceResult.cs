@@ -11,6 +11,14 @@ namespace API.Resources
     public class UserProjectLikeResourceResult
     {
         /// <summary>
+        ///     Gets or sets the id of the project that being liked.
+        /// </summary>
+        /// <value>
+        ///     The identifier of the liked Project
+        /// </value>
+        public int Id { get; set; }
+
+        /// <summary>
         ///     Gets or sets the name of the project that being liked.
         /// </summary>
         /// <value>
