@@ -31,6 +31,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
+using Serilog;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -177,6 +178,7 @@ namespace IdentityServer
             }
             else
             {
+                Log.Logger.Information("Reached state 1");
                 X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 certStore.Open(OpenFlags.ReadOnly);
                 X509Certificate2Collection certCollection = certStore.Certificates.Find(
@@ -186,7 +188,9 @@ namespace IdentityServer
                 );
                 if(certCollection.Count > 0)
                 {
+                    Log.Logger.Information("Reached state 2");
                     X509Certificate2 certificate = certCollection[0];
+                    Log.Logger.Information("Reached state 3: " + certificate.FriendlyName);
                     builder.AddSigningCredential(certificate);
                 }
             }
