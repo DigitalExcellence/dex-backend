@@ -31,13 +31,13 @@ namespace API.Extensions
         /// <param name="file"></param>
         /// <param name="fileName"></param>
         /// <returns> path of file location </returns>
-        Task<string> UploadSingleFile(IFormFile file, string fileName);
+        Task<string> CopyFileToDirectory(IFormFile file, string fileName);
 
         /// <summary>
         /// Method deletes the file from the file server
         /// </summary>
         /// <param name="file"></param>
-        void DeleteFile(File file);
+        void DeleteFileFromDirectory(File file);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ namespace API.Extensions
         /// <param name="file"> File to upload </param>
         /// <param name="fileName"> Name of file </param> 
         /// <returns> path of file location </returns>
-        public async Task<string> UploadSingleFile(IFormFile file, string fileName)
+        public async Task<string> CopyFileToDirectory(IFormFile file, string fileName)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace API.Extensions
         /// </summary>
         /// <param name="file"></param>
         /// <returns> Bool which tells if file is deleted successfully or not </returns>
-        public void DeleteFile(File file)
+        public void DeleteFileFromDirectory(File file)
         {
             if(System.IO.File.Exists(Path.Combine(uploadPath, file.Name)))
             {
