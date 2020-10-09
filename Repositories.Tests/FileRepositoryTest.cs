@@ -19,6 +19,40 @@ namespace Repositories.Tests
         /// </value>
         protected new IFileRepository Repository => (IFileRepository) base.Repository;
 
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
+        [Test]
+        public override Task AddAsyncTest_GoodFlow([FileDataSource] File entity)
+        {
+            return base.AddAsyncTest_GoodFlow(entity);
+        }
+
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
+        [Test]
+        public override void AddRangeTest_BadFlow_EmptyList()
+        {
+            base.AddRangeTest_BadFlow_EmptyList();
+        }
+
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
+        [Test]
+        public override void AddRangeTest_BadFlow_Null()
+        {
+            base.AddRangeTest_BadFlow_Null();
+        }
+
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
+        [Test]
+        public override Task AddRangeTest_GoodFlow([FileDataSource(5)] List<File> entities)
+        {
+            return base.AddRangeTest_GoodFlow(entities);
+        }
+
+        ///<inheritdoc cref="RepositoryTest{TDomain, TRepository}"/>
+        [Test]
+        public override void AddTest_BadFlow_Null()
+        {
+            base.AddTest_BadFlow_Null();
+        }
 
     }
 }

@@ -26,8 +26,56 @@ namespace Services.Tests
         /// <value>
         /// The service.
         /// </value>
-        protected new IFileService Service => (IFileService) base.Service;
+        public new IFileService Service => (IFileService) base.Service;
 
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        [Test]
+        public override void AddRangeTest_GoodFlow([FileDataSource(100)] IEnumerable<File> entities)
+        {
+            base.AddRangeTest_GoodFlow(entities);
+        }
+
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        [Test]
+        public override void AddTest_GoodFlow([FileDataSource] File entity)
+        {
+            base.AddTest_GoodFlow(entity);
+        }
+
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        [Test]
+        public override Task GetAll([FileDataSource(100)] List<File> entities)
+        {
+            return base.GetAll(entities);
+        }
+
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        [Test]
+        public override void Remove([FileDataSource] File entity)
+        {
+            base.Remove(entity);
+        }
+
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        [Test]
+        public Task RemoveAsync()
+        {
+            return base.RemoveAsync(1);
+        }
+
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        [Test]
+        public override void Save()
+        {
+            base.Save();
+        }
+
+        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        [Test]
+        public override void Update([FileDataSource] File entity)
+        {
+            base.Update(entity);
+        }
 
     }
 }

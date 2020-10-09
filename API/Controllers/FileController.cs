@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
 using Services.Services;
 using System;
 using System.IO;
@@ -105,13 +106,14 @@ namespace API.Controllers
                 DateTime uploadDateTime = DateTime.Now;
                 int fileExtPos = fileResource.File.FileName.LastIndexOf(".");
                 string extension = fileResource.File.FileName.Substring(fileExtPos);
-                string newFileName = fileUploader.RemoveSpecialCharacters(fileResource.File.FileName.Remove(fileExtPos) + Guid.NewGuid() + extension);
-                string path = await fileUploader.UploadSingleFile(fileResource.File, newFileName);
+                string newFileName = Guid.NewGuid().ToString() + extension;
                 User user = await HttpContext.GetContextUser(userService)
                                              .ConfigureAwait(false);
+                File file = new File(newFileName, newFileName, user, uploadDateTime);
 
-                File file = new File(path, newFileName, user, uploadDateTime);
-                fileService.Add(file);
+                await fileUploader.UploadSingleFile(fileResource.File, newFileName);
+
+                await fileService.AddAsync(file);
                 fileService.Save();
 
                 return Ok(mapper.Map<File, FileResourceResult>(file));
