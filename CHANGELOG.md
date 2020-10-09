@@ -5,10 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
 
 
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security  
+  
+  
+
+## Release v.0.7.0-beta - 09-10-2020
 
 ### Added
 
@@ -19,16 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed DeX Frontend client to use code flow instead of implicit flow to fix silent refresh - [#246](https://github.com/DigitalExcellence/dex-backend/issues/246)
 - Improved swagger documentation - [#225](https://github.com/DigitalExcellence/dex-backend/issues/225)
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 
-- Fixed a bug where GetAllHighlights endpoint return status code 404 when empty. - [#207](https://github.com/DigitalExcellence/dex-backend/issues/207)
+- Fixed a bug where GetAllHighlights endpoint returned status code 404 when empty. - [#207](https://github.com/DigitalExcellence/dex-backend/issues/207)
 - Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
-
-### Security
 
 
 ## Release v.0.6.1-beta - 16-09-2020
