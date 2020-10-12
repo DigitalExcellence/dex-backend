@@ -1,6 +1,6 @@
 name: Production Deployment
 
-on: 
+on:
   push:
     branches: [ master ]
 
@@ -16,10 +16,15 @@ jobs:
         run:  docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Push docker images to dockerhub
         run:  docker-compose -f docker-compose.deploy.yml push
-      - name: Push to server 
+      - name: Push to server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PRODUCTION_VPS_IP }}
           username: ${{ secrets.PRODUCTION_VPS_USERNAME }}
           password: ${{ secrets.PRODUCTION_VPS_PASSWORD }}
-          script: cd ~/docker_compose && docker-compose down && docker-compose pull && docker-compose up --build -d
+          script: |
+           cd ~/docker_compose
+           docker-compose down
+           docker-compose pull
+           sleep 10s
+           docker-compose up -d

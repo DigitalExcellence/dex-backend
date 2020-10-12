@@ -108,6 +108,7 @@ namespace IdentityServer
                     true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
+                options.PublicOrigin = Config.Self.PublicOrigin;
                 if(Environment.IsDevelopment())
                 {
                     options.IssuerUri = Config.Self.IssuerUri;
