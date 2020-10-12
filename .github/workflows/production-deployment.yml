@@ -22,4 +22,9 @@ jobs:
           host: ${{ secrets.PRODUCTION_VPS_IP }}
           username: ${{ secrets.PRODUCTION_VPS_USERNAME }}
           password: ${{ secrets.PRODUCTION_VPS_PASSWORD }}
-          script: cd ~/docker_compose && docker-compose down && docker-compose pull && docker-compose up --build -d
+          script: |
+           cd ~/docker_compose
+           docker-compose down
+           docker-compose pull
+           sleep 10s
+           docker-compose up -d
