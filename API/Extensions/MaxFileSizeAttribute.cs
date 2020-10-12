@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace API.Extensions
 {
     /// <summary>
-    /// Attribute fort maximum file size
+    /// Attribute for maximum file size
     /// </summary>
     public class MaxFileSizeAttribute : ValidationAttribute
     {

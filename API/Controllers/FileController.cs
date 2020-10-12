@@ -150,7 +150,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(file);
+            return Ok(mapper.Map<File, FileResourceResult>(file));
         }
 
         /// <summary>
