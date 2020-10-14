@@ -5,20 +5,7 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20200925083952_ChangeUserProjectsTableToUserProject.cs" />
-    <Compile Remove="Migrations\20200925083952_ChangeUserProjectsTableToUserProject.Designer.cs" />
-    <Compile Remove="Migrations\20200929133538_initTable.cs" />
-    <Compile Remove="Migrations\20200929133538_initTable.Designer.cs" />
-    <Compile Remove="Migrations\20200929135218_ChangedUserProjectNaming.cs" />
-    <Compile Remove="Migrations\20200929135218_ChangedUserProjectNaming.Designer.cs" />
-    <Compile Remove="Migrations\20200929144218_deleteUserFollowedProjectsTable.cs" />
-    <Compile Remove="Migrations\20200929144218_deleteUserFollowedProjectsTable.Designer.cs" />
-    <Compile Remove="Migrations\20200930104624_InitUserUserTable.cs" />
-    <Compile Remove="Migrations\20200930104624_InitUserUserTable.Designer.cs" />
-  </ItemGroup>
-
- <ItemGroup>
+    <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.3" />
