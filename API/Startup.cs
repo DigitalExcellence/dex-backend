@@ -151,20 +151,22 @@ namespace API
                         }
                     });
                 o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
+                Uri authorizationUrl = Environment.IsDevelopment() ? new Uri(Config.IdentityServer.DevelopmentIdentityUrl + "/connect/authorize") : new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize");
+                
                 o.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize"),
-                            Scopes = new Dictionary<string, string>
                             {
-                                { "dex-api", "Resource scope" },
+                                Implicit = new OpenApiOAuthFlow
+                                           {
+                                               AuthorizationUrl = authorizationUrl,
+                                               Scopes = new Dictionary<string, string>
+                                                        {
+                                                            { "dex-api", "Resource scope" },
+                                                        }
+                                           }
                             }
-                        }
-                    }
                 });
                 o.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
