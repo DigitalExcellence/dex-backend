@@ -29,6 +29,8 @@ using Models.Exceptions;
 using Services.Services;
 using System;
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using File = Models.File;
 
 namespace API.Controllers
@@ -64,21 +66,13 @@ namespace API.Controllers
         /// Get all files
         /// </summary>
         /// <returns>A response and list of files.</returns>
+        /// <response code="200">This endpoint returns all projects.</response>
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(typeof(IEnumerable<FileResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetFilesAsync()
         {
             IEnumerable<File> files = await fileService.GetAll();
-            if(!files.Any())
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting files.",
-                    Detail = "The database does not contain any files.",
-                    Instance = "47525791-57C4-4DE2-91B1-90086D893112"
-                };
-                return NotFound(problem);
-            }
 
             return Ok(mapper.Map<IEnumerable<File>, IEnumerable<FileResourceResult>>(files));
         }
@@ -87,8 +81,13 @@ namespace API.Controllers
         /// Uploads a single file
         /// </summary>
         /// <returns>HTTP Response</returns>
+        /// <response code="200">This endpoint returns all files.</response>
+        /// <response code="400">The 400 bad request is returned when a file is null.</response>
         [HttpPost]
         [Authorize]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UploadSingleFile([FromForm] FileResource fileResource)
         {
             if(fileResource.File == null)
@@ -133,8 +132,11 @@ namespace API.Controllers
         /// Find file by id
         /// </summary>
         /// <param name="fileId"></param>
+        ///<response code="200">This endpoint returns one single file.</response>
         /// <returns> File </returns>
         [HttpGet("{fileId}")]
+        [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetSingleFile(int fileId)
         {
             File file = await fileService.FindAsync(fileId);
@@ -157,9 +159,15 @@ namespace API.Controllers
         /// Deletes single file
         /// </summary>
         /// <param name="fileId"></param>
+        /// <response code="200">This endpoint deletes one single file.</response>
+        /// <response code="404">The 404 Not Found response is returned when the file was not found.</response>
+        /// <response code="401">The 401 Not Authorized response is returned when the user does not have the right credentials.</response>
         /// <returns></returns>
         [HttpDelete("{fileId}")]
         [Authorize]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> DeleteSingleFile(int fileId)
         {
             File file = await fileService.FindAsync(fileId);

@@ -1168,7 +1168,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
