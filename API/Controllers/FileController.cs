@@ -20,7 +20,6 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -30,13 +29,13 @@ using Services.Services;
 using System;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using File = Models.File;
 
 namespace API.Controllers
 {
     /// <summary>
-    ///     File controller for files
+    /// This class is responsible for handling HTTP requests that are related
+    /// to file uploading, for example creating, retrieving or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -105,7 +104,7 @@ namespace API.Controllers
                 DateTime uploadDateTime = DateTime.Now;
                 int fileExtPos = fileResource.File.FileName.LastIndexOf(".");
                 string extension = fileResource.File.FileName.Substring(fileExtPos);
-                string newFileName = Guid.NewGuid().ToString() + extension;
+                string newFileName = Guid.NewGuid() + extension;
                 User user = await HttpContext.GetContextUser(userService)
                                              .ConfigureAwait(false);
                 File file = new File(newFileName, newFileName, user, uploadDateTime);

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200918105547_ChangedProjectModel")]
-    partial class ChangedProjectModel
+    [Migration("20201016093942_AddFilesAndProjectIconReferences")]
+    partial class AddFilesAndProjectIconReferences
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,7 +86,7 @@ namespace _4_Data.Migrations
                     b.Property<DateTime>("UploadDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UploaderId")
+                    b.Property<int>("UploaderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -264,7 +264,9 @@ namespace _4_Data.Migrations
                 {
                     b.HasOne("Models.User", "Uploader")
                         .WithMany()
-                        .HasForeignKey("UploaderId");
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Highlight", b =>

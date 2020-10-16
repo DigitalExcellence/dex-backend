@@ -16,9 +16,7 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Models
 {
@@ -39,6 +37,7 @@ namespace Models
         public string Path { get; set; }
         public DateTime UploadDateTime { get; set; }
         public string Name { get; set; }
+        [Required]
         public User Uploader { get; set; }
 
     }
