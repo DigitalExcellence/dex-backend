@@ -16,9 +16,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Resources
 {
@@ -44,6 +41,10 @@ namespace API.Resources
         /// File name
         /// </summary>
         public string Name { get; set; }
-        
+        /// <summary>
+        /// User Id that uploaded the file
+        /// </summary>
+        public int UploaderUserId { get; set; }
+
     }
 }
