@@ -19,7 +19,6 @@ using Configuration;
 using Data;
 using IdentityServer.Configuration;
 using IdentityServer.Quickstart;
-using IdentityServer4;
 using IdentityServer4.Services;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -108,7 +107,6 @@ namespace IdentityServer
                     true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
-                options.PublicOrigin = Config.Self.PublicOrigin;
                 if(Environment.IsDevelopment())
                 {
                     options.IssuerUri = Config.Self.IssuerUri;
@@ -124,9 +122,9 @@ namespace IdentityServer
             // sets the authentication schema.
             services.AddAuthentication(options =>
                     {
-                        options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     })
                     // Adds Fontys Single Sign On authentication.
                     .AddOpenIdConnect("FHICT", "Fontys", options =>

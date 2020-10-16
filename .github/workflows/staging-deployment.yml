@@ -22,9 +22,4 @@ jobs:
           host: ${{ secrets.STAGING_VPS_IP }}
           username: ${{ secrets.STAGING_VPS_USERNAME }}
           password: ${{ secrets.STAGING_VPS_PASSWORD }}
-          script: |
-           cd ~/docker_compose
-           docker-compose down
-           docker-compose pull
-           sleep 10s
-           docker-compose up -d
+          script: cd ~/docker_compose && docker-compose down && docker-compose pull && docker-compose up --build -d

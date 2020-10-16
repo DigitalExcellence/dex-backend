@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published
+* 
+* This program is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU Lesser General Public License as published 
 * by the Free Software Foundation version 3 of the License.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* 
+* This program is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 * See the GNU Lesser General Public License for more details.
-*
-* You can find a copy of the GNU Lesser General Public License
+* 
+* You can find a copy of the GNU Lesser General Public License 
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -23,17 +23,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using RestSharp;
 using Serilog;
 using Services.Services;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the users, for example creating, retrieving, updating or deleting.
+    ///     This controller handles the user settings.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -62,15 +61,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// The method is responsible for retrieving the current user.
+        /// Gets the current user.
         /// </summary>
         /// <returns>The current user as user resource result.</returns>
-        /// <response code="200">This endpoint returns the current user.</response>
-        /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetCurrentUser()
         {
             string identityId = HttpContext.User.GetIdentityId(HttpContext);
@@ -89,18 +84,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a user account.
+        ///     Get a user account.
         /// </summary>
-        /// <param name="userId">the user identifier which is used for searching a user.</param>
-        /// <returns>This method returns the user resource result.</returns>
-        /// <response code="200">This endpoint returns the user with the specified user id.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the user id is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
+        /// <param name="userId">the useridentifier.</param>
+        /// <returns>The user resource result.</returns>
         [HttpGet("{userId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUser(int userId)
         {
             if(userId < 0)
@@ -131,16 +120,12 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// This method is responsible for creating the account.
+        /// Creates the account asynchronous.
         /// </summary>
-        /// <param name="accountResource">The account resource which is used for creating the account.</param>
-        /// <returns>This method returns the created user as user resource result.</returns>
-        /// <response code="200">This endpoint returns the created user.</response>
-        /// <response code="400">The 400 Bad Request status code is return when saving the user to the database failed.</response>
+        /// <param name="accountResource">The account resource.</param>
+        /// <returns>The created user as user resource result.</returns>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.Created)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
         {
             User user = mapper.Map<UserResource, User>(accountResource);
@@ -167,19 +152,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for updating the account.
+        /// Updates the account.
         /// </summary>
-        /// <param name="userId">The user identifier which is used for searching the user.</param>
-        /// <param name="userResource">The user resource which is used for updating the user.</param>
-        /// <returns>This method returns the updated user as user resource result.</returns>
-        /// <response code="200">This endpoint returns the updated user.</response>
-        /// <response code="401">The 401 Unauthorized status code is returned when the user is not allowed to update the account.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="userResource">The user resource.</param>
+        /// <returns>The updated user as user resource result.</returns>
         [HttpPut("{userId}")]
         [Authorize]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
             User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
@@ -217,15 +196,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for deleting the current account.
+        /// Deletes the current account.
         /// </summary>
-        /// <returns>This method returns status code 200.</returns>
-        /// <response code="200">This endpoint returns status code 200. The current account is deleted.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the current account could not be found.</response>
+        /// <returns>Not found when the user does not exist. OK if everything went welll.</returns>
         [HttpDelete]
         [Authorize]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteAccount()
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
@@ -248,17 +223,11 @@ namespace API.Controllers
        
 
         /// <summary>
-        /// This method is responsible for deleting a user account.
+        ///     Delete the user account.
         /// </summary>
-        /// <returns>This method returns status code 200.</returns>
-        /// <response code="200">This endpoint returns status code 200. The account with the specified id is deleted.</response>
-        /// <response code="401">The 401 Unauthorized status code is returned when the user is not allowed to delete the account.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
+        /// <returns>Statuscode 200</returns>
         [HttpDelete("{userId}")]
         [Authorize]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteAccount(int userId)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);

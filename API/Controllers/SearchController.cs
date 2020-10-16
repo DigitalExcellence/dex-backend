@@ -22,19 +22,19 @@ using Models;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the search requests.
+    ///     The controller that handles search requests
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SearchController : ControllerBase
     {
+
         private readonly IMapper mapper;
 
         private readonly ISearchService searchService;
@@ -42,8 +42,8 @@ namespace API.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchController"/> class.
         /// </summary>
-        /// <param name="searchService">The search service which is used to communicate with the logic layer.</param>
-        /// <param name="mapper">The mapper which is used to convert the resource to the model to the resource result.</param>
+        /// <param name="searchService">The search service.</param>
+        /// <param name="mapper">The mapper.</param>
         public SearchController(ISearchService searchService, IMapper mapper)
         {
             this.searchService = searchService;
@@ -51,16 +51,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for searching and retrieving projects.
+        ///     Search for projects
         /// </summary>
-        /// <param name="query">The search query which is used to search for a project.</param>
-        /// <param name="projectFilterParamsResource">The parameters to filter which is ued to sort and paginate the projects.</param>
-        /// <returns>This method returns the search results.</returns>
-        /// <response code="200">This endpoint returns search results.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the search request is invalid.</response>
+        /// <param name="query">The search query</param>
+        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>Search results</returns>
         [HttpGet("internal/{query}")]
-        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> SearchInternalProjects(string query,
                                                                 [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
@@ -117,5 +113,7 @@ namespace API.Controllers
 
             return Ok(searchResultsResource);
         }
+
     }
+
 }

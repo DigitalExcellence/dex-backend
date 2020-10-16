@@ -23,25 +23,19 @@ namespace API.Resources
     /// <summary>
     ///     The view model result of a highlight
     /// </summary>
-    public class HighlightResourceResult
+    public class HighlightResourceResult : HighlightResource
     {
 
         /// <summary>
         ///     This gets or sets the the id of highlight
         /// </summary>
         public int Id { get; set; }
+
         /// <summary>
-        ///     This gets or sets the id of the project that this highlight is associated with
+        ///     This gets or sets project associated with the highlight
         /// </summary>
-        public int ProjectId { get; set; }
-        /// <summary>
-        ///     This gets or sets the description of the project that this highlight is associated with
-        /// </summary>
-        public string Description { get; set; }
-        /// <summary>
-        ///     This gets or sets the project of this highlight
-        /// </summary>
-        public ProjectHighlightResourceResult Project { get; set; }
+        public Project Project { get; set; }
+
     }
 
 }

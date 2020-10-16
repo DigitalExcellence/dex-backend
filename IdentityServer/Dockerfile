@@ -18,8 +18,6 @@ ENV App__Api__ClientSecret = ''
 
 ENV App__Frontend__RedirectUriFrontend = ''
 
-ENV App__Frontend__RefreshUriFrontend = ''
-
 ENV App__Frontend__RedirectUriFrontendPostman = ''
 
 ENV App__Frontend__PostLogoutUrisFrontend = ''
@@ -40,7 +38,7 @@ ENV App__FfhictOIDC__RedirectUri = ''
 
 ENV SENTRY_DSN = ''
 
-RUN dotnet tool install --tool-path ./ dotnet-certificate-tool --version 2.0.1
+RUN dotnet tool install --tool-path ./ dotnet-certificate-tool
 
 RUN dotnet publish IdentityServer/6_IdentityServer.csproj -c Release -o out
 

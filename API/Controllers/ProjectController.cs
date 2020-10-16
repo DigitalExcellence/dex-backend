@@ -27,14 +27,12 @@ using Serilog;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the projects, for example creating, retrieving, updating or deleting.
+    ///     This controller handles the CRUD projects
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -62,15 +60,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all projects.
+        ///     Get all projects.
         /// </summary>
-        /// <param name="projectFilterParamsResource">The parameters to filter which is used to sort and paginate the projects.</param>
-        /// <returns>This method returns the project result resource.</returns>
-        /// <response code="200">This endpoint returns all projects.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when values inside project filter params resource are invalid.</response>
+        /// <param name="projectFilterParamsResource">The parameters to filter, sort and paginate the projects</param>
+        /// <returns>The project result resource.</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAllProjects([FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
@@ -121,16 +115,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a single project.
+        ///     Get a project.
         /// </summary>
-        /// <returns>This method returns the project resource result.</returns>
-        /// <response code="200">This endpoint returns the project with the specified id.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the specified id is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the project could not be found with the specified id.</response>
+        /// <returns>The project resource result.</returns>
         [HttpGet("{projectId}")]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
         {
             if(projectId < 0)
@@ -160,16 +148,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for creating a Project.
+        ///     Create a Project.
         /// </summary>
-        /// <returns>This method returns the project resource result.</returns>
-        /// <response code="200">This endpoint returns the created project.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the project
-        /// resource is not specified or failed to save project to the database.</response>
+        /// <returns>The project resource result.</returns>
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
         {
             if(projectResource == null)
@@ -205,19 +188,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for updating the project with the specified identifier.
+        /// Updates the project with the specified identifier. 
         /// </summary>
-        /// <param name="projectId">The project identifier which is used for searching the project.</param>
-        /// <param name="projectResource">The project resource which is used for updating the project.</param>
-        /// <returns>This method returns the project resource result.</returns>
-        /// <response code="200">This endpoint returns the updated project.</response>
-        /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
-        /// <response code="404">The 404 not Found status code is returned when the project to update is not found.</response>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="projectResource">The project resource.</param>
+        /// <returns>The project resource result.</returns>
         [HttpPut("{projectId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
@@ -254,17 +231,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for deleting a project.
+        ///     deletes a project.
         /// </summary>
-        /// <returns>This method returns the status code 200.</returns>
-        /// <response code="200">This endpoint returns status code 200. The project is deleted.</response>
-        /// <response code="401">The 401 Unauthorized status code is returned when the the user has not the correct permission to delete.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the project to delete was not found.</response>
+        /// <returns>Status code 200.</returns>
         [HttpDelete("{projectId}")]
         [Authorize]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
