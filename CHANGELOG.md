@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed issue where swagger authorization was not working when running in docker-compose - [#200](https://github.com/DigitalExcellence/dex-backend/issues/200)
+- Fixed issue with search functionality being too extensive. Now matching whole strings only - [#202](https://github.com/DigitalExcellence/dex-backend/issues/202)
 
 ### Security
 
@@ -37,7 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed issue with search functionality being too extensive. Now matching whole strings only - [#202](https://github.com/DigitalExcellence/dex-backend/issues/202)
 - Fixed a bug where GetAllHighlights endpoint returned status code 404 when empty. - [#207](https://github.com/DigitalExcellence/dex-backend/issues/207)
 - Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
 
