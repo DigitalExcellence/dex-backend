@@ -34,7 +34,8 @@ using File = Models.File;
 namespace API.Controllers
 {
     /// <summary>
-    ///     File controller for files
+    /// This class is responsible for handling HTTP requests that are related
+    /// to file uploading, for example creating, retrieving or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
