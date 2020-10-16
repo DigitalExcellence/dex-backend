@@ -47,11 +47,13 @@ using System.Threading.Tasks;
 
 namespace API
 {
+
     /// <summary>
     ///     Startup file
     /// </summary>
     public class Startup
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -107,27 +109,31 @@ namespace API
             services.AddAuthorization(o =>
             {
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.HighlightWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.HighlightWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.UserRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserRead))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserWrite))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.RoleRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleRead))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.RoleWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
 
@@ -138,50 +144,58 @@ namespace API
             services.AddCors();
             services.AddControllersWithViews()
                     .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
-                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
+                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 ;
 
             services.AddSwaggerGen(o =>
             {
                 o.OperationFilter<DefaultOperationFilter>();
                 o.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Title = "Dex API",
-                        Version = "v1",
-                        Description = "Dex API Swagger surface. DeX provides a platform for students, teachers and employees to share and work on projects and ideas. Find, create, share and work on projects and ideas on DeX",
-                        License = new OpenApiLicense
-                        {
-                            Name = "GNU Lesser General Public License v3.0",
-                            Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
-                        }
-                    });
+                             new OpenApiInfo
+                             {
+                                 Title = "Dex API",
+                                 Version = "v1",
+                                 Description =
+                                     "Dex API Swagger surface. DeX provides a platform for students, teachers and employees to share and work on projects and ideas. Find, create, share and work on projects and ideas on DeX",
+                                 License = new OpenApiLicense
+                                           {
+                                               Name = "GNU Lesser General Public License v3.0",
+                                               Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
+                                           }
+                             });
                 o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
-                o.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize"),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { "dex-api", "Resource scope" },
-                            }
-                        }
-                    }
-                });
+
+                o.AddSecurityDefinition("oauth2",
+                                        new OpenApiSecurityScheme
+                                        {
+                                            Type = SecuritySchemeType.OAuth2,
+                                            Flows = new OpenApiOAuthFlows
+                                                    {
+                                                        Implicit = new OpenApiOAuthFlow
+                                                                   {
+                                                                       AuthorizationUrl = GetAuthorizationUrl(),
+                                                                       Scopes = new Dictionary<string, string>
+                                                                           {
+                                                                               {"dex-api", "Resource scope"},
+                                                                           }
+                                                                   }
+                                                    }
+                                        });
                 o.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
-                        },
-                        new[] { "" }
-                    }
-                });
+                                         {
+                                             {
+                                                 new OpenApiSecurityScheme
+                                                 {
+                                                     Reference = new OpenApiReference
+                                                                 {
+                                                                     Type = ReferenceType.SecurityScheme,
+                                                                     Id = "oauth2"
+                                                                 }
+                                                 },
+                                                 new[] {""}
+                                             }
+                                         });
             });
 
             // Add application services.
@@ -363,8 +377,23 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
+
                 // TODO seed embedded projects
             }
         }
+
+        /// <summary>
+        ///     Depending on the environment, will return authorization url based on development identity url or identity url
+        /// </summary>
+        private Uri GetAuthorizationUrl()
+        {
+            if(Environment.IsDevelopment())
+            {
+                return new Uri(Config.IdentityServer.DevelopmentIdentityUrl + "/connect/authorize");
+            }
+            return new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize");
+        }
+
     }
+
 }
