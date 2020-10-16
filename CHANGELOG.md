@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added a fileuploader which gives the opportunity to upload files and icons - [#217] (https://github.com/DigitalExcellence/dex-backend/issues/217)
+- Added a fileuploader which gives the opportunity to upload files and icons - [#217](https://github.com/DigitalExcellence/dex-backend/issues/217)
 
 ### Changed
 
