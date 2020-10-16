@@ -223,6 +223,8 @@ namespace API
 
             app.UseProblemDetails();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
             app.UseCors(c =>
             {
@@ -303,7 +305,6 @@ namespace API
                 o.OAuthClientId(Config.Swagger.ClientId);
             });
 
-            app.UseStaticFiles();
         }
 
         /// <summary>
