@@ -5,7 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
 
 
@@ -15,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added function to follow users and let users follow projects [#228](https://github.com/DigitalExcellence/dex-backend/pull/258)
 
 ### Changed
-
 
 ### Deprecated
 
@@ -55,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed issue resulting in people being unable to sign up with a new account - [#231](https://github.com/DigitalExcellence/dex-backend/issues/231)
+- Fixed issue where highlights were sending too much information. - [#205](https://github.com/DigitalExcellence/dex-backend/issues/205)
 
 ## Release v.0.6-beta - 22-06-2020
 
