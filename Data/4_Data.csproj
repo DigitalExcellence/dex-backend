@@ -5,12 +5,7 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20200916082810_AddFileModel.cs" />
-    <Compile Remove="Migrations\20200916082810_AddFileModel.Designer.cs" />
-  </ItemGroup>
-
- <ItemGroup>
+    <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.3" />
