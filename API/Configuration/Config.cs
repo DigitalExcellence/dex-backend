@@ -125,7 +125,6 @@ namespace API.Configuration
         /// <value>
         ///     The identity URL.
         /// </value>
-        [Required]
         [Url]
         public string DevelopmentIdentityUrl { get; set; }
     }
