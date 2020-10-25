@@ -35,9 +35,9 @@ jobs:
       run: docker-compose up --build -d
 
     - name: Sleep for 10 seconds
-      uses: jakejarvis/wait-action@master
+      uses: juliangruber/sleep-action@v1
       with:
-        time: '10s'
+        time: 10s
 
     - name: Setup node
       uses: actions/setup-node@v1
