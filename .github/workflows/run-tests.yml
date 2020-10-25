@@ -1,0 +1,36 @@
+name: Run tests
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
+
+  integration-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker Compose
+      run: docker-compose up --build -d
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.15.3'
+    - name: Postman tests
+      run: npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --timeout-request=1800

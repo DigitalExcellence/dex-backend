@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add Postman tests to pipeline [#189](https://github.com/DigitalExcellence/dex-backend/issues/189)
+
 ### Changed
 
 ### Deprecated
