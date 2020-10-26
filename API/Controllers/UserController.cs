@@ -275,14 +275,12 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteAccount(int userId)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
-
 
             bool hasUserWriteScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
             bool hasCorrectDataOfficerRights =
-                userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.RequestUserRead)) &&
-                await userService.HasSameInstitution(currentUser.Id, userId);
-            bool isAllowed = hasUserReadScope || hasCorrectDataOfficerRights;
+                userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.RequestUserWrite)) &&
+                await userService.HasSameInstitution(user.Id, userId);
+            bool isAllowed = hasUserWriteScope || hasCorrectDataOfficerRights;
 
             if(user.Id != userId && !isAllowed)
             {
