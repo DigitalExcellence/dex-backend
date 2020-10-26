@@ -75,6 +75,13 @@ namespace Data
         /// The role.
         /// </value>
         public DbSet<Role> Role { get; set; }
+        /// <summary>
+        /// Gets or sets the institution.
+        /// </summary>
+        /// <value>
+        /// The institution.
+        /// </value>
+        public DbSet<Institution> Institution { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
