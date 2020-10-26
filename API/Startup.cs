@@ -343,6 +343,7 @@ namespace API
                     //Seed random users
                     context.User.Add(Seed.SeedPrUser(roles));
                     context.User.AddRange(Seed.SeedUsers(roles));
+                    context.User.Add(Seed.SeedDataOfficerUser(roles));
                     context.SaveChanges();
                 }
             }
