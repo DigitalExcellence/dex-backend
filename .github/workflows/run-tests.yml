@@ -2,7 +2,7 @@ name: Run Backend Unit & Integration Tests
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, master ]
 
 jobs:
   unit-test:
