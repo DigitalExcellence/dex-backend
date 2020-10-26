@@ -34,6 +34,8 @@ namespace Services.Services
 
         bool UserHasScope(string identityId, string scope);
 
+        Task<bool> HasSameInstitution(int ownUserId, int requestUserId);
+
         bool UserWithRoleExists(Role role);
     }
 
@@ -66,6 +68,13 @@ namespace Services.Services
         public bool UserHasScope(string identityId, string scope)
         {
             return Repository.UserHasScope(identityId, scope);
+        }
+
+        public async Task<bool> HasSameInstitution(int ownUserId, int requestUserId)
+        {
+            var ownUserInfo = await Repository.FindAsync(ownUserId);
+            var userRequestInfo = await Repository.FindAsync(requestUserId);
+            return ownUserInfo.Institution == userRequestInfo.Institution;
         }
 
         public bool UserWithRoleExists(Role role)

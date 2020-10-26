@@ -25,6 +25,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -92,12 +93,31 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the user id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpGet("{userId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
+        [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUser(int userId)
         {
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            bool hasUserReadScope = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserRead));
+            bool hasCorrectDataOfficerRights =
+                userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.RequestUserRead)) &&
+                await userService.HasSameInstitution(currentUser.Id, userId);
+            bool isAllowed = hasUserReadScope || hasCorrectDataOfficerRights;
+
+            if(!isAllowed)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "Failed to retrieve the user.",
+                     Detail = "The user is not allowed to retrieve this user.",
+                     Instance = "09D64E7C-DF87-4CBD-9B2E-ECE00670DB35"
+                 };
+                return Unauthorized(problem);
+            }
+
             if(userId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -123,7 +143,6 @@ namespace API.Controllers
 
             return Ok(mapper.Map<User, UserResourceResult>(user));
         }
-
 
         /// <summary>
         /// This method is responsible for creating the account.
