@@ -12,6 +12,7 @@ WORKDIR /app
 
 COPY . ./
 
+RUN dotnet dev-certs https --clean
 RUN dotnet dev-certs https -ep ./dex-identity.pfx -p W64x4AD8dNj9kImdX3tayS
 
 RUN dotnet build
