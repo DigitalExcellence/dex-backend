@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+
 - Added function to follow users and let users follow projects [#228](https://github.com/DigitalExcellence/dex-backend/pull/258)
+- Add Postman tests to pipeline [#189](https://github.com/DigitalExcellence/dex-backend/issues/189)
 
 ### Changed
 
