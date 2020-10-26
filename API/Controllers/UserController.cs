@@ -277,6 +277,13 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
 
+
+            bool hasUserWriteScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
+            bool hasCorrectDataOfficerRights =
+                userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.RequestUserRead)) &&
+                await userService.HasSameInstitution(currentUser.Id, userId);
+            bool isAllowed = hasUserReadScope || hasCorrectDataOfficerRights;
+
             if(user.Id != userId && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails

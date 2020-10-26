@@ -82,7 +82,7 @@ namespace Data.Helpers
                Scopes = new List<RoleScope>
                 {
                     new RoleScope(nameof(Defaults.Scopes.RequestUserRead)),
-                    new RoleScope(nameof(Defaults.Scopes.RequestUserDelete))
+                    new RoleScope(nameof(Defaults.Scopes.RequestUserWrite))
                 }
            };
             roles.Add(dataOfficerRole);
