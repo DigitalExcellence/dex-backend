@@ -9,8 +9,7 @@ namespace _4_Data.Migrations
             migrationBuilder.AddColumn<int>(
                 name: "InstitutionId",
                 table: "User",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Institution",
@@ -37,7 +36,7 @@ namespace _4_Data.Migrations
                 column: "InstitutionId",
                 principalTable: "Institution",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

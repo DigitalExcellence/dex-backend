@@ -200,7 +200,7 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InstitutionId")
+                    b.Property<int?>("InstitutionId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsPublic")
@@ -280,9 +280,7 @@ namespace _4_Data.Migrations
                 {
                     b.HasOne("Models.Institution", "Institution")
                         .WithMany()
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InstitutionId");
 
                     b.HasOne("Models.Role", "Role")
                         .WithMany()

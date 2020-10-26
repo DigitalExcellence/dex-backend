@@ -59,6 +59,10 @@ namespace API.Resources
         /// </value>
         public Role Role { get; set; }
 
+        /// <summary>
+        /// Gets or sets the institution where the user is registered.
+        /// </summary>
+        public Institution Institution { get; set; }
     }
 
 }

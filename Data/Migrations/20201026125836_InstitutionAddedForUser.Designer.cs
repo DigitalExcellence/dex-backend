@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201026105110_InstitutionAddedForUser")]
+    [Migration("20201026125836_InstitutionAddedForUser")]
     partial class InstitutionAddedForUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,7 +202,7 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InstitutionId")
+                    b.Property<int?>("InstitutionId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsPublic")
@@ -282,9 +282,7 @@ namespace _4_Data.Migrations
                 {
                     b.HasOne("Models.Institution", "Institution")
                         .WithMany()
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InstitutionId");
 
                     b.HasOne("Models.Role", "Role")
                         .WithMany()

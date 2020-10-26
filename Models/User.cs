@@ -60,7 +60,6 @@ namespace Models
         /// <summary>
         /// Gets or sets the institution where the user is registered.
         /// </summary>
-        [Required]
         public Institution Institution { get; set; }
     }
 
