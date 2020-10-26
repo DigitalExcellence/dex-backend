@@ -56,6 +56,12 @@ namespace Models
         ///   <c>true</c> if this instance is public; otherwise, <c>false</c>.
         /// </value>
         public bool IsPublic { get; set; }
+
+        /// <summary>
+        /// Gets or sets the institution where the user is registered.
+        /// </summary>
+        [Required]
+        public Institution Institution { get; set; }
     }
 
 }
