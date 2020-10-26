@@ -12,6 +12,10 @@ namespace API.Resources
     public class UserProjectResourceResult
     {
         /// <summary>
+        /// gets or sets Id of the followed project
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
         /// Set or get Project
         /// </summary>
         public string Name{ get; set; }

@@ -39,6 +39,7 @@ namespace API.Configuration
                 .ForAllOtherMembers(o => o.Ignore());
 
            CreateMap<UserProject, UserProjectResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
                 .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
                 .ForMember(q => q.Uri, opt => opt.MapFrom(p => p.Project.Uri))

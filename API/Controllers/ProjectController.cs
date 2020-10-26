@@ -53,7 +53,7 @@ namespace API.Controllers
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="userProjectService"The user project service which is used to communicate with the logic layer.></param>
-        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
+        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper, IUserProjectService userProjectService)
         {
             this.projectService = projectService;
             this.userService = userService;
