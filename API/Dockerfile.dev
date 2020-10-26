@@ -10,6 +10,7 @@ WORKDIR /app
 
 COPY . ./
 
+RUN dotnet dev-certs https --clean
 RUN dotnet dev-certs https -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
 
 RUN dotnet build
