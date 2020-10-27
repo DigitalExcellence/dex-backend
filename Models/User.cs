@@ -29,6 +29,7 @@ namespace Models
         {
             Projects = new List<Project>();
             Services = new List<LinkedService>();
+            CallToActions = new List<CallToAction>();
             AccountCreationDate = DateTime.Now;
             ExpectedGraduationDate = DateTime.Now.AddYears(4);
         }
@@ -49,6 +50,8 @@ namespace Models
         public List<Project> Projects { get; set; }
 
         public List<LinkedService> Services { get; set; }
+
+        public List<CallToAction> CallToActions { get; set; }
 
         public string ProfileUrl { get; set; }
 

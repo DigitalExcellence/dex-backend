@@ -76,6 +76,14 @@ namespace Data
         /// </value>
         public DbSet<Role> Role { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Call to Action
+        /// </summary>
+        /// /// <value>
+        /// The call to action.
+        /// </value>
+        public DbSet<CallToAction> CallToAction { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

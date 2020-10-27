@@ -56,6 +56,9 @@ namespace API.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
+            services.AddScoped<ICallToActionService, CallToActionService>();
+            services.AddScoped<ICallToActionRepository, CallToActionRepository>();
+
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
 
             services.AddScoped<IRestClientFactory, RestClientFactory>();
