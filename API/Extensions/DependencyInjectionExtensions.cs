@@ -67,6 +67,8 @@ namespace API.Extensions
             services.AddScoped<IGitHubSource, GitHubSource>();
             services.AddScoped<IGitLabSource, GitLabSource>();
 
+            services.AddScoped<ICallToActionService, CallToActionService>();
+
             return services;
         }
     }

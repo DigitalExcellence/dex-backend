@@ -29,18 +29,25 @@ namespace Services.Services
 
     public interface ICallToActionService : IService<CallToAction>
     {
-
-       
+        public Task<IEnumerable<CallToAction>> GetAllGraduateCallToActions();
     }
 
     public class CallToActionService : Service<CallToAction>, ICallToActionService
     {
-
-        public CallToActionService(ICallToActionRepository repository) : base(repository) { }
+        private readonly IUserService userService;
+        public CallToActionService(ICallToActionRepository repository, IUserService userService) : base(repository)
+        {
+           this.userService = userService;
+        }
 
         protected new ICallToActionRepository Repository => (ICallToActionRepository)base.Repository;
 
+        Task<IEnumerable<CallToAction>> ICallToActionService.GetAllGraduateCallToActions()
+        {
+            IEnumerable<User> users = (IEnumerable<User>) userService.GetAllExpectedGraduatingUsers();
 
+            return (Task<IEnumerable<CallToAction>>) users;
+        }
     }
 
 }

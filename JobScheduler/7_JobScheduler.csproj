@@ -12,4 +12,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\5_Models.csproj" />
+    <ProjectReference Include="..\Services\2_Services.csproj" />
+  </ItemGroup>
 </Project>

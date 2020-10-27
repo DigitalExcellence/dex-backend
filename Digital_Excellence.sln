@@ -25,6 +25,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "7_JobScheduler", "JobScheduler\7_JobScheduler.csproj", "{7282F142-E5E0-4E93-822B-327A8A5BE328}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9940A638-7501-49EE-A816-560A2908A029} = {9940A638-7501-49EE-A816-560A2908A029}
+		{860D05B3-46CB-4EA9-9F83-63BBF44AFB2F} = {860D05B3-46CB-4EA9-9F83-63BBF44AFB2F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

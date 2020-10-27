@@ -19,6 +19,7 @@ using Models;
 using Repositories;
 using Services.Base;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Services
@@ -35,6 +36,7 @@ namespace Services.Services
         bool UserHasScope(string identityId, string scope);
 
         bool UserWithRoleExists(Role role);
+        Task<IEnumerable<User>> GetAllExpectedGraduatingUsers();
     }
 
     public class UserService : Service<User>, IUserService
@@ -72,5 +74,12 @@ namespace Services.Services
         {
             return Repository.UserWithRoleExists(role);
         }
+
+        public async Task<IEnumerable<User>> GetAllExpectedGraduatingUsers()
+        {
+
+            return await Repository.GetAllExpectedGraduatingUsers();
+                
+        } 
     }
 }

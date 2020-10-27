@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -62,6 +63,8 @@ namespace Repositories
         /// <param name="roleName">Name of the role.</param>
         /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
+
+        Task<IEnumerable<User>> GetAllExpectedGraduatingUsers();
 
     }
     /// <summary>
@@ -177,7 +180,14 @@ namespace Repositories
                 .SingleOrDefault(r => r.Role.Id == role.Id) != null;
         }
 
+        async Task<IEnumerable<User>> IUserRepository.GetAllExpectedGraduatingUsers()
+        {
+            DateTime min = DateTime.Now;
+            DateTime max = DateTime.Now.AddMonths(6);
 
+            IEnumerable<User> users = (IEnumerable<User>) GetAll();
+
+            return users;
+        }
     }
-
 }
