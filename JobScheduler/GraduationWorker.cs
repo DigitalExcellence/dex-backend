@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace JobScheduler
 {
-    public class Worker : BackgroundService
+    public class GraduationWorker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<GraduationWorker> _logger;
 
-        public Worker(ILogger<Worker> logger)
+        public GraduationWorker(ILogger<GraduationWorker> logger)
         {
             _logger = logger;
         }

@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,6 +29,8 @@ namespace Models
         {
             Projects = new List<Project>();
             Services = new List<LinkedService>();
+            AccountCreationDate = DateTime.Now;
+            ExpectedGraduationDate = DateTime.Now.AddYears(4);
         }
 
         public int Id { get; set; }
@@ -56,6 +59,9 @@ namespace Models
         ///   <c>true</c> if this instance is public; otherwise, <c>false</c>.
         /// </value>
         public bool IsPublic { get; set; }
-    }
 
+        public DateTime? AccountCreationDate { get; set; }
+
+        public DateTime? ExpectedGraduationDate { get; set; }
+    }
 }
