@@ -21,7 +21,6 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using Models.Defaults;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 
 namespace IdentityServer.Configuration
@@ -39,22 +38,36 @@ namespace IdentityServer.Configuration
                 new IdentityResources.Email()
             };
         }
-        
+
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope>
+                    {
+                        new ApiScope(nameof(Defaults.Scopes.ProjectRead)),
+                        new ApiScope(nameof(Defaults.Scopes.ProjectWrite)),
+                        new ApiScope(nameof(Defaults.Scopes.UserWrite)),
+                        new ApiScope(nameof(Defaults.Scopes.UserRead)),
+                        new ApiScope(nameof(Defaults.Scopes.HighlightWrite)),
+                        new ApiScope(nameof(Defaults.Scopes.HighlightRead)),
+                        new ApiScope(nameof(Defaults.Scopes.EmbedWrite)),
+                        new ApiScope(nameof(Defaults.Scopes.EmbedRead)),
+                    };
+        }
+
         public static IEnumerable<ApiResource> Apis =>
-            new[]
+            new List<ApiResource>
             {
                 new ApiResource("dex-api", "Digital Excellence API")
                 {
-                    Scopes =
-                    {
-                        new Scope(nameof(Defaults.Scopes.ProjectRead)),
-                        new Scope(nameof(Defaults.Scopes.ProjectWrite)),
-                        new Scope(nameof(Defaults.Scopes.UserWrite)),
-                        new Scope(nameof(Defaults.Scopes.UserRead)),
-                        new Scope(nameof(Defaults.Scopes.HighlightWrite)),
-                        new Scope(nameof(Defaults.Scopes.HighlightRead)),
-                        new Scope(nameof(Defaults.Scopes.EmbedWrite)),
-                        new Scope(nameof(Defaults.Scopes.EmbedRead)),
+                    Scopes = {
+                        nameof(Defaults.Scopes.ProjectRead),
+                        nameof(Defaults.Scopes.ProjectWrite),
+                        nameof(Defaults.Scopes.UserWrite),
+                        nameof(Defaults.Scopes.UserRead),
+                        nameof(Defaults.Scopes.HighlightWrite),
+                        nameof(Defaults.Scopes.HighlightRead),
+                        nameof(Defaults.Scopes.EmbedWrite),
+                        nameof(Defaults.Scopes.EmbedRead)
                     }
                 }
             };
@@ -83,9 +96,9 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.EmbedWrite),
                                nameof(Defaults.Scopes.EmbedRead)
                            },
-                           Claims = new List<Claim>
+                           Claims = new List<ClientClaim>
                                     {
-                                        new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                        new ClientClaim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
                                     }
                        },
 
