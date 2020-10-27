@@ -36,7 +36,7 @@ namespace Services.Services
         bool UserHasScope(string identityId, string scope);
 
         bool UserWithRoleExists(Role role);
-        Task<IEnumerable<User>> GetAllExpectedGraduatingUsers();
+        List<User> GetAllExpectedGraduatingUsers();
     }
 
     public class UserService : Service<User>, IUserService
@@ -75,11 +75,10 @@ namespace Services.Services
             return Repository.UserWithRoleExists(role);
         }
 
-        public async Task<IEnumerable<User>> GetAllExpectedGraduatingUsers()
+        public List <User> GetAllExpectedGraduatingUsers()
         {
-
-            return await Repository.GetAllExpectedGraduatingUsers();
-                
+            List<User> users = Repository.GetAllExpectedGraduatingUsers().Result;
+            return users;
         } 
     }
 }

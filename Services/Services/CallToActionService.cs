@@ -21,6 +21,7 @@ using Repositories;
 using Services.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace Services.Services
 
     public interface ICallToActionService : IService<CallToAction>
     {
-        public Task<IEnumerable<CallToAction>> GetAllGraduateCallToActions();
+        public List<CallToAction> GetAllGraduateCallToActions();
     }
 
     public class CallToActionService : Service<CallToAction>, ICallToActionService
@@ -42,11 +43,12 @@ namespace Services.Services
 
         protected new ICallToActionRepository Repository => (ICallToActionRepository)base.Repository;
 
-        Task<IEnumerable<CallToAction>> ICallToActionService.GetAllGraduateCallToActions()
+        List<CallToAction> ICallToActionService.GetAllGraduateCallToActions()
         {
-            IEnumerable<User> users = (IEnumerable<User>) userService.GetAllExpectedGraduatingUsers();
+            List <User> users = userService.GetAllExpectedGraduatingUsers();
+            List<CallToAction> callToActions = new List<CallToAction>();
 
-            return (Task<IEnumerable<CallToAction>>) users;
+            return callToActions;
         }
     }
 

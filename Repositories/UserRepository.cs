@@ -64,7 +64,7 @@ namespace Repositories
         /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
 
-        Task<IEnumerable<User>> GetAllExpectedGraduatingUsers();
+        Task<List<User>> GetAllExpectedGraduatingUsers();
 
     }
     /// <summary>
@@ -180,12 +180,12 @@ namespace Repositories
                 .SingleOrDefault(r => r.Role.Id == role.Id) != null;
         }
 
-        async Task<IEnumerable<User>> IUserRepository.GetAllExpectedGraduatingUsers()
+         async Task<List<User>> IUserRepository.GetAllExpectedGraduatingUsers()
         {
             DateTime min = DateTime.Now;
             DateTime max = DateTime.Now.AddMonths(6);
 
-            IEnumerable<User> users = (IEnumerable<User>) GetAll();
+            List<User> users = (List<User>) await GetAll();
 
             return users;
         }
