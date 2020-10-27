@@ -18,7 +18,7 @@
 using Configuration;
 using Data;
 using IdentityServer.Configuration;
-using IdentityServer.Quickstart;
+using IdentityServer.Quickstart.UI;
 using IdentityServer4;
 using IdentityServer4.Services;
 using IdentityServer4.Test;
@@ -117,7 +117,6 @@ namespace IdentityServer
             builder.AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources());
             builder.AddInMemoryApiResources(IdentityConfig.Apis);
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
-            builder.Services.AddTransient<IProfileService, ProfileService>();
             services.AddSingleton(Config);
 
             // sets the authentication schema.

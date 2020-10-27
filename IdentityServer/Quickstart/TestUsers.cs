@@ -1,66 +1,131 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
 using IdentityModel;
-using IdentityServer4.Test;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text.Json;
+using IdentityServer.Quickstart.UI;
 using IdentityServer4;
+using IdentityServer4.Test;
+using Models;
+using Models.Defaults;
+using Serilog;
+using Serilog.Core;
+using Services.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace IdentityServer
 {
-    public class TestUsers
+    public static class TestUsers
     {
-        public static List<TestUser> Users
+        /// <summary>
+        /// Gets the default users.
+        /// </summary>
+        /// <param name="isProduction">if set to <c>true</c> [is production].</param>
+        /// <returns>The list of default identity users.</returns>
+        public static List<IdentityUser> GetDefaultIdentityUsers(bool isProduction)
         {
-            get
+            List<IdentityUser> users = new List<IdentityUser>()
             {
-                var address = new
+                 new IdentityUser
+                 {
+                     SubjectId = "818727",
+                     Username = "alice",
+                     Password = LoginHelper.GetHashPassword("alice"),
+                     Name = "Alice Smith",
+                     Firstname = "Alice",
+                     Lastname = "Smith",
+                     Email = "AliceSmith@email.com"
+                 },
+                 new IdentityUser
+                 {
+                     SubjectId = "88421113",
+                     Username = "bob",
+                     Password = LoginHelper.GetHashPassword("bob"),
+                     Name = "Bob Smith",
+                     Firstname = "Bob",
+                     Lastname = "Smith",
+                     Email = "BobSmith@email.com"
+                 },
+                 new IdentityUser
+                 {
+                     SubjectId = "985632147",
+                     Username = "jerry",
+                     Password = LoginHelper.GetHashPassword("jerry"),
+                     Name = "jerry Smith",
+                     Firstname = "jerry",
+                     Lastname = "Smith",
+                     Email = "jerrySmith@email.com"
+                 },
+                 new IdentityUser
+                 {
+                     SubjectId = "147852369",
+                     Username = "berry",
+                     Password = LoginHelper.GetHashPassword("berry"),
+                     Name = "berry Smith",
+                     Firstname = "berry",
+                     Lastname = "Smith",
+                     Email = "berrySmith@email.com"
+                 }
+             };
+            if(isProduction)
+            {
+                Log.Logger.Information("The passwords for this instance:");
+                foreach(IdentityUser testUser in users)
                 {
-                    street_address = "One Hacker Way",
-                    locality = "Heidelberg",
-                    postal_code = 69118,
-                    country = "Germany"
-                };
-                
-                return new List<TestUser>
-                {
-                    new TestUser
-                    {
-                        SubjectId = "818727",
-                        Username = "alice",
-                        Password = "alice",
-                        Claims =
-                        {
-                            new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                            new Claim(JwtClaimTypes.GivenName, "Alice"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
-                            new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                            new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
-                        }
-                    },
-                    new TestUser
-                    {
-                        SubjectId = "88421113",
-                        Username = "bob",
-                        Password = "bob",
-                        Claims =
-                        {
-                            new Claim(JwtClaimTypes.Name, "Bob Smith"),
-                            new Claim(JwtClaimTypes.GivenName, "Bob"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
-                            new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                            new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
-                        }
-                    }
-                };
+                    // Generate a secure password
+                    string generateSecurePassword = GenerateSecurePassword();
+                    // Hash it
+                    testUser.Password = LoginHelper.GetHashPassword(generateSecurePassword);
+                    // Notify the user
+                    Log.Logger.Information("{0} has the new password: {1}", testUser.Username, generateSecurePassword);
+                }
             }
+            return users;
+        }
+
+        /// <summary>
+        /// Generates a secure password.
+        /// </summary>
+        /// <returns>The generated password.</returns>
+        private static string GenerateSecurePassword()
+        {
+
+            const int requiredLength = 20;
+
+            bool requireNonAlphanumeric = true;
+            bool requireDigit = true;
+            bool requireLowercase = true;
+            bool requireUppercase = true;
+
+            StringBuilder password = new StringBuilder();
+            Random random = new Random();
+
+            while(password.Length < requiredLength)
+            {
+                char c = (char) random.Next(33, 126);
+
+                password.Append(c);
+
+                if(char.IsDigit(c))
+                    requireDigit = false;
+                else if(char.IsLower(c))
+                    requireLowercase = false;
+                else if(char.IsUpper(c))
+                    requireUppercase = false;
+                else if(!char.IsLetterOrDigit(c))
+                    requireNonAlphanumeric = false;
+            }
+
+            if(requireNonAlphanumeric)
+                password.Append((char) random.Next(33, 48));
+            if(requireDigit)
+                password.Append((char) random.Next(48, 58));
+            if(requireLowercase)
+                password.Append((char) random.Next(97, 123));
+            if(requireUppercase)
+                password.Append((char) random.Next(65, 91));
+
+            return password.ToString();
         }
     }
 }
