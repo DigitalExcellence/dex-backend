@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\5_Models.csproj" />
-    <ProjectReference Include="..\Services\2_Services.csproj" />
+      <ProjectReference Include="..\API\1_API.csproj" />
+      <ProjectReference Include="..\Models\5_Models.csproj" />
   </ItemGroup>
 </Project>
