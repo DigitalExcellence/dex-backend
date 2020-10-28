@@ -37,7 +37,6 @@ namespace IdentityServer
         /// <summary>
         /// Gets the default users.
         /// </summary>
-        /// <param name="isProduction">if set to <c>true</c> [is production].</param>
         /// <returns>The list of default identity users.</returns>
         public static List<IdentityUser> GetDefaultIdentityUsers()
         {
@@ -98,6 +97,10 @@ namespace IdentityServer
             return users;
         }
 
+        /// <summary>
+        /// Creates a password for a test user and logs it into the console.
+        /// </summary>
+        /// <returns>The hashed password/.</returns>
         public static string CreateTestUserPassword(string userName)
         {
             // Generate a secure password
