@@ -38,28 +38,30 @@ namespace API.Controllers
         /// </summary>
         /// <returns> Call To Actions </returns>
         [HttpGet]
-        public IActionResult CreateCallToActionForGraduatingUsers()
+        public async Task<IActionResult> CreateCallToActionForGraduatingUsers()
         {
             List<User> users = userService.GetAllExpectedGraduatingUsers();
+            IEnumerable<CallToAction> allCallToActions = await callToActionService.GetAll();
             DateTime now = DateTime.Now;
             DateTime max = DateTime.Now.AddMonths(6);
 
             List<CallToAction> callToActions = new List<CallToAction>();
-            foreach(User user in users)
+            foreach(CallToAction callToAction in users.Where(user => user.ExpectedGraduationDate <= max &&
+                                                                     user.ExpectedGraduationDate >= now)
+                                                      .SelectMany(user => from cta in allCallToActions where user.Id == cta.UserId && cta.Type == 0
+                                                                          select new CallToAction(user.Id, CallToActionType.graduationReminder)))
             {
-                if(user.ExpectedGraduationDate <= max &&
-                   user.ExpectedGraduationDate >= now)
-                {
-                    CallToAction callToAction = new CallToAction(user.Id, CallToActionType.graduationReminder);
-                    callToActions.Add(callToAction);
+                callToActions.Add(callToAction);
 
-                    callToActionService.Add(callToAction);
-                }
+                callToActionService.Add(callToAction);
             }
             callToActionService.Save();
 
             return Ok(callToActions);
         }
+
+
+
 
     }
 }

@@ -12,9 +12,12 @@ namespace JobScheduler
     public class GraduationWorker : BackgroundService
     {
         private readonly ILogger<GraduationWorker> _logger;
+
+        private readonly ApiRequestHandler requestHandler;
         public GraduationWorker(ILogger<GraduationWorker> logger)
         {
             _logger = logger;
+            requestHandler = new ApiRequestHandler(new Uri("https://test.com/"), "test");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,23 +25,9 @@ namespace JobScheduler
             while(!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation(requestHandler.GetToken());
 
-                var client = new HttpClient();
-                var identityServerResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-                                                 {
-                                                     Address = "https://localhost:5005/connect/token",
 
-                                                     ClientId = "dex-jobscheduler",
-                                                     ClientSecret = "dex-jobscheduler",
-                                                     Scope = "dex-api",
-                                                 });
-                if (identityServerResponse.IsError)
-                {
-                    _logger.LogError("Something went wrong: " + identityServerResponse.ErrorDescription);
-                } else
-                {
-                    _logger.LogInformation(identityServerResponse.AccessToken);
-                }
                 await Task.Delay(1000, stoppingToken);
             }
         }
