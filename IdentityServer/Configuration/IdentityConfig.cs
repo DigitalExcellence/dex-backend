@@ -151,16 +151,22 @@ namespace IdentityServer.Configuration
                        },
                        new Client
                        {
-                           ClientId = "JobScheduler",
-                           ClientName = "JobScheduler",
+                           ClientId = "dex-jobscheduler",
+                           ClientName = "Digital Excellence Job Scheduler",
+                           AllowedGrantTypes = GrantTypes.ClientCredentials,
                            ClientSecrets =
                            {
-                               new Secret(config.JobScheduler.ClientSecret.Sha256())
+                               // new Secret(config.JobScheduler.ClientSecret.Sha256())
+                               new Secret("dex-jobscheduler".Sha256())
                            },
                            AllowedScopes = new List<string>
                            {
                                "dex-api"
-                           }
+                           },
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                    }
 
                        }
                    };
