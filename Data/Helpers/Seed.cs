@@ -146,6 +146,20 @@ namespace Data.Helpers
             return user;
         }
 
+        public static User SeedAlumniUser(List<Role> roles)
+        {
+            Role alumniRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Alumni));
+            User user = new User
+            {
+                IdentityId = "123456789",
+                Email = "Alumni@dex.software",
+                Name = "Alumni test",
+                Role = alumniRole
+            };
+
+            return user;
+        }
+
         /// <summary>
         ///     Seed random projects into the database using fake date from Bogus
         /// </summary>

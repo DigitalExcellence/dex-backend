@@ -82,6 +82,16 @@ namespace IdentityServer
                      Firstname = "berry",
                      Lastname = "Smith",
                      Email = "berrySmith@email.com"
+                 },
+                  new IdentityUser
+                 {
+                     SubjectId = "123456789",
+                     Username = "AlumniTest",
+                     Password = LoginHelper.GetHashPassword("AlumniTest"),
+                     Name = "Alumni Test",
+                     Firstname = "Alumni",
+                     Lastname = "Test",
+                     Email = "alumnirole@email.com"
                  }
              };
             if(isProduction)
