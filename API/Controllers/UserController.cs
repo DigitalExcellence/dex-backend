@@ -108,15 +108,7 @@ namespace API.Controllers
             bool isAllowed = hasUserReadScope || hasCorrectDataOfficerRights;
 
             if(!isAllowed)
-            {
-                ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed to retrieve the user.",
-                     Detail = "The user is not allowed to retrieve this user.",
-                     Instance = "09D64E7C-DF87-4CBD-9B2E-ECE00670DB35"
-                 };
-                return Unauthorized(problem);
-            }
+                return Forbid();
 
             if(userId < 0)
             {
