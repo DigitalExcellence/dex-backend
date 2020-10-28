@@ -150,7 +150,7 @@ namespace Data.Helpers
             Role dataOfficerRole = roles.Find(role => role.Name == nameof(Defaults.Roles.DataOfficer));
             User user = new User
             {
-                IdentityId = "919191919",
+                IdentityId = "954654861",
                 Email = "dataofficer@dex.software",
                 Name = "data officer Sam",
                 Role = dataOfficerRole
