@@ -16,7 +16,6 @@
 */
 
 using Data;
-using JobScheduler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,7 +68,7 @@ namespace API.Extensions
             services.AddScoped<IGitLabSource, GitLabSource>();
 
             services.AddScoped<ICallToActionService, CallToActionService>();
-            services.AddScoped<GraduationWorker>();
+
             return services;
         }
     }

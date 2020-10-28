@@ -39,7 +39,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\4_Data.csproj" />
-    <ProjectReference Include="..\JobScheduler\7_JobScheduler.csproj" />
     <ProjectReference Include="..\Models\5_Models.csproj" />
     <ProjectReference Include="..\Services\2_Services.csproj" />
   </ItemGroup>

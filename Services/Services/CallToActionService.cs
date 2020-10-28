@@ -36,14 +36,15 @@ namespace Services.Services
     public class CallToActionService : Service<CallToAction>, ICallToActionService
     {
         private readonly IUserService userService;
+        protected new ICallToActionRepository Repository => (ICallToActionRepository) base.Repository;
+
         public CallToActionService(ICallToActionRepository repository, IUserService userService) : base(repository)
         {
            this.userService = userService;
         }
 
-        protected new ICallToActionRepository Repository => (ICallToActionRepository)base.Repository;
 
-        List<CallToAction> ICallToActionService.GetAllGraduateCallToActions()
+        public List<CallToAction> GetAllGraduateCallToActions()
         {
             List <User> users = userService.GetAllExpectedGraduatingUsers();
             List<CallToAction> callToActions = new List<CallToAction>();
@@ -51,5 +52,4 @@ namespace Services.Services
             return callToActions;
         }
     }
-
 }
