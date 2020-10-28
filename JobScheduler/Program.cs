@@ -15,7 +15,11 @@ namespace JobScheduler
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                
+
                     services.AddHostedService<GraduationWorker>();
+
+                    
                 });
     }
 }

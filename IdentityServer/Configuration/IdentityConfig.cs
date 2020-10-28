@@ -62,7 +62,7 @@ namespace IdentityServer.Configuration
         public static IEnumerable<Client> Clients(Config config)
         {
             return new[]
-            {
+                   {
                        // machine to machine client (Identity -> API)
                        new Client
                        {
@@ -104,28 +104,29 @@ namespace IdentityServer.Configuration
                            RequireConsent = false,
 
                            // where to redirect to after login
-                           RedirectUris = new List<string> {
-                               config.Frontend.RedirectUriFrontend,
-                               config.Frontend.RedirectUriPostman,
-                               config.Frontend.RefreshUriFrontend
-                           },
+                           RedirectUris = new List<string>
+                                          {
+                                              config.Frontend.RedirectUriFrontend,
+                                              config.Frontend.RedirectUriPostman,
+                                              config.Frontend.RefreshUriFrontend
+                                          },
 
                            // where to redirect to after logout
-                           PostLogoutRedirectUris = new List<string> {
-                               config.Frontend.PostLogoutUriFrontend
-                           },
+                           PostLogoutRedirectUris = new List<string>
+                                                    {
+                                                        config.Frontend.PostLogoutUriFrontend
+                                                    },
 
                            AllowedScopes = new List<string>
-                            {
-                                IdentityServerConstants.StandardScopes.OpenId,
-                                IdentityServerConstants.StandardScopes.Profile,
-                                IdentityServerConstants.StandardScopes.Email,
-                                "dex-api"
-                            },
+                                           {
+                                               IdentityServerConstants.StandardScopes.OpenId,
+                                               IdentityServerConstants.StandardScopes.Profile,
+                                               IdentityServerConstants.StandardScopes.Email,
+                                               "dex-api"
+                                           },
                            AllowAccessTokensViaBrowser = true,
                            AllowOfflineAccess = true
                        },
-
                        new Client
                        {
                            ClientId = "Swagger-UI",
@@ -133,20 +134,38 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.Implicit,
                            AllowAccessTokensViaBrowser = true,
                            AlwaysIncludeUserClaimsInIdToken = true,
-                           RedirectUris = new List<string> {
-                               config.Swagger.RedirectUrisSwagger
-                           },
-                           PostLogoutRedirectUris = new List<string> {
-                               config.Swagger.PostLogoutUrisSwagger
+                           RedirectUris = new List<string>
+                                          {
+                                              config.Swagger.RedirectUrisSwagger
+                                          },
+                           PostLogoutRedirectUris = new List<string>
+                                                    {
+                                                        config.Swagger.PostLogoutUrisSwagger
+                                                    },
+                           AllowedScopes = new List<string>
+                                           {
+                                               IdentityServerConstants.StandardScopes.OpenId,
+                                               IdentityServerConstants.StandardScopes.Profile,
+                                               "dex-api",
+                                           },
+                       },
+                       new Client
+                       {
+                           ClientId = "JobScheduler",
+                           ClientName = "JobScheduler",
+                           ClientSecrets =
+                           {
+                               new Secret(config.JobScheduler.ClientSecret.Sha256())
                            },
                            AllowedScopes = new List<string>
                            {
-                                IdentityServerConstants.StandardScopes.OpenId,
-                                IdentityServerConstants.StandardScopes.Profile,
-                                "dex-api",
-                            },
+                               "dex-api"
+                           }
+
                        }
                    };
+
+
         }
 
     }

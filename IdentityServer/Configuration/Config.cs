@@ -58,6 +58,9 @@ namespace Configuration
         /// The ffhict oidc.
         /// </value>
         public FhictOIDConfig FfhictOIDC { get; set; }
+
+        public JobSchedulerConfig JobScheduler { get; set; }
+
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -247,6 +250,27 @@ namespace Configuration
             public string RedirectUri { get; set; }
 
         }
+    }
+
+    public class JobSchedulerConfig
+    {
+        /// <summary>
+        ///     Gets or sets the job scheduler identifier.
+        /// </summary>
+        /// <value>
+        ///     The client identifier.
+        /// </value>
+        [Required]
+        public string ClientId { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the job scheduler secret.
+        /// </summary>
+        /// <value>
+        ///     The job scheduler secret.
+        /// </value>
+        [Required]
+        public string ClientSecret { get; set; }
     }
 
 }
