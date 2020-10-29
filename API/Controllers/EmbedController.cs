@@ -89,7 +89,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="guid">The unique identifier which is used for searching the embedded project.</param>
         /// <returns>This method returns the project resource result.</returns>
-        /// <response code="200">This endpoint returns a embedded project with the specified guid.</response>
+        /// <response code="200">This endpoint returns an embedded project with the specified guid.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the guid is not specified.</response>
         /// <response code="404">The 404 Not Found status code is returned when no project could be
         /// found with the specified guid.</response>
