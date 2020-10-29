@@ -47,7 +47,7 @@ namespace Services.Tests
         protected new IInstitutionService Service => (IInstitutionService) base.Service;
 
         /// <summary>
-        /// Tests the GetInstitutionsAsync method in a good flow.
+        /// This method tests the GetInstitutionsAsync method in a good flow.
         /// </summary>
         /// <param name="institutions">The institutions stored generated to mock the institutions from the repository.</param>
         /// <returns>This method will return a passing result for the test.</returns>
@@ -70,7 +70,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Tests the GetInstitutionsAsync method whenever there are no institutions stored.
+        /// This method tests the GetInstitutionsAsync method whenever there are no institutions stored.
         /// </summary>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
