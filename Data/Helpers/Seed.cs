@@ -129,6 +129,19 @@ namespace Data.Helpers
             return user;
         }
         /// <summary>
+        /// This method seeds a test institution in the database.
+        /// </summary>
+        /// <returns>Returns the institution that will be seeded in the databse.</returns>
+        public static Institution SeedInstitution()
+        {
+            Institution institution = new Institution
+                                      {
+                                          Name = "Fontys",
+                                          Description = "Description for Fontys"
+                                      };
+            return institution;
+        }
+        /// <summary>
         /// Seeds the pr user.
         /// </summary>
         /// <param name="roles">The roles.</param>

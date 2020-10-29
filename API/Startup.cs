@@ -352,6 +352,10 @@ namespace API
 
             if(!env.IsProduction())
             {
+                // Seed institutions
+                context.Institution.Add(Seed.SeedInstitution());
+                context.SaveChanges();
+
                 if(!context.Project.Any())
                 {
                     //Seed projects
