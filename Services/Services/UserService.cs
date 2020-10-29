@@ -74,7 +74,7 @@ namespace Services.Services
         {
             var ownUserInfo = await Repository.FindAsync(ownUserId);
             var userRequestInfo = await Repository.FindAsync(requestUserId);
-            return ownUserInfo.Institution == userRequestInfo.Institution;
+            return ownUserInfo.Institution == userRequestInfo.Institution && ownUserInfo.Institution != null;
         }
 
         public bool UserWithRoleExists(Role role)
