@@ -81,10 +81,10 @@ namespace Data.Helpers
                Name = nameof(Defaults.Roles.DataOfficer),
                Scopes = new List<RoleScope>
                 {
-                    new RoleScope(nameof(Defaults.Scopes.RequestUserRead)),
-                    new RoleScope(nameof(Defaults.Scopes.RequestUserWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.RequestEmbedWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.RequestProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserRead)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
                 }
            };
             roles.Add(dataOfficerRole);
@@ -92,7 +92,7 @@ namespace Data.Helpers
             Role administratorRole = new Role()
             {
                 Name = nameof(Defaults.Roles.Administrator),
-                Scopes = new List<RoleScope>()
+                Scopes = new List<RoleScope>
                 {
                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                     new RoleScope(nameof(Defaults.Scopes.UserWrite)),
@@ -103,6 +103,8 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionRead)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionWrite))
                 }
             };
             roles.Add(administratorRole);
