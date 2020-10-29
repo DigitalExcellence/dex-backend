@@ -58,6 +58,11 @@ namespace Models
         public bool IsPublic { get; set; }
 
         /// <summary>
+        /// Gets or sets a value for the Id of the institution where the user is registered.
+        /// </summary>
+        public int? InstitutionId { get; set; }
+
+        /// <summary>
         /// Gets or sets the institution where the user is registered.
         /// </summary>
         public Institution Institution { get; set; }
