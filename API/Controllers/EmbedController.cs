@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
@@ -47,6 +48,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IAuthorizationHelper authorizationHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbedController"/> class
@@ -55,12 +57,13 @@ namespace API.Controllers
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
-        public EmbedController(IEmbedService embedService, IMapper mapper, IProjectService projectService, IUserService userService)
+        public EmbedController(IEmbedService embedService, IMapper mapper, IProjectService projectService, IUserService userService, IAuthorizationHelper authorizationHelper)
         {
             this.embedService = embedService;
             this.mapper = mapper;
             this.projectService = projectService;
             this.userService = userService;
+            this.authorizationHelper = authorizationHelper;
         }
 
         /// <summary>
@@ -180,12 +183,10 @@ namespace API.Controllers
 
             string identity = HttpContext.User.GetIdentityId(HttpContext);
             User user = await userService.GetUserByIdentityIdAsync(identity);
-
-            bool hasEmbedWriteScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.EmbedWrite));
-            bool hasCorrectDataOfficerRights =
-                userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.RequestEmbedWrite)) &&
-                await userService.HasSameInstitution(user.Id, project.UserId);
-            bool isAllowed = hasEmbedWriteScope || hasCorrectDataOfficerRights;
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.EmbedWrite),
+                                                                     nameof(Defaults.Scopes.RequestEmbedWrite),
+                                                                     project.UserId);
 
             if(!(project.UserId == user.Id || isAllowed))
             {
@@ -259,12 +260,10 @@ namespace API.Controllers
 
             string identity = HttpContext.User.GetIdentityId(HttpContext);
             User user = await userService.GetUserByIdentityIdAsync(identity);
-
-            bool hasEmbedWriteScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.EmbedWrite));
-            bool hasCorrectDataOfficerRights =
-                userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.RequestEmbedWrite)) &&
-                await userService.HasSameInstitution(user.Id, embeddedProject.UserId);
-            bool isAllowed = hasEmbedWriteScope || hasCorrectDataOfficerRights;
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.EmbedWrite),
+                                                                     nameof(Defaults.Scopes.RequestEmbedWrite),
+                                                                     embeddedProject.UserId);
 
             if(!(embeddedProject.User.IdentityId == identity || isAllowed))
             {

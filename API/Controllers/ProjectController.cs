@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
@@ -43,6 +44,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IAuthorizationHelper authorizationHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class
@@ -50,11 +52,12 @@ namespace API.Controllers
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper)
+        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper, IAuthorizationHelper authorizationHelper)
         {
             this.projectService = projectService;
             this.userService = userService;
             this.mapper = mapper;
+            this.authorizationHelper = authorizationHelper;
         }
 
         /// <summary>
@@ -276,11 +279,10 @@ namespace API.Controllers
             }
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool hasProjectWriteScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
-            bool hasCorrectDataOfficerRights =
-                userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.RequestProjectWrite)) &&
-                await userService.HasSameInstitution(user.Id, project.UserId);
-            bool isAllowed = hasProjectWriteScope || hasCorrectDataOfficerRights;
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.ProjectWrite),
+                                                                     nameof(Defaults.Scopes.RequestProjectWrite),
+                                                                     project.UserId);
 
             if(!(project.UserId == user.Id || isAllowed))
             {

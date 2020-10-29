@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using API.Configuration;
 using API.Extensions;
 using API.Filters;
@@ -197,6 +198,7 @@ namespace API
             services.AddSingleton(Config);
             services.AddServicesAndRepositories();
             services.AddProblemDetails();
+            services.AddTransient<IAuthorizationHelper, AuthorizationHelper>();
         }
 
         /// <summary>

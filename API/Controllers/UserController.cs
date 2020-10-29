@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
@@ -43,6 +44,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly IAuthorizationHelper authorizationHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
@@ -50,11 +52,12 @@ namespace API.Controllers
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
-        public UserController(IUserService userService, IMapper mapper, IRoleService roleService)
+        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IAuthorizationHelper authorizationHelper)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
+            this.authorizationHelper = authorizationHelper;
         }
 
         /// <summary>
@@ -100,12 +103,10 @@ namespace API.Controllers
         public async Task<IActionResult> GetUser(int userId)
         {
             User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-
-            bool hasUserReadScope = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserRead));
-            bool hasCorrectDataOfficerRights =
-                userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.RequestUserRead)) &&
-                await userService.HasSameInstitution(currentUser.Id, userId);
-            bool isAllowed = hasUserReadScope || hasCorrectDataOfficerRights;
+            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
+                                                               nameof(Defaults.Scopes.UserRead),
+                                                               nameof(Defaults.Scopes.RequestUserRead),
+                                                               userId);
 
             if(!isAllowed)
                 return Forbid();
@@ -267,12 +268,10 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteAccount(int userId)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-
-            bool hasUserWriteScope = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
-            bool hasCorrectDataOfficerRights =
-                userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.RequestUserWrite)) &&
-                await userService.HasSameInstitution(user.Id, userId);
-            bool isAllowed = hasUserWriteScope || hasCorrectDataOfficerRights;
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.UserWrite),
+                                                                     nameof(Defaults.Scopes.RequestUserWrite),
+                                                                     userId);
 
             if(user.Id != userId && !isAllowed)
             {
