@@ -95,16 +95,16 @@ namespace Models.Defaults
             public const string EmbedRead = "embed:read";
 
             [Description("This scope gives read access to user roles for other users within their institution to the User namespace.")]
-            public const string RequestUserRead = "user:request-read";
+            public const string InstitutionUserRead = "user:institution-read";
 
             [Description("This scope gives write access to user roles for other users within their institution to the User namespace.")]
-            public const string RequestUserWrite = "user:request-write";
+            public const string InstitutionUserWrite = "user:institution-write";
 
             [Description("This scope gives write access to user roles for other users within their institution to the Project namespace.")]
-            public const string RequestProjectWrite = "user:request-write";
+            public const string InstitutionProjectWrite = "user:institution-write";
 
             [Description("This scope gives write access to user roles for other users within their institution to the Embed namespace.")]
-            public const string RequestEmbedWrite = "embed:request-write";
+            public const string InstitutionEmbedWrite = "embed:institution-write";
 
             [Description("This scope gives read access to the Insitution namespace.")]
             public const string InstitutionRead = "institution:read";
