@@ -31,7 +31,6 @@ namespace Services.Services
         /// <summary>
         /// This method gets the institution with the specified id asynchronous.
         /// </summary>
-        /// <param name="id">The id of the institution used for searching the institution.</param>
         /// <returns>This method returns the found institution with the specified id.</returns>
         Task<IEnumerable<Institution>> GetInstitutionsAsync();
 
