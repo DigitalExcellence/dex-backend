@@ -44,6 +44,11 @@ namespace API.Resources
         /// </summary>
         public string ProfileUrl { get; set; }
 
+        /// <summary>
+        /// This gets or sets the Institution Id.
+        /// </summary>
+        public int? InstitutionId { get; set; }
+
     }
 
 }

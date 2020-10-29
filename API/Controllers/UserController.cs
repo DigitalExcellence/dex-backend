@@ -161,7 +161,7 @@ namespace API.Controllers
             {
                 userService.Add(user);
                 userService.Save();
-                return Created(nameof(CreateAccountAsync), mapper.Map<User, UserResourceResult>(user));
+                return Created(nameof(CreateAccountAsync), await GetUser(user.Id));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
