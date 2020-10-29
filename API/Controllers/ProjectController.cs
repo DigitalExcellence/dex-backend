@@ -52,7 +52,11 @@ namespace API.Controllers
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IMapper mapper, IAuthorizationHelper authorizationHelper)
+        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        public ProjectController(IProjectService projectService,
+                                 IUserService userService,
+                                 IMapper mapper,
+                                 IAuthorizationHelper authorizationHelper)
         {
             this.projectService = projectService;
             this.userService = userService;

@@ -26,7 +26,6 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
-using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -52,7 +51,11 @@ namespace API.Controllers
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
-        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IAuthorizationHelper authorizationHelper)
+        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        public UserController(IUserService userService,
+                              IMapper mapper,
+                              IRoleService roleService,
+                              IAuthorizationHelper authorizationHelper)
         {
             this.userService = userService;
             this.mapper = mapper;

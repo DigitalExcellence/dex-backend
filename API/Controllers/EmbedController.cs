@@ -28,9 +28,7 @@ using Serilog;
 using Services.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -57,7 +55,12 @@ namespace API.Controllers
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
-        public EmbedController(IEmbedService embedService, IMapper mapper, IProjectService projectService, IUserService userService, IAuthorizationHelper authorizationHelper)
+        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        public EmbedController(IEmbedService embedService,
+                               IMapper mapper,
+                               IProjectService projectService,
+                               IUserService userService,
+                               IAuthorizationHelper authorizationHelper)
         {
             this.embedService = embedService;
             this.mapper = mapper;
