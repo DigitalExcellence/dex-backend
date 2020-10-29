@@ -44,7 +44,7 @@ namespace API.Filters
                                               .Count() != 0;
             if(operation.RequestBody != null && !hasConsumeAttribute)
             {
-                var mediaType = operation.RequestBody.Content["application/json"];
+                OpenApiMediaType mediaType = operation.RequestBody.Content["application/json"];
                 operation.RequestBody.Content.Clear();
                 operation.RequestBody.Content.Add("application/json", mediaType);
             }
