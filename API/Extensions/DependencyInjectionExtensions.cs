@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,11 @@ namespace API.Extensions
             services.AddScoped<ISourceManagerService, SourceManagerService>();
             services.AddScoped<IGitHubSource, GitHubSource>();
             services.AddScoped<IGitLabSource, GitLabSource>();
+
+            services.AddScoped<IInstitutionService, InstitutionService>();
+            services.AddScoped<IInstitutionRepository, InstitutionRepository>();
+
+            services.AddTransient<IAuthorizationHelper, AuthorizationHelper>();
 
             return services;
         }
