@@ -118,6 +118,15 @@ namespace API.Configuration
         [Required]
         [Url]
         public string IdentityUrl { get; set; }
+        /// <summary>
+        ///     Gets or sets the Development identity URL.
+        /// This is used mostly to fix docker environments.
+        /// </summary>
+        /// <value>
+        ///     The identity URL.
+        /// </value>
+        [Url]
+        public string DevelopmentIdentityUrl { get; set; }
     }
 
     /// <summary>
