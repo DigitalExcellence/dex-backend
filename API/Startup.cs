@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using API.Common;
 using API.Configuration;
 using API.Extensions;
 using API.Filters;
@@ -135,6 +134,20 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionEmbedWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionEmbedWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionProjectWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionProjectWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserRead),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
             });
 
             services.AddCors();
@@ -198,7 +211,6 @@ namespace API
             services.AddSingleton(Config);
             services.AddServicesAndRepositories();
             services.AddProblemDetails();
-            services.AddTransient<IAuthorizationHelper, AuthorizationHelper>();
         }
 
         /// <summary>
