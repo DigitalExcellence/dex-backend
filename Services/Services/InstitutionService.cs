@@ -39,7 +39,7 @@ namespace Services.Services
     public class InstitutionService : Service<Institution>, IInstitutionService
     {
 
-        public InstitutionService(IRepository<Institution> repository) : base(repository) { }
+        public InstitutionService(IInstitutionRepository repository) : base(repository) { }
 
         protected new IInstitutionRepository Repository => (IInstitutionRepository) base.Repository;
 
