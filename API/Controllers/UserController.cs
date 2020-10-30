@@ -108,7 +108,7 @@ namespace API.Controllers
             User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
                                                                nameof(Defaults.Scopes.UserRead),
-                                                               nameof(Defaults.Scopes.RequestUserRead),
+                                                               nameof(Defaults.Scopes.InstitutionUserRead),
                                                                userId);
 
             if(!isAllowed)
@@ -273,7 +273,7 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = await authorizationHelper.UserIsAllowed(user,
                                                                      nameof(Defaults.Scopes.UserWrite),
-                                                                     nameof(Defaults.Scopes.RequestUserWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionUserWrite),
                                                                      userId);
 
             if(user.Id != userId && !isAllowed)

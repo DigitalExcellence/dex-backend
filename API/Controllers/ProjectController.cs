@@ -285,7 +285,7 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = await authorizationHelper.UserIsAllowed(user,
                                                                      nameof(Defaults.Scopes.ProjectWrite),
-                                                                     nameof(Defaults.Scopes.RequestProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
                                                                      project.UserId);
 
             if(!(project.UserId == user.Id || isAllowed))

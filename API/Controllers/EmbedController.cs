@@ -188,7 +188,7 @@ namespace API.Controllers
             User user = await userService.GetUserByIdentityIdAsync(identity);
             bool isAllowed = await authorizationHelper.UserIsAllowed(user,
                                                                      nameof(Defaults.Scopes.EmbedWrite),
-                                                                     nameof(Defaults.Scopes.RequestEmbedWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionEmbedWrite),
                                                                      project.UserId);
 
             if(!(project.UserId == user.Id || isAllowed))
@@ -265,7 +265,7 @@ namespace API.Controllers
             User user = await userService.GetUserByIdentityIdAsync(identity);
             bool isAllowed = await authorizationHelper.UserIsAllowed(user,
                                                                      nameof(Defaults.Scopes.EmbedWrite),
-                                                                     nameof(Defaults.Scopes.RequestEmbedWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionEmbedWrite),
                                                                      embeddedProject.UserId);
 
             if(!(embeddedProject.User.IdentityId == identity || isAllowed))
