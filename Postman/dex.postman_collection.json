@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ff29eab8-de3b-4e93-88ef-f6ab66404d8b",
+		"_postman_id": "ff5c49cd-ec16-4a94-86d3-ca649a0d190c",
 		"name": "Digital-Excellence-API",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -15,7 +15,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "b827a93b-2a6d-47e5-9c88-408c119101f8",
+								"id": "3959ca25-5454-4789-a68e-eb9f48fc2dbe",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\") + 5000);",
 									"",
@@ -64,7 +64,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "17613765-0415-4e11-8ebc-373f96e7b631",
+								"id": "342b4180-2f6c-4c49-89f8-9eba436e912a",
 								"exec": [
 									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 									"",
@@ -129,145 +129,12 @@
 							"name": "User",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
-										{
-											"name": "User-FollowUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "dab19e4b-17d8-4c2e-8029-762be0ef2f7e",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var userId = 25",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"     pm.response.to.be.success;",
-															"     pm.response.to.be.withBody;",
-															"     pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userId, function () {",
-															"    pm.expect(jsonData.id).to.eql(userId);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-UnFollowUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "e214fd50-1593-430d-854f-6ff42d4b2c25",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								},
-								{
 									"name": "User-CreateUser-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "3472dd38-3639-4000-85bf-327d76ff8bff",
+												"id": "7cacb551-f975-4ceb-881d-4f9d49f1fc18",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userName\");",
@@ -336,7 +203,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "52aa0280-14a9-4195-a7f6-d232e199dbc6",
+												"id": "d971f1ae-1aef-463c-b92a-b4a81a1f3a96",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var createdUserId = parseInt(pm.environment.get(\"createdUserId\"));",
@@ -404,7 +271,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f23ab553-b3c9-4412-95f4-10036357bcd1",
+												"id": "a1745bf9-14cd-44ed-89e0-c26db7e3d387",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userNameUpdated\");",
@@ -472,7 +339,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "fb897acc-7440-4cd3-9719-44fec1b5dc96",
+												"id": "805af601-042b-41f8-a210-33999a98ee38",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var createdUserId = parseInt(pm.environment.get(\"createdUserId\"));",
@@ -547,7 +414,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "7a39f69f-9301-4e3a-8244-58ccaf92456b",
+												"id": "072eeb3b-87f6-4c42-844d-2be95810d1b6",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserIdentityId = parseInt(pm.environment.get(\"administratorUserIdentityId\"));",
@@ -578,7 +445,7 @@
 										}
 									],
 									"request": {
-										"method": "POST",
+										"method": "GET",
 										"header": [
 											{
 												"key": "IdentityId",
@@ -604,148 +471,235 @@
 							"_postman_isSubFolder": true
 						},
 						{
-							"name": "Project",
+							"name": "FollowUser",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
+									"name": "User-CreateUserToFollow-Administrator",
+									"event": [
 										{
-											"name": "Project-FollowProject-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "9fd04b7b-60e7-44ae-be53-f202ce1cfd89",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var projectName = 3",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"     pm.response.to.be.success;",
-															"     pm.response.to.be.withBody;",
-															"     pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + projectName, function () {",
-															"    pm.expect(jsonData.id).to.eql(projectName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
+											"listen": "test",
+											"script": {
+												"id": "e778d98a-4719-467e-9283-93505626c66a",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"var userName = pm.environment.get(\"userName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"userIdToFollow\", jsonData.id)",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Check if created Username matches: \" + userName, function () {",
+													"    pm.expect(jsonData.name).to.eql(userName);",
+													"});"
 												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Project-UnFollowProject-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "3f426063-1c8b-4d32-9777-bea283d13747",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
+												"type": "text/javascript"
+											}
 										}
 									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User"
+											]
+										}
+									},
+									"response": []
 								},
+								{
+									"name": "User-FollowUser-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "065d35c4-da01-4a1a-86cb-56972bfeda41",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"var userIdToFollow = pm.environment.get(\"userIdToFollow\");",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Check if created Username matches: \" + userIdToFollow, function () {",
+													"    pm.expect(jsonData.id).to.eql(userIdToFollow);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UnFollowUser-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "46bf26be-b56e-401b-90c7-3364eaa48bbe",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c7889f31-4c31-46b7-8b0a-c14b45c157da",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "5a9c8687-8786-4dcf-b185-96dc97a02c0a",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Project",
+							"item": [
 								{
 									"name": "Project-CreateProject-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "db4582ed-ccd9-4fad-9bc5-9eb796ab82b2",
+												"id": "74d7a485-a039-4f5a-962b-ca11ef0ece3b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -823,7 +777,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b7dc3c89-e99d-481a-9349-5a99cb721acb",
+												"id": "5a3fced7-64d3-40b8-aa39-01d65e3027d2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -896,7 +850,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "580ea907-b7bb-404c-be99-db89133abc92",
+												"id": "f5eeb059-b513-48ee-be05-887b880e7d26",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = parseInt(pm.environment.get(\"projectId\"));",
@@ -965,7 +919,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4429b1cd-f857-4557-b003-6fce43fb2944",
+												"id": "7de7cccf-3170-45c4-9ab0-7da05e1a8d64",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectNameUpdated\");",
@@ -1033,7 +987,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4e1093dc-1ba7-434b-b60f-71399f9fdb5f",
+												"id": "34b9c063-ef9c-456e-8a95-8093cd556523",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -1101,7 +1055,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9ca4b874-8ae5-4ba8-b2d7-1e6f8670d9fa",
+												"id": "d8cee4d6-58df-4396-835f-43cc2561759e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1153,6 +1107,214 @@
 							"_postman_isSubFolder": true
 						},
 						{
+							"name": "FollowProject",
+							"item": [
+								{
+									"name": "Project-CreateProjectToFollow-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "118b72c4-3865-46ce-93ca-cd5054dd9ace",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"var adminUserName = pm.environment.get(\"adminUserName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.environment.set(\"projectIdToFollow\", jsonData.id);",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
+													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
+													"});",
+													"",
+													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
+													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-FollowProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "42ba633b-c28c-41b8-bcdd-31b845308db7",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"var projectId = pm.environment.get(\"projectIdToFollow\");",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Check if created Username matches: \" + projectId, function () {",
+													"    pm.expect(jsonData.id).to.eql(projectId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnFollowProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "4558acd9-5c79-4149-bb5b-b91cd1634a47",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
 							"name": "Highlight",
 							"item": [
 								{
@@ -1161,7 +1323,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "35a3168e-d144-43f4-8f06-4e213df479d0",
+												"id": "66f1eb1a-f7a7-4ec2-be15-6d0321994838",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -1190,7 +1352,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "05bcfb21-723e-4269-bec5-ea28fa381201",
+												"id": "365a0fcf-1749-42b1-b7ef-b8d1d8e0b253",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -1240,7 +1402,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "313c98ec-33aa-4e88-97ad-591ae71a7f2e",
+												"id": "c791cf1f-5ca9-4a94-8bd9-0609df615dbb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = pm.environment.get(\"projectId\");",
@@ -1309,7 +1471,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "eed3be18-11d8-4f23-8ced-71ebad388e53",
+												"id": "62eb20fb-cdc9-4c4f-9a3a-4e5d882f90dd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -1371,7 +1533,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5fefd285-9c8e-4fa0-acc9-5cba93154363",
+												"id": "609b188c-54bc-4928-8b58-f0ebbad36c86",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -1458,7 +1620,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "33330cd9-7f81-4523-a8ae-8d450611fc95",
+												"id": "97d0a335-1e34-4227-b0ed-2ea058dc779f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var highlightStartDate = pm.environment.get(\"highlightStartDate\");",
@@ -1490,7 +1652,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "b42fd126-77fe-4567-aa47-2189736defed",
+												"id": "3b461ee3-0b1a-4e4e-a157-f1da4cb02ed5",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
@@ -1537,7 +1699,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "15a4479c-2351-4837-8951-b7d3bb9b8436",
+												"id": "e8752b93-f3a0-4add-a2b6-97996b1a1ddb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var highlightUpdateTimestamp = pm.environment.get(\"current_timestamp\");",
@@ -1596,7 +1758,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b82ef281-95dc-4291-ad9b-fbb0e0d96197",
+												"id": "7140cc49-6ba3-43ef-a97a-42ee619995a5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1657,7 +1819,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "bcc14b8e-3fa0-402f-9549-4a068c822f24",
+												"id": "6c64ba60-3ad6-4a88-aa87-b85e79b74d6e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1721,7 +1883,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f56c0169-0f3b-433e-b208-7140288f7bea",
+												"id": "1a2d9162-fb27-457c-8990-349a5e86ccf3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embedGuid = pm.environment.get(\"embedGuid\");",
@@ -1790,7 +1952,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "537d6005-f6f6-4b6c-aad0-5d2ef6fa8fcf",
+												"id": "dcbb6572-5b6d-4aee-ba93-b3be3b3371d5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embeddedProjectId = parseInt(pm.environment.get(\"embeddedProjectId\"))",
@@ -1848,7 +2010,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "dcd0fc71-f927-4d22-87f4-56cd768ddbb7",
+												"id": "e5555f9c-1047-4582-a35d-73b58eb820fd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1902,7 +2064,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c834c84a-7e0e-4bd6-976e-f212271af58d",
+												"id": "b911a209-d97f-4a6f-8ea3-eb67c2469825",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -1963,7 +2125,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8dd40497-eab0-4e6d-b814-d24fe9a60768",
+												"id": "f57f81b9-4c7a-4fd6-b3ae-ceb11ea9cc77",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var scopeName = pm.environment.get(\"scopeName\");",
@@ -2036,7 +2198,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e629d9dc-4815-4b72-b8dc-d3ce6099c6e8",
+												"id": "4b3b497f-6330-4458-b2cd-284aa8cf217d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleName = pm.environment.get(\"roleName\");",
@@ -2109,7 +2271,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c70013ba-7ba6-4b9a-8f66-5404ba2db7a2",
+												"id": "69097da4-06b5-4e33-b1e5-558d2908b6fc",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -2175,7 +2337,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2072f24b-8dfa-42ca-85f8-e1ba9b8130c8",
+												"id": "58d4ef31-3447-443b-a512-0fb1d9a3d895",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleId = parseInt(pm.environment.get(\"roleId\"));",
@@ -2234,7 +2396,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "18bfab81-d57b-420d-8ba9-d6f9d3e1d5ee",
+												"id": "ffed08e6-da64-43d9-9c03-1ed8dd68b33d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedRoleName = pm.environment.get(\"updatedRoleName\");",
@@ -2301,7 +2463,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "38f386d2-8004-4f82-83bb-97396404817a",
+												"id": "36dab30c-47a9-486e-b076-2e84dce7ab24",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedRoleName = pm.environment.get(\"updatedRoleName\");",
@@ -2359,12 +2521,14 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e8523c11-db8c-413b-9baa-cfc6726efddb",
+												"id": "5f31bdcd-f3c0-4c17-a267-cfb2d49a9b7e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleId = parseInt(pm.environment.get(\"roleId\"));",
 													"",
 													"var jsonData = pm.response.json();",
+													"",
+													"console.info(pm.environment.get(\"createdUserId\") + \" \" + pm.environment.get(\"roleId\") + \" \" + pm.environment.get(\"projectNameUpdated\") )",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
@@ -2438,7 +2602,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c8ff9189-d69d-4ee8-ac71-6c4dd90f1b7d",
+												"id": "063fbd43-8a4c-481b-add3-8ce39928077e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var roleId = parseInt(pm.environment.get(\"roleId\"));",
@@ -2496,7 +2660,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6525c4c0-7e5a-4abf-ba98-e8838f7bc9b7",
+												"id": "eab16568-2d97-45d2-aed0-2c09be304b29",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2557,7 +2721,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "12c1b164-3095-4c82-b334-d95a5b34dd22",
+												"id": "1626d531-386b-40ca-9eef-cf53ffdfebb0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -2623,7 +2787,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b1389398-ceaa-4fe9-8492-111582f0ea11",
+												"id": "1599761e-8d44-49c4-b817-f94c5c9f8f3e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\")) + 1000;",
 													"",
@@ -2689,7 +2853,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "af8a646b-d41e-4bea-902d-441605339831",
+												"id": "3113e8b3-7291-4bc6-965c-a902820f20eb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2734,7 +2898,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "92b2144a-64b5-47aa-8de0-9e6b63b70fcb",
+												"id": "26808b2e-841f-4893-9388-eaf6ef22a86d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2779,7 +2943,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6b8fa039-601b-4c4f-b82a-d123073ee70e",
+												"id": "c05a97c9-6efa-45b9-bbc6-7f810047750f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2824,7 +2988,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c20a5d1e-0882-4ff0-89b2-0fa4916c75da",
+												"id": "52909033-6a79-4035-8f76-71e3fc10d4cc",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2869,7 +3033,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "395595a7-30a2-47d4-b6b3-f7d22bbcbec3",
+												"id": "7de5f4bd-5a10-45a9-a12a-dd27866c2b00",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2914,7 +3078,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a561d994-fadb-486d-b4e7-3d21bed8af8e",
+												"id": "6a8629e4-25c6-44f8-80c9-c23c75ab1054",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -2966,7 +3130,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "bd260b5c-5ae2-4f1a-8da3-2bfb2bbbce67",
+												"id": "86b45db5-d4d6-474c-af2e-8f846673b309",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3017,7 +3181,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "af9ecf6f-b733-4359-92d9-9326448a2a84",
+												"id": "debe2ab8-776a-4bac-8ca9-1492a29f8e42",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3068,7 +3232,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2eeebc99-fcea-4719-9aa4-4a6ecf90d442",
+												"id": "ee615379-27dc-4654-b135-0c85ce68ace5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3119,7 +3283,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a2ad9aa4-38ac-4ab6-8558-63365272be84",
+												"id": "8a0f9611-a75d-42f4-91f0-ad66bf1ddf84",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3170,7 +3334,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "52ee3c8d-d39e-45a2-9a4d-bba0d652cd30",
+												"id": "a8bb2394-c923-4063-a400-e21a49da52fa",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3235,7 +3399,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5865a8d0-29bf-48fd-b922-8f6e47379e6e",
+												"id": "90d0cf29-65d9-46c2-b4f3-5b5b248347c4",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -3313,7 +3477,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "803becd8-ac1b-4258-a45b-1e57b10ce9ec",
+												"id": "afbd00bd-2a58-4ff3-95a1-3e6690c83edf",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -3342,7 +3506,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "09739f37-dc6b-4725-83e1-c744e1c2d241",
+												"id": "4956a3a6-f0e0-4d87-b9a4-e08eee04bcb3",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -3392,7 +3556,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "687b3ec9-992e-4f87-a3d7-c5e0a15a2078",
+												"id": "8630b5a2-f8c1-4967-98ca-d98d61eebce3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3456,7 +3620,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "590a39b4-f6f8-4ad7-9b7d-6a80b54d560b",
+										"id": "856e690e-92be-4b6c-8f47-4fdaea094f63",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3466,7 +3630,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "6a5ee161-8976-4900-92b5-4cf1399f1fe2",
+										"id": "db9e5e46-34ae-4f6c-bd26-845ff883128d",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3481,251 +3645,12 @@
 							"name": "User",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
-										{
-											"name": "User-FollowUser-Guest",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "742d4fdb-4d8f-4f3d-b247-16fa9d27f05d",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 401\", function () {",
-															"    pm.response.to.have.status(401);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															""
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-UnFollowUser-Guest",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "59aadf05-d21e-4582-aad7-5a117d726be2",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 401\", function () {",
-															"    pm.response.to.have.status(401);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								},
-								{
 									"name": "User-CreateUser-Guest",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "3373f452-fc4a-4111-be3a-91e60f8ad5f3",
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"98764342123\",\n    \"name\": \"mycooltestusername\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-FollowUser-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"id": "eb90ea5e-7646-4cf0-9ac7-2fc1e9e9d438",
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"98764342123\",\n    \"name\": \"mycooltestusername\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-FollowProject-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"id": "169cdff7-a82c-45fc-b83a-d953588f1119",
+												"id": "09207dfd-36c6-4b7e-bf50-d191eb6de97d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3783,7 +3708,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b36559aa-f7c2-4ea1-af84-e34e0c57f244",
+												"id": "6f8f2253-da52-45ce-b904-9db4c0d883f6",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3833,7 +3758,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2aaa4a0e-4979-4f8b-a3ba-fb0c953ff8be",
+												"id": "cb2c5ce0-6f86-42c4-88d7-62f8e2a8890c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3892,7 +3817,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "dff749b2-8de7-40ad-af4c-e7c85e8a03bb",
+												"id": "d0364b6b-4067-406b-befd-96e05aa61ad5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -3941,7 +3866,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "7f52857e-7070-4799-92fe-4367a0e8ee89",
+										"id": "57414607-817a-43a5-a6bd-54a952152a37",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3951,7 +3876,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "da51ae44-57da-4198-bbe2-dd8a0e779e78",
+										"id": "920efd77-1ce3-44ff-8f6d-f49c6c0dbf28",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -3963,139 +3888,143 @@
 							"_postman_isSubFolder": true
 						},
 						{
-							"name": "Project",
+							"name": "FollowUser",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
+									"name": "User-FollowUser-Guest",
+									"event": [
 										{
-											"name": "Project-FollowProject-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "ce1cbb6b-5415-4e3a-8777-aba4c977aa96",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var projectName = \"Generic Metal Ball\"",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 401\", function () {",
-															"    pm.response.to.have.status(401);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															""
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
+											"listen": "test",
+											"script": {
+												"id": "510c9066-7980-4994-bfd3-8698fd7b22aa",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													""
 												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Project-UnFollowProject-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "0aef8ac3-b0d1-49bf-a244-e5574e5849a1",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
+												"type": "text/javascript"
+											}
 										}
 									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
 								},
+								{
+									"name": "User-UnFollowUser-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "50eedab9-e8d3-44e3-a010-b2c7d2132cc8",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Project",
+							"item": [
 								{
 									"name": "Project-CreateProject-Guest",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "38028375-2c71-4851-848b-2996514dc408",
+												"id": "951be4a5-fbeb-475a-b991-c1cbc1dede6e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4155,7 +4084,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "02432018-39c4-44a4-bde5-1bf559af3927",
+												"id": "0cf0b488-2303-4274-af33-460618ae463c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -4225,7 +4154,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "7e1dc145-9d14-4e43-979d-b55dc9f716ad",
+												"id": "a4229563-7e8f-4961-af05-dd214c69cd07",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -4280,7 +4209,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "482a9f22-10c9-4cce-9c1d-49c0dbaeee4b",
+												"id": "870762f7-579b-4abd-a6ed-b79bdf383a09",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4337,7 +4266,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "47b2e7fe-4550-4e08-8825-075cd03191f4",
+												"id": "5a934f50-4e08-48de-bc5f-dc5a7c4cfe21",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4386,7 +4315,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "7a8992b6-9cc8-4704-b573-a54f54c6a77a",
+										"id": "773d24e8-3018-44fa-8d83-48f5c0cf879f",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4396,12 +4325,140 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "e840a81d-f500-4fa4-b995-396f25f9eb58",
+										"id": "63e4aa40-f44a-4bb5-b382-da57096ab706",
 										"type": "text/javascript",
 										"exec": [
 											""
 										]
 									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "FollowProject",
+							"item": [
+								{
+									"name": "Project-FollowProject-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "5cc895c0-f7e1-4457-bca6-b7ab5da63567",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnFollowProject-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "e78f5c03-75b0-4a9f-ac4f-568b37003cd3",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"protocolProfileBehavior": {},
@@ -4416,7 +4473,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "429d06f0-dbbf-4ceb-bf2e-b62c2271677c",
+												"id": "10a28a0f-4832-4880-87d4-fdb6283f3be0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4443,7 +4500,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "8f885ecd-9e60-4378-8e97-66994d852372",
+												"id": "0cd4eb53-60ed-43d4-ab71-aa716b58581a",
 												"exec": [
 													""
 												],
@@ -4482,7 +4539,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "edd3e007-31fb-42e9-a8be-d0ccba9a0f37",
+												"id": "32dbd963-a7a8-442e-a8ae-fce481363a0e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var jsonData = pm.response.json();",
@@ -4527,7 +4584,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "14771859-2a73-4509-9d31-cfc031b63c6f",
+												"id": "46b4252b-d05a-4406-8e29-6f3f9131b1a1",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var highlightId = parseInt(pm.environment.get(\"highlightId\"));",
@@ -4582,7 +4639,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c8985640-31cd-4e43-a258-fe3737f0ebf0",
+												"id": "6c7e11ec-988b-4cce-bde0-4d6f65bd87d4",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4631,7 +4688,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "ca58145d-4c4c-485b-9cba-4dda9a9473cc",
+												"id": "275208d6-55cb-4fa6-aef0-acf699f44cbd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4658,7 +4715,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "429d96de-1074-424c-bafd-b92f920ef008",
+												"id": "a33e4758-716e-4fb8-9cd9-a5ea66a85421",
 												"exec": [
 													""
 												],
@@ -4698,7 +4755,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "83eb198d-e1b3-498a-9d94-a67dc53ff2a6",
+												"id": "ac7c46e9-0367-4c19-8969-349f5d6cb822",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4747,7 +4804,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "5c28bc07-b68d-4a8e-966a-97b9cc00b925",
+										"id": "a0db9188-0cf6-4761-81ce-335222566114",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4757,7 +4814,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "a415c3f3-897c-4b44-a0db-d449582cabd0",
+										"id": "938a8168-eac8-4f3f-8303-bef273fa9dc8",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4777,7 +4834,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "00b89cb8-4655-4cfe-bfef-99c71075384c",
+												"id": "dce43e5e-bc20-438f-8f6a-13d4b794bea1",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4832,7 +4889,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "72161f42-8fda-481a-818d-202b0dfca488",
+												"id": "ef59dae2-be04-41e3-861e-d6c0de1b4df7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4878,7 +4935,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e7181385-3925-4b3f-9ed4-9c3e7bd79378",
+												"id": "6a89a408-4b17-40e8-a99e-e9c7b5020051",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4925,7 +4982,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b2d72f1f-0908-4a03-8784-a64093c34d5b",
+												"id": "aea2d332-3aa8-4332-8626-119585650fa1",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -4974,7 +5031,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "53dbee05-b741-4d8b-bcef-e600802e2410",
+										"id": "d8cd3cc2-e687-4c82-9d32-b0ba288e1342",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -4984,7 +5041,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "9ad98cb4-7b19-49fe-84b7-18ff4951f402",
+										"id": "24962589-cd19-460f-b735-a4ef5d10c02e",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5004,7 +5061,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "52a8e434-7893-4773-b2e8-d08f09009880",
+												"id": "0e57dd13-7312-4492-b258-dd28b79cc7dc",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5060,7 +5117,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "197c334a-1027-40bf-9d6c-d87aba60c897",
+												"id": "73036bf2-8aef-4c37-9b81-b1e0d29c14cc",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5107,7 +5164,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f58cadd9-e1d4-4688-bf4c-1edc1ad5cc14",
+												"id": "7a231724-c7b8-430b-a8d5-af6c537e85d0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5155,7 +5212,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5cde50b7-c620-4711-ad89-17483c974f5e",
+												"id": "5f367f44-4423-4377-b979-488a2e4decac",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5203,7 +5260,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e9cfb930-370c-41a2-ade6-06a8744ce2ca",
+												"id": "ad043126-77de-4c1e-a216-fa5334605a43",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5260,7 +5317,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a8c725b1-ec1e-4ab6-ad7c-95e43d0bf816",
+												"id": "63dfa67f-445b-41ef-baca-f055197fdb4f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5331,7 +5388,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "d4dc0f6a-9e81-473b-a6d2-4d182236fda2",
+										"id": "45c9c6ca-e7bd-4057-8b6c-92f50be232c0",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5341,7 +5398,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "3b5d73cb-3c05-49e9-a8eb-a807af0cfbd1",
+										"id": "f62d613b-7bd0-4b40-930d-b4b6febca54c",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5361,7 +5418,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "70bffee9-98ac-4bfc-be9b-77e7644ff635",
+												"id": "01e6f9b3-a6b7-4587-b099-18bbc5becfda",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5412,7 +5469,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "d0d4b573-2d72-4a2d-9380-d3a5d3d9734c",
+										"id": "096c8a0a-35c7-4abb-9f45-dc2c853cef10",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5422,7 +5479,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "d1ca2211-e512-4890-900d-4e0a620ef322",
+										"id": "c060a22e-dae1-495a-bd6e-91dc0b3393d0",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5442,7 +5499,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2b50fd0a-2b1f-49f8-a466-14a866f9be33",
+												"id": "78effdf9-a66c-4439-96ce-09540b6c1187",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5498,7 +5555,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "199676e9-7ea5-4644-af7a-6399476a51c2",
+										"id": "048601b5-68c6-408c-bc0e-67a03e1e0be3",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5508,7 +5565,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "7037d025-d6b0-4b54-af59-e789dae637eb",
+										"id": "577a1710-eebb-49fc-8fe4-d38944b7a50d",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5524,7 +5581,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "ba686cb3-fc8e-4b07-b65f-397ee8d6cae3",
+								"id": "3c5906bc-b907-4870-84f0-3a7b3f1852a9",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -5534,7 +5591,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d2be4adb-c820-4ce9-a0ef-8e0c3c9b6fd8",
+								"id": "07217920-cb4e-4889-9905-12f406160ce3",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -5557,7 +5614,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "db8920d2-e557-4ee8-a709-a8b3eb886618",
+												"id": "dd15797f-2330-4934-bfd7-54fdc6d043b5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userName\");",
@@ -5626,7 +5683,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d1cc5ca3-b0d1-4e10-b934-831d60fcc422",
+												"id": "727b0ae4-e04c-4739-babe-c58e461660df",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -5705,7 +5762,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "64ecbf57-2189-4ff9-92a1-2abeb6c252d9",
+												"id": "b689b19d-2a06-4b6e-ab90-f3f7690697f7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -5734,7 +5791,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "f03e3714-6b31-4dbe-8be4-68b7770dfe7a",
+												"id": "50d8da57-5f00-4c88-81b2-b0b215b8fb6a",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -5784,7 +5841,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e931ecd1-7d4d-4fe2-b8d2-9f3fc9e5f4b3",
+												"id": "edf5bb9f-c695-4b76-adca-d6f1f68c4acb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -5849,7 +5906,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2a454f15-069f-46aa-9e24-0046f3aa8842",
+												"id": "4e8a2885-9bbb-4941-bda1-28bf66d4b6ba",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var scopeName = pm.environment.get(\"scopeName\");",
@@ -5922,7 +5979,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "d5a985fd-8009-4ced-a2e1-9f37a6c87c39",
+										"id": "8d6ef504-b083-4ddc-9008-a0513b500a93",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5932,7 +5989,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "d0d24d95-5d68-4270-be27-657eddadd685",
+										"id": "5c184acc-c077-4abb-9b44-8d79723a756f",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -5947,145 +6004,12 @@
 							"name": "User",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
-										{
-											"name": "User-FollowUser-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "ab0be218-be02-40fe-8845-ed0d3a932de7",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var userId = 25",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"     pm.response.to.be.success;",
-															"     pm.response.to.be.withBody;",
-															"     pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userId, function () {",
-															"    pm.expect(jsonData.id).to.eql(userId);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-UnFollowUser-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "15ed1ba0-acbf-4048-b358-06ad38987428",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								},
-								{
 									"name": "User-CreateUser-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "01024392-f907-4c82-9735-846dbbde0579",
+												"id": "7e32e9f6-8321-4feb-9006-a428168f65b3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var jsonData = pm.response.json();",
@@ -6140,195 +6064,12 @@
 									"response": []
 								},
 								{
-									"name": "User-FollowUser-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"id": "406c789b-d0ed-4830-b3c5-46078bf1be33",
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User/follow/user/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"follow",
-												"user",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-UnFollowUser-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"id": "7574a3ab-ce99-4450-b403-eb56351a3068",
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User/follow/user/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"follow",
-												"user",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-FollowProject-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"id": "e6ce4254-72ec-4fff-8eac-88c467be2bfc",
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User/follow/project/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"follow",
-												"project",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "User-GetUser-Other-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "4f457db6-b4d4-456b-8145-b1a1230e35bf",
+												"id": "6b57b1b4-a737-4087-a895-8059b848f8fb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6381,7 +6122,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "d18ed922-1c29-4a9e-8416-f83bc22a974c",
+												"id": "ea4d537b-26ec-453e-8458-c4a2dd456bc8",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var aliceIdentityId = parseInt(pm.environment.get(\"registeredUserIdentityId\"));",
@@ -6439,7 +6180,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5e8c5cec-4806-4c2e-9525-da46af199d07",
+												"id": "bceec06e-4a44-4ad3-9815-8105a6e0ab62",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
@@ -6506,7 +6247,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "99dbabe3-4d8f-41cb-8bce-1c944ad96a29",
+												"id": "e2c03a2b-a43d-4712-9cbf-e93bac36e2be",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -6568,7 +6309,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "582ea3c3-5a17-451b-b5be-b1e734fef8eb",
+										"id": "72a0a0df-4917-46bd-a4bb-42af148256a2",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -6578,7 +6319,159 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "278af5fc-7c82-4bcf-a361-cf9d6745f6bd",
+										"id": "4d9a3da8-0a66-4f0b-af84-bffcbe37f175",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "FollowUser",
+							"item": [
+								{
+									"name": "User-FollowUser-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "673152d7-df9f-4483-8ff8-518caf3bb160",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"var userId = pm.environment.get(\"userIdToFollow\");",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Check if created Username matches: \" + userId, function () {",
+													"    pm.expect(jsonData.id).to.eql(userId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UnFollowUser-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "50cd2fb3-7580-4c45-8133-8ea300bef295",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "5b97f0a8-863e-4286-a67d-aacfbd152449",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "b17e2239-db09-48ba-b1a6-e5b6ecd6bfe3",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -6593,145 +6486,12 @@
 							"name": "Project",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
-										{
-											"name": "Project-FollowProject-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "22970b7f-2de6-41a2-8f26-3848803bae89",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var projectId = 3",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"     pm.response.to.be.success;",
-															"     pm.response.to.be.withBody;",
-															"     pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + projectId, function () {",
-															"    pm.expect(jsonData.id).to.eql(projectId);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Project-UnFollowProject-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "67efdc2b-2f9a-48a1-95d7-e593637c202c",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								},
-								{
 									"name": "Project-CreateProject-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "3b9fc86d-9853-4594-a1ec-137bacc84275",
+												"id": "e88a64ec-13f1-4674-83b7-8e4be490ef12",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
@@ -6797,7 +6557,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "59515132-4a17-4233-9ac3-758bdecfceae",
+												"id": "f0bb89ae-e8c0-4719-9ad7-924d561bb576",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -6870,7 +6630,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8216b6be-a07b-4496-9a9d-2dd8873245f0",
+												"id": "02fc3765-e2a5-47a8-9d2c-3a4309a550b0",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -6928,7 +6688,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f481301c-4f17-4ecc-8136-be43fd0607ec",
+												"id": "85addaf8-323e-48b9-ab17-01e7ce6ac06b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"pm.test(\"Status code is 200\", function () {",
@@ -6978,7 +6738,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "547c4a5c-6a3f-4117-ad34-8a368531d556",
+												"id": "40349407-e8ef-4492-9bfd-e9fcbccb5155",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectNameUpdated\");",
@@ -7045,7 +6805,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e3f6d06e-c777-4b0a-8d49-85640c2d3202",
+												"id": "af35e368-f1c9-43b3-a99e-b1af5700a51a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7104,6 +6864,158 @@
 							"_postman_isSubFolder": true
 						},
 						{
+							"name": "FollowProject",
+							"item": [
+								{
+									"name": "Project-FollowProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "b3e31ee0-54fc-434f-95d7-9f0fb2d6cfc0",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"var projectId = pm.environment.get(\"projectIdToFollow\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Check if created Username matches: \" + projectId, function () {",
+													"    pm.expect(jsonData.id).to.eql(projectId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnFollowProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "59159987-9feb-4117-97fc-a56880c7d6e2",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "5643d783-c75a-4760-b909-f2657780f2dc",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "ad9466f3-3a63-4785-a446-73bb34c48718",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
 							"name": "Embed",
 							"item": [
 								{
@@ -7112,7 +7024,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "43f20175-6465-4796-9774-a7d8c46b13f7",
+												"id": "5ce8c755-666f-49d3-a898-81e6bde11c2b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7176,7 +7088,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6db9b959-e218-47b1-b2a3-317faef4797e",
+												"id": "fbbbbb00-310d-4ff9-88a0-e3e8f3f2d65e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7237,7 +7149,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "08292766-5d01-4f64-9046-315a3b711974",
+												"id": "33678519-5ea9-4f8c-afba-8f182114d5c1",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7289,7 +7201,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e6d9018c-b68b-4a02-8322-91622ed92517",
+												"id": "9bc03102-af12-4557-adf7-817a6a5b7003",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embeddedProjectId = parseInt(pm.environment.get(\"embeddedProjectId\"))",
@@ -7354,7 +7266,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "15860a63-ec78-44f4-84b6-99a5d7ac493a",
+												"id": "df430e96-892a-4254-a331-9e062333d574",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7380,7 +7292,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "7af04590-c7d8-4f65-a24c-97162b36b7f8",
+												"id": "384f0d0f-1ba6-4c13-b62d-957aca4e94fa",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -7430,7 +7342,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "156df0e0-bd6c-4011-8ead-e8dc22791271",
+												"id": "adc61dc4-8f24-4ea3-b3fb-05489bf507fa",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = pm.environment.get(\"adminProjectId\");",
@@ -7499,7 +7411,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "79c3e397-d4c3-4aec-a1e5-8bd0213b1053",
+												"id": "83f38279-52f5-470d-ba46-46a54092c6d4",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -7561,7 +7473,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "99faab17-d5f8-4891-80fb-269141c7143d",
+												"id": "7bf26e55-6cd2-4f01-8a04-8cb722ceaa4f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7616,7 +7528,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a6f6d147-1f70-470a-9e2e-89ba6de5e81a",
+												"id": "9927ea3e-941f-423c-896a-de89743d2d36",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7685,7 +7597,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "36180131-3f19-4be3-9263-392399ad025c",
+												"id": "288043e3-d53e-4fdc-ac44-bdaaa4c6dd49",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7746,7 +7658,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "43c11a89-656b-469c-8cb0-bacdf6575798",
+												"id": "6bb006ec-9ce5-4fcd-a077-e7817c1f4356",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7798,7 +7710,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "ae43fd3d-cfd8-4bdf-9729-075d257daca2",
+												"id": "dae306dc-feb5-49ce-8723-ee77279921c9",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7851,7 +7763,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "803b1054-777f-4b36-b8ae-fd15bca56bf4",
+												"id": "2f0ad802-6fad-4f49-a64c-b23ec49bbcff",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7904,7 +7816,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f833467b-9316-4252-98fd-b0266a7ddd96",
+												"id": "df71e55a-bb2b-455c-a00f-a6d2dd8ebaea",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -7966,7 +7878,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b28a0f11-948b-4e1a-ab5d-43e5505f72e1",
+												"id": "cb960fa3-1b29-4a0a-950a-8151dfa8e1cd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8047,7 +7959,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4e238c07-790f-4932-97f6-a5c250d59547",
+												"id": "ac74296d-5be3-43eb-871e-0d390181236b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8106,7 +8018,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "56e9b270-b3d3-4055-9c2d-a182042df9a5",
+												"id": "f82a2402-e7c0-432e-af4c-64e48fabe5aa",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\")) + 1000;",
 													"",
@@ -8172,7 +8084,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "06a7f923-cf89-4029-9640-a391dbc40465",
+												"id": "05cb1235-fe28-40f8-92d5-dd5098c0bd56",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8221,7 +8133,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b582a147-3c96-4ae0-aba0-3242856c7d61",
+												"id": "39fa2a82-41ce-4f17-88a4-ceb5f6c5f775",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8272,7 +8184,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "cc83fc60-a31a-4242-bcf1-e6d8a074bf38",
+												"id": "3b13799c-0c2a-4534-9363-96b12ee2c2db",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8323,7 +8235,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "0202e0ad-2287-4f53-bfa8-9d47c51ae0db",
+												"id": "dd95cd3d-d533-42b7-877b-b11ef09b6576",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8368,7 +8280,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "eef0f020-d6cf-4914-a9c0-35bea8e04245",
+												"id": "3a0901f6-e333-48fe-872d-c6ed2335bbc3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8419,7 +8331,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3a80339f-2305-4ecb-99ad-144499de5711",
+												"id": "4564e06f-55c1-425c-a5fa-6ae571205af2",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8470,7 +8382,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "047b16e2-fda2-4592-a6fe-a7a41018ac96",
+												"id": "82bf4972-998a-4846-b142-6e83b85e5a0f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8535,7 +8447,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "96444922-e42d-4a75-845e-34c3a884255e",
+												"id": "27373880-24bb-49fb-8816-ff0b6dae359a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var userName = pm.environment.get(\"userName\");",
@@ -8604,7 +8516,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9ba6e788-0364-4f5e-a316-ddfe997c5948",
+												"id": "bbf0e491-91c1-4352-99e4-1525ff579b56",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
@@ -8683,7 +8595,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "02c1ba2d-2d5a-4402-b403-818f901129c4",
+												"id": "6ccdc966-58bd-4c5f-aabb-136d02178d47",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -8712,7 +8624,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "4f9fd25d-b62b-4c34-91b7-d6be61424072",
+												"id": "b7af45e3-6179-47b8-beb4-4e90c9614d64",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -8762,7 +8674,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "ac2b6251-c664-4f34-a5e8-3926ca6fc757",
+												"id": "b16e33f6-67ad-4082-9c3d-8802eeac67f3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -8826,7 +8738,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e9688d3f-a405-4144-9e1f-8cd9daf1684f",
+												"id": "3dfa4eab-ded7-4599-8b35-254c4ed2eb01",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var scopeName = pm.environment.get(\"scopeName\");",
@@ -8899,7 +8811,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "c7d754cb-9f76-46b3-8ca0-a5bb7bba6d8c",
+										"id": "3ee798d5-14b8-4b26-aa22-b0807512e59e",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -8909,7 +8821,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "585a1f57-bf11-42eb-87e8-3903f4289b42",
+										"id": "dd91bec7-2d40-46bd-8199-934eb260b9c6",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -8924,205 +8836,12 @@
 							"name": "User",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
-										{
-											"name": "User-FollowUser-PR",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "e033e234-2d1a-449f-8149-025fb6900cfe",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var userId = 25",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"     pm.response.to.be.success;",
-															"     pm.response.to.be.withBody;",
-															"     pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userId, function () {",
-															"    pm.expect(jsonData.id).to.eql(userId);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-UnFollowUser-PR",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "e9d15f60-51ee-45d5-84cb-0ffae4eefc8e",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"follow",
-														"{{userIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								},
-								{
 									"name": "User-CreateUser-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "91e39857-10ee-41ba-ace1-5dc1b770c096",
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-FollowUser-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"id": "c216c5da-e108-4581-a7b5-45483c8f2201",
+												"id": "2d9ed119-05d4-4d6a-a15a-6195cada35ab",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var jsonData = pm.response.json();",
@@ -9182,7 +8901,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6ad4f08f-a3b2-4586-b646-6d9e32923c83",
+												"id": "cfb1847a-3db4-4258-8421-e161c98ea0f4",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9235,7 +8954,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "44220256-3a66-459f-9ac2-cb9f34c4dd83",
+												"id": "d81a0107-669a-4376-a671-e5049c779df7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var prUserIdentityId = parseInt(pm.environment.get(\"prUserIdentityId\"));",
@@ -9293,7 +9012,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "fd9c0740-02b3-4e4b-805f-d931a3c00d2f",
+												"id": "1787afa4-393b-47d3-b609-0e8762c18351",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var updatedPrUserEmail = pm.environment.get(\"updatedPrUserEmail\");",
@@ -9360,7 +9079,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "fecaf8bf-320e-437b-a403-b0190734c79e",
+												"id": "982c814e-565d-441f-86d0-398d6d69d2b6",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9422,7 +9141,7 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "b0d4d151-ee9d-49e6-b1d5-7ddbfa5ace61",
+										"id": "a029ff15-234d-4d0f-8127-8b90864109b7",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -9432,7 +9151,159 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "2efd592c-826e-4d55-8a4c-4d630fa1f9b6",
+										"id": "70cd6988-51b3-4d6f-a1ed-f90734e07f25",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "FollowUser",
+							"item": [
+								{
+									"name": "User-FollowUser-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "49aeef34-b26b-497f-b1d7-0686d07bcdc5",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"var userId = pm.environment.get(\"userIdToFollow\");",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Check if created Username matches: \" + userId, function () {",
+													"    pm.expect(jsonData.id).to.eql(userId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UnFollowUser-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "3406766d-f94d-414f-9ba0-126061520169",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/follow/{{userIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"follow",
+												"{{userIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "8c21096d-b838-418e-bcc7-a7467be6840d",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "3b9c2a42-c83d-4e58-91bc-4fadac673df7",
 										"type": "text/javascript",
 										"exec": [
 											""
@@ -9447,145 +9318,12 @@
 							"name": "Project",
 							"item": [
 								{
-									"name": "Follow",
-									"item": [
-										{
-											"name": "Project-FollowProject-PR",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "1d856d10-c630-4b60-840f-8039fa0f71c3",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var projectName = 3",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdUserId\", jsonData.id);",
-															"pm.environment.set(\"createdUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"     pm.response.to.be.success;",
-															"     pm.response.to.be.withBody;",
-															"     pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + projectName, function () {",
-															"    pm.expect(jsonData.id).to.eql(projectName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Project-UnFollowProject-PR",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"id": "7656fde1-7848-4cb5-87b8-2f68ffe90481",
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"project",
-														"follow",
-														"{{projectIdToFollow}}"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								},
-								{
 									"name": "Project-CreateProject-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "9ca0c0d2-9408-4f4b-a1f3-1e60711dacdb",
+												"id": "e4c91aed-6ef6-4b00-aad1-c7dca50c4462",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var PrUserId = pm.environment.get(\"PrUserId\");",
@@ -9651,7 +9389,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "27d3ab62-f7c3-4854-a6e7-141364f6eea5",
+												"id": "d21b4453-3530-4ba7-a134-ec8fd361114e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -9724,7 +9462,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8f6f2297-a515-4c7f-9f44-700017fc3e45",
+												"id": "e79f9b5d-b5b2-42f0-92f4-f4d9464de27f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
@@ -9782,7 +9520,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "2c44ff08-5189-4ce2-b0c7-1ac71f72bb51",
+												"id": "6b1fb601-1095-4beb-947d-181fd5532bf3",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"pm.test(\"Status code is 200\", function () {",
@@ -9832,7 +9570,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5d8846b2-6d2d-4fab-94cd-1765ff572f07",
+												"id": "a344705d-a8fc-4e63-b800-79913f332572",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectName = pm.environment.get(\"projectNameUpdated\");",
@@ -9899,7 +9637,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "aeb54c50-08b5-43cb-859b-4cc219378efa",
+												"id": "08d2965a-4788-40dc-a89b-c912861e25ab",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -9958,6 +9696,158 @@
 							"_postman_isSubFolder": true
 						},
 						{
+							"name": "FollowProject",
+							"item": [
+								{
+									"name": "Project-FollowProject-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "6325a124-1349-488b-b311-2877755413f0",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"var projectId = pm.environment.get(\"projectIdToFollow\");",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Check if created project id matches: \" + projectId, function () {",
+													"    pm.expect(jsonData.id).to.eql(projectId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnFollowProject-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "a63fb9a1-6bb0-443a-b493-0102771d1221",
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/follow/{{projectIdToFollow}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"follow",
+												"{{projectIdToFollow}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "a7236e59-4edc-4971-8ba9-6ef1fbf4efb0",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "859900a6-1848-4050-ac11-832cd2121f7e",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
 							"name": "Embed",
 							"item": [
 								{
@@ -9966,7 +9856,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5de0dbce-1c85-4fcc-956d-1f95113d08c7",
+												"id": "af3ca3d9-a581-4a4c-b9f8-72b4649c12f4",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10030,7 +9920,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4dac6757-e25c-40a8-a5b7-ced1d3f54c28",
+												"id": "a15c6bd7-92dd-45dc-ab36-5a486e5dda3d",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10094,7 +9984,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9ae6ab51-6f8a-4125-bf07-87d62ba791dc",
+												"id": "f5ce86b9-b2ad-4ac1-901c-1530228368cd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10146,7 +10036,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "fbfab176-2361-445b-8210-cbef4aca5ccf",
+												"id": "908772af-ad49-4b8a-8f8d-fc86bf7d955c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var embeddedProjectId = parseInt(pm.environment.get(\"embeddedProjectId\"))",
@@ -10204,7 +10094,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a215f69e-965f-4dd5-80c7-27c1eae7ca79",
+												"id": "c649e329-4782-4fca-ab91-3c685b097794",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var otherEmbeddedProjectId = parseInt(pm.environment.get(\"otherEmbeddedProjectId\"))",
@@ -10269,7 +10159,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3a92482a-eced-4ee9-a04b-b0a3a7401b82",
+												"id": "d13954a7-b32e-4ed0-aee6-b08da85a5223",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10297,7 +10187,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "6d2d6eea-f0f5-45af-9ae1-d4582b12a776",
+												"id": "2ebe216f-b0a4-4163-a6b4-9f2732d8af30",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -10347,7 +10237,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "874b00a5-205d-4e72-a7b4-160f4d1f8791",
+												"id": "0aa214d5-8400-4197-aead-a72621464993",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -10409,7 +10299,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "97535220-1176-494d-b4f4-a4a7e709e7b4",
+												"id": "23298988-0413-4fe9-a621-6090d8936ae6",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -10496,7 +10386,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8248083b-87a6-495d-b1bd-c4f5b16a53bb",
+												"id": "f5e98ca8-095f-4fdd-ab82-307931b6d777",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10522,7 +10412,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "27cedae2-47bb-4a16-81d3-44028c354993",
+												"id": "0cfada2c-d574-4e4b-aaa7-613855748b1b",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
@@ -10569,7 +10459,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "bb670b70-a39f-4cd4-adc9-d9c3481c6ead",
+												"id": "ddb8910d-7ea7-4f07-bbee-58d4343e5f8b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10596,7 +10486,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "54a6efb9-2b62-41c8-b2f5-54e89c86c7ea",
+												"id": "35489972-0a0a-4502-9af9-0065f5988d36",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());\r",
@@ -10646,7 +10536,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "58b30145-c908-441b-9e33-ccc204a28f3c",
+												"id": "636d5863-ecd5-456c-a663-58ba1abb2332",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -10708,7 +10598,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "57306014-34c8-40d6-9e17-df77e745535a",
+												"id": "07338c85-d955-4431-9214-06fc9ea07b0f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
@@ -10795,7 +10685,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "e40405c2-ca3b-4361-a553-71fccc659884",
+												"id": "9f4f7486-02fc-47aa-a948-1fbc084dda0f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -10821,7 +10711,7 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "a2218cd0-ea9a-42c8-8b95-3bdfac11f956",
+												"id": "d4ea9afb-1fd2-4896-946c-330260e07b36",
 												"exec": [
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
@@ -10868,7 +10758,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "5ad8ee5c-5eac-4716-8a75-bc7750515f30",
+												"id": "11552ad9-308d-47a0-a05d-f65dff70e0f1",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var projectId = pm.environment.get(\"adminProjectId\");",
@@ -10944,7 +10834,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "6118d144-de52-4ff4-879a-2b7d8a12d19b",
+												"id": "238a11a2-111c-40d1-975e-ffdfebca7f9e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11005,7 +10895,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "96498358-ff50-4f99-8353-55b7f9deec68",
+												"id": "bca9202d-ed5f-41e7-b842-6b5dea3c59ee",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11057,7 +10947,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "25fd2cb2-01e7-4ce1-ba9b-07d4258669de",
+												"id": "59686009-aad0-4fb5-9a70-66ae0b25ebfe",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11110,7 +11000,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "c90137c5-1598-4b83-bddb-89f014d104a6",
+												"id": "93300883-47d3-4d1a-8506-374f0bf6e196",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11163,7 +11053,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9b61635b-c683-4c8a-bc15-6b6c6fd7b865",
+												"id": "f7bd5846-e127-4274-a87f-ca033482bc5f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11225,7 +11115,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4c7d50f7-edca-44fb-bead-c4e84f2bc81a",
+												"id": "25a28073-1f67-4f96-bb70-e0a82bed6063",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11306,7 +11196,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "7e670af1-8086-4b65-b96e-df0175e7135d",
+												"id": "229d7cc1-041e-43e8-b626-d624f98980cd",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11365,7 +11255,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1cd71ba7-bbca-4b13-80d5-5bbfe10c0662",
+												"id": "b042e4e0-aaae-4fde-bd15-7cd358c14f7b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\")) + 1000;",
 													"",
@@ -11431,7 +11321,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "aed618d6-29e4-4bd7-928c-8170d41faa74",
+												"id": "82a1b043-02fa-443f-9f74-7720e195c5b5",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11480,7 +11370,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "38fb700d-778d-4077-91b7-5b57baa850ae",
+												"id": "009e543f-b3c8-4cfc-ba6a-5892fd162e3f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11529,7 +11419,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "9cd807f1-fb83-48d3-bbde-e00c8d96ebf5",
+												"id": "11068050-84f6-4310-b52a-c3e041009c4e",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11574,7 +11464,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "4a2a41aa-621d-424c-8f2d-5c8ea241b8ec",
+												"id": "6b443f79-8f5c-4bce-aad0-db2ba133e667",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11619,7 +11509,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f0d625fc-937b-4004-96e1-9f4704283ea8",
+												"id": "f5e2a604-f0ea-4eb6-9582-eceeb1be6313",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11664,7 +11554,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "7b8663b4-b140-4187-972f-3d2205896d5d",
+												"id": "40c75c41-8aab-4578-99fb-e0974f80163b",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11717,7 +11607,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "8bfa8b54-767b-4617-82d6-31920b9e440c",
+												"id": "41cc8151-025e-494b-b11f-5461bc6d27eb",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11770,7 +11660,7 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "14206cca-c9ce-4abc-bc62-a773ccf14747",
+												"id": "4656e996-95ea-48ee-a82e-1ce83ce751aa",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
@@ -11827,6 +11717,102 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "Delete-ProjectForFollowing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee5ba265-fb38-489c-be9b-a967db1b5b42",
+								"exec": [
+									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"value": "{{administratorUserIdentityId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/Project/{{projectIdToFollow}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project",
+								"{{projectIdToFollow}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-UserForFollowing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e6b60a71-3c90-4069-9284-7de0be6a83b4",
+								"exec": [
+									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"value": "{{administratorUserIdentityId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/User/{{userIdToFollow}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"{{userIdToFollow}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"auth": {
@@ -11853,7 +11839,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "27cd2b77-ecf3-44cd-b4ab-eb40f0fcdbf1",
+				"id": "cc75fbc6-d531-49ca-9e28-f694cfce821f",
 				"type": "text/javascript",
 				"exec": [
 					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
@@ -11897,7 +11883,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "0a2e5a58-b3d9-4f1a-9d62-d3a31efa8d00",
+				"id": "a9317531-005e-48bf-81bb-172dcf97abe8",
 				"type": "text/javascript",
 				"exec": [
 					""
