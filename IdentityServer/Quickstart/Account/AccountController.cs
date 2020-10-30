@@ -35,6 +35,7 @@ using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -281,6 +282,60 @@ namespace IdentityServer
             }
 
             return View("LoggedOut", vm);
+        }
+
+        /// <summary>
+        /// Delete this user.
+        /// </summary>
+        /// <param name="returnUrl">The return URL to get back to the frontend.</param>
+        [HttpGet]
+        public async Task<IActionResult> Delete(string returnUrl)
+        {
+            // build a model so the logout page knows what to display
+            DeleteViewModel vm = new DeleteViewModel
+             {
+                 ReturnUrl = returnUrl
+             };
+
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Delete this user.
+        /// </summary>
+        /// <param name="model">The delete view model.</param>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(DeleteViewModel model)
+        {
+            // Get the current users subject identifier.
+            string sub = (User?.Claims)?.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if(sub.IsNullOrEmpty())
+            {
+                // No user subject id which should not be possible to get.
+                return Redirect("~/");
+            }
+
+            IdentityUser user = await identityUserService.FindAsync(sub);
+            // If the user exists remove him.
+            if(user != null)
+            {
+                identityUserService.Remove(user);
+                identityUserService.Save();
+            }
+
+            // If user is signed in, sign it out.
+            if(User?.Identity.IsAuthenticated == true)
+            {
+                // delete local authentication cookie
+                await HttpContext.SignOutAsync();
+
+                // raise the logout event
+                await events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+            }
+
+            // Return to the deleted view model, this also redirects the user if a returnURL was given.
+            return View("Deleted", model);
         }
 
         [HttpGet]
