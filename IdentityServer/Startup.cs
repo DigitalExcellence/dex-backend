@@ -21,8 +21,6 @@ using IdentityServer.Configuration;
 using IdentityServer.Quickstart;
 using IdentityServer4;
 using IdentityServer4.Services;
-using IdentityServer4.Test;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +28,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Models;
 using Repositories;
 using Services.Services;
 using System;
@@ -238,11 +237,16 @@ namespace IdentityServer
                                                   .CreateScope();
             using IdentityDbContext context = serviceScope.ServiceProvider.GetService<IdentityDbContext>();
             context.Database.Migrate();
-            if(!context.IdentityUser.Any())
+            List<IdentityUser> identityUsers = TestUsers.GetDefaultIdentityUsers();
+            foreach(IdentityUser identityUser in identityUsers.Where(identityUser => !context.IdentityUser.Any(e => e.SubjectId == identityUser.SubjectId)))
             {
-                context.IdentityUser.AddRange(TestUsers.GetDefaultIdentityUsers(env.IsProduction()));
-                context.SaveChanges();
+                if(env.IsProduction())
+                {
+                    identityUser.Password = TestUsers.CreateTestUserPassword(identityUser.Username);
+                }
+                context.Add(identityUser);
             }
+            context.SaveChanges();
         }
     }
 }
