@@ -52,7 +52,7 @@ namespace API.Controllers
         /// <param name="fileService">The file service.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="userService">The User service</param>
-        /// /// <param name="fileUploader">The file uploader extension</param>
+        /// <param name="fileUploader">The file uploader extension</param>
         public FileController(IFileService fileService, IMapper mapper, IFileUploader fileUploader, IUserService userService)
         {
             this.fileService = fileService;
@@ -62,7 +62,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get all files
+        /// This method is responsible for retrieving all files
         /// </summary>
         /// <returns>A response and list of files.</returns>
         /// <response code="200">This endpoint returns all projects.</response>
@@ -77,9 +77,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Uploads a single file
+        /// This method is responsible for uploading a file
         /// </summary>
-        /// <returns>HTTP Response</returns>
+        /// <returns>This methods return status code 200 </returns>
         /// <response code="200">This endpoint returns all files.</response>
         /// <response code="400">The 400 bad request is returned when a file is null.</response>
         [HttpPost]

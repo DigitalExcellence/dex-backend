@@ -67,7 +67,5 @@ namespace API.Extensions
         {
             return "File is null";
         }
-
-        
     }
 }
