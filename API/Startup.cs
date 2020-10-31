@@ -295,7 +295,8 @@ namespace API
                                                       Name = "Developer",
                                                       Email = "Developer@DEX.com",
                                                       IdentityId = identityId,
-                                                      Role = registeredUserRole
+                                                      Role = registeredUserRole,
+                                                      InstitutionId = 1
                                                   };
                                         userService.Add(newUser);
                                     } else
