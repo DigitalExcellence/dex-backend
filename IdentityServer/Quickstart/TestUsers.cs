@@ -82,8 +82,19 @@ namespace IdentityServer
                      Firstname = "berry",
                      Lastname = "Smith",
                      Email = "berrySmith@email.com"
+                 },
+                 new IdentityUser
+                 {
+                     SubjectId = "954654861",
+                     Username = "john",
+                     Password = LoginHelper.GetHashPassword("john"),
+                     Name = "John Smith",
+                     Firstname = "John",
+                     Lastname = "Smith",
+                     Email = "johnSmith@email.com"
                  }
-             };
+
+            };
             if(isProduction)
             {
                 Log.Logger.Information("The passwords for this instance:");
