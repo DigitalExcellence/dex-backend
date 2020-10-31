@@ -17,8 +17,11 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Models;
+using Models.Defaults;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -71,12 +74,66 @@ namespace Repositories.Base
             return entity;
         }
 
+        /// <summary>
+        /// Ignore the redacted email field of the user object on add/update/delete
+        /// </summary>
+        /// <param name="entity">The modified Entity</param>
+        public virtual void RemoveRedactedField(TEntity entity)
+        {
+            if(entity.GetType() == typeof(User))
+            {
+                User user = entity as User;
+                if(user != null && user.Email ==
+                   Defaults.Privacy.RedactedEmail)
+                {
+                    DbContext.Entry(user)
+                             .Property(x => x.Email)
+                             .IsModified = false;
+                }
+            }
+            else if(entity.GetType() == typeof(Highlight))
+            {
+                Highlight highlight = entity as Highlight;
+                if(highlight != null && highlight?.Project?.User?.Email ==
+                   Defaults.Privacy.RedactedEmail)
+                {
+                    DbContext.Entry(highlight.Project.User)
+                             .Property(x => x.Email)
+                             .IsModified = false;
+                }
+            }
+            else if(entity.GetType() == typeof(Project))
+            {
+                Project project = entity as Project;
+                if(project != null && project?.User?
+                       .Email ==
+                   Defaults.Privacy.RedactedEmail)
+                {
+                    DbContext.Entry(project.User)
+                             .Property(x => x.Email)
+                             .IsModified = false;
+                }
+            }
+            else if(entity.GetType() == typeof(EmbeddedProject))
+            {
+                EmbeddedProject embeddedProject = entity as EmbeddedProject;
+                if(embeddedProject != null && embeddedProject?.User?.Email ==
+                   Defaults.Privacy.RedactedEmail)
+                {
+                    DbContext.Entry(embeddedProject.User)
+                             .Property(x => x.Email)
+                             .IsModified = false;
+                }
+            }
+        }
+
         public virtual void Add(TEntity entity)
         {
             entity = UpdateCreatedField(entity);
             entity = UpdateUpdatedField(entity);
             
             DbSet.Add(entity);
+            RemoveRedactedField(entity);
         }
         public virtual async Task AddAsync(TEntity entity)
         {
@@ -84,6 +141,8 @@ namespace Repositories.Base
             entity = UpdateUpdatedField(entity);
 
             await DbSet.AddAsync(entity).ConfigureAwait(false);
+            RemoveRedactedField(entity);
+
         }
         public virtual void AddRange(IEnumerable<TEntity> entities)
         {
@@ -92,6 +151,7 @@ namespace Repositories.Base
             {
                 entityList[i] = UpdateCreatedField(entityList[i]);
                 entityList[i] = UpdateUpdatedField(entityList[i]);
+                RemoveRedactedField(entityList[i]);
             }
             DbSet.AddRange(entityList);
         }
@@ -102,6 +162,8 @@ namespace Repositories.Base
 
             DbSet.Attach(entity);
             DbSet.Update(entity);
+
+            RemoveRedactedField(entity);
         }
 
         public virtual async Task RemoveAsync(int id)
@@ -123,6 +185,8 @@ namespace Repositories.Base
             {
                 DbSet.Attach(entity);
             }
+
+            RemoveRedactedField(entity);
 
             DbSet.Remove(entity);
         }

@@ -74,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unit testing for the Search service - [#183](https://github.com/DigitalExcellence/dex-backend/issues/183)
 - Added sanitization for project Description - [#198](https://github.com/DigitalExcellence/dex-backend/issues/198)
 - Added redirection to the frontend after logout from the identity server - [#216](https://github.com/DigitalExcellence/dex-backend/issues/216)
+- Added the ability to remove your own user data - [#77](https://github.com/DigitalExcellence/dex-backend/issues/77)
 
 ### Changed
 
