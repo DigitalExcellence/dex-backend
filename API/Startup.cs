@@ -1,22 +1,23 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
 using API.Configuration;
 using API.Extensions;
+using API.Filters;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
@@ -43,11 +44,13 @@ using System.Threading.Tasks;
 
 namespace API
 {
+
     /// <summary>
     ///     Startup file
     /// </summary>
     public class Startup
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -103,76 +106,91 @@ namespace API
             services.AddAuthorization(o =>
             {
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.HighlightWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.HighlightWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.UserRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserRead))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserWrite))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.RoleRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleRead))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.RoleWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
             });
 
             services.AddCors();
             services.AddControllersWithViews()
                     .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
-                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
+                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 ;
 
             services.AddSwaggerGen(o =>
             {
+                o.OperationFilter<DefaultOperationFilter>();
                 o.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Title = "Dex API",
-                        Version = "v1",
-                        License = new OpenApiLicense
-                        {
-                            Name = "GNU Lesser General Public License v3.0",
-                            Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
-                        }
-                    });
-                o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml");
-                o.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize"),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { "dex-api", "Resource scope" },
-                            }
-                        }
-                    }
-                });
+                             new OpenApiInfo
+                             {
+                                 Title = "Dex API",
+                                 Version = "v1",
+                                 Description =
+                                     "Dex API Swagger surface. DeX provides a platform for students, teachers and employees to share and work on projects and ideas. Find, create, share and work on projects and ideas on DeX",
+                                 License = new OpenApiLicense
+                                           {
+                                               Name = "GNU Lesser General Public License v3.0",
+                                               Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
+                                           }
+                             });
+                o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
+
+                o.AddSecurityDefinition("oauth2",
+                                        new OpenApiSecurityScheme
+                                        {
+                                            Type = SecuritySchemeType.OAuth2,
+                                            Flows = new OpenApiOAuthFlows
+                                                    {
+                                                        Implicit = new OpenApiOAuthFlow
+                                                                   {
+                                                                       AuthorizationUrl = GetAuthorizationUrl(),
+                                                                       Scopes = new Dictionary<string, string>
+                                                                           {
+                                                                               {"dex-api", "Resource scope"},
+                                                                           }
+                                                                   }
+                                                    }
+                                        });
                 o.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
-                        },
-                        new[] { "" }
-                    }
-                });
+                                         {
+                                             {
+                                                 new OpenApiSecurityScheme
+                                                 {
+                                                     Reference = new OpenApiReference
+                                                                 {
+                                                                     Type = ReferenceType.SecurityScheme,
+                                                                     Id = "oauth2"
+                                                                 }
+                                                 },
+                                                 new[] {""}
+                                             }
+                                         });
             });
 
             // Add application services.
@@ -189,7 +207,7 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            UpdateDatabase(app,env);
+            UpdateDatabase(app, env);
             if(env.IsDevelopment())
             {
                 //app.UseBrowserLink();
@@ -228,50 +246,57 @@ namespace API
 
             //UserInfo
             app.UseWhen(context =>
-                context.User.Identities.Any(i => i.IsAuthenticated), appBuilder =>
-                {
-                    appBuilder.Use(async (context, next) =>
-                    {
-                        DbContext dbContext = context.RequestServices.GetService<DbContext>();
-                        IUserService userService =
-                            context.RequestServices.GetService<IUserService>();
-                        string identityId = "";
-                        try
+                            context.User.Identities.Any(i => i.IsAuthenticated),
+                        appBuilder =>
                         {
-                            identityId = context.User.GetIdentityId(context);
-                        } catch(UnauthorizedAccessException e)
-                        {
-                            Log.Logger.Error(e, "User is not authorized.");
-                            await next();
-                        }
-                        if(await userService.GetUserByIdentityIdAsync(identityId).ConfigureAwait(false) == null)
-                        {
-                            IRoleService roleService = context.RequestServices.GetService<IRoleService>();
-                            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
-
-                            User newUser = context.GetUserInformation(Config);
-                            if(newUser == null)
+                            appBuilder.Use(async (context, next) =>
                             {
-                                // Then it probably belongs swagger so we set the username as developer.
-                                newUser = new User()
+                                DbContext dbContext = context.RequestServices.GetService<DbContext>();
+                                IUserService userService =
+                                    context.RequestServices.GetService<IUserService>();
+                                string identityId = "";
+                                try
                                 {
-                                    Name = "Developer",
-                                    Email = "Developer@DEX.com",
-                                    IdentityId = identityId,
-                                    Role = registeredUserRole
-                                };
-                                userService.Add(newUser);
-                            } else
-                            {
-                                newUser.Role = registeredUserRole;
-                                userService.Add(newUser);
-                            }
-                            await dbContext.SaveChangesAsync().ConfigureAwait(false);
-                        }
+                                    identityId = context.User.GetIdentityId(context);
+                                } catch(UnauthorizedAccessException e)
+                                {
+                                    Log.Logger.Error(e, "User is not authorized.");
+                                    await next();
+                                }
+                                if(await userService.GetUserByIdentityIdAsync(identityId)
+                                                    .ConfigureAwait(false) ==
+                                   null)
+                                {
+                                    IRoleService roleService = context.RequestServices.GetService<IRoleService>();
+                                    Role registeredUserRole =
+                                        (await roleService.GetAll()).FirstOrDefault(
+                                            i => i.Name == nameof(Defaults.Roles.RegisteredUser));
 
-                        await next().ConfigureAwait(false);
-                    });
-                });
+                                    User newUser = context.GetUserInformation(Config);
+                                    if(newUser == null)
+                                    {
+                                        // Then it probably belongs swagger so we set the username as developer.
+                                        newUser = new User()
+                                                  {
+                                                      Name = "Developer",
+                                                      Email = "Developer@DEX.com",
+                                                      IdentityId = identityId,
+                                                      Role = registeredUserRole
+                                                  };
+                                        userService.Add(newUser);
+                                    } else
+                                    {
+                                        newUser.Role = registeredUserRole;
+                                        userService.Add(newUser);
+                                    }
+                                    await dbContext.SaveChangesAsync()
+                                                   .ConfigureAwait(false);
+                                }
+
+                                await next()
+                                    .ConfigureAwait(false);
+                            });
+                        });
 
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
@@ -347,8 +372,23 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
+
                 // TODO seed embedded projects
             }
         }
+
+        /// <summary>
+        ///     Depending on the environment, will return authorization url based on development identity url or identity url
+        /// </summary>
+        private Uri GetAuthorizationUrl()
+        {
+            if(Environment.IsDevelopment())
+            {
+                return new Uri(Config.IdentityServer.DevelopmentIdentityUrl + "/connect/authorize");
+            }
+            return new Uri(Config.IdentityServer.IdentityUrl + "/connect/authorize");
+        }
+
     }
+
 }

@@ -23,11 +23,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Repositories
 {
-
     public interface IProjectRepository : IRepository<Project>
     {
 
@@ -87,6 +87,7 @@ namespace Repositories
             }
             return project;
         }
+
         /// <summary>
         /// Redact user email from the Projects in the list.
         /// Email will only be redacted if isPublic setting is set to false.
@@ -151,14 +152,10 @@ namespace Repositories
                                                                              h.EndDate == null)
                                                                  .Select(h => h.ProjectId)
                                                                  .ToList();
-                if(highlighted.Value)
-                {
-                    queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id));
-                } else
-                {
-                    queryable = queryable.Where(p => !highlightedQueryable.Contains(p.Id));
-                }
+
+                queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id) == highlighted.Value);
             }
+
             if(orderBy != null)
             {
                 if(orderByAsc)
@@ -169,6 +166,7 @@ namespace Repositories
                     queryable = queryable.OrderByDescending(orderBy);
                 }
             }
+
             if(skip.HasValue) queryable = queryable.Skip(skip.Value);
             if(take.HasValue) queryable = queryable.Take(take.Value);
             return queryable;
@@ -191,8 +189,7 @@ namespace Repositories
             bool? highlighted = null
             )
         {
-            IQueryable<Project> queryable = DbSet
-                .Include(p => p.User);
+            IQueryable<Project> queryable = DbSet.Include(p => p.User);
             queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
 
             List<Project> projects = await queryable.ToListAsync();
@@ -206,9 +203,7 @@ namespace Repositories
         /// <returns>The amount of projects matching the filters</returns>
         public virtual async Task<int> CountAsync(bool? highlighted = null)
         {
-            IQueryable<Project> queryable = DbSet;
-            queryable = ApplyFilters(queryable, null, null, null, true, highlighted);
-            return await queryable.CountAsync();
+            return await ApplyFilters(DbSet, null, null, null, true, highlighted).CountAsync();
         }
 
         /// <summary>
@@ -230,18 +225,8 @@ namespace Repositories
             bool? highlighted = null
         )
         {
-            IQueryable<Project> queryable = DbSet
-                                            .Include(p => p.User)
-                                            .Where(p =>
-                                                       p.Name.Contains(query) ||
-                                                       p.Description.Contains(query) ||
-                                                       p.ShortDescription.Contains(query) ||
-                                                       p.Uri.Contains(query) ||
-                                                       p.Id.ToString()
-                                                        .Equals(query) ||
-                                                       p.User.Name.Contains(query));
-            queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
-            return await queryable.ToListAsync();
+            List<Project> result = await ApplyFilters(GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted).ToListAsync();
+            return result.Where(p => ProjectContainsQuery(p, query)).ToList();
         }
 
         /// <summary>
@@ -252,18 +237,7 @@ namespace Repositories
         /// <returns>The amount of projects matching the filters</returns>
         public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
         {
-            IQueryable<Project> queryable = DbSet
-                                            .Include(p => p.User)
-                                            .Where(p =>
-                                                       p.Name.Contains(query) ||
-                                                       p.Description.Contains(query) ||
-                                                       p.ShortDescription.Contains(query) ||
-                                                       p.Uri.Contains(query) ||
-                                                       p.Id.ToString()
-                                                        .Equals(query) ||
-                                                       p.User.Name.Contains(query));
-            queryable = ApplyFilters(queryable, null, null, null, true, highlighted);
-            return await queryable.CountAsync();
+            return await ApplyFilters(GetProjectQueryable(query), null, null, null, true, highlighted).CountAsync();
         }
 
         /// <summary>
@@ -319,12 +293,48 @@ namespace Repositories
 
                 DbContext.Entry(entity.User)
                          .State = EntityState.Unchanged;
-
             }
 
             DbSet.Update(entity);
         }
 
-    }
+        /// <summary>
+        /// Checks if any of the searchable fields of the project passed contains the provided query.
+        /// </summary>
+        /// <param name="project">A Project to search in</param>
+        /// <param name="query">The query to search in the project's searchable fields.</param>
+        /// <returns>A boolean representing whether or not the passed query was found in the searchable fields of the provided project.</returns>
+        private static bool ProjectContainsQuery(Project project, string query)
+        {
+            Regex regex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            return new List<string>()
+            {
+                project.Name,
+                project.Description,
+                project.ShortDescription,
+                project.Uri,
+                project.User.Name,
+                project.Id.ToString()
+            }
+            .Any(text => regex.IsMatch(text));
+        }
 
+        /// <summary>
+        /// Get the project queryable which contains the provided query.
+        /// </summary>
+        /// <param name="query">A string to search in the project's fields.</param>
+        /// <returns>The filtered IQueryable including the project user.</returns>
+        private IQueryable<Project> GetProjectQueryable(string query)
+        {
+            return DbSet
+                    .Include(p => p.User)
+                    .Where(p =>
+                            p.Name.Contains(query) ||
+                            p.Description.Contains(query) ||
+                            p.ShortDescription.Contains(query) ||
+                            p.Uri.Contains(query) ||
+                            p.Id.ToString().Equals(query) ||
+                            p.User.Name.Contains(query));
+        }
+    }
 }

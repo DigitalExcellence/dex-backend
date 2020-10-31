@@ -1127,7 +1127,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -1244,7 +1244,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{highlightEndDate}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1295,14 +1295,6 @@
 													"",
 													"pm.test(\"Highlight Id matches: \" + highlightId, function () {",
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
-													"});",
-													"",
-													"pm.test(\"Highlight Start Date matches: \" + highlightUpdateTimestamp, function () {",
-													"    pm.expect(jsonData.startDate).to.eql(highlightUpdateTimestamp.replace('Z', ''));",
-													"});",
-													"",
-													"pm.test(\"Highlight End Date matches: \" + highlightEndDate, function () {",
-													"    pm.expect(jsonData.endDate).to.eql(highlightEndDate);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -9359,7 +9351,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -9470,7 +9462,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{highlightEndDate}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9658,7 +9650,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -9769,7 +9761,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{highlightEndDate}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"

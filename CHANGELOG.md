@@ -5,17 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
 
 
 
 ### Added
 
-- Added descriptions for Project Highlights - [#219](https://github.com/DigitalExcellence/dex-backend/issues/219)
+- Add Postman tests to pipeline - [#189](https://github.com/DigitalExcellence/dex-backend/issues/189)
+- Added a new dex user that can be used to add projects manually - [#270](https://github.com/DigitalExcellence/dex-backend/issues/270)
 
 ### Changed
-
 
 ### Deprecated
 
@@ -23,9 +22,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
+- Fixed issue where swagger authorization was not working when running in docker-compose - [#200](https://github.com/DigitalExcellence/dex-backend/issues/200)
+- Fixed issue with search functionality being too extensive. Now matching whole strings only - [#202](https://github.com/DigitalExcellence/dex-backend/issues/202)
 
 ### Security
+
+
+
+## Release v.0.7.0-beta - 09-10-2020
+
+### Added
+- Added descriptions for Project Highlights - [#219](https://github.com/DigitalExcellence/dex-backend/issues/219)
+
+### Changed
+
+- Changed DeX Frontend client to use code flow instead of implicit flow to fix silent refresh - [#246](https://github.com/DigitalExcellence/dex-backend/issues/246)
+- Improved swagger documentation - [#225](https://github.com/DigitalExcellence/dex-backend/issues/225)
+
+### Fixed
+
+- Fixed a bug where GetAllHighlights endpoint returned status code 404 when empty. - [#207](https://github.com/DigitalExcellence/dex-backend/issues/207)
+- Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
 
 
 ## Release v.0.6.1-beta - 16-09-2020
@@ -37,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed issue resulting in people being unable to sign up with a new account - [#231](https://github.com/DigitalExcellence/dex-backend/issues/231)
+- Fixed issue where highlights were sending too much information. - [#205](https://github.com/DigitalExcellence/dex-backend/issues/205)
 
 ## Release v.0.6-beta - 22-06-2020
 
@@ -61,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added error tracking and monitoring with Sentry - [#136](https://github.com/DigitalExcellence/dex-backend/issues/136)
 - Support for fontys login - [#66](https://github.com/DigitalExcellence/dex-backend/issues/66)
 - Added flag to indicate if email is public, show redacted email if not public - [#138](https://github.com/DigitalExcellence/dex-backend/issues/138)
-- Added Integration tests using Postman, also tests different access control levels - [#40](https://github.com/DigitalExcellence/dex-backend/issues/40) 
+- Added Integration tests using Postman, also tests different access control levels - [#40](https://github.com/DigitalExcellence/dex-backend/issues/40)
 - Added an endpoint to get highlights by a project identifier - [#174](https://github.com/DigitalExcellence/dex-backend/issues/174)
 - Automated the deployment to our environments - [#60](https://github.com/DigitalExcellence/dex-backend/issues/60)
 - Added docker compose to get the backend services running locally - [#179](https://github.com/DigitalExcellence/dex-backend/issues/179)
