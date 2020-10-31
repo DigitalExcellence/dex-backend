@@ -354,6 +354,10 @@ namespace API
 
                 if(!env.IsProduction())
                 {
+                    // Seed institutions
+                    context.Institution.Add(Seed.SeedInstitution());
+                    context.SaveChanges();
+
                     //Seed random users
                     context.User.Add(Seed.SeedPrUser(roles));
                     context.User.AddRange(Seed.SeedUsers(roles));
@@ -364,10 +368,6 @@ namespace API
 
             if(!env.IsProduction())
             {
-                // Seed institutions
-                context.Institution.Add(Seed.SeedInstitution());
-                context.SaveChanges();
-
                 if(!context.Project.Any())
                 {
                     //Seed projects

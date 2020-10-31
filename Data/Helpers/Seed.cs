@@ -170,7 +170,8 @@ namespace Data.Helpers
                 IdentityId = "954654861",
                 Email = "dataofficer@dex.software",
                 Name = "data officer Sam",
-                Role = dataOfficerRole
+                Role = dataOfficerRole,
+                InstitutionId = 1
             };
 
             return user;
