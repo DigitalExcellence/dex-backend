@@ -235,11 +235,11 @@ namespace API.Controllers
                 if(institutionId < 1)
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Failed getting institution.",
-                                                 Detail = "The id of an institution can't be smaller than 1",
-                                                 Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
-                                             };
+                     {
+                         Title = "Failed getting institution.",
+                         Detail = "The id of an institution can't be smaller than 1",
+                         Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                     };
                     return BadRequest(problem);
                 }
 
@@ -247,11 +247,11 @@ namespace API.Controllers
                 if(foundInstitution == null)
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Failed getting institution.",
-                                                 Detail = "The institution could not be found in the database.",
-                                                 Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
-                                             };
+                     {
+                         Title = "Failed getting institution.",
+                         Detail = "The institution could not be found in the database.",
+                         Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                     };
                     return NotFound(problem);
                 }
             }
