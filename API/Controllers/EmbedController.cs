@@ -186,10 +186,7 @@ namespace API.Controllers
 
             string identity = HttpContext.User.GetIdentityId(HttpContext);
             User user = await userService.GetUserByIdentityIdAsync(identity);
-            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
-                                                                     nameof(Defaults.Scopes.EmbedWrite),
-                                                                     nameof(Defaults.Scopes.InstitutionEmbedWrite),
-                                                                     project.UserId);
+            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
             {

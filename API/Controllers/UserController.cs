@@ -154,14 +154,17 @@ namespace API.Controllers
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
         {
             User user = mapper.Map<UserResource, User>(accountResource);
-            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
+            Role registeredUserRole =
+                (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
             user.Role = registeredUserRole;
 
             try
             {
                 userService.Add(user);
                 userService.Save();
-                return Created(nameof(CreateAccountAsync), await GetUser(user.Id));
+                UserResourceResult model =
+                    mapper.Map<User, UserResourceResult>(await userService.GetUserAsync(user.Id));
+                return Created(nameof(CreateAccountAsync), model);
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
