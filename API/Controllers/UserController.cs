@@ -229,6 +229,33 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
+            if(userResource.InstitutionId != null)
+            {
+                int institutionId = userResource.InstitutionId.Value;
+                if(institutionId < 1)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Failed getting institution.",
+                                                 Detail = "The id of an institution can't be smaller than 1",
+                                                 Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                                             };
+                    return BadRequest(problem);
+                }
+
+                Institution foundInstitution = await institutionService.FindAsync(institutionId);
+                if(foundInstitution == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Failed getting institution.",
+                                                 Detail = "The institution could not be found in the database.",
+                                                 Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                                             };
+                    return NotFound(problem);
+                }
+            }
+
             User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
 
