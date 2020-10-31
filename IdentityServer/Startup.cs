@@ -28,18 +28,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Models;
 using Repositories;
 using Services.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-
-
-
-
 
 namespace IdentityServer
 {
@@ -122,60 +116,59 @@ namespace IdentityServer
 
             // sets the authentication schema.
             services.AddAuthentication(options =>
-                    {
-                        options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                    })
+            {
+                options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+            })
                     // Adds Fontys Single Sign On authentication.
                     .AddOpenIdConnect("FHICT", "Fontys", options =>
+                    {
+                        options.ClientId = Config.FfhictOIDC.ClientId;
+                        options.ClientSecret = Config.FfhictOIDC.ClientSecret;
+                        options.Authority = Config.FfhictOIDC.Authority;
+                        options.ResponseType = "code";
+                        options.Scope.Clear();
+
+                        string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
+                        foreach(string scope in scopes)
                         {
-                            options.ClientId = Config.FfhictOIDC.ClientId;
-                            options.ClientSecret = Config.FfhictOIDC.ClientSecret;
-                            options.Authority = Config.FfhictOIDC.Authority;
-                            options.ResponseType = "code";
-                            options.Scope.Clear();
-
-                            string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
-                            foreach(string scope in scopes)
-                            {
-                                options.Scope.Add(scope);
-                            }
-
-                            // Set this flow to get the refresh token.
-                            // options.Scope.Add("offline_access");
-
-                            options.SaveTokens = true;
-                            options.GetClaimsFromUserInfoEndpoint = true;
-
-                            // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
-                            options.Events.OnRedirectToIdentityProvider = async n =>
-                            {
-                                n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
-                                await Task.FromResult(0);
-                            };
+                            options.Scope.Add(scope);
                         }
-                        // Add jwt validation this is so that the DGS can authenticate.
+
+                        // Set this flow to get the refresh token.
+                        // options.Scope.Add("offline_access");
+
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
+
+                        // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
+                        options.Events.OnRedirectToIdentityProvider = async n =>
+                        {
+                            n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
+                            await Task.FromResult(0);
+                        };
+                    }
+                    // Add jwt validation this is so that the DGS can authenticate.
                     ).AddJwtBearer(o =>
                     {
                         o.SaveToken = true;
                         o.Authority = Config.Self.JwtAuthority;
                         o.RequireHttpsMetadata = false;
                         o.TokenValidationParameters = new TokenValidationParameters()
-                                                      {
-                                                          ValidateActor = false,
-                                                          ValidateAudience = false,
-                                                          NameClaimType = "name",
-                                                          RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-                                                      };
+                        {
+                            ValidateActor = false,
+                            ValidateAudience = false,
+                            NameClaimType = "name",
+                            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                        };
                     })
                     .AddCookie();
 
             if(Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
-            }
-            else
+            } else
             {
                 X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 certStore.Open(OpenFlags.ReadOnly);
@@ -237,16 +230,11 @@ namespace IdentityServer
                                                   .CreateScope();
             using IdentityDbContext context = serviceScope.ServiceProvider.GetService<IdentityDbContext>();
             context.Database.Migrate();
-            List<IdentityUser> identityUsers = TestUsers.GetDefaultIdentityUsers();
-            foreach(IdentityUser identityUser in identityUsers.Where(identityUser => !context.IdentityUser.Any(e => e.SubjectId == identityUser.SubjectId)))
+            if(!context.IdentityUser.Any())
             {
-                if(env.IsProduction())
-                {
-                    identityUser.Password = TestUsers.CreateTestUserPassword(identityUser.Username);
-                }
-                context.Add(identityUser);
+                context.IdentityUser.AddRange(TestUsers.GetDefaultIdentityUsers(env.IsProduction()));
+                context.SaveChanges();
             }
-            context.SaveChanges();
         }
     }
 }
