@@ -44,6 +44,7 @@ namespace API.Controllers
         private readonly IUserService userService;
         private readonly IRoleService roleService;
         private readonly IAuthorizationHelper authorizationHelper;
+        private readonly IInstitutionService institutionService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
@@ -55,12 +56,14 @@ namespace API.Controllers
         public UserController(IUserService userService,
                               IMapper mapper,
                               IRoleService roleService,
-                              IAuthorizationHelper authorizationHelper)
+                              IAuthorizationHelper authorizationHelper,
+                              IInstitutionService institutionService)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
             this.authorizationHelper = authorizationHelper;
+            this.institutionService = institutionService;
         }
 
         /// <summary>
@@ -146,13 +149,43 @@ namespace API.Controllers
         /// <param name="accountResource">The account resource which is used for creating the account.</param>
         /// <returns>This method returns the created user as user resource result.</returns>
         /// <response code="200">This endpoint returns the created user.</response>
-        /// <response code="400">The 400 Bad Request status code is return when saving the user to the database failed.</response>
+        /// <response code="400">The 400 Bad Request status code is return when the institution id is invalid
+        /// or when saving the user to the database failed.</response>
+        /// <response code="404">The institution with the specified institution id could not be found.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
         {
+            if(accountResource.InstitutionId != null)
+            {
+                int institutionId = accountResource.InstitutionId.Value;
+                if(institutionId < 1)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The id of an institution can't be smaller than 1",
+                        Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                    };
+                    return BadRequest(problem);
+                }
+
+                Institution foundInstitution = await institutionService.FindAsync(institutionId);
+                if(foundInstitution == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The institution could not be found in the database.",
+                        Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                    };
+                    return NotFound(problem);
+                }
+            }
+
             User user = mapper.Map<UserResource, User>(accountResource);
             Role registeredUserRole =
                 (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
