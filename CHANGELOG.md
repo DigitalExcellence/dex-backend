@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added data officer role and CRUD functionalities for institutions - [#265](https://github.com/DigitalExcellence/dex-backend/issues/265)
+
 ### Changed
 
 ### Deprecated
