@@ -76,7 +76,13 @@ namespace Services.Tests
                 "RoleRead",
                 "RoleWrite",
                 "EmbedWrite",
-                "EmbedRead"
+                "EmbedRead",
+                "InstitutionUserRead",
+                "InstitutionUserWrite",
+                "InstitutionProjectWrite",
+                "InstitutionEmbedWrite",
+                "InstitutionRead",
+                "InstitutionWrite",
             };
             List<string> retrievedScopes = Service.GetValidScopes();
             Assert.AreEqual(currentScopes,retrievedScopes);

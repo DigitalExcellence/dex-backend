@@ -101,7 +101,7 @@ namespace Models.Defaults
             public const string InstitutionUserWrite = "user:institution-write";
 
             [Description("This scope gives write access to user roles for other users within their institution to the Project namespace.")]
-            public const string InstitutionProjectWrite = "user:institution-write";
+            public const string InstitutionProjectWrite = "project:institution-write";
 
             [Description("This scope gives write access to user roles for other users within their institution to the Embed namespace.")]
             public const string InstitutionEmbedWrite = "embed:institution-write";
