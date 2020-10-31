@@ -222,7 +222,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.InstitutionWrite))]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> DeleteInsitution(int institutionId)
+        public async Task<IActionResult> DeleteInstitution(int institutionId)
         {
             Institution institution = await institutionService.FindAsync(institutionId);
             if(institution == null)
