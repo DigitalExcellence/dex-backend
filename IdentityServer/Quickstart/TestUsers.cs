@@ -37,8 +37,9 @@ namespace IdentityServer
         /// <summary>
         /// Gets the default users.
         /// </summary>
+        /// <param name="isProduction">if set to <c>true</c> [is production].</param>
         /// <returns>The list of default identity users.</returns>
-        public static List<IdentityUser> GetDefaultIdentityUsers()
+        public static List<IdentityUser> GetDefaultIdentityUsers(bool isProduction)
         {
             List<IdentityUser> users = new List<IdentityUser>()
             {
@@ -84,7 +85,6 @@ namespace IdentityServer
                  },
                  new IdentityUser
                  {
-
                      SubjectId = "954654861",
                      Username = "john",
                      Password = LoginHelper.GetHashPassword("john"),
@@ -93,7 +93,7 @@ namespace IdentityServer
                      Lastname = "Smith",
                      Email = "johnSmith@email.com"
                  },
-                  new IdentityUser
+                 new IdentityUser
                  {
                      SubjectId = "14785236923",
                      Username = "dex",
@@ -102,8 +102,7 @@ namespace IdentityServer
                      Firstname = "DeX",
                      Lastname = "User",
                      Email = "dex@dex.software"
-                 },
-
+                 }
             };
             if(isProduction)
             {
@@ -118,24 +117,7 @@ namespace IdentityServer
                     Log.Logger.Information("{0} has the new password: {1}", testUser.Username, generateSecurePassword);
                 }
             }
-        return users;
-        }
-
-        /// <summary>
-        /// Creates a password for a test user and logs it into the console.
-        /// </summary>
-        /// <returns>The hashed password/.</returns>
-        public static string CreateTestUserPassword(string userName)
-        {
-            // Generate a secure password
-            string securePassword = GenerateSecurePassword();
-
-            // Hash it
-            string password = LoginHelper.GetHashPassword(securePassword);
-
-            // Notify the user
-            Log.Logger.Information("{0} has the new password: {1}", userName, securePassword);
-            return password;
+            return users;
         }
 
         /// <summary>
