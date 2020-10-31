@@ -137,10 +137,10 @@ namespace Data.Helpers
         public static Institution SeedInstitution()
         {
             Institution institution = new Institution
-                                      {
-                                          Name = "Fontys",
-                                          Description = "Description for Fontys"
-                                      };
+              {
+                  Name = "Fontys",
+                  Description = "Description for Fontys"
+              };
             return institution;
         }
         /// <summary>
@@ -161,7 +161,11 @@ namespace Data.Helpers
 
             return user;
         }
-
+        /// <summary>
+        /// This method seeds the data officer user.
+        /// </summary>
+        /// <param name="roles">This variable contains the roles that exist.</param>
+        /// <returns>This method returns the data officer role that will be seeded.</returns>
         public static User SeedDataOfficerUser(List<Role> roles)
         {
             Role dataOfficerRole = roles.Find(role => role.Name == nameof(Defaults.Roles.DataOfficer));
