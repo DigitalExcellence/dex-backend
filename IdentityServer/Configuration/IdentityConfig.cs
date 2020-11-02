@@ -51,6 +51,7 @@ namespace IdentityServer.Configuration
                         new ApiScope(nameof(Defaults.Scopes.HighlightRead)),
                         new ApiScope(nameof(Defaults.Scopes.EmbedWrite)),
                         new ApiScope(nameof(Defaults.Scopes.EmbedRead)),
+                        new ApiScope("dex-api")
                     };
         }
 
@@ -67,7 +68,8 @@ namespace IdentityServer.Configuration
                         nameof(Defaults.Scopes.HighlightWrite),
                         nameof(Defaults.Scopes.HighlightRead),
                         nameof(Defaults.Scopes.EmbedWrite),
-                        nameof(Defaults.Scopes.EmbedRead)
+                        nameof(Defaults.Scopes.EmbedRead),
+                        "dex-api"
                     }
                 }
             };
@@ -94,7 +96,8 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.HighlightRead),
                                nameof(Defaults.Scopes.HighlightWrite),
                                nameof(Defaults.Scopes.EmbedWrite),
-                               nameof(Defaults.Scopes.EmbedRead)
+                               nameof(Defaults.Scopes.EmbedRead),
+                               "dex-api"
                            },
                            Claims = new List<ClientClaim>
                                     {
@@ -156,7 +159,7 @@ namespace IdentityServer.Configuration
                            {
                                 IdentityServerConstants.StandardScopes.OpenId,
                                 IdentityServerConstants.StandardScopes.Profile,
-                                "dex-api",
+                                "dex-api"
                             },
                        }
                    };
