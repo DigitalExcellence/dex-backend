@@ -113,9 +113,9 @@ namespace IdentityServer
                     options.IssuerUri = Config.Self.IssuerUri;
                 }
             });
-
             builder.AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources());
-            builder.AddInMemoryApiResources(IdentityConfig.Apis);
+            builder.AddInMemoryApiScopes(IdentityConfig.GetApiScopes());
+            //builder.AddInMemoryApiResources(IdentityConfig.Apis);
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             services.AddSingleton(Config);
 
@@ -217,7 +217,7 @@ namespace IdentityServer
             }
 
             app.UseStaticFiles();
-            app.UseCors("dex-api");
+            app.UseCors("AllowAll");
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
