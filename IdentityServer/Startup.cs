@@ -217,7 +217,7 @@ namespace IdentityServer
             }
 
             app.UseStaticFiles();
-            app.UseCors("AllowAll");
+            app.UseCors("dex-api");
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
