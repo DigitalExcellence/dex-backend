@@ -40,24 +40,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateCallToActionForGraduatingUsers()
         {
-            List<User> users = userService.GetAllExpectedGraduatingUsers();
-            IEnumerable<CallToAction> allCallToActions = await callToActionService.GetAll();
-            DateTime now = DateTime.Now;
-            DateTime max = DateTime.Now.AddMonths(6);
-
-            List<CallToAction> callToActions = new List<CallToAction>();
-            foreach(CallToAction callToAction in users.Where(user => user.ExpectedGraduationDate <= max &&
-                                                                     user.ExpectedGraduationDate >= now)
-                                                      .SelectMany(user => from cta in allCallToActions where user.Id == cta.UserId && cta.Type == 0
-                                                                          select new CallToAction(user.Id, CallToActionType.graduationReminder)))
-            {
-                callToActions.Add(callToAction);
-
-                callToActionService.Add(callToAction);
-            }
-            //TODO: Remove this
-            callToActions.Add(new CallToAction(1, CallToActionType.graduationReminder));
-            callToActionService.Save();
+            List<CallToAction> callToActions = callToActionService.GetAllGraduateCallToActions();
 
             return Ok(callToActions);
         }
