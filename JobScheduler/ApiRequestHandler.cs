@@ -9,6 +9,7 @@ using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace JobScheduler
 {
@@ -16,12 +17,12 @@ namespace JobScheduler
     {
 
         private readonly RestClient apiClient;
-        private readonly string accessToken;
+        private string accessToken;
+        private List<CallToAction> callToActions;
 
-        public ApiRequestHandler(Uri baseUrlApi, string accessToken)
+        public ApiRequestHandler(Uri baseUrlApi)
         {
-           apiClient = new RestClient(baseUrlApi);
-           this.accessToken = accessToken;
+            apiClient = new RestClient(baseUrlApi);
         }
 
         public string GetToken()
@@ -34,7 +35,7 @@ namespace JobScheduler
 
             IRestResponse identityServerResponse = restClient.Execute(restRequest);
 
-            if (!identityServerResponse.IsSuccessful)
+            if(!identityServerResponse.IsSuccessful)
             {
 
                 Log.Logger.Error("Something went wrong: " + identityServerResponse.ErrorMessage);
@@ -44,22 +45,34 @@ namespace JobScheduler
         }
 
 
-            public List<User> GetExpectedGraduationUsers()
-        {
-            RestRequest restRequest = new RestRequest("/CallToAction");
-            restRequest.AddParameter("Authorization",
+        public List<CallToAction> GetExpectedGraduationUsers() {
+        
+            RestRequest restRequest = new RestRequest("api/CallToAction") { Method = Method.GET };
+
+            if(accessToken == null)
+            {
+                
+                dynamic data = JObject.Parse(GetToken());
+                accessToken = data.access_token;
+
+                GetExpectedGraduationUsers();
+            }
+            else
+            {
+                restRequest.AddParameter("Authorization",
                                  string.Format("Bearer " + accessToken),
                                  ParameterType.HttpHeader);
-            IRestResponse response = apiClient.Execute(restRequest);
-            if(!response.IsSuccessful)
-            {
-                // TODO: get new bearer token and try again.
-                throw new NotImplementedException();
-                
+                IRestResponse response = apiClient.Execute(restRequest);
+
+                if(!response.IsSuccessful)
+                {
+                    // TODO: maximum ammount of attempts to prevent endless trying again loop
+                    accessToken = GetToken();
+                    GetExpectedGraduationUsers();
+                }
+                callToActions = JsonConvert.DeserializeObject<List<CallToAction>>(response.Content);
             }
-
-            return JsonConvert.DeserializeObject<List<User>>(response.Content);
+            return callToActions;
         }
-
     }
 }

@@ -55,6 +55,8 @@ namespace API.Controllers
 
                 callToActionService.Add(callToAction);
             }
+            //TODO: Remove this
+            callToActions.Add(new CallToAction(1, CallToActionType.graduationReminder));
             callToActionService.Save();
 
             return Ok(callToActions);
