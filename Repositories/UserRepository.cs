@@ -182,9 +182,6 @@ namespace Repositories
 
          async Task<List<User>> IUserRepository.GetAllExpectedGraduatingUsers()
         {
-            DateTime min = DateTime.Now;
-            DateTime max = DateTime.Now.AddMonths(6);
-
             List<User> users = (List<User>) await GetAll();
 
             return users;
