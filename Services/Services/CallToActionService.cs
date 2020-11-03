@@ -30,7 +30,7 @@ namespace Services.Services
 
     public interface ICallToActionService : IService<CallToAction>
     {
-        public List<CallToAction> GetAllGraduateCallToActions();
+        public Task<List<CallToAction>> GetAllGraduateCallToActions();
     }
 
     public class CallToActionService : Service<CallToAction>, ICallToActionService
@@ -45,10 +45,10 @@ namespace Services.Services
 
         
 
-        List<CallToAction> ICallToActionService.GetAllGraduateCallToActions()
+        async Task<List<CallToAction>> ICallToActionService.GetAllGraduateCallToActions()
         {
             List<User> users = userService.GetAllExpectedGraduatingUsers();
-            IEnumerable<CallToAction> allCallToActions = (IEnumerable<CallToAction>) Repository.GetAll();
+            IEnumerable<CallToAction> allCallToActions = await Repository.GetAll();
             DateTime now = DateTime.Now;
             DateTime max = DateTime.Now.AddMonths(6);
 

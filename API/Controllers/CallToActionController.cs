@@ -40,7 +40,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateCallToActionForGraduatingUsers()
         {
-            List<CallToAction> callToActions = callToActionService.GetAllGraduateCallToActions();
+            List<CallToAction> callToActions = await callToActionService.GetAllGraduateCallToActions();
 
             return Ok(callToActions);
         }
