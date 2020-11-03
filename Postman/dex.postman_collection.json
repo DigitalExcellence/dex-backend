@@ -899,7 +899,7 @@
 												{
 													"key": "File",
 													"type": "file",
-													"src": "Postman/Postman/testimage.png"
+													"src": "Postman/testimage.png"
 												},
 												{
 													"key": "ProjectId",
