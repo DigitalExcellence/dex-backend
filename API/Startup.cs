@@ -212,7 +212,7 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Defaults.Path.filePath = env.WebRootPath + "Resources\\";
+            Defaults.Path.filePath = env.WebRootPath + "\\Resources\\";
 
             UpdateDatabase(app, env);
             if(env.IsDevelopment())

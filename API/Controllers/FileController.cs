@@ -16,6 +16,7 @@
 */
 
 using API.Extensions;
+using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;

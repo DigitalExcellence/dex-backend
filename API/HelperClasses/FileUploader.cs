@@ -1,23 +1,13 @@
-using AngleSharp;
-using AngleSharp.Io;
-using API.Resources;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Models.Defaults;
 using Models.Exceptions;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using File = Models.File;
 
-namespace API.Extensions
+namespace API.HelperClasses
 {
     
 
@@ -52,7 +42,6 @@ namespace API.Extensions
         /// <summary>
         /// File Uploader
         /// </summary>
-        /// <param name="env"></param>
         public FileUploader()
         {
             uploadPath = Defaults.Path.filePath;
@@ -88,11 +77,11 @@ namespace API.Extensions
         /// <returns> Bool which tells if file is deleted successfully or not </returns>
         public void DeleteFileFromDirectory(File file)
         {
-            if(System.IO.File.Exists(Path.Combine(uploadPath, file.Name)))
-            {
-                System.IO.File.Delete(Path.Combine(uploadPath, file.Name));
+            if(System.IO.File.Exists(uploadPath + file.Name)) {
+                System.IO.File.Delete(uploadPath + file.Name);
                 return;
             }
+
             throw new FileNotFoundException(file.Name);
         }
 
