@@ -54,16 +54,32 @@ namespace Services.Services
 
             List<CallToAction> callToActions = new List<CallToAction>();
 
-            foreach(CallToAction callToAction in users.Where(user => user.ExpectedGraduationDate <= max &&
-                                                                     user.ExpectedGraduationDate >= now)
-                                                      .SelectMany(user => from cta in allCallToActions
-                                                                          where user.Id == cta.UserId && cta.Type == 0
-                                                                          select new CallToAction(user.Id, CallToActionType.graduationReminder)))
+            foreach(User u in users)
             {
-                callToActions.Add(callToAction);
-
-                Add(callToAction);
+                if(u.ExpectedGraduationDate >= now &&
+                   u.ExpectedGraduationDate <= max)
+                {
+                    bool doesExist = false;
+                    foreach(CallToAction callToAction in allCallToActions)
+                    {
+                        if(u.Id == callToAction.UserId)
+                        {
+                            if(callToAction.Status == CallToActionStatus.open && callToAction.Type == CallToActionType.graduationReminder)
+                            {
+                                callToActions.Add(callToAction);
+                                doesExist = true;
+                            }
+                        }
+                    }
+                    if(!doesExist)
+                    {
+                        CallToAction callToAction = new CallToAction(u.Id, CallToActionType.graduationReminder);
+                        Add(callToAction);
+                        callToActions.Add(callToAction);
+                    }
+                }
             }
+
             Save();
 
             return callToActions;
