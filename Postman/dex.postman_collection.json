@@ -899,7 +899,7 @@
 												{
 													"key": "File",
 													"type": "file",
-													"src": "testimage.png"
+													"src": "Postman/Postman/testimage.png"
 												},
 												{
 													"key": "ProjectId",
@@ -3131,7 +3131,7 @@
 												{
 													"key": "File",
 													"type": "file",
-													"src": "testimage.png"
+													"src": "Postman/testimage.png"
 												}
 											]
 										},
@@ -5233,7 +5233,7 @@
 												{
 													"key": "File",
 													"type": "file",
-													"src": "testimage.png"
+													"src": "Postman/testimage.png"
 												}
 											]
 										},
@@ -7944,7 +7944,7 @@
 												{
 													"key": "File",
 													"type": "file",
-													"src": "testimage.png"
+													"src": "Postman/testimage.png"
 												}
 											]
 										},
@@ -11085,7 +11085,7 @@
 												{
 													"key": "File",
 													"type": "file",
-													"src": "testimage.png"
+													"src": "Postman/testimage.png"
 												}
 											]
 										},
