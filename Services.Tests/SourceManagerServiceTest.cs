@@ -1,5 +1,3 @@
-using Models;
-using Moq;
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
@@ -21,6 +19,8 @@ using NUnit.Framework;
 using Services.Services;
 using Services.Sources;
 using System;
+using Models;
+using Moq;
 
 namespace Services.Tests
 {

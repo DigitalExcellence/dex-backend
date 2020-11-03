@@ -68,7 +68,7 @@ namespace API.Extensions
             services.AddScoped<IInstitutionService, InstitutionService>();
             services.AddScoped<IInstitutionRepository, InstitutionRepository>();
 
-            services.AddTransient<IAuthorizationHelper, AuthorizationHelper>();
+            services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
 
             return services;
         }
