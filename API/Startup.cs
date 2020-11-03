@@ -25,9 +25,11 @@ using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -39,6 +41,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -132,8 +135,10 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
-                            policy => policy.Requirements.Add(
-                                new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
             });
 
             services.AddCors();
@@ -207,6 +212,8 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Defaults.Path.filePath = env.WebRootPath + "\\Resources\\";
+
             UpdateDatabase(app, env);
             if(env.IsDevelopment())
             {
@@ -232,6 +239,8 @@ namespace API
 
             app.UseProblemDetails();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
             app.UseCors(c =>
             {
@@ -243,6 +252,8 @@ namespace API
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            
 
             //UserInfo
             app.UseWhen(context =>
@@ -310,7 +321,6 @@ namespace API
                 o.OAuthClientId(Config.Swagger.ClientId);
             });
 
-            app.UseStaticFiles();
         }
 
         /// <summary>

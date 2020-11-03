@@ -15,44 +15,38 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
+using Repositories;
+using Services.Base;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace API.Resources
+namespace Services.Services
 {
     /// <summary>
-    ///     The view model of a project
+    /// The file service interface.
     /// </summary>
-    public class ProjectResource
+    public interface IFileService : IService<File>
     {
-        /// <summary>
-        ///     This gets or sets the Title
-        /// </summary>
-        public string Name { get; set; }
 
-        /// <summary>
-        ///     This gets or sets the Description
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Short description of the project
-        /// </summary>
-        public string ShortDescription { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Uri
-        /// </summary>
-        public string Uri { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the collaborators
-        /// </summary>
-        public ICollection<CollaboratorResource> Collaborators { get; set; }
-
-        /// <summary>
-        /// This gets or sets the file id
-        /// </summary>
-        public int FileId { get; set; }
     }
+
+    public class FileService : Service<File>, IFileService
+    {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileService"/> class.
+        /// </summary>
+        /// <param name="repository">The repository.</param>
+        public FileService(IFileRepository repository) : base(repository) { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected new IFileRepository Repository => (IFileRepository) base.Repository;
+
+
+    }
+
 }

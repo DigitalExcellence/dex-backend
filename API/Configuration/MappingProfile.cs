@@ -57,6 +57,10 @@ namespace API.Configuration
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
 
+            CreateMap<FileResourceResult, File>();
+            CreateMap<File, FileResourceResult>().ForMember(e => e.UploaderUserId,
+                                                            opt => opt.MapFrom(e => e.Uploader.Id));
+
             CreateMap<RoleScopeResource, RoleScope>();
             CreateMap<RoleScope, RoleScopeResource>();
         }

@@ -90,6 +90,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.FileWrite))
                 }
             };
             roles.Add(administratorRole);

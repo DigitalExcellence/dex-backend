@@ -55,6 +55,10 @@ namespace API.Resources
         ///     Get or Set the owner of the project
         /// </summary>
         public LimitedUserResourceResult User { get; set; }
+        /// <summary>
+        /// This gets or set the file of the project
+        /// </summary>
+        public FileResourceResult ProjectIcon { get; set; }
     }
 
 }

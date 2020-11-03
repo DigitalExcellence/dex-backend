@@ -16,50 +16,35 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Models
+namespace API.Resources
 {
-
-    public class Project
+    /// <summary>
+    /// File resource resource result
+    /// </summary>
+    /// <seealso cref="API.Resources.FileResourceResult" />
+    public class FileResourceResult
     {
-
-        public Project()
-        {
-            Collaborators = new List<Collaborator>();
-        }
-
+        /// <summary>
+        /// Id of File
+        /// </summary>
         public int Id { get; set; }
-
-        [Required]
-        public User User { get; set; }
-
-        public int UserId { get; set; }
-
-        [Required]
+        /// <summary>
+        /// Path of file
+        /// </summary>
+        public string Path { get; set; }
+        /// <summary>
+        /// Upload Date and time
+        /// </summary>
+        public DateTime UploadDateTime { get; set; }
+        /// <summary>
+        /// File name
+        /// </summary>
         public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        [Required]
-        public string ShortDescription { get; set; }
-
-        public List<Collaborator> Collaborators { get; set; }
-
-        [Required]
-        public string Uri { get; set; }
-
-        [Required]
-        public DateTime Created { get; set; }
-
-        [Required]
-        public DateTime Updated { get; set; }
-
-        public int? ProjectIconId { get; set; }
-
-        public File ProjectIcon { get; set; }
+        /// <summary>
+        /// User Id that uploaded the file
+        /// </summary>
+        public int UploaderUserId { get; set; }
 
     }
-
 }

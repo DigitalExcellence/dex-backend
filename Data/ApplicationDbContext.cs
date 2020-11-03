@@ -75,6 +75,15 @@ namespace Data
         /// The role.
         /// </value>
         public DbSet<Role> Role { get; set; }
+        /// <summary>
+        /// Gets or sets the file.
+        /// </summary>
+        /// <value>
+        /// The file.
+        /// </value>
+        public DbSet<File> File { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

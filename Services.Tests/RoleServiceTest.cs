@@ -61,7 +61,8 @@ namespace Services.Tests
                 "RoleRead",
                 "RoleWrite",
                 "EmbedWrite",
-                "EmbedRead"
+                "EmbedRead",
+                "FileWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
             Assert.AreEqual(currentScopes,retrievedScopes);
@@ -84,9 +85,10 @@ namespace Services.Tests
                                              "RoleRead",
                                              "RoleWrite",
                                              "EmbedWrite",
-                                             "EmbedRead"
+                                             "EmbedRead",
+                                             "FileWrite"
                                          };
-            bool isValidScope = Service.isValidScope("RoleRead");
+            bool isValidScope = Service.IsValidScope("RoleRead");
 
             Assert.IsTrue(isValidScope);
         }
@@ -97,7 +99,7 @@ namespace Services.Tests
         [Test]
         public void isValidScope_false()
         {
-            bool isValidScope = Service.isValidScope("role:read");
+            bool isValidScope = Service.IsValidScope("role:read");
 
             Assert.IsFalse(isValidScope);
         }

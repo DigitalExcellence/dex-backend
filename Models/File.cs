@@ -16,50 +16,29 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
-
-    public class Project
+    public class File
     {
+        public File() { }
 
-        public Project()
+        public File(string path, string name, User uploader, DateTime uploadDateTime)
         {
-            Collaborators = new List<Collaborator>();
+            Path = path;
+            Name = name;
+            Uploader = uploader;
+            UploadDateTime = uploadDateTime;
         }
 
         public int Id { get; set; }
-
         [Required]
-        public User User { get; set; }
-
-        public int UserId { get; set; }
-
-        [Required]
+        public string Path { get; set; }
+        public DateTime UploadDateTime { get; set; }
         public string Name { get; set; }
-
-        public string Description { get; set; }
-
         [Required]
-        public string ShortDescription { get; set; }
-
-        public List<Collaborator> Collaborators { get; set; }
-
-        [Required]
-        public string Uri { get; set; }
-
-        [Required]
-        public DateTime Created { get; set; }
-
-        [Required]
-        public DateTime Updated { get; set; }
-
-        public int? ProjectIconId { get; set; }
-
-        public File ProjectIcon { get; set; }
+        public User Uploader { get; set; }
 
     }
-
 }
