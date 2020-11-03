@@ -34,6 +34,13 @@ namespace Models.Defaults
 
         }
 
+        public class Path
+        {
+
+            public static string filePath;
+
+        }
+
         public static class Roles
         {
 

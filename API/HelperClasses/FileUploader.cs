@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Models.Defaults;
 using Models.Exceptions;
 using Serilog;
 using System;
@@ -52,9 +53,9 @@ namespace API.Extensions
         /// File Uploader
         /// </summary>
         /// <param name="env"></param>
-        public FileUploader(IWebHostEnvironment env)
+        public FileUploader()
         {
-            uploadPath = Path.Combine(env.WebRootPath, "Resources\\");
+            uploadPath = Defaults.Path.filePath;
         }
 
         /// <summary>
