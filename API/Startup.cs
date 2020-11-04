@@ -135,7 +135,22 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionEmbedWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionEmbedWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionProjectWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionProjectWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserRead),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
+                    
 
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
@@ -253,8 +268,6 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            
-
             //UserInfo
             app.UseWhen(context =>
                             context.User.Identities.Any(i => i.IsAuthenticated),
@@ -292,7 +305,8 @@ namespace API
                                                       Name = "Developer",
                                                       Email = "Developer@DEX.com",
                                                       IdentityId = identityId,
-                                                      Role = registeredUserRole
+                                                      Role = registeredUserRole,
+                                                      InstitutionId = 1
                                                   };
                                         userService.Add(newUser);
                                     } else
@@ -350,9 +364,14 @@ namespace API
 
                 if(!env.IsProduction())
                 {
+                    // Seed institutions
+                    context.Institution.Add(Seed.SeedInstitution());
+                    context.SaveChanges();
+
                     //Seed random users
                     context.User.Add(Seed.SeedPrUser(roles));
                     context.User.AddRange(Seed.SeedUsers(roles));
+                    context.User.Add(Seed.SeedDataOfficerUser(roles));
                     context.SaveChanges();
                 }
             }

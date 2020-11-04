@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -51,6 +51,7 @@ namespace Models.Defaults
             public const string RegisteredUser = "RegisteredUser";
             public const string PrUser = "PrUser";
             public const string Administrator = "Administrator";
+            public const string DataOfficer = "DataOfficer";
 
         }
 
@@ -99,6 +100,24 @@ namespace Models.Defaults
 
             [Description("This scope gives write access to the embed namespace")]
             public const string EmbedRead = "embed:read";
+
+            [Description("This scope gives read access to user roles for other users within their institution to the User namespace.")]
+            public const string InstitutionUserRead = "user:institution-read";
+
+            [Description("This scope gives write access to user roles for other users within their institution to the User namespace.")]
+            public const string InstitutionUserWrite = "user:institution-write";
+
+            [Description("This scope gives write access to user roles for other users within their institution to the Project namespace.")]
+            public const string InstitutionProjectWrite = "project:institution-write";
+
+            [Description("This scope gives write access to user roles for other users within their institution to the Embed namespace.")]
+            public const string InstitutionEmbedWrite = "embed:institution-write";
+
+            [Description("This scope gives read access to the Insitution namespace.")]
+            public const string InstitutionRead = "institution:read";
+
+            [Description("This scope gives write access to the Insitution namespace.")]
+            public const string InstitutionWrite = "institution:write";
 
             [Description("This scope gives write access to the file namespace")]
             public const string FileWrite = "file:write";

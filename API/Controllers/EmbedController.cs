@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
@@ -27,9 +28,7 @@ using Serilog;
 using Services.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -47,6 +46,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IAuthorizationHelper authorizationHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbedController"/> class
@@ -55,12 +55,18 @@ namespace API.Controllers
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
-        public EmbedController(IEmbedService embedService, IMapper mapper, IProjectService projectService, IUserService userService)
+        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        public EmbedController(IEmbedService embedService,
+                               IMapper mapper,
+                               IProjectService projectService,
+                               IUserService userService,
+                               IAuthorizationHelper authorizationHelper)
         {
             this.embedService = embedService;
             this.mapper = mapper;
             this.projectService = projectService;
             this.userService = userService;
+            this.authorizationHelper = authorizationHelper;
         }
 
         /// <summary>
@@ -83,7 +89,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="guid">The unique identifier which is used for searching the embedded project.</param>
         /// <returns>This method returns the project resource result.</returns>
-        /// <response code="200">This endpoint returns a embedded project with the specified guid.</response>
+        /// <response code="200">This endpoint returns an embedded project with the specified guid.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the guid is not specified.</response>
         /// <response code="404">The 404 Not Found status code is returned when no project could be
         /// found with the specified guid.</response>
@@ -179,8 +185,8 @@ namespace API.Controllers
             }
 
             string identity = HttpContext.User.GetIdentityId(HttpContext);
-            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
             User user = await userService.GetUserByIdentityIdAsync(identity);
+            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
             {
@@ -253,7 +259,11 @@ namespace API.Controllers
             }
 
             string identity = HttpContext.User.GetIdentityId(HttpContext);
-            bool isAllowed = userService.UserHasScope(identity, nameof(Defaults.Scopes.EmbedWrite));
+            User user = await userService.GetUserByIdentityIdAsync(identity);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.EmbedWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionEmbedWrite),
+                                                                     embeddedProject.UserId);
 
             if(!(embeddedProject.User.IdentityId == identity || isAllowed))
             {

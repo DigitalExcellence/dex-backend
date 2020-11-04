@@ -63,6 +63,9 @@ namespace API.Configuration
 
             CreateMap<RoleScopeResource, RoleScope>();
             CreateMap<RoleScope, RoleScopeResource>();
+
+            CreateMap<InstitutionResource, Institution>();
+            CreateMap<Institution, InstitutionResourceResult>();
         }
     }
 }

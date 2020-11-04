@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201026125836_InstitutionAddedForUser")]
+    partial class InstitutionAddedForUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,33 +67,6 @@ namespace _4_Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("EmbeddedProject");
-                });
-
-            modelBuilder.Entity("Models.File", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UploadDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UploaderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UploaderId");
-
-                    b.ToTable("File");
                 });
 
             modelBuilder.Entity("Models.Highlight", b =>
@@ -156,9 +131,6 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectIconId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ShortDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -174,8 +146,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectIconId");
 
                     b.HasIndex("UserId");
 
@@ -281,15 +251,6 @@ namespace _4_Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.File", b =>
-                {
-                    b.HasOne("Models.User", "Uploader")
-                        .WithMany()
-                        .HasForeignKey("UploaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Models.Highlight", b =>
                 {
                     b.HasOne("Models.Project", "Project")
@@ -301,10 +262,6 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.Project", b =>
                 {
-                    b.HasOne("Models.File", "ProjectIcon")
-                        .WithMany()
-                        .HasForeignKey("ProjectIconId");
-
                     b.HasOne("Models.User", "User")
                         .WithMany("Projects")
                         .HasForeignKey("UserId")

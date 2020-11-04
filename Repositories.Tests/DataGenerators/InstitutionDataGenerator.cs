@@ -18,31 +18,20 @@
 using Bogus;
 using Models;
 using Repositories.Tests.DataGenerators.Base;
-using System.Collections.Generic;
 
 namespace Repositories.Tests.DataGenerators
 {
-    /// <summary>
-    /// FakeDataGenerator for the roles
-    /// </summary>
-    public class RoleDataGenerator : FakeDataGenerator<Role>
-    {
-        /// <summary>
-        /// Initializes the RoleDataGenerator
-        /// and define dataGenerator options
-        /// </summary>
-        public RoleDataGenerator()
-        {
-            List<RoleScope> roleScopes = new List<RoleScope>();
-            for(int i = 0; i < 10; i++)
-            {
-                RoleScope roleScope = new RoleScope(new Faker().Random.String2(10));
-                roleScopes.Add(roleScope);
-            }
 
-            Faker = new Faker<Role>()
-                    .RuleFor(role => role.Scopes, roleScopes)
-                    .RuleFor(role => role.Name, faker => faker.Random.String2(10));
+    public class InstitutionDataGenerator : FakeDataGenerator<Institution>
+    {
+
+        public InstitutionDataGenerator()
+        {
+            Faker = new Faker<Institution>()
+                    .RuleFor(institution => institution.Name, faker => faker.Company.CompanyName())
+                    .RuleFor(institution => institution.Description, faker => faker.Company.CatchPhrase());
         }
+
     }
+
 }
