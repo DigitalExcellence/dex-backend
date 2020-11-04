@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
@@ -42,6 +43,8 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly IAuthorizationHelper authorizationHelper;
+        private readonly IInstitutionService institutionService;
         private readonly IProjectService projectService;
         private readonly IUserUserService userUserService;
         /// <summary>
@@ -50,13 +53,20 @@ namespace API.Controllers
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
-        /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
-        /// <param name="userUserService">The user service which is used to communicate with the logic layer.</param>
-        public UserController(IUserService userService, IMapper mapper, IRoleService roleService, IProjectService projectService,IUserUserService userUserService)
+        /// <param name="institutionService">The institution service which is used to communicate with the logic layer.</param>
+        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        public UserController(IUserService userService,
+                              IMapper mapper,
+                              IRoleService roleService,
+                              IAuthorizationHelper authorizationHelper,
+                              IInstitutionService institutionService,
+                              IUserUserService userUserService)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
+            this.authorizationHelper = authorizationHelper;
+            this.institutionService = institutionService;
             this.projectService = projectService;
             this.userUserService = userUserService;
         }
@@ -97,12 +107,21 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the user id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpGet("{userId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
+        [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUser(int userId)
         {
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
+                                                               nameof(Defaults.Scopes.UserRead),
+                                                               nameof(Defaults.Scopes.InstitutionUserRead),
+                                                               userId);
+
+            if(!isAllowed)
+                return Forbid();
+
             if(userId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -129,29 +148,61 @@ namespace API.Controllers
             return Ok(mapper.Map<User, UserResourceResult>(user));
         }
 
-
         /// <summary>
         /// This method is responsible for creating the account.
         /// </summary>
         /// <param name="accountResource">The account resource which is used for creating the account.</param>
         /// <returns>This method returns the created user as user resource result.</returns>
         /// <response code="200">This endpoint returns the created user.</response>
-        /// <response code="400">The 400 Bad Request status code is return when saving the user to the database failed.</response>
+        /// <response code="400">The 400 Bad Request status code is return when the institution id is invalid
+        /// or when saving the user to the database failed.</response>
+        /// <response code="404">The institution with the specified institution id could not be found.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
         {
+            if(accountResource.InstitutionId != null)
+            {
+                int institutionId = accountResource.InstitutionId.Value;
+                if(institutionId < 1)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The id of an institution can't be smaller than 1",
+                        Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                    };
+                    return BadRequest(problem);
+                }
+
+                Institution foundInstitution = await institutionService.FindAsync(institutionId);
+                if(foundInstitution == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The institution could not be found in the database.",
+                        Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                    };
+                    return NotFound(problem);
+                }
+            }
+
             User user = mapper.Map<UserResource, User>(accountResource);
-            Role registeredUserRole = (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
+            Role registeredUserRole =
+                (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
             user.Role = registeredUserRole;
 
             try
             {
                 userService.Add(user);
                 userService.Save();
-                return Created(nameof(CreateAccountAsync), mapper.Map<User, UserResourceResult>(user));
+                UserResourceResult model =
+                    mapper.Map<User, UserResourceResult>(await userService.GetUserAsync(user.Id));
+                return Created(nameof(CreateAccountAsync), model);
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
@@ -182,6 +233,33 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
         {
+            if(userResource.InstitutionId != null)
+            {
+                int institutionId = userResource.InstitutionId.Value;
+                if(institutionId < 1)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                     {
+                         Title = "Failed getting institution.",
+                         Detail = "The id of an institution can't be smaller than 1",
+                         Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                     };
+                    return BadRequest(problem);
+                }
+
+                Institution foundInstitution = await institutionService.FindAsync(institutionId);
+                if(foundInstitution == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                     {
+                         Title = "Failed getting institution.",
+                         Detail = "The institution could not be found in the database.",
+                         Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                     };
+                    return NotFound(problem);
+                }
+            }
+
             User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
 
@@ -262,7 +340,10 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteAccount(int userId)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.UserWrite));
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.UserWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionUserWrite),
+                                                                     userId);
 
             if(user.Id != userId && !isAllowed)
             {

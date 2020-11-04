@@ -5,6 +5,11 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Configurations\IdentityMigrations\**" />
+    <EmbeddedResource Remove="Configurations\IdentityMigrations\**" />
+    <None Remove="Configurations\IdentityMigrations\**" />
+  </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

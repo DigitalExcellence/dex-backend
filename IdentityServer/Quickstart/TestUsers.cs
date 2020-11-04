@@ -91,7 +91,17 @@ namespace IdentityServer
                      Firstname = "DeX",
                      Lastname = "User",
                      Email = "dex@dex.software"
-                 }
+                 },
+                 new IdentityUser
+                 {
+                     SubjectId = "954654861",
+                     Username = "john",
+                     Password = LoginHelper.GetHashPassword("john"),
+                     Name = "John Smith",
+                     Firstname = "John",
+                     Lastname = "Smith",
+                     Email = "johnSmith@email.com"
+                 },
              };
 
             return users;
