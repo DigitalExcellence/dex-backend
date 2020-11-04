@@ -268,7 +268,7 @@ namespace API.Controllers
             }
 
             // Check if the icon has been changed
-            if(projectResource.FileId != project.ProjectIconId)
+            if(projectResource.FileId != 0 && projectResource.FileId != project.ProjectIconId)
             {
                 // We need to delete the old file.
                 File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
