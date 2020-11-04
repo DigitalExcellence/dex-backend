@@ -45,7 +45,6 @@ namespace API.Controllers
         private readonly IRoleService roleService;
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly IInstitutionService institutionService;
-        private readonly IProjectService projectService;
         private readonly IUserUserService userUserService;
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
@@ -55,6 +54,7 @@ namespace API.Controllers
         /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        /// <param name="userUserService">The user user service is responsible for users that are following users.</param>
         public UserController(IUserService userService,
                               IMapper mapper,
                               IRoleService roleService,
@@ -67,7 +67,6 @@ namespace API.Controllers
             this.roleService = roleService;
             this.authorizationHelper = authorizationHelper;
             this.institutionService = institutionService;
-            this.projectService = projectService;
             this.userUserService = userUserService;
         }
 
