@@ -135,6 +135,7 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionEmbedWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionEmbedWrite))));
@@ -149,7 +150,7 @@ namespace API
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+                    
 
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));

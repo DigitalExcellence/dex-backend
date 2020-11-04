@@ -12184,14 +12184,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/File/{dataOfficerFileId}",
+											"raw": "{{apiUrl}}/api/File/{{dataOfficerFileId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"File",
-												"{dataOfficerFileId}"
+												"{{dataOfficerFileId}}"
 											]
 										}
 									},
