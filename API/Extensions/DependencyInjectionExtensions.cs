@@ -76,6 +76,12 @@ namespace API.Extensions
 
             services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
 
+            services.AddScoped<IUserProjectService, UserProjectService>();
+            services.AddScoped<IUserProjectRepository, UserProjectRepository>();
+
+            services.AddScoped<IUserUserService, UserUserService>();
+            services.AddScoped<IUserUserRepository, UserUserRepository>();
+
             return services;
         }
     }

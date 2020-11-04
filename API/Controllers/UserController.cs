@@ -45,7 +45,7 @@ namespace API.Controllers
         private readonly IRoleService roleService;
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly IInstitutionService institutionService;
-
+        private readonly IUserUserService userUserService;
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
         /// </summary>
@@ -54,17 +54,20 @@ namespace API.Controllers
         /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        /// <param name="userUserService">The user user service is responsible for users that are following users.</param>
         public UserController(IUserService userService,
                               IMapper mapper,
                               IRoleService roleService,
                               IAuthorizationHelper authorizationHelper,
-                              IInstitutionService institutionService)
+                              IInstitutionService institutionService,
+                              IUserUserService userUserService)
         {
             this.userService = userService;
             this.mapper = mapper;
             this.roleService = roleService;
             this.authorizationHelper = authorizationHelper;
             this.institutionService = institutionService;
+            this.userUserService = userUserService;
         }
 
         /// <summary>
@@ -319,6 +322,7 @@ namespace API.Controllers
             userService.Save();
             return Ok();
         }
+       
 
         /// <summary>
         /// This method is responsible for deleting a user account.
@@ -364,6 +368,121 @@ namespace API.Controllers
 
             await userService.RemoveAsync(userId);
             userService.Save();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Follows user
+        /// </summary>
+        /// <param name="followedUserId"></param>
+        /// <returns></returns>
+        [HttpPost("follow/{followedUserId}")]
+        [Authorize]
+        public async Task<IActionResult> FollowUser(int followedUserId)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
+                return NotFound(problem);
+            }
+
+            if(userUserService.CheckIfUserFollows(user.Id, followedUserId))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "You are already following this user",
+                    Detail = "You are already following this user.",
+                    Instance = "6B4D9745-4A18-4516-86A3-466678A3F891"
+                };
+                return Conflict(problem);
+            }
+
+            User followedUser = await userService.FindAsync(followedUserId);
+
+            if(await userService.FindAsync(followedUserId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user",
+                    Detail = "Unable to find user to follow",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
+                return NotFound(problem);
+            }
+            if(user.Id == followedUserId)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "You can not follow yourself",
+                    Detail = "You can not follow yourself",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
+                return NotFound(problem);
+            }
+            UserUser userUser = new UserUser(user,followedUser);
+            userUserService.Add(userUser);
+
+            userUserService.Save();
+            return Ok(mapper.Map<UserUser, UserUserResourceResult>(userUser));
+
+        }
+
+        /// <summary>
+        /// Unfollow user
+        /// </summary>
+        /// <param name="followedUserId"></param>
+        /// <returns></returns>
+        [HttpDelete("follow/{followedUserId}")]
+        [Authorize]
+        public async Task<IActionResult> UnfollowUser(int followedUserId)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
+                return NotFound(problem);
+            }
+
+            if(userUserService.CheckIfUserFollows(user.Id, followedUserId) == false)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "User is not following this user",
+                    Detail = "You are not following this user.",
+                    Instance = "103E6317-4546-4985-8E39-7D9FD3E14E35"
+                };
+                return Conflict(problem);
+            }
+
+            User followedUser= await userService.FindAsync(followedUserId);
+
+            if(await userService.FindAsync(followedUserId) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "ED4E8B26-7D7B-4F5E-BA04-983B5F114FB5"
+                };
+                return NotFound(problem);
+            }
+            UserUser userToUnfollow = new UserUser(user, followedUser);
+            userUserService.Remove(userToUnfollow);
+
+            userUserService.Save();
             return Ok();
         }
     }

@@ -89,6 +89,9 @@ namespace Data
         /// </value>
         public DbSet<File> File { get; set; }
 
+        public DbSet<UserProject> UserProject { get; set; }
+        public DbSet<UserUser> UserUser { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -97,7 +100,6 @@ namespace Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         }
-
     }
 
 }
