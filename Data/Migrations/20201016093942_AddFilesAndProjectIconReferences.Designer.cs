@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201016093942_AddFilesAndProjectIconReferences")]
+    partial class AddFilesAndProjectIconReferences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,24 +123,6 @@ namespace _4_Data.Migrations
                     b.ToTable("Highlight");
                 });
 
-            modelBuilder.Entity("Models.Institution", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Institution");
-                });
-
             modelBuilder.Entity("Models.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -232,9 +216,6 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InstitutionId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
@@ -249,8 +230,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InstitutionId");
 
                     b.HasIndex("RoleId");
 
@@ -323,10 +302,6 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.User", b =>
                 {
-                    b.HasOne("Models.Institution", "Institution")
-                        .WithMany()
-                        .HasForeignKey("InstitutionId");
-
                     b.HasOne("Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");

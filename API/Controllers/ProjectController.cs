@@ -45,21 +45,25 @@ namespace API.Controllers
         private readonly IProjectService projectService;
         private readonly IUserService userService;
         private readonly IAuthorizationHelper authorizationHelper;
+        private readonly IFileService fileService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class
         /// </summary>
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
+        /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
-                                 IAuthorizationHelper authorizationHelper)
+                                 IAuthorizationHelper authorizationHelper,
+                                 IFileService fileService)
         {
             this.projectService = projectService;
             this.userService = userService;
+            this.fileService = fileService;
             this.mapper = mapper;
             this.authorizationHelper = authorizationHelper;
         }
@@ -77,9 +81,9 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllProjects([FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
-                                     {
-                                         Title = "Invalid search request."
-                                     };
+            {
+                Title = "Invalid search request."
+            };
             if(projectFilterParamsResource.Page != null &&
                projectFilterParamsResource.Page < 1)
             {
@@ -111,14 +115,13 @@ namespace API.Controllers
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
 
             ProjectResultsResource resultsResource = new ProjectResultsResource()
-                                                           {
-                                                               Results = results.ToArray(),
-                                                               Count = results.Count(),
-                                                               TotalCount = await projectService.ProjectsCount(projectFilterParams),
-                                                               Page = projectFilterParams.Page,
-                                                               TotalPages =
-                                                                   await projectService.GetProjectsTotalPages(projectFilterParams)
-                                                           };
+            {
+                Results = results.ToArray(),
+                Count = results.Count(),
+                TotalCount = await projectService.ProjectsCount(projectFilterParams),
+                Page = projectFilterParams.Page,
+                TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams)
+            };
 
             return Ok(resultsResource);
         }
@@ -186,7 +189,22 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
+            File file = await fileService.FindAsync(projectResource.FileId);
+
+            if(projectResource.FileId != 0 && file == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                     Title = "File was not found.",
+                     Detail = "The specified file was not found while creating project.",
+                     Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
+                };
+                return BadRequest(problem);
+            }
+
+            project.ProjectIcon = file;
             project.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
             try
             {
                 projectService.Add(project);
@@ -236,6 +254,24 @@ namespace API.Controllers
             }
 
             mapper.Map(projectResource, project);
+            File file = null;
+            if(projectResource.FileId != 0)
+            {
+                file = await fileService.FindAsync(projectResource.FileId);
+                project.ProjectIcon = file;
+            }
+
+            if(projectResource.FileId != 0 && file == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                 {
+                     Title = "File was not found.",
+                     Detail = "The specified file was not found while updating project.",
+                     Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                 };
+                return BadRequest(problem);
+            }
+
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
@@ -270,15 +306,16 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
+            Project project = await projectService.FindAsync(projectId)
+                                                  .ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to delete the project.",
-                    Detail = "The project could not be found in the database.",
-                    Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
-                };
+                 {
+                     Title = "Failed to delete the project.",
+                     Detail = "The project could not be found in the database.",
+                     Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
+                 };
                 return NotFound(problem);
             }
 
@@ -291,15 +328,16 @@ namespace API.Controllers
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to delete the project.",
-                    Detail = "The user is not allowed to delete the project.",
-                    Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
-                };
+                 {
+                     Title = "Failed to delete the project.",
+                     Detail = "The user is not allowed to delete the project.",
+                     Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
+                 };
                 return Unauthorized(problem);
             }
 
-            await projectService.RemoveAsync(projectId).ConfigureAwait(false);
+            await projectService.RemoveAsync(projectId)
+                                .ConfigureAwait(false);
             projectService.Save();
             return Ok();
         }
