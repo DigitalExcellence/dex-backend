@@ -19,35 +19,15 @@ namespace API.Resources
 {
 
     /// <summary>
-    ///     The view model of a user
+    /// Resource Result of the Institution model
     /// </summary>
-    public class UserResource
+    public class InstitutionResourceResult : InstitutionResource
     {
 
         /// <summary>
-        ///     This gets or sets the Name
+        /// Gets or sets a the id of the institution.
         /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the email
-        /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Identity Id from external identity provider
-        /// </summary>
-        public string IdentityId { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the ProfileUrl
-        /// </summary>
-        public string ProfileUrl { get; set; }
-
-        /// <summary>
-        /// This gets or sets the Institution Id.
-        /// </summary>
-        public int? InstitutionId { get; set; }
+        public int Id { get; set; }
 
     }
 

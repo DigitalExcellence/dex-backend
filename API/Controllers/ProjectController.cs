@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
 using API.Extensions;
 using API.HelperClasses;
 using API.Resources;
@@ -44,6 +45,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
+        private readonly IAuthorizationHelper authorizationHelper;
         private readonly IFileService fileService;
         private readonly IFileUploader fileUploader;
 
@@ -54,13 +56,20 @@ namespace API.Controllers
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IFileService fileService, IMapper mapper, IFileUploader fileUploader)
+        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        public ProjectController(IProjectService projectService,
+                                 IUserService userService,
+                                 IMapper mapper,
+                                 IAuthorizationHelper authorizationHelper,
+                                 IFileService fileService,
+                                 IFileUploader fileUploader)
         {
             this.projectService = projectService;
             this.userService = userService;
             this.fileService = fileService;
             this.fileUploader = fileUploader;
             this.mapper = mapper;
+            this.authorizationHelper = authorizationHelper;
         }
 
         /// <summary>
@@ -344,9 +353,11 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            User user = await HttpContext.GetContextUser(userService)
-                                         .ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.ProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
+                                                                     project.UserId);
 
             if(!(project.UserId == user.Id || isAllowed))
             {

@@ -13,41 +13,28 @@
 * You can find a copy of the GNU Lesser General Public License 
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
-*/
+*/  
 
-namespace API.Resources
+namespace Models
 {
 
-    /// <summary>
-    ///     The view model of a user
-    /// </summary>
-    public class UserResource
+    public class Institution
     {
 
         /// <summary>
-        ///     This gets or sets the Name
+        /// Gets or sets a the id of the institution.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the name of the institution.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        ///     This gets or sets the email
+        /// Gets or sets a value for the description of the institution.
         /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Identity Id from external identity provider
-        /// </summary>
-        public string IdentityId { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the ProfileUrl
-        /// </summary>
-        public string ProfileUrl { get; set; }
-
-        /// <summary>
-        /// This gets or sets the Institution Id.
-        /// </summary>
-        public int? InstitutionId { get; set; }
+        public string Description { get; set; }
 
     }
 

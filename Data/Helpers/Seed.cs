@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -76,10 +76,23 @@ namespace Data.Helpers
             };
             roles.Add(prRole);
 
+            Role dataOfficerRole = new Role
+           {
+               Name = nameof(Defaults.Roles.DataOfficer),
+               Scopes = new List<RoleScope>
+                {
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserRead)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
+                }
+           };
+            roles.Add(dataOfficerRole);
+
             Role administratorRole = new Role()
             {
                 Name = nameof(Defaults.Roles.Administrator),
-                Scopes = new List<RoleScope>()
+                Scopes = new List<RoleScope>
                 {
                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                     new RoleScope(nameof(Defaults.Scopes.UserWrite)),
@@ -90,6 +103,8 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionRead)),
+                    new RoleScope(nameof(Defaults.Scopes.InstitutionWrite)),
                     new RoleScope(nameof(Defaults.Scopes.FileWrite))
                 }
             };
@@ -117,6 +132,19 @@ namespace Data.Helpers
             return user;
         }
         /// <summary>
+        /// This method seeds a test institution in the database.
+        /// </summary>
+        /// <returns>Returns the institution that will be seeded in the databse.</returns>
+        public static Institution SeedInstitution()
+        {
+            Institution institution = new Institution
+              {
+                  Name = "Fontys",
+                  Description = "Description for Fontys"
+              };
+            return institution;
+        }
+        /// <summary>
         /// Seeds the pr user.
         /// </summary>
         /// <param name="roles">The roles.</param>
@@ -130,6 +158,25 @@ namespace Data.Helpers
                 Email = "Pr@dex.software",
                 Name = "Pr jerry",
                 Role = prRole
+            };
+
+            return user;
+        }
+        /// <summary>
+        /// This method seeds the data officer user.
+        /// </summary>
+        /// <param name="roles">This variable contains the roles that exist.</param>
+        /// <returns>This method returns the data officer role that will be seeded.</returns>
+        public static User SeedDataOfficerUser(List<Role> roles)
+        {
+            Role dataOfficerRole = roles.Find(role => role.Name == nameof(Defaults.Roles.DataOfficer));
+            User user = new User
+            {
+                IdentityId = "954654861",
+                Email = "dataofficer@dex.software",
+                Name = "data officer Sam",
+                Role = dataOfficerRole,
+                InstitutionId = 1
             };
 
             return user;

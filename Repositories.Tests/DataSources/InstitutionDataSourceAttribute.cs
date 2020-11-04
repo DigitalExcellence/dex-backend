@@ -27,44 +27,44 @@ using System.Linq;
 namespace Repositories.Tests.DataSources
 {
     /// <summary>
-    /// Attribute to generate users
+    /// This class is an attribute used for generating institutions.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
-    public class UserDataSourceAttribute : Attribute, IParameterDataSource
+    public class InstitutionDataSourceAttribute : Attribute, IParameterDataSource
     {
-        private readonly IFakeDataGenerator<User> fakeDataGenerator;
+
+        private readonly IFakeDataGenerator<Institution> fakeDataGenerator;
         private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// Initializes userDataSourceAttribute
+        /// Initializes InstitutionDataSourceAttribute
         /// </summary>
-        public UserDataSourceAttribute()
+        public InstitutionDataSourceAttribute()
         {
-            fakeDataGenerator = new UserDataGenerator();
+            fakeDataGenerator = new InstitutionDataGenerator();
         }
 
-        /// <summary>
-        /// Initializes userDataSourceAttribute
-        /// and setting the amount of users to be generated
-        /// </summary>
-        public UserDataSourceAttribute(int amount) : this()
+        public InstitutionDataSourceAttribute(int amount)
+            : this()
         {
             amountToGenerate = amount;
         }
 
         /// <summary>
-        /// Generate the data and return it
+        /// This method generates the data and returns it;
         /// </summary>
-        /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance</param>
-        /// <returns>The generated data</returns>
+        /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance.</param>
+        /// <returns>This method returns the generated data.</returns>
         public IEnumerable GetData(IParameterInfo parameter)
         {
-            if (amountToGenerate <= 1)
+            if(amountToGenerate <= 1)
             {
                 return new[] { fakeDataGenerator.Generate() };
             }
-            List<User> users = fakeDataGenerator.GenerateRange(amountToGenerate).ToList();
-            return new[] { users };
+            List<Institution> projects = fakeDataGenerator.GenerateRange(amountToGenerate).ToList();
+            return new[] { projects };
         }
+
     }
+
 }
