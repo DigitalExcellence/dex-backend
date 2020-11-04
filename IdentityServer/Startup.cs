@@ -28,12 +28,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Models;
 using Repositories;
 using Services.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+
+
+
+
 
 namespace IdentityServer
 {
@@ -230,11 +236,16 @@ namespace IdentityServer
                                                   .CreateScope();
             using IdentityDbContext context = serviceScope.ServiceProvider.GetService<IdentityDbContext>();
             context.Database.Migrate();
-            if(!context.IdentityUser.Any())
+            List<IdentityUser> identityUsers = TestUsers.GetDefaultIdentityUsers();
+            foreach(IdentityUser identityUser in identityUsers.Where(identityUser => !context.IdentityUser.Any(e => e.SubjectId == identityUser.SubjectId)))
             {
-                context.IdentityUser.AddRange(TestUsers.GetDefaultIdentityUsers(env.IsProduction()));
-                context.SaveChanges();
+                if(env.IsProduction())
+                {
+                    identityUser.Password = TestUsers.CreateTestUserPassword(identityUser.Username);
+                }
+                context.Add(identityUser);
             }
+            context.SaveChanges();
         }
     }
 }
