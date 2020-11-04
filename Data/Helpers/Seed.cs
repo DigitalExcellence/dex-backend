@@ -85,7 +85,6 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.FileWrite))
                 }
            };
             roles.Add(dataOfficerRole);
