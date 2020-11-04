@@ -16,6 +16,7 @@
 */
 
 using API.Extensions;
+using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -44,6 +45,7 @@ namespace API.Controllers
         private readonly IProjectService projectService;
         private readonly IUserService userService;
         private readonly IFileService fileService;
+        private readonly IFileUploader fileUploader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class
@@ -52,11 +54,12 @@ namespace API.Controllers
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
-        public ProjectController(IProjectService projectService, IUserService userService, IFileService fileService, IMapper mapper)
+        public ProjectController(IProjectService projectService, IUserService userService, IFileService fileService, IMapper mapper, IFileUploader fileUploader)
         {
             this.projectService = projectService;
             this.userService = userService;
             this.fileService = fileService;
+            this.fileUploader = fileUploader;
             this.mapper = mapper;
         }
 
@@ -264,6 +267,36 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            // Check if the icon has been changed
+            if(projectResource.FileId != project.ProjectIconId)
+            {
+                // We need to delete the old file.
+                File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                try
+                {
+                    // Remove the file from the database
+                    await fileService.RemoveAsync(fileToDelete.Id)
+                                        .ConfigureAwait(false);
+                    fileService.Save();
+
+                    // Remove the file from the filesystem
+                    fileUploader.DeleteFileFromDirectory(fileToDelete);
+
+                    return Ok();
+
+                } catch(System.IO.FileNotFoundException)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "File could not be deleted because the path does not exist.",
+                        Detail = "File could not be found.",
+                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
+                    };
+
+                    return NotFound(problem);
+                }
+            }
+
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
@@ -326,9 +359,37 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
+            if(project.ProjectIconId.HasValue)
+            {
+                // We need to delete the old file.
+                File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                try
+                {
+                    // Remove the file from the database
+                    await fileService.RemoveAsync(fileToDelete.Id)
+                                        .ConfigureAwait(false);
+                    fileService.Save();
+
+                    // Remove the file from the filesystem
+                    fileUploader.DeleteFileFromDirectory(fileToDelete);
+
+                } catch(System.IO.FileNotFoundException)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "File could not be deleted because the path does not exist.",
+                        Detail = "File could not be found.",
+                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
+                    };
+
+                    return NotFound(problem);
+                }
+            }
+
             await projectService.RemoveAsync(projectId)
                                 .ConfigureAwait(false);
             projectService.Save();
+
             return Ok();
         }
     }
