@@ -180,11 +180,16 @@ namespace Repositories
                 .SingleOrDefault(r => r.Role.Id == role.Id) != null;
         }
 
-         async Task<List<User>> IUserRepository.GetAllExpectedGraduatingUsers()
+        public async Task<List<User>> GetAllExpectedGraduatingUsers()
         {
-            List<User> users = (List<User>) await GetAll();
+            DateTime now = DateTime.Now;
+            DateTime max = DateTime.Now.AddMonths(6);
 
-            return users;
+            return GetDbSet<User>()
+                           .Where(u => u.ExpectedGraduationDate >= now && u.ExpectedGraduationDate <= max)
+                           .ToList();
         }
+
+        
     }
 }

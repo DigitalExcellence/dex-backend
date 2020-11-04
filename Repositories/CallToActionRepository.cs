@@ -17,21 +17,12 @@
 
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.Defaults;
 using Repositories.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Repositories
 {
     public interface ICallToActionRepository : IRepository<CallToAction>
     {
-
-
     }
 
     public class CallToActionRepository : Repository<CallToAction>, ICallToActionRepository

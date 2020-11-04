@@ -75,7 +75,7 @@ namespace Services.Services
             return Repository.UserWithRoleExists(role);
         }
 
-        public List <User> GetAllExpectedGraduatingUsers()
+        public List<User> GetAllExpectedGraduatingUsers()
         {
             List<User> users = Repository.GetAllExpectedGraduatingUsers().Result;
             return users;

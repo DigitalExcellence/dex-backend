@@ -30,7 +30,7 @@ namespace Services.Services
 
     public interface ICallToActionService : IService<CallToAction>
     {
-        public Task<List<CallToAction>> GetAllGraduateCallToActions();
+        public Task<List<CallToAction>> GetAllOpenGraduateCallToActions();
     }
 
     public class CallToActionService : Service<CallToAction>, ICallToActionService
@@ -45,43 +45,35 @@ namespace Services.Services
 
         
 
-        async Task<List<CallToAction>> ICallToActionService.GetAllGraduateCallToActions()
+        public async Task<List<CallToAction>> GetAllOpenGraduateCallToActions()
         {
             List<User> users = userService.GetAllExpectedGraduatingUsers();
             IEnumerable<CallToAction> allCallToActions = await Repository.GetAll();
-            DateTime now = DateTime.Now;
-            DateTime max = DateTime.Now.AddMonths(6);
-
             List<CallToAction> callToActions = new List<CallToAction>();
 
             foreach(User u in users)
             {
-                if(u.ExpectedGraduationDate >= now &&
-                   u.ExpectedGraduationDate <= max)
+               bool doesExist = false;
+                foreach(CallToAction callToAction in allCallToActions)
                 {
-                    bool doesExist = false;
-                    foreach(CallToAction callToAction in allCallToActions)
+                    if(u.Id == callToAction.UserId)
                     {
-                        if(u.Id == callToAction.UserId)
+                        if(callToAction.Status == CallToActionStatus.open && callToAction.Type == CallToActionType.graduationReminder)
                         {
-                            if(callToAction.Status == CallToActionStatus.open && callToAction.Type == CallToActionType.graduationReminder)
-                            {
-                                callToActions.Add(callToAction);
-                                doesExist = true;
-                            }
-                            if(callToAction.Status == CallToActionStatus.completed && callToAction.Type == CallToActionType.graduationReminder)
-                            {
-                                callToActions.Add(callToAction);
-                                doesExist = true;
-                            }
+                            callToActions.Add(callToAction);
+                            doesExist = true;
+                        }
+                        if(callToAction.Status == CallToActionStatus.completed)
+                        {
+                            doesExist = true;
                         }
                     }
-                    if(!doesExist)
-                    {
-                        CallToAction callToAction = new CallToAction(u.Id, CallToActionType.graduationReminder);
-                        Add(callToAction);
-                        callToActions.Add(callToAction);
-                    }
+                }
+                if(!doesExist)
+                {
+                    CallToAction callToAction = new CallToAction(u.Id, CallToActionType.graduationReminder);
+                    Add(callToAction);
+                    callToActions.Add(callToAction);
                 }
             }
 
