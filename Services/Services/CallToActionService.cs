@@ -69,6 +69,11 @@ namespace Services.Services
                                 callToActions.Add(callToAction);
                                 doesExist = true;
                             }
+                            if(callToAction.Status == CallToActionStatus.completed && callToAction.Type == CallToActionType.graduationReminder)
+                            {
+                                callToActions.Add(callToAction);
+                                doesExist = true;
+                            }
                         }
                     }
                     if(!doesExist)
