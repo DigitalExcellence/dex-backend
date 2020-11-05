@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed issue where swagger authorization was not working when running in docker-compose - [#200](https://github.com/DigitalExcellence/dex-backend/issues/200)
 - Fixed issue with search functionality being too extensive. Now matching whole strings only - [#202](https://github.com/DigitalExcellence/dex-backend/issues/202)
+- Fixed issue where highlights were not returning the end date & start date - [#296](https://github.com/DigitalExcellence/dex-backend/issues/296)
 
 ### Security
 
