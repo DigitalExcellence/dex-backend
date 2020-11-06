@@ -227,8 +227,8 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            Defaults.Path.filePath = Path.Combine(env.WebRootPath, "Resources");
+            env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+            Defaults.Path.filePath = Path.Combine(env.WebRootPath, "Images");
             
 
             UpdateDatabase(app, env);
@@ -257,6 +257,12 @@ namespace API
             app.UseProblemDetails();
 
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+                               {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "Uploads", "Images")),
+                RequestPath = "/Uploads/Images"
+            });
 
             app.UseRouting();
             app.UseCors(c =>

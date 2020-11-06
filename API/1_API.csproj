@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -13,6 +13,10 @@
     <Content Remove="Resources\Project\**" />
     <EmbeddedResource Remove="Resources\Project\**" />
     <None Remove="Resources\Project\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Uploads\.gitkeep" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +45,10 @@
     <ProjectReference Include="..\Data\4_Data.csproj" />
     <ProjectReference Include="..\Models\5_Models.csproj" />
     <ProjectReference Include="..\Services\2_Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Uploads\Images\" />
   </ItemGroup>
 
 
