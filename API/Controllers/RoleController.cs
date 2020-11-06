@@ -150,7 +150,7 @@ namespace API.Controllers
 
             foreach(RoleScope roleScope in role.Scopes)
             {
-                if(!roleService.isValidScope(roleScope.Scope))
+                if(!roleService.IsValidScope(roleScope.Scope))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
@@ -212,7 +212,7 @@ namespace API.Controllers
             mapper.Map<RoleResource, Role>(roleResource,currentRole);
             foreach(RoleScope roleScope in currentRole.Scopes)
             {
-                if(!roleService.isValidScope(roleScope.Scope))
+                if(!roleService.IsValidScope(roleScope.Scope))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {

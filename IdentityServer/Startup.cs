@@ -122,60 +122,59 @@ namespace IdentityServer
 
             // sets the authentication schema.
             services.AddAuthentication(options =>
-                    {
-                        options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                    })
+            {
+                options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+            })
                     // Adds Fontys Single Sign On authentication.
                     .AddOpenIdConnect("FHICT", "Fontys", options =>
+                    {
+                        options.ClientId = Config.FfhictOIDC.ClientId;
+                        options.ClientSecret = Config.FfhictOIDC.ClientSecret;
+                        options.Authority = Config.FfhictOIDC.Authority;
+                        options.ResponseType = "code";
+                        options.Scope.Clear();
+
+                        string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
+                        foreach(string scope in scopes)
                         {
-                            options.ClientId = Config.FfhictOIDC.ClientId;
-                            options.ClientSecret = Config.FfhictOIDC.ClientSecret;
-                            options.Authority = Config.FfhictOIDC.Authority;
-                            options.ResponseType = "code";
-                            options.Scope.Clear();
-
-                            string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
-                            foreach(string scope in scopes)
-                            {
-                                options.Scope.Add(scope);
-                            }
-
-                            // Set this flow to get the refresh token.
-                            // options.Scope.Add("offline_access");
-
-                            options.SaveTokens = true;
-                            options.GetClaimsFromUserInfoEndpoint = true;
-
-                            // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
-                            options.Events.OnRedirectToIdentityProvider = async n =>
-                            {
-                                n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
-                                await Task.FromResult(0);
-                            };
+                            options.Scope.Add(scope);
                         }
-                        // Add jwt validation this is so that the DGS can authenticate.
+
+                        // Set this flow to get the refresh token.
+                        // options.Scope.Add("offline_access");
+
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
+
+                        // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
+                        options.Events.OnRedirectToIdentityProvider = async n =>
+                        {
+                            n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
+                            await Task.FromResult(0);
+                        };
+                    }
+                    // Add jwt validation this is so that the DGS can authenticate.
                     ).AddJwtBearer(o =>
                     {
                         o.SaveToken = true;
                         o.Authority = Config.Self.JwtAuthority;
                         o.RequireHttpsMetadata = false;
                         o.TokenValidationParameters = new TokenValidationParameters()
-                                                      {
-                                                          ValidateActor = false,
-                                                          ValidateAudience = false,
-                                                          NameClaimType = "name",
-                                                          RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-                                                      };
+                        {
+                            ValidateActor = false,
+                            ValidateAudience = false,
+                            NameClaimType = "name",
+                            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                        };
                     })
                     .AddCookie();
 
             if(Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
-            }
-            else
+            } else
             {
                 X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 certStore.Open(OpenFlags.ReadOnly);
