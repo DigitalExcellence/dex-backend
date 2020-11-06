@@ -334,5 +334,5 @@ profile
 
 IdentityServer/tempkey.rsa
 
-/API/wwwroot/Resources/*
-!/API/wwwroot/Resources/.gitkeep
+/API/Uploads/Images/*
+!/API/Uploads/Images/.gitkeep
