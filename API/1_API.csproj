@@ -16,7 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Uploads\.gitkeep" />
+    <None Remove="Uploads\Images\.gitkeep" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Uploads\Images\.gitkeep" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,10 +49,6 @@
     <ProjectReference Include="..\Data\4_Data.csproj" />
     <ProjectReference Include="..\Models\5_Models.csproj" />
     <ProjectReference Include="..\Services\2_Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Uploads\Images\" />
   </ItemGroup>
 
 
