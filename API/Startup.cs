@@ -227,13 +227,9 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            Defaults.Path.filePath = Path.Combine(env.WebRootPath, "Resources");
             
-            if(string.IsNullOrWhiteSpace(env.WebRootPath))
-            {
-                env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-                Log.Information("Webrootpath: " + env.WebRootPath);
-                Defaults.Path.filePath = Path.Combine(env.WebRootPath, "Resources");
-            }
 
             UpdateDatabase(app, env);
             if(env.IsDevelopment())

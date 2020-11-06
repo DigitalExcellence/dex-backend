@@ -57,7 +57,7 @@ namespace API.HelperClasses
         {
             try
             {
-                if(System.IO.File.Exists(uploadPath + fileName)) throw new FileExistException(fileName);
+                if(System.IO.File.Exists(Path.Combine(uploadPath + fileName))) throw new FileExistException(fileName);
                 await using Stream sourceStream = file.OpenReadStream();
                 await using FileStream destinationStream = System.IO.File.Create(Path.Combine(uploadPath, fileName));
                 await sourceStream.CopyToAsync(destinationStream);
