@@ -59,7 +59,7 @@ namespace API.HelperClasses
             {
                 if(System.IO.File.Exists(uploadPath + fileName)) throw new FileExistException(fileName);
                 await using Stream sourceStream = file.OpenReadStream();
-                await using FileStream destinationStream = System.IO.File.Create(uploadPath + fileName);
+                await using FileStream destinationStream = System.IO.File.Create(Path.Combine(uploadPath, fileName));
                 await sourceStream.CopyToAsync(destinationStream);
 
                 return fileName;
@@ -77,8 +77,8 @@ namespace API.HelperClasses
         /// <returns> Bool which tells if file is deleted successfully or not </returns>
         public void DeleteFileFromDirectory(File file)
         {
-            if(System.IO.File.Exists(uploadPath + file.Name)) {
-                System.IO.File.Delete(uploadPath + file.Name);
+            if(System.IO.File.Exists(Path.Combine(uploadPath, file.Name))) {
+                System.IO.File.Delete(Path.Combine(uploadPath, file.Name));
                 return;
             }
 

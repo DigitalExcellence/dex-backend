@@ -2,7 +2,7 @@ name: Staging Deployment
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ bugfix/298-project-icon-not-loading ]
 
 jobs:
   build:
