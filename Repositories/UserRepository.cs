@@ -18,7 +18,6 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -89,6 +88,7 @@ namespace Repositories
                              .Include(s => s.Role)
                              .ThenInclude(s => s.Scopes)
                              .Include(u =>  u.Institution)
+                             .Include(f => f.UserProject)
                              .SingleOrDefaultAsync();
         }
         /// <summary>
@@ -103,6 +103,7 @@ namespace Repositories
                          .Include(u => u.Role)
                          .ThenInclude(u => u.Scopes)
                          .Include(u => u.Institution)
+                         .Include(f => f.UserProject)
                          .SingleOrDefaultAsync();
         }
         /// <summary>
@@ -117,6 +118,7 @@ namespace Repositories
                          .Include(u => u.Role)
                          .ThenInclude(u => u.Scopes)
                          .Include(u => u.Institution)
+                         .Include(f => f.UserProject)
                          .SingleOrDefaultAsync();
         }
 
@@ -179,5 +181,8 @@ namespace Repositories
                 .Include(s => s.Role)
                 .SingleOrDefault(r => r.Role.Id == role.Id) != null;
         }
+
+
     }
+
 }
