@@ -64,7 +64,7 @@ namespace API.Controllers
                                  IMapper mapper,
                                  IAuthorizationHelper authorizationHelper,
                                  IFileService fileService,
-                                 IFileUploader fileUploader
+                                 IFileUploader fileUploader,
                                  IUserProjectService userProjectService)
         {
             this.projectService = projectService;
