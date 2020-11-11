@@ -20,6 +20,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 
 COPY --from=build-env /app/API/bin/Debug/netcoreapp3.1 .
+COPY --from=build-env /app/API/Uploads/Images ./Uploads/Images
 COPY --from=build-env /app/dex-api.pfx . 
 
 ENTRYPOINT ["dotnet", "1_API.dll", "--environment=Development"]

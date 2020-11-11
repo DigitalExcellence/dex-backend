@@ -55,6 +55,7 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.HighlightRead)),
                         new Scope(nameof(Defaults.Scopes.EmbedWrite)),
                         new Scope(nameof(Defaults.Scopes.EmbedRead)),
+                        new Scope(nameof(Defaults.Scopes.FileWrite))
                     }
                 }
             };
@@ -81,7 +82,8 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.HighlightRead),
                                nameof(Defaults.Scopes.HighlightWrite),
                                nameof(Defaults.Scopes.EmbedWrite),
-                               nameof(Defaults.Scopes.EmbedRead)
+                               nameof(Defaults.Scopes.EmbedRead),
+                               nameof(Defaults.Scopes.FileWrite)
                            },
                            Claims = new List<Claim>
                                     {

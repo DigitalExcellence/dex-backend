@@ -13,5 +13,9 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.
 
+**Production URL**
+Can this issue be linked to a relevant production URL? If so, please post the full link here, don't use hyperlinks.
+If you can, post a short description around the url why it's relevant, this is good for SEO reasons.
+
 **Additional context**
 Add any other context or screenshots about the feature request here.

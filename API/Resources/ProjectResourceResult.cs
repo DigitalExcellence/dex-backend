@@ -74,5 +74,9 @@ namespace API.Resources
         ///     This gets or sets the Updated time of the project
         /// </summary>
         public DateTime Updated { get; set; }
+        /// <summary>
+        /// This gets or set the file of the project
+        /// </summary>
+        public FileResourceResult ProjectIcon { get; set; }
     }
 }
