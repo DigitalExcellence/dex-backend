@@ -17,6 +17,7 @@
 
 using IdentityModel;
 using IdentityServer.Quickstart;
+using IdentityServer.Quickstart.Account;
 using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
@@ -443,6 +444,11 @@ namespace IdentityServer
             }
 
             return vm;
+        }
+
+        private void ConvertAccountToAlumni(ConvertToAlumniInputModel inputModel)
+        {
+            
         }
 
     }
