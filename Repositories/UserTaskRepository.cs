@@ -21,14 +21,14 @@ using Repositories.Base;
 
 namespace Repositories
 {
-    public interface ICallToActionRepository : IRepository<CallToAction>
+    public interface IUserTaskRepository : IRepository<UserTask>
     {
     }
 
-    public class CallToActionRepository : Repository<CallToAction>, ICallToActionRepository
+    public class UserTaskRepository : Repository<UserTask>, IUserTaskRepository
     {
 
-        public CallToActionRepository(DbContext dbContext) : base(dbContext) { }
+        public UserTaskRepository(DbContext dbContext) : base(dbContext) { }
 
       
     }

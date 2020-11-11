@@ -10,6 +10,27 @@
     <EmbeddedResource Remove="Configurations\IdentityMigrations\**" />
     <None Remove="Configurations\IdentityMigrations\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200527095846_addIsPublicFlagToUser.cs" />
+    <Compile Remove="Migrations\20200527095846_addIsPublicFlagToUser.Designer.cs" />
+    <Compile Remove="Migrations\20200904113526_DecriptionAddedForHighlightTable.cs" />
+    <Compile Remove="Migrations\20200904113526_DecriptionAddedForHighlightTable.Designer.cs" />
+    <Compile Remove="Migrations\20201014124545_AddFollowUsersAndProjects.cs" />
+    <Compile Remove="Migrations\20201014124545_AddFollowUsersAndProjects.Designer.cs" />
+    <Compile Remove="Migrations\20201016093942_AddFilesAndProjectIconReferences.cs" />
+    <Compile Remove="Migrations\20201016093942_AddFilesAndProjectIconReferences.Designer.cs" />
+    <Compile Remove="Migrations\20201026125836_InstitutionAddedForUser.cs" />
+    <Compile Remove="Migrations\20201026125836_InstitutionAddedForUser.Designer.cs" />
+    <Compile Remove="Migrations\20201027112537_AddedUserGraduationField.cs" />
+    <Compile Remove="Migrations\20201027112537_AddedUserGraduationField.Designer.cs" />
+    <Compile Remove="Migrations\20201027131830_AddedCallToActionModel.cs" />
+    <Compile Remove="Migrations\20201027131830_AddedCallToActionModel.Designer.cs" />
+    <Compile Remove="Migrations\20201111140053_RenamedTableToUserTasks.cs" />
+    <Compile Remove="Migrations\20201111140053_RenamedTableToUserTasks.Designer.cs" />
+    <Compile Remove="Migrations\20201111140622_AddUserTasksTable.cs" />
+    <Compile Remove="Migrations\20201111140622_AddUserTasksTable.Designer.cs" />
+  </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

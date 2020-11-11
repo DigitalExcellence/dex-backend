@@ -5,32 +5,32 @@ using System.Text;
 namespace Models
 {
     /// <summary>
-    /// Call To Actions with types and status
+    /// user tasks with types and status
     /// </summary>
-    public enum CallToActionStatus
+    public enum UserTaskStatus
     {
         open,
         completed
     }
 
-    public enum CallToActionType
+    public enum UserTaskType
     {
         graduationReminder,
     }
 
-    public class CallToAction
+    public class UserTask
     {
-        public CallToAction(int userId,CallToActionType type)
+        public UserTask(int userId,UserTaskType type)
         {
             Type = type;
             UserId = userId;
-            Status = CallToActionStatus.open;
+            Status = UserTaskStatus.open;
         }
 
         public int Id { get; set; }
         public int UserId { get; set; }
-        public CallToActionStatus Status { get; set; }
-        public CallToActionType Type { get; set; }
+        public UserTaskStatus Status { get; set; }
+        public UserTaskType Type { get; set; }
     }
 
 

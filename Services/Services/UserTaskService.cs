@@ -28,42 +28,42 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
-    public interface ICallToActionService : IService<CallToAction>
+    public interface IUserTaskService : IService<UserTask>
     {
-        public Task<List<CallToAction>> GetAllOpenGraduateCallToActions();
+        public Task<List<UserTask>> GetAllOpenGraduateUserTasks();
     }
 
-    public class CallToActionService : Service<CallToAction>, ICallToActionService
+    public class UserTaskService : Service<UserTask>, IUserTaskService
     {
         private readonly IUserService userService;
-        protected new ICallToActionRepository Repository => (ICallToActionRepository) base.Repository;
+        protected new IUserTaskRepository Repository => (IUserTaskRepository) base.Repository;
 
-        public CallToActionService(ICallToActionRepository repository, IUserService userService) : base(repository)
+        public UserTaskService(IUserTaskRepository repository, IUserService userService) : base(repository)
         {
            this.userService = userService;
         }
 
         
 
-        public async Task<List<CallToAction>> GetAllOpenGraduateCallToActions()
+        public async Task<List<UserTask>> GetAllOpenGraduateUserTasks()
         {
             List<User> users = userService.GetAllExpectedGraduatingUsers();
-            IEnumerable<CallToAction> allCallToActions = await Repository.GetAll();
-            List<CallToAction> callToActions = new List<CallToAction>();
+            IEnumerable<UserTask> allUserTasks = await Repository.GetAll();
+            List<UserTask> UserTasks = new List<UserTask>();
 
             foreach(User u in users)
             {
                bool doesExist = false;
-                foreach(CallToAction callToAction in allCallToActions)
+                foreach(UserTask UserTask in allUserTasks)
                 {
-                    if(u.Id == callToAction.UserId)
+                    if(u.Id == UserTask.UserId)
                     {
-                        if(callToAction.Status == CallToActionStatus.open && callToAction.Type == CallToActionType.graduationReminder)
+                        if(UserTask.Status == UserTaskStatus.open && UserTask.Type == UserTaskType.graduationReminder)
                         {
-                            callToActions.Add(callToAction);
+                            UserTasks.Add(UserTask);
                             doesExist = true;
                         }
-                        if(callToAction.Status == CallToActionStatus.completed)
+                        if(UserTask.Status == UserTaskStatus.completed)
                         {
                             doesExist = true;
                         }
@@ -71,15 +71,15 @@ namespace Services.Services
                 }
                 if(!doesExist)
                 {
-                    CallToAction callToAction = new CallToAction(u.Id, CallToActionType.graduationReminder);
-                    Add(callToAction);
-                    callToActions.Add(callToAction);
+                    UserTask UserTask = new UserTask(u.Id, UserTaskType.graduationReminder);
+                    Add(UserTask);
+                    UserTasks.Add(UserTask);
                 }
             }
 
             Save();
 
-            return callToActions;
+            return UserTasks;
         }
     }
 }

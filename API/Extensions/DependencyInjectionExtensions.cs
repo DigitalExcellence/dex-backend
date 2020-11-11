@@ -63,8 +63,8 @@ namespace API.Extensions
 
             services.AddScoped<IFileUploader, FileUploader>();
 
-            services.AddScoped<ICallToActionService, CallToActionService>();
-            services.AddScoped<ICallToActionRepository, CallToActionRepository>();
+            services.AddScoped<IUserTaskService, UserTaskService>();
+            services.AddScoped<IUserTaskRepository, UserTaskRepository>();
 
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
 

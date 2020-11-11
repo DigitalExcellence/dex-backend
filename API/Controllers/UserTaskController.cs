@@ -26,35 +26,35 @@ namespace API.Controllers
 
     /// <summary>
     /// This class is responsible for handling HTTP requests that are related
-    /// to the call to actions, for example creating, retrieving or deleting.
+    /// to the user tasks, for example creating, retrieving or deleting.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
-    public class CallToActionController : ControllerBase
+    public class UserTaskController : ControllerBase
     {
 
-        private readonly ICallToActionService callToActionService;
+        private readonly IUserTaskService userTaskService;
 
         /// <summary>
-        /// The constructor for call to actions
+        /// The constructor for user tasks
         /// </summary>
-        /// <param name="callToActionService"></param>
-        public CallToActionController(ICallToActionService callToActionService)
+        /// <param name="userTaskService"></param>
+        public UserTaskController(IUserTaskService userTaskService)
         {
-            this.callToActionService = callToActionService;
+            this.userTaskService = userTaskService;
         }
 
         /// <summary>
-        /// Creates and returns all graduation call to actions for expecting graduation users.
+        /// Creates and returns all graduation user tasks for expecting graduation users.
         /// </summary>
-        /// <returns> All call To actions which are created or open for graduation users. </returns>
+        /// <returns> All user tasks which are created or open for graduation users. </returns>
         [HttpGet]
-        public async Task<IActionResult> CreateCallToActionForGraduatingUsers()
+        public async Task<IActionResult> CreateUserTasksForGraduatingUsers()
         {
-            List<CallToAction> callToActions = await callToActionService.GetAllOpenGraduateCallToActions();
+            List<UserTask> userTasks = await userTaskService.GetAllOpenGraduateUserTasks();
 
-            return Ok(callToActions);
+            return Ok(userTasks);
         }
 
 

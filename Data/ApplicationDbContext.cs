@@ -98,7 +98,7 @@ namespace Data
         /// /// <value>
         /// The call to action.
         /// </value>
-        public DbSet<CallToAction> CallToAction { get; set; }
+        public DbSet<UserTask> UserTask { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

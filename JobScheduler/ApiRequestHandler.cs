@@ -18,7 +18,7 @@ namespace JobScheduler
 
         private readonly RestClient apiClient;
         private string accessToken;
-        private List<CallToAction> callToActions;
+        private List<UserTask> userTasks;
 
         public ApiRequestHandler(Uri baseUrlApi)
         {
@@ -45,9 +45,9 @@ namespace JobScheduler
         }
 
 
-        public List<CallToAction> GetExpectedGraduationUsers() {
+        public List<UserTask> GetExpectedGraduationUsers() {
         
-            RestRequest restRequest = new RestRequest("api/CallToAction") { Method = Method.GET };
+            RestRequest restRequest = new RestRequest("api/UserTask") { Method = Method.GET };
 
             if(accessToken == null)
             {
@@ -70,9 +70,9 @@ namespace JobScheduler
                     accessToken = GetToken();
                     GetExpectedGraduationUsers();
                 }
-                callToActions = JsonConvert.DeserializeObject<List<CallToAction>>(response.Content);
+                userTasks = JsonConvert.DeserializeObject<List<UserTask>>(response.Content);
             }
-            return callToActions;
+            return userTasks;
         }
     }
 }

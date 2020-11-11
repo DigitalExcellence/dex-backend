@@ -380,6 +380,7 @@ namespace API
                     context.User.Add(Seed.SeedPrUser(roles));
                     context.User.AddRange(Seed.SeedUsers(roles));
                     context.User.Add(Seed.SeedDataOfficerUser(roles));
+                    context.User.Add(Seed.SeedAlumniUser(roles));
                     context.SaveChanges();
                 }
             }

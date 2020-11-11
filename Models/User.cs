@@ -32,7 +32,7 @@ namespace Models
             Services = new List<LinkedService>();
             UserProject = new List<UserProject>();
             FollowedUsers = new List<UserUser>();
-            CallToActions = new List<CallToAction>();
+            UserTasks = new List<UserTask>();
             AccountCreationDate = DateTime.Now;
             ExpectedGraduationDate = DateTime.Now.AddYears(4);
         }
@@ -83,8 +83,8 @@ namespace Models
         public Institution Institution { get; set; }
 
         /// <summary>
-        /// Gets or sets the call to actions
+        /// Gets or sets the user tasks
         /// </summary>
-        public List<CallToAction> CallToActions { get; set; }
+        public List<UserTask> UserTasks { get; set; }
     }
 }

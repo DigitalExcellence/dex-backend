@@ -14,7 +14,7 @@ namespace JobScheduler
     public class GraduationWorker : BackgroundService
     {
         private readonly ILogger<GraduationWorker> _logger;
-        private List<CallToAction> users;
+        private List<UserTask> users;
 
         private readonly ApiRequestHandler requestHandler;
         public GraduationWorker(ILogger<GraduationWorker> logger)
