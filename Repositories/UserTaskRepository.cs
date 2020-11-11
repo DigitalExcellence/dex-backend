@@ -18,11 +18,17 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repositories
 {
     public interface IUserTaskRepository : IRepository<UserTask>
     {
+
+        public Task<UserTask> GetUserTasksForUser(int userId);
+
     }
 
     public class UserTaskRepository : Repository<UserTask>, IUserTaskRepository
@@ -30,6 +36,14 @@ namespace Repositories
 
         public UserTaskRepository(DbContext dbContext) : base(dbContext) { }
 
-      
+
+        public async Task<UserTask> GetUserTasksForUser(int userId)
+        {
+            return await GetDbSet<UserTask>()
+                   .Where(u => u.UserId == userId)
+                   .Where(u => u.Type == UserTaskType.graduationReminder)
+                   .SingleOrDefaultAsync();
+        }
+
     }
 }

@@ -26,6 +26,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -46,6 +47,7 @@ namespace API.Controllers
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly IInstitutionService institutionService;
         private readonly IUserUserService userUserService;
+        private readonly IUserTaskService userTaskService;
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
         /// </summary>
@@ -55,12 +57,14 @@ namespace API.Controllers
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
         /// <param name="userUserService">The user user service is responsible for users that are following users.</param>
+        /// <param name="userTaskService">The user task service is responsible for tasks that user should follow up.</param>
         public UserController(IUserService userService,
                               IMapper mapper,
                               IRoleService roleService,
                               IAuthorizationHelper authorizationHelper,
                               IInstitutionService institutionService,
-                              IUserUserService userUserService)
+                              IUserUserService userUserService,
+                              IUserTaskService userTaskService)
         {
             this.userService = userService;
             this.mapper = mapper;
@@ -68,6 +72,7 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.institutionService = institutionService;
             this.userUserService = userUserService;
+            this.userTaskService = userTaskService;
         }
 
         /// <summary>
@@ -484,6 +489,59 @@ namespace API.Controllers
 
             userUserService.Save();
             return Ok();
+        }
+
+        /// <summary>
+        /// Converts an account to alumni role.
+        /// </summary>
+        /// <returns>Updated user</returns>
+        [HttpPut("alumni")]
+        [Authorize]
+        public async Task<IActionResult> ConvertToAlumni()
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "598E61EC-1C0F-4ED2-AC42-F5B5503D4A5E"
+                };
+                return NotFound(problem);
+            }
+
+            if(await userTaskService.GetUserTasksForUser(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "No graduation user task exists.",
+                                             Detail = "The database does not contain a user task for graduating.",
+                                             Instance = "A10E4AE8-633D-4334-BADA-99B7AD077B6D"
+                                         };
+                return NotFound(problem);
+            }
+
+            List<Role> roles = await roleService.GetAllAsync();
+            Role alumniRole = roles.Find(r => r.Name == "Alumni");
+
+            if(alumniRole == null) 
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Alumni role does not exist.",
+                                             Detail = "The database does not contain a role for alumni.",
+                                             Instance = "2DE31766-5D9C-4E41-908F-389A9A85F723"
+                };
+                return NotFound(problem);
+            }
+
+            user.Role = alumniRole;
+            userService.Update(user);
+            userService.Save();
+
+            return Ok(user);
         }
     }
 }
