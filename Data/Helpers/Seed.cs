@@ -110,6 +110,18 @@ namespace Data.Helpers
             };
             roles.Add(administratorRole);
 
+            Role alumniRole = new Role()
+            {
+                Name = nameof(Defaults.Roles.Alumni),
+                Scopes = new List<RoleScope>()
+                {
+                    new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
+                    new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
+                }
+            };
+            roles.Add(alumniRole);
+
             return roles;
         }
         /// <summary>
@@ -177,6 +189,20 @@ namespace Data.Helpers
                 Name = "data officer Sam",
                 Role = dataOfficerRole,
                 InstitutionId = 1
+            };
+
+            return user;
+        }
+
+        public static User SeedAlumniUser(List<Role> roles)
+        {
+            Role alumniRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Alumni));
+            User user = new User
+            {
+                IdentityId = "123456789",
+                Email = "Alumni@dex.software",
+                Name = "Alumni test",
+                Role = alumniRole
             };
 
             return user;

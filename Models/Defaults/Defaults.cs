@@ -51,6 +51,7 @@ namespace Models.Defaults
             public const string RegisteredUser = "RegisteredUser";
             public const string PrUser = "PrUser";
             public const string Administrator = "Administrator";
+            public const string Alumni = "Alumni";
             public const string DataOfficer = "DataOfficer";
 
         }
