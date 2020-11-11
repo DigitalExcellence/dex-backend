@@ -102,6 +102,16 @@ namespace IdentityServer
                      Lastname = "Smith",
                      Email = "johnSmith@email.com"
                  },
+                 new IdentityUser
+                 {
+                     SubjectId = "123456789",
+                     Username = "AlumniTest",
+                     Password = LoginHelper.GetHashPassword("AlumniTest"),
+                     Name = "Alumni Test",
+                     Firstname = "Alumni",
+                     Lastname = "Test",
+                     Email = "alumnirole@email.com"
+                 }
              };
 
             return users;
@@ -122,32 +132,6 @@ namespace IdentityServer
             // Notify the user
             Log.Logger.Information("{0} has the new password: {1}", userName, securePassword);
             return password;
-                 },
-                  new IdentityUser
-                 {
-                     SubjectId = "123456789",
-                     Username = "AlumniTest",
-                     Password = LoginHelper.GetHashPassword("AlumniTest"),
-                     Name = "Alumni Test",
-                     Firstname = "Alumni",
-                     Lastname = "Test",
-                     Email = "alumnirole@email.com"
-                 }
-             };
-            if(isProduction)
-            {
-                Log.Logger.Information("The passwords for this instance:");
-                foreach(IdentityUser testUser in users)
-                {
-                    // Generate a secure password
-                    string generateSecurePassword = GenerateSecurePassword();
-                    // Hash it
-                    testUser.Password = LoginHelper.GetHashPassword(generateSecurePassword);
-                    // Notify the user
-                    Log.Logger.Information("{0} has the new password: {1}", testUser.Username, generateSecurePassword);
-                }
-            }
-            return users;
         }
 
         /// <summary>
