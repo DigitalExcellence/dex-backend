@@ -30,6 +30,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Models;
 using Services.Services;
@@ -446,11 +447,15 @@ namespace IdentityServer
             return vm;
         }
 
-        private void ConvertAccountToAlumni(ConvertToAlumniInputModel inputModel)
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public IActionResult Alumni()
         {
-            
+            if(Request.IsHttps)
+            {
+                return Ok("endpoint works");
+            }
+            return BadRequest();
         }
-
     }
-
 }
