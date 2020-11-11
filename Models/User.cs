@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
 {
@@ -29,6 +30,8 @@ namespace Models
         {
             Projects = new List<Project>();
             Services = new List<LinkedService>();
+            UserProject = new List<UserProject>();
+            FollowedUsers = new List<UserUser>();
             CallToActions = new List<CallToAction>();
             AccountCreationDate = DateTime.Now;
             ExpectedGraduationDate = DateTime.Now.AddYears(4);
@@ -51,7 +54,9 @@ namespace Models
 
         public List<LinkedService> Services { get; set; }
 
-        public List<CallToAction> CallToActions { get; set; }
+        public List<UserProject> UserProject { get; set; }
+        [InverseProperty("FollowedUser")]
+        public List<UserUser> FollowedUsers { get; set; }
 
         public string ProfileUrl { get; set; }
 
@@ -66,5 +71,20 @@ namespace Models
         public DateTime? AccountCreationDate { get; set; }
 
         public DateTime? ExpectedGraduationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Id of the institution where the user is registered.
+        /// </summary>
+        public int? InstitutionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the institution where the user is registered.
+        /// </summary>
+        public Institution Institution { get; set; }
+
+        /// <summary>
+        /// Gets or sets the call to actions
+        /// </summary>
+        public List<CallToAction> CallToActions { get; set; }
     }
 }

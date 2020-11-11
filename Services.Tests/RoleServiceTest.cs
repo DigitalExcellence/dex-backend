@@ -1,3 +1,20 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using Models;
 using Moq;
 using NUnit.Framework;
@@ -5,9 +22,7 @@ using Repositories;
 using Repositories.Tests.DataSources;
 using Services.Services;
 using Services.Tests.Base;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Tests
@@ -15,7 +30,7 @@ namespace Services.Tests
     [TestFixture]
     public class RoleServiceTest : ServiceTest<Role, RoleService, IRoleRepository>
     {
-        
+
         protected new IRoleService Service => (IRoleService) base.Service;
 
         /// <summary>
@@ -61,7 +76,14 @@ namespace Services.Tests
                 "RoleRead",
                 "RoleWrite",
                 "EmbedWrite",
-                "EmbedRead"
+                "EmbedRead",
+                "InstitutionUserRead",
+                "InstitutionUserWrite",
+                "InstitutionProjectWrite",
+                "InstitutionEmbedWrite",
+                "InstitutionRead",
+                "InstitutionWrite",
+                "FileWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
             Assert.AreEqual(currentScopes,retrievedScopes);
@@ -84,9 +106,10 @@ namespace Services.Tests
                                              "RoleRead",
                                              "RoleWrite",
                                              "EmbedWrite",
-                                             "EmbedRead"
+                                             "EmbedRead",
+                                             "FileWrite"
                                          };
-            bool isValidScope = Service.isValidScope("RoleRead");
+            bool isValidScope = Service.IsValidScope("RoleRead");
 
             Assert.IsTrue(isValidScope);
         }
@@ -97,7 +120,7 @@ namespace Services.Tests
         [Test]
         public void isValidScope_false()
         {
-            bool isValidScope = Service.isValidScope("role:read");
+            bool isValidScope = Service.IsValidScope("role:read");
 
             Assert.IsFalse(isValidScope);
         }
