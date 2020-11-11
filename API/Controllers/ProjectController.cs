@@ -261,56 +261,6 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            mapper.Map(projectResource, project);
-            File file = null;
-            if(projectResource.FileId != 0)
-            {
-                file = await fileService.FindAsync(projectResource.FileId);
-                project.ProjectIcon = file;
-            }
-
-            if(projectResource.FileId != 0 && file == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "File was not found.",
-                     Detail = "The specified file was not found while updating project.",
-                     Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
-                 };
-                return BadRequest(problem);
-            }
-
-            // Check if the icon has been changed
-            if(projectResource.FileId != 0 && projectResource.FileId != project.ProjectIconId)
-            {
-                // We need to delete the old file.
-                File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
-                try
-                {
-                    // Remove the file from the database
-                    await fileService.RemoveAsync(fileToDelete.Id)
-                                        .ConfigureAwait(false);
-                    fileService.Save();
-
-                    // Remove the file from the filesystem
-                    fileUploader.DeleteFileFromDirectory(fileToDelete);
-
-                    return Ok();
-
-                } catch(System.IO.FileNotFoundException)
-                {
-                    ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "File could not be deleted because the path does not exist.",
-                        Detail = "File could not be found.",
-                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
-                    };
-
-                    return NotFound(problem);
-                }
-            }
-
-
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
 
@@ -325,6 +275,69 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
+            // Upload the new file if there is one
+            File file = null;
+            if(projectResource.FileId != 0)
+            {
+                if(project.ProjectIconId != 0)
+                {
+                    File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                    // Remove the file from the filesystem
+                    fileUploader.DeleteFileFromDirectory(fileToDelete);
+                    // Remove file from DB
+                    await fileService.RemoveAsync(project.ProjectIconId.Value);
+                   
+                   
+                    fileService.Save();
+                }
+
+                // Get the uploaded file
+                file = await fileService.FindAsync(projectResource.FileId);
+
+                if(file != null)
+                {
+                    project.ProjectIcon = file;
+
+                } else
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "File was not found.",
+                        Detail = "The specified file was not found while updating project.",
+                        Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                    };
+                    return BadRequest(problem);
+                }  
+            }
+
+            /*// Check if the icon has been changed
+            if(projectResource.FileId != 0 && projectResource.FileId != project.ProjectIconId)
+            {
+                // We need to delete the old file.
+                
+                try
+                {
+                    // Remove the file from the database
+                    await fileService.RemoveAsync(fileToDelete.Id)
+                                        .ConfigureAwait(false);
+                    fileService.Save();
+
+                    
+
+                } catch(System.IO.FileNotFoundException)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "File could not be deleted because the path does not exist.",
+                        Detail = "File could not be found.",
+                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
+                    };
+
+                    return NotFound(problem);
+                }
+            }*/
+
+            mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
