@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Refactored Postman CLI files to make them work from Postman folder. - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
+
 ### Security
 
 
