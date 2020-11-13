@@ -52,21 +52,21 @@ namespace Services.Services
         {
             List<User> users = userService.GetAllExpectedGraduatingUsers();
             IEnumerable<UserTask> allUserTasks = await Repository.GetAll();
-            List<UserTask> UserTasks = new List<UserTask>();
+            List<UserTask> userTasks = new List<UserTask>();
 
             foreach(User u in users)
             {
                bool doesExist = false;
-                foreach(UserTask UserTask in allUserTasks)
+                foreach(UserTask userTask in allUserTasks)
                 {
-                    if(u.Id == UserTask.UserId)
+                    if(u.Id == userTask.UserId)
                     {
-                        if(UserTask.Status == UserTaskStatus.open && UserTask.Type == UserTaskType.graduationReminder)
+                        if(userTask.Status == UserTaskStatus.Open && userTask.Type == UserTaskType.GraduationReminder)
                         {
-                            UserTasks.Add(UserTask);
+                            userTasks.Add(userTask);
                             doesExist = true;
                         }
-                        if(UserTask.Status == UserTaskStatus.completed)
+                        if(userTask.Status == UserTaskStatus.Completed)
                         {
                             doesExist = true;
                         }
@@ -74,15 +74,15 @@ namespace Services.Services
                 }
                 if(!doesExist)
                 {
-                    UserTask UserTask = new UserTask(u.Id, UserTaskType.graduationReminder);
-                    Add(UserTask);
-                    UserTasks.Add(UserTask);
+                    UserTask userTask = new UserTask(u.Id, UserTaskType.GraduationReminder);
+                    Add(userTask);
+                    userTasks.Add(userTask);
                 }
             }
 
             Save();
 
-            return UserTasks;
+            return userTasks;
         }
 
         public async Task<UserTask> GetUserTasksForUser(int userId)

@@ -13,13 +13,13 @@ namespace JobScheduler
 {
     public class GraduationWorker : BackgroundService
     {
-        private readonly ILogger<GraduationWorker> _logger;
+        private readonly ILogger<GraduationWorker> logger;
         private List<UserTask> users;
 
         private readonly ApiRequestHandler requestHandler;
         public GraduationWorker(ILogger<GraduationWorker> logger)
         {
-            _logger = logger;
+            this.logger = logger;
             requestHandler = new ApiRequestHandler(new Uri("https://localhost:5001/"));
         }
 
@@ -29,9 +29,9 @@ namespace JobScheduler
 
             while(!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                _logger.LogInformation(users[0].Type.ToString());
+                logger.LogInformation(users[0].Type.ToString());
 
                 await Task.Delay(1000, stoppingToken);
             }

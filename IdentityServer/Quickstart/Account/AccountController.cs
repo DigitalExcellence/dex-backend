@@ -462,11 +462,12 @@ namespace IdentityServer
         {
             string pass = Request.Headers.FirstOrDefault(x => x.Key == "password").Value.FirstOrDefault();
             string email = Request.Headers.FirstOrDefault(x => x.Key == "email").Value.FirstOrDefault();
-            int subjectId = Convert.ToInt32( Request.Headers.FirstOrDefault(x => x.Key == "subjectId").Value.FirstOrDefault());
+            string subjectId = Request.Headers.FirstOrDefault(x => x.Key == "subjectId").Value.FirstOrDefault();
 
-            IdentityUser IdentityUser = await identityUserService.FindAsync(subjectId);
+            IdentityUser IdentityUser = await identityUserService.FindBySubjectId(subjectId);
             IdentityUser.Email = email;
-            IdentityUser.Password = pass;
+            IdentityUser.Username = email;
+            IdentityUser.Password = LoginHelper.GetHashPassword(pass);
 
             identityUserService.Update(IdentityUser);
             identityUserService.Save();

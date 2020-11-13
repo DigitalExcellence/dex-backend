@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Models
@@ -9,13 +10,13 @@ namespace Models
     /// </summary>
     public enum UserTaskStatus
     {
-        open,
-        completed
+        Open,
+        Completed
     }
 
     public enum UserTaskType
     {
-        graduationReminder,
+        GraduationReminder,
     }
 
     public class UserTask
@@ -24,14 +25,19 @@ namespace Models
         {
             Type = type;
             UserId = userId;
-            Status = UserTaskStatus.open;
+            Status = UserTaskStatus.Open;
         }
 
         public int Id { get; set; }
         public int UserId { get; set; }
+
         public UserTaskStatus Status { get; set; }
         public UserTaskType Type { get; set; }
+
+        
     }
+
+    
 
 
 }

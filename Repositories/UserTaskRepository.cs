@@ -41,7 +41,7 @@ namespace Repositories
         {
             return await GetDbSet<UserTask>()
                    .Where(u => u.UserId == userId)
-                   .Where(u => u.Type == UserTaskType.graduationReminder)
+                   .Where(u => u.Type == UserTaskType.GraduationReminder)
                    .SingleOrDefaultAsync();
         }
 

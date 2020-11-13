@@ -63,6 +63,8 @@ namespace Repositories
         /// <returns>The retrieved IdentityUser</returns>
         Task<IdentityUser> AutoProvisionUser(string provider, string providerUserId, List<Claim> claimsList);
 
+        Task<IdentityUser> FindBySubjectId(string subjectId);
+
     }
 
     /// <summary>
@@ -144,6 +146,12 @@ namespace Repositories
             DbContext.SaveChanges();
             return await GetDbSet<IdentityUser>()
                 .Where(i => i.ProviderId == provider && i.ExternalSubjectId == providerUserId).SingleOrDefaultAsync();
+        }
+
+        public async Task<IdentityUser> FindBySubjectId(string subjectId)
+        {
+            return await GetDbSet<IdentityUser>()
+                       .Where(i => i.SubjectId == subjectId).SingleOrDefaultAsync();
         }
 
     }
