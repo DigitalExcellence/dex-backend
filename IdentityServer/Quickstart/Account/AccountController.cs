@@ -447,15 +447,23 @@ namespace IdentityServer
             return vm;
         }
 
-        [HttpGet]
-        [ValidateAntiForgeryToken]
-        public IActionResult Alumni()
+        //[HttpPut]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult ChangeAccountCredentials()
+        //{
+        //    string pass = Request.Headers.FirstOrDefault(x => x.Key == "key of password header").Value.FirstOrDefault();
+        //    string email = Request.Headers.FirstOrDefault(x => x.Key == "key of email in header").Value.FirstOrDefault();
+
+        //    return Ok(pass + email);
+        //}
+        //[ValidateAntiForgeryToken]
+        [HttpPut]
+        public IActionResult ChangeCredentials()
         {
-            if(Request.IsHttps)
-            {
-                return Ok("endpoint works");
-            }
-            return BadRequest();
+            string pass = Request.Headers.FirstOrDefault(x => x.Key == "password").Value.FirstOrDefault();
+            string email = Request.Headers.FirstOrDefault(x => x.Key == "email").Value.FirstOrDefault();
+
+            return Ok();
         }
     }
 }
