@@ -458,10 +458,18 @@ namespace IdentityServer
         //}
         //[ValidateAntiForgeryToken]
         [HttpPut]
-        public IActionResult ChangeCredentials()
+        public async Task<IActionResult> ChangeCredentials()
         {
             string pass = Request.Headers.FirstOrDefault(x => x.Key == "password").Value.FirstOrDefault();
             string email = Request.Headers.FirstOrDefault(x => x.Key == "email").Value.FirstOrDefault();
+            int subjectId = Convert.ToInt32( Request.Headers.FirstOrDefault(x => x.Key == "subjectId").Value.FirstOrDefault());
+
+            IdentityUser IdentityUser = await identityUserService.FindAsync(subjectId);
+            IdentityUser.Email = email;
+            IdentityUser.Password = pass;
+
+            identityUserService.Update(IdentityUser);
+            identityUserService.Save();
 
             return Ok();
         }
