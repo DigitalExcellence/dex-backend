@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed issue where unused project icons where left in the database & File System - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
+
 ### Security
 
 
