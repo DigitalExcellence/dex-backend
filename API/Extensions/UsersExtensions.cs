@@ -32,6 +32,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Extensions
 {
@@ -107,6 +108,12 @@ namespace API.Extensions
         public static User GetUserInformation(this HttpContext actionContext, Config config)
         {
             string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
+
+            string token = bearerToken.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var tokenS = handler.ReadToken(token) as JwtSecurityToken;
+            var provider = tokenS.Claims.First(claim => claim.Type == "idp").Value;
+
             if(string.IsNullOrEmpty(bearerToken))
             {
                 return null;
