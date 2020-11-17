@@ -111,8 +111,8 @@ namespace API.Extensions
 
             string token = bearerToken.Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
-            var tokenS = handler.ReadToken(token) as JwtSecurityToken;
-            var provider = tokenS.Claims.First(claim => claim.Type == "idp").Value;
+            var tokens = handler.ReadToken(token) as JwtSecurityToken;
+            var providerId = tokens.Claims.First(claim => claim.Type == "idp").Value;
 
             if(string.IsNullOrEmpty(bearerToken))
             {
