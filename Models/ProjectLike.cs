@@ -4,16 +4,16 @@ namespace Models
     /// The Model class that represents
     /// individual projects liked by users.
     /// </summary>
-    public class LikedProjectByUser
+    public class ProjectLike
     {
 
-        public LikedProjectByUser(Project likedProject, User creatorOfProject)
+        public ProjectLike(Project likedProject, User creatorOfProject)
         {
             LikedProject = likedProject;
             CreatorOfProject = creatorOfProject;
         }
 
-        public LikedProjectByUser()
+        public ProjectLike()
         {
 
         }

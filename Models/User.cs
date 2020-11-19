@@ -31,7 +31,7 @@ namespace Models
             Services = new List<LinkedService>();
             UserProject = new List<UserProject>();
             FollowedUsers = new List<UserUser>();
-            LikedProjectsByUsers = new List<LikedProjectByUser>();
+            LikedProjectsByUsers = new List<ProjectLike>();
         }
 
         public int Id { get; set; }
@@ -72,7 +72,7 @@ namespace Models
         /// <value>
         /// The list object that keeps projects.
         /// </value>
-        public List<LikedProjectByUser> LikedProjectsByUsers { get; set; }
+        public List<ProjectLike> LikedProjectsByUsers { get; set; }
 
 
         /// <summary>

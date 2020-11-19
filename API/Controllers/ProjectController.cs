@@ -575,13 +575,13 @@ namespace API.Controllers
 
             try
             {
-                LikedProjectByUser likedProjectByUser =
-                    new LikedProjectByUser(projectToUnlike, currentUser);
-                await userProjectLikeService.AddAsync(likedProjectByUser);
+                ProjectLike projectLike =
+                    new ProjectLike(projectToUnlike, currentUser);
+                await userProjectLikeService.AddAsync(projectLike);
 
                 userProjectLikeService.Save();
-                return Ok(mapper.Map<LikedProjectByUser,
-                              UserProjectLikeResourceResult>(likedProjectByUser));
+                return Ok(mapper.Map<ProjectLike,
+                              UserProjectLikeResourceResult>(projectLike));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e,"Database exception!");
@@ -668,13 +668,13 @@ namespace API.Controllers
 
             try
             {
-                LikedProjectByUser likedProjectByUser =
-                    new LikedProjectByUser(projectToLike, currentUser);
-                userProjectLikeService.Remove(likedProjectByUser);
+                ProjectLike projectLike =
+                    new ProjectLike(projectToLike, currentUser);
+                userProjectLikeService.Remove(projectLike);
 
                 userProjectLikeService.Save();
-                return Ok(mapper.Map<LikedProjectByUser,
-                              UserProjectLikeResourceResult>(likedProjectByUser));
+                return Ok(mapper.Map<ProjectLike,
+                              UserProjectLikeResourceResult>(projectLike));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e,"Database exception!");

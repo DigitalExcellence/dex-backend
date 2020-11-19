@@ -23,45 +23,45 @@ using System.Linq;
 namespace Repositories
 {
 
-    public interface IUserProjectLikeRepository : IRepository<LikedProjectByUser>
+    public interface IUserProjectLikeRepository : IRepository<ProjectLike>
     {
 
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
 
     }
 
-    public class UserProjectLikeRepository : Repository<LikedProjectByUser>,
+    public class UserProjectLikeRepository : Repository<ProjectLike>,
                                              IUserProjectLikeRepository
     {
         public UserProjectLikeRepository(DbContext dbContext) :
             base(dbContext) { }
 
-        public override void Add(LikedProjectByUser likedProjectByUser)
+        public override void Add(ProjectLike projectLike)
         {
-            DbContext.Add(likedProjectByUser);
+            DbContext.Add(projectLike);
         }
 
-        public override void Remove(LikedProjectByUser likedProjectByUser)
+        public override void Remove(ProjectLike projectLike)
         {
-            LikedProjectByUser likedProjectToRemove = GetDbSet
-                    <LikedProjectByUser>()
+            ProjectLike projectToRemove = GetDbSet
+                    <ProjectLike>()
                 .SingleOrDefault(project => project.UserId ==
-                                            likedProjectByUser.CreatorOfProject.Id &&
+                                            projectLike.CreatorOfProject.Id &&
                                             project.LikedProject.Id ==
-                                            likedProjectByUser.LikedProject.Id);
+                                            projectLike.LikedProject.Id);
 
-            GetDbSet<LikedProjectByUser>()
-                .Remove(likedProjectToRemove);
+            GetDbSet<ProjectLike>()
+                .Remove(projectToRemove);
         }
 
         bool IUserProjectLikeRepository
             .CheckIfUserAlreadyLiked(int userId, int projectId)
         {
-            LikedProjectByUser likedProjectByUser = GetDbSet<LikedProjectByUser>()
+            ProjectLike projectLike = GetDbSet<ProjectLike>()
                 .SingleOrDefault(project =>
                                      (project.UserId == userId) && project.LikedProject.Id == projectId);
 
-            if(likedProjectByUser != null)
+            if(projectLike != null)
             {
                 return true;
             }

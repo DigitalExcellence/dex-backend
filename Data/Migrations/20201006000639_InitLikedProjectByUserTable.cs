@@ -7,7 +7,7 @@ namespace _4_Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "LikedProjectByUser",
+                name: "ProjectLike",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -34,19 +34,19 @@ namespace _4_Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_LikedProjectByUser_LikedProjectId",
-                table: "LikedProjectByUser",
+                table: "ProjectLike",
                 column: "LikedProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LikedProjectByUser_UserId",
-                table: "LikedProjectByUser",
+                table: "ProjectLike",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "LikedProjectByUser");
+                name: "ProjectLike");
         }
     }
 }

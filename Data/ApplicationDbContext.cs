@@ -91,7 +91,7 @@ namespace Data
         /// <summary>
         /// Gets or sets the projects liked by users.
         /// </summary>
-        public DbSet<LikedProjectByUser> LikedProjectByUser { get; set; }
+        public DbSet<ProjectLike> ProjectLike { get; set; }
 
         public DbSet<UserProject> UserProject { get; set; }
         public DbSet<UserUser> UserUser { get; set; }

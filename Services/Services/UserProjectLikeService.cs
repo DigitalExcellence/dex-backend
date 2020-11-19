@@ -24,12 +24,12 @@ using System;
 namespace Services.Services
 {
 
-    public interface IUserProjectLikeService : IService<LikedProjectByUser>
+    public interface IUserProjectLikeService : IService<ProjectLike>
     {
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
     }
 
-    public class UserProjectLikeService : Service<LikedProjectByUser>,
+    public class UserProjectLikeService : Service<ProjectLike>,
                                           IUserProjectLikeService
     {
 
@@ -39,14 +39,14 @@ namespace Services.Services
         private new IUserProjectLikeRepository Repository =>
             (IUserProjectLikeRepository) base.Repository;
 
-        public override void Add(LikedProjectByUser likedProjectEntity)
+        public override void Add(ProjectLike projectEntity)
         {
-            Repository.Add(likedProjectEntity);
+            Repository.Add(projectEntity);
         }
 
-        public override void Remove(LikedProjectByUser likedProjectByUser)
+        public override void Remove(ProjectLike projectLike)
         {
-            Repository.Remove(likedProjectByUser);
+            Repository.Remove(projectLike);
         }
 
         bool IUserProjectLikeService.CheckIfUserAlreadyLiked(int userId, int projectId)

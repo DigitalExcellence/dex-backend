@@ -139,7 +139,7 @@ namespace _4_Data.Migrations
                     b.ToTable("Institution");
                 });
 
-            modelBuilder.Entity("Models.LikedProjectByUser", b =>
+            modelBuilder.Entity("Models.ProjectLike", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,7 +158,7 @@ namespace _4_Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("LikedProjectByUser");
+                    b.ToTable("ProjectLike");
                 });
 
             modelBuilder.Entity("Models.Project", b =>
@@ -365,7 +365,7 @@ namespace _4_Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.LikedProjectByUser", b =>
+            modelBuilder.Entity("Models.ProjectLike", b =>
                 {
                     b.HasOne("Models.Project", "LikedProject")
                         .WithMany()
