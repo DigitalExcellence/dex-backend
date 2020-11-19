@@ -36,6 +36,11 @@ namespace Models
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the identity id of this institution.
+        /// </summary>
+        public string IdentityId { get; set; }
+
     }
 
 }
