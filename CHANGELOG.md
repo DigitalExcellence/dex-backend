@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Added
-- Automatically link users to their institution - [#295](ttps://github.com/DigitalExcellence/dex-backend/issues/295)
+- Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
 
 ### Changed
 
