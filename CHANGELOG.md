@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed issue where unused project icons where left in the database & File System - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
 - Refactored Postman CLI files to make them work from Postman folder. - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
 
 ### Security
