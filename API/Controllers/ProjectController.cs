@@ -257,7 +257,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to update project.",
                     Detail = "The specified project could not be found in the database.",
-                    Instance = "6A123609-19A1-47F0-B789-3D8F2A52C0C6"
+                    Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
                 };
                 return NotFound(problem);
             }
@@ -271,7 +271,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to edit the project.",
                     Detail = "The user is not allowed to edit the project.",
-                    Instance = "2E765D18-8EBC-4117-8F9E-B800E8967038"
+                    Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
                 };
                 return Unauthorized(problem);
             }
@@ -310,34 +310,6 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }  
             }
-
-            /*// Check if the icon has been changed
-            if(projectResource.FileId != 0 && projectResource.FileId != project.ProjectIconId)
-            {
-                // We need to delete the old file.
-                
-                try
-                {
-                    // Remove the file from the database
-                    await fileService.RemoveAsync(fileToDelete.Id)
-                                        .ConfigureAwait(false);
-                    fileService.Save();
-
-                    
-
-                } catch(System.IO.FileNotFoundException)
-                {
-                    ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "File could not be deleted because the path does not exist.",
-                        Detail = "File could not be found.",
-                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
-                    };
-
-                    return NotFound(problem);
-                }
-            }*/
-
             mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
