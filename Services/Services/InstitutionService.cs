@@ -19,6 +19,7 @@ using Models;
 using Repositories;
 using Repositories.Base;
 using Services.Base;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,6 +35,8 @@ namespace Services.Services
         /// <returns>This method returns the found institution with the specified id.</returns>
         Task<IEnumerable<Institution>> GetInstitutionsAsync();
 
+        Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId);
+
     }
 
     public class InstitutionService : Service<Institution>, IInstitutionService
@@ -46,6 +49,11 @@ namespace Services.Services
         public async Task<IEnumerable<Institution>> GetInstitutionsAsync()
         {
             return await Repository.GetInstitutionsAsync();
+        }
+
+        public async Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId)
+        {
+            return await Repository.GetInstitutionByInstitutionIdentityId(institutionIdentityId);
         }
 
     }
