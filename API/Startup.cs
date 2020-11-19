@@ -297,7 +297,7 @@ namespace API
                                 }
                                 IInstitutionService institutionService =
                                     context.RequestServices.GetService<IInstitutionService>();
-
+                                UserCreateInternalResource userInformation = context.GetUserInformation(Config);
                                 User user = await userService.GetUserByIdentityIdAsync(identityId)
                                                              .ConfigureAwait(false);
                                 if(user == null)
@@ -307,8 +307,6 @@ namespace API
                                         (await roleService.GetAll()).FirstOrDefault(
                                             i => i.Name == nameof(Defaults.Roles.RegisteredUser));
 
-                                    UserCreateInternalResource userInformation = context.GetUserInformation(Config);
-                                    
                                     if(userInformation == null)
                                     {
                                         // Then it probably belongs swagger so we set the username as developer.
@@ -342,24 +340,20 @@ namespace API
                                     await dbContext.SaveChangesAsync()
                                                    .ConfigureAwait(false);
                                 }
-                                else
+                                else if(Config.OriginalConfiguration.GetValue<bool>("UpdateInstitutionOnLogin"))
                                 {
-                                    UserCreateInternalResource userInformation = context.GetUserInformation(Config);
                                     if(userInformation != null)
                                     {
-                                        Institution institution =
-                                            await institutionService.GetInstitutionByInstitutionIdentityId(
-                                                userInformation.IdentityInsitutionId);
+                                        Institution institution = await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                                      userInformation.IdentityInsitutionId);
                                         if(institution != null)
-                                        {
                                             user.InstitutionId = institution.Id;
-                                        }
+                                        
                                         userService.Update(user);
                                         await dbContext.SaveChangesAsync()
                                                        .ConfigureAwait(false);
                                     }
                                 }
-
                                 await next()
                                     .ConfigureAwait(false);
                             });
