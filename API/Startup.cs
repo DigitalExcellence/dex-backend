@@ -328,9 +328,14 @@ namespace API
                                                            Email = userInformation.Email,
                                                            IdentityId = userInformation.IdentityId,
                                                            Role = registeredUserRole,
-                                                           InstitutionId = (await institutionService.GetInstitutionByInstitutionIdentityId(
-                                                                                userInformation.IdentityInsitutionId)).Id
                                                        };
+                                        Institution institution =
+                                            await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                userInformation.IdentityInsitutionId);
+                                        if( institution != null)
+                                        {
+                                            newUser.InstitutionId = institution.Id;
+                                        }
                                         userService.Add(newUser);
                                     }
                                     await dbContext.SaveChangesAsync()
