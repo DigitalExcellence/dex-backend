@@ -117,8 +117,7 @@ namespace API.Extensions
                 JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
                 if(handler.ReadToken(token) is JwtSecurityToken tokens)
                 {
-                    providerId = tokens.Claims.First(claim => claim.Type == "idp")
-                                              .Value;
+                    providerId = tokens.Claims.FirstOrDefault(claim => claim.Type == "idp")?.Value;
                 }
             }
 
