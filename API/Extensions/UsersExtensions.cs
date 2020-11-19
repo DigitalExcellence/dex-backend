@@ -109,10 +109,16 @@ namespace API.Extensions
         {
             string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
 
-            string token = bearerToken.Replace("Bearer ", "");
-            var handler = new JwtSecurityTokenHandler();
-            var tokens = handler.ReadToken(token) as JwtSecurityToken;
-            var providerId = tokens.Claims.First(claim => claim.Type == "idp").Value;
+            if(bearerToken != null)
+            {
+                string token = bearerToken.Replace("Bearer ", "");
+                JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+                if(handler.ReadToken(token) is JwtSecurityToken tokens)
+                {
+                    string providerId = tokens.Claims.First(claim => claim.Type == "idp")
+                                              .Value;
+                }
+            }
 
             if(string.IsNullOrEmpty(bearerToken))
             {
