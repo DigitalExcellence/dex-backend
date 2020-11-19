@@ -340,6 +340,8 @@ namespace API
                                     await dbContext.SaveChangesAsync()
                                                    .ConfigureAwait(false);
                                 }
+
+                                // If the user is already in the database and the Update institution on login is set to true
                                 else if(Config.OriginalConfiguration.GetValue<bool>("UpdateInstitutionOnLogin"))
                                 {
                                     if(userInformation != null)
