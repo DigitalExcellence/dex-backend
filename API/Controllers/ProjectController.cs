@@ -59,6 +59,7 @@ namespace API.Controllers
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
         /// <param name="userProjectService">The user project service is responsible for users that are following / liking projects.</param>
+        /// <param name="fileUploader">The file uploader service is used to upload the files into the file system</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
