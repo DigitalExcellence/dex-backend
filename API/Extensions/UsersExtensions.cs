@@ -16,6 +16,7 @@
 */
 
 using API.Configuration;
+using API.InternalResources;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -105,9 +106,10 @@ namespace API.Extensions
         /// <param name="actionContext">The action context.</param>
         /// <param name="config">The configuration.</param>
         /// <returns>The user object with information retrieved from the identity server</returns>
-        public static User GetUserInformation(this HttpContext actionContext, Config config)
+        public static UserCreateInternalResource GetUserInformation(this HttpContext actionContext, Config config)
         {
             string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
+            string providerId = "";
 
             if(bearerToken != null)
             {
@@ -115,7 +117,7 @@ namespace API.Extensions
                 JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
                 if(handler.ReadToken(token) is JwtSecurityToken tokens)
                 {
-                    string providerId = tokens.Claims.First(claim => claim.Type == "idp")
+                    providerId = tokens.Claims.First(claim => claim.Type == "idp")
                                               .Value;
                 }
             }
@@ -136,11 +138,13 @@ namespace API.Extensions
             {
                 return null;
             }
-            User newUser = new User()
+
+            UserCreateInternalResource newUser = new UserCreateInternalResource
             {
                 Name = (string) jsonResponse["name"],
                 Email = (string) jsonResponse["email"],
-                IdentityId = (string) jsonResponse["sub"]
+                IdentityId = (string) jsonResponse["sub"],
+                IdentityInsitutionId = providerId
             };
             return newUser ;
         }
