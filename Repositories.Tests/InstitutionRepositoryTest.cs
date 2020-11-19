@@ -62,6 +62,44 @@ namespace Repositories.Tests
             retrievedInstitutions.Should().BeEmpty();
         }
 
+        /// <summary>
+        /// This method tests the GetInstitutionByInstitutionIdentityId method whenever it returns an institution.
+        /// </summary>
+        /// <param name="institution">The institution, generated to mock the institution found from the repository.</param>
+        /// <returns>This method will return a passing result for the test.</returns>
+        [Test]
+        public async Task GetInstitutionByInstitutionIdentityId_ExistingIdentityId([InstitutionDataSource(1)] Institution institution)
+        {
+            DbContext.Add(institution);
+            await DbContext.SaveChangesAsync();
+
+            // Act
+            Institution retrievedInstitution =
+                await Repository.GetInstitutionByInstitutionIdentityId(institution.IdentityId);
+
+            // Assert
+            retrievedInstitution.Should().NotBeNull();
+            retrievedInstitution.Should()
+                                .Be(institution);
+        }
+
+        /// <summary>
+        /// This method tests the GetInstitutionByInstitutionIdentityId method whenever it can't find an institution.
+        /// </summary>
+        /// <returns>This method will return a passing result for the test.</returns>
+        [Test]
+        public async Task GetInstitutionByInstitutionIdentityId_NoIdentityId()
+        {
+            // Arrange
+
+            // Act
+            Institution retrievedInstitution =
+                await Repository.GetInstitutionByInstitutionIdentityId(string.Empty);
+
+            // Assert
+            retrievedInstitution.Should().BeNull();
+        }
+
     }
 
 }

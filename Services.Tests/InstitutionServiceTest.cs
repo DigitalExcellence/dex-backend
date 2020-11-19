@@ -110,7 +110,7 @@ namespace Services.Tests
             // Assert
             act.Should().NotThrow();
             actualInstitution.Should()
-                             .Equals(institution);
+                             .Be(institution);
             actualInstitution.Should()
                              .NotBeNull();
         }
