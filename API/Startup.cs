@@ -18,6 +18,7 @@
 using API.Configuration;
 using API.Extensions;
 using API.Filters;
+using API.InternalResources;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
@@ -25,7 +26,6 @@ using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -304,22 +304,33 @@ namespace API
                                         (await roleService.GetAll()).FirstOrDefault(
                                             i => i.Name == nameof(Defaults.Roles.RegisteredUser));
 
-                                    User newUser = context.GetUserInformation(Config);
-                                    if(newUser == null)
+                                    UserCreateInternalResource userInformation = context.GetUserInformation(Config);
+                                    
+                                    if(userInformation == null)
                                     {
                                         // Then it probably belongs swagger so we set the username as developer.
-                                        newUser = new User()
-                                                  {
-                                                      Name = "Developer",
-                                                      Email = "Developer@DEX.com",
-                                                      IdentityId = identityId,
-                                                      Role = registeredUserRole,
-                                                      InstitutionId = 1
-                                                  };
+                                        User newUser = new User
+                                        {
+                                            Name = "Developer",
+                                            Email = "Developer@DEX.com",
+                                            IdentityId = identityId,
+                                            Role = registeredUserRole,
+                                            InstitutionId = 1
+                                        };
                                         userService.Add(newUser);
                                     } else
                                     {
-                                        newUser.Role = registeredUserRole;
+                                        IInstitutionService institutionService =
+                                            context.RequestServices.GetService<IInstitutionService>();
+                                        User newUser = new User
+                                                       {
+                                                           Name = userInformation.Name,
+                                                           Email = userInformation.Email,
+                                                           IdentityId = userInformation.IdentityId,
+                                                           Role = registeredUserRole,
+                                                           InstitutionId = (await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                                                userInformation.IdentityInsitutionId)).Id
+                                                       };
                                         userService.Add(newUser);
                                     }
                                     await dbContext.SaveChangesAsync()
