@@ -7,6 +7,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -44,24 +45,13 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of role resource results.</returns>
         /// <response code="200">This endpoint returns a list of roles.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no roles are found.</response>
         [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
         [ProducesResponseType(typeof(IEnumerable<RoleResourceResult>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetAllRoles()
         {
-            List<Role> roles = await roleService.GetAllAsync().ConfigureAwait(false);
-            if(roles.Count == 0)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting all roles.",
-                    Detail = "There where no roles found in the database.",
-                    Instance = "3EB1E953-96D7-45FE-8C5C-05306AF8D060"
-                };
-                return NotFound(problem);
-            }
+            List<Role> roles = await roleService.GetAllAsync()
+                                                        .ConfigureAwait(false);
 
             return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleResourceResult>>(roles));
         }
@@ -89,6 +79,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
+
             return Ok(scopeList);
         }
 
@@ -159,7 +150,7 @@ namespace API.Controllers
 
             foreach(RoleScope roleScope in role.Scopes)
             {
-                if(!roleService.isValidScope(roleScope.Scope))
+                if(!roleService.IsValidScope(roleScope.Scope))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
@@ -221,7 +212,7 @@ namespace API.Controllers
             mapper.Map<RoleResource, Role>(roleResource,currentRole);
             foreach(RoleScope roleScope in currentRole.Scopes)
             {
-                if(!roleService.isValidScope(roleScope.Scope))
+                if(!roleService.IsValidScope(roleScope.Scope))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {

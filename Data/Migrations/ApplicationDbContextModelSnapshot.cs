@@ -67,6 +67,33 @@ namespace _4_Data.Migrations
                     b.ToTable("EmbeddedProject");
                 });
 
+            modelBuilder.Entity("Models.File", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UploaderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UploaderId");
+
+                    b.ToTable("File");
+                });
+
             modelBuilder.Entity("Models.Highlight", b =>
                 {
                     b.Property<int>("Id")
@@ -92,6 +119,24 @@ namespace _4_Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Highlight");
+                });
+
+            modelBuilder.Entity("Models.Institution", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Institution");
                 });
 
             modelBuilder.Entity("Models.LikedProjectByUser", b =>
@@ -133,6 +178,9 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectIconId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ShortDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -148,6 +196,8 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectIconId");
 
                     b.HasIndex("UserId");
 
@@ -204,6 +254,9 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("InstitutionId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
@@ -219,9 +272,55 @@ namespace _4_Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InstitutionId");
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Models.UserProject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserProject");
+                });
+
+            modelBuilder.Entity("Models.UserUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FollowedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserUser");
                 });
 
             modelBuilder.Entity("Models.Collaborator", b =>
@@ -244,6 +343,15 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.File", b =>
+                {
+                    b.HasOne("Models.User", "Uploader")
+                        .WithMany()
+                        .HasForeignKey("UploaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -272,6 +380,10 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.Project", b =>
                 {
+                    b.HasOne("Models.File", "ProjectIcon")
+                        .WithMany()
+                        .HasForeignKey("ProjectIconId");
+
                     b.HasOne("Models.User", "User")
                         .WithMany("Projects")
                         .HasForeignKey("UserId")
@@ -290,9 +402,39 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.User", b =>
                 {
+                    b.HasOne("Models.Institution", "Institution")
+                        .WithMany()
+                        .HasForeignKey("InstitutionId");
+
                     b.HasOne("Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
+                });
+
+            modelBuilder.Entity("Models.UserProject", b =>
+                {
+                    b.HasOne("Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("Models.User", "User")
+                        .WithMany("UserProject")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.UserUser", b =>
+                {
+                    b.HasOne("Models.User", "FollowedUser")
+                        .WithMany("FollowedUsers")
+                        .HasForeignKey("FollowedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

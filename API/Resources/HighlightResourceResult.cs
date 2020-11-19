@@ -16,6 +16,7 @@
 */
 
 using Models;
+using System;
 
 namespace API.Resources
 {
@@ -42,6 +43,16 @@ namespace API.Resources
         ///     This gets or sets the project of this highlight
         /// </summary>
         public ProjectHighlightResourceResult Project { get; set; }
+
+        /// <summary>
+        ///     This gets or sets the start date that the highlight should start
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+
+        /// <summary>
+        ///     This gets or sets the end date that highlight should end
+        /// </summary>
+        public DateTime? EndDate { get; set; }
     }
 
 }

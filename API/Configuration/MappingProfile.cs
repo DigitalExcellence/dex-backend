@@ -54,8 +54,26 @@ namespace API.Configuration
                                             destination.LikedProject.Description))
                 .ForAllOtherMembers(member => member.Ignore());
 
-            CreateMap<UserResource, User>();
+           CreateMap<UserUserResourceResult, UserUser>();
+
+           CreateMap<UserUser, UserUserResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(q => q.FollowedUser.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
+                .ForAllOtherMembers(o => o.Ignore());
+
+           CreateMap<UserProject, UserProjectResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
+                .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
+                .ForMember(q => q.Uri, opt => opt.MapFrom(p => p.Project.Uri))
+                .ForMember(q => q.Description, opt => opt.MapFrom(p => p.Project.Description))
+                .ForAllOtherMembers(o => o.Ignore());
+
+
             CreateMap<User, UserResourceResult>();
+
+            CreateMap<UserResource, User>();
+
             CreateMap<User, LimitedUserResourceResult>();
 
             CreateMap<ProjectResource, Project>();
@@ -80,8 +98,15 @@ namespace API.Configuration
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
 
+            CreateMap<FileResourceResult, File>();
+            CreateMap<File, FileResourceResult>().ForMember(e => e.UploaderUserId,
+                                                            opt => opt.MapFrom(e => e.Uploader.Id));
+
             CreateMap<RoleScopeResource, RoleScope>();
             CreateMap<RoleScope, RoleScopeResource>();
+
+            CreateMap<InstitutionResource, Institution>();
+            CreateMap<Institution, InstitutionResourceResult>();
         }
     }
 }

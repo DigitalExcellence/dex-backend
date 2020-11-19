@@ -17,6 +17,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
 {
@@ -28,6 +29,8 @@ namespace Models
         {
             Projects = new List<Project>();
             Services = new List<LinkedService>();
+            UserProject = new List<UserProject>();
+            FollowedUsers = new List<UserUser>();
             LikedProjectsByUsers = new List<LikedProjectByUser>();
         }
 
@@ -48,6 +51,10 @@ namespace Models
 
         public List<LinkedService> Services { get; set; }
 
+        public List<UserProject> UserProject { get; set; }
+        [InverseProperty("FollowedUser")]
+        public List<UserUser> FollowedUsers { get; set; }
+
         public string ProfileUrl { get; set; }
 
         /// <summary>
@@ -66,6 +73,17 @@ namespace Models
         /// The list object that keeps projects.
         /// </value>
         public List<LikedProjectByUser> LikedProjectsByUsers { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets a value for the Id of the institution where the user is registered.
+        /// </summary>
+        public int? InstitutionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the institution where the user is registered.
+        /// </summary>
+        public Institution Institution { get; set; }
 
     }
 

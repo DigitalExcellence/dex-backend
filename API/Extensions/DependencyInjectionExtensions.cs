@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Common;
+using API.HelperClasses;
 using Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +58,11 @@ namespace API.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IFileRepository, FileRepository>();
+
+            services.AddScoped<IFileUploader, FileUploader>();
+
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
 
             services.AddScoped<IRestClientFactory, RestClientFactory>();
@@ -63,6 +70,17 @@ namespace API.Extensions
             services.AddScoped<ISourceManagerService, SourceManagerService>();
             services.AddScoped<IGitHubSource, GitHubSource>();
             services.AddScoped<IGitLabSource, GitLabSource>();
+
+            services.AddScoped<IInstitutionService, InstitutionService>();
+            services.AddScoped<IInstitutionRepository, InstitutionRepository>();
+
+            services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
+
+            services.AddScoped<IUserProjectService, UserProjectService>();
+            services.AddScoped<IUserProjectRepository, UserProjectRepository>();
+
+            services.AddScoped<IUserUserService, UserUserService>();
+            services.AddScoped<IUserUserRepository, UserUserRepository>();
 
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();

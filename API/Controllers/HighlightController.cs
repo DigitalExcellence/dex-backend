@@ -24,6 +24,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -58,23 +59,12 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of highlight resource results.</returns>
         /// <response code="200">This endpoint returns a list highlights.</response>
-        /// <response code="404">The 404 Not Found status code is returned when there are no highlights found.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetAllHighlights()
         {
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync();
-            if(!highlights.Any())
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlights.",
-                    Detail = "The database does not contain any highlights.",
-                    Instance = "FC6A4F97-C815-4A92-8A73-2ECF1729B161"
-                };
-                return NotFound(problem);
-            }
+
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
         }
 
