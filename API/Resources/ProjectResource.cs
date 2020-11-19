@@ -49,5 +49,10 @@ namespace API.Resources
         ///     This gets or sets the collaborators
         /// </summary>
         public ICollection<CollaboratorResource> Collaborators { get; set; }
+
+        /// <summary>
+        /// This gets or sets the file id
+        /// </summary>
+        public int FileId { get; set; }
     }
 }

@@ -21,5 +21,10 @@ namespace API.Resources
         ///     This gets or sets the Short Description
         /// </summary>
         public string ShortDescription { get; set; }
+
+        /// <summary>
+        /// This gets or set the file of the project
+        /// </summary>
+        public FileResourceResult ProjectIcon { get; set; }
     }
 }

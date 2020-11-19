@@ -5,19 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
 
 
 
 ### Added
 
-- Added descriptions for Project Highlights - [#219](https://github.com/DigitalExcellence/dex-backend/issues/219)
-
 ### Changed
-
-- Changed DeX Frontend client to use code flow instead of implicit flow to fix silent refresh - [#246](https://github.com/DigitalExcellence/dex-backend/issues/246)
-- Improved swagger documentation - [#225](https://github.com/DigitalExcellence/dex-backend/issues/225)
 
 ### Deprecated
 
@@ -25,9 +19,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
-
 ### Security
+
+
+
+## Release v.0.8.0-beta - 06-11-2020
+
+
+
+### Added
+
+- Added a fileuploader which gives the opportunity to upload files and icons - [#217](https://github.com/DigitalExcellence/dex-backend/issues/217)
+- Add Postman tests to pipeline - [#189](https://github.com/DigitalExcellence/dex-backend/issues/189)
+- Added function to follow users and let users follow projects - [#228](https://github.com/DigitalExcellence/dex-backend/pull/258)
+- Added a new dex user that can be used to add projects manually - [#270](https://github.com/DigitalExcellence/dex-backend/issues/270)
+- Added data officer role and CRUD functionalities for institutions - [#265](https://github.com/DigitalExcellence/dex-backend/issues/265)
+
+### Fixed
+
+- Fixed issue where swagger authorization was not working when running in docker-compose - [#200](https://github.com/DigitalExcellence/dex-backend/issues/200)
+- Fixed issue with search functionality being too extensive. Now matching whole strings only - [#202](https://github.com/DigitalExcellence/dex-backend/issues/202)
+- Fixed issue where highlights were not returning the end date & start date - [#296](https://github.com/DigitalExcellence/dex-backend/issues/296)
+
+
+
+## Release v.0.7.0-beta - 09-10-2020
+
+### Added
+- Added descriptions for Project Highlights - [#219](https://github.com/DigitalExcellence/dex-backend/issues/219)
+
+### Changed
+
+- Changed DeX Frontend client to use code flow instead of implicit flow to fix silent refresh - [#246](https://github.com/DigitalExcellence/dex-backend/issues/246)
+- Improved swagger documentation - [#225](https://github.com/DigitalExcellence/dex-backend/issues/225)
+
+### Fixed
+
+- Fixed a bug where GetAllHighlights endpoint returned status code 404 when empty. - [#207](https://github.com/DigitalExcellence/dex-backend/issues/207)
+- Fixed issue where local docker-compose would not work due to missing connection string - [#234](https://github.com/DigitalExcellence/dex-backend/issues/234)
 
 
 ## Release v.0.6.1-beta - 16-09-2020

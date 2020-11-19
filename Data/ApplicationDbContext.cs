@@ -76,6 +76,22 @@ namespace Data
         /// </value>
         public DbSet<Role> Role { get; set; }
         /// <summary>
+        /// Gets or sets the institution.
+        /// </summary>
+        /// <value>
+        /// The institution.
+        /// </value>
+        public DbSet<Institution> Institution { get; set; }
+        /// Gets or sets the file.
+        /// </summary>
+        /// <value>
+        /// The file.
+        /// </value>
+        public DbSet<File> File { get; set; }
+
+        public DbSet<UserProject> UserProject { get; set; }
+        public DbSet<UserUser> UserUser { get; set; }
+        /// <summary>
         /// Gets or sets the projects liked by users.
         /// </summary>
         public DbSet<LikedProjectByUser> LikedProjectByUser { get; set; }
@@ -88,7 +104,6 @@ namespace Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         }
-
     }
 
 }
