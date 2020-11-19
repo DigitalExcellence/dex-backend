@@ -295,9 +295,12 @@ namespace API
                                     Log.Logger.Error(e, "User is not authorized.");
                                     await next();
                                 }
-                                if(await userService.GetUserByIdentityIdAsync(identityId)
-                                                    .ConfigureAwait(false) ==
-                                   null)
+                                IInstitutionService institutionService =
+                                    context.RequestServices.GetService<IInstitutionService>();
+
+                                User user = await userService.GetUserByIdentityIdAsync(identityId)
+                                                             .ConfigureAwait(false);
+                                if(user == null)
                                 {
                                     IRoleService roleService = context.RequestServices.GetService<IRoleService>();
                                     Role registeredUserRole =
@@ -320,8 +323,6 @@ namespace API
                                         userService.Add(newUser);
                                     } else
                                     {
-                                        IInstitutionService institutionService =
-                                            context.RequestServices.GetService<IInstitutionService>();
                                         User newUser = new User
                                                        {
                                                            Name = userInformation.Name,
@@ -340,6 +341,23 @@ namespace API
                                     }
                                     await dbContext.SaveChangesAsync()
                                                    .ConfigureAwait(false);
+                                }
+                                else
+                                {
+                                    UserCreateInternalResource userInformation = context.GetUserInformation(Config);
+                                    if(userInformation != null)
+                                    {
+                                        Institution institution =
+                                            await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                userInformation.IdentityInsitutionId);
+                                        if(institution != null)
+                                        {
+                                            user.InstitutionId = institution.Id;
+                                        }
+                                        userService.Update(user);
+                                        await dbContext.SaveChangesAsync()
+                                                       .ConfigureAwait(false);
+                                    }
                                 }
 
                                 await next()
