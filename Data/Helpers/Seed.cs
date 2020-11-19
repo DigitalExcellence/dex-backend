@@ -134,14 +134,15 @@ namespace Data.Helpers
         /// <summary>
         /// This method seeds a test institution in the database.
         /// </summary>
-        /// <returns>Returns the institution that will be seeded in the databse.</returns>
+        /// <returns>Returns the institution that will be seeded in the database.</returns>
         public static Institution SeedInstitution()
         {
             Institution institution = new Institution
               {
                   Name = "Fontys",
-                  Description = "Description for Fontys"
-              };
+                  Description = "Description for Fontys",
+                  IdentityId = "https://identity.fhict.nl"
+            };
             return institution;
         }
         /// <summary>
