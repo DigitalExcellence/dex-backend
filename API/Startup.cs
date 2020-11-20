@@ -330,7 +330,7 @@ namespace API
                                                        };
                                         Institution institution =
                                             await institutionService.GetInstitutionByInstitutionIdentityId(
-                                                userInformation.IdentityInsitutionId);
+                                                userInformation.IdentityInstitutionId);
                                         if( institution != null)
                                         {
                                             newUser.InstitutionId = institution.Id;
@@ -347,7 +347,7 @@ namespace API
                                     if(userInformation != null)
                                     {
                                         Institution institution = await institutionService.GetInstitutionByInstitutionIdentityId(
-                                                                      userInformation.IdentityInsitutionId);
+                                                                      userInformation.IdentityInstitutionId);
                                         if(institution != null)
                                             user.InstitutionId = institution.Id;
                                         

@@ -143,7 +143,7 @@ namespace API.Extensions
                 Name = (string) jsonResponse["name"],
                 Email = (string) jsonResponse["email"],
                 IdentityId = (string) jsonResponse["sub"],
-                IdentityInsitutionId = providerId
+                IdentityInstitutionId = providerId
             };
             return newUser ;
         }
