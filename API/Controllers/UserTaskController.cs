@@ -73,7 +73,8 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This endpoint is responsible for converting an account to Alumni. 
+        /// This endpoint is responsible for converting an account to Alumni.
+        /// New credentials in the headers due to security. 
         /// </summary>
         /// <returns> The updated user. </returns>
         [HttpPut]
@@ -121,7 +122,7 @@ namespace API.Controllers
             }
 
             
-
+            // Rest call to Identity server to change credentials. Credentials are in the headers due to security issues.
             RestClient restClient = new RestClient("https://localhost:5005/");
             RestRequest restRequest = new RestRequest("Account/ChangeCredentials")
                                       {
