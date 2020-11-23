@@ -11,9 +11,9 @@ namespace NotificationSystem
         static void Main(string[] args)
         {
             // todo change to env variables.
-            string hostName = "localhost";
-            string user = "guest";
-            string password = "guest";
+            string hostName = "rabbitmq";
+            string user = "notificationservice";
+            string password = "C6S&jph1VQUv";
 
             RabbitMQSubscriber subscriber = new RabbitMQSubscriber(hostName, user, password);
             IModel channel = subscriber.SubscribeToSubject("email");

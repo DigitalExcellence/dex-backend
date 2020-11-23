@@ -1,6 +1,5 @@
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using NotificationSystem.Contracts;
 using RabbitMQ.Client.Events;
@@ -31,9 +30,18 @@ namespace NotificationSystem.Services
                 string message = Encoding.UTF8.GetString(body);
                 try
                 {
-                    notificationService.ValidateMessageBody(message);
-                    notificationService.SendNotification(message);
-                    channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                    if(notificationService != null)
+                    {
+                        notificationService.ValidateMessageBody(message);
+                        notificationService.SendNotification(message);
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                        Console.WriteLine("Delivered");
+                    } else
+                    {
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                        Console.WriteLine("Delivered");
+                    }
+                    
                 } catch(Exception e)
                 {
                     Log.Logger.Error(e, "Error sending notification.");
@@ -47,6 +55,7 @@ namespace NotificationSystem.Services
             channel.BasicConsume(queue: subject,
                 autoAck: false,
                 consumer: consumer);
+            Console.ReadLine();
         }
     }
 }

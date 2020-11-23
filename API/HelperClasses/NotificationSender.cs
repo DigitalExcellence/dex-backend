@@ -27,9 +27,10 @@ namespace API.HelperClasses
     public class NotificationSender : INotificationSender
     {
         // todo change to env variables.
-        private string hostName = "localhost";
-        private string user = "guest";
-        private string password = "guest";
+        // docker service name
+        private string hostName = "rabbitmq";
+        private string user = "notificationservice";
+        private string password = "C6S&jph1VQUv";
 
         private ConnectionFactory connectionFactory;
 

@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    volumes:
+      - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      mssql-network:
+  
   db:
     build:
       context: .
@@ -29,6 +41,21 @@ services:
     ports:
       - 5004:5004
       - 5005:5005
+    deploy:
+      restart_policy:
+        condition: on-failure
+  
+  notificationservice:
+    build:
+      context: .
+      dockerfile: NotificationSystem/Dockerfile
+    depends_on: 
+      - rabbitmq
+    networks: 
+      mssql-network:
+    deploy:
+      restart_policy:
+        condition: on-failure
 
   api:
     build:
@@ -36,6 +63,7 @@ services:
       dockerfile: API/Dockerfile.dev
     depends_on:
       - db
+      - rabbitmq
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=master;User=sa;Password=Dexcelence!1;
       - App__IdentityServer__IdentityUrl=http://identity:5004
@@ -48,6 +76,9 @@ services:
     ports:
       - 5000:5000
       - 5001:5001
+    deploy:
+       restart_policy:
+        condition: on-failure
 
 networks:
   mssql-network:
