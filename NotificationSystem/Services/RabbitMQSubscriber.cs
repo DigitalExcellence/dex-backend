@@ -14,11 +14,10 @@ namespace NotificationSystem.Services
     public class RabbitMQSubscriber : IRabbitMQSubscriber
     {
 
-        private string hostName;
-        private string user;
-        private string password;
+        private readonly string hostName;
+        private readonly string user;
+        private readonly string password;
         private IConnection connection;
-        private EventingBasicConsumer consumer;
 
 
         public RabbitMQSubscriber(string hostName, string user, string password)
@@ -31,15 +30,20 @@ namespace NotificationSystem.Services
 
         private void ConnectToMessageBroker()
         {
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.UserName = user;
-            factory.Password = password;
-            factory.HostName = hostName;
+            ConnectionFactory factory = new ConnectionFactory
+            {
+                UserName = user,
+                Password = password,
+                HostName = hostName
+            };
+            factory.AutomaticRecoveryEnabled = true;
             connection = factory.CreateConnection();
+            Console.WriteLine("Connected with RabbitMQ");
         }
 
         public IModel SubscribeToSubject(string subject)
         {
+            Console.WriteLine("Before subscribe to subject");
             IModel channel = connection.CreateModel();
             channel.QueueDeclare(queue: subject,
                 durable: true,
@@ -47,6 +51,7 @@ namespace NotificationSystem.Services
                 autoDelete: false,
                 arguments: null);
             channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+            Console.WriteLine("After subscribe to subject");
             return channel;
         }
     }

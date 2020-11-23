@@ -7,11 +7,12 @@ services:
       - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
       - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
       - ./rabbitmq/logs:/var/log/rabbitmq/log
-    ports:
+    ports: 
       - 5672:5672
+      - 5671:5671
       - 15672:15672
     networks:
-      mssql-network:
+      rabbitmq-network:
   
   db:
     build:
@@ -49,13 +50,13 @@ services:
     build:
       context: .
       dockerfile: NotificationSystem/Dockerfile
-    depends_on: 
+    depends_on:
       - rabbitmq
-    networks: 
-      mssql-network:
     deploy:
       restart_policy:
         condition: on-failure
+    networks:
+      rabbitmq-network:
 
   api:
     build:
@@ -63,7 +64,6 @@ services:
       dockerfile: API/Dockerfile.dev
     depends_on:
       - db
-      - rabbitmq
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=master;User=sa;Password=Dexcelence!1;
       - App__IdentityServer__IdentityUrl=http://identity:5004
@@ -73,6 +73,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
     networks:
       mssql-network:
+      rabbitmq-network:
     ports:
       - 5000:5000
       - 5001:5001
@@ -87,3 +88,5 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
+  rabbitmq-network:
+    driver: bridge

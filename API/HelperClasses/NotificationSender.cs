@@ -28,7 +28,7 @@ namespace API.HelperClasses
     {
         // todo change to env variables.
         // docker service name
-        private string hostName = "rabbitmq";
+        private string hostName = "localhost";
         private string user = "notificationservice";
         private string password = "C6S&jph1VQUv";
 

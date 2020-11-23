@@ -14,7 +14,7 @@ namespace NotificationSystem.Services
     }
     public class RabbitMQListener : IRabbitMQListener
     {
-        private IModel channel;
+        private readonly IModel channel;
 
         public RabbitMQListener(IModel channel)
         {
@@ -23,6 +23,7 @@ namespace NotificationSystem.Services
 
         public EventingBasicConsumer CreateConsumer(INotificationService notificationService)
         {
+            Console.WriteLine("Before creating Consumer");
             EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
             consumer.Received += (sender, ea) =>
             {
@@ -44,17 +45,20 @@ namespace NotificationSystem.Services
                     
                 } catch(Exception e)
                 {
-                    Log.Logger.Error(e, "Error sending notification.");
+                    throw e;
                 }
             };
+            Console.WriteLine("After creating Consumer");
             return consumer;
         }
 
         public void StartConsume(EventingBasicConsumer consumer, string subject)
         {
+            Console.WriteLine("Before starting consument");
             channel.BasicConsume(queue: subject,
                 autoAck: false,
                 consumer: consumer);
+            Console.WriteLine("After starting consument");
             Console.ReadLine();
         }
     }
