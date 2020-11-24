@@ -88,6 +88,13 @@ namespace Data
         /// The file.
         /// </value>
         public DbSet<File> File { get; set; }
+        /// <summary>
+        /// Gets or sets the Call to Action.
+        /// </summary>
+        /// <value>
+        /// The call to action.
+        /// </value>
+        public DbSet<CallToAction> CallToAction { get; set; }
 
         public DbSet<UserProject> UserProject { get; set; }
         public DbSet<UserUser> UserUser { get; set; }
