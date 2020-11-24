@@ -10,7 +10,7 @@ namespace NotificationSystem
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             //wait for rabbitmq service to start
             Thread.Sleep(10000);

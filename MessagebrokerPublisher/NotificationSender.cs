@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.HelperClasses
+namespace MessagebrokerPublisher
 {
     ///<summary>
     ///Interface for the NotificationSender.
@@ -18,7 +18,7 @@ namespace API.HelperClasses
         /// </summary>
         /// <param name="message"></param>
         /// <param name="subject"></param>
-        void RegisterNotification(string message, string subject);
+        void RegisterNotification(string message, Subject subject);
     }
 
     /// <summary>
@@ -26,11 +26,11 @@ namespace API.HelperClasses
     /// </summary>
     public class NotificationSender : INotificationSender
     {
-        // todo change to env variables.
+        // todo change to env variables so that when not ran in docker, it does not crash.
         // docker service name
-        private string hostName = "rabbitmq";
-        private string user = "notificationservice";
-        private string password = "C6S&jph1VQUv";
+        private readonly string hostName = "rabbitmq";
+        private readonly string user = "notificationservice";
+        private readonly string password = "C6S&jph1VQUv";
 
         private ConnectionFactory connectionFactory;
 
@@ -43,10 +43,12 @@ namespace API.HelperClasses
         }
         private void CreateConnectionFactory()
         {
-            connectionFactory = new ConnectionFactory();
-            connectionFactory.UserName = user;
-            connectionFactory.Password = password;
-            connectionFactory.HostName = hostName;
+            connectionFactory = new ConnectionFactory
+            {
+                UserName = user,
+                Password = password,
+                HostName = hostName
+            };
         }
         private IConnection CreateConnection()
         {
@@ -58,19 +60,20 @@ namespace API.HelperClasses
         /// </summary>
         /// <param name="message">The message to be registered.</param>
         /// <param name="subject">The queue to be registered to.</param>
-        public void RegisterNotification(string message, string subject)
+        public void RegisterNotification(string message, Subject subject)
         {
+            string subjectString = subject.ToString();
             IConnection connection = CreateConnection();
             IModel channel = connection.CreateModel();
-            channel.QueueDeclare(queue: subject, durable: true, exclusive: false, autoDelete: false, arguments: null);
+            channel.QueueDeclare(queue: subjectString, durable: true, exclusive: false, autoDelete: false, arguments: null);
             channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-            Byte[] body = Encoding.UTF8.GetBytes(message);
+            byte[] body = Encoding.UTF8.GetBytes(message);
             IBasicProperties properties = channel.CreateBasicProperties();
             properties.Persistent = true;
-            channel.BasicPublish(exchange: "", routingKey: subject, basicProperties: properties, body: body);
+            channel.BasicPublish(exchange: "", routingKey: subjectString, basicProperties: properties, body: body);
         }
 
-        
+
     }
 }

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.8.10-beta.1-management
     volumes:
       - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
       - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
@@ -11,6 +11,7 @@ services:
       - 5672:5672
       - 5671:5671
       - 15672:15672
+    user: root
     networks:
       rabbitmq-network:
   
@@ -52,6 +53,9 @@ services:
       dockerfile: NotificationSystem/Dockerfile
     depends_on:
       - rabbitmq
+    user: root
+    stdin_open: true
+    tty: true
     deploy:
       restart_policy:
         condition: on-failure
