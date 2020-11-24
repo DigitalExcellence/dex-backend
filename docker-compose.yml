@@ -1,6 +1,20 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3.8.10-beta.1-management
+    volumes:
+      - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports: 
+      - 5672:5672
+      - 5671:5671
+      - 15672:15672
+    user: root
+    networks:
+      rabbitmq-network:
+  
   db:
     build:
       context: .
@@ -29,6 +43,24 @@ services:
     ports:
       - 5004:5004
       - 5005:5005
+    deploy:
+      restart_policy:
+        condition: on-failure
+  
+  notificationservice:
+    build:
+      context: .
+      dockerfile: NotificationSystem/Dockerfile
+    depends_on:
+      - rabbitmq
+    user: root
+    stdin_open: true
+    tty: true
+    deploy:
+      restart_policy:
+        condition: on-failure
+    networks:
+      rabbitmq-network:
 
   api:
     build:
@@ -45,9 +77,13 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
     networks:
       mssql-network:
+      rabbitmq-network:
     ports:
       - 5000:5000
       - 5001:5001
+    deploy:
+       restart_policy:
+        condition: on-failure
 
 networks:
   mssql-network:
@@ -56,3 +92,5 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
+  rabbitmq-network:
+    driver: bridge
