@@ -311,6 +311,7 @@ namespace Repositories
         {
             return DbSet
                     .Include(p => p.User)
+                    .Include(i => i.ProjectIcon)
                     .Where(p =>
                             p.Name.Contains(query) ||
                             p.Description.Contains(query) ||
