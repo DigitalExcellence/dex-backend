@@ -18,9 +18,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.DataProviders;
 using Services.Services;
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -33,14 +36,16 @@ namespace API.Controllers
     public class WizardController : ControllerBase
     {
         private readonly ISourceManagerService sourceManagerService;
+        private readonly IDataProviderService dataProviderService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
         /// <param name="sourceManagerService">The source manager service which is used to communicate with the logic layer.</param>
-        public WizardController(ISourceManagerService sourceManagerService)
+        public WizardController(ISourceManagerService sourceManagerService, IDataProviderService dataProviderService)
         {
             this.sourceManagerService = sourceManagerService;
+            this.dataProviderService = dataProviderService;
         }
 
         /// <summary>
@@ -83,6 +88,76 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+            return Ok(project);
+        }
+
+        public async Task<IActionResult> GetProjectsFromExternalDataSource([FromQuery] string dataSourceGuid, [FromQuery] string accessToken)
+        {
+            if(string.IsNullOrEmpty(dataSourceGuid))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Invalid data source guid",
+                    Detail = "Data source guid can't be empty",
+                    Instance = "D84D3112-855D-480A-BCDE-7CADAC2C6C55"
+                };
+                return BadRequest(problem);
+            }
+
+            if(dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Data source guid not found",
+                    Detail = "Data source could not be found with specified data source guid",
+                    Instance = "4FB90F9A-8499-40F1-B7F3-3C2838BDB1D4"
+                };
+                return NotFound(problem);
+            }
+
+            IEnumerable<Project> projects = await dataProviderService.GetAllProjects(dataSourceGuid, accessToken);
+            return Ok(projects);
+        }
+
+        public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
+                                                                    [FromQuery] string accessToken,
+                                                                    [FromQuery] string projectGuid)
+        {
+            if(string.IsNullOrEmpty(dataSourceGuid))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Invalid data source guid",
+                    Detail = "Data source guid can't be empty",
+                    Instance = "019146D8-4162-43DD-8531-57DDD26E221C"
+                };
+                return BadRequest(problem);
+            }
+
+            if(dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Data source guid not found",
+                    Detail = "Data source could not be found with specified data source guid",
+                    Instance = "4E3837F4-9D35-40C4-AB7C-D325FBA225E6"
+                };
+                return NotFound(problem);
+            }
+
+            Project project = await dataProviderService.GetProjectByGuid(projectGuid);
+
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Project not found",
+                    Detail = "Project could not be found with specified project guid",
+                    Instance = "0D96A77A-D35F-487C-B552-BF6D1C0CDD42"
+                };
+                return NotFound(problem);
+            }
+
             return Ok(project);
         }
     }
