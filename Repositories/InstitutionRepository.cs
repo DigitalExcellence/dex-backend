@@ -18,6 +18,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,6 +38,13 @@ namespace Repositories
         /// <returns>This method returns a collection of institutions.</returns>
         Task<IEnumerable<Institution>> GetInstitutionsAsync();
 
+        /// <summary>
+        /// This method gets the institution with the specified identity id asynchronous.
+        /// </summary>
+        /// <param name="institutionIdentityId">The identity id which is used for searching the institution.</param>
+        /// <returns>This method returns the found institution with the specified identity id.</returns>
+        Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId);
+
     }
 
     /// <summary>
@@ -53,6 +61,12 @@ namespace Repositories
         {
             return await GetDbSet<Institution>()
                        .ToListAsync();
+        }
+
+        public async Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId)
+        {
+            return await GetDbSet<Institution>()
+                       .FirstOrDefaultAsync(i => i.IdentityId == institutionIdentityId);
         }
 
     }

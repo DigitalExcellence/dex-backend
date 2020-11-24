@@ -15,29 +15,34 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-namespace API.Resources
+namespace API.InternalResources
 {
-
     /// <summary>
-    /// The viewmodel of a Institution model
+    /// The internal model resource for retrieving user data and
+    /// creating the user
     /// </summary>
-    public class InstitutionResource
+    public class UserCreateInternalResource
     {
-        
         /// <summary>
-        /// Gets or sets a value for the name of the institution.
+        /// Gets or sets the name of the internal user resource.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the description of the institution.
+        /// Gets or sets the Email of the internal user resource.
         /// </summary>
-        public string Description { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the identity id for the institution.
+        /// Gets or sets the identity id of the internal user resource.
         /// </summary>
         public string IdentityId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identity institution id of the internal user resource.
+        /// </summary>
+        public string IdentityInstitutionId { get; set; }
+
     }
 
 }
