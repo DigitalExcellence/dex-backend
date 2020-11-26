@@ -24,7 +24,7 @@ namespace Models
     /// An example would be the title of an call to action. The type would be
     /// 'Title' and the Value is the text on the call to action.
     /// </summary>
-    public class CallToActionOptions
+    public class CallToActionOption
     {
         /// <summary>
         /// Gets or sets a value for the Id property.

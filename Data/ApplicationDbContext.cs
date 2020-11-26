@@ -101,7 +101,7 @@ namespace Data
         /// <value>
         /// The call to action options.
         /// </value>
-        public DbSet<CallToActionOptions> CallToActionOption { get; set; }
+        public DbSet<CallToActionOption> CallToActionOption { get; set; }
 
         public DbSet<UserProject> UserProject { get; set; }
         public DbSet<UserUser> UserUser { get; set; }

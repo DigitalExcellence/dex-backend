@@ -37,7 +37,7 @@ namespace _4_Data.Migrations
                     b.ToTable("CallToAction");
                 });
 
-            modelBuilder.Entity("Models.CallToActionOptions", b =>
+            modelBuilder.Entity("Models.CallToActionOption", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
