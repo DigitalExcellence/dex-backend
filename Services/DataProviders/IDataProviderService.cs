@@ -13,6 +13,10 @@ namespace Models.DataProviders
 
         bool IsExistingDataSourceGuid(string dataSourceGuid);
 
+        string GetOauthUrl(string guid);
+
+        Task<OauthTokens> GetTokens(string code, string guid);
+
     }
 
 }

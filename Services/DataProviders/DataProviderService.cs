@@ -43,6 +43,17 @@ namespace Models.DataProviders
             return dataProviderLoader.GetDataSourceByGuid(dataSourceGuid) != null;
         }
 
+        public string GetOauthUrl(string guid)
+        {
+            return dataProviderLoader.GetDataSourceByGuid(guid)
+                                     .OauthUrl;
+        }
+
+        public Task<OauthTokens> GetTokens(string code, string guid)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }
