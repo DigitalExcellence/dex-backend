@@ -17,11 +17,13 @@
 
 using API.Resources;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Defaults;
 using Services.Services;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -39,13 +41,25 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly ICallToActionOptionService callToActionOptionService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CallToActionOptionController"/> class.
+        /// </summary>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
+        /// <param name="callToActionOptionService">The call to action option service which is used to communicate with the logic layer.</param>
         public CallToActionOptionController(IMapper mapper, ICallToActionOptionService callToActionOptionService)
         {
             this.mapper = mapper;
             this.callToActionOptionService = callToActionOptionService;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving all the call to action options.
+        /// </summary>
+        /// <returns>This method returns a list of call to action option resource results.</returns>
+        /// <response code="200">This endpoint returns a list of call to action options.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
+        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetAllOptions()
         {
             IEnumerable<CallToActionOption> options = await callToActionOptionService.GetCallToActionOptionsAsync();
@@ -55,8 +69,20 @@ namespace API.Controllers
             return Ok(returnModel);
         }
 
-        //TODO: Check if type exists
+        /// <summary>
+        /// This method is responsible for retrieving all the call to action options with
+        /// the specified type id.
+        /// </summary>
+        /// <param name="id">The unique identifier for the call to action option type which is
+        /// used for searching all the call to action options.</param>
+        /// <returns code="200">This endpoint returns a list of call to action options with the specified type</returns>
+        /// <response code="400">The 400 Bad Request status code is returned when the id is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the type could not be found.</response>
         [HttpGet("type/{id}")]
+        [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetAllOptionsFromType(int id)
         {
             if(id <= 0)
@@ -70,6 +96,8 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            //TODO: Check if type exists
+
             IEnumerable<CallToActionOption> options =
                 await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(id);
             IEnumerable<CallToActionOptionResourceResult> returnModel =
@@ -78,6 +106,20 @@ namespace API.Controllers
             return Ok(returnModel);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a single call to action option by id.
+        /// </summary>
+        /// <param name="id">The unique identifier which is used for searching the call to action option.</param>
+        /// <returns>This method returns the call to action option resource result.</returns>
+        /// <response code="200">This endpoint returns a call to action option with the specified id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the id is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no call to action option could be
+        /// found with the specified id.</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetOptionById(int id)
         {
             if(id <= 0)
