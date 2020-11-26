@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Models
 {
 
@@ -32,11 +34,13 @@ namespace Models
         /// <summary>
         /// Gets or sets a value for the Name property.
         /// </summary>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets a value for the Description property.
         /// </summary>
+        [Required]
         public string Description { get; set; }
 
     }

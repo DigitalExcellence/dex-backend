@@ -10,6 +10,13 @@
     <EmbeddedResource Remove="Configurations\IdentityMigrations\**" />
     <None Remove="Configurations\IdentityMigrations\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20201126125840_AddedCallToActionOptions.cs" />
+    <Compile Remove="Migrations\20201126125840_AddedCallToActionOptions.Designer.cs" />
+    <Compile Remove="Migrations\20201126130204_AddedCallToActionOptions.cs" />
+    <Compile Remove="Migrations\20201126130204_AddedCallToActionOptions.Designer.cs" />
+  </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

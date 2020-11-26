@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Models
 {
     /// <summary>
@@ -30,11 +32,13 @@ namespace Models
         /// <summary>
         /// Gets or sets a value for the Name property.
         /// </summary>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets a value for the RedirectUrl property.
         /// </summary>
+        [Required]
         public string RedirectUrl { get; set; }
 
     }

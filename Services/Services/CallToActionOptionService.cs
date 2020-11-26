@@ -58,17 +58,17 @@ namespace Services.Services
 
         protected new ICallToActionOptionRepository Repository => (ICallToActionOptionRepository) base.Repository;
 
-        public Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsAsync()
+        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsAsync()
         {
             return await Repository.GetCallToActionOptionsAsync();
         }
 
-        public Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
+        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
         {
             return await Repository.GetCallToActionOptionsFromTypeAsync(typeId);
         }
 
-        public Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id)
+        public async Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id)
         {
             return await Repository.GetCallToActionOptionByIdAsync(id);
         }

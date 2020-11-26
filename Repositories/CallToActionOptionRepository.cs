@@ -20,6 +20,7 @@ using Models;
 using Repositories.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Repositories
@@ -59,14 +60,17 @@ namespace Repositories
                        .ToListAsync();
         }
 
-        public Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
+        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
         {
             return await GetDbSet<CallToActionOption>()
+                         .Where(o => o.Type.Id == typeId)
+                         .ToListAsync();
         }
 
-        public Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id)
+        public async Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await GetDbSet<CallToActionOption>()
+                       .SingleOrDefaultAsync(o => o.Id == id);
         }
 
     }
