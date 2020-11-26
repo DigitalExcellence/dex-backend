@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Models.DataProviders
 {
@@ -31,7 +30,8 @@ namespace Models.DataProviders
         {
             List<IDataSource> dataSources = new List<IDataSource>();
             using IServiceScope scope = serviceScopeFactory.CreateScope();
-            foreach(string dll in Directory.GetFiles(Assembly.GetEntryAssembly().Location, "*.dll"))
+            foreach(string dll in Directory.GetFiles(Assembly.GetEntryAssembly()
+                                                             ?.Location, "*.dll"))
             {
                 Assembly assembly = Assembly.LoadFrom(dll);
                 foreach(Type type in assembly.GetTypes())
