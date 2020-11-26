@@ -5,7 +5,7 @@ using Repositories.Base;
 namespace Repositories
 {
 
-    public interface ICallToActionOptionRepository
+    public interface ICallToActionOptionRepository : IRepository<CallToActionOption>
     {
 
 
