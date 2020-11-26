@@ -15,33 +15,29 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Models
 {
+
     /// <summary>
-    /// This class contains all the properties for a call to action option.
-    /// An example would be the title of an call to action. The type would be
-    /// 'Title' and the Value is the text on the call to action.
+    /// This class contains all the properties for a call to action option type.
     /// </summary>
-    public class CallToActionOption
+    public class CallToActionOptionType
     {
+
         /// <summary>
         /// Gets or sets a value for the Id property.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Type property.
+        /// Gets or sets a value for the Name property.
         /// </summary>
-        [Required]
-        public CallToActionOptionType Type { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Value property.
+        /// Gets or sets a value for the Description property.
         /// </summary>
-        [Required]
-        public string Value { get; set; }
+        public string Description { get; set; }
 
     }
 
