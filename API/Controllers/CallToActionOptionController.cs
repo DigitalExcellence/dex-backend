@@ -19,8 +19,10 @@ using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Serilog;
 using Services.Services;
 using System.Collections.Generic;
 using System.Net;
@@ -62,12 +64,21 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetAllOptions()
         {
-            IEnumerable<CallToActionOption> options = await callToActionOptionService.GetCallToActionOptionsAsync();
+            IEnumerable<CallToActionOption> options = await callToActionOptionService.GetAll();
             IEnumerable<CallToActionOptionResourceResult> returnModel =
                 mapper.Map<IEnumerable<CallToActionOption>, IEnumerable<CallToActionOptionResourceResult>>(options);
 
             return Ok(returnModel);
         }
+
+        //public async Task<IActionResult> GetCallToActionTypes()
+        //{
+        //    IEnumerable<CallToActionOptionType> types =
+        //        await callToActionOptionService.GetCallToActionOptionTypesAsync();
+        //    IEnumerable<CallToActionOptionTypeResourceResult> returnModel =
+        //        mapper.Map<IEnumerable<CallToActionOptionType>, IEnumerable<CallToActionOptionTypeResourceResult>>(types);
+        //    return Ok(returnModel);
+        //}
 
         /// <summary>
         /// This method is responsible for retrieving all the call to action options with
@@ -85,7 +96,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetAllOptionsFromType(int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -96,7 +107,17 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            //TODO: Check if type exists
+            CallToActionOptionType type = await callToActionOptionService.GetCallToActionOptionTypeByIdAsync(id);
+            if (type == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the call to action option type.",
+                    Detail = "The database does not contain a call to action option type with the specified id.",
+                    Instance = "8F83DE66-7CB8-49E4-A204-153C525BCA28"
+                };
+                return NotFound(problem);
+            }
 
             IEnumerable<CallToActionOption> options =
                 await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(id);
@@ -122,7 +143,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetOptionById(int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -134,7 +155,7 @@ namespace API.Controllers
             }
 
             CallToActionOption callToActionOption = await callToActionOptionService.GetCallToActionOptionByIdAsync(id);
-            if(callToActionOption == null)
+            if (callToActionOption == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -148,6 +169,104 @@ namespace API.Controllers
             CallToActionOptionResourceResult model =
                 mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(callToActionOption);
             return Ok(model);
+        }
+
+        //public async Task<IActionResult> GetTypeById(int id)
+        //{
+        //    if (id <= 0)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Invalid Id specified",
+        //            Detail = "The specified id is invalid.",
+        //            Instance = "10769751-1BC3-4851-9EC5-1502E9AEE8A4"
+        //        };
+        //        return BadRequest(problem);
+        //    }
+        //}
+
+        public async Task<IActionResult> CreateCallToActionOption(CallToActionOptionResource callToActionOptionResource)
+        {
+            if(callToActionOptionResource == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed creating the institution.",
+                    Detail = "The institution resource is null.",
+                    Instance = "E2FD8F7B-96B1-4406-9E90-138AA36B570B"
+                };
+                return BadRequest(problem);
+            }
+
+            CallToActionOption option =
+                mapper.Map<CallToActionOptionResource, CallToActionOption>(callToActionOptionResource);
+
+            try
+            {
+                callToActionOptionService.Add(option);
+                callToActionOptionService.Save();
+                CallToActionOptionResourceResult model =
+                    mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(option);
+                return Created(nameof(CreateCallToActionOption), model);
+            } catch(DbUpdateException e)
+            {
+                Log.Logger.Error("Database exception");
+
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed Saving the call to action option.",
+                    Detail = "Failed saving the call to action option to the database.",
+                    Instance = "5A1D2B14-E320-4FAE-84DF-BC02B996588B"
+                };
+                return BadRequest(problem);
+            }
+        }
+
+        //public async Task<IActionResult> CreateCallToActionOptionType()
+        //{
+
+        //}
+
+        public async Task<IActionResult> UpdateCallToActionOption([FromQuery] int callToActionId,
+                                                                  [FromBody] CallToActionOptionResource callToActionOptionResource)
+        {
+            CallToActionOption option = await callToActionOptionService.FindAsync(callToActionId);
+            if(option == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the call to action option.",
+                    Detail = "The database does not contain a call to action option with that id.",
+                    Instance = "A939D6FA-4B85-4D3F-B3CC-86658713D76C"
+                };
+                return NotFound(problem);
+            }
+
+            mapper.Map(callToActionOptionResource, option);
+
+            callToActionOptionService.Update(option);
+            callToActionOptionService.Save();
+
+            return Ok(mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(option));
+        }
+
+        public async Task<IActionResult> DeleteCallToActionOption(int id)
+        {
+            CallToActionOption option = await callToActionOptionService.FindAsync(id);
+            if(option == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the call to action option.",
+                    Detail = "The database does not contain a call to action option with that id.",
+                    Instance = "6BDD3202-AE32-4CC1-AA87-42A2870CE8E6"
+                };
+                return NotFound(problem);
+            }
+
+            await callToActionOptionService.RemoveAsync(id);
+            callToActionOptionService.Save();
+            return Ok();
         }
 
     }

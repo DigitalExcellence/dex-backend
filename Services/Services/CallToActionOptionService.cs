@@ -24,15 +24,8 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
-    public interface ICallToActionOptionService
+    public interface ICallToActionOptionService : IService<CallToActionOption>
     {
-
-        /// <summary>
-        /// This method gets all the call to action options asynchronous.
-        /// </summary>
-        /// <returns>This method returns a list of call to action options.</returns>
-        Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsAsync();
-
         /// <summary>
         /// This method gets all the call to action options with the specified type asynchronous.
         /// </summary>
@@ -44,6 +37,10 @@ namespace Services.Services
         /// </summary>
         /// <returns>This method returns the found call to action option with the specified id.</returns>
         Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id);
+
+        Task<IEnumerable<CallToActionOptionType>> GetCallToActionOptionTypesAsync();
+
+        Task<CallToActionOptionType> GetCallToActionOptionTypeByIdAsync(int id);
 
     }
 
