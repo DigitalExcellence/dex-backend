@@ -121,7 +121,7 @@ namespace API.Controllers
 
         public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
                                                                     [FromQuery] string accessToken,
-                                                                    [FromQuery] string projectGuid)
+                                                                    [FromQuery] int projectId)
         {
             if(string.IsNullOrEmpty(dataSourceGuid))
             {
@@ -145,7 +145,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            Project project = await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectGuid);
+            Project project = await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectId);
 
             if(project == null)
             {
