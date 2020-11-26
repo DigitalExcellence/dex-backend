@@ -1,6 +1,3 @@
-using AngleSharp;
-using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +7,6 @@ namespace Models.DataProviders
 
     public class DataProviderService : IDataProviderService
     {
-
         private readonly IDataProviderLoader dataProviderLoader;
 
         public DataProviderService(IDataProviderLoader dataProviderLoader)
@@ -21,15 +17,8 @@ namespace Models.DataProviders
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken)
         {
             IDataSource dataSource = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
-
-            RestClient client = new RestClient(dataSource.BaseUrl + "user/repos");
-            client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
-            RestRequest request = new RestRequest(Method.GET);
-            request.AddQueryParameter("visibility", "all");
-            request.AddHeader("accept", "application/vnd.github.v3+json");
-
-            IEnumerable<Project> response = (await client.ExecuteAsync<IEnumerable<Project>>(request)).Data;
-            return response;
+            IEnumerable<Project> projects = await dataSource.GetAllProjects(accessToken);
+            return projects;
         }
 
         public async Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id)
@@ -49,9 +38,11 @@ namespace Models.DataProviders
                                      .OauthUrl;
         }
 
-        public Task<OauthTokens> GetTokens(string code, string guid)
+        public async Task<OauthTokens> GetTokens(string code, string guid)
         {
-            throw new NotImplementedException();
+            IDataSource dataProvider = dataProviderLoader.GetDataSourceByGuid(guid);
+            OauthTokens tokens = await dataProvider.GetTokens(code);
+            return tokens;
         }
 
     }
