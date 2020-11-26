@@ -145,7 +145,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            Project project = await dataProviderService.GetProjectByGuid(projectGuid);
+            Project project = await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectGuid);
 
             if(project == null)
             {
