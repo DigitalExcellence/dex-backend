@@ -1,3 +1,4 @@
+using MessagebrokerPublisher;
 using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
@@ -12,29 +13,19 @@ namespace NotificationSystem
     {
         private static void Main()
         {
-            //wait for rabbitmq service to start
-            Thread.Sleep(10000);
-            try
-            {
-                // todo change to env variables.
-                string hostName = "rabbitmq";
-                string user = "notificationservice";
-                string password = "C6S&jph1VQUv";
+            string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME");
+            string user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
+            string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
-                RabbitMQSubscriber subscriber = new RabbitMQSubscriber(hostName, user, password);
-                IModel channel = subscriber.SubscribeToSubject("email");
+            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(hostName, user, password);
+            IModel channel = subscriber.SubscribeToSubject(Subject.EMAIL.ToString());
 
-                RabbitMQListener listener = new RabbitMQListener(channel);
-                // inject your notification service here
-                INotificationService notificationService = null;
-                EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
-                listener.StartConsume(consumer, "email");
-            } catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.ReadLine();
-            }
+            RabbitMQListener listener = new RabbitMQListener(channel);
 
+            // inject your notification service here
+            INotificationService notificationService = new EmailSender();
+            EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
+            listener.StartConsumer(consumer, Subject.EMAIL.ToString());
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using MessagebrokerPublisher.Contracts;
 
 namespace MessagebrokerPublisher
 {
@@ -16,9 +18,8 @@ namespace MessagebrokerPublisher
         /// <summary>
         /// Method deletes the file from the file server
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="subject"></param>
-        void RegisterNotification(string message, Subject subject);
+        /// <param name="notification"></param>
+        void RegisterNotification(INotification notification);
     }
 
     /// <summary>
@@ -26,11 +27,9 @@ namespace MessagebrokerPublisher
     /// </summary>
     public class NotificationSender : INotificationSender
     {
-        // todo change to env variables so that when not ran in docker, it does not crash.
-        // docker service name
-        private readonly string hostName = "rabbitmq";
-        private readonly string user = "notificationservice";
-        private readonly string password = "C6S&jph1VQUv";
+        private readonly string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME");
+        private readonly string user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
+        private readonly string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
         private ConnectionFactory connectionFactory;
 
@@ -58,22 +57,19 @@ namespace MessagebrokerPublisher
         /// <summary>
         /// Registers a specified message to a specified queue on the messagebroker.
         /// </summary>
-        /// <param name="message">The message to be registered.</param>
-        /// <param name="subject">The queue to be registered to.</param>
-        public void RegisterNotification(string message, Subject subject)
+        /// <param name="notification">The notification to be registered.</param>
+        public void RegisterNotification(INotification notification)
         {
-            string subjectString = subject.ToString();
+            string subjectString = notification.Subject.ToString();
             IConnection connection = CreateConnection();
             IModel channel = connection.CreateModel();
             channel.QueueDeclare(queue: subjectString, durable: true, exclusive: false, autoDelete: false, arguments: null);
             channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-            byte[] body = Encoding.UTF8.GetBytes(message);
+            byte[] body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(notification));
             IBasicProperties properties = channel.CreateBasicProperties();
             properties.Persistent = true;
             channel.BasicPublish(exchange: "", routingKey: subjectString, basicProperties: properties, body: body);
         }
-
-
     }
 }
