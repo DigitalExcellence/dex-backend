@@ -56,14 +56,14 @@ namespace Services.Tests
         {
             // Arrange
             RepositoryMock
-                .Setup(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<int>()))
+                .Setup(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<string>()))
                 .ReturnsAsync(options);
 
             // Act
             IEnumerable<CallToActionOption> actualOptions =
-                await Service.GetCallToActionOptionsFromTypeAsync(It.IsAny<int>());
+                await Service.GetCallToActionOptionsFromTypeAsync(It.IsAny<string>());
             Action act = () =>
-                RepositoryMock.Verify(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<int>()),
+                RepositoryMock.Verify(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<string>()),
                                       Times.Once());
 
             // Assert
@@ -86,14 +86,14 @@ namespace Services.Tests
         {
             // Arrange
             RepositoryMock
-                .Setup(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<int>()))
+                .Setup(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<string>()))
                 .ReturnsAsync(Enumerable.Empty<CallToActionOption>());
 
             // Act
             IEnumerable<CallToActionOption> actualOptions =
-                await Service.GetCallToActionOptionsFromTypeAsync(It.IsAny<int>());
+                await Service.GetCallToActionOptionsFromTypeAsync(It.IsAny<string>());
             Action act = () =>
-                RepositoryMock.Verify(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<int>()),
+                RepositoryMock.Verify(repository => repository.GetCallToActionOptionsFromTypeAsync(It.IsAny<string>()),
                                       Times.Once());
 
             // Assert

@@ -48,7 +48,7 @@ namespace Repositories.Tests
         /// <param name="institutions">The institutions stored, generated to mock the institutions from the database.</param>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
-        public async Task GetInstitutionsAsync_Goodflow([InstitutionDataSource(100)]IEnumerable<Institution> institutions)
+        public async Task GetInstitutionsAsync_GoodFlow([InstitutionDataSource(100)]IEnumerable<Institution> institutions)
         {
             // Arrange
             DbContext.AddRange(institutions);

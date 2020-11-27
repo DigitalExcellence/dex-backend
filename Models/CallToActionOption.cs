@@ -35,7 +35,7 @@ namespace Models
         /// Gets or sets a value for the Type property.
         /// </summary>
         [Required]
-        public CallToActionOptionType Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// Gets or sets a value for the Value property.

@@ -56,7 +56,7 @@ namespace Repositories.Tests
 
             // Act
             IEnumerable<CallToActionOption> retrievedOptions =
-                await Repository.GetCallToActionOptionsFromTypeAsync(short.MaxValue);
+                await Repository.GetCallToActionOptionsFromTypeAsync(string.Empty);
 
             // Assert
             retrievedOptions.Count()
@@ -77,7 +77,7 @@ namespace Repositories.Tests
 
             // Act
             IEnumerable<CallToActionOption> retrievedOptions =
-                await Repository.GetCallToActionOptionsFromTypeAsync(short.MaxValue);
+                await Repository.GetCallToActionOptionsFromTypeAsync(string.Empty);
 
             // Assert
             retrievedOptions

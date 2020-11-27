@@ -31,7 +31,7 @@ namespace Repositories
         /// This method gets all the call to action options with the specified type asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
-        Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId);
+        Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName);
 
     }
 
@@ -40,10 +40,10 @@ namespace Repositories
 
         public CallToActionOptionRepository(DbContext dbContext) : base(dbContext) { }
 
-        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
+        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName)
         {
             return await GetDbSet<CallToActionOption>()
-                         .Where(o => o.Type.Id == typeId)
+                         .Where(o => o.Type == typeName)
                          .ToListAsync();
         }
 

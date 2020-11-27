@@ -30,7 +30,7 @@ namespace Services.Services
         /// This method gets all the call to action options with the specified type asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
-        Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId);
+        Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName);
     }
 
     public class CallToActionOptionService : Service<CallToActionOption>, ICallToActionOptionService
@@ -43,9 +43,9 @@ namespace Services.Services
 
         protected new ICallToActionOptionRepository Repository => (ICallToActionOptionRepository) base.Repository;
 
-        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
+        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName)
         {
-            return await Repository.GetCallToActionOptionsFromTypeAsync(typeId);
+            return await Repository.GetCallToActionOptionsFromTypeAsync(typeName);
         }
     }
 

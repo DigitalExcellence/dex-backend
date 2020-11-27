@@ -73,33 +73,33 @@ namespace API.Controllers
 
         /// <summary>
         /// This method is responsible for retrieving all the call to action options with
-        /// the specified type id.
+        /// the specified type name.
         /// </summary>
-        /// <param name="id">The unique identifier for the call to action option type which is
+        /// <param name="typeName">The name for the call to action option type which is
         /// used for searching all the call to action options.</param>
         /// <returns code="200">This endpoint returns a list of call to action options with the specified type</returns>
         /// <response code="400">The 400 Bad Request status code is returned when the id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when the type could not be found.</response>
-        [HttpGet("type/{id}")]
+        [HttpGet("type/{typeName}")]
         [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
-        public async Task<IActionResult> GetAllOptionsFromType(int id)
+        public async Task<IActionResult> GetAllOptionsFromType(string typeName)
         {
-            if (id <= 0)
+            if (string.IsNullOrEmpty(typeName))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Invalid Id specified",
-                    Detail = "The specified id is invalid.",
+                    Title = "Invalid type name specified",
+                    Detail = "The specified type name is invalid.",
                     Instance = "4C5FE712-E286-43B4-8B2E-6C6BC3985F83"
                 };
                 return BadRequest(problem);
             }
 
             IEnumerable<CallToActionOption> type =
-                await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(id);
+                await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(typeName);
             if (type == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -112,7 +112,7 @@ namespace API.Controllers
             }
 
             IEnumerable<CallToActionOption> options =
-                await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(id);
+                await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(typeName);
             IEnumerable<CallToActionOptionResourceResult> returnModel =
                 mapper.Map<IEnumerable<CallToActionOption>, IEnumerable<CallToActionOptionResourceResult>>(options);
 
