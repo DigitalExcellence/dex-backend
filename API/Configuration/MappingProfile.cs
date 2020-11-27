@@ -84,6 +84,9 @@ namespace API.Configuration
 
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
+
+            CreateMap<CallToActionOptionResource, CallToActionOption>();
+            CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
         }
     }
 }
