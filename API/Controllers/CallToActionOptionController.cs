@@ -37,7 +37,7 @@ namespace API.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
-    public partial class CallToActionOptionController : ControllerBase
+    public class CallToActionOptionController : ControllerBase
     {
 
         private readonly IMapper mapper;
@@ -70,15 +70,6 @@ namespace API.Controllers
 
             return Ok(returnModel);
         }
-
-        //public async Task<IActionResult> GetCallToActionTypes()
-        //{
-        //    IEnumerable<CallToActionOptionType> types =
-        //        await callToActionOptionService.GetCallToActionOptionTypesAsync();
-        //    IEnumerable<CallToActionOptionTypeResourceResult> returnModel =
-        //        mapper.Map<IEnumerable<CallToActionOptionType>, IEnumerable<CallToActionOptionTypeResourceResult>>(types);
-        //    return Ok(returnModel);
-        //}
 
         /// <summary>
         /// This method is responsible for retrieving all the call to action options with
@@ -171,21 +162,20 @@ namespace API.Controllers
             return Ok(model);
         }
 
-        //public async Task<IActionResult> GetTypeById(int id)
-        //{
-        //    if (id <= 0)
-        //    {
-        //        ProblemDetails problem = new ProblemDetails
-        //        {
-        //            Title = "Invalid Id specified",
-        //            Detail = "The specified id is invalid.",
-        //            Instance = "10769751-1BC3-4851-9EC5-1502E9AEE8A4"
-        //        };
-        //        return BadRequest(problem);
-        //    }
-        //}
-
-        public async Task<IActionResult> CreateCallToActionOption(CallToActionOptionResource callToActionOptionResource)
+        /// <summary>
+        /// This method is responsible for creating a call to action option.
+        /// </summary>
+        /// <param name="callToActionOptionResource">The call to action option resource which is used
+        /// to create the call to action option.</param>
+        /// <returns>This method returns the created call to action option resource result</returns>
+        /// <response code="201">This endpoint returns the created call to action option.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified
+        /// resource is invalid or the call to action option could not be saved to the database.</response>
+        [HttpPost]
+        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionWrite))]
+        [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        public IActionResult CreateCallToActionOption(CallToActionOptionResource callToActionOptionResource)
         {
             if(callToActionOptionResource == null)
             {
@@ -208,7 +198,7 @@ namespace API.Controllers
                 CallToActionOptionResourceResult model =
                     mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(option);
                 return Created(nameof(CreateCallToActionOption), model);
-            } catch(DbUpdateException e)
+            } catch(DbUpdateException)
             {
                 Log.Logger.Error("Database exception");
 
@@ -222,11 +212,19 @@ namespace API.Controllers
             }
         }
 
-        //public async Task<IActionResult> CreateCallToActionOptionType()
-        //{
-
-        //}
-
+        /// <summary>
+        /// This method is responsible for updating the call to action option.
+        /// </summary>
+        /// <param name="callToActionId">The call to action option identifier which is used to find the call to action option.</param>
+        /// <param name="callToActionOptionResource">The call to action option resource which is used to update the call to action option.</param>
+        /// <returns>This method returns the updated call to action option resource result.</returns>
+        /// <response code="200">This endpoint returns the updated call to action option.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no call to action option is
+        /// found with the specified call to action option id.</response>
+        [HttpPut("{callToActionId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionWrite))]
+        [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateCallToActionOption([FromQuery] int callToActionId,
                                                                   [FromBody] CallToActionOptionResource callToActionOptionResource)
         {
@@ -250,6 +248,18 @@ namespace API.Controllers
             return Ok(mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(option));
         }
 
+        /// <summary>
+        /// This method is responsible for deleting the call to action option by the identifier.
+        /// </summary>
+        /// <param name="id">The call to action option identifier which is used to find the
+        /// call to action option.</param>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The call to action option is deleted.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no call to action option is found with the specified id.</response>
+        [HttpDelete("{id}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionWrite))]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteCallToActionOption(int id)
         {
             CallToActionOption option = await callToActionOptionService.FindAsync(id);
