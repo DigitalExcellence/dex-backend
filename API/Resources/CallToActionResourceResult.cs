@@ -15,33 +15,19 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.ComponentModel.DataAnnotations;
-
-namespace Models
+namespace API.Resources
 {
+
     /// <summary>
-    /// This class contains all the properties for a call to action model.
+    /// Resource Result for call to action
     /// </summary>
-    public class CallToAction
+    public class CallToActionResourceResult
+        : CallToActionResource
     {
         /// <summary>
-        /// Gets or sets a value for the Id property.
+        /// Gets or sets the id of the call to action.
         /// </summary>
         public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the OptionValue property.
-        /// For example, this would be the Title on the call to action button.
-        /// </summary>
-        [Required]
-        public string OptionValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the Value property.
-        /// For example, this would be the redirect url for the call to action button.
-        /// </summary>
-        [Required]
-        public string Value { get; set; }
 
     }
 

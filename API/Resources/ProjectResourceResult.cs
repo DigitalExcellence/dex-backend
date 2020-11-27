@@ -78,5 +78,9 @@ namespace API.Resources
         /// This gets or set the file of the project
         /// </summary>
         public FileResourceResult ProjectIcon { get; set; }
+        /// <summary>
+        /// This gets or sets the call to action
+        /// </summary>
+        public CallToActionResourceResult CallToAction { get; set; }
     }
 }
