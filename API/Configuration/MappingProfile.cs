@@ -85,7 +85,9 @@ namespace API.Configuration
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
 
-            CreateMap<CallToActionOptionResource, CallToActionOption>();
+            CreateMap<CallToActionOptionResource, CallToActionOption>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToLower()))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToLower()));
             CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
         }
     }
