@@ -226,7 +226,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionWrite))]
         [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> UpdateCallToActionOption([FromQuery] int callToActionId,
+        public async Task<IActionResult> UpdateCallToActionOption(int callToActionId,
                                                                   [FromBody] CallToActionOptionResource callToActionOptionResource)
         {
             CallToActionOption option = await callToActionOptionService.FindAsync(callToActionId);
