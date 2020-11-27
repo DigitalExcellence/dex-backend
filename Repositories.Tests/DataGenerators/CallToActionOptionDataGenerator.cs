@@ -30,13 +30,7 @@ namespace Repositories.Tests.DataGenerators
             Faker = new Faker<CallToActionOption>()
                     .RuleFor(option => option.Id, faker => faker.IndexFaker)
                     .RuleFor(option => option.Value, faker => faker.Name.FirstName())
-                    .RuleForType(typeof(CallToActionOptionType),
-                                 faker => new CallToActionOptionType
-                                          {
-                                              Id = faker.IndexFaker,
-                                              Name = faker.Name.FirstName(),
-                                              Description = faker.Lorem.Paragraph()
-                                          });
+                    .RuleFor(option => option.Type, faker => faker.Name.FirstName());
         }
 
     }

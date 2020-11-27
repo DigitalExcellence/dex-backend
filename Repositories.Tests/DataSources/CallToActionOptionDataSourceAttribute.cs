@@ -17,6 +17,7 @@
 
 using Models;
 using NUnit.Framework.Interfaces;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataGenerators.Base;
 using System;
 using System.Collections;

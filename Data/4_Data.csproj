@@ -16,6 +16,8 @@
     <Compile Remove="Migrations\20201126125840_AddedCallToActionOptions.Designer.cs" />
     <Compile Remove="Migrations\20201126130204_AddedCallToActionOptions.cs" />
     <Compile Remove="Migrations\20201126130204_AddedCallToActionOptions.Designer.cs" />
+    <Compile Remove="Migrations\20201127142049_AddedCallToAction.cs" />
+    <Compile Remove="Migrations\20201127142049_AddedCallToAction.Designer.cs" />
   </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
