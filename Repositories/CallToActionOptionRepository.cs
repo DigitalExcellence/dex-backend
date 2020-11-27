@@ -18,7 +18,6 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,24 +27,11 @@ namespace Repositories
 
     public interface ICallToActionOptionRepository : IRepository<CallToActionOption>
     {
-
-        /// <summary>
-        /// This method gets all the call to action options asynchronous.
-        /// </summary>
-        /// <returns>This method returns a list of call to action options.</returns>
-        Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsAsync();
-
         /// <summary>
         /// This method gets all the call to action options with the specified type asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId);
-
-        /// <summary>
-        /// This method gets the call to action option with the specified id asynchronous.
-        /// </summary>
-        /// <returns>This method returns the found call to action option with the specified id.</returns>
-        Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id);
 
     }
 
@@ -54,23 +40,11 @@ namespace Repositories
 
         public CallToActionOptionRepository(DbContext dbContext) : base(dbContext) { }
 
-        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsAsync()
-        {
-            return await GetDbSet<CallToActionOption>()
-                       .ToListAsync();
-        }
-
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
         {
             return await GetDbSet<CallToActionOption>()
                          .Where(o => o.Type.Id == typeId)
                          .ToListAsync();
-        }
-
-        public async Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id)
-        {
-            return await GetDbSet<CallToActionOption>()
-                       .SingleOrDefaultAsync(o => o.Id == id);
         }
 
     }

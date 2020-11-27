@@ -98,7 +98,8 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            CallToActionOptionType type = await callToActionOptionService.GetCallToActionOptionTypeByIdAsync(id);
+            IEnumerable<CallToActionOption> type =
+                await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(id);
             if (type == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -145,7 +146,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            CallToActionOption callToActionOption = await callToActionOptionService.GetCallToActionOptionByIdAsync(id);
+            CallToActionOption callToActionOption = await callToActionOptionService.FindAsync(id);
             if (callToActionOption == null)
             {
                 ProblemDetails problem = new ProblemDetails

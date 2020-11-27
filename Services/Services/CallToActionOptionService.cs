@@ -31,22 +31,10 @@ namespace Services.Services
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId);
-
-        /// <summary>
-        /// This method gets the call to action option with the specified id asynchronous.
-        /// </summary>
-        /// <returns>This method returns the found call to action option with the specified id.</returns>
-        Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id);
-
-        Task<IEnumerable<CallToActionOptionType>> GetCallToActionOptionTypesAsync();
-
-        Task<CallToActionOptionType> GetCallToActionOptionTypeByIdAsync(int id);
-
     }
 
     public class CallToActionOptionService : Service<CallToActionOption>, ICallToActionOptionService
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbedService"/> class.
         /// </summary>
@@ -55,21 +43,10 @@ namespace Services.Services
 
         protected new ICallToActionOptionRepository Repository => (ICallToActionOptionRepository) base.Repository;
 
-        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsAsync()
-        {
-            return await Repository.GetCallToActionOptionsAsync();
-        }
-
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(int typeId)
         {
             return await Repository.GetCallToActionOptionsFromTypeAsync(typeId);
         }
-
-        public async Task<CallToActionOption> GetCallToActionOptionByIdAsync(int id)
-        {
-            return await Repository.GetCallToActionOptionByIdAsync(id);
-        }
-
     }
 
 }
