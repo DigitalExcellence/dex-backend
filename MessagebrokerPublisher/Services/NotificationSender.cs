@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using MessagebrokerPublisher.Contracts;
 
 namespace MessagebrokerPublisher
 {
@@ -18,8 +16,9 @@ namespace MessagebrokerPublisher
         /// <summary>
         /// Method deletes the file from the file server
         /// </summary>
-        /// <param name="notification"></param>
-        void RegisterNotification(INotification notification);
+        /// <param name="payload"></param>
+        /// <param name="subject"></param>
+        void RegisterNotification(string payload, Subject subject);
     }
 
     /// <summary>
@@ -27,7 +26,7 @@ namespace MessagebrokerPublisher
     /// </summary>
     public class NotificationSender : INotificationSender
     {
-        private readonly string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME");
+        private readonly string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME") ?? "localhost";
         private readonly string user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
         private readonly string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
@@ -58,15 +57,15 @@ namespace MessagebrokerPublisher
         /// Registers a specified message to a specified queue on the messagebroker.
         /// </summary>
         /// <param name="notification">The notification to be registered.</param>
-        public void RegisterNotification(INotification notification)
+        public void RegisterNotification(string payload, Subject subject)
         {
-            string subjectString = notification.Subject.ToString();
+            string subjectString = subject.ToString();
             IConnection connection = CreateConnection();
             IModel channel = connection.CreateModel();
             channel.QueueDeclare(queue: subjectString, durable: true, exclusive: false, autoDelete: false, arguments: null);
             channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-            byte[] body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(notification));
+            byte[] body = Encoding.UTF8.GetBytes(payload);
             IBasicProperties properties = channel.CreateBasicProperties();
             properties.Persistent = true;
             channel.BasicPublish(exchange: "", routingKey: subjectString, basicProperties: properties, body: body);

@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MessagebrokerPublisher.Contracts;
+using NotificationSystem.Contracts;
 
-namespace MessagebrokerPublisher
+namespace NotificationSystem.Notifications
 {
     public class EmailNotification : INotification
     {
         public string RecipientEmail { get; set; }
         public string TextContent { get; set; }
         public string HtmlContent { get; set; }
-        public Subject Subject { get; }
+        public String Subject { get; }
 
         public EmailNotification(string recipientEmail, string textContent, string htmlContent = null)
         {
             this.RecipientEmail = recipientEmail;
             this.TextContent = textContent;
             this.HtmlContent = htmlContent;
-            this.Subject = Subject.EMAIL;
+            this.Subject = "EMAIL";
         }
     }
 }

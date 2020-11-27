@@ -5,8 +5,7 @@ using NotificationSystem.Contracts;
 using RabbitMQ.Client.Events;
 using Serilog;
 using Newtonsoft.Json;
-using MessagebrokerPublisher;
-using MessagebrokerPublisher.Contracts;
+using NotificationSystem.Notifications;
 
 namespace NotificationSystem.Services
 {
@@ -33,9 +32,10 @@ namespace NotificationSystem.Services
             {
                 
                 byte[] body = ea.Body.ToArray();
+                string jsonBody = Encoding.UTF8.GetString(body);
 
                 // Currently we have only EmailNotification, this should change later to match other types of noticiations
-                var notification = JsonConvert.DeserializeObject<EmailNotification>(Encoding.UTF8.GetString(body));
+                var notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
 
                 try
                 {

@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using MessagebrokerPublisher;
-using MessagebrokerPublisher.Contracts;
 using NotificationSystem.Contracts;
+using NotificationSystem.Notifications;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 

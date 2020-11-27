@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MessagebrokerPublisher.Contracts
+namespace NotificationSystem.Contracts
 {
     public interface INotification
     {
-        public Subject Subject { get; }
+        public String Subject { get; }
     }
 }
