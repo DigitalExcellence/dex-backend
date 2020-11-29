@@ -45,7 +45,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the collaborators
         /// </summary>
-        public ICollection<CollaboratorResourceResult> Collaborators { get; set; }
+        public IEnumerable<CollaboratorResourceResult> Collaborators { get; set; }
 
         /// <summary>
         ///     Get or Set the created date from the project
