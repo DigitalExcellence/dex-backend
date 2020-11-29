@@ -48,21 +48,21 @@ namespace Repositories.Tests
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
         public async Task GetCallToActionOptionsFromTypeAsync_GoodFlow(
-            [CallToActionOptionDataSource(30)] IEnumerable<CallToActionOption> options)
+            [CallToActionOptionDataSource(100)] IEnumerable<CallToActionOption> options)
         {
             // Arrange
-            DbContext.AddRange(options);
+            string firstType = options
+                               .ToList()[0].Type;
+            int totalTimesFirstType = options.Count(o => o.Type == firstType);
+            await DbContext.AddRangeAsync(options);
             await DbContext.SaveChangesAsync();
 
             // Act
-            IEnumerable<CallToActionOption> retrievedOptions =
-                await Repository.GetCallToActionOptionsFromTypeAsync(string.Empty);
+            IEnumerable<CallToActionOption> retrievedInstitutions = await Repository.GetCallToActionOptionsFromTypeAsync(firstType);
 
             // Assert
-            retrievedOptions.Count()
-                .Should().Be(30);
-            retrievedOptions
-                .Should().BeEquivalentTo(options);
+            retrievedInstitutions.Count().Should().Be(totalTimesFirstType);
+            retrievedInstitutions.Should().BeEquivalentTo(options.Where(o => o.Type == firstType));
         }
 
         /// <summary>

@@ -28,7 +28,6 @@ namespace Repositories.Tests.DataGenerators
         public CallToActionOptionDataGenerator()
         {
             Faker = new Faker<CallToActionOption>()
-                    .RuleFor(option => option.Id, faker => faker.IndexFaker)
                     .RuleFor(option => option.Value, faker => faker.Name.FirstName())
                     .RuleFor(option => option.Type, faker => faker.Name.FirstName());
         }
