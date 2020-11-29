@@ -16,6 +16,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace API.Resources
 {
@@ -40,6 +41,11 @@ namespace API.Resources
         ///     Get or Set a short description of the project
         /// </summary>
         public string ShortDescription { get; set; }
+
+        /// <summary>
+        ///     This gets or sets the collaborators
+        /// </summary>
+        public ICollection<CollaboratorResourceResult> Collaborators { get; set; }
 
         /// <summary>
         ///     Get or Set the created date from the project
