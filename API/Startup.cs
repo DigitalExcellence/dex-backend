@@ -154,8 +154,6 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
 
-                o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionRead),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
             });

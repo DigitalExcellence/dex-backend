@@ -61,7 +61,6 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns a list of call to action options.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
-        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetAllOptions()
         {
             IEnumerable<CallToActionOption> options = await callToActionOptionService.GetAll();
@@ -84,7 +83,6 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetAllOptionsFromType(string typeName)
         {
             if (string.IsNullOrEmpty(typeName))
@@ -99,7 +97,7 @@ namespace API.Controllers
             }
 
             IEnumerable<CallToActionOption> type =
-                await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(typeName);
+                await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(typeName.ToLower());
             if (type == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -132,7 +130,6 @@ namespace API.Controllers
         [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionRead))]
         public async Task<IActionResult> GetOptionById(int id)
         {
             if (id <= 0)
