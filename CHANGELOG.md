@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
+- Collaborators are now included on the project overview page - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
 
 ### Changed
 
