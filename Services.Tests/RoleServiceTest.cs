@@ -83,7 +83,8 @@ namespace Services.Tests
                 "InstitutionEmbedWrite",
                 "InstitutionRead",
                 "InstitutionWrite",
-                "FileWrite"
+                "FileWrite",
+                "CallToActionOptionWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
             Assert.AreEqual(currentScopes,retrievedScopes);

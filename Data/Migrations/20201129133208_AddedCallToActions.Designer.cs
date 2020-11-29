@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201127151022_AddedCallToAction")]
-    partial class AddedCallToAction
+    [Migration("20201129133208_AddedCallToActions")]
+    partial class AddedCallToActions
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

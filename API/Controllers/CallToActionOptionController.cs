@@ -60,6 +60,7 @@ namespace API.Controllers
         /// <returns>This method returns a list of call to action option resource results.</returns>
         /// <response code="200">This endpoint returns a list of call to action options.</response>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllOptions()
         {
@@ -80,6 +81,7 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when the type could not be found.</response>
         [HttpGet("type/{typeName}")]
+        [Authorize]
         [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
@@ -127,6 +129,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when no call to action option could be
         /// found with the specified id.</response>
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
