@@ -62,7 +62,7 @@ namespace API.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAllOptions()
+        public async Task<IActionResult> GetAllCallToActionOptions()
         {
             IEnumerable<CallToActionOption> options = await callToActionOptionService.GetAll();
             IEnumerable<CallToActionOptionResourceResult> returnModel =
@@ -85,7 +85,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetAllOptionsFromType(string typeName)
+        public async Task<IActionResult> GetAllCallToActionOptionsFromType(string typeName)
         {
             if (string.IsNullOrEmpty(typeName))
             {
@@ -133,7 +133,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetOptionById(int id)
+        public async Task<IActionResult> GetCallToActionOptionById(int id)
         {
             if (id <= 0)
             {
