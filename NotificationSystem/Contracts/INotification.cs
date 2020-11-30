@@ -6,6 +6,6 @@ namespace NotificationSystem.Contracts
 {
     public interface INotification
     {
-        public String Subject { get; }
+        public string Subject { get; }
     }
 }

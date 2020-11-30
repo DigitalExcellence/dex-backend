@@ -43,7 +43,6 @@ namespace NotificationSystem.Services
 
         public IModel SubscribeToSubject(string subject)
         {
-            Console.WriteLine("Before subscribe to subject");
             IModel channel = connection.CreateModel();
             channel.QueueDeclare(queue: subject,
                 durable: true,
@@ -51,7 +50,6 @@ namespace NotificationSystem.Services
                 autoDelete: false,
                 arguments: null);
             channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
-            Console.WriteLine("After subscribe to subject");
             return channel;
         }
     }

@@ -10,14 +10,14 @@ namespace NotificationSystem.Notifications
         public string RecipientEmail { get; set; }
         public string TextContent { get; set; }
         public string HtmlContent { get; set; }
-        public String Subject { get; }
+        public string Subject { get; }
 
         public EmailNotification(string recipientEmail, string textContent, string htmlContent = null)
         {
-            this.RecipientEmail = recipientEmail;
-            this.TextContent = textContent;
-            this.HtmlContent = htmlContent;
-            this.Subject = "EMAIL";
+            RecipientEmail = recipientEmail;
+            TextContent = textContent;
+            HtmlContent = htmlContent;
+            Subject = "EMAIL";
         }
     }
 }

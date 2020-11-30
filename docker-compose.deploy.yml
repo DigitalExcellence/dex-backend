@@ -11,6 +11,18 @@ services:
     networks:
       mssql-network:
         ipv4_address: 172.16.238.2
+  
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    environment:
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+    ports: 
+      - 5672:5672
+      - 5671:5671
+      - 15672:15672
+    networks:
+      rabbitmq-network:
 
   api:
     build:
@@ -27,7 +39,8 @@ services:
       - SENTRY_DSN=${SENTRY_DSN}
     image:  digitalexcellence/api
     networks:
-      - mssql-network
+      mssql-network:
+      rabbitmq-network:
 
   identity:
     build:
@@ -52,6 +65,26 @@ services:
       - App__FfhictOIDC__RedirectUri=${FFHICTOIDC_REDIRECT_URI}
       - SENTRY_DSN=${SENTRY_DSN}
     image: digitalexcellence/identity
+  
+  notificationservice:
+    build:
+      context: .
+      dockerfile: NotificationSystem/Dockerfile
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST_NAME=rabbitmq
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - SENDGRID_EMAIL_FROM=${SENDGRID_EMAIL_FROM}
+    stdin_open: true
+    tty: true
+    deploy:
+      restart_policy:
+        condition: on-failure
+    networks:
+      rabbitmq-network:
 
 networks:
   mssql-network:
@@ -61,3 +94,5 @@ networks:
       config:
         - subnet: 172.16.238.0/24
     external: false
+  rabbitmq-network:
+    driver: bridge

@@ -3,7 +3,6 @@ using System;
 using System.Text;
 using NotificationSystem.Contracts;
 using RabbitMQ.Client.Events;
-using Serilog;
 using Newtonsoft.Json;
 using NotificationSystem.Notifications;
 
@@ -25,7 +24,6 @@ namespace NotificationSystem.Services
 
         public EventingBasicConsumer CreateConsumer(INotificationService notificationService)
         {
-            Console.WriteLine("Before creating Consumer");
             EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
 
             consumer.Received += (sender, ea) =>
@@ -35,37 +33,25 @@ namespace NotificationSystem.Services
                 string jsonBody = Encoding.UTF8.GetString(body);
 
                 // Currently we have only EmailNotification, this should change later to match other types of noticiations
-                var notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
+                EmailNotification notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
 
                 try
-                {
-                    if(notificationService != null)
-                    {
-                        notificationService.SendNotification(notification);
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                        Console.WriteLine("Delivered");
-                    } else
-                    {
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                        Console.WriteLine("Delivered");
-                    }
-                    
+                {                   
+                    notificationService.SendNotification(notification);
+                    channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);                    
                 } catch(Exception e)
                 {
                     throw e;
                 }
             };
-            Console.WriteLine("After creating Consumer");
             return consumer;
         }
 
         public void StartConsumer(EventingBasicConsumer consumer, string subject)
         {
-            Console.WriteLine("Before starting consument");
             channel.BasicConsume(queue: subject,
                 autoAck: false,
                 consumer: consumer);
-            Console.WriteLine("After starting consument");
             Console.ReadLine();
         }
     }

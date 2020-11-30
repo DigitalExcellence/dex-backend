@@ -2,9 +2,7 @@ using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using Serilog;
 using System;
-using System.Threading;
 
 namespace NotificationSystem
 {
@@ -12,9 +10,23 @@ namespace NotificationSystem
     {
         private static void Main()
         {
-            string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME") ?? "localhost";
-            string user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
-            string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+            string hostName;
+            string user;
+            string password;
+
+            //check for if running in docker, else set values to run with local RabbitMQ service
+            if (Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME") != null)
+            {
+                hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME");
+                user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
+                password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+            } else
+            {
+                hostName = "localhost";
+                user = "guest";
+                password = "guest";
+            }
+            
 
             RabbitMQSubscriber subscriber = new RabbitMQSubscriber(hostName, user, password);
             IModel channel = subscriber.SubscribeToSubject("EMAIL");
@@ -24,6 +36,8 @@ namespace NotificationSystem
             // inject your notification service here
             INotificationService notificationService = new EmailSender();
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
+
+
             listener.StartConsumer(consumer, "EMAIL");
         }
     }

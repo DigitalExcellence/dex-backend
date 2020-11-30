@@ -11,14 +11,15 @@ namespace NotificationSystem.Services
 {
     public class EmailSender : INotificationService
     {
-        private SendGridClient client;
-        private EmailAddress from;
+        private readonly SendGridClient client;
+        private readonly EmailAddress from;
 
         public EmailSender()
         {
-            this.client = new SendGridClient(Environment.GetEnvironmentVariable("SENDGRID_API_KEY"));
-            this.from = new EmailAddress(Environment.GetEnvironmentVariable("SENDGRID_EMAIL_FROM"));
+            client = new SendGridClient(Environment.GetEnvironmentVariable("SENDGRID_API_KEY"));
+            from = new EmailAddress(Environment.GetEnvironmentVariable("SENDGRID_EMAIL_FROM"));
         }
+
 
         public void SendNotification(INotification notification)
         {
@@ -34,12 +35,12 @@ namespace NotificationSystem.Services
         {
             EmailNotification emailNotification = (EmailNotification) notification;
 
-            if (String.IsNullOrEmpty(emailNotification.RecipientEmail) || String.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
+            if (string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
             {
                 return false;
             }
 
-            if (String.IsNullOrEmpty(emailNotification.TextContent))
+            if (string.IsNullOrEmpty(emailNotification.TextContent))
             {
                 return false;
             }
@@ -47,12 +48,12 @@ namespace NotificationSystem.Services
             return true;
         }
 
-        async Task Execute(string recipient, string textContent, string htmlContent = null)
+        private async Task Execute(string recipient, string textContent, string htmlContent = null)
         {
             string subject = "You have a new notification on DeX";
             EmailAddress to = new EmailAddress(recipient);
-            SendGridMessage msg = MailHelper.CreateSingleEmail(this.from, to, subject, textContent, htmlContent);
-            var result = await client.SendEmailAsync(msg);
+            SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, textContent, htmlContent);
+            _ = await client.SendEmailAsync(msg);
         }
     }
 }
