@@ -33,6 +33,10 @@ namespace Repositories
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName);
 
+        /// <summary>
+        /// This method gets all the call to action options with the specified value asynchronous.
+        /// </summary>
+        /// <returns>This method returns a list of call to action options with the specified value id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value);
 
     }
