@@ -1,4 +1,5 @@
 using Models;
+using Repositories;
 using Services.Base;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace Services.Services
 
     public class PortfolioService : Service<Portfolio>, IPortfolioService
     {
+        public PortfolioService(IPortfolioRepository repository) : base(repository) { }
+
+
         public override void Add(Portfolio entity)
         {
             base.Add(entity);
