@@ -47,6 +47,9 @@ namespace API.Configuration
                 .ForAllOtherMembers(o => o.Ignore());
 
 
+            CreateMap<PortfolioResource, Portfolio>();
+            CreateMap<Portfolio, PortfolioResourceResult>();
+
             CreateMap<User, UserResourceResult>();
 
             CreateMap<UserResource, User>();

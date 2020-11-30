@@ -26,7 +26,7 @@ namespace API.Resources
     public class ProjectResourceResult
     {
         /// <summary>
-        ///     Get or Set Id of a Project Resource Reuslt
+        ///     Get or Set Id of a Project Resource result
         /// </summary>
         public int Id { get; set; }
 
