@@ -10,14 +10,34 @@ namespace Services.Services
 {
     public interface IPortfolioService : IService<Portfolio>
     {
+        /// <summary>
+        /// Add a portfolio item
+        /// </summary>
+        /// <param name="portfolioItem"></param>
+        /// <returns></returns>
+        Task<PortfolioItem> AddPortfolioItem(PortfolioItem portfolioItem);
 
 
+        /// <summary>
+        /// Update a portfolio item
+        /// </summary>
+        /// <param name="portfolioItem"></param>
+        /// <returns></returns>
+        Task<PortfolioItem> UpdatePortfolioItem(PortfolioItem portfolioItem);
+
+        /// <summary>
+        /// Delete a portfolio item
+        /// </summary>
+        /// <param name="portfolioItem"></param>
+        /// <returns></returns>
+        Task<PortfolioItem> DeletePortfolioItem(PortfolioItem portfolioItem);
     }
 
     public class PortfolioService : Service<Portfolio>, IPortfolioService
     {
         public PortfolioService(IPortfolioRepository repository) : base(repository) { }
 
+        protected new IPortfolioRepository Repository => (IPortfolioRepository) base.Repository;
 
         public override void Add(Portfolio entity)
         {
@@ -29,10 +49,26 @@ namespace Services.Services
             return base.AddAsync(entity);
         }
 
+        public Task<PortfolioItem> AddPortfolioItem(PortfolioItem portfolioItem)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<PortfolioItem> UpdatePortfolioItem(PortfolioItem portfolioItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PortfolioItem> DeletePortfolioItem(PortfolioItem portfolioItem)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void AddRange(IEnumerable<Portfolio> entities)
         {
             base.AddRange(entities);
         }
+
+
 
         public override bool Equals(object obj)
         {
