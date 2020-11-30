@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace API.Resources
 {
+    /// <summary>
+    /// The view model of a portfolio
+    /// </summary>
     public class PortfolioResource
     {
         /// <summary>
