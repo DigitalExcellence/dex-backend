@@ -123,7 +123,7 @@ namespace API.Controllers
             }
 
             ProjectFilterParams projectFilterParams = mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
-            IEnumerable<Project> projects = await projectService.GetAllWithUsersAsync(projectFilterParams);
+            IEnumerable<Project> projects = await projectService.GetAllWithUsersAndCollaboratorsAsync(projectFilterParams);
             IEnumerable<ProjectResultResource> results =
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
 
