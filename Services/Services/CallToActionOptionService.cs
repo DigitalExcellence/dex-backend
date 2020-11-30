@@ -19,6 +19,7 @@ using Models;
 using Repositories;
 using Services.Base;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.Services
@@ -31,6 +32,9 @@ namespace Services.Services
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName);
+
+        Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value);
+
     }
 
     public class CallToActionOptionService : Service<CallToActionOption>, ICallToActionOptionService
@@ -47,6 +51,12 @@ namespace Services.Services
         {
             return await Repository.GetCallToActionOptionsFromTypeAsync(typeName);
         }
+
+        public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value)
+        {
+            return await Repository.GetCallToActionOptionFromValueAsync(value);
+        }
+
     }
 
 }

@@ -25,6 +25,7 @@ using Models.Defaults;
 using Serilog;
 using Services.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -176,13 +177,13 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionWrite))]
         [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public IActionResult CreateCallToActionOption(CallToActionOptionResource callToActionOptionResource)
+        public async Task<IActionResult> CreateCallToActionOption(CallToActionOptionResource callToActionOptionResource)
         {
             if(callToActionOptionResource == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed creating the institution.",
+                    Title = "Failed creating the call to action option.",
                     Detail = "The institution resource is null.",
                     Instance = "E2FD8F7B-96B1-4406-9E90-138AA36B570B"
                 };
@@ -191,6 +192,18 @@ namespace API.Controllers
 
             CallToActionOption option =
                 mapper.Map<CallToActionOptionResource, CallToActionOption>(callToActionOptionResource);
+
+            if((await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(option.Type)).Any()
+               && (await callToActionOptionService.GetCallToActionOptionFromValueAsync(option.Value)).Any())
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                     Title = "Failed creating the call to action option.",
+                     Detail = "Identical call to action option already exists.",
+                     Instance = "1DA7B168-FAD1-41B6-A90F-3AAEB26147CE"
+                };
+                return BadRequest(problem);
+            }
 
             try
             {
@@ -242,6 +255,18 @@ namespace API.Controllers
             }
 
             mapper.Map(callToActionOptionResource, option);
+
+            if((await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(option.Type)).Any()
+            && (await callToActionOptionService.GetCallToActionOptionFromValueAsync(option.Value)).Any())
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed creating the call to action option.",
+                    Detail = "Identical call to action option already exists.",
+                    Instance = "1DA7B168-FAD1-41B6-A90F-3AAEB26147CE"
+                };
+                return BadRequest(problem);
+            }
 
             callToActionOptionService.Update(option);
             callToActionOptionService.Save();
