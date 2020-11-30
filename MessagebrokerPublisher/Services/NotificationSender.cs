@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessagebrokerPublisher
+namespace MessageBrokerPublisher
 {
     ///<summary>
     ///Interface for the NotificationSender.
@@ -26,7 +26,7 @@ namespace MessagebrokerPublisher
     /// </summary>
     public class NotificationSender : INotificationSender
     {
-        private readonly string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME") ?? "localhost";
+        private readonly string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME");
         private readonly string user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
         private readonly string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
@@ -38,6 +38,13 @@ namespace MessagebrokerPublisher
         public NotificationSender()
         {
             CreateConnectionFactory();
+
+            if (String.IsNullOrEmpty(hostName))
+            {
+                hostName = "localhost";
+                user = "guest";
+                password = "guest";
+            }
         }
         private void CreateConnectionFactory()
         {

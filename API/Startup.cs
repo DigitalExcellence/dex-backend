@@ -22,6 +22,7 @@ using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
+using MessageBrokerPublisher;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +36,8 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
+using NotificationSystem.Notifications;
+using NotificationSystem.Services;
 using Serilog;
 using Services.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -342,7 +345,6 @@ namespace API
                 o.DisplayRequestDuration();
                 o.OAuthClientId(Config.Swagger.ClientId);
             });
-
         }
 
         /// <summary>
