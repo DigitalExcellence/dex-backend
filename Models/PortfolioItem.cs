@@ -19,6 +19,6 @@ namespace Models
         [Required]
         public string Content { get; set; }
 
-        public int ProjectId { get; set; }
+        public Project ProjectId { get; set; }
     }
 }
