@@ -17,8 +17,4 @@
       <ProjectReference Include="..\API\1_API.csproj" />
       <ProjectReference Include="..\Models\5_Models.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
 </Project>

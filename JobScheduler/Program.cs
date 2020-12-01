@@ -12,8 +12,6 @@ namespace JobScheduler
 
         public static void Main(string[] args)
         {
-            Task.Delay(7500);
-
             CreateHostBuilder(args).Build().Run();
         }
 

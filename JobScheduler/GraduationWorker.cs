@@ -21,6 +21,9 @@ namespace JobScheduler
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            // Wait till API and Identity are started
+            await Task.Delay(10000);
+
             while(!stoppingToken.IsCancellationRequested)
             {
                 List<UserTask> userTasks = requestHandler.GetExpectedGraduationUsers();
