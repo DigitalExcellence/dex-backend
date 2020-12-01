@@ -13,7 +13,7 @@ namespace NotificationSystem
         {
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables(prefix: "YOUR_APP_PREFIX_")
+                .AddEnvironmentVariables()
                 .Build();
 
 
