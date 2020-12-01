@@ -19,7 +19,7 @@ namespace Repositories
         public PortfolioRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// Updates the specified entity excluding the user object.
+        /// Updates the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         public override void Update(Portfolio entity)
