@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using NotificationSystem.Configuration;
 using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
@@ -13,9 +14,10 @@ namespace NotificationSystem
         {
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables(prefix: "YOUR_APP_PREFIX_")
+                .AddJsonFile($"appsetting.{}")
+                .AddEnvironmentVariables()
                 .Build();
-
+            Config config2 = config.GetSection("App").Get<Config>();
 
             string hostName;
             string user;
