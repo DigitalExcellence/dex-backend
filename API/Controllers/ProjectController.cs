@@ -180,6 +180,20 @@ namespace API.Controllers
             }
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
             project.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            var similairProjects = await projectService.GetSimilairProjects(project);
+
+            if(similairProjects.Count > 0)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Project is too similair.",
+                    Detail = "The specified project resource was too similair." + similairProjects.ToString(),
+                    Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
+                };
+                return BadRequest(problem);
+            }
+
             try
             {
                 projectService.Add(project);
