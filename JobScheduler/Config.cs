@@ -1,43 +1,69 @@
-using IdentityModel.Client;
+using Microsoft.Extensions.Configuration;
 using RestSharp;
-using Services.Sources;
+using RestSharp.Authenticators;
+using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace JobScheduler
 {
-    public class Config
+
+    public interface IConfig
     {
-        const string adress = "https://localhost:5005/";
+        string GetJwtToken();
+
+        string GetApiUrl();
+
+    }
+
+    public class Config : IConfig
+    {
+        public IdentityServerConfig IdentityServerConfig { get; set; }
+        public ApiConfig ApiConfig { get; set; }
+
+        public IConfiguration config { get; set; }
+
+        public Config()
+        {
+            string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            config = new ConfigurationBuilder()
+                                           .AddJsonFile("appsettings.json", true, true)
+                                           .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                                           .AddEnvironmentVariables()
+                                           .Build();
+            IdentityServerConfig  = config.GetSection("App")
+                                          .GetSection("IdentityServerConfig")
+                                          .Get<IdentityServerConfig>();
+            ApiConfig = config.GetSection("App")
+                              .GetSection("API")
+                              .Get<ApiConfig>();
+
+        }
 
         public string GetJwtToken()
         {
-            string token = "";
+            RestClient restClient = new RestClient(IdentityServerConfig.IdentityUrl);
+            RestRequest restRequest = new RestRequest("connect/token") { Method = Method.POST };
+            restRequest.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            restRequest.AddParameter("grant_type", "client_credentials");
+            restClient.Authenticator = new HttpBasicAuthenticator(IdentityServerConfig.ClientId, IdentityServerConfig.ClientSecret);
 
-            ClientCredentialsTokenRequest credentialsTokenRequest = new ClientCredentialsTokenRequest();
-            credentialsTokenRequest.Address = adress;
-            credentialsTokenRequest.ClientId = "dex-jobscheduler";
-            credentialsTokenRequest.ClientSecret = "dex-jobscheduler";
-            credentialsTokenRequest.Scope = "dex-api";
+            IRestResponse identityServerResponse = restClient.Execute(restRequest);
 
+            if(!identityServerResponse.IsSuccessful)
+            {
 
-
-            var client = new RestClient(adress);
-
-            //new from here
-
-            RestRequest restRequest = new RestRequest("connect/token", Method.POST);
-            restRequest.AddParameter("application/json", credentialsTokenRequest, ParameterType.RequestBody);
-            restRequest.RequestFormat = DataFormat.Json;
-
-            //Adding Json body as parameter to the post request
-
-            IRestResponse restResponse = client.Execute(restRequest);
-
-            return restResponse.Content;
-
+                Log.Logger.Error("Something went wrong: " + identityServerResponse.ErrorMessage);
+            }
+            Log.Logger.Information(identityServerResponse.Content);
+            return identityServerResponse.Content;
         }
+
+
+        public string GetApiUrl()
+        {
+            return ApiConfig.ApiUrl;
+        }
+
     }
 
 

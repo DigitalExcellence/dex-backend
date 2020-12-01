@@ -13,35 +13,25 @@ using Newtonsoft.Json.Linq;
 
 namespace JobScheduler
 {
-    public class ApiRequestHandler
+
+    public interface IApiRequestHandler
+    {
+        List<UserTask> GetExpectedGraduationUsers();
+
+    }
+
+    public class ApiRequestHandler : IApiRequestHandler
     {
 
         private readonly RestClient apiClient;
         private string accessToken;
         private List<UserTask> userTasks;
+        private IConfig config;
 
-        public ApiRequestHandler(Uri baseUrlApi)
+        public ApiRequestHandler(IConfig config)
         {
-            apiClient = new RestClient(baseUrlApi);
-        }
-
-        public string GetToken()
-        {
-            RestClient restClient = new RestClient("https://localhost:5005/");
-            RestRequest restRequest = new RestRequest("connect/token") { Method = Method.POST };
-            restRequest.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            restRequest.AddParameter("grant_type", "client_credentials");
-            restClient.Authenticator = new HttpBasicAuthenticator("dex-jobscheduler", "dex-jobscheduler");
-
-            IRestResponse identityServerResponse = restClient.Execute(restRequest);
-
-            if(!identityServerResponse.IsSuccessful)
-            {
-
-                Log.Logger.Error("Something went wrong: " + identityServerResponse.ErrorMessage);
-            }
-            Log.Logger.Information(identityServerResponse.Content);
-            return identityServerResponse.Content;
+            apiClient = new RestClient(config.GetApiUrl());
+            this.config = config;
         }
 
 
@@ -52,7 +42,7 @@ namespace JobScheduler
             if(accessToken == null)
             {
                 
-                dynamic data = JObject.Parse(GetToken());
+                dynamic data = JObject.Parse(config.GetJwtToken());
                 accessToken = data.access_token;
 
                 GetExpectedGraduationUsers();
@@ -67,7 +57,8 @@ namespace JobScheduler
                 if(!response.IsSuccessful)
                 {
                     // TODO: maximum ammount of attempts to prevent endless trying again loop
-                    accessToken = GetToken();
+                    dynamic data = JObject.Parse(config.GetJwtToken());
+                    accessToken = data.access_token;
                     GetExpectedGraduationUsers();
                 }
                 userTasks = JsonConvert.DeserializeObject<List<UserTask>>(response.Content);

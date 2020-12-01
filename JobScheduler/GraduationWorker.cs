@@ -1,11 +1,8 @@
-using IdentityModel.Client;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Serilog;
-using System.Net.Http;
 using System.Collections.Generic;
 using Models;
 
@@ -14,26 +11,30 @@ namespace JobScheduler
     public class GraduationWorker : BackgroundService
     {
         private readonly ILogger<GraduationWorker> logger;
-        private List<UserTask> users;
+        private readonly IApiRequestHandler requestHandler;
 
-        private readonly ApiRequestHandler requestHandler;
-        public GraduationWorker(ILogger<GraduationWorker> logger)
+        public GraduationWorker(ILogger<GraduationWorker> logger, IApiRequestHandler apiRequestHandler)
         {
             this.logger = logger;
-            requestHandler = new ApiRequestHandler(new Uri("https://localhost:5001/"));
+            requestHandler = apiRequestHandler;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            users = requestHandler.GetExpectedGraduationUsers();
-
             while(!stoppingToken.IsCancellationRequested)
             {
+                List<UserTask> userTasks = requestHandler.GetExpectedGraduationUsers();
                 logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                logger.LogInformation(users[0].Type.ToString());
+                if(userTasks != null)
+                {
+                    foreach(UserTask user in userTasks)
+                    {
+                        logger.LogInformation("Found expected graduating user: " + user.UserId);
+                    }
+                }
 
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(10000, stoppingToken);
             }
         }
     }
