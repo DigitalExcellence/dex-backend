@@ -27,6 +27,11 @@ namespace API.Resources
         public int Template { get; set; }
 
         /// <summary>
+        /// This sets or gets the portfolio icon
+        /// </summary>
+        public int? Icon { get; set; }
+
+        /// <summary>
         /// this sets or gets the portfolio title
         /// </summary>
         public string Title { get; set; }

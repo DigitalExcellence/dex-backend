@@ -10,7 +10,7 @@ namespace Models
         public int Id { get; set; }
 
         [Required]
-        public Portfolio PortfolioId { get; set; }
+        public int PortfolioId { get; set; }
 
         public int Position { get; set; }
 
