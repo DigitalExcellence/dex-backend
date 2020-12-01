@@ -16,8 +16,6 @@ namespace Models
 
         public int Template { get; set; }
 
-        public int? Icon { get; set; }
-
         public string Title { get; set; }
 
         public string PublicUri { get; set; }
