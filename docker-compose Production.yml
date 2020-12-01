@@ -1,0 +1,122 @@
+version: '3.8'
+
+services:
+  db:
+    image: digitalexcellence/database
+    container_name: db
+    restart: unless-stopped
+    expose:
+      - "1433"
+    networks:
+      mssql-network:
+        ipv4_address: 172.16.238.2
+    environment:
+      - MSSQL_SA_PASSWORD=${PRODUCTION_DATABASE_PASSWORD}
+    volumes:
+      - ~/docker_compose/backup:/var/opt/mssql/backup
+      - ~/docker_compose/data:/var/opt/mssql/data
+
+  api:
+    image: digitalexcellence/api:latest
+    container_name: api
+    networks:
+      - proxy
+      - mssql-network
+    depends_on:
+      - db
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/ubuntu/Uploads/Images:/app/Uploads/Images
+    environment:
+      - ConnectionStrings__DefaultConnection=${PRODUCTION_CONNECTION_STRING}
+      - App__Frontend__FrontendUrl=https://dex.software
+      - App__Frontend__ClientId=${PRODUCTION_API_FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${PRODUCTION_API_FRONTEND_CLIENT_SECRET}
+      - App__IdentityServer__IdentityUrl=https://identity.dex.software
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.entrypoints=http"
+      - "traefik.http.routers.api.rule=Host(`api.dex.software`)"
+      - "traefik.http.middlewares.api-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.api.middlewares=api-https-redirect"
+      - "traefik.http.routers.api-secure.entrypoints=https"
+      - "traefik.http.routers.api-secure.rule=Host(`api.dex.software`)"
+      - "traefik.http.routers.api-secure.tls=true"
+      - "traefik.http.routers.api-secure.tls.certresolver=http"
+      - "traefik.http.routers.api-secure.service=api"
+      - "traefik.http.services.api.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+
+  identity:
+    image: digitalexcellence/identity:latest
+    container_name: identity
+    networks:
+      - proxy
+      - mssql-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/ubuntu/certs:/app/certs
+    environment:
+      - ConnectionStrings__DefaultConnection=${IDENTITY_PRODUCTION_CONNECTION_STRING}
+      - App__Self__PublicOrigin=https://identity.dex.software
+      - App__Self__JwtAuthority=https://dex.software
+      - App__Api__DeXApiUrl=https://api.dex.software
+      - App__Api__ClientId=${API_CLIENT_ID}
+      - App__Api__ClientSecret=${API_CLIENT_SECRET}
+      - App__Frontend__RedirectUriFrontend=https://dex.software/auth-callback
+      - App__Frontend__RefreshUriFrontend=https://dex.software/silent-refresh.html
+      - App__Frontend__RedirectUriPostman=https://www.postman.com/oauth2/callback
+      - App__Frontend__PostLogoutUriFrontend=https://dex.software/
+      - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
+      - App__swagger__RedirectUrisSwagger=https://dex.software/oauth2-redirect.html
+      - App__swagger__PostLogoutUrisSwagger=https://dex.software
+      - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
+      - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
+      - App__FfhictOIDC__RedirectUri=https://identity.dex.software/external/callback/fhict
+      - Cert_File=/app/identity.dex.software_pfx.pfx
+      - Cert_Thumb=${CERT_THUMB}
+      - Cert_Password=${CERT_PASSWORD}
+      - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.identity.entrypoints=http"
+      - "traefik.http.routers.identity.rule=Host(`identity.dex.software`)"
+      - "traefik.http.middlewares.identity-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.identity.middlewares=api-https-redirect"
+      - "traefik.http.routers.identity-secure.entrypoints=https"
+      - "traefik.http.routers.identity-secure.rule=Host(`identity.dex.software`)"
+      - "traefik.http.routers.identity-secure.tls=true"
+      - "traefik.http.routers.identity-secure.tls.certresolver=http"
+      - "traefik.http.routers.identity-secure.service=identity"
+      - "traefik.http.services.identity.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+
+  frontend:
+    image: digitalexcellence/frontend:latest
+    container_name: frontend
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.entrypoints=http"
+      - "traefik.http.routers.frontend.rule=Host(`dex.software`)"
+      - "traefik.http.middlewares.frontend-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.frontend.middlewares=api-https-redirect"
+      - "traefik.http.routers.frontend-secure.entrypoints=https"
+      - "traefik.http.routers.frontend-secure.rule=Host(`dex.software`)"
+      - "traefik.http.routers.frontend-secure.tls=true"
+      - "traefik.http.routers.frontend-secure.tls.certresolver=http"
+      - "traefik.http.routers.frontend-secure.service=frontend"
+      - "traefik.http.services.frontend.loadbalancer.server.port=443"
+      - "traefik.docker.network=proxy"
+
+networks:
+  mssql-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+  proxy:
+    external: true
