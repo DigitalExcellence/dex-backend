@@ -26,18 +26,28 @@ namespace JobScheduler
 
             while(!stoppingToken.IsCancellationRequested)
             {
-                List<UserTask> userTasks = requestHandler.GetExpectedGraduationUsers();
-                logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-                if(userTasks != null)
-                {
-                    foreach(UserTask user in userTasks)
-                    {
-                        logger.LogInformation("Found expected graduating user: " + user.UserId);
-                    }
-                }
-
+                logger.LogInformation("Graduation job started: {time}", DateTimeOffset.Now);
+                GraduationJob();
+                logger.LogInformation("Graduation job finished: {time}", DateTimeOffset.Now);
+                // Time between job. 
                 await Task.Delay(10000, stoppingToken);
+            }
+        }
+
+        private void GraduationJob()
+        {
+            List<UserTask> userTasks = requestHandler.GetExpectedGraduationUsers();
+            if(userTasks != null)
+            {
+                foreach(UserTask userTask in userTasks)
+                {
+                    // TODO: Send email to user.
+                    
+                    logger.LogInformation("Found expected graduating user: " + userTask.UserId);
+
+                    requestHandler.SetGraduationTaskStatusToMailed(userTask.Id);
+                    // TODO: Set user task to status mailed.
+                }
             }
         }
     }

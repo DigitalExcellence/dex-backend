@@ -18,6 +18,8 @@ namespace JobScheduler
     {
         List<UserTask> GetExpectedGraduationUsers();
 
+        void SetGraduationTaskStatusToMailed(int userTask);
+
     }
 
     public class ApiRequestHandler : IApiRequestHandler
@@ -64,6 +66,25 @@ namespace JobScheduler
                 userTasks = JsonConvert.DeserializeObject<List<UserTask>>(response.Content);
             }
             return userTasks;
+        }
+
+        public void SetGraduationTaskStatusToMailed(int userTask)
+        {
+            RestRequest restRequest = new RestRequest("api/UserTask/SetToMailed") { Method = Method.PUT };
+
+            restRequest.AddParameter("Authorization",
+                                     string.Format("Bearer " + accessToken),
+                                     ParameterType.HttpHeader);
+            restRequest.AddParameter("application/json", JsonConvert.SerializeObject(userTask), ParameterType.RequestBody);
+            IRestResponse response = apiClient.Execute(restRequest);
+
+            if(!response.IsSuccessful)
+            {
+                // TODO: maximum ammount of attempts to prevent endless trying again loop
+                dynamic data = JObject.Parse(config.GetJwtToken());
+                accessToken = data.access_token;
+                SetGraduationTaskStatusToMailed(userTask);
+            }
         }
     }
 }
