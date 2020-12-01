@@ -47,7 +47,8 @@ namespace API.Configuration
                 .ForAllOtherMembers(o => o.Ignore());
 
 
-            CreateMap<User, UserResourceResult>();
+            CreateMap<User, UserResourceResult>()
+                .ForMember(q=> q.UserTask, opt => opt.MapFrom(q => q.UserTasks));
 
             CreateMap<UserResource, User>();
 
@@ -84,6 +85,14 @@ namespace API.Configuration
 
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
+
+            CreateMap<UserTask, UserTaskResourceResult>()
+                .ForMember(e => e.UserId,
+                           opt => opt.MapFrom(d => d.UserId))
+                .ForMember(e => e.Id, opt => opt.MapFrom(e => e.Id))
+                .ForMember(e => e.Status, opt => opt.MapFrom(e => e.Status))
+                .ForMember(e => e.Type, opt => opt.MapFrom(e => e.Type));
+
         }
     }
 }

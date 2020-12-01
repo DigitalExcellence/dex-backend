@@ -447,7 +447,7 @@ namespace IdentityServer
             return vm;
         }
 
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] 
         [HttpPut]
         public async Task<IActionResult> ChangeCredentials()
         {

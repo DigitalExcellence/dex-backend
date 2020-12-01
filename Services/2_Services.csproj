@@ -4,11 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>8</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Services\NewFile1.txt" />
-  </ItemGroup>
-
+    
   <ItemGroup>
     <PackageReference Include="HtmlSanitizer" Version="5.0.331" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

@@ -31,8 +31,8 @@ namespace Services.Services
     public interface IUserTaskService : IService<UserTask>
     {
         public Task<List<UserTask>> GetAllOpenGraduateUserTasks();
-
-        public Task<UserTask> GetUserTasksForUser(int userId);
+        
+        public Task<List<UserTask>> GetUserTasksForUser(int userId);
 
     }
 
@@ -85,7 +85,7 @@ namespace Services.Services
             return userTasks;
         }
 
-        public async Task<UserTask> GetUserTasksForUser(int userId)
+        public async Task<List<UserTask>> GetUserTasksForUser(int userId)
         {
             return await Repository.GetUserTasksForUser(userId);
         }

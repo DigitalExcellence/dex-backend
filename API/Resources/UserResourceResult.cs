@@ -69,6 +69,11 @@ namespace API.Resources
         /// Gets or sets the followed projects for user
         /// </summary>
         public List<UserProjectResourceResult> UserProject { get; set; }
+
+        /// <summary>
+        /// Gets or set the tasks the user should follow up.
+        /// </summary>
+        public List<UserTaskResourceResult> UserTask { get; set; }
     }
 
 }

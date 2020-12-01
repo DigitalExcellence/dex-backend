@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace Repositories
     public interface IUserTaskRepository : IRepository<UserTask>
     {
 
-        public Task<UserTask> GetUserTasksForUser(int userId);
+        public Task<List<UserTask>> GetUserTasksForUser(int userId);
 
     }
 
@@ -37,12 +38,12 @@ namespace Repositories
         public UserTaskRepository(DbContext dbContext) : base(dbContext) { }
 
 
-        public async Task<UserTask> GetUserTasksForUser(int userId)
+        public async Task<List<UserTask>> GetUserTasksForUser(int userId)
         {
             return await GetDbSet<UserTask>()
-                   .Where(u => u.UserId == userId)
-                   .Where(u => u.Type == UserTaskType.GraduationReminder)
-                   .SingleOrDefaultAsync();
+                         .Where(u => u.UserId == userId)
+                       .ToListAsync();
+
         }
 
     }

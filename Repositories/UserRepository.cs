@@ -123,6 +123,7 @@ namespace Repositories
                          .ThenInclude(u => u.Scopes)
                          .Include(u => u.Institution)
                          .Include(f => f.UserProject)
+                         .Include(u => u.UserTasks)
                          .SingleOrDefaultAsync();
         }
 
@@ -191,9 +192,9 @@ namespace Repositories
             DateTime now = DateTime.Now;
             DateTime max = DateTime.Now.AddMonths(6);
 
-            return GetDbSet<User>()
+            return await GetDbSet<User>()
                            .Where(u => u.ExpectedGraduationDate >= now && u.ExpectedGraduationDate <= max)
-                           .ToList();
+                           .ToListAsync();
         }
 
         
