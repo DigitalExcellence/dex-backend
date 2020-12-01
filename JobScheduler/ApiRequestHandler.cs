@@ -37,7 +37,7 @@ namespace JobScheduler
 
         public List<UserTask> GetExpectedGraduationUsers() {
         
-            RestRequest restRequest = new RestRequest("api/UserTask") { Method = Method.GET };
+            RestRequest restRequest = new RestRequest("api/UserTask/CreateUserTasks") { Method = Method.GET };
 
             if(accessToken == null)
             {

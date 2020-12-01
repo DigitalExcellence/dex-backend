@@ -73,11 +73,38 @@ namespace API.Controllers
         /// </summary>
         /// <returns> All user tasks which are created or open for graduation users. </returns>
         /// <response code="200">This endpoint returns a list of user tasks.</response>
-        [HttpGet]
+        [HttpGet("CreateUserTasks")]
         [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> CreateUserTasksForGraduatingUsers()
         {
             List<UserTask> userTasks = await userTaskService.GetAllOpenGraduateUserTasks();
+
+            return Ok(userTasks);
+        }
+
+        /// <summary>
+        /// Creates and returns all graduation user tasks for expecting graduation users.
+        /// </summary>
+        /// <returns> All user tasks which are created or open for graduation users. </returns>
+        /// <response code="200">This status code is returned when the user tasks were found successfully.</response>
+        /// <response code="404">This status code is returned when no user was found.</response>
+        [HttpGet()]
+        [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
+        public async Task<IActionResult> GetUserTasksForCurrentUser()
+        {
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            if(currentUser == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The user could not be found in the database.",
+                                             Instance = "548DA96F-0183-483F-8CE9-2848A868DC57"
+                };
+                return NotFound(problem);
+            }
+
+            List<UserTask> userTasks = await userTaskService.GetUserTasksForUser(currentUser.Id);
 
             return Ok(userTasks);
         }
@@ -110,7 +137,8 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            UserTask userTask = await userTaskService.GetUserTasksForUser(user.Id);
+            List<UserTask> userTasks = await userTaskService.GetUserTasksForUser(user.Id);
+            UserTask userTask = userTasks.Find(u => u.Type == UserTaskType.GraduationReminder);
 
             if(userTask == null)
             {
@@ -140,16 +168,15 @@ namespace API.Controllers
             
             // Rest call to Identity server to change credentials. Credentials are in the headers due to security issues.
             RestClient restClient = new RestClient(configuration.IdentityServer.IdentityUrl);
-            RestRequest restRequest = new RestRequest("Account/ChangeCredentials")
+            RestRequest restRequest = new RestRequest("/Account/ChangeCredentials")
                                       {
                                           Method = Method.PUT
                                       };
 
             restRequest.AddHeader("password", Request.Headers.FirstOrDefault(h => h.Key == "password")
                                                      .Value.FirstOrDefault());
-            restRequest.AddHeader("email",
-                                  Request.Headers.FirstOrDefault(h => h.Key == "email")
-                                         .Value.FirstOrDefault());
+            restRequest.AddHeader("email", Request.Headers.FirstOrDefault(h => h.Key == "email")
+                                                  .Value.FirstOrDefault());
             restRequest.AddHeader("subjectId", user.IdentityId);
             IRestResponse response = restClient.Execute(restRequest);
 
