@@ -27,7 +27,7 @@ namespace NotificationSystem
             RabbitMQListener listener = new RabbitMQListener(channel);
 
             // inject your notification service here
-            INotificationService notificationService = new EmailSender();
+            INotificationService notificationService = new EmailSender(config);
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
 
 

@@ -40,11 +40,20 @@ namespace NotificationSystem.Configuration
         public RabbitMQConfig RabbitMQ { get; set; }
 
         /// <summary>
+        ///     Gets or sets the sendgrid Config
+        /// </summary>
+        /// <value>
+        ///     The SendGrid config.
+        /// </value>
+        public SendGridConfig SendGrid { get; set; }
+
+        /// <summary>
         ///     Validates this instance.
         /// </summary>
         public void Validate()
         {
             Validator.ValidateObject(RabbitMQ, new ValidationContext(RabbitMQ), true);
+            Validator.ValidateObject(SendGrid, new ValidationContext(SendGrid), true);
         }
     }
 
@@ -79,5 +88,29 @@ namespace NotificationSystem.Configuration
         /// </value>
         [Required]
         public string Password { get; set; }
+    }
+
+    /// <summary>
+    /// Configuration settings for Sendgrid
+    /// </summary>
+    public class SendGridConfig
+    {
+        /// <summary>
+        ///     Gets or sets the api key.
+        /// </summary>
+        /// <value>
+        ///     The api key for SendGrid.
+        /// </value>
+        [Required]
+        public string ApiKey { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the email address that emails are send from.
+        /// </summary>
+        /// <value>
+        ///     The email that is used to send emails from.
+        /// </value>
+        [Required]
+        public string EmailFrom { get; set; }
     }
 }
