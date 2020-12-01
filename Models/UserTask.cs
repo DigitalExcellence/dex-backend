@@ -11,7 +11,8 @@ namespace Models
     public enum UserTaskStatus
     {
         Open,
-        Completed
+        Completed,
+        Mailed
     }
 
     public enum UserTaskType

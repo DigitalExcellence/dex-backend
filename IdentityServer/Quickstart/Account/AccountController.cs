@@ -447,16 +447,7 @@ namespace IdentityServer
             return vm;
         }
 
-        //[HttpPut]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult ChangeAccountCredentials()
-        //{
-        //    string pass = Request.Headers.FirstOrDefault(x => x.Key == "key of password header").Value.FirstOrDefault();
-        //    string email = Request.Headers.FirstOrDefault(x => x.Key == "key of email in header").Value.FirstOrDefault();
-
-        //    return Ok(pass + email);
-        //}
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         [HttpPut]
         public async Task<IActionResult> ChangeCredentials()
         {
@@ -464,12 +455,12 @@ namespace IdentityServer
             string email = Request.Headers.FirstOrDefault(x => x.Key == "email").Value.FirstOrDefault();
             string subjectId = Request.Headers.FirstOrDefault(x => x.Key == "subjectId").Value.FirstOrDefault();
 
-            IdentityUser IdentityUser = await identityUserService.FindBySubjectId(subjectId);
-            IdentityUser.Email = email;
-            IdentityUser.Username = email;
-            IdentityUser.Password = LoginHelper.GetHashPassword(pass);
+            IdentityUser identityUser = await identityUserService.FindBySubjectId(subjectId);
+            identityUser.Email = email;
+            identityUser.Username = email;
+            identityUser.Password = LoginHelper.GetHashPassword(pass);
 
-            identityUserService.Update(IdentityUser);
+            identityUserService.Update(identityUser);
             identityUserService.Save();
 
             return Ok();

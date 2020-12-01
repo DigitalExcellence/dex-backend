@@ -15,16 +15,20 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using AngleSharp;
+using API.Configuration;
 using API.Extensions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Hosting;
 using Models;
 using RestSharp;
 using RestSharp.Authenticators;
 using Serilog;
 using Services.Services;
 using System.Linq;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -44,6 +48,7 @@ namespace API.Controllers
         private readonly IUserTaskService userTaskService;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly Config configuration;
 
         /// <summary>
         /// The constructor for user tasks
@@ -51,20 +56,25 @@ namespace API.Controllers
         /// <param name="userTaskService"> The user task service is responsible for getting and setting the tasks that users should follow up.</param>
         /// <param name="userService"> The user service is responsible for getting and setting users. </param>
         /// <param name="roleService"> The role service is responsible for getting and setting roles. </param>
+        /// <param name="configuration"> The configuration is responsible for configuration settings. </param>
         public UserTaskController(IUserTaskService userTaskService,
                                   IUserService userService,
-                                  IRoleService roleService)
+                                  IRoleService roleService,
+                                  Config configuration)
         {
             this.userTaskService = userTaskService;
             this.userService = userService;
             this.roleService = roleService;
+            this.configuration = configuration;
         }
 
         /// <summary>
         /// Creates and returns all graduation user tasks for expecting graduation users.
         /// </summary>
         /// <returns> All user tasks which are created or open for graduation users. </returns>
+        /// <response code="200">This endpoint returns a list of user tasks.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> CreateUserTasksForGraduatingUsers()
         {
             List<UserTask> userTasks = await userTaskService.GetAllOpenGraduateUserTasks();
@@ -77,7 +87,13 @@ namespace API.Controllers
         /// New credentials in the headers due to security. 
         /// </summary>
         /// <returns> The updated user. </returns>
+        /// <response code="200">This endpoint returns the converted user.</response>
+        /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
+        /// <response code="503">The 503 Service unavailable status code is returned if the identity server cannot execute the request.</response>
         [HttpPut]
+        [ProducesResponseType(typeof(User), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), 503)]
         public async Task<IActionResult> ConvertToAlumni()
         {
             User user = await HttpContext.GetContextUser(userService)
@@ -123,7 +139,7 @@ namespace API.Controllers
 
             
             // Rest call to Identity server to change credentials. Credentials are in the headers due to security issues.
-            RestClient restClient = new RestClient("https://localhost:5005/");
+            RestClient restClient = new RestClient(configuration.IdentityServer.IdentityUrl);
             RestRequest restRequest = new RestRequest("Account/ChangeCredentials")
                                       {
                                           Method = Method.PUT
