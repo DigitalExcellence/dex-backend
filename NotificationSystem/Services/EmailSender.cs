@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using NotificationSystem.Configuration;
 using NotificationSystem.Contracts;
 using NotificationSystem.Notifications;
 using SendGrid;
@@ -14,10 +15,10 @@ namespace NotificationSystem.Services
         private readonly SendGridClient client;
         private readonly EmailAddress from;
 
-        public EmailSender()
+        public EmailSender(Config config)
         {
-            client = new SendGridClient(Environment.GetEnvironmentVariable("SENDGRID_API_KEY"));
-            from = new EmailAddress(Environment.GetEnvironmentVariable("SENDGRID_EMAIL_FROM"));
+            client = new SendGridClient(config.SendGrid.ApiKey);
+            from = new EmailAddress(config.SendGrid.EmailFrom);
         }
 
 
