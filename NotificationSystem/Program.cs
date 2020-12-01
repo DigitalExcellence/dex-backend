@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using NotificationSystem.Configuration;
 using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
@@ -11,31 +12,16 @@ namespace NotificationSystem
     {
         private static void Main()
         {
-            IConfiguration config = new ConfigurationBuilder()
+            string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            IConfiguration configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsetting.{environmentName}")
                 .AddEnvironmentVariables()
                 .Build();
+            Config config = configuration.GetSection("App").Get<Config>();
+           
 
-
-            string hostName;
-            string user;
-            string password;
-
-            //check for if running in docker, else set values to run with local RabbitMQ service
-            if (Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME") != null)
-            {
-                hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME");
-                user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
-                password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
-            } else
-            {
-                hostName = "localhost";
-                user = "guest";
-                password = "guest";
-            }
-            
-
-            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(hostName, user, password);
+            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password);
             IModel channel = subscriber.SubscribeToSubject("EMAIL");
 
             RabbitMQListener listener = new RabbitMQListener(channel);
