@@ -19,7 +19,6 @@ namespace NotificationSystem
                 .AddEnvironmentVariables()
                 .Build();
             Config config = configuration.GetSection("App").Get<Config>();
-           
 
             RabbitMQSubscriber subscriber = new RabbitMQSubscriber(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password);
             IModel channel = subscriber.SubscribeToSubject("EMAIL");
@@ -29,7 +28,6 @@ namespace NotificationSystem
             // inject your notification service here
             INotificationService notificationService = new EmailSender(config);
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
-
 
             listener.StartConsumer(consumer, "EMAIL");
         }

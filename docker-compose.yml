@@ -52,11 +52,11 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - RABBITMQ_HOST_NAME=${App__RabbitMQ__Hostname}
-      - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
-      - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
-      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-      - SENDGRID_EMAIL_FROM=${SENDGRID_EMAIL_FROM}
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
+      - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
     stdin_open: true
     tty: true
     deploy:
@@ -78,9 +78,9 @@ services:
       - ASPNETCORE_HTTPS_PORT=5001
       - ASPNETCORE_Kestrel__Certificates__Default__Password=xI90DrNea7M6UJFNDwip6t
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
-      - RABBITMQ_HOST_NAME=rabbitmq
-      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
       mssql-network:
       rabbitmq-network:

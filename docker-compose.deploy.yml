@@ -15,8 +15,8 @@ services:
   rabbitmq:
     image: 'bitnami/rabbitmq:latest'
     environment:
-      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
+      - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
     ports: 
       - 5672:5672
       - 5671:5671
@@ -37,6 +37,9 @@ services:
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=${IDENTITY_URL}
       - SENTRY_DSN=${SENTRY_DSN}
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
     image:  digitalexcellence/api
     networks:
       mssql-network:
@@ -73,9 +76,9 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - RABBITMQ_HOST_NAME=rabbitmq
-      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
       - SENDGRID_API_KEY=${SENDGRID_API_KEY}
       - SENDGRID_EMAIL_FROM=${SENDGRID_EMAIL_FROM}
     stdin_open: true
