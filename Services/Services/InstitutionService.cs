@@ -30,9 +30,9 @@ namespace Services.Services
     {
 
         /// <summary>
-        /// This method gets the institution with the specified id asynchronous.
+        /// This method gets all the institutions asynchronous.
         /// </summary>
-        /// <returns>This method returns the found institution with the specified id.</returns>
+        /// <returns>This method returns a list of institutions.</returns>
         Task<IEnumerable<Institution>> GetInstitutionsAsync();
 
         /// <summary>

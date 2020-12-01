@@ -44,7 +44,7 @@ namespace Services.Tests
         /// <value>
         /// The service.
         /// </value>
-        protected new IInstitutionService Service => (IInstitutionService) base.Service;
+        protected new IInstitutionService Service => base.Service;
 
         /// <summary>
         /// This method tests the GetInstitutionsAsync method in a good flow.

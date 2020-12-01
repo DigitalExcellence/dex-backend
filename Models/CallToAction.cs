@@ -15,52 +15,33 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
-
-    public class Project
+    /// <summary>
+    /// This class contains all the properties for a call to action model.
+    /// </summary>
+    public class CallToAction
     {
-
-        public Project()
-        {
-            Collaborators = new List<Collaborator>();
-        }
-
+        /// <summary>
+        /// Gets or sets a value for the Id property.
+        /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the OptionValue property.
+        /// For example, this would be the Title on the call to action button.
+        /// </summary>
         [Required]
-        public User User { get; set; }
+        public string OptionValue { get; set; }
 
-        public int UserId { get; set; }
-
+        /// <summary>
+        /// Gets or sets a value for the Value property.
+        /// For example, this would be the redirect url for the call to action button.
+        /// </summary>
         [Required]
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        [Required]
-        public string ShortDescription { get; set; }
-
-        public List<Collaborator> Collaborators { get; set; }
-
-        [Required]
-        public string Uri { get; set; }
-
-        [Required]
-        public DateTime Created { get; set; }
-
-        [Required]
-        public DateTime Updated { get; set; }
-
-        public int? ProjectIconId { get; set; }
-
-        public File ProjectIcon { get; set; }
-
-        public CallToAction CallToAction { get; set; }
+        public string Value { get; set; }
 
     }
 
