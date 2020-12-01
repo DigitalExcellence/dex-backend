@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace API.Resources
 {
     /// <summary>
-    /// The view model of a portfolio item
+    /// The View model of a portfolioitem
     /// </summary>
-    public class PortfolioResourceResult : PortfolioResource
+    public class PortfolioItemResourceResult : PortfolioItemResource
     {
         /// <summary>
-        /// This sets or gets the user of the portfolio Resource result id
+        /// this sets or gets the portfolio item id
         /// </summary>
         public int Id { get; set; }
     }
