@@ -15,49 +15,34 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
-using System.Collections.Generic;
-
-namespace API.Resources
+namespace API.InternalResources
 {
     /// <summary>
-    ///     The view model of a project
+    /// The internal model resource for retrieving user data and
+    /// creating the user
     /// </summary>
-    public class ProjectResource
+    public class UserCreateInternalResource
     {
         /// <summary>
-        ///     This gets or sets the Title
+        /// Gets or sets the name of the internal user resource.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Description
+        /// Gets or sets the Email of the internal user resource.
         /// </summary>
-        public string Description { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Short description of the project
+        /// Gets or sets the identity id of the internal user resource.
         /// </summary>
-        public string ShortDescription { get; set; }
+        public string IdentityId { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Uri
+        /// Gets or sets the identity institution id of the internal user resource.
         /// </summary>
-        public string Uri { get; set; }
+        public string IdentityInstitutionId { get; set; }
 
-        /// <summary>
-        ///     This gets or sets the collaborators
-        /// </summary>
-        public ICollection<CollaboratorResource> Collaborators { get; set; }
-
-        /// <summary>
-        /// This gets or sets the file id
-        /// </summary>
-        public int FileId { get; set; }
-
-        /// <summary>
-        /// This gets or sets the call to action
-        /// </summary>
-        public CallToActionResource CallToAction { get; set; }
     }
+
 }

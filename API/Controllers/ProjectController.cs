@@ -17,6 +17,7 @@
 
 using API.Common;
 using API.Extensions;
+using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -46,8 +47,9 @@ namespace API.Controllers
         private readonly IUserService userService;
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly IFileService fileService;
+        private readonly IFileUploader fileUploader;
         private readonly IUserProjectService userProjectService;
-
+        private readonly ICallToActionOptionService callToActionOptionService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class
@@ -58,19 +60,25 @@ namespace API.Controllers
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
         /// <param name="userProjectService">The user project service is responsible for users that are following / liking projects.</param>
+        /// <param name="fileUploader">The file uploader service is used to upload the files into the file system.</param>
+        /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
                                  IAuthorizationHelper authorizationHelper,
                                  IFileService fileService,
-                                 IUserProjectService userProjectService)
+                                 IFileUploader fileUploader,
+                                 IUserProjectService userProjectService,
+                                 ICallToActionOptionService callToActionOptionService)
         {
             this.projectService = projectService;
             this.userService = userService;
             this.fileService = fileService;
+            this.fileUploader = fileUploader;
             this.mapper = mapper;
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
+            this.callToActionOptionService = callToActionOptionService;
         }
 
         /// <summary>
@@ -115,7 +123,7 @@ namespace API.Controllers
             }
 
             ProjectFilterParams projectFilterParams = mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
-            IEnumerable<Project> projects = await projectService.GetAllWithUsersAsync(projectFilterParams);
+            IEnumerable<Project> projects = await projectService.GetAllWithUsersAndCollaboratorsAsync(projectFilterParams);
             IEnumerable<ProjectResultResource> results =
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
 
@@ -193,6 +201,22 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+
+            if(projectResource.CallToAction != null)
+            {
+                IEnumerable<CallToActionOption> callToActionOptions = await callToActionOptionService.GetCallToActionOptionFromValueAsync(projectResource.CallToAction.OptionValue);
+                if(!callToActionOptions.Any())
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Call to action value was not found.",
+                        Detail = "The specified call to action value was not found while creating the project.",
+                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                    };
+                    return BadRequest(problem);
+                }
+            }
+
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
             File file = await fileService.FindAsync(projectResource.FileId);
 
@@ -253,30 +277,10 @@ namespace API.Controllers
                 {
                     Title = "Failed to update project.",
                     Detail = "The specified project could not be found in the database.",
-                    Instance = "6A123609-19A1-47F0-B789-3D8F2A52C0C6"
+                    Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
                 };
                 return NotFound(problem);
             }
-
-            mapper.Map(projectResource, project);
-            File file = null;
-            if(projectResource.FileId != 0)
-            {
-                file = await fileService.FindAsync(projectResource.FileId);
-                project.ProjectIcon = file;
-            }
-
-            if(projectResource.FileId != 0 && file == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "File was not found.",
-                     Detail = "The specified file was not found while updating project.",
-                     Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
-                 };
-                return BadRequest(problem);
-            }
-
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
@@ -287,11 +291,61 @@ namespace API.Controllers
                 {
                     Title = "Failed to edit the project.",
                     Detail = "The user is not allowed to edit the project.",
-                    Instance = "2E765D18-8EBC-4117-8F9E-B800E8967038"
+                    Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
                 };
                 return Unauthorized(problem);
             }
 
+            if(projectResource.CallToAction != null)
+            {
+                IEnumerable<CallToActionOption> callToActionOptions = await callToActionOptionService.GetCallToActionOptionFromValueAsync(projectResource.CallToAction.OptionValue);
+                if(!callToActionOptions.Any())
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Call to action value was not found.",
+                        Detail = "The specified call to action value was not found while creating the project.",
+                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                    };
+                    return BadRequest(problem);
+                }
+            }
+
+            // Upload the new file if there is one
+            File file = null;
+            if(projectResource.FileId != 0)
+            {
+                if(project.ProjectIconId != 0)
+                {
+                    File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                    // Remove the file from the filesystem
+                    fileUploader.DeleteFileFromDirectory(fileToDelete);
+                    // Remove file from DB
+                    await fileService.RemoveAsync(project.ProjectIconId.Value);
+                   
+                   
+                    fileService.Save();
+                }
+
+                // Get the uploaded file
+                file = await fileService.FindAsync(projectResource.FileId);
+
+                if(file != null)
+                {
+                    project.ProjectIcon = file;
+
+                } else
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "File was not found.",
+                        Detail = "The specified file was not found while updating project.",
+                        Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                    };
+                    return BadRequest(problem);
+                }  
+            }
+            mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
@@ -341,9 +395,37 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
+            if(project.ProjectIconId.HasValue)
+            {
+                // We need to delete the old file.
+                File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                try
+                {
+                    // Remove the file from the database
+                    await fileService.RemoveAsync(fileToDelete.Id)
+                                        .ConfigureAwait(false);
+                    fileService.Save();
+
+                    // Remove the file from the filesystem
+                    fileUploader.DeleteFileFromDirectory(fileToDelete);
+
+                } catch(System.IO.FileNotFoundException)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "File could not be deleted because the path does not exist.",
+                        Detail = "File could not be found.",
+                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
+                    };
+
+                    return NotFound(problem);
+                }
+            }
+
             await projectService.RemoveAsync(projectId)
                                 .ConfigureAwait(false);
             projectService.Save();
+
             return Ok();
         }
 

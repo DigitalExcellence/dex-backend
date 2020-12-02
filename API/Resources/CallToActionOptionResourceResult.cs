@@ -19,25 +19,16 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// The viewmodel of a Institution model
+    /// Resource Result for call to action option
     /// </summary>
-    public class InstitutionResource
+    public class CallToActionOptionResourceResult
+        : CallToActionOptionResource
     {
-        
         /// <summary>
-        /// Gets or sets a value for the name of the institution.
+        /// Gets or sets the id of the call to action option.
         /// </summary>
-        public string Name { get; set; }
+        public int Id { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value for the description of the institution.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the identity id for the institution.
-        /// </summary>
-        public string IdentityId { get; set; }
     }
 
 }
