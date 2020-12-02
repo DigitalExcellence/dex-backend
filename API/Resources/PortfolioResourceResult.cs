@@ -45,5 +45,10 @@ namespace API.Resources
         /// this sets or gets the portfoliouri
         /// </summary>
         public string PublicUri { get; set; }
+
+        /// <summary>
+        /// this sets or gets the PortfolioItems
+        /// </summary>
+        public List<PortfolioItem> PortfolioItem { get; set; }
     }
 }
