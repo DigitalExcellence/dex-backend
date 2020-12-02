@@ -17,9 +17,14 @@ namespace API.Resources
         public int Id { get; set; }
 
         /// <summary>
-        /// This sets or gets the user of the portfolio
+        /// This sets or gets the username of the portfolio
         /// </summary>
         public string UserName { get; set; }
+
+        /// <summary>
+        /// This sets or gets the username of the portfolio
+        /// </summary>
+        public int UserId { get; set; }
 
         /// <summary>
         /// This sets or gets the name of the portfolio

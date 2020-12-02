@@ -48,6 +48,7 @@ namespace API.Configuration
 
 
             CreateMap<Portfolio, PortfolioResourceResult>()
+                .ForMember(q => q.UserId, opt => opt.MapFrom(p => p.User.Id))
                 .ForMember(q => q.UserName, opt => opt.MapFrom(p => p.User.Name));
 
             CreateMap<PortfolioResource, Portfolio>()
