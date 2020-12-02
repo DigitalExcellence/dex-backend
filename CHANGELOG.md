@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
 - Added call to actions for projects and call to action options - [312](https://github.com/DigitalExcellence/dex-backend/issues/312)
 - Collaborators are now included on the project overview page - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
+- Added new endpoint for ability to like and unlike projects - [#229](https://github.com/DigitalExcellence/dex-backend/issues/229)
 
 
 ### Changed
@@ -115,7 +116,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unit testing for the Search service - [#183](https://github.com/DigitalExcellence/dex-backend/issues/183)
 - Added sanitization for project Description - [#198](https://github.com/DigitalExcellence/dex-backend/issues/198)
 - Added redirection to the frontend after logout from the identity server - [#216](https://github.com/DigitalExcellence/dex-backend/issues/216)
-- Added new endpoint for ability to like and unlike projects - [#229](https://github.com/DigitalExcellence/dex-backend/issues/229)
 
 ### Changed
 
