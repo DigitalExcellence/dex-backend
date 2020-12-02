@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build-env
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ ENV SENTRY_DSN = ''
 
 RUN dotnet publish API/1_API.csproj -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/aspnet:3.1
 
 WORKDIR /app
 

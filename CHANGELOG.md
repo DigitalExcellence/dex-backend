@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added function to follow users and let users follow projects - [#228](https://github.com/DigitalExcellence/dex-backend/pull/258)
 - Added a new dex user that can be used to add projects manually - [#270](https://github.com/DigitalExcellence/dex-backend/issues/270)
 - Added data officer role and CRUD functionalities for institutions - [#265](https://github.com/DigitalExcellence/dex-backend/issues/265)
+- Added notification system - [#256](https://github.com/DigitalExcellence/dex-backend/issues/256)
 
 ### Fixed
 
