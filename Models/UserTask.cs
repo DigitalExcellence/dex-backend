@@ -35,7 +35,6 @@ namespace Models
         public UserTaskStatus Status { get; set; }
         public UserTaskType Type { get; set; }
 
-        
     }
 
     

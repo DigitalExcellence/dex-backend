@@ -42,7 +42,6 @@ namespace JobScheduler
                 foreach(UserTask userTask in userTasks)
                 {
                     // TODO: Send email to user.
-                    
                     logger.LogInformation("Found expected graduating user: " + userTask.UserId);
                     userTask.Status = UserTaskStatus.Mailed;
                     requestHandler.SetGraduationTaskStatusToMailed(userTask);

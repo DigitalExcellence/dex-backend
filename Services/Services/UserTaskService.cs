@@ -61,7 +61,7 @@ namespace Services.Services
                 {
                     if(u.Id == userTask.UserId)
                     {
-                        if(userTask.Status == UserTaskStatus.Open && userTask.Type == UserTaskType.GraduationReminder)
+                        if(userTask.Status == UserTaskStatus.Open && userTask.Type == UserTaskType.GraduationReminder || userTask.Status == UserTaskStatus.Mailed &&  userTask.Type == UserTaskType.GraduationReminder)
                         {
                             userTasks.Add(userTask);
                             doesExist = true;
@@ -89,6 +89,5 @@ namespace Services.Services
         {
             return await Repository.GetUserTasksForUser(userId);
         }
-
     }
 }
