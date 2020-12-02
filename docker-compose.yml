@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   rabbitmq:
+    container_name: rabbitmq
     image: 'bitnami/rabbitmq:3.8.9'
     environment:
       - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
@@ -14,6 +15,7 @@ services:
       rabbitmq-network:
 
   db:
+    container_name: database
     build:
       context: .
       dockerfile: Data/Dockerfile
@@ -23,6 +25,8 @@ services:
       mssql-network:
 
   identity:
+    container_name: identity
+    restart: on-failure
     build:
       context: .
       dockerfile: IdentityServer/Dockerfile.dev
@@ -41,11 +45,10 @@ services:
     ports:
       - 5004:5004
       - 5005:5005
-    deploy:
-      restart_policy:
-        condition: on-failure
 
   notificationservice:
+    container_name: notificationservice
+    restart: on-failure
     build:
       context: .
       dockerfile: NotificationSystem/Dockerfile
@@ -59,13 +62,12 @@ services:
       - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
     stdin_open: true
     tty: true
-    deploy:
-      restart_policy:
-        condition: on-failure
     networks:
       rabbitmq-network:
 
   api:
+    container_name: api
+    restart: on-failure
     build:
       context: .
       dockerfile: API/Dockerfile.dev

@@ -70,6 +70,7 @@ services:
     image: digitalexcellence/identity
 
   notificationservice:
+    image:  digitalexcellence/notificationservice
     build:
       context: .
       dockerfile: NotificationSystem/Dockerfile
@@ -83,10 +84,6 @@ services:
       - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
     stdin_open: true
     tty: true
-    image:  digitalexcellence/notificationservice
-    deploy:
-      restart_policy:
-        condition: on-failure
     networks:
       rabbitmq-network:
 
