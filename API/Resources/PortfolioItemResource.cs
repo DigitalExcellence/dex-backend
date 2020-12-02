@@ -9,7 +9,7 @@ namespace API.Resources
     /// <summary>
     /// The View model of a portfolio item
     /// </summary>
-    public class PortolioItemResource
+    public class PortfolioItemResource
     {
         /// <summary>
         /// this sets or gets the portfolio id
@@ -34,6 +34,6 @@ namespace API.Resources
         /// <summary>
         /// this sets or gets the projectid
         /// </summary>
-        public Project ProjectId { get; set; }
+        public Project ProjectId2 { get; set; }
     }
 }
