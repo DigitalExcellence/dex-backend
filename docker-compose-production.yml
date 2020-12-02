@@ -117,8 +117,8 @@ services:
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
-      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-      - SENDGRID_EMAIL_FROM=${SENDGRID_EMAIL_FROM}
+      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
+      - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
     stdin_open: true
     tty: true
     deploy:
@@ -153,5 +153,7 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
+  rabbitmq-network:
+    driver: bridge
   proxy:
     external: true
