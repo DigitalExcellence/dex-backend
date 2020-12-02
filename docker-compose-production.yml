@@ -17,7 +17,7 @@ services:
       - ~/docker_compose/data:/var/opt/mssql/data
 
   rabbitmq:
-    image: 'bitnami/rabbitmq:latest'
+    image: 'bitnami/rabbitmq:3.8.9'
     environment:
       - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
       - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
@@ -117,8 +117,8 @@ services:
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
-      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-      - SENDGRID_EMAIL_FROM=${SENDGRID_EMAIL_FROM}
+      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
+      - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
     stdin_open: true
     tty: true
     deploy:
@@ -153,5 +153,7 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
+  rabbitmq-network:
+    driver: bridge
   proxy:
     external: true
