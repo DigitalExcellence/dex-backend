@@ -12,7 +12,6 @@ COPY . ./
 
 RUN dotnet dev-certs https --clean
 RUN dotnet dev-certs https -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
-RUN security set-key-partition-list -D localhost -S unsigned:,teamid:UBF8T346G9
 
 RUN dotnet build
 
