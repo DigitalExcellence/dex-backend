@@ -82,6 +82,9 @@ namespace API.Extensions
             services.AddScoped<IUserUserService, UserUserService>();
             services.AddScoped<IUserUserRepository, UserUserRepository>();
 
+            services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
+            services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
+
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
 

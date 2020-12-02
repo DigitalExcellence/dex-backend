@@ -31,6 +31,29 @@ namespace API.Configuration
         /// </summary>
         public MappingProfile()
         {
+            CreateMap<ProjectLike, UserProjectLikeResourceResult>()
+                .ForMember(source => source.Id,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Id))
+                .ForMember(source => source.Name,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Name))
+                .ForMember(source => source.ShortDescription,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.ShortDescription))
+                .ForMember(source => source.Uri,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Uri))
+                .ForMember(source => source.Description,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Description))
+                .ForAllOtherMembers(member => member.Ignore());
+
            CreateMap<UserUserResourceResult, UserUser>();
 
            CreateMap<UserUser, UserUserResourceResult>()
