@@ -17,7 +17,6 @@ namespace Services.Services
         /// <returns></returns>
         Task<PortfolioItem> AddPortfolioItem(PortfolioItem portfolioItem);
 
-
         /// <summary>
         /// Update a portfolio item
         /// </summary>

@@ -92,6 +92,9 @@ namespace Data
         public DbSet<UserProject> UserProject { get; set; }
         public DbSet<UserUser> UserUser { get; set; }
 
+        public DbSet<Portfolio> Portfolio { get; set; }
+        public DbSet<PortfolioItem> PortfolioItem { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
