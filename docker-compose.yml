@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
   rabbitmq:
-    image: 'bitnami/rabbitmq:latest'
+    image: 'bitnami/rabbitmq:3.8.9'
     environment:
       - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
       - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
-    ports: 
+    ports:
       - 5672:5672
       - 5671:5671
       - 15672:15672
     networks:
       rabbitmq-network:
-  
+
   db:
     build:
       context: .
@@ -44,7 +44,7 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-  
+
   notificationservice:
     build:
       context: .

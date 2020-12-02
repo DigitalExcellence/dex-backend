@@ -24,7 +24,7 @@ services:
      - ~/docker_compose/data:/var/opt/mssql/data
 
   rabbitmq:
-    image: 'bitnami/rabbitmq:latest'
+    image: 'bitnami/rabbitmq:3.8.9'
     environment:
       - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
       - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
