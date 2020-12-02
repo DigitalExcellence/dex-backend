@@ -7,10 +7,18 @@ namespace Models
 {
     public class PortfolioItem
     {
+        public PortfolioItem(Portfolio portfolio, Project project)
+        {
+            Portfolio = portfolio;
+            Project = project;
+        }
+
+        public PortfolioItem() { }
+
         public int Id { get; set; }
 
         [Required]
-        public int PortfolioId { get; set; }
+        public Portfolio Portfolio { get; set; }
 
         public int Position { get; set; }
 
@@ -19,6 +27,6 @@ namespace Models
         [Required]
         public string Content { get; set; }
 
-        public Project ProjectId { get; set; }
+        public Project Project { get; set; }
     }
 }

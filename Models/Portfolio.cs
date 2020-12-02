@@ -7,6 +7,11 @@ namespace Models
 {
     public class Portfolio
     {
+        public Portfolio()
+        {
+            PortfolioItem = new List<PortfolioItem>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -21,5 +26,7 @@ namespace Models
         public string Title { get; set; }
 
         public string PublicUri { get; set; }
+
+        public List<PortfolioItem> PortfolioItem { get; set; }
     }
 }
