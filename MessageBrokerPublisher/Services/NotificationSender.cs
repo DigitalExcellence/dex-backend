@@ -26,9 +26,9 @@ namespace MessageBrokerPublisher
     /// </summary>
     public class NotificationSender : INotificationSender
     {
-        private readonly string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST_NAME");
-        private readonly string user = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
-        private readonly string password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+        private readonly string hostName = Environment.GetEnvironmentVariable("App__RabbitMQ__Hostname");
+        private readonly string user = Environment.GetEnvironmentVariable("App__RabbitMQ__Username");
+        private readonly string password = Environment.GetEnvironmentVariable("App__RabbitMQ__Password");
 
         private ConnectionFactory connectionFactory;
 
