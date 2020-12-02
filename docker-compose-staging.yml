@@ -24,7 +24,9 @@ services:
      - ~/docker_compose/data:/var/opt/mssql/data
 
   rabbitmq:
+    container_name: rabbitmq
     image: 'bitnami/rabbitmq:3.8.9'
+    restart: unless-stopped
     environment:
       - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
       - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
@@ -74,6 +76,7 @@ services:
   identity:
     image: digitalexcellence/identity:latest
     container_name: identity
+    restart: on-failure
     depends_on:
       - db
     networks:
@@ -119,6 +122,9 @@ services:
       - "traefik.docker.network=proxy"
 
   notificationservice:
+    container_name: notificationservice
+    image:  digitalexcellence/notificationservice
+    restart: on-failure
     build:
       context: .
       dockerfile: NotificationSystem/Dockerfile
@@ -132,15 +138,13 @@ services:
       - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
     stdin_open: true
     tty: true
-    deploy:
-      restart_policy:
-        condition: on-failure
     networks:
       rabbitmq-network:
 
   frontend:
     image: digitalexcellence/stagingfrontend
     container_name: frontend
+    restart: on-failure
     networks:
       - proxy
     labels:
