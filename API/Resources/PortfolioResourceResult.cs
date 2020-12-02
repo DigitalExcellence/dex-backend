@@ -9,7 +9,7 @@ namespace API.Resources
     /// <summary>
     /// The view model of a portfolio item
     /// </summary>
-    public class PortfolioResourceResult : PortfolioResource
+    public class PortfolioResourceResult
     {
         /// <summary>
         /// This sets or gets the user of the portfolio Resource result id
