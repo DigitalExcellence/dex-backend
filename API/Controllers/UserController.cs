@@ -488,16 +488,5 @@ namespace API.Controllers
             userUserService.Save();
             return Ok();
         }
-
-        /*/// <summary>
-        /// Converts an account to alumni role.
-        /// </summary>
-        /// <returns>Updated user</returns>
-        [HttpPut("alumni")]
-        [Authorize]
-        public async Task<IActionResult> ConvertToAlumni()
-        {
-            
-        }*/
     }
 }
