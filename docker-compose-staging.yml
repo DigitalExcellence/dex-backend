@@ -132,6 +132,7 @@ services:
       - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
     stdin_open: true
     tty: true
+    image:  digitalexcellence/notificationservice
     deploy:
       restart_policy:
         condition: on-failure
