@@ -34,6 +34,6 @@ namespace API.Resources
         /// <summary>
         /// this sets or gets the projectid
         /// </summary>
-        public Project ProjectId { get; set; }
+        public Project ProjectId2 { get; set; }
     }
 }
