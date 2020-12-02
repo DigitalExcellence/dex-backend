@@ -181,7 +181,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="institutionId">The institution identifier which is used to find the institution.</param>
         /// <param name="institutionResource">The institution resource which is used to update the institution.</param>
-        /// <returns>This method return the updated institution resource result</returns>
+        /// <returns>This method returns the updated institution resource result.</returns>
         /// <response code="200">This endpoint returns the updated institution.</response>
         /// <response code="404">The 404 Not Found status code is returned when no institution is found with the specified institution id.</response>
         [HttpPut("{institutionId}")]

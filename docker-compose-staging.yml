@@ -1,0 +1,174 @@
+version: '3.8'
+
+services:
+  db:
+   image: digitalexcellence/database
+   container_name: db
+   restart: unless-stopped
+   ports:
+     - 1433:1433
+   networks:
+     mssql-network:
+       ipv4_address: 172.16.238.2
+   environment:
+     - MSSQL_SA_PASSWORD=${STAGING_DATABASE_PASSWORD}
+   volumes:
+     - ~/docker_compose/create-trigger-new-user.sql:/opt/create-trigger-new-user.sql
+     - ~/docker_compose/new_user.sql:/opt/new_user.sql
+     - ~/docker_compose/add_user.sql:/opt/add_user.sql
+     - ~/docker_compose/test-mail.sql:/opt/test-mail.sql
+     - ~/docker_compose/create_profile.sql:/opt/create_profile.sql
+     - ~/docker_compose/enable-mail.sql:/opt/enable-mail.sql
+     - ~/docker_compose/create-trigger.sql:/opt/create-trigger.sql
+     - ~/docker_compose/backup:/var/opt/mssql/backup
+     - ~/docker_compose/data:/var/opt/mssql/data
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:3.8.9'
+    environment:
+      - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
+      - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
+    ports:
+      - 5672:5672
+      - 5671:5671
+      - 15672:15672
+    networks:
+      rabbitmq-network:
+
+  api:
+    image: digitalexcellence/api
+    container_name: api
+    restart: on-failure
+    networks:
+      - proxy
+      - mssql-network
+    depends_on:
+      - db
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/ubuntu/Uploads/Images:/app/Uploads/Images
+    environment:
+      - ConnectionStrings__DefaultConnection=${STAGING_CONNECTION_STRING}
+      - App__Frontend__FrontendUrl=https://staging.dex.software
+      - App__Frontend__ClientId=${STAGING_API_FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${STAGING_API_FRONTEND_CLIENT_SECRET}
+      - App__IdentityServer__IdentityUrl=https://identity.staging.dex.software
+      - SENTRY_DSN=https://c4cad5ec89d74853a66347a7b19c213b@o395685.ingest.sentry.io/5247967
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.entrypoints=http"
+      - "traefik.http.routers.api.rule=Host(`api.staging.dex.software`)"
+      - "traefik.http.middlewares.api-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.api.middlewares=api-https-redirect"
+      - "traefik.http.routers.api-secure.entrypoints=https"
+      - "traefik.http.routers.api-secure.rule=Host(`api.staging.dex.software`)"
+      - "traefik.http.routers.api-secure.tls=true"
+      - "traefik.http.routers.api-secure.tls.certresolver=http"
+      - "traefik.http.routers.api-secure.service=api"
+      - "traefik.http.services.api.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+
+  identity:
+    image: digitalexcellence/identity:latest
+    container_name: identity
+    depends_on:
+      - db
+    networks:
+      - proxy
+      - mssql-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/ubuntu/certs/identity:/app/certs
+    environment:
+      - ConnectionStrings__DefaultConnection=${IDENTITY_STAGING_CONNECTION_STRING}
+      - App__Self__PublicOrigin=https://identity.staging.dex.software
+      - App__Self__JwtAuthority=https://staging.dex.software
+      - App__Api__DeXApiUrl=https://api.staging.dex.software
+      - App__Api__ClientId=${API_CLIENT_ID}
+      - App__Api__ClientSecret=${API_CLIENT_SECRET}
+      - App__Frontend__RedirectUriFrontend=https://staging.dex.software/auth-callback
+      - App__Frontend__RedirectUriPostman=https://www.postman.com/oauth2/callback
+      - App__Frontend__RefreshUriFrontend=https://staging.dex.software/silent-refresh.html
+      - App__Frontend__PostLogoutUriFrontend=https://staging.dex.software/
+      - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
+      - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
+      - App__swagger__RedirectUrisSwagger=https://staging.dex.software/oauth2-redirect.html
+      - App__swagger__PostLogoutUrisSwagger=https://staging.dex.software
+      - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
+      - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
+      - App__FfhictOIDC__RedirectUri=https://identity.staging.dex.software/external/callback/fhict
+      - Cert_File=/app/identity.staging.dex.software_pfx.pfx
+      - Cert_Thumb=${CERT_THUMB}
+      - Cert_Password=${CERT_PASSWORD}
+      - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.identity.entrypoints=http"
+      - "traefik.http.routers.identity.rule=Host(`identity.staging.dex.software`)"
+      - "traefik.http.middlewares.identity-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.identity.middlewares=api-https-redirect"
+      - "traefik.http.routers.identity-secure.entrypoints=https"
+      - "traefik.http.routers.identity-secure.rule=Host(`identity.staging.dex.software`)"
+      - "traefik.http.routers.identity-secure.tls=true"
+      - "traefik.http.routers.identity-secure.tls.certresolver=http"
+      - "traefik.http.routers.identity-secure.service=identity"
+      - "traefik.http.services.identity.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+
+  notificationservice:
+    build:
+      context: .
+      dockerfile: NotificationSystem/Dockerfile
+    depends_on:
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
+      - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
+    stdin_open: true
+    tty: true
+    image:  digitalexcellence/notificationservice
+    deploy:
+      restart_policy:
+        condition: on-failure
+    networks:
+      rabbitmq-network:
+
+  frontend:
+    image: digitalexcellence/stagingfrontend
+    container_name: frontend
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.entrypoints=http"
+      - "traefik.http.routers.frontend.rule=Host(`staging.dex.software`)"
+      - "traefik.http.middlewares.frontend-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.frontend.middlewares=api-https-redirect"
+      - "traefik.http.routers.frontend-secure.entrypoints=https"
+      - "traefik.http.routers.frontend-secure.rule=Host(`staging.dex.software`)"
+      - "traefik.http.routers.frontend-secure.tls=true"
+      - "traefik.http.routers.frontend-secure.tls.certresolver=http"
+      - "traefik.http.routers.frontend-secure.service=frontend"
+      - "traefik.http.services.frontend.loadbalancer.server.port=443"
+      - "traefik.docker.network=proxy"
+
+networks:
+  mssql-network:
+    internal: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+  rabbitmq-network:
+    driver: bridge
+
+  proxy:
+    external: true
+

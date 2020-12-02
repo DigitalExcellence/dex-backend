@@ -93,6 +93,14 @@ namespace API.Configuration
                 .ForMember(e => e.Status, opt => opt.MapFrom(e => e.Status))
                 .ForMember(e => e.Type, opt => opt.MapFrom(e => e.Type));
 
+            CreateMap<CallToActionResource, CallToAction>()
+                .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));
+            CreateMap<CallToAction, CallToActionResourceResult>();
+
+            CreateMap<CallToActionOptionResource, CallToActionOption>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToLower()))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToLower()));
+            CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
         }
     }
 }

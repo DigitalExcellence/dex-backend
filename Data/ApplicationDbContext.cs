@@ -15,9 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
 using Data.Configurations;
-using Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -39,12 +37,26 @@ namespace Data
         /// The user.
         /// </value>
         public DbSet<User> User { get; set; }
-
+        /// <summary>
+        /// Gets or sets the Call to Action.
+        /// </summary>
+        /// <value>
+        /// The call to action.
+        /// </value>
+        public DbSet<CallToAction> CallToAction { get; set; }
         /// <summary>
         /// Gets or sets the project.
         /// </summary>
         /// <value>
         /// The project.
+        /// </value>
+        public DbSet<File> File { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Call To Action options.
+        /// </summary>
+        /// <value>
+        /// The call to action options.
         /// </value>
         public DbSet<Project> Project { get; set; }
         /// <summary>
@@ -82,12 +94,13 @@ namespace Data
         /// The institution.
         /// </value>
         public DbSet<Institution> Institution { get; set; }
+        /// <summary>
         /// Gets or sets the file.
         /// </summary>
         /// <value>
         /// The file.
         /// </value>
-        public DbSet<File> File { get; set; }
+        public DbSet<CallToActionOption> CallToActionOption { get; set; }
 
         public DbSet<UserProject> UserProject { get; set; }
         public DbSet<UserUser> UserUser { get; set; }

@@ -34,6 +34,10 @@ namespace API.Resources
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the identity id for the institution.
+        /// </summary>
+        public string IdentityId { get; set; }
     }
 
 }
