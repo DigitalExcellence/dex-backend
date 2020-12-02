@@ -51,6 +51,7 @@ namespace API.Controllers
         private readonly IFileUploader fileUploader;
         private readonly IUserProjectService userProjectService;
         private readonly IUserProjectLikeService userProjectLikeService;
+        private readonly ICallToActionOptionService callToActionOptionService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectController"/> class
@@ -63,15 +64,19 @@ namespace API.Controllers
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
         /// <param name="fileUploader">The file uploader service is used to upload the files into the file system</param>
         /// <param name="userProjectService">The user project service is responsible for users that are following / liking projects.</param>
-        public ProjectController(IProjectService projectService, 
-                                 IUserService userService,  
+        /// <param name="userProjectService">The user project service is responsible for users that are following / liking projects.</param>
+        /// <param name="fileUploader">The file uploader service is used to upload the files into the file system.</param>
+        /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
+        public ProjectController(IProjectService projectService,
+                                 IUserService userService,
                                  IMapper mapper,
                                  IFileService fileService,
                                  IUserProjectLikeService userProjectLikeService,
                                  IAuthorizationHelper authorizationHelper,
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService
-                                 ) {
+                                 ICallToActionOptionService callToActionOptionService)             
+        {
             this.projectService = projectService;
             this.userService = userService;
             this.userProjectLikeService = userProjectLikeService;
@@ -80,6 +85,7 @@ namespace API.Controllers
             this.mapper = mapper;
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
+            this.callToActionOptionService = callToActionOptionService;
         }
 
         /// <summary>
@@ -124,7 +130,7 @@ namespace API.Controllers
             }
 
             ProjectFilterParams projectFilterParams = mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
-            IEnumerable<Project> projects = await projectService.GetAllWithUsersAsync(projectFilterParams);
+            IEnumerable<Project> projects = await projectService.GetAllWithUsersAndCollaboratorsAsync(projectFilterParams);
             IEnumerable<ProjectResultResource> results =
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
 
@@ -202,6 +208,22 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+
+            if(projectResource.CallToAction != null)
+            {
+                IEnumerable<CallToActionOption> callToActionOptions = await callToActionOptionService.GetCallToActionOptionFromValueAsync(projectResource.CallToAction.OptionValue);
+                if(!callToActionOptions.Any())
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Call to action value was not found.",
+                        Detail = "The specified call to action value was not found while creating the project.",
+                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                    };
+                    return BadRequest(problem);
+                }
+            }
+
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
             File file = await fileService.FindAsync(projectResource.FileId);
 
@@ -279,6 +301,21 @@ namespace API.Controllers
                     Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
                 };
                 return Unauthorized(problem);
+            }
+
+            if(projectResource.CallToAction != null)
+            {
+                IEnumerable<CallToActionOption> callToActionOptions = await callToActionOptionService.GetCallToActionOptionFromValueAsync(projectResource.CallToAction.OptionValue);
+                if(!callToActionOptions.Any())
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Call to action value was not found.",
+                        Detail = "The specified call to action value was not found while creating the project.",
+                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                    };
+                    return BadRequest(problem);
+                }
             }
 
             // Upload the new file if there is one

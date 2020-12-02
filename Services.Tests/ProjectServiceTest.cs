@@ -42,12 +42,12 @@ namespace Services.Tests
         public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
             RepositoryMock.Setup(
-                repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, null))
+                repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, null))
                 .Returns(
                     Task.FromResult(projects)
                 );
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new ProjectFilterParams()
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
                                                                                  {
                                                                                      Page = null,
                                                                                      AmountOnPage = null,
@@ -57,7 +57,7 @@ namespace Services.Tests
                                                                                  });
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, null), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, null), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
@@ -72,12 +72,12 @@ namespace Services.Tests
         public async Task GetAllOrderedByCreatedAscendingAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
             RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAsync(null, null, project => project.Created, true, null))
+                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Created, true, null))
                           .Returns(
                               Task.FromResult(projects)
                           );
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new ProjectFilterParams()
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
                                                                                  {
                                                                                      Page = null,
                                                                                      AmountOnPage = null,
@@ -87,7 +87,7 @@ namespace Services.Tests
                                                                                  });
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, project => project.Created, true, null), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Created, true, null), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
@@ -102,12 +102,12 @@ namespace Services.Tests
         public async Task GetAllOrderedByNameDescendingAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
             RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAsync(null, null, project => project.Name, false, null))
+                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Name, false, null))
                           .Returns(
                               Task.FromResult(projects)
                           );
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new ProjectFilterParams()
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
                                                                                  {
                                                                                      Page = null,
                                                                                      AmountOnPage = null,
@@ -117,7 +117,7 @@ namespace Services.Tests
                                                                                  });
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, project => project.Name, false, null), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Name, false, null), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
@@ -132,12 +132,12 @@ namespace Services.Tests
         public async Task GetAllHighlightedAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
             RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, true))
+                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, true))
                           .Returns(
                               Task.FromResult(projects)
                           );
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new ProjectFilterParams()
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
                                                                                  {
                                                                                      Page = null,
                                                                                      AmountOnPage = null,
@@ -147,7 +147,7 @@ namespace Services.Tests
                                                                                  });
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, true), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, true), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
@@ -162,12 +162,12 @@ namespace Services.Tests
         public async Task GetAllNoHighlightedAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
         {
             RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, false))
+                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, false))
                           .Returns(
                               Task.FromResult(projects)
                           );
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAsync(new ProjectFilterParams()
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
                                                                                  {
                                                                                      Page = null,
                                                                                      AmountOnPage = null,
@@ -177,7 +177,7 @@ namespace Services.Tests
                                                                                  });
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAsync(null, null, project => project.Updated, true, false), Times.Once);
+                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, false), Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);

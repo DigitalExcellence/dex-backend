@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201129133208_AddedCallToActions")]
+    partial class AddedCallToActions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,28 +182,6 @@ namespace _4_Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Institution");
-                });
-
-            modelBuilder.Entity("Models.ProjectLike", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("LikedProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LikedProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ProjectLike");
                 });
 
             modelBuilder.Entity("Models.Project", b =>
@@ -409,19 +389,6 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.ProjectLike", b =>
-                {
-                    b.HasOne("Models.Project", "LikedProject")
-                        .WithMany()
-                        .HasForeignKey("LikedProjectId");
-
-                    b.HasOne("Models.User", "CreatorOfProject")
-                        .WithMany("LikedProjectsByUsers")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

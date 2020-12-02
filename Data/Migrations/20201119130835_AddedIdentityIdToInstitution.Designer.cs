@@ -4,60 +4,22 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201119130835_AddedIdentityIdToInstitution")]
+    partial class AddedIdentityIdToInstitution
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Models.CallToAction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("OptionValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CallToAction");
-                });
-
-            modelBuilder.Entity("Models.CallToActionOption", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CallToActionOption");
-                });
 
             modelBuilder.Entity("Models.Collaborator", b =>
                 {
@@ -182,37 +144,12 @@ namespace _4_Data.Migrations
                     b.ToTable("Institution");
                 });
 
-            modelBuilder.Entity("Models.ProjectLike", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("LikedProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LikedProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ProjectLike");
-                });
-
             modelBuilder.Entity("Models.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CallToActionId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -242,8 +179,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CallToActionId");
 
                     b.HasIndex("ProjectIconId");
 
@@ -413,25 +348,8 @@ namespace _4_Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.ProjectLike", b =>
-                {
-                    b.HasOne("Models.Project", "LikedProject")
-                        .WithMany()
-                        .HasForeignKey("LikedProjectId");
-
-                    b.HasOne("Models.User", "CreatorOfProject")
-                        .WithMany("LikedProjectsByUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Models.Project", b =>
                 {
-                    b.HasOne("Models.CallToAction", "CallToAction")
-                        .WithMany()
-                        .HasForeignKey("CallToActionId");
-
                     b.HasOne("Models.File", "ProjectIcon")
                         .WithMany()
                         .HasForeignKey("ProjectIconId");

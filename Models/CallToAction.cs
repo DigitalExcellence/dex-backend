@@ -15,29 +15,34 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-namespace API.Resources
+using System.ComponentModel.DataAnnotations;
+
+namespace Models
 {
-
     /// <summary>
-    /// The viewmodel of a Institution model
+    /// This class contains all the properties for a call to action model.
     /// </summary>
-    public class InstitutionResource
+    public class CallToAction
     {
-        
         /// <summary>
-        /// Gets or sets a value for the name of the institution.
+        /// Gets or sets a value for the Id property.
         /// </summary>
-        public string Name { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the description of the institution.
+        /// Gets or sets a value for the OptionValue property.
+        /// For example, this would be the Title on the call to action button.
         /// </summary>
-        public string Description { get; set; }
+        [Required]
+        public string OptionValue { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the identity id for the institution.
+        /// Gets or sets a value for the Value property.
+        /// For example, this would be the redirect url for the call to action button.
         /// </summary>
-        public string IdentityId { get; set; }
+        [Required]
+        public string Value { get; set; }
+
     }
 
 }

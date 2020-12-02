@@ -54,5 +54,10 @@ namespace API.Resources
         /// This gets or sets the file id
         /// </summary>
         public int FileId { get; set; }
+
+        /// <summary>
+        /// This gets or sets the call to action
+        /// </summary>
+        public CallToActionResource CallToAction { get; set; }
     }
 }

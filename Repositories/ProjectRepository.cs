@@ -32,7 +32,7 @@ namespace Repositories
     public interface IProjectRepository : IRepository<Project>
     {
 
-        Task<List<Project>> GetAllWithUsersAsync(
+        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
@@ -108,6 +108,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                    .Where(s => s.Id == id)
                    .Include(p => p.Collaborators)
+                   .Include(p => p.CallToAction)
                    .SingleOrDefaultAsync();
 
             return RedactUser(project);
@@ -172,7 +173,7 @@ namespace Repositories
         /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">Filter highlighted projects</param>
         /// <returns>The projects filtered by the parameters</returns>
-        public virtual async Task<List<Project>> GetAllWithUsersAsync(
+        public virtual async Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
@@ -182,7 +183,10 @@ namespace Repositories
         {
             IQueryable<Project> queryable = DbSet
                                             .Include(p => p.User)
-                                            .Include(p => p.ProjectIcon);
+                                            .Include(p => p.ProjectIcon)
+                                            .Include(p => p.CallToAction)
+                                            .Include(p => p.Collaborators);
+
             queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
 
             List<Project> projects = await queryable.ToListAsync();
@@ -247,6 +251,7 @@ namespace Repositories
                    .Include(p => p.User)
                    .Include(p => p.Collaborators)
                    .Include(p => p.ProjectIcon)
+                   .Include(p => p.CallToAction)
                    .Where(p => p.Id == id)
                    .FirstOrDefaultAsync();
 
@@ -311,6 +316,8 @@ namespace Repositories
         {
             return DbSet
                     .Include(p => p.User)
+                    .Include(i => i.ProjectIcon)
+                    .Include(p => p.CallToAction)
                     .Where(p =>
                             p.Name.Contains(query) ||
                             p.Description.Contains(query) ||

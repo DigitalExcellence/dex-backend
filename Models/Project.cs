@@ -59,6 +59,8 @@ namespace Models
 
         public File ProjectIcon { get; set; }
 
+        public CallToAction CallToAction { get; set; }
+
     }
 
 }

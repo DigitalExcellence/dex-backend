@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
+- Added call to actions for projects and call to action options - [312](https://github.com/DigitalExcellence/dex-backend/issues/312)
+- Collaborators are now included on the project overview page - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
+
+
 ### Changed
 
 ### Deprecated
@@ -21,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed issue where unused project icons where left in the database & File System - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
 - Refactored Postman CLI files to make them work from Postman folder. - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
+- Fixed issue where searching for a project did not include the project icon. - [#307](https://github.com/DigitalExcellence/dex-backend/issues/307)
 
 ### Security
 
