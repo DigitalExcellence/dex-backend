@@ -210,9 +210,10 @@ namespace API.Controllers
         /// <response code="404">This status code is returned when no user was found.</response>
         [HttpPut("SetToMailed")]
         [ProducesResponseType((int) HttpStatusCode.OK)]
-        public async Task<IActionResult> SetUserTasksToStatusMailed(int userTask)
+        public async Task<IActionResult> SetUserTasksToStatusMailed(UserTask userTask)
         {
-            // TODO : Find userTask, set usertask to status mailed.
+            userTaskService.Update(userTask);
+            userTaskService.Save();
 
             return Ok();
         }

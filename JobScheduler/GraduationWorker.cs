@@ -44,9 +44,8 @@ namespace JobScheduler
                     // TODO: Send email to user.
                     
                     logger.LogInformation("Found expected graduating user: " + userTask.UserId);
-
-                    requestHandler.SetGraduationTaskStatusToMailed(userTask.Id);
-                    // TODO: Set user task to status mailed.
+                    userTask.Status = UserTaskStatus.Mailed;
+                    requestHandler.SetGraduationTaskStatusToMailed(userTask);
                 }
             }
         }

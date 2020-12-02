@@ -18,7 +18,7 @@ namespace JobScheduler
     {
         List<UserTask> GetExpectedGraduationUsers();
 
-        void SetGraduationTaskStatusToMailed(int userTask);
+        void SetGraduationTaskStatusToMailed(UserTask userTask);
 
     }
 
@@ -56,9 +56,8 @@ namespace JobScheduler
                                  ParameterType.HttpHeader);
                 IRestResponse response = apiClient.Execute(restRequest);
 
-                if(!response.IsSuccessful)
+                if(response.StatusCode.Equals(401))
                 {
-                    // TODO: maximum ammount of attempts to prevent endless trying again loop
                     dynamic data = JObject.Parse(config.GetJwtToken());
                     accessToken = data.access_token;
                     GetExpectedGraduationUsers();
@@ -68,7 +67,7 @@ namespace JobScheduler
             return userTasks;
         }
 
-        public void SetGraduationTaskStatusToMailed(int userTask)
+        public void SetGraduationTaskStatusToMailed(UserTask userTask)
         {
             RestRequest restRequest = new RestRequest("api/UserTask/SetToMailed") { Method = Method.PUT };
 
@@ -78,12 +77,11 @@ namespace JobScheduler
             restRequest.AddParameter("application/json", JsonConvert.SerializeObject(userTask), ParameterType.RequestBody);
             IRestResponse response = apiClient.Execute(restRequest);
 
-            if(!response.IsSuccessful)
+            if(response.StatusCode.Equals(401))
             {
-                // TODO: maximum ammount of attempts to prevent endless trying again loop
-                dynamic data = JObject.Parse(config.GetJwtToken());
-                accessToken = data.access_token;
-                SetGraduationTaskStatusToMailed(userTask);
+                    dynamic data = JObject.Parse(config.GetJwtToken());
+                    accessToken = data.access_token;
+                    SetGraduationTaskStatusToMailed(userTask);
             }
         }
     }
