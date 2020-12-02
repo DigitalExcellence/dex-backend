@@ -101,15 +101,7 @@ namespace Data
         /// The institution.
         /// </value>
         public DbSet<Institution> Institution { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the file.
-        /// </summary>
-        /// <value>
-        /// The file.
-        /// </value>
-        public DbSet<File> File { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the projects liked by users.
         /// </summary>

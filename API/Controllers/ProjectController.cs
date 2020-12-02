@@ -74,7 +74,7 @@ namespace API.Controllers
                                  IUserProjectLikeService userProjectLikeService,
                                  IAuthorizationHelper authorizationHelper,
                                  IFileUploader fileUploader,
-                                 IUserProjectService userProjectService
+                                 IUserProjectService userProjectService,
                                  ICallToActionOptionService callToActionOptionService)             
         {
             this.projectService = projectService;
