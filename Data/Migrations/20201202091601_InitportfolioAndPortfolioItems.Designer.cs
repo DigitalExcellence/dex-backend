@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201202082834_Initportfolioitems")]
-    partial class Initportfolioitems
+    [Migration("20201202091601_InitportfolioAndPortfolioItems")]
+    partial class InitportfolioAndPortfolioItems
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

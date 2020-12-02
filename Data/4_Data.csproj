@@ -10,6 +10,13 @@
     <EmbeddedResource Remove="Configurations\IdentityMigrations\**" />
     <None Remove="Configurations\IdentityMigrations\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20201202082834_Initportfolioitems.cs" />
+    <Compile Remove="Migrations\20201202082834_Initportfolioitems.Designer.cs" />
+    <Compile Remove="Migrations\20201202091420_CreateListOfPortfolioItemsinPortfolioTable.cs" />
+    <Compile Remove="Migrations\20201202091420_CreateListOfPortfolioItemsinPortfolioTable.Designer.cs" />
+  </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

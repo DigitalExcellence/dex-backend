@@ -32,6 +32,24 @@ namespace API.Controllers
         private readonly IAuthorizationHelper authorizationHelper;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PortfolioController"/> class
+        /// </summary>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
+        /// <param name="portfolioService">The portfolio service which is used to communicate with the logic layer.</param>
+        /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
+        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        public PortfolioController(IMapper mapper,
+                                   IPortfolioService portfolioService,
+                                   IUserService userService,
+                                   IAuthorizationHelper authorizationHelper)
+        {
+            this.mapper = mapper;
+            this.portfolioService = portfolioService;
+            this.userService = userService;
+            this.authorizationHelper = authorizationHelper;
+        }
+
+        /// <summary>
         /// This method is responsible for retrieving a single portfolio.
         /// </summary>
         /// <param name="portfolioId">the portfolio identifier which is used for searching a portfolio.</param>
@@ -82,25 +100,6 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PortfolioController"/> class
-        /// </summary>
-        /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
-        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
-        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
-        /// <param name="userProjectService">The user project service is responsible for users that are following / liking projects.</param>
-        /// <param name="fileUploader">The file uploader service is used to upload the files into the file system</param>
-        public PortfolioController(IMapper mapper,
-                                   IPortfolioService portfolioService,
-                                   IUserService userService,
-                                   IAuthorizationHelper authorizationHelper)
-        {
-            this.mapper = mapper;
-            this.portfolioService = portfolioService;
-            this.userService = userService;
-            this.authorizationHelper = authorizationHelper;
-        }
-
-        /// <summary>
         /// This method is responsible for creating a Project.
         /// </summary>
         /// <returns>This method returns the project resource result.</returns>
@@ -113,6 +112,19 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreatePortfolioAsync([FromBody] PortfolioResource portfolioResource)
         {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
+                return NotFound(problem);
+            }
+
             if(portfolioResource == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -124,8 +136,6 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
             Portfolio portfolio = mapper.Map<PortfolioResource, Portfolio>(portfolioResource);
-
-            portfolio.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
             try
             {

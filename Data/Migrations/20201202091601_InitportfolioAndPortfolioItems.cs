@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _4_Data.Migrations
 {
-    public partial class Initportfolioitems : Migration
+    public partial class InitportfolioAndPortfolioItems : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
