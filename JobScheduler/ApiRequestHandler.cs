@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace JobScheduler
 {
@@ -61,6 +62,10 @@ namespace JobScheduler
                     dynamic data = JObject.Parse(config.GetJwtToken());
                     accessToken = data.access_token;
                     GetExpectedGraduationUsers();
+                }
+                if(response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception(response.ErrorMessage);
                 }
                 userTasks = JsonConvert.DeserializeObject<List<UserTask>>(response.Content);
             }

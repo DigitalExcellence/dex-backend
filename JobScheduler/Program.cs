@@ -1,3 +1,4 @@
+using MessageBrokerPublisher;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +20,7 @@ namespace JobScheduler
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddScoped<INotificationSender, NotificationSender>();
                     services.AddScoped<IConfig, Config>();
                     services.AddScoped<IApiRequestHandler, ApiRequestHandler>();
                     services.AddHostedService<GraduationWorker>();
