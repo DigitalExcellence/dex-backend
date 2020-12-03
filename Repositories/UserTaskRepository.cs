@@ -41,7 +41,7 @@ namespace Repositories
         public async Task<List<UserTask>> GetUserTasksForUser(int userId)
         {
             return await GetDbSet<UserTask>()
-                         .Where(u => u.UserId == userId)
+                         .Where(u => u.User.Id == userId)
                        .ToListAsync();
 
         }

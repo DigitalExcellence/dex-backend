@@ -59,7 +59,7 @@ namespace Services.Services
                bool doesExist = false;
                 foreach(UserTask userTask in allUserTasks)
                 {
-                    if(u.Id == userTask.UserId)
+                    if(u.Id == userTask.User.Id)
                     {
                         if(userTask.Status == UserTaskStatus.Open && userTask.Type == UserTaskType.GraduationReminder || userTask.Status == UserTaskStatus.Mailed &&  userTask.Type == UserTaskType.GraduationReminder)
                         {
@@ -74,7 +74,7 @@ namespace Services.Services
                 }
                 if(!doesExist)
                 {
-                    UserTask userTask = new UserTask(u.Id, UserTaskType.GraduationReminder,u.Email);
+                    UserTask userTask = new UserTask(u, UserTaskType.GraduationReminder);
                     Add(userTask);
                     userTasks.Add(userTask);
                 }

@@ -22,21 +22,21 @@ namespace Models
 
     public class UserTask
     {
-        public UserTask(int userId,UserTaskType type,string email)
+
+        public UserTask() { }
+
+        public UserTask(User user,UserTaskType type)
         {
             Type = type;
-            UserId = userId;
+            User = user;
             Status = UserTaskStatus.Open;
-            this.email = email;
         }
 
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public User User { get; set; }
 
         public UserTaskStatus Status { get; set; }
         public UserTaskType Type { get; set; }
-
-        public string email { get; set; }
 
     }
 

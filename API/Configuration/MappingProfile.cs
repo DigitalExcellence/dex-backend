@@ -87,8 +87,8 @@ namespace API.Configuration
             CreateMap<Institution, InstitutionResourceResult>();
 
             CreateMap<UserTask, UserTaskResourceResult>()
-                .ForMember(e => e.UserId,
-                           opt => opt.MapFrom(d => d.UserId))
+                .ForMember(e => e.UserResourceResult,
+                           opt => opt.MapFrom(d => d.User))
                 .ForMember(e => e.Id, opt => opt.MapFrom(e => e.Id))
                 .ForMember(e => e.Status, opt => opt.MapFrom(e => e.Status))
                 .ForMember(e => e.Type, opt => opt.MapFrom(e => e.Type));
