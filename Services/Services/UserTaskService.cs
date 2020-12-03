@@ -74,7 +74,7 @@ namespace Services.Services
                 }
                 if(!doesExist)
                 {
-                    UserTask userTask = new UserTask(u.Id, UserTaskType.GraduationReminder);
+                    UserTask userTask = new UserTask(u.Id, UserTaskType.GraduationReminder,u.Email);
                     Add(userTask);
                     userTasks.Add(userTask);
                 }
