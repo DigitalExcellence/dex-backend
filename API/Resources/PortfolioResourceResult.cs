@@ -28,11 +28,6 @@ namespace API.Resources
         public int UserId { get; set; }
 
         /// <summary>
-        /// This sets or gets the name of the portfolio
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// This sets or gets the template of the portfolio
         /// </summary>
         public int Template { get; set; }

@@ -17,8 +17,6 @@ namespace Models
         [Required]
         public User User { get; set; }
 
-        public string Name { get; set; }
-
         public int Template { get; set; }
 
         public int? Icon { get; set; }
