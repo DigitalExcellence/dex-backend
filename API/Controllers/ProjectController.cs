@@ -322,7 +322,7 @@ namespace API.Controllers
             File file = null;
             if(projectResource.FileId != 0)
             {
-                if(project.ProjectIconId != 0)
+                if(project.ProjectIconId != 0 && project.ProjectIconId != null)
                 {
                     if(project.ProjectIconId != projectResource.FileId)
                     {
