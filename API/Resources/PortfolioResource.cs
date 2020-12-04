@@ -14,7 +14,7 @@ namespace API.Resources
         /// <summary>
         /// This sets or gets the user of the portfolio
         /// </summary>
-        public User User { get; set; }
+        public User user { get; set; }
 
         /// <summary>
         /// This sets or gets the name of the portfolio

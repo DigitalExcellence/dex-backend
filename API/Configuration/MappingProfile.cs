@@ -46,14 +46,11 @@ namespace API.Configuration
                 .ForMember(q => q.Description, opt => opt.MapFrom(p => p.Project.Description))
                 .ForAllOtherMembers(o => o.Ignore());
 
-
             CreateMap<Portfolio, PortfolioResourceResult>()
                 .ForMember(q => q.UserId, opt => opt.MapFrom(p => p.User.Id))
                 .ForMember(q => q.UserName, opt => opt.MapFrom(p => p.User.Name));
 
-            CreateMap<PortfolioResource, Portfolio>()
-                .ForMember(q => q.Name, opt => opt.MapFrom(p => p.User.Name));
-
+            CreateMap<PortfolioResource, Portfolio>();
 
             CreateMap<User, UserResourceResult>();
 

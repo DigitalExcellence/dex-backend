@@ -90,7 +90,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting the portfolio.",
-                    Detail = "The user could not be found in the database.",
+                    Detail = "The portfolio id could not be found in the database.",
                     Instance = "FD71D106-17E3-453E-A40D-B39F67D6A517"
                 };
                 return NotFound(problem);
@@ -110,7 +110,7 @@ namespace API.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreatePortfolioAsync([FromBody] PortfolioResource portfolioResource)
+        public async Task<IActionResult> CreatePortfolioAsync(PortfolioResource portfolioResource)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
@@ -135,13 +135,16 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+
             Portfolio portfolio = mapper.Map<PortfolioResource, Portfolio>(portfolioResource);
 
             try
             {
+                portfolio.User = user;
                 portfolioService.Add(portfolio);
                 portfolioService.Save();
-                return Created(nameof(CreatePortfolioAsync), mapper.Map<Portfolio, PortfolioResourceResult>(portfolio));
+                PortfolioResourceResult model = mapper.Map<Portfolio, PortfolioResourceResult>(portfolio);
+                return Created(nameof(CreatePortfolioAsync), model);
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
