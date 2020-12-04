@@ -28,6 +28,7 @@ namespace API.Controllers
     {
         private readonly IMapper mapper;
         private readonly IPortfolioService portfolioService;
+        private readonly IPortItemfolioService portfolioItemService;
         private readonly IUserService userService;
         private readonly IAuthorizationHelper authorizationHelper;
 
@@ -36,15 +37,18 @@ namespace API.Controllers
         /// </summary>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="portfolioService">The portfolio service which is used to communicate with the logic layer.</param>
+        /// <param name="portfolioItemService">The portfolioItem service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
         public PortfolioController(IMapper mapper,
                                    IPortfolioService portfolioService,
+                                   IPortfolioItemService portfolioItemService,
                                    IUserService userService,
                                    IAuthorizationHelper authorizationHelper)
         {
             this.mapper = mapper;
             this.portfolioService = portfolioService;
+            this.portfolioItemService = portfolioItemService;
             this.userService = userService;
             this.authorizationHelper = authorizationHelper;
         }
@@ -268,6 +272,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreatePortfolioItemAsync(int portfolioId, PortfolioItemResource portfolioItemResource)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
 
             if(await userService.FindAsync(user.Id) == null)
             {
@@ -295,8 +300,7 @@ namespace API.Controllers
 
             try
             {
-                portfolio.User = user;
-                portfolioService.Add(portfolio);
+                portfol.Add();
                 portfolioService.Save();
                 PortfolioResourceResult model = mapper.Map<Portfolio, PortfolioResourceResult>(portfolio);
                 return Created(nameof(CreatePortfolioAsync), model);
