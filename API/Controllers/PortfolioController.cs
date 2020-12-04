@@ -159,5 +159,99 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
         }
+
+        /// <summary>
+        /// This method is responsible for updating the portfolio with the specified identifier.
+        /// </summary>
+        /// <param name="portfolioId">The project identifier which is used for searching the project.</param>
+        /// <param name="portfolioResource">The project resource which is used for updating the project.</param>
+        /// <returns>This method returns the project resource result.</returns>
+        /// <response code="200">This endpoint returns the updated project.</response>
+        /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
+        /// <response code="404">The 404 not Found status code is returned when the project to update is not found.</response>
+        [HttpPut("{portfolioId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> UpdatePortfolio(int portfolioId, [FromBody] PortfolioResource portfolioResource)
+        {
+            Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
+            if(portfolio.Id == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update portfolio.",
+                    Detail = "The specified portfolio could not be found in the database.",
+                    Instance = "E0701056-DBA6-4256-8FAC-54A9ADF1284C"
+                };
+                return NotFound(problem);
+            }
+
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+
+            if(!(portfolio.User.Id == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to edit the portfolio.",
+                    Detail = "The user is not allowed to edit the portfolio.",
+                    Instance = "43026602-BBFB-44EB-9A8B-AE49B95C0B3E"
+                };
+                return Unauthorized(problem);
+            }
+
+            mapper.Map(portfolioResource, portfolio);
+            portfolioService.Update(portfolio);
+            portfolioService.Save();
+            return Ok(mapper.Map<Portfolio, PortfolioResourceResult>(portfolio));
+        }
+
+        /// <summary>
+        /// This method is responsible for deleting the portfolio.
+        /// </summary>
+        /// <param name="portfolioId">The project identifier which is used for searching the project.</param>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The current account is deleted.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the current account could not be found.</response>
+        [HttpDelete]
+        [Authorize]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeletePortfolio(int portfolioId)
+        {
+            Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(portfolio == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete portfolio.",
+                    Detail = "The specified portfolio could not be found in the database.",
+                    Instance = "60329216-3B51-423D-AB8A-BB1F3B55BD4B"
+                };
+                return NotFound(problem);
+            }
+
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+
+            if(!(portfolio.User.Id == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the portfolio.",
+                    Detail = "The user is not allowed to delete the portfolio.",
+                    Instance = "D36DEDD5-75DB-4849-92B6-2271D7C350D0"
+                };
+                return Unauthorized(problem);
+            }
+
+
+            await portfolioService.RemoveAsync(portfolioId);
+            portfolioService.Save();
+            return Ok();
+        }
     }
 }
