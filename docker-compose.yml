@@ -64,6 +64,10 @@ services:
     tty: true
     networks:
       rabbitmq-network:
+           
+ 
+
+
 
   api:
     container_name: api
@@ -92,6 +96,25 @@ services:
     deploy:
        restart_policy:
         condition: on-failure
+        
+        
+        
+  jobscheduler:    
+    container_name: jobscheduler
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: JobScheduler/Dockerfile
+    depends_on:
+      - api
+      
+    stdin_open: true
+    tty: true
+    #networks:
+      #rabbitmq-network:
+      
+      
+     
 
 networks:
   mssql-network:

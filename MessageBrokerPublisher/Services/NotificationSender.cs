@@ -37,7 +37,6 @@ namespace MessageBrokerPublisher
         /// </summary>
         public NotificationSender()
         {
-            CreateConnectionFactory();
 
             if (String.IsNullOrEmpty(hostName))
             {
@@ -45,6 +44,8 @@ namespace MessageBrokerPublisher
                 user = "guest";
                 password = "guest";
             }
+            CreateConnectionFactory();
+
         }
         private void CreateConnectionFactory()
         {
