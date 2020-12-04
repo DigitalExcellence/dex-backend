@@ -61,12 +61,16 @@ namespace Services.Services
                 {
                     if(u.Id == userTask.User.Id)
                     {
-                        if(userTask.Status == UserTaskStatus.Open && userTask.Type == UserTaskType.GraduationReminder || userTask.Status == UserTaskStatus.Mailed &&  userTask.Type == UserTaskType.GraduationReminder)
+                        if(userTask.Status == UserTaskStatus.Open && userTask.Type == UserTaskType.GraduationReminder)
                         {
                             userTasks.Add(userTask);
                             doesExist = true;
                         }
                         if(userTask.Status == UserTaskStatus.Completed)
+                        {
+                            doesExist = true;
+                        }
+                        if(userTask.Status == UserTaskStatus.Mailed)
                         {
                             doesExist = true;
                         }
