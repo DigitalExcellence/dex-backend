@@ -79,7 +79,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the portfolio.",
                     Detail = "The user id is less then zero and therefore cannot exist in the database.",
-                    Instance = "EAF7FEA1-47E9-4CF8-8415-4D3BC843FB71",
+                    Instance = "F7669BF7-CE70-47C0-8D29-37516BA887C0",
                 };
                 return BadRequest(problem);
             }
@@ -91,7 +91,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the portfolio.",
                     Detail = "The portfolio id could not be found in the database.",
-                    Instance = "FD71D106-17E3-453E-A40D-B39F67D6A517"
+                    Instance = "91A15229-CD31-4D6E-920E-9DD6889333F1"
                 };
                 return NotFound(problem);
             }
@@ -100,15 +100,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for creating a Project.
+        /// This method is responsible for creating a portfolio.
         /// </summary>
-        /// <returns>This method returns the project resource result.</returns>
+        /// <returns>This method returns the portfolio resource result.</returns>
         /// <response code="200">This endpoint returns the created portfolio.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the portfolio
-        /// resource is not specified or failed to save project to the database.</response>
+        /// resource is not specified or failed to save portfolio to the database.</response>
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreatePortfolioAsync(PortfolioResource portfolioResource)
         {
@@ -120,7 +120,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with this user id.",
-                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                    Instance = "C199E422-D4BA-49DC-813F-B529959C6AD2"
                 };
                 return NotFound(problem);
             }
@@ -129,9 +129,9 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to create a new project.",
+                    Title = "Failed to create a new portfolio.",
                     Detail = "The specified portfolio resource was null.",
-                    Instance = "68257E3C-3C75-483D-A35E-BB76FDC6ECAE"
+                    Instance = "0A2C218D-CA78-4384-A6A7-0C8C7C01D56B"
                 };
                 return BadRequest(problem);
             }
@@ -154,7 +154,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to save new portfolio.",
                     Detail = "There was a problem while saving the portfolio to the database.",
-                    Instance = "A0FA175B-C339-433E-95C4-F4E0F74EAE3E"
+                    Instance = "E54E222D-A131-4F78-90AD-266E7CA29DB5"
                 };
                 return BadRequest(problem);
             }
@@ -163,15 +163,15 @@ namespace API.Controllers
         /// <summary>
         /// This method is responsible for updating the portfolio with the specified identifier.
         /// </summary>
-        /// <param name="portfolioId">The project identifier which is used for searching the project.</param>
-        /// <param name="portfolioResource">The project resource which is used for updating the project.</param>
-        /// <returns>This method returns the project resource result.</returns>
-        /// <response code="200">This endpoint returns the updated project.</response>
+        /// <param name="portfolioId">The portfolio identifier which is used for searching the portfolio.</param>
+        /// <param name="portfolioResource">The portfolio resource which is used for updating the portfolio.</param>
+        /// <returns>This method returns the portfolio resource result.</returns>
+        /// <response code="200">This endpoint returns the updated portfolio.</response>
         /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
-        /// <response code="404">The 404 not Found status code is returned when the project to update is not found.</response>
+        /// <response code="404">The 404 not Found status code is returned when the portfolio to update is not found.</response>
         [HttpPut("{portfolioId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PortfolioResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdatePortfolio(int portfolioId, [FromBody] PortfolioResource portfolioResource)
@@ -183,13 +183,13 @@ namespace API.Controllers
                 {
                     Title = "Failed to update portfolio.",
                     Detail = "The specified portfolio could not be found in the database.",
-                    Instance = "E0701056-DBA6-4256-8FAC-54A9ADF1284C"
+                    Instance = "65229A71-FDD8-4887-BBCD-3D4258C5D329"
                 };
                 return NotFound(problem);
             }
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
             if(!(portfolio.User.Id == user.Id || isAllowed))
             {
@@ -197,7 +197,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to edit the portfolio.",
                     Detail = "The user is not allowed to edit the portfolio.",
-                    Instance = "43026602-BBFB-44EB-9A8B-AE49B95C0B3E"
+                    Instance = "B00CA783-B8E0-4F73-9E19-A74448F1930B"
                 };
                 return Unauthorized(problem);
             }
@@ -211,10 +211,10 @@ namespace API.Controllers
         /// <summary>
         /// This method is responsible for deleting the portfolio.
         /// </summary>
-        /// <param name="portfolioId">The project identifier which is used for searching the project.</param>
+        /// <param name="portfolioId">The portfolio identifier which is used for searching the portfolio.</param>
         /// <returns>This method returns status code 200.</returns>
-        /// <response code="200">This endpoint returns status code 200. The current account is deleted.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the current account could not be found.</response>
+        /// <response code="200">This endpoint returns status code 200. The current portfolio is deleted.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the current portfolio could not be found.</response>
         [HttpDelete]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
@@ -230,12 +230,12 @@ namespace API.Controllers
                 {
                     Title = "Failed to delete portfolio.",
                     Detail = "The specified portfolio could not be found in the database.",
-                    Instance = "60329216-3B51-423D-AB8A-BB1F3B55BD4B"
+                    Instance = "CF5D3E72-6B98-4828-BDBB-E829BDED297D"
                 };
                 return NotFound(problem);
             }
 
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
             if(!(portfolio.User.Id == user.Id || isAllowed))
             {
@@ -243,7 +243,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to delete the portfolio.",
                     Detail = "The user is not allowed to delete the portfolio.",
-                    Instance = "D36DEDD5-75DB-4849-92B6-2271D7C350D0"
+                    Instance = "2BA2DD8D-EA05-4796-B0C0-C7F3F0CEE5D4"
                 };
                 return Unauthorized(problem);
             }
@@ -253,5 +253,67 @@ namespace API.Controllers
             portfolioService.Save();
             return Ok();
         }
+
+        /// <summary>
+        /// This method is responsible for creating a portfolio item.
+        /// </summary>
+        /// <returns>This method returns the portfolio resource result.</returns>
+        /// <response code="200">This endpoint returns the created portfolio.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the portfolio
+        /// resource is not specified or failed to save portfolio to the database.</response>
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreatePortfolioItemAsync(int portfolioId, PortfolioItemResource portfolioItemResource)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "C199E422-D4BA-49DC-813F-B529959C6AD2"
+                };
+                return NotFound(problem);
+            }
+
+            if(portfolioItemResource == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to create a new portfolio.",
+                    Detail = "The specified portfolio resource was null.",
+                    Instance = "0A2C218D-CA78-4384-A6A7-0C8C7C01D56B"
+                };
+                return BadRequest(problem);
+            }
+
+            PortfolioItem portfolioItem = mapper.Map<PortfolioItemResource, PortfolioItem>(portfolioItemResource);
+
+            try
+            {
+                portfolio.User = user;
+                portfolioService.Add(portfolio);
+                portfolioService.Save();
+                PortfolioResourceResult model = mapper.Map<Portfolio, PortfolioResourceResult>(portfolio);
+                return Created(nameof(CreatePortfolioAsync), model);
+            } catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e, "Database exception");
+
+
+                ProblemDetails problem = new ProblemDetails()
+                {
+                    Title = "Failed to save new portfolio.",
+                    Detail = "There was a problem while saving the portfolio to the database.",
+                    Instance = "E54E222D-A131-4F78-90AD-266E7CA29DB5"
+                };
+                return BadRequest(problem);
+            }
+        }
+
     }
 }
