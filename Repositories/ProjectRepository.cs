@@ -54,6 +54,8 @@ namespace Repositories
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+
+        Task<IEnumerable<Project>> FindUserProjectsWithUserAndCollaboratorsAsync(int userId);
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -320,6 +322,21 @@ namespace Repositories
                             p.Uri.Contains(query) ||
                             p.Id.ToString().Equals(query) ||
                             p.User.Name.Contains(query));
+        }
+
+        /// <summary>
+        /// Get the user projects.
+        /// </summary>
+        /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
+        /// <returns>A enumerable of the users projects</returns>
+        public async Task<IEnumerable<Project>> FindUserProjectsWithUserAndCollaboratorsAsync(int userId)
+        {
+            IEnumerable<Project> projects = await GetDbSet<Project>()
+                   .Include(p => p.Collaborators)
+                   .Include(p => p.ProjectIcon)
+                   .Where(p => p.UserId == userId)
+                   .ToListAsync();
+            return projects;
         }
     }
 }
