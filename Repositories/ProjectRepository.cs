@@ -106,6 +106,7 @@ namespace Repositories
         )
         {
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
+                                                    .Include(u => u.User)
                                                     .Include(p => p.ProjectIcon)
                                                     .Include(p => p.CallToAction);
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
@@ -116,9 +117,7 @@ namespace Repositories
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
-                project.User = RedactUser(await GetDbSet<User>()
-                                                .Where(p => p.Id == project.UserId)
-                                                .FirstOrDefaultAsync());
+                project.User = RedactUser(project.User);
                 project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
             }
             return await queryableProjects.ToListAsync();
@@ -255,6 +254,7 @@ namespace Repositories
         /// </returns>
         private User RedactUser(User user)
         {
+            if(user == null) return null;
             if(user.IsPublic == false)
             {
                 user.Email = Defaults.Privacy.RedactedEmail;
