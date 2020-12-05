@@ -82,6 +82,7 @@ namespace Repositories
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
             }
 
             return RedactUser(project);
@@ -118,6 +119,7 @@ namespace Repositories
                 project.User = RedactUser(await GetDbSet<User>()
                                                 .Where(p => p.Id == project.UserId)
                                                 .FirstOrDefaultAsync());
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
             }
             return await queryableProjects.ToListAsync();
         }
@@ -192,6 +194,7 @@ namespace Repositories
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
             }
 
             return RedactUser(project);
@@ -361,6 +364,7 @@ namespace Repositories
                    .Include(p => p.User)
                    .Include(i => i.ProjectIcon)
                    .Include(p => p.CallToAction)
+                   .Include(l => l.Likes)
                    .Where(p =>
                               p.Name.Contains(query) ||
                               p.Description.Contains(query) ||

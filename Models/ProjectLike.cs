@@ -1,3 +1,6 @@
+using Microsoft.VisualBasic;
+using System;
+
 namespace Models
 {
     /// <summary>
@@ -11,11 +14,11 @@ namespace Models
         {
             LikedProject = likedProject;
             CreatorOfProject = creatorOfProject;
+            Date = DateTime.Now;
         }
 
         public ProjectLike()
         {
-
         }
 
         /// <summary>
@@ -50,6 +53,8 @@ namespace Models
         /// The user identifier.
         /// </value>
         public int UserId { get; set; }
+
+        public DateTime Date { get; set; }
     }
 
 }

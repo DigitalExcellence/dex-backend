@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
 using System;
 using System.Collections.Generic;
 
@@ -82,5 +83,9 @@ namespace API.Resources
         /// This gets or sets the call to action
         /// </summary>
         public CallToActionResourceResult CallToAction { get; set; }
+        /// <summary>
+        /// This gets or sets the likes of the project
+        /// </summary>
+        public List<ProjectLikesResourceResult> Likes { get; set; }
     }
 }
