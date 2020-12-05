@@ -21,6 +21,7 @@ using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -482,6 +483,9 @@ namespace API.Controllers
         /// <returns>200 if success 409 if user already follows project</returns>
         [HttpPost("follow/{projectId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> FollowProject(int projectId)
         {
             User user = await HttpContext.GetContextUser(userService)
@@ -535,6 +539,9 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("follow/{projectId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> UnfollowProject(int projectId)
         {
             User user = await HttpContext.GetContextUser(userService)
@@ -592,6 +599,10 @@ namespace API.Controllers
         /// </returns>
         [HttpPost("like/{projectId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LikeProject(int projectId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -667,6 +678,9 @@ namespace API.Controllers
         /// </returns>
         [HttpDelete("like/{projectId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> UnlikeProject(int projectId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
