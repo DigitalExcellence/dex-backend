@@ -105,6 +105,7 @@ namespace Repositories
         )
         {
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
+                                                    .Include(u => u.User)
                                                     .Include(p => p.ProjectIcon)
                                                     .Include(p => p.CallToAction);
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
@@ -115,9 +116,6 @@ namespace Repositories
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
-                project.User = RedactUser(await GetDbSet<User>()
-                                                .Where(p => p.Id == project.UserId)
-                                                .FirstOrDefaultAsync());
             }
             return await queryableProjects.ToListAsync();
         }
