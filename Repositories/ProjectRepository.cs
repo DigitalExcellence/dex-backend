@@ -116,6 +116,7 @@ namespace Repositories
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
+                project.User = RedactUser(project.User);
             }
             return await queryableProjects.ToListAsync();
         }
