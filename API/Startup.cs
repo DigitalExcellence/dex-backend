@@ -154,6 +154,13 @@ namespace API
 
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.PortfolioRead),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.PortfolioRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.PortfolioWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.PortfolioWrite))));
             });
 
             services.AddCors();
