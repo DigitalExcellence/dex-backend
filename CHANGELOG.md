@@ -11,10 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
-- Added call to actions for projects and call to action options - [312](https://github.com/DigitalExcellence/dex-backend/issues/312)
-- Collaborators are now included on the project overview page - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
-- Added new endpoint for ability to like and unlike projects - [#229](https://github.com/DigitalExcellence/dex-backend/issues/229)
+- Automatically link users to their institution. - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
+- Added call to actions for projects and call to action options. - [312](https://github.com/DigitalExcellence/dex-backend/issues/312)
+- Collaborators are now included on the project overview page. - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
+- Added new endpoint for ability to like and unlike projects. - [#229](https://github.com/DigitalExcellence/dex-backend/issues/229)
+- Project retrieval endpoints now include likes. - [#329](https://github.com/DigitalExcellence/dex-backend/issues/329)
 
 
 ### Changed
@@ -25,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed issue where unused project icons where left in the database & File System - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
+- Fixed issue where unused project icons where left in the database & File System. - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
 - Refactored Postman CLI files to make them work from Postman folder. - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
 - Fixed issue where searching for a project did not include the project icon. - [#307](https://github.com/DigitalExcellence/dex-backend/issues/307)
 - Fixes issue where retrieving projects performed badly due to large amount of collaborators. - [#331](https://github.com/DigitalExcellence/dex-backend/issues/331)
