@@ -252,6 +252,7 @@ namespace Repositories
         /// </returns>
         private User RedactUser(User user)
         {
+            if(user == null) return null;
             if(user.IsPublic == false)
             {
                 user.Email = Defaults.Privacy.RedactedEmail;
