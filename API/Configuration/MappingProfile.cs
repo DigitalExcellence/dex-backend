@@ -18,6 +18,7 @@
 using API.Resources;
 using AutoMapper;
 using Models;
+using System.Collections.Generic;
 
 namespace API.Configuration
 {
@@ -78,6 +79,7 @@ namespace API.Configuration
 
             CreateMap<ProjectResource, Project>();
             CreateMap<Project, ProjectResourceResult>();
+            CreateMap<ProjectLike, ProjectLikesResourceResult>();
             CreateMap<Project, ProjectHighlightResourceResult>();
 
             CreateMap<CollaboratorResource, Collaborator>();
