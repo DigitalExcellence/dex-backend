@@ -63,11 +63,11 @@ namespace Repositories
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        ///     Find the project async by project id
+        /// This method finds the project async by project the specified id.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
-        ///     Project with possibly redacted email
+        /// This method returns a project with the specified id with possibly redacted email.
         /// </returns>
         public override async Task<Project> FindAsync(int id)
         {
@@ -89,14 +89,14 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Get the projects in the database
+        /// This method gets all the projects in the database.
         /// </summary>
-        /// <param name="skip">The number of projects to skip</param>
-        /// <param name="take">The number of projects to return</param>
-        /// <param name="orderBy">The property to order the projects by</param>
-        /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
-        /// <param name="highlighted">Filter highlighted projects</param>
-        /// <returns>The projects filtered by the parameters</returns>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns a list of projects filtered by the specified parameters.</returns>
         public virtual async Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
             int? skip = null,
             int? take = null,
@@ -124,10 +124,10 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Count the amount of projects matching the filters
+        /// This method counts the amount of projects matching the filters.
         /// </summary>
-        /// <param name="highlighted">The highlighted filter</param>
-        /// <returns>The amount of projects matching the filters</returns>
+        /// <param name="highlighted">The highlighted parameter represents whether to filter highlighted projects.</param>
+        /// <returns>This method returns the amount of projects matching the filters.</returns>
         public virtual async Task<int> CountAsync(bool? highlighted = null)
         {
             return await ApplyFilters(DbSet, null, null, null, true, highlighted)
@@ -135,15 +135,15 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Search the database for projects matching the search query and parameters
+        /// This method searches the database for projects matching the search query and parameters.
         /// </summary>
-        /// <param name="query">The search query</param>
-        /// <param name="skip">The number of projects to skip</param>
-        /// <param name="take">The number of projects to return</param>
-        /// <param name="orderBy">The property to order the projects by</param>
-        /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
-        /// <param name="highlighted">Filter highlighted projects</param>
-        /// <returns>The projects matching the search query and parameters</returns>
+        /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns thee projects matching the search query and parameters.</returns>
         public virtual async Task<IEnumerable<Project>> SearchAsync(
             string query,
             int? skip = null,
@@ -161,11 +161,11 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Count the amount of projects matching the filters and the search query
+        /// This method counts the amount of projects matching the filters and the search query.
         /// </summary>
-        /// <param name="query">The search query</param>
-        /// <param name="highlighted">The highlighted filter</param>
-        /// <returns>The amount of projects matching the filters</returns>
+        /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns the amount of projects matching the filters.</returns>
         public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
         {
             return await ApplyFilters(GetProjectQueryable(query), null, null, null, true, highlighted)
@@ -173,12 +173,12 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Retrieve project with user and collaborators async.
-        ///     Project will be redacted if user has that setting configured.
+        /// This method will retrieve a project with user and collaborators async. Project will be redacted if user
+        /// has that setting configured.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+/// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
-        ///     Possibly redacted Project object with user and collaborators
+        /// This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
         public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
@@ -200,9 +200,9 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Updates the specified entity excluding the user object.
+        /// This method updates the specified entity excluding the user object.
         /// </summary>
-        /// <param name="entity">The entity.</param>
+        /// <param name="entity">The entity parameter represents the updated project object.</param>
         public override void Update(Project entity)
         {
             entity = UpdateUpdatedField(entity);
@@ -228,11 +228,11 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Redact user email from the Project if isPublic setting is set to false
+        /// This method redacts user email from the Project if isPublic setting is set to false.
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="project">The project parameter represents the project object that will be used.</param>
         /// <returns>
-        ///     Project with possibly redacted email depending on setting
+        /// This method returns the project with possibly redacted email depending on setting.
         /// </returns>
         private Project RedactUser(Project project)
         {
@@ -246,11 +246,11 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Redact user email from the User if isPublic setting is set to false
+        /// This method redacts the user email from the User if isPublic setting is set to false.
         /// </summary>
-        /// <param name="user">The user.</param>
+        /// <param name="user">The user parameter represents the user object that will be used.</param>
         /// <returns>
-        ///     User with possibly redacted email depending on setting
+        /// This method returns the user with possibly redacted email depending on setting.
         /// </returns>
         private User RedactUser(User user)
         {
@@ -263,12 +263,12 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Redact user email from the Projects in the list.
-        ///     Email will only be redacted if isPublic setting is set to false.
+        /// This method redacts the user email from the Projects in the list. The email will only be
+        /// redacted if isPublic setting is set to false.
         /// </summary>
-        /// <param name="projects">The projects.</param>
+        /// <param name="projects">The projects parameter represents the project objects that will be used.</param>
         /// <returns>
-        ///     List of Projects with possibly redacted email depending on setting
+        /// This method returns a list of Projects with possibly redacted email depending on setting.
         /// </returns>
         private List<Project> RedactUser(List<Project> projects)
         {
@@ -280,16 +280,16 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Apply query parameters and find project based on these filters
+        /// This method applies query parameters and find project based on these filters.
         /// </summary>
-        /// <param name="queryable">The linq queryable object.</param>
-        /// <param name="skip">The amount of objects to skip.</param>
-        /// <param name="take">The amount of objects to take.</param>
-        /// <param name="orderBy">The order by expression.</param>
-        /// <param name="orderByAsc">if set to <c>true</c> [order by asc].</param>
-        /// <param name="highlighted">Boolean if the project should show highlighted.</param>
+        /// <param name="queryable">The linq queryable parameter represents the IQueryable object.</param>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <returns>
-        ///     IQueryable Projects based on the given filters
+        /// This method returns a IQueryable Projects collection based on the given filters.
         /// </returns>
         private IQueryable<Project> ApplyFilters(
             IQueryable<Project> queryable,
@@ -330,13 +330,13 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Checks if any of the searchable fields of the project passed contains the provided query.
+        /// This method checks if any of the searchable fields of the project passed contains the provided query.
         /// </summary>
-        /// <param name="project">A Project to search in</param>
-        /// <param name="query">The query to search in the project's searchable fields.</param>
+        /// <param name="project">The project parameter represents a Project to search in.</param>
+        /// <param name="query">The query parameter represents the query to search in the project's searchable fields.</param>
         /// <returns>
-        ///     A boolean representing whether or not the passed query was found in the searchable fields of the provided
-        ///     project.
+        /// This method returns a boolean representing whether or not the passed query was found in the
+        /// searchable fields of the provided project.
         /// </returns>
         private static bool ProjectContainsQuery(Project project, string query)
         {
@@ -354,10 +354,10 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Get the project queryable which contains the provided query.
+        /// This method gets the project queryable which contains the provided query.
         /// </summary>
-        /// <param name="query">A string to search in the project's fields.</param>
-        /// <returns>The filtered IQueryable including the project user.</returns>
+        /// <param name="query">The query parameter is a string to search in the project's fields.</param>
+        /// <returns>This method returns the filtered IQueryable including the project user.</returns>
         private IQueryable<Project> GetProjectQueryable(string query)
         {
             return DbSet

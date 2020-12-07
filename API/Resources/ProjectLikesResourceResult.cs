@@ -15,7 +15,7 @@ namespace API.Resources
         /// </value>
         public int UserId { get; set; }
         /// <summary>
-        /// Gets or sets the date of when the user has liked the project
+        /// Gets or sets the date of when the user has liked the project.
         /// </summary>
         public DateTime Date { get; set; }  
     }
