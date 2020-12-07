@@ -79,14 +79,19 @@ namespace JobScheduler
             restRequest.AddParameter("Authorization",
                                      string.Format("Bearer " + accessToken),
                                      ParameterType.HttpHeader);
-            restRequest.AddParameter("application/json", JsonConvert.SerializeObject(userTask), ParameterType.RequestBody);
+            restRequest.AddParameter("text/json", JsonConvert.SerializeObject(userTask), ParameterType.RequestBody);
             IRestResponse response = apiClient.Execute(restRequest);
 
+            //TODO: Debuging showed that status code is badrequest...
             if(response.StatusCode.Equals(401))
             {
                     dynamic data = JObject.Parse(config.GetJwtToken());
                     accessToken = data.access_token;
                     SetGraduationTaskStatusToMailed(userTask);
+            }
+            if(response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception(response.ErrorMessage);
             }
         }
     }

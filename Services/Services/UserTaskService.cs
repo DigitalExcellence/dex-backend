@@ -84,8 +84,7 @@ namespace Services.Services
                 }
             }
 
-            Save();
-
+            Repository.Save();
             return userTasks;
         }
 

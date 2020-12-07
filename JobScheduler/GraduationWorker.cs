@@ -51,7 +51,6 @@ namespace JobScheduler
                 {
                     foreach(UserTask userTask in userTasks)
                     {
-                        //TODO: Replace email adress with actual user object email. this is for testing puproses.
                         EmailNotification notification = new EmailNotification(userTask.User.Email, "User graduation mail here,no template yet");
                         notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(notification), Subject.EMAIL);
 
