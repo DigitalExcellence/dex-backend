@@ -192,6 +192,7 @@ namespace Repositories
             DateTime now = DateTime.Now;
             DateTime max = DateTime.Now.AddMonths(6);
 
+            //TODO: Not returning users while graduating users are present in DB..
 
             return await GetDbSet<User>()
                            .Where(u => u.ExpectedGraduationDate >= now && u.ExpectedGraduationDate <= max)
