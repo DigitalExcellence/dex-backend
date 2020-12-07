@@ -97,7 +97,7 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed getting the portfolio.",
+                    Title = "the portfolio doesn't exist.",
                     Detail = "The portfolio id could not be found in the database.",
                     Instance = "91A15229-CD31-4D6E-920E-9DD6889333F1"
                 };
@@ -116,7 +116,7 @@ namespace API.Controllers
         /// resource is not specified or failed to save portfolio to the database.</response>
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(PortfolioResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreatePortfolioAsync(PortfolioResource portfolioResource)
         {
@@ -267,12 +267,12 @@ namespace API.Controllers
         /// </summary>
         /// <param name="portfolioId">The portfolio identifier which is used for searching the portfolio.</param>
         /// <param name="projectId">The project identifier which is used for searching the project.</param>
-        /// <param name="portfolioItemResource">The portfolioitem resource which is used for creating the portfolio item.</param>
-        /// <returns>This method returns the portfolio resource result.</returns>
+        /// <param name="portfolioItemResource">The portfolio item resource which is used for creating the portfolio item.</param>
+        /// <returns>This method returns the portfolio item resource result.</returns>
         /// <response code="200">This endpoint returns the created portfolio.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the portfolio
         /// resource is not specified or failed to save portfolio to the database.</response>
-        [HttpPut("item/{projectId}")]
+        [HttpPost("item/{portfolioId}")]
         [Authorize]
         [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -297,23 +297,34 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to create a new portfolio.",
+                    Title = "Failed to create a new portfolio item.",
                     Detail = "The specified portfolio resource was null.",
                     Instance = "0A2C218D-CA78-4384-A6A7-0C8C7C01D56B"
                 };
                 return BadRequest(problem);
             }
 
+            if(portfolio == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed to get the corresponding portfolio.",
+                                             Detail = "The specified portfolio resource was null.",
+                                             Instance = "6C53D257-FBEA-487D-B0B0-DFACCFFAEF9E"
+                };
+                return BadRequest(problem);
+            }
+
+            portfolioItemResource.Project = project;
+            portfolioItemResource.Portfolio = portfolio;
             PortfolioItem portfolioItem = mapper.Map<PortfolioItemResource, PortfolioItem>(portfolioItemResource);
 
             try
             {
-                portfolioItem.Project = project;
-                portfolioItem.Portfolio = portfolio;
                 portfolioItemService.Add(portfolioItem);
                 portfolioService.Save();
-                PortfolioResourceResult model = mapper.Map<Portfolio, PortfolioResourceResult>(portfolio);
-                return Created(nameof(CreatePortfolioAsync), model);
+                PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);
+                return Created(nameof(CreatePortfolioItemAsync), model);
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
@@ -321,8 +332,8 @@ namespace API.Controllers
 
                 ProblemDetails problem = new ProblemDetails()
                 {
-                    Title = "Failed to save new portfolio.",
-                    Detail = "There was a problem while saving the portfolio to the database.",
+                    Title = "Failed to save new portfolio item.",
+                    Detail = "There was a problem while saving the portfolio item to the database.",
                     Instance = "E54E222D-A131-4F78-90AD-266E7CA29DB5"
                 };
                 return BadRequest(problem);

@@ -38,7 +38,7 @@ namespace API.Configuration
                 .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
                 .ForAllOtherMembers(o => o.Ignore());
 
-           CreateMap<UserProject, UserProjectResourceResult>()
+            CreateMap<UserProject, UserProjectResourceResult>()
                 .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
                 .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
@@ -46,11 +46,17 @@ namespace API.Configuration
                 .ForMember(q => q.Description, opt => opt.MapFrom(p => p.Project.Description))
                 .ForAllOtherMembers(o => o.Ignore());
 
-            CreateMap<Portfolio, PortfolioResourceResult>()
-                .ForMember(q => q.UserId, opt => opt.MapFrom(p => p.User.Id))
-                .ForMember(q => q.UserName, opt => opt.MapFrom(p => p.User.Name));
+           CreateMap<Portfolio, PortfolioResourceResult>()
+               //.ForMember(q => q.UserId, opt => opt.MapFrom(p => p.User.Id))
+               //.ForMember(q => q.UserName, opt => opt.MapFrom(p => p.User.Name))
+               .ForMember(q => q.PortfolioItem, opt => opt.MapFrom(p => p.PortfolioItem.Count))
+               .ForAllOtherMembers(o => o.Ignore());
 
             CreateMap<PortfolioResource, Portfolio>();
+
+            CreateMap<PortfolioItem, PortfolioItemResourceResult>();
+            CreateMap<PortfolioItemResourceResult, PortfolioItem>();
+
 
             CreateMap<User, UserResourceResult>();
 

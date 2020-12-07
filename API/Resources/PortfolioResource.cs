@@ -22,7 +22,7 @@ namespace API.Resources
         public string Title { get; set; }
 
         /// <summary>
-        /// this sets or gets the portfoliouri
+        /// this sets or gets the portfolio Uri
         /// </summary>
         public string PublicUri { get; set; }
     }

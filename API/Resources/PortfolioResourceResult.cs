@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace API.Resources
 {
     /// <summary>
-    /// The view model of a portfolio item
+    /// viewmodel to return to frontend
     /// </summary>
     public class PortfolioResourceResult
     {
@@ -43,7 +43,7 @@ namespace API.Resources
         public string Title { get; set; }
 
         /// <summary>
-        /// this sets or gets the portfoliouri
+        /// this sets or gets the portfolio Uri
         /// </summary>
         public string PublicUri { get; set; }
 

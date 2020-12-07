@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace API.Resources
 {
     /// <summary>
-    /// The View model of a portfolioitem
+    /// viewmodel to return to frontend
     /// </summary>
     public class PortfolioItemResourceResult
     {
@@ -15,7 +15,7 @@ namespace API.Resources
         /// <summary>
         /// this sets or gets the portfolio id
         /// </summary>
-        public Portfolio PortfolioId { get; set; }
+        public Portfolio Portfolio { get; set; }
 
         /// <summary>
         /// This sets or gets the position
@@ -33,8 +33,8 @@ namespace API.Resources
         public string Content { get; set; }
 
         /// <summary>
-        /// this sets or gets the projectid
+        /// this sets or gets the project
         /// </summary>
-        public string ProjectName { get; set; }
+        public Project Project { get; set; }
     }
 }
