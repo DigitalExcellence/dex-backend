@@ -27,7 +27,7 @@ namespace JobScheduler
     {
 
         private readonly RestClient apiClient;
-        private string accessToken;
+        private Token _token;
         private List<UserTask> userTasks;
         private IConfig config;
 
@@ -42,25 +42,22 @@ namespace JobScheduler
         
             RestRequest restRequest = new RestRequest("api/UserTask/CreateUserTasks") { Method = Method.GET };
 
-            if(accessToken == null)
+            if(_token == null)
             {
-                
-                dynamic data = JObject.Parse(config.GetJwtToken());
-                accessToken = data.access_token;
+                _token = config.GetJwtToken();
 
                 GetExpectedGraduationUsers();
             }
             else
             {
                 restRequest.AddParameter("Authorization",
-                                 string.Format("Bearer " + accessToken),
+                                 string.Format("Bearer " + _token),
                                  ParameterType.HttpHeader);
                 IRestResponse response = apiClient.Execute(restRequest);
 
                 if(response.StatusCode.Equals(401))
                 {
-                    dynamic data = JObject.Parse(config.GetJwtToken());
-                    accessToken = data.access_token;
+                    _token = config.GetJwtToken();
                     GetExpectedGraduationUsers();
                 }
                 if(response.StatusCode != HttpStatusCode.OK)
@@ -77,15 +74,14 @@ namespace JobScheduler
             RestRequest restRequest = new RestRequest("api/UserTask/SetToMailed") { Method = Method.PUT };
 
             restRequest.AddParameter("Authorization",
-                                     string.Format("Bearer " + accessToken),
+                                     string.Format("Bearer " + _token),
                                      ParameterType.HttpHeader);
             restRequest.AddParameter("text/json", JsonConvert.SerializeObject(userTask), ParameterType.RequestBody);
             IRestResponse response = apiClient.Execute(restRequest);
 
             if(response.StatusCode.Equals(401))
             {
-                    dynamic data = JObject.Parse(config.GetJwtToken());
-                    accessToken = data.access_token;
+                    _token = config.GetJwtToken();
                     SetGraduationTaskStatusToMailed(userTask);
             }
             if(response.StatusCode != HttpStatusCode.OK)

@@ -1,6 +1,10 @@
 using Microsoft.Extensions.Configuration;
+using Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using RestSharp.Authenticators;
+using RestSharp.Serialization.Json;
 using Serilog;
 using System;
 
@@ -9,7 +13,7 @@ namespace JobScheduler
 
     public interface IConfig
     {
-        string GetJwtToken();
+        Token GetJwtToken();
 
         string GetApiUrl();
 
@@ -39,7 +43,7 @@ namespace JobScheduler
 
         }
 
-        public string GetJwtToken()
+        public Token GetJwtToken()
         {
             RestClient restClient = new RestClient(IdentityServerConfig.IdentityUrl);
             RestRequest restRequest = new RestRequest("connect/token") { Method = Method.POST };
@@ -55,7 +59,11 @@ namespace JobScheduler
                 Log.Logger.Error("Something went wrong: " + identityServerResponse.ErrorMessage);
             }
             Log.Logger.Information(identityServerResponse.Content);
-            return identityServerResponse.Content;
+
+            JObject json = JObject.Parse(identityServerResponse.Content);
+            Token token = new Token(json["access_token"].ToString(), json["expires_in"].ToString(), json["token_type"].ToString(),json["scope"].ToString());
+
+            return token;
         }
 
 
