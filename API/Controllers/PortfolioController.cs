@@ -307,20 +307,36 @@ namespace API.Controllers
             if(portfolio == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to get the corresponding portfolio.",
-                                             Detail = "The specified portfolio resource was null.",
-                                             Instance = "6C53D257-FBEA-487D-B0B0-DFACCFFAEF9E"
+                {
+                    Title = "Failed to get the corresponding portfolio.",
+                    Detail = "The specified portfolio resource was null.",
+                    Instance = "6C53D257-FBEA-487D-B0B0-DFACCFFAEF9E"
                 };
                 return BadRequest(problem);
             }
 
-            portfolioItemResource.Project = project;
-            portfolioItemResource.Portfolio = portfolio;
+            if(projectId > 0)
+            {
+                if(project == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed to get the corresponding project.",
+                        Detail = "The specified project resource was null.",
+                        Instance = "34DB000E-BF54-4258-BD70-4F91E64BD92C"
+                    };
+                    return BadRequest(problem);
+                }
+                portfolioItemResource.ProjectId = project.Id;
+                            }
+
+            portfolioItemResource.PortfolioId = portfolio.Id;
             PortfolioItem portfolioItem = mapper.Map<PortfolioItemResource, PortfolioItem>(portfolioItemResource);
 
             try
             {
+                portfolioItem.Portfolio = portfolio;
+                portfolioItem.Project = project;
                 portfolioItemService.Add(portfolioItem);
                 portfolioService.Save();
                 PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);

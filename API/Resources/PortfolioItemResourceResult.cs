@@ -15,7 +15,7 @@ namespace API.Resources
         /// <summary>
         /// this sets or gets the portfolio id
         /// </summary>
-        public Portfolio Portfolio { get; set; }
+        public int PortfolioId { get; set; }
 
         /// <summary>
         /// This sets or gets the position
@@ -35,6 +35,6 @@ namespace API.Resources
         /// <summary>
         /// this sets or gets the project
         /// </summary>
-        public Project Project { get; set; }
+        public int ProjectId { get; set; }
     }
 }

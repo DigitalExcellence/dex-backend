@@ -47,15 +47,19 @@ namespace API.Configuration
                 .ForAllOtherMembers(o => o.Ignore());
 
            CreateMap<Portfolio, PortfolioResourceResult>()
-               //.ForMember(q => q.UserId, opt => opt.MapFrom(p => p.User.Id))
-               //.ForMember(q => q.UserName, opt => opt.MapFrom(p => p.User.Name))
-               .ForMember(q => q.PortfolioItem, opt => opt.MapFrom(p => p.PortfolioItem.Count))
+               .ForMember(q => q.UserId, opt => opt.MapFrom(p => p.User.Id))
+               .ForMember(q => q.UserName, opt => opt.MapFrom(p => p.User.Name))
                .ForAllOtherMembers(o => o.Ignore());
 
             CreateMap<PortfolioResource, Portfolio>();
 
-            CreateMap<PortfolioItem, PortfolioItemResourceResult>();
-            CreateMap<PortfolioItemResourceResult, PortfolioItem>();
+            CreateMap<PortfolioItemResource, PortfolioItem>();
+
+            CreateMap<PortfolioItem, PortfolioItemResourceResult>()
+                .ForMember(q => q.PortfolioId, opt => opt.MapFrom(p => p.Portfolio.Id))
+                .ForMember(q => q.ProjectId, opt => opt.MapFrom(p => p.Project.Id))
+                .ForAllOtherMembers(o => o.Ignore());
+
 
 
             CreateMap<User, UserResourceResult>();
