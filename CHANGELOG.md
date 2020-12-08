@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed issue where unused project icons where left in the database & File System. - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
 - Refactored Postman CLI files to make them work from Postman folder. - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
 - Fixed issue where searching for a project did not include the project icon. - [#307](https://github.com/DigitalExcellence/dex-backend/issues/307)
+- Fixed issue where project icons would get deleted when they shouldn't - [#332](https://github.com/DigitalExcellence/dex-backend/issues/332)
 - Fixes issue where retrieving projects performed badly due to large amount of collaborators. - [#331](https://github.com/DigitalExcellence/dex-backend/issues/331)
 
 ### Security

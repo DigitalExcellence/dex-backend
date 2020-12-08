@@ -358,18 +358,19 @@ namespace API.Controllers
             File file = null;
             if(projectResource.FileId != 0)
             {
-                if(project.ProjectIconId != 0)
+                if(project.ProjectIconId != 0 && project.ProjectIconId != null)
                 {
-                    File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                    if(project.ProjectIconId != projectResource.FileId)
+                    {
+                        File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                        // Remove the file from the filesystem
+                        fileUploader.DeleteFileFromDirectory(fileToDelete);
+                        // Remove file from DB
+                        await fileService.RemoveAsync(project.ProjectIconId.Value);
 
-                    // Remove the file from the filesystem
-                    fileUploader.DeleteFileFromDirectory(fileToDelete);
 
-                    // Remove file from DB
-                    await fileService.RemoveAsync(project.ProjectIconId.Value);
-
-
-                    fileService.Save();
+                        fileService.Save();
+                    }
                 }
 
                 // Get the uploaded file
