@@ -101,6 +101,12 @@ namespace API.Controllers
         }
 
 
+
+        /// <summary>
+        ///     This method is responsible for retrieving all projects in ElasticSearch formatted model.
+        /// </summary>
+        /// <returns>This method returns a list of in ElasticSearch formatted projects.</returns>
+        /// <response code="200">This endpoint returns a list of in ElasticSearch formatted projects.</response>
         [HttpGet("export")]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]

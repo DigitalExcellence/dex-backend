@@ -30,13 +30,13 @@ namespace ElasticSynchronizer.Workers
 {
     public class DeleteProjectWorker : BackgroundService
     {
-        private readonly ILogger<DeleteProjectWorker> _logger;
+        private readonly ILogger<DeleteProjectWorker> logger;
         private readonly string subject = "ELASTIC_DELETE";
         private readonly Config config;
 
         public DeleteProjectWorker(ILogger<DeleteProjectWorker> logger, Config config)
         {
-            _logger = logger;
+            this.logger = logger;
             this.config = config;
         }
 

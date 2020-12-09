@@ -30,13 +30,13 @@ namespace ElasticSynchronizer.Workers
 {
     public class UpdateProjectWorker : BackgroundService
     {
-        private readonly ILogger<UpdateProjectWorker> _logger;
+        private readonly ILogger<UpdateProjectWorker> logger;
         private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
         private readonly Config config;
 
         public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config)
         {
-            _logger = logger;
+            this.logger = logger;
             this.config = config;
         }
 

@@ -20,13 +20,35 @@ using System.Collections.Generic;
 
 namespace ElasticSynchronizer.Models
 {
+    /// <summary>
+    /// This model is the model used to create, update or delete documents in Elastic Search.
+    /// </summary>
     public class ProjectES
     {
-            public DateTime Created { get; set; }
-            public int Id { get; set; }
-            public string ProjectName { get; set; }
-            public string Description { get; set; }
-            public List<int> Likes { get; set; }
+        /// <summary>
+        /// This gets or sets the created date of the project 
+        /// </summary>
+        public DateTime Created { get; set; }
+
+        /// <summary>
+        /// This gets or sets the Id of the project
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// This gets or sets the name of the project 
+        /// </summary>
+        public string ProjectName { get; set; }
+
+        /// <summary>
+        /// This gets or sets the description of the project 
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// This gets or sets the likes of the project. Likes are stored as an array of user id's who like the project.
+        /// </summary>
+        public List<int> Likes { get; set; }
 
         
     }
