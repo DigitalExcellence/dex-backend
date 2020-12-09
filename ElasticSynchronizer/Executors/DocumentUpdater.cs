@@ -1,27 +1,32 @@
+using ElasticSynchronizer.Configuration;
+using ElasticSynchronizer.Models;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ElasticSynchronizer
+namespace ElasticSynchronizer.Executors
 {
     public class DocumentUpdater : INotificationService
     {
-        private ProjectES projectES;
-        RestClient restClient;
+        private ProjectES projectEs;
+        private readonly RestClient restClient;
+        private readonly Config config;
 
-        public DocumentUpdater()
+        public DocumentUpdater(Config config)
         {
-            restClient = new RestClient("http://localhost:9200/");
-            restClient.Authenticator = new HttpBasicAuthenticator("elastic", "changeme");
+            this.config = config;
+            restClient = new RestClient(config.Elastic.Hostname)
+                         {
+                             Authenticator =
+                                 new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
+                         };
         }
 
         public void ParsePayload(string jsonBody)
         {
-            projectES = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
+            projectEs = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
         }
 
 
@@ -37,14 +42,14 @@ namespace ElasticSynchronizer
         }
 
         private void CreateOrUpdateDocument()
-        {​​​​
-            RestRequest request = new RestRequest("projectkeywords5/_doc/" + projectES.Id, Method.POST);
-            request.AddParameter("application/json", JsonConvert.SerializeObject(projectES), ParameterType.RequestBody);
+        {
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.POST);
+            request.AddParameter("application/json", JsonConvert.SerializeObject(projectEs), ParameterType.RequestBody);
             IRestResponse response = restClient.Execute(request);
-            if(response.IsSuccessful)
-            {​​​​
-                Console.WriteLine("Data successfully posted.");
-            }​​​​
+            if(!response.IsSuccessful)
+            {
+                Console.WriteLine(response);
+            }
         }
     }
 }

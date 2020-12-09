@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace ElasticSynchronizer
+namespace ElasticSynchronizer.Models
 {
     public class ProjectES
     {

@@ -1,26 +1,26 @@
+using ElasticSynchronizer.Configuration;
+using ElasticSynchronizer.Executors;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ElasticSynchronizer
+namespace ElasticSynchronizer.Workers
 {
     public class DeleteProjectWorker : BackgroundService
     {
         private readonly ILogger<DeleteProjectWorker> _logger;
         private readonly string subject = "ELASTIC_DELETE";
-        private readonly IConfig config;
+        private readonly Config config;
 
-        public DeleteProjectWorker(ILogger<DeleteProjectWorker> logger)
+        public DeleteProjectWorker(ILogger<DeleteProjectWorker> logger, Config config)
         {
             _logger = logger;
+            this.config = config;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -29,7 +29,7 @@ namespace ElasticSynchronizer
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
 
-            INotificationService notificationService = new DocumentUpdater();
+            INotificationService notificationService = new DocumentDeleter(config);
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
 
             listener.StartConsumer(consumer, subject);

@@ -1,27 +1,32 @@
+using ElasticSynchronizer.Configuration;
+using ElasticSynchronizer.Models;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ElasticSynchronizer
+namespace ElasticSynchronizer.Executors
 {
     public class DocumentDeleter : INotificationService
     {
-        private ProjectES projectES;
-        RestClient restClient;
+        private ProjectES projectEs;
+        private readonly RestClient restClient;
+        private readonly Config config;
 
-        public DocumentDeleter()
+        public DocumentDeleter(Config config)
         {
-            restClient = new RestClient("http://localhost:9200/");
-            restClient.Authenticator = new HttpBasicAuthenticator("elastic", "changeme");
+            this.config = config;
+            restClient = new RestClient(config.Elastic.Hostname)
+                         {
+                             Authenticator =
+                                 new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
+                         };
         }
 
         public void ParsePayload(string jsonBody)
         {
-            projectES = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
+            projectEs = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
         }
 
 
@@ -37,14 +42,15 @@ namespace ElasticSynchronizer
         }
 
         private void DeleteDocument()
-        {​​​​
-            RestRequest request = new RestRequest("projectkeywords5/_doc/" + projectES.Id, Method.DELETE);
+        {
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.DELETE);
             IRestResponse response = restClient.Execute(request);
-            if(response.IsSuccessful)
-            {​​​​
-                Console.WriteLine("Data successfully posted.");
-            }​​​​
-}
+            if(!response.IsSuccessful)
+            {
+                Console.WriteLine(response);
+            }
+        }
+
     }
 }
 
