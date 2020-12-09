@@ -6,27 +6,27 @@ on:
 
 jobs:
   unit-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    
+
     - name: Install dependencies
       run: dotnet restore
-    
+
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    
+
     - name: Test
       run: dotnet test --no-restore --verbosity normal
 
   integration-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
@@ -34,10 +34,10 @@ jobs:
     - name: Docker Compose
       run: docker-compose up --build -d
 
-    - name: Sleep for 10 seconds
+    - name: Sleep for 30 seconds
       uses: juliangruber/sleep-action@v1
       with:
-        time: 10s
+        time: 30s
 
     - name: Setup node
       uses: actions/setup-node@v1

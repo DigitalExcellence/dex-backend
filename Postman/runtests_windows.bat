@@ -1,1 +1,2 @@
-start cmd /k newman run dex.postman_collection.json -e local.postman_environment.json -k
+cd ..
+start cmd /k newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json -k

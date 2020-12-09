@@ -35,7 +35,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        Task<List<Project>> GetAllWithUsersAsync(ProjectFilterParams projectFilterParams);
+        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
@@ -64,7 +64,7 @@ namespace Services.Services
 
         public override void Add(Project entity)
         {
-            /// Sanitze description before exceuting default behaviour.
+            // Sanitize description before executing default behaviour.
             HtmlSanitizer sanitizer = new HtmlSanitizer();
             entity.Description = sanitizer.Sanitize(entity.Description);
             base.Add(entity);
@@ -72,7 +72,7 @@ namespace Services.Services
 
         public override void Update(Project entity)
         {
-            /// Sanitze description before exceuting default behaviour.
+            // Sanitize description before executing default behaviour.
             HtmlSanitizer sanitizer = new HtmlSanitizer();
             entity.Description = sanitizer.Sanitize(entity.Description);
             base.Update(entity);
@@ -83,7 +83,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        public Task<List<Project>> GetAllWithUsersAsync(ProjectFilterParams projectFilterParams)
+        public Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams)
         {
             if(!projectFilterParams.AmountOnPage.HasValue ||
                projectFilterParams.AmountOnPage <= 0)
@@ -112,7 +112,7 @@ namespace Services.Services
             }
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
-            return Repository.GetAllWithUsersAsync(skip, take, orderBy, orderByDirection, projectFilterParams.Highlighted);
+            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip, take, orderBy, orderByDirection, projectFilterParams.Highlighted);
         }
 
         /// <summary>

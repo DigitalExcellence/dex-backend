@@ -34,7 +34,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
             Assert.AreEqual(100, retrieved.Count);
             foreach(Project project in projects)
             {
@@ -54,7 +54,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -72,7 +72,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -96,13 +96,13 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Tests
-            List<Project> retrieved = await Repository.GetAllWithUsersAsync(0, 1);
+            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync(0, 1);
             Assert.AreEqual(1, retrieved.Count, "Get all with skip take failed");
 
-            retrieved = await Repository.GetAllWithUsersAsync(0, 10);
+            retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync(0, 10);
             Assert.AreEqual(10, retrieved.Count, "Get all with skip take failed");
 
-            retrieved = await Repository.GetAllWithUsersAsync(10, 10);
+            retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync(10, 10);
             Assert.AreEqual(10, retrieved.Count, "Get all with skip take failed");
         }
 
@@ -126,7 +126,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Tests
-            List<Project> retrieved = (List<Project>)await Repository.GetAllWithUsersAsync(1000, 10);
+            List<Project> retrieved = (List<Project>)await Repository.GetAllWithUsersAndCollaboratorsAsync(1000, 10);
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -183,7 +183,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
             Assert.AreEqual(1, retrieved.Count);
             Assert.AreEqual(retrieved[0].User.Email, Defaults.Privacy.RedactedEmail);
         }
@@ -205,7 +205,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
             Assert.AreEqual(1, retrieved.Count);
             Assert.AreEqual(retrieved[0].User.Email, user.Email);
         }
