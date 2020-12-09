@@ -154,7 +154,7 @@ namespace Repositories
         )
         {
             List<Project> result =
-                await ApplyFilters(GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted)
+                await ApplyFilters(await GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted)
                     .ToListAsync();
             return result.Where(p => ProjectContainsQuery(p, query))
                          .ToList();
@@ -168,7 +168,7 @@ namespace Repositories
         /// <returns>This method returns the amount of projects matching the filters.</returns>
         public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
         {
-            return await ApplyFilters(GetProjectQueryable(query), null, null, null, true, highlighted)
+            return await ApplyFilters(await GetProjectQueryable(query), null, null, null, true, highlighted)
                        .CountAsync();
         }
 
@@ -358,9 +358,9 @@ namespace Repositories
         /// </summary>
         /// <param name="query">The query parameter is a string to search in the project's fields.</param>
         /// <returns>This method returns the filtered IQueryable including the project user.</returns>
-        private IQueryable<Project> GetProjectQueryable(string query)
+        private async Task<IQueryable<Project>> GetProjectQueryable(string query)
         {
-            return DbSet
+            IQueryable<Project> projectsToReturn = DbSet
                    .Include(p => p.User)
                    .Include(i => i.ProjectIcon)
                    .Include(p => p.CallToAction)
@@ -373,6 +373,15 @@ namespace Repositories
                               p.Id.ToString()
                                .Equals(query) ||
                               p.User.Name.Contains(query));
+
+            foreach(Project project in projectsToReturn)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+            }
+            return projectsToReturn;
         }
 
     }
