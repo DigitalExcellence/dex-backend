@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NotificationSystem.Configuration;
 using NotificationSystem.Contracts;
 using NotificationSystem.Notifications;
@@ -14,6 +15,7 @@ namespace NotificationSystem.Services
     {
         private readonly SendGridClient client;
         private readonly EmailAddress from;
+        private EmailNotification notification;
 
         public EmailSender(Config config)
         {
@@ -21,20 +23,21 @@ namespace NotificationSystem.Services
             from = new EmailAddress(config.SendGrid.EmailFrom);
         }
 
-
-        public void SendNotification(INotification notification)
+        public void ParsePayload(string jsonBody)
         {
-            EmailNotification emailNotification = (EmailNotification) notification;
-
-            if (ValidateNotification(emailNotification))
-            {
-                Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Wait();
-            }
+            notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
         }
 
-        public bool ValidateNotification(INotification notification)
+        public void ExecuteTask()
         {
-            EmailNotification emailNotification = (EmailNotification) notification;
+            EmailNotification emailNotification = notification;            
+            Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Wait();
+            
+        }
+
+        public bool ValidatePayload()
+        {
+            EmailNotification emailNotification = notification;
 
             if (string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
             {

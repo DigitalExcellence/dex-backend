@@ -6,7 +6,8 @@ namespace NotificationSystem.Contracts
 {
     public interface INotificationService
     {
-        bool ValidateNotification(INotification notification);
-        void SendNotification(INotification notification);
+        void ParsePayload(string jsonBody);
+        bool ValidatePayload();
+        void ExecuteTask();
     }
 }

@@ -53,6 +53,8 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        Task<List<ESProjectFormat>> GetAllESProjectsFromProjects();
+
     }
 
     public class ProjectService : Service<Project>, IProjectService
@@ -142,6 +144,29 @@ namespace Services.Services
         public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
             return Repository.FindWithUserAndCollaboratorsAsync(id);
+        }
+
+        public async Task<List<ESProjectFormat>> GetAllESProjectsFromProjects()
+        {
+            IEnumerable<Project> projectsToConvert = await Repository.GetAllWithUsersAndCollaboratorsAsync();
+            List<ESProjectFormat> convertedProjects = new List<ESProjectFormat>();
+            foreach(Project project in projectsToConvert)
+            {
+                ESProjectFormat convertedProject = new ESProjectFormat();
+                List<int> likes = new List<int>();
+                foreach(ProjectLike projectLike in project.Likes)
+                {
+                    likes.Add(projectLike.UserId);
+                }
+                convertedProject.Description = project.Description;
+                convertedProject.ProjectName = project.Name;
+                convertedProject.Id = project.Id;
+                convertedProject.Created = project.Created;
+                convertedProject.Likes = likes;
+                convertedProjects.Add(convertedProject);
+
+            }
+            return convertedProjects;
         }
 
     }

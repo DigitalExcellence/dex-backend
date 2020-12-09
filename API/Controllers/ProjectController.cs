@@ -28,6 +28,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -99,6 +100,25 @@ namespace API.Controllers
             this.callToActionOptionService = callToActionOptionService;
         }
 
+
+        [HttpGet("export")]
+        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetAllConvertedProjectExport()
+        {
+            try
+            {
+                List<ESProjectFormat> projectsToExport = await projectService.GetAllESProjectsFromProjects();
+                return Ok(projectsToExport);
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return BadRequest(e.Message);
+
+            }
+
+        }
+
         /// <summary>
         ///     This method is responsible for retrieving all projects.
         /// </summary>
@@ -109,6 +129,8 @@ namespace API.Controllers
         ///     The 400 Bad Request status code is returned when values inside project filter params resource are
         ///     invalid.
         /// </response>
+        ///
+
         [HttpGet]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]

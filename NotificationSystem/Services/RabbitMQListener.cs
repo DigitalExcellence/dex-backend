@@ -30,14 +30,13 @@ namespace NotificationSystem.Services
             {
                 
                 byte[] body = ea.Body.ToArray();
-                string jsonBody = Encoding.UTF8.GetString(body);
-
-                // Currently we have only EmailNotification, this should change later to match other types of noticiations
-                EmailNotification notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
+                string jsonBody = Encoding.UTF8.GetString(body);              
 
                 try
-                {                   
-                    notificationService.SendNotification(notification);
+                {
+                    notificationService.ParsePayload(jsonBody);
+                    notificationService.ValidatePayload();
+                    notificationService.ExecuteTask();
                     channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);                    
                 } catch(Exception e)
                 {

@@ -6,6 +6,8 @@ namespace MessageBrokerPublisher
 {
     public enum Subject
     {
-        EMAIL
+        EMAIL,
+        ELASTIC_CREATE_OR_UPDATE,
+        ELASTIC_DELETE
     }
 }

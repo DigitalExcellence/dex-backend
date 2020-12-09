@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using MessageBrokerPublisher;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
@@ -60,7 +61,10 @@ namespace Repositories
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
 
-        public ProjectRepository(DbContext dbContext) : base(dbContext) { }
+        INotificationSender notificationSender;
+        public ProjectRepository(DbContext dbContext, INotificationSender notificationSender) : base(dbContext) {
+            this.notificationSender = notificationSender;
+        }
 
         /// <summary>
         /// This method finds the project async by project the specified id.
@@ -225,6 +229,20 @@ namespace Repositories
             }
 
             DbSet.Update(entity);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_CREATE_OR_UPDATE);
+
+        }
+
+        public override void Add(Project entity)
+        {
+            base.Add(entity);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_CREATE_OR_UPDATE);
+        }
+
+        public override void Remove(Project entity)
+        {
+            base.Remove(entity);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_DELETE);
         }
 
         /// <summary>
