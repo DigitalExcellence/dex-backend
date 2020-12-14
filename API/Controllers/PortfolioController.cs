@@ -338,7 +338,7 @@ namespace API.Controllers
                 portfolioItem.Portfolio = portfolio;
                 portfolioItem.Project = project;
                 portfolioItemService.Add(portfolioItem);
-                portfolioService.Save();
+                portfolioItemService.Save();
                 PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);
                 return Created(nameof(CreatePortfolioItemAsync), model);
             } catch(DbUpdateException e)
@@ -354,6 +354,56 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+        }
+
+        /// <summary>
+        /// This method is responsible for updating the portfolio with the specified identifier.
+        /// </summary>
+        /// <param name="portfolioId">The portfolio identifier which is used for searching the portfolio.</param>
+        /// <param name="portfolioItemId">The portfolio item identifier which is used for searching the portfolio item</param>
+        /// <param name="portfolioItemResource">The portfolio item resource which is used for updating the portfolio item.</param>
+        /// <returns>This method returns the portfolio item resource result.</returns>
+        /// <response code="200">This endpoint returns the updated portfolio.</response>
+        /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
+        /// <response code="404">The 404 not Found status code is returned when the portfolio to update is not found.</response>
+        [HttpPut("{portfolioItemId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> UpdatePortfolioItem(int portfolioId, int portfolioItemId, [FromBody] PortfolioItemResource portfolioItemResource)
+        {
+            PortfolioItem portfolioItem = await portfolioItemService.FindAsync(portfolioItemId).ConfigureAwait(false);
+            Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
+            if(portfolioItem == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update portfolio item.",
+                    Detail = "The specified portfolio could not be found in the database.",
+                    Instance = "8F2CDC1B-7015-4B72-B91B-78FD839DDEF1"
+                };
+                return NotFound(problem);
+            }
+
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
+
+            if(!(portfolio.User.Id == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to edit the portfolio.",
+                    Detail = "The user is not allowed to edit the portfolio.",
+                    Instance = "B00CA783-B8E0-4F73-9E19-A74448F1930B"
+                };
+                return Unauthorized(problem);
+            }
+
+            mapper.Map(portfolioItemResource, portfolioItem);
+            portfolioItemService.Update(portfolioItem);
+            portfolioItemService.Save();
+            return Ok(mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem));
         }
 
     }
