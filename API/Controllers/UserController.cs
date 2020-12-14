@@ -69,7 +69,7 @@ namespace API.Controllers
         IAuthorizationHelper authorizationHelper,
         IUserUserService userUserService,
         IProjectService projectService,
-        IEmbedService embedService,
+        IEmbedService embedService
         )
         {
             this.userService = userService;
@@ -99,10 +99,10 @@ namespace API.Controllers
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed getting the user account.",
-                     Detail = "The user could not be found in the database.",
-                     Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
                 };
                 return NotFound(problem);
             }
@@ -250,11 +250,11 @@ namespace API.Controllers
                 if(institutionId < 1)
                 {
                     ProblemDetails problem = new ProblemDetails
-                     {
-                         Title = "Failed getting institution.",
-                         Detail = "The id of an institution can't be smaller than 1",
-                         Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
-                     };
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The id of an institution can't be smaller than 1",
+                        Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                    };
                     return BadRequest(problem);
                 }
 
@@ -262,11 +262,11 @@ namespace API.Controllers
                 if(foundInstitution == null)
                 {
                     ProblemDetails problem = new ProblemDetails
-                     {
-                         Title = "Failed getting institution.",
-                         Detail = "The institution could not be found in the database.",
-                         Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
-                     };
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The institution could not be found in the database.",
+                        Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                    };
                     return NotFound(problem);
                 }
             }
@@ -277,11 +277,11 @@ namespace API.Controllers
             if(currentUser.Id != userId && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed to edit the user.",
-                     Detail = "The user is not allowed to edit this user.",
-                     Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
-                 };
+                {
+                    Title = "Failed to edit the user.",
+                    Detail = "The user is not allowed to edit this user.",
+                    Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
+                };
                 return Unauthorized(problem);
             }
 
@@ -306,75 +306,43 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for deleting the current account.
-        /// </summary>
-        /// <returns>This method returns status code 200.</returns>
-        /// <response code="200">This endpoint returns status code 200. The current account is deleted.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the current account could not be found.</response>
-        [HttpDelete("{userId?}")]
-        [Authorize]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> DeleteAccount(int? userId=null)
-        {
-            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-
-            User toDeleteUser = null;
-            // If no userid is given use the current users userid.
-            if(userId == null)
-            {
-                toDeleteUser = currentUser;
-            } else
-            {
-                toDeleteUser = await userService.FindAsync((int)userId);
-            }
-
-            bool isAllowed = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
-
-            if(toDeleteUser == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed getting the user account.",
-                     Detail = "The database does not contain a user with this user id.",
-                     Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
-                 };
-                return NotFound(problem);
-            }
-
-            await userService.RemoveAsync(user.Id);
-            userService.Save();
-            return Ok();
-        }
-
-        /// <summary>
         /// This method is responsible for deleting a user account.
         /// </summary>
         /// <returns>This method returns status code 200.</returns>
         /// <response code="200">This endpoint returns status code 200. The account with the specified id is deleted.</response>
         /// <response code="401">The 401 Unauthorized status code is returned when the user is not allowed to delete the account.</response>
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
-        [HttpDelete("{userId}")]
+        [HttpDelete("{userId?}")]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> DeleteAccount(int userId)
+        public async Task<IActionResult> DeleteAccount(int? userId = null)
         {
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
                                                                      nameof(Defaults.Scopes.UserWrite),
                                                                      nameof(Defaults.Scopes.InstitutionUserWrite),
-                                                                     userId);
+                                                                     (int) userId);
+            User toDeleteUser;
+            if(userId != null)
+            {
+                toDeleteUser = await userService.GetUserAsync((int) userId);
+            } else
+            {
+                toDeleteUser = currentUser;
+            }
 
-            if(user.Id != userId && !isAllowed)
+            // The user that is getting deleted is not the same user as the logged in user.
+            // The logged in user is not an admin either.
+            if(currentUser.Id != userId && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed to delete the user.",
-                     Detail = "The user is not allowed to delete this user.",
-                     Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
-                 };
+                {
+                    Title = "Failed to delete the user.",
+                    Detail = "The user is not allowed to delete this user.",
+                    Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
+                };
                 return Unauthorized(problem);
             }
 
@@ -404,7 +372,9 @@ namespace API.Controllers
 
 
             await userService.RemoveAsync(toDeleteUser.Id);
+
             userService.Save();
+            userUserService.Save();
 
             return Ok();
         }
@@ -464,7 +434,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            UserUser userUser = new UserUser(user,followedUser);
+            UserUser userUser = new UserUser(user, followedUser);
             userUserService.Add(userUser);
 
             userUserService.Save();
@@ -505,7 +475,7 @@ namespace API.Controllers
                 return Conflict(problem);
             }
 
-            User followedUser= await userService.FindAsync(followedUserId);
+            User followedUser = await userService.FindAsync(followedUserId);
 
             if(await userService.FindAsync(followedUserId) == null)
             {
@@ -523,4 +493,5 @@ namespace API.Controllers
             userUserService.Save();
             return Ok();
         }
+    }
 }
