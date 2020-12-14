@@ -32,7 +32,7 @@ namespace Services.Services
 
         Task<List<Role>> GetAllAsync();
         List<string> GetValidScopes();
-        bool isValidScope(string scope);
+        bool IsValidScope(string scope);
 
     }
 
@@ -76,7 +76,7 @@ namespace Services.Services
         /// <returns>
         ///   <c>true</c> if [is valid scope] [the specified scope]; otherwise, <c>false</c>.
         /// </returns>
-        public bool isValidScope(string scope)
+        public bool IsValidScope(string scope)
         {
             List<string> scopes = GetValidScopes();
             return scopes.Contains(scope);

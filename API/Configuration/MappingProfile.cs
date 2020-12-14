@@ -18,6 +18,7 @@
 using API.Resources;
 using AutoMapper;
 using Models;
+using System.Collections.Generic;
 
 namespace API.Configuration
 {
@@ -31,12 +32,54 @@ namespace API.Configuration
         /// </summary>
         public MappingProfile()
         {
-            CreateMap<UserResource, User>();
+            CreateMap<ProjectLike, UserProjectLikeResourceResult>()
+                .ForMember(source => source.Id,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Id))
+                .ForMember(source => source.Name,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Name))
+                .ForMember(source => source.ShortDescription,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.ShortDescription))
+                .ForMember(source => source.Uri,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Uri))
+                .ForMember(source => source.Description,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Description))
+                .ForAllOtherMembers(member => member.Ignore());
+
+           CreateMap<UserUserResourceResult, UserUser>();
+
+           CreateMap<UserUser, UserUserResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(q => q.FollowedUser.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
+                .ForAllOtherMembers(o => o.Ignore());
+
+           CreateMap<UserProject, UserProjectResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
+                .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
+                .ForMember(q => q.Uri, opt => opt.MapFrom(p => p.Project.Uri))
+                .ForMember(q => q.Description, opt => opt.MapFrom(p => p.Project.Description))
+                .ForAllOtherMembers(o => o.Ignore());
+
+
             CreateMap<User, UserResourceResult>();
+
+            CreateMap<UserResource, User>();
+
             CreateMap<User, LimitedUserResourceResult>();
 
             CreateMap<ProjectResource, Project>();
             CreateMap<Project, ProjectResourceResult>();
+            CreateMap<ProjectLike, ProjectLikesResourceResult>();
             CreateMap<Project, ProjectHighlightResourceResult>();
 
             CreateMap<CollaboratorResource, Collaborator>();
@@ -57,8 +100,24 @@ namespace API.Configuration
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
 
+            CreateMap<FileResourceResult, File>();
+            CreateMap<File, FileResourceResult>().ForMember(e => e.UploaderUserId,
+                                                            opt => opt.MapFrom(e => e.Uploader.Id));
+
             CreateMap<RoleScopeResource, RoleScope>();
             CreateMap<RoleScope, RoleScopeResource>();
+
+            CreateMap<InstitutionResource, Institution>();
+            CreateMap<Institution, InstitutionResourceResult>();
+
+            CreateMap<CallToActionResource, CallToAction>()
+                .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));
+            CreateMap<CallToAction, CallToActionResourceResult>();
+
+            CreateMap<CallToActionOptionResource, CallToActionOption>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToLower()))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToLower()));
+            CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
         }
     }
 }

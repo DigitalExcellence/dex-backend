@@ -11,9 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add Postman tests to pipeline - [#189](https://github.com/DigitalExcellence/dex-backend/issues/189)
-- Added a new dex user that can be used to add projects manually - [#270](https://github.com/DigitalExcellence/dex-backend/issues/270)
-
 ### Changed
 
 ### Deprecated
@@ -22,10 +19,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Security
+
+## Release v.0.9.0-beta - 09-12-2020
+
+
+
+### Added
+
+- Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
+- Added call to actions for projects and call to action options - [#312](https://github.com/DigitalExcellence/dex-backend/issues/312)
+- Collaborators are now included on the project overview page - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
+- Added new endpoint for ability to like and unlike projects - [#229](https://github.com/DigitalExcellence/dex-backend/issues/229)
+- Project retrieval endpoints now include likes - [#329](https://github.com/DigitalExcellence/dex-backend/issues/329)
+
+### Fixed
+
+- Fixed issue where unused project icons where left in the database & File System - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
+- Refactored Postman CLI files to make them work from Postman folder - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
+- Fixed issue where searching for a project did not include the project icon - [#307](https://github.com/DigitalExcellence/dex-backend/issues/307)
+- Fixed issue where project icons would get deleted when they should not - [#332](https://github.com/DigitalExcellence/dex-backend/issues/332)
+- Fixes issue where retrieving projects performed badly due to large amount of collaborators - [#331](https://github.com/DigitalExcellence/dex-backend/issues/331)
+
+
+## Release v.0.8.0-beta - 06-11-2020
+
+
+
+### Added
+
+- Added a fileuploader which gives the opportunity to upload files and icons - [#217](https://github.com/DigitalExcellence/dex-backend/issues/217)
+- Add Postman tests to pipeline - [#189](https://github.com/DigitalExcellence/dex-backend/issues/189)
+- Added function to follow users and let users follow projects - [#228](https://github.com/DigitalExcellence/dex-backend/pull/258)
+- Added a new dex user that can be used to add projects manually - [#270](https://github.com/DigitalExcellence/dex-backend/issues/270)
+- Added data officer role and CRUD functionalities for institutions - [#265](https://github.com/DigitalExcellence/dex-backend/issues/265)
+- Added notification system - [#256](https://github.com/DigitalExcellence/dex-backend/issues/256)
+
+### Fixed
+
 - Fixed issue where swagger authorization was not working when running in docker-compose - [#200](https://github.com/DigitalExcellence/dex-backend/issues/200)
 - Fixed issue with search functionality being too extensive. Now matching whole strings only - [#202](https://github.com/DigitalExcellence/dex-backend/issues/202)
-
-### Security
+- Fixed issue where highlights were not returning the end date & start date - [#296](https://github.com/DigitalExcellence/dex-backend/issues/296)
 
 
 

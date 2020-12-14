@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,6 +6,7 @@
     <DocumentationFile>.\API.xml</DocumentationFile>
     <Company>Digital Excellence Fontys</Company>
     <LangVersion>8</LangVersion>
+    <Version>0.9.0-beta</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,14 @@
     <Content Remove="Resources\Project\**" />
     <EmbeddedResource Remove="Resources\Project\**" />
     <None Remove="Resources\Project\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Uploads\Images\.gitkeep" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Uploads\Images\.gitkeep" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +48,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\4_Data.csproj" />
+    <ProjectReference Include="..\MessageBrokerPublisher\MessageBrokerPublisher.csproj" />
     <ProjectReference Include="..\Models\5_Models.csproj" />
+    <ProjectReference Include="..\NotificationSystem\NotificationSystem.csproj" />
     <ProjectReference Include="..\Services\2_Services.csproj" />
   </ItemGroup>
 

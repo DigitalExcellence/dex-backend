@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -80,6 +80,7 @@ namespace Repositories
             Highlight project = await GetDbSet<Highlight>()
                    .Where(s => s.Id == id)
                    .Include(p => p.Project)
+                   .Include(p => p.Project.ProjectIcon)
                    .SingleOrDefaultAsync();
 
             return RedactUser(project);
@@ -95,6 +96,7 @@ namespace Repositories
                          .Where(s => s.StartDate <= DateTime.Now || s.StartDate == null)
                          .Where(s => s.EndDate >= DateTime.Now || s.EndDate == null)
                          .Include(p => p.Project)
+                         .Include(p => p.Project.ProjectIcon)
                          .ToListAsync();
             return RedactUser(highlights);
         }
@@ -104,6 +106,7 @@ namespace Repositories
             return await GetDbSet<Highlight>()
                          .Where(s => s.ProjectId == projectId)
                          .Include(p => p.Project)
+                         .Include(p => p.Project.ProjectIcon)
                          .ToListAsync();
         }
     }

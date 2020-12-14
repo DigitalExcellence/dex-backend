@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -122,60 +122,59 @@ namespace IdentityServer
 
             // sets the authentication schema.
             services.AddAuthentication(options =>
-                    {
-                        options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                        options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                    })
+            {
+                options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+            })
                     // Adds Fontys Single Sign On authentication.
                     .AddOpenIdConnect("FHICT", "Fontys", options =>
+                    {
+                        options.ClientId = Config.FfhictOIDC.ClientId;
+                        options.ClientSecret = Config.FfhictOIDC.ClientSecret;
+                        options.Authority = Config.FfhictOIDC.Authority;
+                        options.ResponseType = "code";
+                        options.Scope.Clear();
+
+                        string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
+                        foreach(string scope in scopes)
                         {
-                            options.ClientId = Config.FfhictOIDC.ClientId;
-                            options.ClientSecret = Config.FfhictOIDC.ClientSecret;
-                            options.Authority = Config.FfhictOIDC.Authority;
-                            options.ResponseType = "code";
-                            options.Scope.Clear();
-
-                            string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
-                            foreach(string scope in scopes)
-                            {
-                                options.Scope.Add(scope);
-                            }
-
-                            // Set this flow to get the refresh token.
-                            // options.Scope.Add("offline_access");
-
-                            options.SaveTokens = true;
-                            options.GetClaimsFromUserInfoEndpoint = true;
-
-                            // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
-                            options.Events.OnRedirectToIdentityProvider = async n =>
-                            {
-                                n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
-                                await Task.FromResult(0);
-                            };
+                            options.Scope.Add(scope);
                         }
-                        // Add jwt validation this is so that the DGS can authenticate.
+
+                        // Set this flow to get the refresh token.
+                        // options.Scope.Add("offline_access");
+
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
+
+                        // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
+                        options.Events.OnRedirectToIdentityProvider = async n =>
+                        {
+                            n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
+                            await Task.FromResult(0);
+                        };
+                    }
+                    // Add jwt validation this is so that the DGS can authenticate.
                     ).AddJwtBearer(o =>
                     {
                         o.SaveToken = true;
                         o.Authority = Config.Self.JwtAuthority;
                         o.RequireHttpsMetadata = false;
                         o.TokenValidationParameters = new TokenValidationParameters()
-                                                      {
-                                                          ValidateActor = false,
-                                                          ValidateAudience = false,
-                                                          NameClaimType = "name",
-                                                          RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-                                                      };
+                        {
+                            ValidateActor = false,
+                            ValidateAudience = false,
+                            NameClaimType = "name",
+                            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                        };
                     })
                     .AddCookie();
 
             if(Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
-            }
-            else
+            } else
             {
                 X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 certStore.Open(OpenFlags.ReadOnly);
