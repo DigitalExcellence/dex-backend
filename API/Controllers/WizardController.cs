@@ -91,6 +91,17 @@ namespace API.Controllers
             return Ok(project);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving projects from an external data source.
+        /// </summary>
+        /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
+        /// <param name="accessToken">The access token which is used for authentication.</param>
+        /// <returns>This method returns a collection of all the projects.</returns>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProjectsFromExternalDataSource([FromQuery] string dataSourceGuid, [FromQuery] string accessToken)
         {
             if(string.IsNullOrEmpty(dataSourceGuid))
@@ -119,6 +130,18 @@ namespace API.Controllers
             return Ok(projects);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a specified project from an external data source.
+        /// </summary>
+        /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
+        /// <param name="accessToken">The access token which is used for authentication.</param>
+        /// <param name="projectId">The id of the project which is used for searching a specific project.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
                                                                     [FromQuery] string accessToken,
                                                                     [FromQuery] int projectId)
