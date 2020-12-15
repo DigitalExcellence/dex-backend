@@ -25,33 +25,44 @@ namespace NotificationSystem.Services
         public EventingBasicConsumer CreateConsumer(INotificationService notificationService)
         {
             EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
+            SetCallBack(notificationService, consumer);
+            return consumer;
+        }
 
+        public EventingBasicConsumer SetCallBack(INotificationService notificationService, IBasicConsumer basicConsumer)
+        {
+            EventingBasicConsumer consumer = (EventingBasicConsumer) basicConsumer;
             consumer.Received += (sender, ea) =>
             {
-
-                byte[] body = ea.Body.ToArray();
-                string jsonBody = Encoding.UTF8.GetString(body);
-
-                try
-                {
-                    notificationService.ParsePayload(jsonBody);
-                    notificationService.ValidatePayload();
-                    notificationService.ExecuteTask();
-                    channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                } catch(Exception e)
-                {
-                    throw e;
-                }
+                CallBack(notificationService, ea);
             };
             return consumer;
+        }
+
+        public void CallBack(INotificationService notificationService, BasicDeliverEventArgs ea)
+        {
+            byte[] body = ea.Body.ToArray();
+            string jsonBody = Encoding.UTF8.GetString(body);
+
+            try
+            {
+                notificationService.ParsePayload(jsonBody);
+                notificationService.ValidatePayload();
+                notificationService.ExecuteTask();
+                channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                Console.WriteLine("Task executed");
+            } catch(Exception e)
+            {
+                Console.WriteLine("Task failed");
+                Console.WriteLine(e.Message);
+            }
         }
 
         public void StartConsumer(EventingBasicConsumer consumer, string subject)
         {
             channel.BasicConsume(queue: subject,
                 autoAck: false,
-                consumer: consumer);
-            Console.ReadLine();
+                consumer: consumer);            
         }
     }
 }

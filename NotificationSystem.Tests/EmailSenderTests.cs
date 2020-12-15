@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace NotificationSystem.Tests
 {
-    public class Tests
+    public class EmailSenderTests
     {
         [Test]
         public void ParsePayload_ValidBody_EmailNotification()
@@ -63,7 +63,7 @@ namespace NotificationSystem.Tests
         }
 
         [Test]
-        public void ExecuteTask_PayloadNotVerified_CallsSendEmailAsync()
+        public void ExecuteTask_PayloadNotParsed_CallsSendEmailAsync()
         {
             //arrange
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
@@ -81,10 +81,73 @@ namespace NotificationSystem.Tests
             EmailSender emailSender = new EmailSender(sendgridMock.Object, emailFromString);
 
             //act + assert
-            Assert.Throws<NullReferenceException>(() => emailSender.ExecuteTask());
-
-            
+            Assert.Throws<NullReferenceException>(() => emailSender.ExecuteTask());            
         }
+
+        [Test]
+        public void ValidatePayload_PayloadNotParsed_Exception()
+        {
+            string emailFromString = "test@gmail.com";
+            EmailSender emailSender = new EmailSender(null, emailFromString);
+
+            //act
+            Assert.Throws<NullReferenceException>(() => emailSender.ValidatePayload());
+
+        }
+
+
+        [Test]
+        public void ValidatePayload_NonEmptyValues_True()
+        {
+            EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string emailFromString = "test@gmail.com";
+            EmailSender emailSender = new EmailSender(null, emailFromString);
+
+            //act
+            emailSender.ParsePayload(payload);
+            bool result = emailSender.ValidatePayload();
+
+            //assert
+            Assert.AreEqual(true, result);
+
+        }
+
+        [Test]
+        public void ValidatePayload_EmptyRecipientEmail_False()
+        {
+            EmailNotification notification = new EmailNotification("", "plain text content");
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string emailFromString = "test@gmail.com";
+            EmailSender emailSender = new EmailSender(null, emailFromString);
+
+            //act
+            emailSender.ParsePayload(payload);
+            bool result = emailSender.ValidatePayload();
+
+            //assert
+            Assert.AreEqual(false, result);
+
+        }
+
+        [Test]
+        public void ValidatePayload_EmptyTextContent_False()
+        {
+            EmailNotification notification = new EmailNotification("test@gmail.com", "");
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string emailFromString = "test@gmail.com";
+            EmailSender emailSender = new EmailSender(null, emailFromString);
+
+            //act
+            emailSender.ParsePayload(payload);
+            bool result = emailSender.ValidatePayload();
+
+            //assert
+            Assert.AreEqual(false, result);
+
+        }
+
+
 
     }
 

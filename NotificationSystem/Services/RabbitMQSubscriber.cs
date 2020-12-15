@@ -13,10 +13,6 @@ namespace NotificationSystem.Services
     }
     public class RabbitMQSubscriber : IRabbitMQSubscriber
     {
-
-        private readonly string hostName;
-        private readonly string user;
-        private readonly string password;
         private IConnection connection;
 
 
@@ -25,19 +21,7 @@ namespace NotificationSystem.Services
             connection = connectionFactory.CreateConnection();
         }
 
-        private void ConnectToMessageBroker()
-        {
-            ConnectionFactory factory = new ConnectionFactory
-            {
-                UserName = user,
-                Password = password,
-                HostName = hostName
-            };
-            factory.AutomaticRecoveryEnabled = true;
-            connection = factory.CreateConnection();
-            Console.WriteLine("Connected with RabbitMQ");
-        }
-
+        
         public IModel SubscribeToSubject(string subject)
         {
             IModel channel = connection.CreateModel();

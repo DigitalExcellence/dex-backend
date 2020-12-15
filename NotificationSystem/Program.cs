@@ -34,6 +34,7 @@ namespace NotificationSystem
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
 
             listener.StartConsumer(consumer, "EMAIL");
+            Console.ReadLine();
         }
     }
 }

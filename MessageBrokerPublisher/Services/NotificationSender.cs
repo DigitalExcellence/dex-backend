@@ -56,6 +56,7 @@ namespace MessageBrokerPublisher
             IBasicProperties properties = channel.CreateBasicProperties();
             properties.Persistent = true;
             channel.BasicPublish(exchange: "", routingKey: subjectString, false, basicProperties: properties, body: body);
+            Console.WriteLine("Task published");
         }
     }
 }
