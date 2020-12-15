@@ -16,7 +16,6 @@
 */
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Models;
 using Models.Defaults;
 using Repositories.Base;
@@ -29,6 +28,7 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     public interface IProjectRepository : IRepository<Project>
     {
 
@@ -38,7 +38,7 @@ namespace Repositories
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
             bool? highlighted = null
-            );
+        );
 
         Task<int> CountAsync(bool? highlighted = null);
 
@@ -54,6 +54,7 @@ namespace Repositories
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -62,11 +63,176 @@ namespace Repositories
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// Redact user email from the Project if isPublic setting is set to false
+        /// This method finds the project async by project the specified id.
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
-        /// Project with possibly redacted email depending on setting
+        /// This method returns a project with the specified id with possibly redacted email.
+        /// </returns>
+        public override async Task<Project> FindAsync(int id)
+        {
+            Project project = await GetDbSet<Project>()
+                                    .Where(s => s.Id == id)
+                                    .Include(p => p.ProjectIcon)
+                                    .Include(p => p.CallToAction)
+                                    .SingleOrDefaultAsync();
+
+            if(project != null)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+            }
+
+            return RedactUser(project);
+        }
+
+        /// <summary>
+        /// This method gets all the projects in the database.
+        /// </summary>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns a list of projects filtered by the specified parameters.</returns>
+        public virtual async Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null
+        )
+        {
+            IQueryable<Project> queryableProjects = GetDbSet<Project>()
+                                                    .Include(u => u.User)
+                                                    .Include(p => p.ProjectIcon)
+                                                    .Include(p => p.CallToAction);
+            queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
+
+
+            foreach(Project project in queryableProjects)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .ToListAsync();
+                project.User = RedactUser(project.User);
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+            }
+            return await queryableProjects.ToListAsync();
+        }
+
+        /// <summary>
+        /// This method counts the amount of projects matching the filters.
+        /// </summary>
+        /// <param name="highlighted">The highlighted parameter represents whether to filter highlighted projects.</param>
+        /// <returns>This method returns the amount of projects matching the filters.</returns>
+        public virtual async Task<int> CountAsync(bool? highlighted = null)
+        {
+            return await ApplyFilters(DbSet, null, null, null, true, highlighted)
+                       .CountAsync();
+        }
+
+        /// <summary>
+        /// This method searches the database for projects matching the search query and parameters.
+        /// </summary>
+        /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns thee projects matching the search query and parameters.</returns>
+        public virtual async Task<IEnumerable<Project>> SearchAsync(
+            string query,
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null
+        )
+        {
+            List<Project> result =
+                await ApplyFilters(await GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted)
+                    .ToListAsync();
+            return result.Where(p => ProjectContainsQuery(p, query))
+                         .ToList();
+        }
+
+        /// <summary>
+        /// This method counts the amount of projects matching the filters and the search query.
+        /// </summary>
+        /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns the amount of projects matching the filters.</returns>
+        public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
+        {
+            return await ApplyFilters(await GetProjectQueryable(query), null, null, null, true, highlighted)
+                       .CountAsync();
+        }
+
+        /// <summary>
+        /// This method will retrieve a project with user and collaborators async. Project will be redacted if user
+        /// has that setting configured.
+        /// </summary>
+/// <param name="id">The unique identifier which is used for searching the correct project.</param>
+        /// <returns>
+        /// This method returns possibly redacted Project object with user and collaborators.
+        /// </returns>
+        public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        {
+            Project project = await GetDbSet<Project>()
+                                    .Include(p => p.User)
+                                    .Include(p => p.ProjectIcon)
+                                    .Include(p => p.CallToAction)
+                                    .Where(p => p.Id == id)
+                                    .FirstOrDefaultAsync();
+            if(project != null)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+            }
+
+            return RedactUser(project);
+        }
+
+        /// <summary>
+        /// This method updates the specified entity excluding the user object.
+        /// </summary>
+        /// <param name="entity">The entity parameter represents the updated project object.</param>
+        public override void Update(Project entity)
+        {
+            entity = UpdateUpdatedField(entity);
+
+            DbSet.Attach(entity);
+            if(entity.User != null)
+            {
+                DbContext.Entry(entity.User)
+                         .Property(x => x.Email)
+                         .IsModified = false;
+
+                DbContext.Entry(entity.User)
+                         .State = EntityState.Unchanged;
+            }
+
+            if(entity.ProjectIcon == null)
+            {
+                DbContext.Entry(entity)
+                         .Entity.ProjectIconId = null;
+            }
+
+            DbSet.Update(entity);
+        }
+
+        /// <summary>
+        /// This method redacts user email from the Project if isPublic setting is set to false.
+        /// </summary>
+        /// <param name="project">The project parameter represents the project object that will be used.</param>
+        /// <returns>
+        /// This method returns the project with possibly redacted email depending on setting.
         /// </returns>
         private Project RedactUser(Project project)
         {
@@ -80,12 +246,29 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Redact user email from the Projects in the list.
-        /// Email will only be redacted if isPublic setting is set to false.
+        /// This method redacts the user email from the User if isPublic setting is set to false.
         /// </summary>
-        /// <param name="projects">The projects.</param>
+        /// <param name="user">The user parameter represents the user object that will be used.</param>
         /// <returns>
-        /// List of Projects with possibly redacted email depending on setting
+        /// This method returns the user with possibly redacted email depending on setting.
+        /// </returns>
+        private User RedactUser(User user)
+        {
+            if(user == null) return null;
+            if(user.IsPublic == false)
+            {
+                user.Email = Defaults.Privacy.RedactedEmail;
+            }
+            return user;
+        }
+
+        /// <summary>
+        /// This method redacts the user email from the Projects in the list. The email will only be
+        /// redacted if isPublic setting is set to false.
+        /// </summary>
+        /// <param name="projects">The projects parameter represents the project objects that will be used.</param>
+        /// <returns>
+        /// This method returns a list of Projects with possibly redacted email depending on setting.
         /// </returns>
         private List<Project> RedactUser(List<Project> projects)
         {
@@ -97,34 +280,16 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Find the project async by project id
+        /// This method applies query parameters and find project based on these filters.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="queryable">The linq queryable parameter represents the IQueryable object.</param>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <returns>
-        /// Project with possibly redacted email
-        /// </returns>
-        public override async Task<Project> FindAsync(int id)
-        {
-            Project project = await GetDbSet<Project>()
-                   .Where(s => s.Id == id)
-                   .Include(p => p.Collaborators)
-                   .Include(p => p.CallToAction)
-                   .SingleOrDefaultAsync();
-
-            return RedactUser(project);
-        }
-
-        /// <summary>
-        /// Apply query parameters and find project based on these filters
-        /// </summary>
-        /// <param name="queryable">The linq queryable object.</param>
-        /// <param name="skip">The amount of objects to skip.</param>
-        /// <param name="take">The amount of objects to take.</param>
-        /// <param name="orderBy">The order by expression.</param>
-        /// <param name="orderByAsc">if set to <c>true</c> [order by asc].</param>
-        /// <param name="highlighted">Boolean if the project should show highlighted.</param>
-        /// <returns>
-        /// IQueryable Projects based on the given filters
+        /// This method returns a IQueryable Projects collection based on the given filters.
         /// </returns>
         private IQueryable<Project> ApplyFilters(
             IQueryable<Project> queryable,
@@ -133,7 +298,7 @@ namespace Repositories
             Expression<Func<Project, object>> orderBy,
             bool orderByAsc,
             bool? highlighted
-            )
+        )
         {
             if(highlighted.HasValue)
             {
@@ -165,166 +330,60 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Get the projects in the database
+        /// This method checks if any of the searchable fields of the project passed contains the provided query.
         /// </summary>
-        /// <param name="skip">The number of projects to skip</param>
-        /// <param name="take">The number of projects to return</param>
-        /// <param name="orderBy">The property to order the projects by</param>
-        /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
-        /// <param name="highlighted">Filter highlighted projects</param>
-        /// <returns>The projects filtered by the parameters</returns>
-        public virtual async Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
-            int? skip = null,
-            int? take = null,
-            Expression<Func<Project, object>> orderBy = null,
-            bool orderByAsc = true,
-            bool? highlighted = null
-            )
-        {
-            IQueryable<Project> queryable = DbSet
-                                            .Include(p => p.User)
-                                            .Include(p => p.ProjectIcon)
-                                            .Include(p => p.CallToAction)
-                                            .Include(p => p.Collaborators);
-
-            queryable = ApplyFilters(queryable, skip, take, orderBy, orderByAsc, highlighted);
-
-            List<Project> projects = await queryable.ToListAsync();
-            return RedactUser(projects);
-        }
-
-        /// <summary>
-        /// Count the amount of projects matching the filters
-        /// </summary>
-        /// <param name="highlighted">The highlighted filter</param>
-        /// <returns>The amount of projects matching the filters</returns>
-        public virtual async Task<int> CountAsync(bool? highlighted = null)
-        {
-            return await ApplyFilters(DbSet, null, null, null, true, highlighted).CountAsync();
-        }
-
-        /// <summary>
-        ///     Search the database for projects matching the search query and parameters
-        /// </summary>
-        /// <param name="query">The search query</param>
-        /// <param name="skip">The number of projects to skip</param>
-        /// <param name="take">The number of projects to return</param>
-        /// <param name="orderBy">The property to order the projects by</param>
-        /// <param name="orderByAsc">The order direction (True: asc, False: desc)</param>
-        /// <param name="highlighted">Filter highlighted projects</param>
-        /// <returns>The projects matching the search query and parameters</returns>
-        public virtual async Task<IEnumerable<Project>> SearchAsync(
-            string query,
-            int? skip = null,
-            int? take = null,
-            Expression<Func<Project, object>> orderBy = null,
-            bool orderByAsc = true,
-            bool? highlighted = null
-        )
-        {
-            List<Project> result = await ApplyFilters(GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted).ToListAsync();
-            return result.Where(p => ProjectContainsQuery(p, query)).ToList();
-        }
-
-        /// <summary>
-        /// Count the amount of projects matching the filters and the search query
-        /// </summary>
-        /// <param name="query">The search query</param>
-        /// <param name="highlighted">The highlighted filter</param>
-        /// <returns>The amount of projects matching the filters</returns>
-        public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
-        {
-            return await ApplyFilters(GetProjectQueryable(query), null, null, null, true, highlighted).CountAsync();
-        }
-
-        /// <summary>
-        /// Retrieve project with user and collaborators async.
-        /// Project will be redacted if user has that setting configured.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="project">The project parameter represents a Project to search in.</param>
+        /// <param name="query">The query parameter represents the query to search in the project's searchable fields.</param>
         /// <returns>
-        /// Possibly redacted Project object with user and collaborators
+        /// This method returns a boolean representing whether or not the passed query was found in the
+        /// searchable fields of the provided project.
         /// </returns>
-        public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
-        {
-            Project project = await GetDbSet<Project>()
-                   .Include(p => p.User)
-                   .Include(p => p.Collaborators)
-                   .Include(p => p.ProjectIcon)
-                   .Include(p => p.CallToAction)
-                   .Where(p => p.Id == id)
-                   .FirstOrDefaultAsync();
-
-            return RedactUser(project);
-        }
-
-        /// <summary>
-        /// Updates the specified entity excluding the user object.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        public override void Update(Project entity)
-        {
-            entity = UpdateUpdatedField(entity);
-
-            DbSet.Attach(entity);
-            if(entity.User != null)
-            {
-                DbContext.Entry(entity.User)
-                         .Property(x => x.Email)
-                         .IsModified = false;
-
-                DbContext.Entry(entity.User)
-                         .State = EntityState.Unchanged;
-            }
-
-            if(entity.ProjectIcon == null)
-            {
-                DbContext.Entry(entity)
-                         .Entity.ProjectIconId = null;
-            }
-
-            DbSet.Update(entity);
-        }
-
-        /// <summary>
-        /// Checks if any of the searchable fields of the project passed contains the provided query.
-        /// </summary>
-        /// <param name="project">A Project to search in</param>
-        /// <param name="query">The query to search in the project's searchable fields.</param>
-        /// <returns>A boolean representing whether or not the passed query was found in the searchable fields of the provided project.</returns>
         private static bool ProjectContainsQuery(Project project, string query)
         {
             Regex regex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            return new List<string>()
-            {
-                project.Name,
-                project.Description,
-                project.ShortDescription,
-                project.Uri,
-                project.User.Name,
-                project.Id.ToString()
-            }
-            .Any(text => regex.IsMatch(text));
+            return new List<string>
+                   {
+                       project.Name,
+                       project.Description,
+                       project.ShortDescription,
+                       project.Uri,
+                       project.User.Name,
+                       project.Id.ToString()
+                   }
+                .Any(text => regex.IsMatch(text));
         }
 
         /// <summary>
-        /// Get the project queryable which contains the provided query.
+        /// This method gets the project queryable which contains the provided query.
         /// </summary>
-        /// <param name="query">A string to search in the project's fields.</param>
-        /// <returns>The filtered IQueryable including the project user.</returns>
-        private IQueryable<Project> GetProjectQueryable(string query)
+        /// <param name="query">The query parameter is a string to search in the project's fields.</param>
+        /// <returns>This method returns the filtered IQueryable including the project user.</returns>
+        private async Task<IQueryable<Project>> GetProjectQueryable(string query)
         {
-            return DbSet
-                    .Include(p => p.User)
-                    .Include(i => i.ProjectIcon)
-                    .Include(p => p.CallToAction)
-                    .Where(p =>
-                            p.Name.Contains(query) ||
-                            p.Description.Contains(query) ||
-                            p.ShortDescription.Contains(query) ||
-                            p.Uri.Contains(query) ||
-                            p.Id.ToString().Equals(query) ||
-                            p.User.Name.Contains(query));
+            IQueryable<Project> projectsToReturn = DbSet
+                   .Include(p => p.User)
+                   .Include(i => i.ProjectIcon)
+                   .Include(p => p.CallToAction)
+                   .Include(l => l.Likes)
+                   .Where(p =>
+                              p.Name.Contains(query) ||
+                              p.Description.Contains(query) ||
+                              p.ShortDescription.Contains(query) ||
+                              p.Uri.Contains(query) ||
+                              p.Id.ToString()
+                               .Equals(query) ||
+                              p.User.Name.Contains(query));
+
+            foreach(Project project in projectsToReturn)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+            }
+            return projectsToReturn;
         }
+
     }
+
 }

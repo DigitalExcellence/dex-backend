@@ -37,6 +37,7 @@ namespace Data
         /// The user.
         /// </value>
         public DbSet<User> User { get; set; }
+        
         /// <summary>
         /// Gets or sets the Call to Action.
         /// </summary>
@@ -44,6 +45,7 @@ namespace Data
         /// The call to action.
         /// </value>
         public DbSet<CallToAction> CallToAction { get; set; }
+        
         /// <summary>
         /// Gets or sets the project.
         /// </summary>
@@ -59,6 +61,7 @@ namespace Data
         /// The call to action options.
         /// </value>
         public DbSet<Project> Project { get; set; }
+        
         /// <summary>
         /// Gets or sets the collaborators.
         /// </summary>
@@ -66,6 +69,7 @@ namespace Data
         /// The collaborators.
         /// </value>
         public DbSet<Collaborator> Collaborators { get; set; }
+        
         /// <summary>
         /// Gets or sets the highlight.
         /// </summary>
@@ -73,6 +77,7 @@ namespace Data
         /// The highlight.
         /// </value>
         public DbSet<Highlight> Highlight { get; set; }
+        
         /// <summary>
         /// Gets or sets the embedded project.
         /// </summary>
@@ -80,6 +85,7 @@ namespace Data
         /// The embedded project.
         /// </value>
         public DbSet<EmbeddedProject> EmbeddedProject { get; set; }
+        
         /// <summary>
         /// Gets or sets the role.
         /// </summary>
@@ -87,6 +93,7 @@ namespace Data
         /// The role.
         /// </value>
         public DbSet<Role> Role { get; set; }
+        
         /// <summary>
         /// Gets or sets the institution.
         /// </summary>
@@ -94,15 +101,37 @@ namespace Data
         /// The institution.
         /// </value>
         public DbSet<Institution> Institution { get; set; }
+
         /// <summary>
-        /// Gets or sets the file.
+        /// Gets or sets the projects liked by users.
         /// </summary>
         /// <value>
-        /// The file.
+        /// The like by the user.
+        /// </value>
+        public DbSet<ProjectLike> ProjectLike { get; set; }
+
+        /// <summary>
+        /// Gets or sets the call to action option.
+        /// </summary>
+        /// <value>
+        /// The call to action option.
         /// </value>
         public DbSet<CallToActionOption> CallToActionOption { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user follwoing the project.
+        /// </summary>
+        /// <value>
+        /// The user following the project.
+        /// </value>
         public DbSet<UserProject> UserProject { get; set; }
+
+        /// <summary>
+        /// Gets or sets user following the user.
+        /// </summary>
+        /// <value>
+        /// The user following the user.
+        /// </value>
         public DbSet<UserUser> UserUser { get; set; }
 
         /// <summary>
@@ -116,8 +145,6 @@ namespace Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            //modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         }
