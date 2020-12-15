@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NotificationSystem.Configuration;
 using NotificationSystem.Contracts;
 using NotificationSystem.Notifications;
@@ -12,36 +13,40 @@ namespace NotificationSystem.Services
 {
     public class EmailSender : INotificationService
     {
-        private readonly SendGridClient client;
+        private readonly ISendGridClient client;
         private readonly EmailAddress from;
+        private EmailNotification notification;
 
-        public EmailSender(Config config)
+        public EmailNotification Notification { get => notification; set => notification = value; }
+
+        public EmailSender(ISendGridClient sendGridClient,  string emailFrom)
         {
-            client = new SendGridClient(config.SendGrid.ApiKey);
-            from = new EmailAddress(config.SendGrid.EmailFrom);
+            client = sendGridClient;
+            from = new EmailAddress(emailFrom);
         }
 
-
-        public void SendNotification(INotification notification)
+        public void ParsePayload(string jsonBody)
         {
-            EmailNotification emailNotification = (EmailNotification) notification;
-
-            if (ValidateNotification(emailNotification))
-            {
-                Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Wait();
-            }
+            notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
         }
 
-        public bool ValidateNotification(INotification notification)
+        public void ExecuteTask()
         {
-            EmailNotification emailNotification = (EmailNotification) notification;
+            EmailNotification emailNotification = notification;
+            Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Wait();
 
-            if (string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
+        }
+
+        public bool ValidatePayload()
+        {
+            EmailNotification emailNotification = notification;
+
+            if(string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
             {
                 return false;
             }
 
-            if (string.IsNullOrEmpty(emailNotification.TextContent))
+            if(string.IsNullOrEmpty(emailNotification.TextContent))
             {
                 return false;
             }

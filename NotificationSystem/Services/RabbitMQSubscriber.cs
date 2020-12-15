@@ -20,12 +20,9 @@ namespace NotificationSystem.Services
         private IConnection connection;
 
 
-        public RabbitMQSubscriber(string hostName, string user, string password)
+        public RabbitMQSubscriber(IRabbitMQConnectionFactory connectionFactory)
         {
-            this.hostName = hostName;
-            this.user = user;
-            this.password = password;
-            ConnectToMessageBroker();
+            connection = connectionFactory.CreateConnection();
         }
 
         private void ConnectToMessageBroker()

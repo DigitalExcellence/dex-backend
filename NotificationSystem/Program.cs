@@ -4,6 +4,7 @@ using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using SendGrid;
 using System;
 
 namespace NotificationSystem
@@ -20,13 +21,16 @@ namespace NotificationSystem
                 .Build();
             Config config = configuration.GetSection("App").Get<Config>();
 
-            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password);
+            IRabbitMQConnectionFactory connectionFactory = new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password);
+
+            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(connectionFactory);
             IModel channel = subscriber.SubscribeToSubject("EMAIL");
 
             RabbitMQListener listener = new RabbitMQListener(channel);
 
             // inject your notification service here
-            INotificationService notificationService = new EmailSender(config);
+            ISendGridClient sendGridClient = new SendGridClient(config.SendGrid.ApiKey);
+            INotificationService notificationService = new EmailSender(sendGridClient, config.SendGrid.EmailFrom);
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
 
             listener.StartConsumer(consumer, "EMAIL");
