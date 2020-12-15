@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public interface IDataProviderService
+    public interface IDataProviderAdapter
     {
 
         Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken);
@@ -42,20 +42,20 @@ namespace Services.DataProviders
     /// The data provider service which communicates with the correct data source. This service
     /// acts as the adapter in the adapter pattern.
     /// </summary>
-    /// <seealso cref="IDataProviderService" />
-    public class DataProviderService : IDataProviderService
+    /// <seealso cref="IDataProviderAdapter" />
+    public class DataProviderAdapter : IDataProviderAdapter
     {
         private readonly IDataProviderLoader dataProviderLoader;
 
-        public DataProviderService(IDataProviderLoader dataProviderLoader)
+        public DataProviderAdapter(IDataProviderLoader dataProviderLoader)
         {
             this.dataProviderLoader = dataProviderLoader;
         }
 
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken)
         {
-            IDataSource dataSource = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
-            IEnumerable<Project> projects = await dataSource.GetAllProjects(accessToken);
+            IDataSourceAdaptee dataSourceAdaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
+            IEnumerable<Project> projects = await dataSourceAdaptee.GetAllProjects(accessToken);
             return projects;
         }
 
@@ -78,7 +78,7 @@ namespace Services.DataProviders
 
         public async Task<OauthTokens> GetTokens(string code, string guid)
         {
-            IDataSource dataProvider = dataProviderLoader.GetDataSourceByGuid(guid);
+            IDataSourceAdaptee dataProvider = dataProviderLoader.GetDataSourceByGuid(guid);
             OauthTokens tokens = await dataProvider.GetTokens(code);
             return tokens;
         }

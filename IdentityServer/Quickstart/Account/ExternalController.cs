@@ -29,9 +29,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models;
-using Models.DataProviders;
 using Newtonsoft.Json;
 using RestSharp;
+using Services.DataProviders;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace IdentityServer
         private readonly ILogger<ExternalController> logger;
         private readonly Config config;
         private readonly IIdentityUserService identityUserService;
-        private readonly IDataProviderService dataProviderService;
+        private readonly IDataProviderAdapter dataProviderAdapter;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -62,7 +62,7 @@ namespace IdentityServer
             ILogger<ExternalController> logger,
             Config config,
             IIdentityUserService identityUserService,
-            IDataProviderService dataProviderService)
+            IDataProviderAdapter dataProviderAdapter)
         {
             this.identityUserService = identityUserService;
             this.interaction = interaction;
@@ -70,7 +70,7 @@ namespace IdentityServer
             this.logger = logger;
             this.events = events;
             this.config = config;
-            this.dataProviderService = dataProviderService;
+            this.dataProviderAdapter = dataProviderAdapter;
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace IdentityServer
         {
             HttpContext.Response.Cookies.Append("redirectUrl", redirectUrl);
 
-            string oauthUrl = dataProviderService.GetOauthUrl(guid);
+            string oauthUrl = dataProviderAdapter.GetOauthUrl(guid);
             return Redirect(oauthUrl);
         }
 
@@ -334,7 +334,7 @@ namespace IdentityServer
         /// <returns>This method returns the correct tokens.</returns>
         public async Task<IActionResult> RetrieveTokens(string code, string state)
         {
-            OauthTokens tokens = await dataProviderService.GetTokens(code, state);
+            OauthTokens tokens = await dataProviderAdapter.GetTokens(code, state);
 
             HttpContext.Response.Headers.Add("OauthTokens", JsonConvert.SerializeObject(tokens));
 

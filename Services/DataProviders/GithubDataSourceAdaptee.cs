@@ -27,14 +27,14 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public class GithubDataSource : IDataSource
+    public class GithubDataSourceAdaptee : IDataSourceAdaptee
     {
 
         private readonly string clientSecret;
         private readonly string clientId;
         private readonly string baseUrl = "https://api.github.com/";
 
-        public GithubDataSource(IConfiguration configuration)
+        public GithubDataSourceAdaptee(IConfiguration configuration)
         {
             clientId = configuration.GetSection($"{Name}ClientId")
                                     .Value;

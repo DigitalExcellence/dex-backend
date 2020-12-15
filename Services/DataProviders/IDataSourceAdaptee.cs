@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public interface IDataSource
+    public interface IDataSourceAdaptee
     {
         string Guid { get; }
 

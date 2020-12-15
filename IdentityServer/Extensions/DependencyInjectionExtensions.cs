@@ -1,8 +1,8 @@
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Models.DataProviders;
 using Repositories;
+using Services.DataProviders;
 using Services.Services;
 
 namespace IdentityServer
@@ -17,7 +17,7 @@ namespace IdentityServer
             services.AddScoped<IIdentityUserService, IdentityUserService>();
             services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();
 
-            services.AddScoped<IDataProviderService, DataProviderService>();
+            services.AddScoped<IDataProviderAdapter, DataProviderAdapter>();
             services.AddScoped<IDataProviderLoader, DataProviderLoader>();
 
             return services;

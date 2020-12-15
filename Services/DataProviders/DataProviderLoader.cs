@@ -28,9 +28,9 @@ namespace Services.DataProviders
     public interface IDataProviderLoader
     {
 
-        IEnumerable<IDataSource> GetAllDataSources();
+        IEnumerable<IDataSourceAdaptee> GetAllDataSources();
 
-        IDataSource GetDataSourceByGuid(string guid);
+        IDataSourceAdaptee GetDataSourceByGuid(string guid);
 
     }
 
@@ -43,9 +43,9 @@ namespace Services.DataProviders
             this.serviceScopeFactory = serviceScopeFactory;
         }
 
-        public IEnumerable<IDataSource> GetAllDataSources()
+        public IEnumerable<IDataSourceAdaptee> GetAllDataSources()
         {
-            List<IDataSource> dataSources = new List<IDataSource>();
+            List<IDataSourceAdaptee> dataSources = new List<IDataSourceAdaptee>();
             using IServiceScope scope = serviceScopeFactory.CreateScope();
             foreach(string dll in Directory.GetFiles(Assembly.GetEntryAssembly()
                                                              ?.Location, "*.dll"))
@@ -53,16 +53,16 @@ namespace Services.DataProviders
                 Assembly assembly = Assembly.LoadFrom(dll);
                 foreach(Type type in assembly.GetTypes())
                 {
-                    if(type.GetInterface("IDataSource") != typeof(IDataSource)) continue;
-                    IDataSource dataSource = scope.ServiceProvider.GetService(type) as IDataSource;
-                    dataSources.Add(dataSource);
+                    if(type.GetInterface("IDataSourceAdaptee") != typeof(IDataSourceAdaptee)) continue;
+                    IDataSourceAdaptee dataSourceAdaptee = scope.ServiceProvider.GetService(type) as IDataSourceAdaptee;
+                    dataSources.Add(dataSourceAdaptee);
                 }
             }
 
             return dataSources;
         }
 
-        public IDataSource GetDataSourceByGuid(string guid)
+        public IDataSourceAdaptee GetDataSourceByGuid(string guid)
         {
             return GetAllDataSources()
                 .SingleOrDefault(d => d.Guid == guid);

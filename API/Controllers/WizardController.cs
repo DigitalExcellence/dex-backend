@@ -18,7 +18,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.DataProviders;
+using Services.DataProviders;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -36,16 +36,16 @@ namespace API.Controllers
     public class WizardController : ControllerBase
     {
         private readonly ISourceManagerService sourceManagerService;
-        private readonly IDataProviderService dataProviderService;
+        private readonly IDataProviderAdapter dataProviderAdapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
         /// <param name="sourceManagerService">The source manager service which is used to communicate with the logic layer.</param>
-        public WizardController(ISourceManagerService sourceManagerService, IDataProviderService dataProviderService)
+        public WizardController(ISourceManagerService sourceManagerService, IDataProviderAdapter dataProviderAdapter)
         {
             this.sourceManagerService = sourceManagerService;
-            this.dataProviderService = dataProviderService;
+            this.dataProviderAdapter = dataProviderAdapter;
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
+            if(dataProviderAdapter.IsExistingDataSourceGuid(dataSourceGuid))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -126,7 +126,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IEnumerable<Project> projects = await dataProviderService.GetAllProjects(dataSourceGuid, accessToken);
+            IEnumerable<Project> projects = await dataProviderAdapter.GetAllProjects(dataSourceGuid, accessToken);
             return Ok(projects);
         }
 
@@ -157,7 +157,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
+            if(dataProviderAdapter.IsExistingDataSourceGuid(dataSourceGuid))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -168,7 +168,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            Project project = await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectId);
+            Project project = await dataProviderAdapter.GetProjectByGuid(dataSourceGuid, accessToken, projectId);
 
             if(project == null)
             {
