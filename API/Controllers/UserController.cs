@@ -520,7 +520,7 @@ namespace API.Controllers
             userService.Update(user);
             userService.Save();
 
-            return Ok();
+            return Ok(mapper.Map<User, UserResourceResult> (user));
         }
     }
 }
