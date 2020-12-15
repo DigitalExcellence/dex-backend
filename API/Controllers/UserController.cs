@@ -26,6 +26,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -486,6 +487,39 @@ namespace API.Controllers
             userUserService.Remove(userToUnfollow);
 
             userUserService.Save();
+            return Ok();
+        }
+
+
+        /// <summary>
+        /// This method changes the expected graduation date for the user.
+        /// </summary>
+        /// <param name="userResource"></param>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The account has changed the graduation date.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user is not found.</response>
+        [HttpPut("graduationdate")]
+        [Authorize]
+        public async Task<IActionResult> SetUserGraduationDate([FromBody] UserResource userResource)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "DB0A5629-4A79-48BB-870E-C02FE7C1A768"
+                };
+                return NotFound(problem);
+            }
+
+            user.ExpectedGraduationDate = userResource.ExpectedGraduationDateTime;
+
+            userService.Update(user);
+            userService.Save();
+
             return Ok();
         }
     }
