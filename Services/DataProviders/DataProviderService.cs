@@ -1,10 +1,48 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+* 
+* This program is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU Lesser General Public License as published 
+* by the Free Software Foundation version 3 of the License.
+* 
+* This program is distributed in the hope that it will be useful, 
+* but WITHOUT ANY WARRANTY; without even the implied warranty 
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+* See the GNU Lesser General Public License for more details.
+* 
+* You can find a copy of the GNU Lesser General Public License 
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
+using Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Models.DataProviders
+namespace Services.DataProviders
 {
 
+    public interface IDataProviderService
+    {
+
+        Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken);
+
+        Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id);
+
+        bool IsExistingDataSourceGuid(string dataSourceGuid);
+
+        string GetOauthUrl(string guid);
+
+        Task<OauthTokens> GetTokens(string code, string guid);
+
+    }
+
+    /// <summary>
+    /// The data provider service which communicates with the correct data source. This service
+    /// acts as the adapter in the adapter pattern.
+    /// </summary>
+    /// <seealso cref="IDataProviderService" />
     public class DataProviderService : IDataProviderService
     {
         private readonly IDataProviderLoader dataProviderLoader;
