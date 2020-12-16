@@ -26,7 +26,7 @@ namespace Services.DataProviders
     public interface IPublicDataSourceAdaptee : IDataSourceAdaptee
     {
 
-        public Task<IEnumerable<Project>> GetAllPublicProjects { get; set; }
+        public Task<IEnumerable<Project>> GetAllPublicProjects();
 
         public Project GetProjectFromUri(Uri sourceUri);
 

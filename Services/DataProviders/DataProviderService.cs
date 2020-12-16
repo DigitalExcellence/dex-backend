@@ -52,12 +52,13 @@ namespace Services.DataProviders
             this.dataProviderLoader = dataProviderLoader;
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken)
+        public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken = null)
         {
             IDataSourceAdaptee dataSourceAdaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
-            if(dataSourceAdaptee == null) return null;
-            IEnumerable<Project> projects = await dataSourceAdaptee.GetAllProjects(accessToken);
-            return projects;
+            if(string.IsNullOrEmpty(accessToken))
+                return await GetAllProjectsWithoutAccessToken(dataSourceAdaptee);
+
+            return await GetAllProjectWithAccessToken(accessToken, dataSourceAdaptee);
         }
 
         public async Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id)
@@ -82,6 +83,24 @@ namespace Services.DataProviders
             IDataSourceAdaptee dataProvider = dataProviderLoader.GetDataSourceByGuid(guid);
             OauthTokens tokens = await dataProvider.GetTokens(code);
             return tokens;
+        }
+
+        private async Task<IEnumerable<Project>> GetAllProjectWithAccessToken(string accessToken, IDataSourceAdaptee dataSourceAdaptee)
+        {
+            // Access token specified, this indicated that the data source implements the Oauth flow.
+            IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee = dataSourceAdaptee as IAuthorizedDataSourceAdaptee;
+            if(authorizedDataSourceAdaptee == null) return null;
+            IEnumerable<Project> projects = await authorizedDataSourceAdaptee.GetAllProjects(accessToken);
+            return projects;
+        }
+
+        private async Task<IEnumerable<Project>> GetAllProjectsWithoutAccessToken(IDataSourceAdaptee dataSourceAdaptee)
+        {
+            // No access token specified, this means the data source should NOT require authentication.
+            IPublicDataSourceAdaptee publicDataSourceAdaptee = dataSourceAdaptee as IPublicDataSourceAdaptee;
+            if(publicDataSourceAdaptee == null) return null;
+            IEnumerable<Project> projects = await publicDataSourceAdaptee.GetAllPublicProjects();
+            return projects;
         }
 
     }
