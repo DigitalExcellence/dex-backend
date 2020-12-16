@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Services.DataProviders.Resources
 {
     /// <summary>
-    /// Viewmodel for the project github datasource.
+    /// Viewmodel for the project github data source.
     /// </summary>
     public class GithubDataSourceResourceResult
     {

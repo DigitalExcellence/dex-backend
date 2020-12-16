@@ -55,6 +55,7 @@ namespace Services.DataProviders
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken)
         {
             IDataSourceAdaptee dataSourceAdaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
+            if(dataSourceAdaptee == null) return null;
             IEnumerable<Project> projects = await dataSourceAdaptee.GetAllProjects(accessToken);
             return projects;
         }
