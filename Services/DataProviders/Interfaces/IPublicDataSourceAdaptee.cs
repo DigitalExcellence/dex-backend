@@ -16,22 +16,19 @@
 */
 
 using Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.DataProviders
 {
 
-    public interface IDataSourceAdaptee
+    public interface IPublicDataSourceAdaptee : IDataSourceAdaptee
     {
-        string Guid { get; }
 
-        string Name { get; }
-        string OauthUrl { get; }
+        public Task<IEnumerable<Project>> GetAllPublicProjects { get; set; }
 
-        Task<OauthTokens> GetTokens(string code);
-
-        Task<IEnumerable<Project>> GetAllProjects(string accessToken);
+        public Project GetProjectFromUri(Uri sourceUri);
 
     }
 

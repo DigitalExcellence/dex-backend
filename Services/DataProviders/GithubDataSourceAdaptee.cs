@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public class GithubDataSourceAdaptee
+    public class GithubDataSourceAdaptee : IDataSourceAdaptee
     {
         /// <summary>
         /// A factory that will generate a rest client to make API requests.
