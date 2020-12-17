@@ -28,7 +28,7 @@ namespace Services.DataProviders
 
         public Task<IEnumerable<Project>> GetAllPublicProjects();
 
-        public Project GetProjectFromUri(Uri sourceUri);
+        public Task<Project> GetPublicProjectFromUri(Uri sourceUri);
 
     }
 

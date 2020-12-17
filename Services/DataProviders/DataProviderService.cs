@@ -74,15 +74,17 @@ namespace Services.DataProviders
 
         public string GetOauthUrl(string guid)
         {
-            return dataProviderLoader.GetDataSourceByGuid(guid)
-                                     .OauthUrl;
+            IAuthorizedDataSourceAdaptee authorizedDataSource =
+                dataProviderLoader.GetDataSourceByGuid(guid) as IAuthorizedDataSourceAdaptee;
+            return authorizedDataSource?.OauthUrl;
         }
 
         public async Task<OauthTokens> GetTokens(string code, string guid)
         {
-            IDataSourceAdaptee dataProvider = dataProviderLoader.GetDataSourceByGuid(guid);
-            OauthTokens tokens = await dataProvider.GetTokens(code);
-            return tokens;
+            IAuthorizedDataSourceAdaptee dataProvider =
+                dataProviderLoader.GetDataSourceByGuid(guid) as IAuthorizedDataSourceAdaptee;
+            if(dataProvider == null) return null;
+            return await dataProvider.GetTokens(code);
         }
 
         private async Task<IEnumerable<Project>> GetAllProjectWithAccessToken(string accessToken, IDataSourceAdaptee dataSourceAdaptee)
