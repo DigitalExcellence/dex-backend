@@ -70,6 +70,7 @@ namespace Configuration
             Validator.ValidateObject(Api, new ValidationContext(Api), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
             Validator.ValidateObject(FfhictOIDC, new ValidationContext(FfhictOIDC), true);
+            Validator.ValidateObject(JobScheduler, new ValidationContext(JobScheduler), true);
         }
 
         /// <summary>

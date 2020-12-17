@@ -126,6 +126,9 @@ namespace Models.Defaults
             [Description("This scope gives write access to the Call To Action option namespace")]
             public const string CallToActionOptionWrite = "callToAction:write";
 
+            [Description("This scope gives write access to the user task namescape.")]
+            public const string UserTaskWrite = "userTask:write";
+
         }
 
     }

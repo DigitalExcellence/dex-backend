@@ -55,7 +55,8 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.HighlightRead)),
                         new Scope(nameof(Defaults.Scopes.EmbedWrite)),
                         new Scope(nameof(Defaults.Scopes.EmbedRead)),
-                        new Scope(nameof(Defaults.Scopes.FileWrite))
+                        new Scope(nameof(Defaults.Scopes.FileWrite)),
+                        new Scope(nameof(Defaults.Scopes.UserTaskWrite))
                     }
                 }
             };
@@ -83,7 +84,8 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.HighlightWrite),
                                nameof(Defaults.Scopes.EmbedWrite),
                                nameof(Defaults.Scopes.EmbedRead),
-                               nameof(Defaults.Scopes.FileWrite)
+                               nameof(Defaults.Scopes.FileWrite),
+                               nameof(Defaults.Scopes.UserTaskWrite)
                            },
                            Claims = new List<Claim>
                                     {
@@ -158,12 +160,11 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.ClientCredentials,
                            ClientSecrets =
                            {
-                               // new Secret(config.JobScheduler.ClientSecret.Sha256())
                                new Secret("dex-jobscheduler".Sha256())
                            },
-                           AllowedScopes = new List<string>
+                           AllowedScopes =
                            {
-                               "dex-api"
+                                "dex-api"
                            },
                            Claims = new List<Claim>
                                     {

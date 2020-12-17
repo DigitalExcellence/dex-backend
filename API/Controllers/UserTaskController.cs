@@ -15,25 +15,21 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using AngleSharp;
 using API.Configuration;
 using API.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.Hosting;
 using Models;
+using Models.Defaults;
 using RestSharp;
-using RestSharp.Authenticators;
-using Serilog;
 using Services.Services;
 using System.Linq;
 using System.Net;
 
 namespace API.Controllers
 {
-
-    
 
     /// <summary>
     /// This class is responsible for handling HTTP requests that are related
@@ -88,7 +84,7 @@ namespace API.Controllers
         /// <returns> All user tasks which are created or open for graduation users. </returns>
         /// <response code="200">This status code is returned when the user tasks were found successfully.</response>
         /// <response code="404">This status code is returned when no user was found.</response>
-        [HttpGet()]
+        [HttpGet]
         [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetUserTasksForCurrentUser()
         {
@@ -118,6 +114,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
         /// <response code="503">The 503 Service unavailable status code is returned if the identity server cannot execute the request.</response>
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(typeof(User), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), 503)]
