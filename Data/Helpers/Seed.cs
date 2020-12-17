@@ -72,6 +72,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                 }
             };
             roles.Add(prRole);
@@ -85,6 +86,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                 }
            };
             roles.Add(dataOfficerRole);
@@ -94,7 +96,7 @@ namespace Data.Helpers
                 Name = nameof(Defaults.Roles.Administrator),
                 Scopes = new List<RoleScope>
                 {
-                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.AdminProjectWrite)),
                     new RoleScope(nameof(Defaults.Scopes.UserWrite)),
                     new RoleScope(nameof(Defaults.Scopes.UserRead)),
                     new RoleScope(nameof(Defaults.Scopes.RoleRead)),
@@ -106,7 +108,8 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.InstitutionRead)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionWrite)),
                     new RoleScope(nameof(Defaults.Scopes.FileWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite))
+                    new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                 }
             };
             roles.Add(administratorRole);

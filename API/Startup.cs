@@ -121,6 +121,9 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.AdminProjectWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.AdminProjectWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
@@ -159,6 +162,8 @@ namespace API
 
                 o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
             });
 
             services.AddCors();

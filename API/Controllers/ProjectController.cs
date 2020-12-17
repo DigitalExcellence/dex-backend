@@ -219,7 +219,7 @@ namespace API.Controllers
         ///     resource is not specified or failed to save project to the database.
         /// </response>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
@@ -323,7 +323,7 @@ namespace API.Controllers
 
             User user = await HttpContext.GetContextUser(userService)
                                          .ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.AdminProjectWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
             {
@@ -429,7 +429,7 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService)
                                          .ConfigureAwait(false);
             bool isAllowed = await authorizationHelper.UserIsAllowed(user,
-                                                                     nameof(Defaults.Scopes.ProjectWrite),
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
                                                                      nameof(Defaults.Scopes.InstitutionProjectWrite),
                                                                      project.UserId);
 

@@ -68,7 +68,7 @@ namespace Services.Tests
             List<string> currentScopes = new List<string>()
             {
                 "ProjectRead",
-                "ProjectWrite",
+                "AdminProjectWrite",
                 "UserRead",
                 "UserWrite",
                 "HighlightRead",
@@ -99,7 +99,7 @@ namespace Services.Tests
             List<string> currentScopes = new List<string>()
                                          {
                                              "ProjectRead",
-                                             "ProjectWrite",
+                                             "AdminProjectWrite",
                                              "UserRead",
                                              "UserWrite",
                                              "HighlightRead",

@@ -48,6 +48,7 @@ namespace IdentityServer.Configuration
                     Scopes =
                     {
                         new Scope(nameof(Defaults.Scopes.ProjectRead)),
+                        new Scope(nameof(Defaults.Scopes.AdminProjectWrite)),
                         new Scope(nameof(Defaults.Scopes.ProjectWrite)),
                         new Scope(nameof(Defaults.Scopes.UserWrite)),
                         new Scope(nameof(Defaults.Scopes.UserRead)),
@@ -77,6 +78,7 @@ namespace IdentityServer.Configuration
                            AllowedScopes =
                            {
                                nameof(Defaults.Scopes.ProjectRead),
+                               nameof(Defaults.Scopes.AdminProjectWrite),
                                nameof(Defaults.Scopes.ProjectWrite),
                                nameof(Defaults.Scopes.UserWrite),
                                nameof(Defaults.Scopes.UserRead),
