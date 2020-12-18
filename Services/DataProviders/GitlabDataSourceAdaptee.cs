@@ -51,7 +51,7 @@ namespace Services.DataProviders
 
         public string BaseUrl { get; }
 
-        public Task<IEnumerable<Project>> GetAllPublicProjects()
+        public Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
             throw new NotImplementedException();
         }
