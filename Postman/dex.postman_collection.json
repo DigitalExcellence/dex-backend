@@ -18822,7 +18822,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{prUserIdentityId}}"
 											}
 										],
 										"url": {
