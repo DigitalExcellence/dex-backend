@@ -95,14 +95,17 @@ namespace API.Controllers
         /// This method is responsible for retrieving projects from an external data source.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
-        /// <param name="accessToken">The access token which is used for authentication.</param>
+        /// <param name="token">The token which is used for retrieving the projects from the user.</param>
         /// <returns>This method returns a collection of all the projects.</returns>
         [HttpGet]
         [Authorize]
         [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetProjectsFromExternalDataSource([FromQuery] string dataSourceGuid, [FromQuery] string accessToken)
+        public async Task<IActionResult> GetProjectsFromExternalDataSource(
+            [FromQuery] string dataSourceGuid,
+            [FromQuery] string token,
+            [FromQuery] bool needsAuth)
         {
             if(string.IsNullOrEmpty(dataSourceGuid))
             {
@@ -126,7 +129,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IEnumerable<Project> projects = await dataProviderAdapter.GetAllProjects(dataSourceGuid, accessToken);
+            IEnumerable<Project> projects = await dataProviderAdapter.GetAllProjects(dataSourceGuid, token, needsAuth);
             return Ok(projects);
         }
 
@@ -144,7 +147,8 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
                                                                     [FromQuery] string accessToken,
-                                                                    [FromQuery] int projectId)
+                                                                    [FromQuery] int projectId,
+                                                                    [FromQuery] bool needsAuth)
         {
             if(string.IsNullOrEmpty(dataSourceGuid))
             {
@@ -168,7 +172,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            Project project = await dataProviderAdapter.GetProjectByGuid(dataSourceGuid, accessToken, projectId);
+            Project project = await dataProviderAdapter.GetProjectByGuid(dataSourceGuid, accessToken, projectId, needsAuth);
 
             if(project == null)
             {

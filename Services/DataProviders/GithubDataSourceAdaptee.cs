@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public class GithubDataSourceAdaptee : IDataSourceAdaptee
+    public class GithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee
     {
         /// <summary>
         /// A factory that will generate a rest client to make API requests.
@@ -62,6 +62,8 @@ namespace Services.DataProviders
         public string Guid => "de38e528-1d6d-40e7-83b9-4334c51c19be";
 
         public string Name => "Github";
+
+        public string BaseUrl { get; }
 
         public string OauthUrl { get; }
 

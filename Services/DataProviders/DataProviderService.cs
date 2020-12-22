@@ -26,9 +26,9 @@ namespace Services.DataProviders
     public interface IDataProviderAdapter
     {
 
-        Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken);
+        Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth);
 
-        Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id);
+        Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id, bool needsAuth);
 
         bool IsExistingDataSourceGuid(string dataSourceGuid);
 
@@ -52,18 +52,18 @@ namespace Services.DataProviders
             this.dataProviderLoader = dataProviderLoader;
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string accessToken = null)
+        public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth)
         {
             IDataSourceAdaptee dataSourceAdaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
-            if(string.IsNullOrEmpty(accessToken))
-                return await GetAllProjectsWithoutAccessToken(dataSourceAdaptee);
+            if(!needsAuth)
+                return await GetAllProjectsWithoutAccessToken(dataSourceAdaptee, token);
 
-            return await GetAllProjectWithAccessToken(accessToken, dataSourceAdaptee);
+            return await GetAllProjectWithAccessToken(token, dataSourceAdaptee);
         }
 
-        public async Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id)
+        public async Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id, bool needsAuth)
         {
-            IEnumerable<Project> projects = await GetAllProjects(dataSourceGuid, accessToken);
+            IEnumerable<Project> projects = await GetAllProjects(dataSourceGuid, accessToken, needsAuth);
             return projects.SingleOrDefault(p => p.Id == id);
         }
 
@@ -96,12 +96,12 @@ namespace Services.DataProviders
             return projects;
         }
 
-        private async Task<IEnumerable<Project>> GetAllProjectsWithoutAccessToken(IDataSourceAdaptee dataSourceAdaptee)
+        private async Task<IEnumerable<Project>> GetAllProjectsWithoutAccessToken(IDataSourceAdaptee dataSourceAdaptee, string username)
         {
             // No access token specified, this means the data source should NOT require authentication.
             IPublicDataSourceAdaptee publicDataSourceAdaptee = dataSourceAdaptee as IPublicDataSourceAdaptee;
             if(publicDataSourceAdaptee == null) return null;
-            IEnumerable<Project> projects = await publicDataSourceAdaptee.GetAllPublicProjects();
+            IEnumerable<Project> projects = await publicDataSourceAdaptee.GetAllPublicProjects(username);
             return projects;
         }
 
