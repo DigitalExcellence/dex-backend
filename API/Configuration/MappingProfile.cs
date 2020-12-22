@@ -18,6 +18,7 @@
 using API.Resources;
 using AutoMapper;
 using Models;
+using Services.DataProviders.Resources;
 
 namespace API.Configuration
 {
@@ -84,6 +85,14 @@ namespace API.Configuration
 
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
+
+            CreateExternalSourceMappingProfiles();
+        }
+
+        private void CreateExternalSourceMappingProfiles()
+        {
+            CreateMap<JsFiddleDataSourceResourceResult, Project>()
+                .ForMember(d => d.Name, opt => opt.MapFrom(m => m.Title));
         }
     }
 }
