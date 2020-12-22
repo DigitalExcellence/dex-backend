@@ -47,15 +47,19 @@ namespace Services.DataProviders
         {
             List<IDataSourceAdaptee> dataSources = new List<IDataSourceAdaptee>();
             using IServiceScope scope = serviceScopeFactory.CreateScope();
-            foreach(string dll in Directory.GetFiles(Assembly.GetEntryAssembly()
-                                                             ?.Location, "*.dll"))
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var folder = Path.GetDirectoryName(executingAssembly.Location);
+            
+            
+            foreach(string dll in Directory.GetFiles(folder, "*.dll"))
             {
                 Assembly assembly = Assembly.LoadFrom(dll);
                 foreach(Type type in assembly.GetTypes())
                 {
                     if(type.GetInterface("IDataSourceAdaptee") != typeof(IDataSourceAdaptee)) continue;
-                    IDataSourceAdaptee dataSourceAdaptee = scope.ServiceProvider.GetService(type) as IDataSourceAdaptee;
-                    dataSources.Add(dataSourceAdaptee);
+                    object dataSourceAdaptee = scope.ServiceProvider.GetService(type);
+                    if(dataSourceAdaptee != null)
+                        dataSources.Add(dataSourceAdaptee as IDataSourceAdaptee);
                 }
             }
 
