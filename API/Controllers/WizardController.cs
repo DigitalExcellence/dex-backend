@@ -56,7 +56,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the project with the specified source Uri.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the source Uri is not specified.</response>
         /// <response code="404">The 404 Not Found status code is returned when the project could not be found with the specified source Uri.</response>
-        [HttpGet]
+        [HttpGet("/test")]
         [Authorize]
         [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -118,7 +118,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(dataProviderAdapter.IsExistingDataSourceGuid(dataSourceGuid))
+            if(!dataProviderAdapter.IsExistingDataSourceGuid(dataSourceGuid))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -140,14 +140,14 @@ namespace API.Controllers
         /// <param name="accessToken">The access token which is used for authentication.</param>
         /// <param name="projectId">The id of the project which is used for searching a specific project.</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("projectId")]
         [Authorize]
         [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
                                                                     [FromQuery] string accessToken,
-                                                                    [FromQuery] int projectId,
+                                                                    int projectId,
                                                                     [FromQuery] bool needsAuth)
         {
             if(string.IsNullOrEmpty(dataSourceGuid))

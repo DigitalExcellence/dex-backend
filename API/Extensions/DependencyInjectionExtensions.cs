@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
+using Services.DataProviders;
 using Services.Services;
 using Services.Sources;
 
@@ -81,6 +82,20 @@ namespace API.Extensions
 
             services.AddScoped<IUserUserService, UserUserService>();
             services.AddScoped<IUserUserRepository, UserUserRepository>();
+
+            services.AddScoped<IDataProviderAdapter, DataProviderAdapter>();
+            services.AddScoped<IDataProviderLoader, DataProviderLoader>();
+
+            services.AddExternalDataSources();
+
+            return services;
+        }
+
+        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
+        {
+            services.AddScoped<GithubDataSourceAdaptee>();
+            services.AddScoped<GitlabDataSourceAdaptee>();
+            services.AddScoped<JsFiddleDataSourceAdaptee>();
 
             return services;
         }
