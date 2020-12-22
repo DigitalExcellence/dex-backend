@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public interface IDataProviderAdapter
+    public interface IDataProviderService
     {
 
         Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth);
@@ -36,35 +36,37 @@ namespace Services.DataProviders
 
         Task<OauthTokens> GetTokens(string code, string guid);
 
+        IEnumerable<IDataSourceAdaptee> RetrieveDataSources(bool? needsAuth);
+
     }
 
     /// <summary>
     /// The data provider service which communicates with the correct data source. This service
     /// acts as the adapter in the adapter pattern.
     /// </summary>
-    /// <seealso cref="IDataProviderAdapter" />
-    public class DataProviderAdapter : IDataProviderAdapter
+    /// <seealso cref="IDataProviderService" />
+    public class DataProviderService : IDataProviderService
     {
         private readonly IDataProviderLoader dataProviderLoader;
+        private IDataProviderAdapter dataProviderAdapter;
 
-        public DataProviderAdapter(IDataProviderLoader dataProviderLoader)
+        public DataProviderService(IDataProviderLoader dataProviderLoader)
         {
             this.dataProviderLoader = dataProviderLoader;
         }
 
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth)
         {
-            IDataSourceAdaptee dataSourceAdaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
-            if(!needsAuth)
-                return await GetAllProjectsWithoutAccessToken(dataSourceAdaptee, token);
-
-            return await GetAllProjectWithAccessToken(token, dataSourceAdaptee);
+            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
+            dataProviderAdapter = new DataProviderAdapter(adaptee);
+            return await dataProviderAdapter.GetAllProjects(token, needsAuth);
         }
 
         public async Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id, bool needsAuth)
         {
-            IEnumerable<Project> projects = await GetAllProjects(dataSourceGuid, accessToken, needsAuth);
-            return projects.SingleOrDefault(p => p.Id == id);
+            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
+            dataProviderAdapter = new DataProviderAdapter(adaptee);
+            return await dataProviderAdapter.GetProjectByGuid(accessToken, id.ToString(), needsAuth);
         }
 
         public bool IsExistingDataSourceGuid(string dataSourceGuid)
@@ -74,35 +76,28 @@ namespace Services.DataProviders
 
         public string GetOauthUrl(string guid)
         {
-            IAuthorizedDataSourceAdaptee authorizedDataSource =
-                dataProviderLoader.GetDataSourceByGuid(guid) as IAuthorizedDataSourceAdaptee;
-            return authorizedDataSource?.OauthUrl;
+            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(guid);
+            dataProviderAdapter = new DataProviderAdapter(adaptee);
+            return dataProviderAdapter.GetOauthUrl();
         }
 
         public async Task<OauthTokens> GetTokens(string code, string guid)
         {
-            IAuthorizedDataSourceAdaptee dataProvider =
-                dataProviderLoader.GetDataSourceByGuid(guid) as IAuthorizedDataSourceAdaptee;
-            if(dataProvider == null) return null;
-            return await dataProvider.GetTokens(code);
+            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(guid);
+            dataProviderAdapter = new DataProviderAdapter(adaptee);
+            return await dataProviderAdapter.GetTokens(code);
+
         }
 
-        private async Task<IEnumerable<Project>> GetAllProjectWithAccessToken(string accessToken, IDataSourceAdaptee dataSourceAdaptee)
+        public IEnumerable<IDataSourceAdaptee> RetrieveDataSources(bool? needsAuth)
         {
-            // Access token specified, this indicated that the data source implements the Oauth flow.
-            IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee = dataSourceAdaptee as IAuthorizedDataSourceAdaptee;
-            if(authorizedDataSourceAdaptee == null) return null;
-            IEnumerable<Project> projects = await authorizedDataSourceAdaptee.GetAllProjects(accessToken);
-            return projects;
-        }
+            IEnumerable<IDataSourceAdaptee> sources =  dataProviderLoader.GetAllDataSources();
+            if(needsAuth == null) return sources;
 
-        private async Task<IEnumerable<Project>> GetAllProjectsWithoutAccessToken(IDataSourceAdaptee dataSourceAdaptee, string username)
-        {
-            // No access token specified, this means the data source should NOT require authentication.
-            IPublicDataSourceAdaptee publicDataSourceAdaptee = dataSourceAdaptee as IPublicDataSourceAdaptee;
-            if(publicDataSourceAdaptee == null) return null;
-            IEnumerable<Project> projects = await publicDataSourceAdaptee.GetAllPublicProjects(username);
-            return projects;
+            if(needsAuth.Value)
+                return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
+
+            return sources.Where(s => s is IPublicDataSourceAdaptee);
         }
 
     }

@@ -36,16 +36,16 @@ namespace API.Controllers
     public class WizardController : ControllerBase
     {
         private readonly ISourceManagerService sourceManagerService;
-        private readonly IDataProviderAdapter dataProviderAdapter;
+        private readonly IDataProviderService dataProviderService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
         /// <param name="sourceManagerService">The source manager service which is used to communicate with the logic layer.</param>
-        public WizardController(ISourceManagerService sourceManagerService, IDataProviderAdapter dataProviderAdapter)
+        public WizardController(ISourceManagerService sourceManagerService, IDataProviderService dataProviderService)
         {
             this.sourceManagerService = sourceManagerService;
-            this.dataProviderAdapter = dataProviderAdapter;
+            this.dataProviderService = dataProviderService;
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(!dataProviderAdapter.IsExistingDataSourceGuid(dataSourceGuid))
+            if(!dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -129,7 +129,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IEnumerable<Project> projects = await dataProviderAdapter.GetAllProjects(dataSourceGuid, token, needsAuth);
+            IEnumerable<Project> projects = await dataProviderService.GetAllProjects(dataSourceGuid, token, needsAuth);
             return Ok(projects);
         }
 
@@ -161,7 +161,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(dataProviderAdapter.IsExistingDataSourceGuid(dataSourceGuid))
+            if(dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -172,7 +172,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            Project project = await dataProviderAdapter.GetProjectByGuid(dataSourceGuid, accessToken, projectId, needsAuth);
+            Project project = await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectId, needsAuth);
 
             if(project == null)
             {
@@ -186,6 +186,12 @@ namespace API.Controllers
             }
 
             return Ok(project);
+        }
+
+        [HttpGet("datasources")]
+        public IActionResult GetAvailableDataSources([FromQuery] bool? needsAuth)
+        {
+            return Ok(dataProviderService.RetrieveDataSources(needsAuth));
         }
     }
 }

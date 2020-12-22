@@ -30,6 +30,8 @@ namespace Services.DataProviders
 
         public Task<Project> GetPublicProjectFromUri(Uri sourceUri);
 
+        public Task<Project> GetPublicProjectById(string identifier);
+
     }
 
 }
