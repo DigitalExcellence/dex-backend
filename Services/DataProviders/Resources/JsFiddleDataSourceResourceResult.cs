@@ -7,20 +7,6 @@ namespace Services.DataProviders.Resources
     public class JsFiddleDataSourceResourceResult
     {
 
-        [JsonProperty("status")]
-        public string Status { get; set; }
-
-        [JsonProperty("overallResultSetCount")]
-        public int OverallResultSetCount { get; set; }
-
-        [JsonProperty("list")]
-        public List<FiddleProjectResourceResult> Fiddles { get; set; }
-
-
-    }
-
-    public class FiddleProjectResourceResult
-    {
         [JsonProperty("framework")]
         public string Framework { get; set; }
 
@@ -45,6 +31,8 @@ namespace Services.DataProviders.Resources
         [JsonProperty("created")]
         public string Created { get; set; }
 
+
     }
+
 
 }

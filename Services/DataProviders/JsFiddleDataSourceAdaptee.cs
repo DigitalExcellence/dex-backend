@@ -6,6 +6,7 @@ using Services.DataProviders.Resources;
 using Services.Sources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -30,23 +31,23 @@ namespace Services.DataProviders
             this.mapper = mapper;
         }
 
-        public string Guid { get; }
+        public string Guid { get; } = "a";
 
         public string Name { get; }
 
-        public string BaseUrl { get; }
+        public string BaseUrl { get; } = "http://jsfiddle.net/api/";
 
         public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
-            JsFiddleDataSourceResourceResult resourceResult = await FetchAllFiddlesFromUser(username);
-            if(resourceResult.OverallResultSetCount <= 0) return null;
-            return mapper.Map<JsFiddleDataSourceResourceResult, IEnumerable<Project>>(resourceResult);
+            IEnumerable<JsFiddleDataSourceResourceResult> resourceResult = await FetchAllFiddlesFromUser(username);
+            if(!resourceResult.Any()) return null;
+            return mapper.Map<IEnumerable<JsFiddleDataSourceResourceResult>, IEnumerable<Project>>(resourceResult);
         }
 
-        private async Task<JsFiddleDataSourceResourceResult> FetchAllFiddlesFromUser(string username)
+        private async Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
-            IRestRequest request = new RestRequest($"/user/{username}/demo/list.json", Method.GET);
+            IRestRequest request = new RestRequest($"user/{username}/demo/list.json", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(response.StatusCode != HttpStatusCode.OK ||
@@ -55,8 +56,8 @@ namespace Services.DataProviders
                 return null;
             }
 
-            JsFiddleDataSourceResourceResult resourceResult =
-                JsonConvert.DeserializeObject<JsFiddleDataSourceResourceResult>(response.Content);
+            IEnumerable<JsFiddleDataSourceResourceResult> resourceResult =
+                JsonConvert.DeserializeObject<IEnumerable<JsFiddleDataSourceResourceResult>>(response.Content);
             return resourceResult;
         }
 
