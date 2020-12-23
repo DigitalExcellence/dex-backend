@@ -31,9 +31,9 @@ namespace Services.DataProviders
             this.mapper = mapper;
         }
 
-        public string Guid { get; } = "a";
+        public string Guid => "96666870-3afe-44e2-8d62-337d49cf972d";
 
-        public string Name { get; }
+        public string Name => "JsFiddle";
 
         public string BaseUrl { get; } = "http://jsfiddle.net/api/";
 

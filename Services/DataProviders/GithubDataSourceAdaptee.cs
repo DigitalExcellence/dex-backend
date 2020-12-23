@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public class GithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee
+    public class GithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
     {
         /// <summary>
         /// A factory that will generate a rest client to make API requests.
@@ -47,7 +47,6 @@ namespace Services.DataProviders
 
         private readonly string clientSecret;
         private readonly string clientId;
-        private readonly Uri baseUrl = new Uri("https://api.github.com/");
 
         public GithubDataSourceAdaptee(IConfiguration configuration, IRestClientFactory restClientFactory, IMapper mapper)
         {
@@ -63,7 +62,7 @@ namespace Services.DataProviders
 
         public string Name => "Github";
 
-        public string BaseUrl { get; }
+        public string BaseUrl => "https://api.github.com/";
 
         public string OauthUrl { get; }
 
@@ -105,7 +104,7 @@ namespace Services.DataProviders
 
         private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
         {
-            IRestClient client = restClientFactory.Create(baseUrl);
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest("user/repos", Method.GET);
 
             request.AddHeaders(new List<KeyValuePair<string, string>>
@@ -127,6 +126,55 @@ namespace Services.DataProviders
                 JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
             return projects;
         }
+
+        public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
+        {
+            IEnumerable<GithubDataSourceResourceResult> resourceResults = await FetchAllPublicGithubRepositories(username);
+            if(!resourceResults.Any()) return null;
+            return mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(resourceResults);
+        }
+
+        private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(string username)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"users/{username}/repos", Method.GET);
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(response.StatusCode != HttpStatusCode.OK ||
+               string.IsNullOrEmpty(response.Content))
+            {
+                return null;
+            }
+
+            IEnumerable<GithubDataSourceResourceResult> resourceResults =
+                JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
+            return resourceResults;
+        }
+
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
+        {
+            GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri);
+            Project project = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
+            return project;
+        }
+
+        private async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        {
+            IRestClient client = restClientFactory.Create(sourceUri);
+            RestRequest request = new RestRequest(Method.GET);
+            IRestResponse response = await client.ExecuteAsync(request);
+            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
+            {
+                return null;
+            }
+            return JsonConvert.DeserializeObject<GithubDataSourceResourceResult>(response.Content);
+        }
+
+        public Task<Project> GetPublicProjectById(string identifier)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }

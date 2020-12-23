@@ -45,9 +45,9 @@ namespace Services.DataProviders
             this.mapper = mapper;
         }
 
-        public string Guid { get; }
+        public string Guid => "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
 
-        public string Name { get; }
+        public string Name => "Gitlab";
 
         public string BaseUrl { get; }
 
