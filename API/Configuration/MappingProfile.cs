@@ -18,6 +18,7 @@
 using API.Resources;
 using AutoMapper;
 using Models;
+using Services.DataProviders;
 using Services.DataProviders.Resources;
 
 namespace API.Configuration
@@ -85,6 +86,8 @@ namespace API.Configuration
 
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
+
+            CreateMap<IDataSourceAdaptee, DataSourceResourceResult>();
 
             CreateExternalSourceMappingProfiles();
         }

@@ -17,7 +17,7 @@ namespace IdentityServer
             services.AddScoped<IIdentityUserService, IdentityUserService>();
             services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();
 
-            services.AddScoped<IDataProviderAdapter, DataProviderAdapter>();
+            services.AddScoped<IDataProviderService, DataProviderService>();
             services.AddScoped<IDataProviderLoader, DataProviderLoader>();
 
             return services;

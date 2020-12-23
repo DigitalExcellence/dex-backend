@@ -66,6 +66,11 @@ namespace Services.DataProviders
             return null;
         }
 
+        public Task<Project> GetPublicProjectById(string identifier)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }

@@ -64,6 +64,11 @@ namespace Services.DataProviders
             return project;
         }
 
+        public Task<Project> GetPublicProjectById(string identifier)
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
             IRestClient client = restClientFactory.Create(sourceUri);

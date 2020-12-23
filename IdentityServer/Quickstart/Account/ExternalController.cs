@@ -53,7 +53,7 @@ namespace IdentityServer
         private readonly ILogger<ExternalController> logger;
         private readonly Config config;
         private readonly IIdentityUserService identityUserService;
-        private readonly IDataProviderAdapter dataProviderAdapter;
+        private readonly IDataProviderService dataProviderService;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -62,7 +62,7 @@ namespace IdentityServer
             ILogger<ExternalController> logger,
             Config config,
             IIdentityUserService identityUserService,
-            IDataProviderAdapter dataProviderAdapter)
+            IDataProviderService dataProviderService)
         {
             this.identityUserService = identityUserService;
             this.interaction = interaction;
@@ -70,7 +70,7 @@ namespace IdentityServer
             this.logger = logger;
             this.events = events;
             this.config = config;
-            this.dataProviderAdapter = dataProviderAdapter;
+            this.dataProviderService = dataProviderService;
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace IdentityServer
         {
             HttpContext.Response.Cookies.Append("redirectUrl", redirectUrl);
 
-            string oauthUrl = dataProviderAdapter.GetOauthUrl(guid);
+            string oauthUrl = dataProviderService.GetOauthUrl(guid);
             return Redirect(oauthUrl);
         }
 
@@ -334,7 +334,7 @@ namespace IdentityServer
         /// <returns>This method returns the correct tokens.</returns>
         public async Task<IActionResult> RetrieveTokens(string code, string state)
         {
-            OauthTokens tokens = await dataProviderAdapter.GetTokens(code, state);
+            OauthTokens tokens = await dataProviderService.GetTokens(code, state);
 
             HttpContext.Response.Headers.Add("OauthTokens", JsonConvert.SerializeObject(tokens));
 

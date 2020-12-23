@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Resources;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -37,15 +39,20 @@ namespace API.Controllers
     {
         private readonly ISourceManagerService sourceManagerService;
         private readonly IDataProviderService dataProviderService;
+        private readonly IMapper mapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
         /// <param name="sourceManagerService">The source manager service which is used to communicate with the logic layer.</param>
-        public WizardController(ISourceManagerService sourceManagerService, IDataProviderService dataProviderService)
+        public WizardController(
+            ISourceManagerService sourceManagerService,
+            IDataProviderService dataProviderService,
+            IMapper mapper)
         {
             this.sourceManagerService = sourceManagerService;
             this.dataProviderService = dataProviderService;
+            this.mapper = mapper;
         }
 
         /// <summary>
@@ -188,10 +195,22 @@ namespace API.Controllers
             return Ok(project);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving data sources.
+        /// </summary>
+        /// <param name="needsAuth">This parameter specifies whether the data sources should need authentication.</param>
+        /// <returns>This method returns a collection of data sources.</returns>
         [HttpGet("datasources")]
+        [Authorize]
+        [ProducesResponseType(typeof(IEnumerable<IDataSourceAdaptee>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public IActionResult GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
-            return Ok(dataProviderService.RetrieveDataSources(needsAuth));
+            IEnumerable<IDataSourceAdaptee> dataSources = dataProviderService.RetrieveDataSources(needsAuth);
+            IEnumerable<DataSourceResourceResult> dataSourceResourceResult =
+                mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceResourceResult>>(dataSources);
+            return Ok(dataSourceResourceResult);
         }
     }
 }
