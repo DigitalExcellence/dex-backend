@@ -29,7 +29,7 @@ using System.Threading.Tasks;
 namespace Services.DataProviders
 {
 
-    public class GitlabDataSourceAdaptee : IPublicDataSourceAdaptee
+    public class GitlabDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
     {
 
         /// <summary>
@@ -49,7 +49,9 @@ namespace Services.DataProviders
 
         public string Name => "Gitlab";
 
-        public string BaseUrl { get; }
+        public string BaseUrl => "https://gitlab.com/api/v4/";
+
+        public string OauthUrl { get; }
 
         public Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
@@ -89,6 +91,16 @@ namespace Services.DataProviders
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
             return response.Content;
+        }
+
+        public Task<OauthTokens> GetTokens(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Project>> GetAllProjects(string accessToken)
+        {
+            throw new NotImplementedException();
         }
 
     }
