@@ -96,6 +96,8 @@ namespace API.Configuration
         {
             CreateMap<JsFiddleDataSourceResourceResult, Project>()
                 .ForMember(d => d.Name, opt => opt.MapFrom(m => m.Title));
+
+            CreateMap<GithubDataSourceResourceResult, Project>();
         }
     }
 }
