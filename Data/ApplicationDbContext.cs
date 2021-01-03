@@ -88,6 +88,13 @@ namespace Data
         /// The file.
         /// </value>
         public DbSet<File> File { get; set; }
+        /// <summary>
+        /// Gets or sets the data source.
+        /// </summary>
+        /// <value>
+        /// The data source.
+        /// </value>
+        public DbSet<DataSource> DataSource { get; set; }
 
         public DbSet<UserProject> UserProject { get; set; }
         public DbSet<UserUser> UserUser { get; set; }
