@@ -15,16 +15,24 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
+
 namespace Services.DataProviders
 {
 
     public interface IDataSourceAdaptee
     {
-        string Guid { get; }
+        string Guid { get; set; }
 
-        string Name { get; }
+        string Title { get; set; }
 
-        string BaseUrl { get; }
+        string BaseUrl { get; set; }
+
+        public bool IsVisible { get; set; }
+
+        public File Icon { get; set; }
+
+        public string Description { get; set; }
 
     }
 

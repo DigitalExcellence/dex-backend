@@ -19,6 +19,7 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
+using Repositories;
 using RestSharp;
 using Services.DataProviders.Resources;
 using Services.Sources;
@@ -48,21 +49,30 @@ namespace Services.DataProviders
         private readonly string clientSecret;
         private readonly string clientId;
 
-        public GithubDataSourceAdaptee(IConfiguration configuration, IRestClientFactory restClientFactory, IMapper mapper)
+        public GithubDataSourceAdaptee(
+            IConfiguration configuration,
+            IRestClientFactory restClientFactory,
+            IMapper mapper)
         {
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
 
-            clientId = configuration.GetSection($"{Name}ClientId").Value;
-            clientSecret = configuration.GetSection($"{Name}ClientSecret").Value;
-            OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo&state={Name}";
+            clientId = configuration.GetSection($"{Title}ClientId").Value;
+            clientSecret = configuration.GetSection($"{Title}ClientSecret").Value;
+            OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo&state={Title}";
         }
 
         public string Guid => "de38e528-1d6d-40e7-83b9-4334c51c19be";
 
-        public string Name => "Github";
+        public string Title => "Github";
 
         public string BaseUrl => "https://api.github.com/";
+
+        public bool IsVisible { get; set; }
+
+        public File Icon { get; set; }
+
+        public string Description { get; set; }
 
         public string OauthUrl { get; }
 
@@ -74,7 +84,7 @@ namespace Services.DataProviders
                 { "client_id",  clientId },
                 { "client_secret", clientSecret},
                 {"code", code },
-                {"state", Name }
+                {"state", Title }
             };
             FormUrlEncodedContent data = new FormUrlEncodedContent(accessRefreshTokenRequirements);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
