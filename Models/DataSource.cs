@@ -27,6 +27,11 @@ namespace Models
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the Guid of the data source that gets used in the front-end.
+        /// </summary>
+        public string Guid { get; set; }
+
+        /// <summary>
         /// Gets or sets the Title of the data source.
         /// </summary>
         public string Title { get; set; }
@@ -40,6 +45,11 @@ namespace Models
         /// Gets or sets the Icon of the data source.
         /// </summary>
         public File Icon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the visibility of the data source.
+        /// </summary>
+        public bool IsVisible { get; set; }
 
     }
 

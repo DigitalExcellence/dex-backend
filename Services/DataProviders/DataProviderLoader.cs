@@ -47,8 +47,8 @@ namespace Services.DataProviders
         {
             List<IDataSourceAdaptee> dataSources = new List<IDataSourceAdaptee>();
             using IServiceScope scope = serviceScopeFactory.CreateScope();
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            var folder = Path.GetDirectoryName(executingAssembly.Location);
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            string folder = Path.GetDirectoryName(executingAssembly.Location);
             
             
             foreach(string dll in Directory.GetFiles(folder, "*.dll"))

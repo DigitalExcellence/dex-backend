@@ -50,8 +50,10 @@ namespace Services.DataProviders
         public async Task<IEnumerable<Project>> GetAllProjects(string token, bool needsAuth)
         {
             if(!needsAuth)
+            {
                 return await GetAllProjectsWithoutAccessToken(token);
-
+            }
+            
             return await GetAllProjectWithAccessToken(token);
         }
 
