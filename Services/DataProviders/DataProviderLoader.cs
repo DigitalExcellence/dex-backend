@@ -16,6 +16,7 @@
 */
 
 using Microsoft.Extensions.DependencyInjection;
+using Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,10 +38,14 @@ namespace Services.DataProviders
     public class DataProviderLoader : IDataProviderLoader
     {
         private readonly IServiceScopeFactory serviceScopeFactory;
+        private readonly IDataSourceAdapteeRepository dataSourceAdapteeRepository;
 
-        public DataProviderLoader(IServiceScopeFactory serviceScopeFactory)
+        public DataProviderLoader(
+            IServiceScopeFactory serviceScopeFactory,
+            IDataSourceAdapteeRepository dataSourceAdapteeRepository)
         {
             this.serviceScopeFactory = serviceScopeFactory;
+            this.dataSourceAdapteeRepository = dataSourceAdapteeRepository;
         }
 
         public IEnumerable<IDataSourceAdaptee> GetAllDataSources()

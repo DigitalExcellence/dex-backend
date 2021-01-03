@@ -103,6 +103,8 @@ namespace Services.DataProviders
             IEnumerable<DataSource> sourceModels = await dataSourceAdapteeRepository.GetAll();
             IEnumerable<IDataSourceAdaptee> sources =  dataProviderLoader.GetAllDataSources().ToArray();
 
+            AddNewDataSources(sourceModels, sources);
+
             mapper.Map(sourceModels, sources);
             sources = sources.Where(d => d.IsVisible);
 
@@ -112,6 +114,15 @@ namespace Services.DataProviders
                 return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
 
             return sources.Where(s => s is IPublicDataSourceAdaptee);
+        }
+
+        private void AddNewDataSources(IEnumerable<DataSource> sourceModels, IEnumerable<IDataSourceAdaptee> sources)
+        {
+            // For every adaptee implementation, check if a model in the database is found. Whenever
+            // no model in the database is found, this should get added to the database.
+            IEnumerable<IDataSourceAdaptee> adapteesWithoutModel =
+                sources.Where(s => sourceModels.SingleOrDefault(m => m.Guid == s.Guid) == null);
+            dataSourceAdapteeRepository.AddRange(mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
         }
 
     }
