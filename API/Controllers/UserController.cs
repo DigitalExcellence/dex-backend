@@ -312,7 +312,8 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns status code 200. The account with the specified id is deleted.</response>
         /// <response code="401">The 401 Unauthorized status code is returned when the user is not allowed to delete the account.</response>
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
-        [HttpDelete("{userId?}")]
+        [HttpDelete]
+        [HttpDelete("{userId}")]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
@@ -320,21 +321,25 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteAccount(int? userId = null)
         {
             User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
+            User toDeleteUser;
+            bool isAllowed;
+
+            if(userId != null)
+            {
+                // The user wants to delete another account, not their own
+                toDeleteUser = await userService.GetUserAsync((int) userId);
+                isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
                                                                      nameof(Defaults.Scopes.UserWrite),
                                                                      nameof(Defaults.Scopes.InstitutionUserWrite),
                                                                      (int) userId);
-            User toDeleteUser;
-            if(userId != null)
-            {
-                toDeleteUser = await userService.GetUserAsync((int) userId);
             } else
             {
                 toDeleteUser = currentUser;
+                isAllowed = true;
             }
 
-            // The user that is getting deleted is not the same user as the logged in user.
-            // The logged in user is not an admin either.
+            // The user that is getting deleted is not the same user as the logged-in user.
+            // The logged-in user is not an admin/ Data Officer either.
             if(currentUser.Id != userId && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -347,13 +352,14 @@ namespace API.Controllers
             }
 
 
+
             User placeholderUser = await userService.GetUserByIdentityIdAsync("DEX-0");
 
-            // Projects
+            // Get the user's projects and transfer them to a placeholder account
             List<Project> projects = await projectService.GetProjectsByReferencedUser(toDeleteUser);
             foreach(Project project in projects)
             {
-                // TODO: EXtend with collaborator when that becomes a user object.
+                // TODO: Extend with collaborator when that becomes a user object.
                 if(project.UserId == userId)
                 {
                     project.User = placeholderUser;
@@ -362,7 +368,7 @@ namespace API.Controllers
             }
             projectService.Save();
 
-            //Embedded projects
+            // Delete all the embedded projects
             IEnumerable<EmbeddedProject> embeddedProjects = await embedService.GetEmbeddedProjectsByOwnerAsync(toDeleteUser);
             foreach(EmbeddedProject embeddedProject in embeddedProjects)
             {
@@ -370,11 +376,10 @@ namespace API.Controllers
             }
             embedService.Save();
 
-
+            // Remove the user from the database
             await userService.RemoveAsync(toDeleteUser.Id);
 
             userService.Save();
-            userUserService.Save();
 
             return Ok();
         }
