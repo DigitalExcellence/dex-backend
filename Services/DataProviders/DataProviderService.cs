@@ -100,7 +100,7 @@ namespace Services.DataProviders
 
         public async Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth)
         {
-            IEnumerable<DataSource> sourceModels = await dataSourceAdapteeRepository.GetAll();
+            IEnumerable<DataSource> sourceModels = (await dataSourceAdapteeRepository.GetAll()).ToArray();
             IEnumerable<IDataSourceAdaptee> sources =  dataProviderLoader.GetAllDataSources().ToArray();
 
             AddNewDataSources(sourceModels, sources);

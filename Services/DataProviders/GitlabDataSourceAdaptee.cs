@@ -47,9 +47,9 @@ namespace Services.DataProviders
 
         public string Guid => "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
 
-        public string Title => "Gitlab";
+        public string Title { get; set; } = "Gitlab";
 
-        public string BaseUrl => "https://gitlab.com/api/v4/";
+        public string BaseUrl { get; set; } = "https://gitlab.com/api/v4/";
 
         public bool IsVisible { get; set; }
 

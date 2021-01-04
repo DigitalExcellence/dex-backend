@@ -22,7 +22,7 @@ namespace Services.DataProviders
 
     public interface IDataSourceAdaptee
     {
-        string Guid { get; set; }
+        string Guid { get; }
 
         string Title { get; set; }
 

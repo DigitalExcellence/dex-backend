@@ -64,9 +64,9 @@ namespace Services.DataProviders
 
         public string Guid => "de38e528-1d6d-40e7-83b9-4334c51c19be";
 
-        public string Title => "Github";
+        public string Title { get; set; } = "Github";
 
-        public string BaseUrl => "https://api.github.com/";
+        public string BaseUrl { get; set; } = "https://api.github.com/";
 
         public bool IsVisible { get; set; }
 

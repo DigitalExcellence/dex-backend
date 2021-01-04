@@ -205,9 +205,9 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<IDataSourceAdaptee>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public IActionResult GetAvailableDataSources([FromQuery] bool? needsAuth)
+        public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
-            IEnumerable<IDataSourceAdaptee> dataSources = dataProviderService.RetrieveDataSources(needsAuth);
+            IEnumerable<IDataSourceAdaptee> dataSources = await dataProviderService.RetrieveDataSources(needsAuth);
             IEnumerable<DataSourceResourceResult> dataSourceResourceResult =
                 mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceResourceResult>>(dataSources);
             return Ok(dataSourceResourceResult);

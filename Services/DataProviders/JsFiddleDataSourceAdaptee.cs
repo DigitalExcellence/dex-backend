@@ -50,9 +50,9 @@ namespace Services.DataProviders
 
         public string Guid => "96666870-3afe-44e2-8d62-337d49cf972d";
 
-        public string Title => "JsFiddle";
+        public string Title { get; set; } = "JsFiddle";
 
-        public string BaseUrl { get; } = "http://jsfiddle.net/api/";
+        public string BaseUrl { get; set; } = "http://jsfiddle.net/api/";
 
         public bool IsVisible { get; set; }
 
