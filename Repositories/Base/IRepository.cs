@@ -29,6 +29,7 @@ namespace Repositories.Base
         void Add(TEntity entity);
 
         void AddRange(IEnumerable<TEntity> entities);
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         void Update(TEntity entity);
 

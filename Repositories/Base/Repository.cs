@@ -96,6 +96,17 @@ namespace Repositories.Base
             DbSet.AddRange(entityList);
         }
 
+        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            List<TEntity> entityList = entities.ToList();
+            for(int i = 0; i < entityList.Count; i++)
+            {
+                entityList[i] = UpdateCreatedField(entityList[i]);
+                entityList[i] = UpdateUpdatedField(entityList[i]);
+            }
+            await DbSet.AddRangeAsync(entityList).ConfigureAwait(false);
+        }
+
         public virtual void Update(TEntity entity)
         {
             entity = UpdateUpdatedField(entity);

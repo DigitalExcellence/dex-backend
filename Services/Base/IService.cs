@@ -31,6 +31,7 @@ namespace Services.Base
         Task AddAsync(TEntity entity);
 
         void AddRange(IEnumerable<TEntity> entities);
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         void Update(TEntity entity);
 

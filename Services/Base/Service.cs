@@ -50,6 +50,11 @@ namespace Services.Base
             Repository.AddRange(entities);
         }
 
+        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            await Repository.AddRangeAsync(entities);
+        }
+
         public virtual void Update(TEntity entity)
         {
             Repository.Update(entity);
