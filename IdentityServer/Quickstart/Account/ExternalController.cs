@@ -318,11 +318,11 @@ namespace IdentityServer
         /// <param name="guid">The guid is used for identifying the data provider.</param>
         /// <returns>This method returns the url of the oauth login page.</returns>
         [HttpGet]
-        public IActionResult ExternalAuthentication(string guid, string redirectUrl)
+        public async Task<IActionResult> ExternalAuthentication(string guid, string redirectUrl)
         {
             HttpContext.Response.Cookies.Append("redirectUrl", redirectUrl);
 
-            string oauthUrl = dataProviderService.GetOauthUrl(guid);
+            string oauthUrl = await dataProviderService.GetOauthUrl(guid);
             return Redirect(oauthUrl);
         }
 
