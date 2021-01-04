@@ -34,7 +34,7 @@ namespace Services.DataProviders
 
         bool IsExistingDataSourceGuid(string dataSourceGuid);
 
-        string GetOauthUrl(string guid);
+        Task<string> GetOauthUrl(string guid);
 
         Task<OauthTokens> GetTokens(string code, string guid);
 
@@ -66,14 +66,14 @@ namespace Services.DataProviders
 
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth)
         {
-            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
+            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
             return await dataProviderAdapter.GetAllProjects(token, needsAuth);
         }
 
         public async Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id, bool needsAuth)
         {
-            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
+            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
             return await dataProviderAdapter.GetProjectByGuid(accessToken, id.ToString(), needsAuth);
         }
@@ -83,16 +83,16 @@ namespace Services.DataProviders
             return dataProviderLoader.GetDataSourceByGuid(dataSourceGuid) != null;
         }
 
-        public string GetOauthUrl(string guid)
+        public async Task<string> GetOauthUrl(string guid)
         {
-            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(guid);
+            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(guid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
             return dataProviderAdapter.GetOauthUrl();
         }
 
         public async Task<OauthTokens> GetTokens(string code, string guid)
         {
-            IDataSourceAdaptee adaptee = dataProviderLoader.GetDataSourceByGuid(guid);
+            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(guid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
             return await dataProviderAdapter.GetTokens(code);
 
@@ -100,29 +100,16 @@ namespace Services.DataProviders
 
         public async Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth)
         {
-            IEnumerable<DataSource> sourceModels = (await dataSourceAdapteeRepository.GetAll()).ToArray();
-            IEnumerable<IDataSourceAdaptee> sources =  dataProviderLoader.GetAllDataSources().ToArray();
-
-            AddNewDataSources(sourceModels, sources);
-
-            mapper.Map(sourceModels, sources);
-            sources = sources.Where(d => d.IsVisible);
+            IEnumerable<IDataSourceAdaptee> sources =  await dataProviderLoader.GetAllDataSources();
 
             if(needsAuth == null) return sources;
 
             if(needsAuth.Value)
+            {
                 return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
+            }
 
             return sources.Where(s => s is IPublicDataSourceAdaptee);
-        }
-
-        private void AddNewDataSources(IEnumerable<DataSource> sourceModels, IEnumerable<IDataSourceAdaptee> sources)
-        {
-            // For every adaptee implementation, check if a model in the database is found. Whenever
-            // no model in the database is found, this should get added to the database.
-            IEnumerable<IDataSourceAdaptee> adapteesWithoutModel =
-                sources.Where(s => sourceModels.SingleOrDefault(m => m.Guid == s.Guid) == null);
-            dataSourceAdapteeRepository.AddRange(mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
         }
 
     }

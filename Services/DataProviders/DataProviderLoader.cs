@@ -15,13 +15,16 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Models;
 using Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Services.DataProviders
 {
@@ -29,9 +32,9 @@ namespace Services.DataProviders
     public interface IDataProviderLoader
     {
 
-        IEnumerable<IDataSourceAdaptee> GetAllDataSources();
+        Task<IEnumerable<IDataSourceAdaptee>> GetAllDataSources();
 
-        IDataSourceAdaptee GetDataSourceByGuid(string guid);
+        Task<IDataSourceAdaptee> GetDataSourceByGuid(string guid);
 
     }
 
@@ -39,23 +42,46 @@ namespace Services.DataProviders
     {
         private readonly IServiceScopeFactory serviceScopeFactory;
         private readonly IDataSourceAdapteeRepository dataSourceAdapteeRepository;
+        private readonly IMapper mapper;
 
         public DataProviderLoader(
             IServiceScopeFactory serviceScopeFactory,
-            IDataSourceAdapteeRepository dataSourceAdapteeRepository)
+            IDataSourceAdapteeRepository dataSourceAdapteeRepository,
+            IMapper mapper)
         {
             this.serviceScopeFactory = serviceScopeFactory;
             this.dataSourceAdapteeRepository = dataSourceAdapteeRepository;
+            this.mapper = mapper;
         }
 
-        public IEnumerable<IDataSourceAdaptee> GetAllDataSources()
+        public async Task<IEnumerable<IDataSourceAdaptee>> GetAllDataSources()
+        {
+            List<IDataSourceAdaptee> dataSources = GetLocalAdapteeImplementations();
+            await UpdateDatabaseWithLocalAdapteeImplementations(dataSources);
+            IEnumerable<IDataSourceAdaptee> updatedDataSourceAdaptees = await UpdateModelsWithRepositoryValues(dataSources.ToArray());
+            return updatedDataSourceAdaptees.Where(d => d.IsVisible);
+        }
+
+        public async Task<IDataSourceAdaptee> GetDataSourceByGuid(string guid)
+        {
+            return (await GetAllDataSources())
+                .SingleOrDefault(d => d.Guid == guid);
+        }
+
+        private async Task<IEnumerable<IDataSourceAdaptee>> UpdateModelsWithRepositoryValues(IDataSourceAdaptee[] sources)
+        {
+            IEnumerable<DataSource> sourceModels = (await dataSourceAdapteeRepository.GetAll()).ToArray();
+            mapper.Map(sourceModels, sources);
+            return sources;
+        }
+
+        private List<IDataSourceAdaptee> GetLocalAdapteeImplementations()
         {
             List<IDataSourceAdaptee> dataSources = new List<IDataSourceAdaptee>();
             using IServiceScope scope = serviceScopeFactory.CreateScope();
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             string folder = Path.GetDirectoryName(executingAssembly.Location);
-            
-            
+
             foreach(string dll in Directory.GetFiles(folder, "*.dll"))
             {
                 Assembly assembly = Assembly.LoadFrom(dll);
@@ -71,10 +97,21 @@ namespace Services.DataProviders
             return dataSources;
         }
 
-        public IDataSourceAdaptee GetDataSourceByGuid(string guid)
+        private async Task UpdateDatabaseWithLocalAdapteeImplementations(IEnumerable<IDataSourceAdaptee> sources)
         {
-            return GetAllDataSources()
-                .SingleOrDefault(d => d.Guid == guid);
+            IEnumerable<DataSource> sourceModels = await dataSourceAdapteeRepository.GetAll();
+
+            // For every adaptee implementation, check if a model in the database is found. Whenever
+            // no model in the database is found, this should get added to the database.
+            IEnumerable<IDataSourceAdaptee> adapteesWithoutModel =
+                sources.Where(s => sourceModels.SingleOrDefault(m => m.Guid == s.Guid) == null);
+            dataSourceAdapteeRepository.AddRange(mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
+
+            // For every model in the database, check if an adaptee is found. Whenever
+            // no adaptee is found, this should get removed from the database.
+            List<DataSource> modelsWithoutAdaptee =
+                sourceModels.Where(m => sources.SingleOrDefault(s => s.Guid == m.Guid) == null).ToList();
+            modelsWithoutAdaptee.ForEach(async m => await dataSourceAdapteeRepository.RemoveAsync(m.Id));
         }
 
     }
