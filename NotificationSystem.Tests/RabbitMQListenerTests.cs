@@ -15,7 +15,7 @@ namespace NotificationSystem.Tests
         [Test]
         public void SetCallBack_Valid_EventHandlerAdded()
         {
-            //arrange
+            // Arrange
             string payload = "test";
             byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
             ReadOnlyMemory<byte> readOnlyMemory = new ReadOnlyMemory<byte>(payloadBytes);
@@ -30,24 +30,19 @@ namespace NotificationSystem.Tests
 
             RabbitMQListener listener = new RabbitMQListener(modelMock.Object);
 
-            //act
+            // Act
             listener.CreateConsumer(notificationmock.Object);
             listener.SetCallBack(notificationmock.Object, consumerMock.Object);
             listener.CallBack(notificationmock.Object, eventArgs);
 
-            //assert
+            // Assert
             notificationmock.Verify();
-
-
-
-
-
-
         }
+
         [Test]
         public void StartConsumer_Valid_BasicConsumeCalled()
         {
-            //arrange
+            // Arrange
             string subject = "test";
             Mock<IModel> modelMock = new Mock<IModel>();
             Mock<EventingBasicConsumer> consumerMock = new Mock<EventingBasicConsumer>(modelMock.Object);
@@ -56,17 +51,11 @@ namespace NotificationSystem.Tests
                         
             RabbitMQListener listener = new RabbitMQListener(modelMock.Object);
 
-            //act
+            // Act
             listener.StartConsumer(consumerMock.Object, subject);
 
-            //assert
-            modelMock.Verify();
-
-            
+            // Assert
+            modelMock.Verify();    
         }
-        
-
-        
-
     }
 }

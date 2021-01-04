@@ -30,7 +30,7 @@ namespace NotificationSystem
 
             // inject your notification service here
             ISendGridClient sendGridClient = new SendGridClient(config.SendGrid.ApiKey);
-            INotificationService notificationService = new EmailSender(sendGridClient, config.SendGrid.EmailFrom);
+            INotificationService notificationService = new EmailSender(sendGridClient, config.SendGrid.EmailFrom, config.SendGrid.SandboxMode);
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
 
             listener.StartConsumer(consumer, "EMAIL");

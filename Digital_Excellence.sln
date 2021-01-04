@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBrokerPublisher", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSystem.Tests", "NotificationSystem.Tests\NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSystem.Tests", "NotificationSystem.Tests\NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
