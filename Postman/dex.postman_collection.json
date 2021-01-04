@@ -334,62 +334,6 @@
 					"response": []
 				},
 				{
-					"name": "User-CreateUser-Administrator",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.test(\"Status code is 201\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.success;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "IdentityId",
-								"type": "text",
-								"value": "{{administratorUserIdentityId}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{apiUrl}}/api/User",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"User"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Project-CreateProjectToFollow-Administrator",
 					"event": [
 						{
@@ -443,7 +387,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -506,7 +450,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+							"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_UserToFollow@example.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -552,7 +496,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_test to be deleted by unauthorized roles\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n  \"shortDescription\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n  \"uri\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n      \"role\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -633,7 +577,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"User-CreateUser-Administrator@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -761,7 +705,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{userNameUpdated}}\",\r\n  \"email\": \"postmantest_email\",\r\n  \"identityId\": \"{{createdUserIdentityId}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{userNameUpdated}}\",\r\n  \"email\": \"User-CreateUser-Administrator\",\r\n  \"identityId\": \"{{createdUserIdentityId}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1105,7 +1049,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1302,7 +1246,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-UpdateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-UpdateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1713,7 +1657,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postmantest_Highlight-CreateHighlight-Administrator\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1992,7 +1936,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postmantest_Highlight-UpdateHighlight-Administrator\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2469,7 +2413,8 @@
 												"api",
 												"Role"
 											]
-										}
+										},
+										"description": "Is deleted in the latest cleanup folder"
 									},
 									"response": []
 								},
@@ -2818,7 +2763,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"createdUserId\": {{createdUserId}},\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -3067,7 +3012,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"{{institutionName}}\",\n    \"description\": \"postmantest_initial_description\"\n}",
+											"raw": "{\n    \"name\": \"{{institutionName}}\",\n    \"description\": \"postmantest_Institution-CreateInstitution-Administrator\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -3189,7 +3134,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{updatedInstitutionName}}\",\r\n  \"description\": \"postmantest_updated_description\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{updatedInstitutionName}}\",\r\n  \"description\": \"postmantest_Institution-UpdateInstitution-Administrator\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -3279,6 +3224,171 @@
 							]
 						},
 						{
+							"name": "File",
+							"item": [
+								{
+									"name": "File-CreateFile-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"adminFileId\", jsonData.id)\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than 800ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "Postman/testimage.png"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Files-GetAll-Adminstrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "File-Delete-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/File/{{adminFileId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File",
+												"{{adminFileId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "CallToActionOption",
 							"item": [
 								{
@@ -3328,7 +3438,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"type\": \"Title\",\r\n  \"value\": \"Collaborate\"\r\n}",
+											"raw": "{\r\n  \"type\": \"postman_CallToActionOption-CreateCallToActionOption-Administrator\",\r\n  \"value\": \"postman_CallToActionOption-CreateCallToActionOption-Administrator\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -3759,50 +3869,6 @@
 									"response": []
 								},
 								{
-									"name": "Institution-DeleteInstitution-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Institution",
-												"{{createdInstitutionId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Role-DeleteRole-WithUsers-Administrator",
 									"event": [
 										{
@@ -3847,6 +3913,50 @@
 									"response": []
 								},
 								{
+									"name": "Institution-DeleteInstitution-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Institution",
+												"{{createdInstitutionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "User-DeleteUser-Administrator",
 									"event": [
 										{
@@ -3885,50 +3995,6 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Role-DeleteRole-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Role",
-												"{{roleId}}"
 											]
 										}
 									},
@@ -4078,56 +4144,6 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Role-Get-Deleted-Role-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 404\", function () {",
-													"    pm.response.to.have.status(404);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.notFound;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Role",
-												"{{roleId}}"
 											]
 										}
 									},
@@ -4284,171 +4300,6 @@
 									"response": []
 								}
 							]
-						},
-						{
-							"name": "File",
-							"item": [
-								{
-									"name": "File-CreateFile-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"adminFileId\", jsonData.id)\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than 800ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "formdata",
-											"formdata": [
-												{
-													"key": "File",
-													"type": "file",
-													"src": "Postman/testimage.png"
-												}
-											]
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/File",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"File"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Files-GetAll-Adminstrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/File",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"File"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "File-Delete-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/File/{{adminFileId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"File",
-												"{{adminFileId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
 						}
 					]
 				},
@@ -4473,6 +4324,7 @@
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"projectId\", jsonData.id);",
+													"pm.environment.set(\"adminProjectId\", jsonData.id);",
 													"",
 													"pm.test(\"Status code is 201\", function () {",
 													"    pm.response.to.have.status(201);",
@@ -4515,7 +4367,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Guest_Project-CreateProject\",\r\n  \"shortDescription\": \"postmantest_Guest_Project-CreateProject\",\r\n  \"uri\": \"postmantest_Guest_Project-CreateProject-CreateProjecttest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Guest_Project-CreateProject\",\r\n      \"role\": \"postmantest_Guest_Project-CreateProject\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -4592,7 +4444,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postman_Highlight-CreateHighlight\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -4687,7 +4539,6 @@
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"callToActionOptionId\", jsonData.id);",
-													"pm.environment.set(\"callToActionOptionType\", jsonData.type);",
 													"",
 													"pm.test(\"Status code is 201\", function () {",
 													"    pm.response.to.have.status(201);",
@@ -4727,7 +4578,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"type\": \"Title\",\r\n  \"value\": \"Collaborate\"\r\n}",
+											"raw": "{\r\n  \"type\": \"Title\",\r\n  \"value\": \"Feedback\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -4807,7 +4658,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"98764342123\",\n    \"name\": \"mycooltestusername\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"98764342123\",\n    \"name\": \"postman_User-CreateUser-Guest\",\n    \"email\": \"postman_User-CreateUser-Guest@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -6456,6 +6307,51 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Role-DeleteRole-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Role",
+												"{{roleId}}"
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"auth": {
@@ -7256,6 +7152,95 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "Cleanup Administrator",
+							"item": [
+								{
+									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"CallToActionOption",
+												"{{callToActionOptionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{adminProjectId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					],
 					"event": [
@@ -7333,7 +7318,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_Registered_User-CreateUser@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -7411,7 +7396,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Registered-Project-CreateProject\",\r\n  \"shortDescription\": \"postmantest_Registered-Project-CreateProject\",\r\n  \"uri\": \"postmantest_Registered-Project-CreateProject\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Registered-Project-CreateProject\",\r\n      \"role\": \"postmantest_Registered-Project-CreateProject\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -7488,7 +7473,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postman_Registered_Highlight-CreateHighlight\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -7567,78 +7552,6 @@
 											"path": [
 												"api",
 												"Embed"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Role-CreateRole",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var scopeName = pm.environment.get(\"scopeName\");",
-													"var roleName = pm.environment.get(\"roleName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.environment.set(\"roleId\", jsonData.id);",
-													"",
-													"pm.test(\"Status code is 201\", function () {",
-													"    pm.response.to.have.status(201);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.success;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Role Name is set correctly and matching: \" + roleName, function () {",
-													"    pm.expect(jsonData.name).to.eql(roleName);",
-													"});",
-													"",
-													"pm.test(\"Scope is correct and matching: \" + scopeName, function () {",
-													"    pm.expect(jsonData.scopes.scope).to.eql(scopeName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{roleName}}\",\r\n  \"scopes\": [\r\n    {\r\n      \"scope\": \"EmbedWrite\"\r\n    }\r\n  ]\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Role",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Role"
 											]
 										}
 									},
@@ -7748,9 +7661,8 @@
 											"listen": "test",
 											"script": {
 												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
@@ -7761,7 +7673,10 @@
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
 													"});",
-													""
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
 												],
 												"type": "text/javascript"
 											}
@@ -7943,7 +7858,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{registeredUserIdentityId}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"postman_User-UpdateUser-Self-Registered_alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{registeredUserIdentityId}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8007,6 +7922,54 @@
 												}
 											}
 										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-DeleteUser-Other-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
 										"url": {
 											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
@@ -8228,7 +8191,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8459,7 +8422,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8630,6 +8593,54 @@
 												"Project",
 												"like",
 												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Other-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectToBeDeletedByUnauthorizedRoles}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectToBeDeletedByUnauthorizedRoles}}"
 											]
 										}
 									},
@@ -8996,6 +9007,102 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Embed-DeleteEmbed-Self-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Embed/{{embedGuid}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Embed",
+												"{{embedGuid}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Embed-DeleteEmbed-Other-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Embed/{{adminEmbedGuid}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Embed",
+												"{{adminEmbedGuid}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -9288,6 +9395,54 @@
 												}
 											}
 										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"{{highlightId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Highlight-DeleteHighlight-Other-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
 										"url": {
 											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
 											"host": [
@@ -9627,6 +9782,54 @@
 													"value": "{{roleId}}",
 													"description": "Id of the role that you want to update the user with"
 												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Role-DeleteRole-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Role",
+												"{{roleId}}"
 											]
 										}
 									},
@@ -10041,7 +10244,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"fileId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"fileId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -10210,7 +10413,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"postmantest_projectname_updated\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"fileId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"fileId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -10384,7 +10587,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"postmantest_projectname_updated\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"fileId\": {{newRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"fileId\": {{newRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11201,152 +11404,8 @@
 							]
 						},
 						{
-							"name": "Cleanup",
+							"name": "Cleanup Registered",
 							"item": [
-								{
-									"name": "Embed-DeleteEmbed-Self-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Embed/{{embedGuid}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Embed",
-												"{{embedGuid}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Embed-DeleteEmbed-Other-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Embed/{{adminEmbedGuid}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Embed",
-												"{{adminEmbedGuid}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Highlight-DeleteHighlight-Other-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Highlight",
-												"{{highlightId}}"
-											]
-										}
-									},
-									"response": []
-								},
 								{
 									"name": "Project-DeleteProject-Self-Registered",
 									"event": [
@@ -11374,7 +11433,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -11390,9 +11449,14 @@
 										}
 									},
 									"response": []
-								},
+								}
+							]
+						},
+						{
+							"name": "Cleanup Administrator",
+							"item": [
 								{
-									"name": "Project-DeleteProject-Other-Registered",
+									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -11406,154 +11470,6 @@
 													"",
 													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{projectToBeDeletedByUnauthorizedRoles}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{projectToBeDeletedByUnauthorizedRoles}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Role-DeleteRole-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Role",
-												"{{roleId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-DeleteUser-Other-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"{{createdUserId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "CallToActionOption-DeleteCallToActionOption-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
 													"});"
 												],
 												"type": "text/javascript"
@@ -11582,6 +11498,110 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{adminProjectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-DeleteUser-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
 								}
 							]
 						}
@@ -11640,7 +11660,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"name\": \"{{institutionName}}\",\n    \"description\": \"postmantest_initial_description\"\n}",
+											"raw": "{\n    \"name\": \"{{institutionName}}\",\n    \"description\": \"postmantest_DataOfficer-Institution-CreateInstitution\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11708,7 +11728,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_DataOfficer-User-CreateUserWithoutInstitution@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11775,7 +11795,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\",\n    \"institutionId\": {{institutionIdFromUser}}\n}",
+											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_DataOfficer-User-CreateUserWithInstitution@example.com\",\n    \"institutionId\": {{institutionIdFromUser}}\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11853,7 +11873,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_DataOfficer-Project-CreateProject-DifferentInstitution\",\r\n  \"shortDescription\": \"postmantest_DataOfficer-Project-CreateProject-DifferentInstitution\",\r\n  \"uri\": \"postmantest_DataOfficer-Project-CreateProject-DifferentInstitution\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_DataOfficer-Project-CreateProject-DifferentInstitution\",\r\n      \"role\": \"postmantest_DataOfficer-Project-CreateProject-DifferentInstitution\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11916,7 +11936,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_DataOfficer-Project-CreateProject-SameInstitution\",\r\n  \"shortDescription\": \"postmantest_DataOfficer-Project-CreateProject-SameInstitution\",\r\n  \"uri\": \"postmantest_DataOfficer-Project-CreateProject-SameInstitution\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_DataOfficer-Project-CreateProject-SameInstitution\",\r\n      \"role\": \"postmantest_DataOfficer-Project-CreateProject-SameInstitution\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11993,7 +12013,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postmantest_DataOfficer-Highlight-CreateHighlight\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -12140,78 +12160,6 @@
 									"response": []
 								},
 								{
-									"name": "Role-CreateRole",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var scopeName = pm.environment.get(\"scopeName\");",
-													"var roleName = pm.environment.get(\"roleName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.environment.set(\"roleId\", jsonData.id);",
-													"",
-													"pm.test(\"Status code is 201\", function () {",
-													"    pm.response.to.have.status(201);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.success;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Role Name is set correctly and matching: \" + roleName, function () {",
-													"    pm.expect(jsonData.name).to.eql(roleName);",
-													"});",
-													"",
-													"pm.test(\"Scope is correct and matching: \" + scopeName, function () {",
-													"    pm.expect(jsonData.scopes.scope).to.eql(scopeName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{roleName}}\",\r\n  \"scopes\": [\r\n    {\r\n      \"scope\": \"EmbedWrite\"\r\n    }\r\n  ]\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Role",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Role"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "CallToActionOption-CreateCallToActionOption",
 									"event": [
 										{
@@ -12262,7 +12210,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"type\": \"Title\",\r\n  \"value\": \"Contact\"\r\n}",
+											"raw": "{\r\n  \"type\": \"Title\",\r\n  \"value\": \"Feedback\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -12360,6 +12308,69 @@
 											"path": [
 												"api",
 												"User"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UpdateUser-Self-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
+													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_DataOfficer-alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n  \"institutionId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{dataOfficerUserId}}"
 											]
 										}
 									},
@@ -12518,69 +12529,6 @@
 									"response": []
 								},
 								{
-									"name": "User-UpdateUser-Self-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
-													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n  \"institutionId\": 1\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"{{dataOfficerUserId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "User-UpdateUser-Other-DataOfficer",
 									"event": [
 										{
@@ -12705,7 +12653,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-DataOfficer\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-DataOfficer\",\r\n  \"uri\": \"postmantest_Project-CreateProject-DataOfficer\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-DataOfficer\",\r\n      \"role\": \"postmantest_Project-CreateProject-DataOfficer\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -12936,7 +12884,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-UpdateProject-Self-DataOfficer\",\r\n  \"shortDescription\": \"postmantest_Project-UpdateProject-Self-DataOfficer\",\r\n  \"uri\": \"postmantest_Project-UpdateProject-Self-DataOfficer\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-UpdateProject-Self-DataOfficer\",\r\n      \"role\": \"postmantest_Project-UpdateProject-Self-DataOfficer\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -13107,6 +13055,54 @@
 												"Project",
 												"like",
 												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Other-OtherInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectToBeDeletedByUnauthorizedRoles}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectToBeDeletedByUnauthorizedRoles}}"
 											]
 										}
 									},
@@ -13329,6 +13325,150 @@
 												"api",
 												"Embed",
 												"{{embedGuid}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Embed-DeleteEmbed-Self-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Embed/{{embedGuid}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Embed",
+												"{{embedGuid}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Embed-DeleteEmbed-Other-DifferentInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Embed/{{adminEmbedGuid}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Embed",
+												"{{adminEmbedGuid}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Embed-DeleteEmbed-Other-SameInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Embed/{{embedGuidWithInstitution}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Embed",
+												"{{embedGuidWithInstitution}}"
 											]
 										}
 									},
@@ -13625,6 +13765,54 @@
 												}
 											}
 										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"{{highlightId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Highlight-DeleteHighlight-Other-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
 										"url": {
 											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
 											"host": [
@@ -13964,6 +14152,54 @@
 													"value": "{{roleId}}",
 													"description": "Id of the role that you want to update the user with"
 												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Role-DeleteRole-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Role",
+												"{{roleId}}"
 											]
 										}
 									},
@@ -14780,200 +15016,8 @@
 							]
 						},
 						{
-							"name": "Cleanup",
+							"name": "Cleanup Data Officer",
 							"item": [
-								{
-									"name": "Embed-DeleteEmbed-Self-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Embed/{{embedGuid}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Embed",
-												"{{embedGuid}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Embed-DeleteEmbed-Other-DifferentInstitution-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Embed/{{adminEmbedGuid}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Embed",
-												"{{adminEmbedGuid}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Embed-DeleteEmbed-Other-SameInstitution-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Embed/{{embedGuidWithInstitution}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Embed",
-												"{{embedGuidWithInstitution}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Highlight-DeleteHighlight-Other-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Highlight",
-												"{{highlightId}}"
-											]
-										}
-									},
-									"response": []
-								},
 								{
 									"name": "Project-DeleteProject-Self-DataOfficer",
 									"event": [
@@ -15005,7 +15049,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -15017,54 +15061,6 @@
 												"api",
 												"Project",
 												"{{projectId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-DeleteProject-Other-OtherInstitution-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"1"
 											]
 										}
 									},
@@ -15117,9 +15113,34 @@
 										}
 									},
 									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
 								},
 								{
-									"name": "Role-DeleteRole-DataOfficer",
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "Cleanup Administrator",
+							"item": [
+								{
+									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -15133,10 +15154,6 @@
 													"",
 													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
 													"});"
 												],
 												"type": "text/javascript"
@@ -15153,21 +15170,61 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
+											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Role",
-												"{{roleId}}"
+												"CallToActionOption",
+												"{{callToActionOptionId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "User-DeleteUser-Other-DifferentInstitution-DataOfficer",
+									"name": "Project-DeleteProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{adminProjectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Institution-DeleteInstitution-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -15181,10 +15238,6 @@
 													"",
 													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
 													"});"
 												],
 												"type": "text/javascript"
@@ -15201,21 +15254,21 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
+											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"User",
-												"{{createdUserId}}"
+												"Institution",
+												"{{createdInstitutionId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "User-DeleteUser-Other-SameInstitution-DataOfficer",
+									"name": "User-DeleteUser-Other-SameInstitution-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -15263,7 +15316,7 @@
 									"response": []
 								},
 								{
-									"name": "CallToActionOption-DeleteCallToActionOption-DataOfficer",
+									"name": "User-DeleteUser-Other-DifferentInstitution-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -15297,14 +15350,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"CallToActionOption",
-												"{{callToActionOptionId}}"
+												"User",
+												"{{createdUserId}}"
 											]
 										}
 									},
@@ -15369,7 +15422,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"99966\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_PR-User-CreateUser@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -15447,7 +15500,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_PR-Project-CreateProject\",\r\n  \"shortDescription\": \"postmantest_PR-Project-CreateProject\",\r\n  \"uri\": \"postmantest_PR-Project-CreateProject\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_PR-Project-CreateProject\",\r\n      \"role\": \"postmantest_PR-Project-CreateProject\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -15524,7 +15577,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postmantest_PR-Highlight-CreateHighlight\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -15608,78 +15661,6 @@
 									"response": []
 								},
 								{
-									"name": "Role-CreateRole",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var scopeName = pm.environment.get(\"scopeName\");",
-													"var roleName = pm.environment.get(\"roleName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.environment.set(\"roleId\", jsonData.id);",
-													"",
-													"pm.test(\"Status code is 201\", function () {",
-													"    pm.response.to.have.status(201);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.success;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Role Name is set correctly and matching: \" + roleName, function () {",
-													"    pm.expect(jsonData.name).to.eql(roleName);",
-													"});",
-													"",
-													"pm.test(\"Scope is correct and matching: \" + scopeName, function () {",
-													"    pm.expect(jsonData.scopes.scope).to.eql(scopeName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{roleName}}\",\r\n  \"scopes\": [\r\n    {\r\n      \"scope\": \"EmbedWrite\"\r\n    }\r\n  ]\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Role",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Role"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "CallToActionOption-CreateCallToActionOption",
 									"event": [
 										{
@@ -15730,7 +15711,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"type\": \"Title\",\r\n  \"value\": \"Review\"\r\n}",
+											"raw": "{\r\n  \"type\": \"Title\",\r\n  \"value\": \"Feedback\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -15978,7 +15959,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"Pr jerry\",\r\n  \"email\": \"{{updatedPrUserEmail}}\",\r\n  \"identityId\": \"{{prUserIdentityId}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"postman_Pr_jerry\",\r\n  \"email\": \"{{updatedPrUserEmail}}\",\r\n  \"identityId\": \"{{prUserIdentityId}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -16263,7 +16244,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-PR\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-PR\",\r\n  \"uri\": \"postmantest_Project-CreateProject-PR\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-PR\",\r\n      \"role\": \"postmantest_Project-CreateProject-PR\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -16494,7 +16475,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-PR\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-PR\",\r\n  \"uri\": \"postmantest_Project-CreateProject-PR\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-PR\",\r\n      \"role\": \"postmantest_Project-CreateProject-PR\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -16665,6 +16646,54 @@
 												"Project",
 												"like",
 												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Other-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{adminProjectId}}"
 											]
 										}
 									},
@@ -17088,6 +17117,102 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Embed-DeleteEmbed-Self-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Embed/{{embedGuid}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Embed",
+												"{{embedGuid}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Embed-DeleteEmbed-Other-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Embed/{{otherEmbedGuid}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Embed",
+												"{{otherEmbedGuid}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -17146,7 +17271,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": {{projectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postman_Highlight-CreateHighlight-Self-PR\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -17353,7 +17478,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postman_Highlight-CreateHighlight-Self-PR\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -17425,7 +17550,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": {{adminProjectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": {{adminProjectId}},\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postman_Highlight-CreateHighlight-Other-PR\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -17632,7 +17757,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"Lorem Ipsum\"\r\n}",
+											"raw": "{\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"startDate\": \"{{current_timestamp}}\",\r\n  \"endDate\": \"{{future_timestamp}}\",\r\n  \"description\" : \"postman_Highlight-CreateHighlight-Other-PR\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -17713,6 +17838,94 @@
 											"path": [
 												"api",
 												"Highlight"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Highlight-DeleteHighlight-Self-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"{{highlightId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Highlight-DeleteHighlight-Other-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight/{{adminHighlightId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight",
+												"{{adminHighlightId}}"
 											]
 										}
 									},
@@ -18860,106 +19073,10 @@
 							]
 						},
 						{
-							"name": "Cleanup",
+							"name": "Cleanup PR",
 							"item": [
 								{
-									"name": "Embed-DeleteEmbed-Self-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Embed/{{embedGuid}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Embed",
-												"{{embedGuid}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Embed-DeleteEmbed-Other-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Embed/{{otherEmbedGuid}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Embed",
-												"{{otherEmbedGuid}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Highlight-DeleteHighlight-Self-PR",
+									"name": "Project-DeleteProject-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -18985,95 +19102,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Highlight/{{highlightId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Highlight",
-												"{{highlightId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Highlight-DeleteHighlight-Other-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Highlight/{{adminHighlightId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Highlight",
-												"{{adminHighlightId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-DeleteProject-Self-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{prUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -19089,9 +19118,14 @@
 										}
 									},
 									"response": []
-								},
+								}
+							]
+						},
+						{
+							"name": "Cleanup Administrator",
+							"item": [
 								{
-									"name": "Project-DeleteProject-Other-PR",
+									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -19105,10 +19139,50 @@
 													"",
 													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"CallToActionOption",
+												"{{callToActionOptionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -19139,7 +19213,7 @@
 									"response": []
 								},
 								{
-									"name": "Role-DeleteRole-PR",
+									"name": "User-DeleteUser-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -19153,58 +19227,6 @@
 													"",
 													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Role",
-												"{{roleId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-DeleteUser-Other-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
 													"});"
 												],
 												"type": "text/javascript"
@@ -19229,54 +19251,6 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "CallToActionOption-DeleteCallToActionOption-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"CallToActionOption",
-												"{{callToActionOptionId}}"
 											]
 										}
 									},
@@ -19599,6 +19573,50 @@
 								"api",
 								"User",
 								"{{userIdToFollow}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role-DeleteRole-Administrator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{administratorUserIdentityId}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/Role/{{roleId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Role",
+								"{{roleId}}"
 							]
 						}
 					},
