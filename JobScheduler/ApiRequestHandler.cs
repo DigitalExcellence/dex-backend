@@ -51,7 +51,7 @@ namespace JobScheduler
             else
             {
                 restRequest.AddParameter("Authorization",
-                                 string.Format("Bearer " + _token),
+                                 string.Format("Bearer " + _token.AccessToken),
                                  ParameterType.HttpHeader);
                 IRestResponse response = apiClient.Execute(restRequest);
 
@@ -74,7 +74,7 @@ namespace JobScheduler
             RestRequest restRequest = new RestRequest("api/UserTask/SetToMailed") { Method = Method.PUT };
 
             restRequest.AddParameter("Authorization",
-                                     string.Format("Bearer " + _token),
+                                     string.Format("Bearer " + _token.AccessToken),
                                      ParameterType.HttpHeader);
             restRequest.AddParameter("text/json", JsonConvert.SerializeObject(userTask), ParameterType.RequestBody);
             IRestResponse response = apiClient.Execute(restRequest);

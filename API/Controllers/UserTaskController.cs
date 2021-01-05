@@ -70,6 +70,7 @@ namespace API.Controllers
         /// <returns> All user tasks which are created or open for graduation users. </returns>
         /// <response code="200">This endpoint returns a list of user tasks.</response>
         [HttpGet("CreateUserTasks")]
+        [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
         [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> CreateUserTasksForGraduatingUsers()
         {
@@ -206,6 +207,7 @@ namespace API.Controllers
         /// <response code="200">This status code is returned when the user tasks were found successfully.</response>
         /// <response code="404">This status code is returned when no user was found.</response>
         [HttpPut("SetToMailed")]
+        [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         public async Task<IActionResult> SetUserTasksToStatusMailed(UserTask userTask)
         {

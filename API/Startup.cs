@@ -25,6 +25,8 @@ using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MessageBrokerPublisher;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -109,8 +111,13 @@ namespace API
                         options.ApiSecret = Config.Frontend.ClientSecret;
                         options.EnableCaching = true;
                     });
+
             services.AddAuthorization(o =>
             {
+                
+                o.AddPolicy(nameof(Defaults.Roles.BackendApplication),
+                    policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
+                
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
