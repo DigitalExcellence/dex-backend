@@ -11,7 +11,6 @@ namespace API.Resources
     /// </summary>
     public class PortfolioItemResourceResult
     {
-
         /// <summary>
         /// this sets or gets the portfolio id
         /// </summary>

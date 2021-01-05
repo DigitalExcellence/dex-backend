@@ -16,6 +16,8 @@
     <Compile Remove="Migrations\20201202082834_Initportfolioitems.Designer.cs" />
     <Compile Remove="Migrations\20201202091420_CreateListOfPortfolioItemsinPortfolioTable.cs" />
     <Compile Remove="Migrations\20201202091420_CreateListOfPortfolioItemsinPortfolioTable.Designer.cs" />
+    <Compile Remove="Migrations\20210105075132_portfolioItemNoLinkedTable.cs" />
+    <Compile Remove="Migrations\20210105075132_portfolioItemNoLinkedTable.Designer.cs" />
   </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />

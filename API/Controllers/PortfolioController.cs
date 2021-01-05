@@ -57,6 +57,8 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
         }
 
+        #region Portfolio
+
         /// <summary>
         /// This method is responsible for retrieving a single portfolio.
         /// </summary>
@@ -262,6 +264,60 @@ namespace API.Controllers
             return Ok();
         }
 
+        #endregion
+
+        #region PortfolioItem
+
+        /// <summary>
+        /// This method is responsible for retrieving a single portfolio.
+        /// </summary>
+        /// <param name="portfolioItemId">the portfolio identifier which is used for searching a portfolio.</param>
+        /// <returns>This method returns the user resource result.</returns>
+        /// <response code="200">This endpoint returns the portfolio with the specified portfolio item id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the portfolio item id is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the portfolio item with the specified id could not be found.</response>
+        [HttpGet("item/{portfolioItemId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetPortfolioItem(int portfolioItemId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
+                                                               nameof(Defaults.Scopes.UserRead),
+                                                               nameof(Defaults.Scopes.InstitutionUserRead),
+                                                               portfolioItemId);
+
+            if(!isAllowed)
+                return Forbid();
+
+            if(portfolioItemId < 0)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the portfolio item.",
+                    Detail = "The user id is less then zero and therefore cannot exist in the database.",
+                    Instance = "006B26A3-C8F9-4ABC-BDFD-6A3A6D0D894F",
+                };
+                return BadRequest(problem);
+            }
+
+            PortfolioItem PortfolioItem = await portfolioItemService.FindAsync(portfolioItemId);
+            if(PortfolioItem == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "the portfolio doesn't exist.",
+                    Detail = "The portfolio item id could not be found in the database.",
+                    Instance = "A130226D-B26D-4C41-9CCF-C988B6FE3F08"
+                };
+                return NotFound(problem);
+            }
+
+            return Ok(mapper.Map<PortfolioItem, PortfolioItemResourceResult>(PortfolioItem));
+        }
+
         /// <summary>
         /// This method is responsible for creating a portfolio item.
         /// </summary>
@@ -269,10 +325,10 @@ namespace API.Controllers
         /// <param name="projectId">The project identifier which is used for searching the project.</param>
         /// <param name="portfolioItemResource">The portfolio item resource which is used for creating the portfolio item.</param>
         /// <returns>This method returns the portfolio item resource result.</returns>
-        /// <response code="200">This endpoint returns the created portfolio.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the portfolio
-        /// resource is not specified or failed to save portfolio to the database.</response>
-        [HttpPost("item/{portfolioId}")]
+        /// <response code="200">This endpoint returns the created portfolio item.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the portfolio item
+        /// resource is not specified or failed to save portfolio item to the database.</response>
+        [HttpPost("item/{portfolioItemId}")]
         [Authorize]
         [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -281,6 +337,9 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
+
+            PortfolioItem portfolioItem = mapper.Map<PortfolioItemResource, PortfolioItem>(portfolioItemResource);
+
 
             if(await userService.FindAsync(user.Id) == null)
             {
@@ -327,16 +386,15 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
-                portfolioItemResource.ProjectId = project.Id;
-                            }
+                //portfolioItemResource.ProjectId = project.Id;
+                portfolioItem.ProjectId = 0;
+            }
 
-            portfolioItemResource.PortfolioId = portfolio.Id;
-            PortfolioItem portfolioItem = mapper.Map<PortfolioItemResource, PortfolioItem>(portfolioItemResource);
+            //portfolioItemResource.PortfolioId = portfolio.Id;
 
             try
             {
-                portfolioItem.Portfolio = portfolio;
-                portfolioItem.Project = project;
+                portfolioItem.PortfolioId = portfolio.Id;
                 portfolioItemService.Add(portfolioItem);
                 portfolioItemService.Save();
                 PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);
@@ -363,10 +421,10 @@ namespace API.Controllers
         /// <param name="portfolioItemId">The portfolio item identifier which is used for searching the portfolio item</param>
         /// <param name="portfolioItemResource">The portfolio item resource which is used for updating the portfolio item.</param>
         /// <returns>This method returns the portfolio item resource result.</returns>
-        /// <response code="200">This endpoint returns the updated portfolio.</response>
+        /// <response code="200">This endpoint returns the updated portfolio item.</response>
         /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
         /// <response code="404">The 404 not Found status code is returned when the portfolio to update is not found.</response>
-        [HttpPut("{portfolioItemId}")]
+        [HttpPut("item/{portfolioItemId}")]
         [Authorize]
         [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
@@ -406,5 +464,54 @@ namespace API.Controllers
             return Ok(mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem));
         }
 
+        /// <summary>
+        /// This method is responsible for deleting the portfolio.
+        /// </summary>
+        /// <param name="portfolioId">The portfolio identifier which is used for searching the portfolio.</param>
+        /// <param name="portfolioItemId">The portfolio Item identifier which is used for searching the portfolio item.</param>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The current portfolio item is deleted.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the current portfolio item could not be found.</response>
+        [HttpDelete("item/{portfolioItemId}")]
+        [Authorize]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeletePortfolioItem(int portfolioId, int portfolioItemId)
+        {
+            PortfolioItem portfolioItem = await portfolioItemService.FindAsync(portfolioItemId).ConfigureAwait(false);
+            Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(portfolioItem == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete portfolio item.",
+                    Detail = "The specified portfolio could not be found in the database.",
+                    Instance = "618CCDA0-A8E2-4B8E-B393-661D96A22585"
+                };
+                return NotFound(problem);
+            }
+
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
+
+            if(!(portfolio.User.Id == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the portfolio item.",
+                    Detail = "The user is not allowed to delete the portfolio.",
+                    Instance = "9F0CB10D-0FAE-4112-A91A-79E5C1F798BD"
+                };
+                return Unauthorized(problem);
+            }
+
+
+            await portfolioItemService.RemoveAsync(portfolioItemId);
+            portfolioService.Save();
+            return Ok();
+        }
+
     }
+    #endregion
 }

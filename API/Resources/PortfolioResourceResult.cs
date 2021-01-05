@@ -21,7 +21,6 @@ namespace API.Resources
         /// </summary>
         public string UserName { get; set; }
 
-
         /// <summary>
         /// This sets or gets the username of the portfolio
         /// </summary>
