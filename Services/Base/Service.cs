@@ -70,6 +70,16 @@ namespace Services.Base
             return Repository.RemoveAsync(id);
         }
 
+        public virtual void RemoveRange(IEnumerable<TEntity> entities)
+        {
+            Repository.RemoveRange(entities);
+        }
+
+        public virtual Task RemoveRangeAsync(IEnumerable<int> ids)
+        {
+            return Repository.RemoveRangeAsync(ids);
+        }
+
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
             return await Repository.GetAll().ConfigureAwait(false);

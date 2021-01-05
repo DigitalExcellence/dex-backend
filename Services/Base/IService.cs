@@ -39,6 +39,10 @@ namespace Services.Base
 
         void Remove(TEntity entity);
 
+        void RemoveRange(IEnumerable<TEntity> entities);
+
+        Task RemoveRangeAsync(IEnumerable<int> ids);
+
         Task<IEnumerable<TEntity>> GetAll();
 
         void Save();

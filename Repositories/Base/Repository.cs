@@ -138,6 +138,37 @@ namespace Repositories.Base
             DbSet.Remove(entity);
         }
 
+        public virtual void RemoveRange(IEnumerable<TEntity> entities)
+        {
+            foreach(TEntity e in entities)
+            {
+                if(DbContext.Entry(e)
+                            .State ==
+                   EntityState.Detached)
+                {
+                    DbSet.Attach(e);
+                }
+            }
+
+            DbSet.RemoveRange(entities);
+        }
+
+        public virtual async Task RemoveRangeAsync(IEnumerable<int> ids)
+        {
+            List<TEntity> entities = new List<TEntity>();
+            foreach(int id in ids)
+            {
+                TEntity entity = await FindAsync(id).ConfigureAwait(false);
+                if(entity == null)
+                {
+                    throw new KeyNotFoundException($"Id: {id} not found");
+                }
+                entities.Add(entity);
+            }
+
+            RemoveRange(entities);
+        }
+
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
             return await DbSet.ToListAsync().ConfigureAwait(false);
