@@ -70,8 +70,17 @@ namespace Services.DataProviders
 
         private async Task<IEnumerable<IDataSourceAdaptee>> UpdateModelsWithRepositoryValues(IDataSourceAdaptee[] sources)
         {
-            IEnumerable<DataSource> sourceModels = (await dataSourceAdapteeRepository.GetAll()).ToArray();
-            mapper.Map(sourceModels, sources);
+            DataSource[] sourceModels = (await dataSourceAdapteeRepository.GetAll()).ToArray();
+            foreach(DataSource sourceModel in sourceModels)
+            {
+                IDataSourceAdaptee source = sources.SingleOrDefault(s => s.Guid == sourceModel.Guid);
+                if(source == null) continue;
+                source.Title = sourceModel.Title;
+                source.Description = sourceModel.Description;
+                source.IsVisible = sourceModel.IsVisible;
+                source.Icon = sourceModel.Icon;
+            }
+            
             return sources;
         }
 
@@ -105,13 +114,16 @@ namespace Services.DataProviders
             // no model in the database is found, this should get added to the database.
             IEnumerable<IDataSourceAdaptee> adapteesWithoutModel =
                 sources.Where(s => sourceModels.SingleOrDefault(m => m.Guid == s.Guid) == null);
-            dataSourceAdapteeRepository.AddRange(mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
-
+            await dataSourceAdapteeRepository.AddRangeAsync(
+                mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
+            
             // For every model in the database, check if an adaptee is found. Whenever
             // no adaptee is found, this should get removed from the database.
             List<DataSource> modelsWithoutAdaptee =
                 sourceModels.Where(m => sources.SingleOrDefault(s => s.Guid == m.Guid) == null).ToList();
             modelsWithoutAdaptee.ForEach(async m => await dataSourceAdapteeRepository.RemoveAsync(m.Id));
+
+            dataSourceAdapteeRepository.Save();
         }
 
     }
