@@ -84,6 +84,7 @@ namespace API.Extensions
             services.AddScoped<IUserUserRepository, UserUserRepository>();
 
             services.AddScoped<IDataProviderService, DataProviderService>();
+            services.AddScoped<IDataSourceAdapteeRepository, DataSourceAdapteeRepository>();
             services.AddScoped<IDataProviderLoader, DataProviderLoader>();
 
             services.AddExternalDataSources();

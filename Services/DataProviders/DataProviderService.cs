@@ -15,9 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using AutoMapper;
 using Models;
-using Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,18 +48,11 @@ namespace Services.DataProviders
     public class DataProviderService : IDataProviderService
     {
         private readonly IDataProviderLoader dataProviderLoader;
-        private readonly IDataSourceAdapteeRepository dataSourceAdapteeRepository;
-        private readonly IMapper mapper;
         private IDataProviderAdapter dataProviderAdapter;
 
-        public DataProviderService(
-            IDataProviderLoader dataProviderLoader,
-            IDataSourceAdapteeRepository dataSourceAdapteeRepository,
-            IMapper mapper)
+        public DataProviderService(IDataProviderLoader dataProviderLoader)
         {
             this.dataProviderLoader = dataProviderLoader;
-            this.dataSourceAdapteeRepository = dataSourceAdapteeRepository;
-            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth)
