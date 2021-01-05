@@ -31,7 +31,6 @@ using Microsoft.Extensions.Logging;
 using Models;
 using Newtonsoft.Json;
 using RestSharp;
-using Services.DataProviders;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -53,7 +52,6 @@ namespace IdentityServer
         private readonly ILogger<ExternalController> logger;
         private readonly Config config;
         private readonly IIdentityUserService identityUserService;
-        private readonly IDataProviderService dataProviderService;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -61,8 +59,7 @@ namespace IdentityServer
             IEventService events,
             ILogger<ExternalController> logger,
             Config config,
-            IIdentityUserService identityUserService,
-            IDataProviderService dataProviderService)
+            IIdentityUserService identityUserService)
         {
             this.identityUserService = identityUserService;
             this.interaction = interaction;
@@ -70,7 +67,7 @@ namespace IdentityServer
             this.logger = logger;
             this.events = events;
             this.config = config;
-            this.dataProviderService = dataProviderService;
+            //this.dataProviderService = dataProviderService;
         }
 
         /// <summary>
@@ -312,35 +309,35 @@ namespace IdentityServer
             return Redirect(returnUrl);
         }
 
-        /// <summary>
-        /// This method returns the url of the oauth login page of the correct data provider.
-        /// </summary>
-        /// <param name="guid">The guid is used for identifying the data provider.</param>
-        /// <returns>This method returns the url of the oauth login page.</returns>
-        [HttpGet]
-        public async Task<IActionResult> ExternalAuthentication(string guid, string redirectUrl)
-        {
-            HttpContext.Response.Cookies.Append("redirectUrl", redirectUrl);
+        ///// <summary>
+        ///// This method returns the url of the oauth login page of the correct data provider.
+        ///// </summary>
+        ///// <param name="guid">The guid is used for identifying the data provider.</param>
+        ///// <returns>This method returns the url of the oauth login page.</returns>
+        //[HttpGet]
+        //public async Task<IActionResult> ExternalAuthentication(string guid, string redirectUrl)
+        //{
+        //    HttpContext.Response.Cookies.Append("redirectUrl", redirectUrl);
 
-            string oauthUrl = await dataProviderService.GetOauthUrl(guid);
-            return Redirect(oauthUrl);
-        }
+        //    string oauthUrl = await dataProviderService.GetOauthUrl(guid);
+        //    return Redirect(oauthUrl);
+        //}
 
-        /// <summary>
-        /// This method converts the retrieved code to the tokens to use in the external API.
-        /// </summary>
-        /// <param name="code">This is the retrieved code from the login page from the external data source.</param>
-        /// <param name="state">This is a random string which can be a variable, for example the guid.</param>
-        /// <returns>This method returns the correct tokens.</returns>
-        public async Task<IActionResult> RetrieveTokens(string code, string state)
-        {
-            OauthTokens tokens = await dataProviderService.GetTokens(code, state);
+        ///// <summary>
+        ///// This method converts the retrieved code to the tokens to use in the external API.
+        ///// </summary>
+        ///// <param name="code">This is the retrieved code from the login page from the external data source.</param>
+        ///// <param name="state">This is a random string which can be a variable, for example the guid.</param>
+        ///// <returns>This method returns the correct tokens.</returns>
+        //public async Task<IActionResult> RetrieveTokens(string code, string state)
+        //{
+        //    OauthTokens tokens = await dataProviderService.GetTokens(code, state);
 
-            HttpContext.Response.Headers.Add("OauthTokens", JsonConvert.SerializeObject(tokens));
+        //    HttpContext.Response.Headers.Add("OauthTokens", JsonConvert.SerializeObject(tokens));
 
-            string returnUrl = Request.Cookies["redirectUrl"];
-            return Redirect(returnUrl);
-        }
+        //    string returnUrl = Request.Cookies["redirectUrl"];
+        //    return Redirect(returnUrl);
+        //}
 
         /// <summary>
         /// Finds the user from external provider.
