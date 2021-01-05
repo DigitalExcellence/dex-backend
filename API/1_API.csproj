@@ -6,6 +6,7 @@
     <DocumentationFile>.\API.xml</DocumentationFile>
     <Company>Digital Excellence Fontys</Company>
     <LangVersion>8</LangVersion>
+    <Version>0.9.0-beta</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,7 +48,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\4_Data.csproj" />
+    <ProjectReference Include="..\MessageBrokerPublisher\MessageBrokerPublisher.csproj" />
     <ProjectReference Include="..\Models\5_Models.csproj" />
+    <ProjectReference Include="..\NotificationSystem\NotificationSystem.csproj" />
     <ProjectReference Include="..\Services\2_Services.csproj" />
   </ItemGroup>
 

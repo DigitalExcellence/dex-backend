@@ -88,6 +88,13 @@ namespace API.Extensions
             services.AddScoped<IPortfolioItemService, PortfolioItemService>();
             services.AddScoped<IPortfolioItemRepository, PortfolioItemRepository>();
 
+            services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
+            services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
+
+            services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
+            services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
+
+
             return services;
         }
     }

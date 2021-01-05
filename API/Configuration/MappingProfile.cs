@@ -18,6 +18,7 @@
 using API.Resources;
 using AutoMapper;
 using Models;
+using System.Collections.Generic;
 
 namespace API.Configuration
 {
@@ -31,6 +32,29 @@ namespace API.Configuration
         /// </summary>
         public MappingProfile()
         {
+            CreateMap<ProjectLike, UserProjectLikeResourceResult>()
+                .ForMember(source => source.Id,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Id))
+                .ForMember(source => source.Name,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Name))
+                .ForMember(source => source.ShortDescription,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.ShortDescription))
+                .ForMember(source => source.Uri,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Uri))
+                .ForMember(source => source.Description,
+                           option => option
+                               .MapFrom(destination =>
+                                            destination.LikedProject.Description))
+                .ForAllOtherMembers(member => member.Ignore());
+
            CreateMap<UserUserResourceResult, UserUser>();
 
            CreateMap<UserUser, UserUserResourceResult>()
@@ -72,6 +96,7 @@ namespace API.Configuration
 
             CreateMap<ProjectResource, Project>();
             CreateMap<Project, ProjectResourceResult>();
+            CreateMap<ProjectLike, ProjectLikesResourceResult>();
             CreateMap<Project, ProjectHighlightResourceResult>();
 
             CreateMap<CollaboratorResource, Collaborator>();
@@ -101,6 +126,15 @@ namespace API.Configuration
 
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
+
+            CreateMap<CallToActionResource, CallToAction>()
+                .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));
+            CreateMap<CallToAction, CallToActionResourceResult>();
+
+            CreateMap<CallToActionOptionResource, CallToActionOption>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToLower()))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToLower()));
+            CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
         }
     }
 }

@@ -127,6 +127,9 @@ namespace Models.Defaults
             [Description("This scope gives write access to the file namespace")]
             public const string FileWrite = "file:write";
 
+            [Description("This scope gives write access to the Call To Action option namespace")]
+            public const string CallToActionOptionWrite = "callToAction:write";
+
         }
 
     }
