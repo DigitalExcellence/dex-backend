@@ -23,10 +23,24 @@ namespace API.Resources
     public class DataSourceResource
     {
         /// <summary>
-        /// Get or Set the Title of the data source.
+        /// Gets or Set the Title of the data source.
         /// </summary>
         public string Title { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Description of the data source.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the visibility of the data source.
+        /// </summary>
+        public bool IsVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the icon id of the data source.
+        /// </summary>
+        public int IconId { get; set; }
     }
 
 }

@@ -15,18 +15,40 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
+
 namespace API.Resources
 {
     /// <summary>
     /// Resource Result for a data source.
     /// </summary>
-    public class DataSourceResourceResult : DataSourceResource
+    public class DataSourceResourceResult
     {
 
         /// <summary>
         /// Get or set the guid of a data source.
         /// </summary>
         public string Guid { get; set; }
+
+        /// <summary>
+        /// Gets or Set the Title of the data source.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description of the data source.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the visibility of the data source.
+        /// </summary>
+        public bool IsVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the icon of the data source.
+        /// </summary>
+        public File Icon { get; set; }
 
     }
 
