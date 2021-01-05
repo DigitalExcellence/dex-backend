@@ -18,14 +18,11 @@
 namespace API.Resources
 {
 
-    public class DataSourceResourceResult
+    public class DataSourceResourceResult : DataSourceResource
     {
 
         public string Guid { get; set; }
 
-        public string Title { get; set; }
-
-
-    }
+        }
 
 }
