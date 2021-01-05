@@ -122,6 +122,9 @@ namespace Models.Defaults
             [Description("This scope gives write access to the file namespace")]
             public const string FileWrite = "file:write";
 
+            [Description("This scope gives write access to the datasource namespace")]
+            public const string DataSourceWrite = "datasource:write";
+
         }
 
     }
