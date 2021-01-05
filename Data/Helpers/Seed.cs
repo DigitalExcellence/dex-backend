@@ -105,7 +105,8 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionRead)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.FileWrite))
+                    new RoleScope(nameof(Defaults.Scopes.FileWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.DataSourceWrite))
                 }
             };
             roles.Add(administratorRole);
