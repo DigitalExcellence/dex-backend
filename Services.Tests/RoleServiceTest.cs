@@ -67,6 +67,8 @@ namespace Services.Tests
         {
             List<string> currentScopes = new List<string>()
             {
+                "PortfolioRead",
+                "PortfolioWrite",
                 "ProjectRead",
                 "ProjectWrite",
                 "UserRead",
