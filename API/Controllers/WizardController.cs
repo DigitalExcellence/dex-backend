@@ -18,13 +18,14 @@
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Defaults;
 using Services.DataProviders;
 using Services.Services;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -37,89 +38,95 @@ namespace API.Controllers
     [ApiController]
     public class WizardController : ControllerBase
     {
-        private readonly ISourceManagerService sourceManagerService;
         private readonly IDataProviderService dataProviderService;
+        private readonly IDataSourceModelService dataSourceModelService;
         private readonly IMapper mapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardController"/> class.
         /// </summary>
-        /// <param name="sourceManagerService">The source manager service which is used to communicate with the logic layer.</param>
+        /// <param name="dataProviderService">The source manager service which is used to communicate with the logic layer.</param>
+        /// <param name="dataSourceModelService">The data source model service which is used to communicate with the logic layer.</param>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         public WizardController(
-            ISourceManagerService sourceManagerService,
             IDataProviderService dataProviderService,
+            IDataSourceModelService dataSourceModelService,
             IMapper mapper)
         {
-            this.sourceManagerService = sourceManagerService;
             this.dataProviderService = dataProviderService;
+            this.dataSourceModelService = dataSourceModelService;
             this.mapper = mapper;
         }
 
-        /// <summary>
-        /// This method is responsible for retrieving the wizard information.
-        /// </summary>
-        /// <param name="sourceURI">The source URI which is used for searching the project.</param>
-        /// <returns>This method returns the filled in project.</returns>
-        /// <response code="200">This endpoint returns the project with the specified source Uri.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the source Uri is not specified.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the project could not be found with the specified source Uri.</response>
-        [HttpGet("/test")]
-        [Authorize]
-        [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int) HttpStatusCode.NotFound)]
-        public IActionResult GetWizardInformation(Uri sourceURI)
-        {
-            if(sourceURI == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Source uri is null or empty.",
-                    Detail = "The incoming source uri is not valid.",
-                    Instance = "6D63D9FA-91D6-42D5-9ACB-461FBEB0D2ED"
-                };
-                return BadRequest(problem);
-            }
-            Project project = sourceManagerService.FetchProject(sourceURI);
-            if(project == null)
-            {
-                return NotFound();
-            }
-            if(project.Name == null && project.ShortDescription == null && project.Description == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Project not found.",
-                    Detail = "The incoming source uri aims at a gitlab which is either not instantiated or is a group.",
-                    Instance = "E56D89C5-8760-4503-839C-F695092C79BF"
-                };
-                return BadRequest(problem);
-            }
-            return Ok(project);
-        }
+        ///// <summary>
+        ///// This method is responsible for retrieving the wizard information.
+        ///// </summary>
+        ///// <param name="sourceURI">The source URI which is used for searching the project.</param>
+        ///// <returns>This method returns the filled in project.</returns>
+        ///// <response code="200">This endpoint returns the project with the specified source Uri.</response>
+        ///// <response code="400">The 400 Bad Request status code is returned when the source Uri is not specified.</response>
+        ///// <response code="404">The 404 Not Found status code is returned when the project could not be found with the specified source Uri.</response>
+        //[HttpGet("/test")]
+        //[Authorize]
+        //[ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        //[ProducesResponseType((int) HttpStatusCode.NotFound)]
+        //public IActionResult GetWizardInformation(Uri sourceURI)
+        //{
+        //    if(sourceURI == null)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Source uri is null or empty.",
+        //            Detail = "The incoming source uri is not valid.",
+        //            Instance = "6D63D9FA-91D6-42D5-9ACB-461FBEB0D2ED"
+        //        };
+        //        return BadRequest(problem);
+        //    }
+        //    Project project = sourceManagerService.FetchProject(sourceURI);
+        //    if(project == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    if(project.Name == null && project.ShortDescription == null && project.Description == null)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Project not found.",
+        //            Detail = "The incoming source uri aims at a gitlab which is either not instantiated or is a group.",
+        //            Instance = "E56D89C5-8760-4503-839C-F695092C79BF"
+        //        };
+        //        return BadRequest(problem);
+        //    }
+        //    return Ok(project);
+        //}
 
         /// <summary>
         /// This method is responsible for retrieving projects from an external data source.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
         /// <param name="token">The token which is used for retrieving the projects from the user.</param>
+        /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
         /// <returns>This method returns a collection of all the projects.</returns>
+        /// <response code="200">This endpoint returns the project with the specified id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectsFromExternalDataSource(
             [FromQuery] string dataSourceGuid,
             [FromQuery] string token,
             [FromQuery] bool needsAuth)
         {
-            if(string.IsNullOrEmpty(dataSourceGuid))
+            if(!Guid.TryParse(dataSourceGuid, out Guid _))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Invalid data source guid",
-                    Detail = "Data source guid can't be empty",
+                    Title = "Specified guid is not valid.",
+                    Detail = "The specified guid is not a real or valid guid.",
                     Instance = "D84D3112-855D-480A-BCDE-7CADAC2C6C55"
                 };
                 return BadRequest(problem);
@@ -146,23 +153,27 @@ namespace API.Controllers
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
         /// <param name="accessToken">The access token which is used for authentication.</param>
         /// <param name="projectId">The id of the project which is used for searching a specific project.</param>
-        /// <returns></returns>
+        /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
+        /// <returns>This method returns the project data source resource result</returns>
+        /// <response code="200">This endpoint returns the project with the specified id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
         [HttpGet("projectId")]
         [Authorize]
-        [ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
                                                                     [FromQuery] string accessToken,
                                                                     int projectId,
                                                                     [FromQuery] bool needsAuth)
         {
-            if(string.IsNullOrEmpty(dataSourceGuid))
+            if(!Guid.TryParse(dataSourceGuid, out Guid _))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Invalid data source guid",
-                    Detail = "Data source guid can't be empty",
+                    Title = "Specified guid is not valid.",
+                    Detail = "The specified guid is not a real or valid guid.",
                     Instance = "019146D8-4162-43DD-8531-57DDD26E221C"
                 };
                 return BadRequest(problem);
@@ -200,17 +211,64 @@ namespace API.Controllers
         /// </summary>
         /// <param name="needsAuth">This parameter specifies whether the data sources should need authentication.</param>
         /// <returns>This method returns a collection of data sources.</returns>
-        [HttpGet("datasources")]
+        /// <response code="200">This endpoint returns the available data sources with the specified flow.</response>
+        [HttpGet("dataSources")]
         [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<IDataSourceAdaptee>), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<IDataSourceAdaptee>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
             IEnumerable<IDataSourceAdaptee> dataSources = await dataProviderService.RetrieveDataSources(needsAuth);
             IEnumerable<DataSourceResourceResult> dataSourceResourceResult =
                 mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceResourceResult>>(dataSources);
             return Ok(dataSourceResourceResult);
+        }
+
+        /// <summary>
+        /// This method is responsible for updating the data source in the database.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="dataSourceResource"></param>
+        /// <returns>This method returns the updated data source resource result.</returns>
+        /// <response code="200">This endpoint returns the updated data source.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
+        [HttpPut("dataSource/{guid}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.DataSourceWrite))]
+        [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateDataSource(string guid, [FromBody] DataSourceResource dataSourceResource)
+        {
+            if(!Guid.TryParse(guid, out Guid _))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Specified guid is not valid.",
+                    Detail = "The specified guid is not a real or valid guid.",
+                    Instance = "F472CEEC-BBC7-41A7-87C9-24B669DB9D80"
+                };
+                return BadRequest(problem);
+            }
+
+            DataSource dataSourceModel = await dataSourceModelService.GetDataSourceByGuid(guid);
+
+            if(dataSourceModel == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed retrieving the data source.",
+                    Detail = "The database does not contain an institution with that guid.",
+                    Instance = "D2F23105-8BE0-45C1-8A4F-F169A828B269"
+                };
+                return NotFound(problem);
+            }
+
+            mapper.Map(dataSourceResource, dataSourceModel);
+
+            dataSourceModelService.Update(dataSourceModel);
+            dataSourceModelService.Save();
+
+            return Ok(mapper.Map<DataSource, DataSourceResourceResult>(dataSourceModel));
         }
     }
 }
