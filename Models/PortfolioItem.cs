@@ -7,18 +7,18 @@ namespace Models
 {
     public class PortfolioItem
     {
-        //public PortfolioItem(Portfolio portfolio, Project project)
-        //{
-        //    Portfolio = portfolio;
-        //    Project = project;
-        //}
+        public PortfolioItem(Portfolio portfolio, Project project)
+        {
+            Portfolio = portfolio;
+            ProjectId = project.Id;
+        }
 
         public PortfolioItem() { }
 
         public int Id { get; set; }
 
         [Required]
-        public int PortfolioId { get; set; }
+        public Portfolio Portfolio { get; set; }
 
         public int Position { get; set; }
 

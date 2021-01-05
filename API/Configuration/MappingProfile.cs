@@ -81,10 +81,10 @@ namespace API.Configuration
 
             CreateMap<PortfolioItemResource, PortfolioItem>();
 
+
             CreateMap<PortfolioItem, PortfolioItemResourceResult>()
-                //.ForMember(q => q.PortfolioId, opt => opt.MapFrom(p => p.Portfolio.Id))
-                //.ForMember(q => q.ProjectId, opt => opt.MapFrom(p => p.Project.Id))
-                .ForAllOtherMembers(o => o.Ignore());
+                .ForMember(q => q.PortfolioId, opt => opt.MapFrom(p => p.Portfolio.Id))
+                .ForMember(q => q.ProjectId, opt => opt.MapFrom(p => p.ProjectId));
 
 
 

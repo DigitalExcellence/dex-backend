@@ -271,7 +271,7 @@ namespace API.Controllers
         /// <summary>
         /// This method is responsible for retrieving a single portfolio.
         /// </summary>
-        /// <param name="portfolioItemId">the portfolio identifier which is used for searching a portfolio.</param>
+        /// <param name="portfolioItemId">the portfolio item identifier which is used for searching a portfolio item.</param>
         /// <returns>This method returns the user resource result.</returns>
         /// <response code="200">This endpoint returns the portfolio with the specified portfolio item id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the portfolio item id is invalid.</response>
@@ -303,8 +303,8 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            PortfolioItem PortfolioItem = await portfolioItemService.FindAsync(portfolioItemId);
-            if(PortfolioItem == null)
+            PortfolioItem portfolioItem = await portfolioItemService.FindAsync(portfolioItemId);
+            if(portfolioItem == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -315,7 +315,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<PortfolioItem, PortfolioItemResourceResult>(PortfolioItem));
+            return Ok(mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem));
         }
 
         /// <summary>
@@ -394,11 +394,11 @@ namespace API.Controllers
 
             try
             {
-                portfolioItem.PortfolioId = portfolio.Id;
+                portfolioItem.Portfolio = portfolio;
                 portfolioItemService.Add(portfolioItem);
                 portfolioItemService.Save();
                 PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);
-                return Created(nameof(CreatePortfolioItemAsync), model);
+                return Created(nameof(CreatePortfolioItemAsync), portfolioItem);
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
