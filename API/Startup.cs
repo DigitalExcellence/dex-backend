@@ -151,9 +151,11 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
                     
-
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.DataSourceWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.DataSourceWrite))));
             });
 
             services.AddCors();

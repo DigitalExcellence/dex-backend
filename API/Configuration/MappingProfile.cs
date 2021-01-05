@@ -88,6 +88,8 @@ namespace API.Configuration
             CreateMap<Institution, InstitutionResourceResult>();
 
             CreateMap<IDataSourceAdaptee, DataSourceResourceResult>();
+            CreateMap<DataSourceResource, DataSource>();
+            CreateMap<DataSource, DataSourceResourceResult>();
             CreateMap<IDataSourceAdaptee, DataSource>();
 
             CreateExternalSourceMappingProfiles();

@@ -52,7 +52,7 @@ namespace Services.Services
         /// Initializes a new instance of the <see cref="DataSourceModelService"/> class.
         /// </summary>
         /// <param name="repository">The repository that will be used to communicate with the repository layer.</param>
-        public DataSourceModelService(IRepository<DataSource> repository) : base(repository) { }
+        public DataSourceModelService(IDataSourceModelRepository repository) : base(repository) { }
 
         protected new IDataSourceModelRepository Repository => (IDataSourceModelRepository) base.Repository;
 
