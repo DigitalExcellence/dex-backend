@@ -206,11 +206,13 @@ namespace API.Controllers
         /// <returns> All user tasks which are created or open for graduation users. </returns>
         /// <response code="200">This status code is returned when the user tasks were found successfully.</response>
         /// <response code="404">This status code is returned when no user was found.</response>
-        [HttpPut("SetToMailed")]
+        [HttpPut("SetToMailed/{userTaskId}")]
         [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
         [ProducesResponseType((int) HttpStatusCode.OK)]
-        public async Task<IActionResult> SetUserTasksToStatusMailed(UserTask userTask)
+        public async Task<IActionResult> SetUserTasksToStatusMailed(int userTaskId)
         {
+            UserTask userTask = await userTaskService.FindAsync(userTaskId);
+            userTask.Status = UserTaskStatus.Mailed;
             userTaskService.Update(userTask);
             userTaskService.Save();
 

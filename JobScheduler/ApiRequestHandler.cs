@@ -19,7 +19,7 @@ namespace JobScheduler
     {
         List<UserTask> GetExpectedGraduationUsers();
 
-        void SetGraduationTaskStatusToMailed(UserTask userTask);
+        void SetGraduationTaskStatusToMailed(int userTaskId);
 
     }
 
@@ -69,20 +69,19 @@ namespace JobScheduler
             return userTasks;
         }
 
-        public void SetGraduationTaskStatusToMailed(UserTask userTask)
+        public void SetGraduationTaskStatusToMailed(int userTaskId)
         {
-            RestRequest restRequest = new RestRequest("api/UserTask/SetToMailed") { Method = Method.PUT };
+            RestRequest restRequest = new RestRequest("api/UserTask/SetToMailed/" + userTaskId) { Method = Method.PUT };
 
             restRequest.AddParameter("Authorization",
                                      string.Format("Bearer " + _token.AccessToken),
                                      ParameterType.HttpHeader);
-            restRequest.AddParameter("text/json", JsonConvert.SerializeObject(userTask), ParameterType.RequestBody);
             IRestResponse response = apiClient.Execute(restRequest);
 
             if(response.StatusCode.Equals(401))
             {
                     _token = config.GetJwtToken();
-                    SetGraduationTaskStatusToMailed(userTask);
+                    SetGraduationTaskStatusToMailed(userTaskId);
             }
             if(response.StatusCode != HttpStatusCode.OK)
             {

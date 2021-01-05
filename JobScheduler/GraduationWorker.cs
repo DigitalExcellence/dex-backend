@@ -55,8 +55,7 @@ namespace JobScheduler
                         notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(notification), Subject.EMAIL);
 
                         logger.LogInformation("Found expected graduating user: " + userTask.User.Id);
-                        userTask.Status = UserTaskStatus.Mailed;
-                        requestHandler.SetGraduationTaskStatusToMailed(userTask);
+                        requestHandler.SetGraduationTaskStatusToMailed(userTask.Id);
                     }
                 }
             } catch(Exception e)
