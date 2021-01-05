@@ -17,12 +17,17 @@
 
 namespace API.Resources
 {
-
+    /// <summary>
+    /// Resource Result for a data source.
+    /// </summary>
     public class DataSourceResourceResult : DataSourceResource
     {
 
+        /// <summary>
+        /// Get or set the guid of a data source.
+        /// </summary>
         public string Guid { get; set; }
 
-        }
+    }
 
 }
