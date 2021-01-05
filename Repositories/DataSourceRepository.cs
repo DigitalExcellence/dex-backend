@@ -29,7 +29,7 @@ namespace Repositories
     /// The data source adaptee repository interface
     /// </summary>
     /// <seealso cref="IRepository{DataSource}" />
-    public interface IDataSourceAdapteeRepository : IRepository<DataSource>
+    public interface IDataSourceModelRepository : IRepository<DataSource>
     {
 
         /// <summary>
@@ -43,12 +43,12 @@ namespace Repositories
     /// <summary>
     /// The implementation for the data source adaptee repository
     /// </summary>
-    /// <seealso cref="IDataSourceAdapteeRepository" />
+    /// <seealso cref="IDataSourceModelRepository" />
     /// <seealso cref="Repository{DataSource}" />
-    public class DataSourceAdapteeRepository : Repository<DataSource>, IDataSourceAdapteeRepository
+    public class DataSourceModelRepository : Repository<DataSource>, IDataSourceModelRepository
     {
 
-        public DataSourceAdapteeRepository(DbContext dbContext) : base(dbContext) { }
+        public DataSourceModelRepository(DbContext dbContext) : base(dbContext) { }
 
         public async Task<DataSource> GetDataSourceByGuid(string guid)
         {
