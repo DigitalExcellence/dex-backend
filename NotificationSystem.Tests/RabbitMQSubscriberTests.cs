@@ -41,7 +41,6 @@ namespace NotificationSystem.Tests
             connectionFactoryMock.Verify();
             connectionMock.Verify();
             modelMock.Verify();
-            
         }
     }
 }
