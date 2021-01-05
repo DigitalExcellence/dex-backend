@@ -54,7 +54,15 @@ namespace Repositories
         {
             return await GetDbSet<DataSource>()
                          .Where(d => d.Guid == guid)
+                         .Include(d => d.Icon)
                          .SingleOrDefaultAsync();
+        }
+
+        public override async Task<IEnumerable<DataSource>> GetAll()
+        {
+            return await GetDbSet<DataSource>()
+                         .Include(d => d.Icon)
+                         .ToListAsync();
         }
 
     }

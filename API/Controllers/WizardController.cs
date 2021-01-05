@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -40,6 +41,8 @@ namespace API.Controllers
     {
         private readonly IDataProviderService dataProviderService;
         private readonly IDataSourceModelService dataSourceModelService;
+        private readonly IFileService fileService;
+        private readonly IFileUploader fileUploader;
         private readonly IMapper mapper;
 
         /// <summary>
@@ -47,14 +50,19 @@ namespace API.Controllers
         /// </summary>
         /// <param name="dataProviderService">The source manager service which is used to communicate with the logic layer.</param>
         /// <param name="dataSourceModelService">The data source model service which is used to communicate with the logic layer.</param>
+        /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         public WizardController(
             IDataProviderService dataProviderService,
             IDataSourceModelService dataSourceModelService,
+            IFileService fileService,
+            IFileUploader fileUploader,
             IMapper mapper)
         {
             this.dataProviderService = dataProviderService;
             this.dataSourceModelService = dataSourceModelService;
+            this.fileService = fileService;
+            this.fileUploader = fileUploader;
             this.mapper = mapper;
         }
 
@@ -261,6 +269,39 @@ namespace API.Controllers
                     Instance = "D2F23105-8BE0-45C1-8A4F-F169A828B269"
                 };
                 return NotFound(problem);
+            }
+
+            
+            if(dataSourceResource.IconId != 0)
+            {
+                if(dataSourceModel.Icon != null)
+                {
+                    File fileToDelete = await fileService.FindAsync(dataSourceModel.Icon.Id);
+                    // Remove the file from the filesystem
+                    fileUploader.DeleteFileFromDirectory(fileToDelete);
+                    // Remove file from DB
+                    await fileService.RemoveAsync(dataSourceModel.Icon.Id);
+
+
+                    fileService.Save();
+                }
+
+                // Get the uploaded file
+                File file = await fileService.FindAsync(dataSourceResource.IconId);
+
+                if(file != null)
+                {
+                    dataSourceModel.Icon = file;
+                } else
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "File was not found.",
+                        Detail = "The specified file was not found while updating project.",
+                        Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                    };
+                    return BadRequest(problem);
+                }
             }
 
             mapper.Map(dataSourceResource, dataSourceModel);
