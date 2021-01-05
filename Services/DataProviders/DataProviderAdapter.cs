@@ -19,7 +19,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+//TODO: CHANGE RETURN NULL TO EXCEPTION, SO IT'S CATCH-ABLE?
 namespace Services.DataProviders
 {
 
@@ -30,6 +30,7 @@ namespace Services.DataProviders
 
         Task<Project> GetProjectByGuid(string token, string id, bool needsAuth);
 
+        Task<Project> GetProjectByUri(Uri sourceUri);
 
         string GetOauthUrl();
 
@@ -60,6 +61,13 @@ namespace Services.DataProviders
         public Task<Project> GetProjectByGuid(string token, string id, bool needsAuth)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Project> GetProjectByUri(Uri sourceUri)
+        {
+            IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
+            if(publicDataSource == null) return null;
+            return await publicDataSource.GetPublicProjectFromUri(sourceUri);
         }
 
 

@@ -28,7 +28,7 @@ using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+//TODO: CREATE WIZARD PROJECT RESOURCE RESULT AND IMPLEMENT THIS RESOURCE RESULT AS RETURN MODEL
 namespace API.Controllers
 {
     /// <summary>
@@ -109,6 +109,58 @@ namespace API.Controllers
         //    return Ok(project);
         //}
 
+        [HttpGet("project/uri/{sourceUri}")]
+        public async Task<IActionResult> GetProjectByUriFromExternalDataSource(
+            [FromQuery] string dataSourceGuid,
+            Uri sourceUri)
+        {
+            if(sourceUri == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Source uri is null or empty.",
+                    Detail = "The incoming source uri is not valid.",
+                    Instance = "6D63D9FA-91D6-42D5-9ACB-461FBEB0D2ED"
+                };
+                return BadRequest(problem);
+            }
+
+            if(!Guid.TryParse(dataSourceGuid, out Guid _))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Specified guid is not valid.",
+                    Detail = "The specified guid is not a real or valid guid.",
+                    Instance = "9FAF4C56-5B09-46C2-9A52-902D82ADAFA6"
+                };
+                return BadRequest(problem);
+            }
+
+            if(!dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Data source not found.",
+                    Detail = "Data source could not be found with specified data source guid.",
+                    Instance = "DA33EB64-13EF-46CC-B3E6-785E4027377A"
+                };
+                return NotFound(problem);
+            }
+
+            Project project = await dataProviderService.GetProjectFromUri(dataSourceGuid, sourceUri);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Project could not be found.",
+                    Detail = "The project could not be found with the specified source Uri and data source guid",
+                    Instance = "993252E8-61C4-422D-A547-EB9F56BA47B7"
+                };
+                return NotFound(problem);
+            }
+            return Ok(project);
+        }
+
         /// <summary>
         /// This method is responsible for retrieving projects from an external data source.
         /// </summary>
@@ -119,7 +171,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
-        [HttpGet]
+        [HttpGet("projects")]
         [Authorize]
         [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -144,8 +196,8 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Data source guid not found",
-                    Detail = "Data source could not be found with specified data source guid",
+                    Title = "Data source not found.",
+                    Detail = "Data source could not be found with specified data source guid.",
                     Instance = "4FB90F9A-8499-40F1-B7F3-3C2838BDB1D4"
                 };
                 return NotFound(problem);
@@ -166,7 +218,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
-        [HttpGet("projectId")]
+        [HttpGet("project/{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -191,8 +243,8 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Data source guid not found",
-                    Detail = "Data source could not be found with specified data source guid",
+                    Title = "Data source not found.",
+                    Detail = "Data source could not be found with specified data source guid.",
                     Instance = "4E3837F4-9D35-40C4-AB7C-D325FBA225E6"
                 };
                 return NotFound(problem);
@@ -239,7 +291,8 @@ namespace API.Controllers
         /// <returns>This method returns the updated data source resource result.</returns>
         /// <response code="200">This endpoint returns the updated data source.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid
+        /// or whenever no file is found with the specified id.</response>
         [HttpPut("dataSource/{guid}")]
         [Authorize(Policy = nameof(Defaults.Scopes.DataSourceWrite))]
         [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
@@ -266,29 +319,22 @@ namespace API.Controllers
                 {
                     Title = "Failed retrieving the data source.",
                     Detail = "The database does not contain an institution with that guid.",
-                    Instance = "D2F23105-8BE0-45C1-8A4F-F169A828B269"
+                    Instance = "031FE0E3-D8CF-4DEC-81D5-E89B33BED8D0"
                 };
                 return NotFound(problem);
             }
-
             
             if(dataSourceResource.IconId != 0)
             {
                 if(dataSourceModel.Icon != null)
                 {
                     File fileToDelete = await fileService.FindAsync(dataSourceModel.Icon.Id);
-                    // Remove the file from the filesystem
                     fileUploader.DeleteFileFromDirectory(fileToDelete);
-                    // Remove file from DB
                     await fileService.RemoveAsync(dataSourceModel.Icon.Id);
-
-
                     fileService.Save();
                 }
 
-                // Get the uploaded file
                 File file = await fileService.FindAsync(dataSourceResource.IconId);
-
                 if(file != null)
                 {
                     dataSourceModel.Icon = file;
@@ -298,9 +344,9 @@ namespace API.Controllers
                     {
                         Title = "File was not found.",
                         Detail = "The specified file was not found while updating project.",
-                        Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                        Instance = "7A6BF2DE-A0BC-4C84-8CC4-89EC0C706EAB"
                     };
-                    return BadRequest(problem);
+                    return NotFound(problem);
                 }
             }
 

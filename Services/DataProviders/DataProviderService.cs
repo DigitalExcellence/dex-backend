@@ -16,6 +16,7 @@
 */
 
 using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,6 +32,8 @@ namespace Services.DataProviders
         Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id, bool needsAuth);
 
         bool IsExistingDataSourceGuid(string dataSourceGuid);
+
+        Task<Project> GetProjectFromUri(string dataSourceGuid, Uri sourceUri);
 
         Task<string> GetOauthUrl(string guid);
 
@@ -72,6 +75,13 @@ namespace Services.DataProviders
         public bool IsExistingDataSourceGuid(string dataSourceGuid)
         {
             return dataProviderLoader.GetDataSourceByGuid(dataSourceGuid) != null;
+        }
+
+        public async Task<Project> GetProjectFromUri(string dataSourceGuid, Uri sourceUri)
+        {
+            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
+            dataProviderAdapter = new DataProviderAdapter(adaptee);
+            return await dataProviderAdapter.GetProjectByUri(sourceUri);
         }
 
         public async Task<string> GetOauthUrl(string guid)
