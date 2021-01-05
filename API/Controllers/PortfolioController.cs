@@ -328,7 +328,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the created portfolio item.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the portfolio item
         /// resource is not specified or failed to save portfolio item to the database.</response>
-        [HttpPost("item/{portfolioItemId}")]
+        [HttpPost("item")]
         [Authorize]
         [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
