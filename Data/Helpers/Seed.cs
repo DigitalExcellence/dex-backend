@@ -233,6 +233,45 @@ namespace Data.Helpers
             }
             return collaborators;
         }
+
+        /// <summary>
+        /// Seed random ProjectLikes into the database
+        /// </summary>
+        public static List<ProjectLike> SeedLikes(List<Project> projects, List<User> users)
+        {
+            List<ProjectLike> projectLikes = new List<ProjectLike>();
+            foreach(Project project in projects)
+            {
+                List<User> usersThatLiked = new List<User>();
+                for(int i = 0; i < users.Count - 15; i++)
+                {
+                    ProjectLike projectLike = new ProjectLike
+                    {
+                        UserId = project.User.Id,
+                        LikedProject = project
+                    };
+
+                    bool userFound = false;
+                    while(!userFound)
+                    {
+                        Random random = new Random();
+                        int randomUserId = random.Next(0, users.Count);
+                        User u = users[randomUserId];
+                        if(!usersThatLiked.Contains(u))
+                        {
+                            projectLike.CreatorOfProject = u;
+                            usersThatLiked.Add(u);
+                            userFound = true;
+                        }
+                    }
+
+                    projectLikes.Add(projectLike);
+                }
+
+            }
+            return projectLikes;
+        }
+
         /// <summary>
         /// Seeds the highlights.
         /// </summary>
