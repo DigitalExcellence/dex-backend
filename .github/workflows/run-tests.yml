@@ -25,8 +25,8 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
       env:
-        App__SendGrid__ApiKey: ${{secrets.App__SendGrid__ApiKey}}
-        App__SendGrid__EmailFrom: ${{secrets.App__SendGrid__EmailFrom}}
+        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
+        App__SendGrid__EmailFrom: test@dex.software
 
   integration-test:
     runs-on: ubuntu-18.04
