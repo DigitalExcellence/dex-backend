@@ -34,7 +34,7 @@ namespace ElasticSynchronizer.Configuration
         ///     Gets or sets the username.
         /// </summary>
         /// <value>
-        ///     The usename of the rabbit mq instance.
+        ///     The username of the rabbit mq instance.
         /// </value>
         [Required]
         public string Username { get; set; }
