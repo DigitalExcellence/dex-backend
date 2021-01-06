@@ -93,6 +93,38 @@ services:
        restart_policy:
         condition: on-failure
 
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: 7.10.0
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: ./elasticsearch/config/analysis/wn_s.txt
+        target: /usr/share/elasticsearch/config/analysis/wn_s.txt
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      mssql-network:
+
+volumes:
+  elasticsearch:  
+
+
 networks:
   mssql-network:
     driver: bridge
@@ -102,3 +134,5 @@ networks:
         - subnet: 172.16.238.0/24
   rabbitmq-network:
     driver: bridge
+
+
