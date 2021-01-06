@@ -243,7 +243,9 @@ namespace Data.Helpers
             foreach(Project project in projects)
             {
                 List<User> usersThatLiked = new List<User>();
-                for(int i = 0; i < users.Count - 15; i++)
+                Random random = new Random();
+                int randomLikes = random.Next(0, 15);
+                for(int i = 0; i < randomLikes; i++)
                 {
                     ProjectLike projectLike = new ProjectLike
                     {
@@ -254,7 +256,6 @@ namespace Data.Helpers
                     bool userFound = false;
                     while(!userFound)
                     {
-                        Random random = new Random();
                         int randomUserId = random.Next(0, users.Count);
                         User u = users[randomUserId];
                         if(!usersThatLiked.Contains(u))
