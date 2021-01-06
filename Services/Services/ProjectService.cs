@@ -15,9 +15,13 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using AngleSharp;
 using Ganss.XSS;
+using MessageBrokerPublisher;
 using Models;
 using Repositories;
+using RestSharp;
+using RestSharp.Authenticators;
 using Services.Base;
 using System;
 using System.Collections.Generic;
@@ -31,7 +35,7 @@ namespace Services.Services
     {
 
         /// <summary>
-        /// Get a list of all the projects
+        ///     Get a list of all the projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
@@ -53,14 +57,29 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        /// <summary>
+        ///     Returns all projects and projects in the format of ElasticSearch.
+        /// </summary>
+        /// <returns></returns>
         Task<List<ESProjectFormat>> GetAllESProjectsFromProjects();
+
+        /// <summary>
+        ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
+        /// </summary>
+        /// <param name="projectsToExport"></param>
+        void MigrateDatabase(List<ESProjectFormat> projectsToExport);
 
     }
 
     public class ProjectService : Service<Project>, IProjectService
     {
 
-        public ProjectService(IProjectRepository repository) : base(repository) { }
+        private INotificationSender notificationSender;
+
+        public ProjectService(IProjectRepository repository, INotificationSender notificationSender) : base(repository)
+        {
+            this.notificationSender = notificationSender;
+        }
 
         protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
 
@@ -167,6 +186,14 @@ namespace Services.Services
 
             }
             return convertedProjects;
+        }
+
+        public void MigrateDatabase(List<ESProjectFormat> projectsToExport)
+        {
+            foreach(ESProjectFormat pr in projectsToExport)
+            {
+                notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(pr), Subject.ELASTIC_CREATE_OR_UPDATE);
+            }
         }
 
     }
