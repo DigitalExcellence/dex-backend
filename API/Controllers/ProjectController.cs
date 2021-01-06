@@ -103,24 +103,25 @@ namespace API.Controllers
 
 
         /// <summary>
-        ///     This method is responsible for retrieving all projects in ElasticSearch formatted model.
+        ///     This method is responsible for retrieving all projects in ElasticSearch formatted model. After these project are retrieved the endpoint registers the projects at the messagebroker to synchronize.
         /// </summary>
         /// <returns>This method returns a list of in ElasticSearch formatted projects.</returns>
         /// <response code="200">This endpoint returns a list of in ElasticSearch formatted projects.</response>
         [HttpGet("export")]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAllConvertedProjectExport()
+        public async Task<IActionResult> MigrateDatabaseToElasticSearch()
         {
             try
             {
                 List<ESProjectFormat> projectsToExport = await projectService.GetAllESProjectsFromProjects();
+                projectService.MigrateDatabase(projectsToExport);
+
                 return Ok(projectsToExport);
             } catch(Exception e)
             {
                 Console.WriteLine(e.Message);
                 return BadRequest(e.Message);
-
             }
 
         }
