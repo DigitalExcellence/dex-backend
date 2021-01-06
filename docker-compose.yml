@@ -35,7 +35,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=identity;User=sa;Password=Dexcelence!1;
       - App__Self__IssuerUri=https://identity:5005
-      - App__Api__DeXApiUrl=https://api:5009
+      - App__Api__DeXApiUrl=https://api:5001
       - ASPNETCORE_URLS=http://+:5004;https://+:5005;
       - ASPNETCORE_HTTPS_PORT=5005
       - ASPNETCORE_Kestrel__Certificates__Default__Password=W64x4AD8dNj9kImdX3tayS
@@ -95,8 +95,8 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=master;User=sa;Password=Dexcelence!1;
       - App__IdentityServer__IdentityUrl=http://identity:5004
-      - ASPNETCORE_URLS=http://+:5008;https://+:5009;
-      - ASPNETCORE_HTTPS_PORT=5009
+      - ASPNETCORE_URLS=http://+:5000;https://+:5001;
+      - ASPNETCORE_HTTPS_PORT=5001
       - ASPNETCORE_Kestrel__Certificates__Default__Password=xI90DrNea7M6UJFNDwip6t
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
@@ -106,8 +106,8 @@ services:
       mssql-network:
       rabbitmq-network:
     ports:
-      - 5008:5008
-      - 5009:5009
+      - 5000:5000
+      - 5001:5001
 
   elasticsearch:
     build:
