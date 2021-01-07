@@ -30,7 +30,7 @@ namespace Services.Services
 
     public interface IUserTaskService : IService<UserTask>
     {
-        public Task<List<UserTask>> GetAllOpenGraduateUserTasks();
+        public Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths);
         
         public Task<List<UserTask>> GetUserTasksForUser(int userId);
 
@@ -48,9 +48,9 @@ namespace Services.Services
 
         
 
-        public async Task<List<UserTask>> GetAllOpenGraduateUserTasks()
+        public async Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths)
         {
-            List<User> users = userService.GetAllExpectedGraduatingUsers();
+            List<User> users = userService.GetAllExpectedGraduatingUsers(6);
             IEnumerable<UserTask> allUserTasks = await Repository.GetAll();
             List<UserTask> userTasks = new List<UserTask>();
 

@@ -64,7 +64,12 @@ namespace Repositories
         /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
 
-        Task<List<User>> GetAllExpectedGraduatingUsers();
+        /// <summary>
+        /// Gets the expected graduating user in time range between now and entered amount of months.
+        /// </summary>
+        /// <param name="amountOfMonths"></param>
+        /// <returns></returns>
+        Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
     }
     /// <summary>
@@ -190,10 +195,10 @@ namespace Repositories
                 .SingleOrDefault(r => r.Role.Id == role.Id) != null;
         }
 
-        public async Task<List<User>> GetAllExpectedGraduatingUsers()
+        public async Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths)
         {
             DateTime now = DateTime.Now;
-            DateTime max = DateTime.Now.AddMonths(6);
+            DateTime max = DateTime.Now.AddMonths(amountOfMonths);
 
 
             return await GetDbSet<User>()

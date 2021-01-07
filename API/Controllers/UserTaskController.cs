@@ -69,12 +69,12 @@ namespace API.Controllers
         /// </summary>
         /// <returns> All user tasks which are created or open for graduation users. </returns>
         /// <response code="200">This endpoint returns a list of user tasks.</response>
-        [HttpGet("CreateUserTasks")]
+        [HttpGet("CreateUserTasks/{withinAmountOfMonths}")]
         [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
         [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
-        public async Task<IActionResult> CreateUserTasksForGraduatingUsers()
+        public async Task<IActionResult> CreateUserTasksForGraduatingUsers(int withinAmountOfMonths)
         {
-            List<UserTask> userTasks = await userTaskService.GetAllOpenGraduateUserTasks();
+            List<UserTask> userTasks = await userTaskService.GetAllOpenGraduateUserTasks(withinAmountOfMonths);
 
             return Ok(userTasks);
         }

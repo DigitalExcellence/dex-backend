@@ -38,7 +38,7 @@ namespace Services.Services
         Task<bool> HasSameInstitution(int ownUserId, int requestUserId);
 
         bool UserWithRoleExists(Role role);
-        List<User> GetAllExpectedGraduatingUsers();
+        List<User> GetAllExpectedGraduatingUsers(int amountOfMonths);
     }
 
     public class UserService : Service<User>, IUserService
@@ -84,9 +84,9 @@ namespace Services.Services
             return Repository.UserWithRoleExists(role);
         }
 
-        public List<User> GetAllExpectedGraduatingUsers()
+        public List<User> GetAllExpectedGraduatingUsers(int amountOfMonths)
         {
-            List<User> users = Repository.GetAllExpectedGraduatingUsers().Result;
+            List<User> users = Repository.GetAllExpectedGraduatingUsers(amountOfMonths).Result;
             return users;
         } 
     }

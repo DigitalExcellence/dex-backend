@@ -1,10 +1,6 @@
 using MessageBrokerPublisher;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Models;
-using System;
-using System.Threading.Tasks;
 
 namespace JobScheduler
 {
@@ -17,6 +13,8 @@ namespace JobScheduler
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+            
+
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
