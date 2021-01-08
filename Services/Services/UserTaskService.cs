@@ -50,7 +50,7 @@ namespace Services.Services
 
         public async Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths)
         {
-            List<User> users = userService.GetAllExpectedGraduatingUsers(6);
+            List<User> users = userService.GetAllExpectedGraduatingUsers(withinAmountOfMonths);
             IEnumerable<UserTask> allUserTasks = await Repository.GetAll();
             List<UserTask> userTasks = new List<UserTask>();
 
