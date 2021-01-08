@@ -74,8 +74,8 @@ namespace Services.Services
 
         public async Task<bool> HasSameInstitution(int ownUserId, int requestUserId)
         {
-            var ownUserInfo = await Repository.FindAsync(ownUserId);
-            var userRequestInfo = await Repository.FindAsync(requestUserId);
+            User ownUserInfo = await Repository.FindAsync(ownUserId);
+            User userRequestInfo = await Repository.FindAsync(requestUserId);
             return ownUserInfo.Institution == userRequestInfo.Institution && ownUserInfo.Institution != null;
         }
 
