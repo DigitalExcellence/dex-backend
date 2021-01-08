@@ -41,11 +41,11 @@ namespace JobScheduler
             }
         }
 
-        private void GraduationJob()
+        private async Task GraduationJob()
         {
             try
             {
-                List<UserTask> userTasks = requestHandler.GetExpectedGraduationUsers();
+                List<UserTask> userTasks = await requestHandler.GetExpectedGraduationUsersAsync();
 
                 if(userTasks != null)
                 {

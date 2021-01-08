@@ -1,3 +1,4 @@
+using AutoMapper.Configuration;
 using IdentityModel.Client;
 using Models;
 using Newtonsoft.Json;
@@ -17,7 +18,7 @@ namespace JobScheduler
 
     public interface IApiRequestHandler
     {
-        List<UserTask> GetExpectedGraduationUsers();
+        Task<List<UserTask>> GetExpectedGraduationUsersAsync();
 
         void SetGraduationTaskStatusToMailed(int userTaskId);
 
@@ -25,68 +26,26 @@ namespace JobScheduler
 
     public class ApiRequestHandler : IApiRequestHandler
     {
+        /// <summary>
+        /// This is the HttpClient
+        /// </summary>
+        private readonly HttpClient client;
 
-        private readonly RestClient apiClient;
-        private Token _token;
-        private List<UserTask> userTasks;
-        private IConfig config;
-
-        public ApiRequestHandler(IConfig config)
+        public ApiRequestHandler(IHttpClientFactory factory)
         {
-            apiClient = new RestClient(config.GetApiUrl());
-            this.config = config;
+            client = factory.CreateClient("client");
         }
 
-
-        public List<UserTask> GetExpectedGraduationUsers() {
-        
-            RestRequest restRequest = new RestRequest("api/UserTask/CreateUserTasks/6") { Method = Method.GET };
-
-            if(_token == null)
-            {
-                _token = config.GetJwtToken();
-
-                GetExpectedGraduationUsers();
-            }
-            else
-            {
-                restRequest.AddParameter("Authorization",
-                                 string.Format("Bearer " + _token.AccessToken),
-                                 ParameterType.HttpHeader);
-                IRestResponse response = apiClient.Execute(restRequest);
-
-                if(response.StatusCode.Equals(401))
-                {
-                    _token = config.GetJwtToken();
-                    GetExpectedGraduationUsers();
-                }
-                if(response.StatusCode != HttpStatusCode.OK)
-                {
-                    throw new Exception(response.ErrorMessage);
-                }
-                userTasks = JsonConvert.DeserializeObject<List<UserTask>>(response.Content);
-            }
-            return userTasks;
+        public async Task<List<UserTask>> GetExpectedGraduationUsersAsync()
+        {
+            HttpResponseMessage response = await client.GetAsync("api/UserTask/CreateUserTasks/6");
+            return JsonConvert.DeserializeObject<List<UserTask>>(await response.Content.ReadAsStringAsync());
         }
 
         public void SetGraduationTaskStatusToMailed(int userTaskId)
         {
-            RestRequest restRequest = new RestRequest("api/UserTask/SetToMailed/" + userTaskId) { Method = Method.PUT };
-
-            restRequest.AddParameter("Authorization",
-                                     string.Format("Bearer " + _token.AccessToken),
-                                     ParameterType.HttpHeader);
-            IRestResponse response = apiClient.Execute(restRequest);
-
-            if(response.StatusCode.Equals(401))
-            {
-                    _token = config.GetJwtToken();
-                    SetGraduationTaskStatusToMailed(userTaskId);
-            }
-            if(response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception(response.ErrorMessage);
-            }
+            client.PutAsync("api/UserTask/SetToMailed/" + userTaskId, null);
         }
+
     }
 }
