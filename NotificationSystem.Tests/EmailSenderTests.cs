@@ -155,6 +155,9 @@ namespace NotificationSystem.Tests
             Assert.AreEqual(false, result);
         }
 
+       
+         // Valid SendGrid API key should be set in NotificationSystem/appsettings.Development.json or
+         // as an environmental variable with key App__SendGrid__ApiKey for this test to pass
         [Test]
         public void EmailSending_WithValidApiKey_ValidEmail()
         {
@@ -204,6 +207,8 @@ namespace NotificationSystem.Tests
             Assert.AreEqual(HttpStatusCode.Unauthorized, sender.ExecuteTask().StatusCode);
         }
 
+        // Valid SendGrid API key should be set in NotificationSystem/appsettings.Development.json or
+        // as an environmental variable with key App__SendGrid__ApiKey for this test to pass
         [Test]
         public void EmailSending_WithValidApiKey_InvalidEmail()
         {
