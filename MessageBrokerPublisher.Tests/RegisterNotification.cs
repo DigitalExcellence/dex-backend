@@ -100,7 +100,6 @@ namespace MessageBrokerPublisher.Tests
 
             INotificationSender notificationSender = new NotificationSender(connectionFactoryMock.Object);
 
-
             // Act + Assert
             Assert.Throws<ArgumentNullException>(() => notificationSender.RegisterNotification(null, Subject.EMAIL));
         }
