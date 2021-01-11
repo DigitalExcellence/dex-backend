@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -12,14 +12,6 @@
     <None Remove="Configurations\IdentityMigrations\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20201202082834_Initportfolioitems.cs" />
-    <Compile Remove="Migrations\20201202082834_Initportfolioitems.Designer.cs" />
-    <Compile Remove="Migrations\20201202091420_CreateListOfPortfolioItemsinPortfolioTable.cs" />
-    <Compile Remove="Migrations\20201202091420_CreateListOfPortfolioItemsinPortfolioTable.Designer.cs" />
-    <Compile Remove="Migrations\20210105075132_portfolioItemNoLinkedTable.cs" />
-    <Compile Remove="Migrations\20210105075132_portfolioItemNoLinkedTable.Designer.cs" />
-  </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
