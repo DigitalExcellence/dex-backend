@@ -425,7 +425,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user",
                     Detail = "Unable to find user to follow",
-                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                    Instance = "59C47A79-6D22-41F3-AB05-0CCC1B3C8328"
                 };
                 return NotFound(problem);
             }
