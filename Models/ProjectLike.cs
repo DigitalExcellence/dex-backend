@@ -10,10 +10,10 @@ namespace Models
     public class ProjectLike
     {
 
-        public ProjectLike(Project likedProject, User creatorOfProject)
+        public ProjectLike(Project likedProject, User projectLiker)
         {
             LikedProject = likedProject;
-            CreatorOfProject = creatorOfProject;
+            ProjectLiker = projectLiker;
             Date = DateTime.Now;
         }
 
@@ -39,12 +39,12 @@ namespace Models
         public Project LikedProject { get; set; }
 
         /// <summary>
-        /// Gets or set the creator of the project.
+        /// Gets or set the project liker.
         /// </summary>
         /// <value>
-        /// The User instance.
+        /// The User instance of the one who likes the project.
         /// </value>
-        public User CreatorOfProject { get; set; }
+        public User ProjectLiker { get; set; }
 
         /// <summary>
         /// Gets or sets the user who liked the project.

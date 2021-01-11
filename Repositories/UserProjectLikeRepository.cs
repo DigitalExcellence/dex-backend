@@ -46,7 +46,7 @@ namespace Repositories
             ProjectLike projectToRemove = GetDbSet
                     <ProjectLike>()
                 .SingleOrDefault(project => project.UserId ==
-                                            projectLike.CreatorOfProject.Id &&
+                                            projectLike.ProjectLiker.Id &&
                                             project.LikedProject.Id ==
                                             projectLike.LikedProject.Id);
 
@@ -59,7 +59,7 @@ namespace Repositories
         {
             ProjectLike projectLike = GetDbSet<ProjectLike>()
                 .SingleOrDefault(project =>
-                                     (project.UserId == userId) && project.LikedProject.Id == projectId);
+                                     (project.ProjectLiker.Id == userId) && project.LikedProject.Id == projectId);
 
             if(projectLike != null)
             {
