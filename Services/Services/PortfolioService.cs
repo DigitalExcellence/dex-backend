@@ -38,80 +38,19 @@ namespace Services.Services
 
         protected new IPortfolioRepository Repository => (IPortfolioRepository) base.Repository;
 
-        public override void Add(Portfolio entity)
-        {
-            base.Add(entity);
-        }
-
-        public override Task AddAsync(Portfolio entity)
-        {
-            return base.AddAsync(entity);
-        }
-
-        public Task<PortfolioItem> AddPortfolioItem(PortfolioItem portfolioItem)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<PortfolioItem> UpdatePortfolioItem(PortfolioItem portfolioItem)
+        Task<PortfolioItem> IPortfolioService.AddPortfolioItem(PortfolioItem portfolioItem)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PortfolioItem> DeletePortfolioItem(PortfolioItem portfolioItem)
+        Task<PortfolioItem> IPortfolioService.DeletePortfolioItem(PortfolioItem portfolioItem)
         {
             throw new NotImplementedException();
         }
 
-        public override void AddRange(IEnumerable<Portfolio> entities)
+        Task<PortfolioItem> IPortfolioService.UpdatePortfolioItem(PortfolioItem portfolioItem)
         {
-            base.AddRange(entities);
-        }
-
-
-
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override Task<Portfolio> FindAsync(int id)
-        {
-            return base.FindAsync(id);
-        }
-
-        public override Task<IEnumerable<Portfolio>> GetAll()
-        {
-            return base.GetAll();
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public override void Remove(Portfolio entity)
-        {
-            base.Remove(entity);
-        }
-
-        public override Task RemoveAsync(int id)
-        {
-            return base.RemoveAsync(id);
-        }
-
-        public override void Save()
-        {
-            base.Save();
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
-        public override void Update(Portfolio entity)
-        {
-            base.Update(entity);
+            throw new NotImplementedException();
         }
     }
 }
