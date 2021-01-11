@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SendGrid;
 
 namespace NotificationSystem.Contracts
 {
     public interface INotificationService
     {
-        bool ValidateNotification(INotification notification);
-        void SendNotification(INotification notification);
+        void ParsePayload(string jsonBody);
+        bool ValidatePayload();
+        Response ExecuteTask();
     }
 }
