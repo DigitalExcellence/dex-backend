@@ -49,6 +49,6 @@ namespace API.Resources
         /// <summary>
         /// this sets or gets the PortfolioItems
         /// </summary>
-        public List<PortfolioItem> PortfolioItem { get; set; }
+        public ICollection<LimitedPortfolioItemResourceResult> PortfolioItem { get; set; }
     }
 }

@@ -68,21 +68,11 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the portfolio id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when the portfolio with the specified id could not be found.</response>
         [HttpGet("{portfolioId}")]
-        [Authorize]
         [ProducesResponseType(typeof(PortfolioResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetPortfolio(int portfolioId)
         {
-            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
-                                                               nameof(Defaults.Scopes.UserRead),
-                                                               nameof(Defaults.Scopes.InstitutionUserRead),
-                                                               portfolioId);
-
-            if(!isAllowed)
-                return Forbid();
-
             if(portfolioId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -186,6 +176,12 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdatePortfolio(int portfolioId, [FromBody] PortfolioResource portfolioResource)
         {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
+
+            if(!isAllowed)
+                return Forbid();
+
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             if(portfolio == null)
             {
@@ -198,8 +194,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
+
 
             if(!(portfolio.User.Id == user.Id || isAllowed))
             {
@@ -227,12 +222,17 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the current portfolio could not be found.</response>
         [HttpDelete]
         [Authorize]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeletePortfolio(int portfolioId)
         {
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
+
+            if(!isAllowed)
+                return Forbid();
 
             if(portfolio == null)
             {
@@ -244,8 +244,6 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
             if(!(portfolio.User.Id == user.Id || isAllowed))
             {
@@ -277,21 +275,10 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the portfolio item id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when the portfolio item with the specified id could not be found.</response>
         [HttpGet("item/{portfolioItemId}")]
-        [Authorize]
         [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetPortfolioItem(int portfolioItemId)
         {
-            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
-                                                               nameof(Defaults.Scopes.UserRead),
-                                                               nameof(Defaults.Scopes.InstitutionUserRead),
-                                                               portfolioItemId);
-
-            if(!isAllowed)
-                return Forbid();
-
             if(portfolioItemId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -330,16 +317,20 @@ namespace API.Controllers
         /// resource is not specified or failed to save portfolio item to the database.</response>
         [HttpPost("item")]
         [Authorize]
-        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.Created)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(PortfolioItemResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> CreatePortfolioItemAsync(int portfolioId, int projectId, PortfolioItemResource portfolioItemResource)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
+
+            if(!isAllowed)
+                return Unauthorized();
+
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
-
             PortfolioItem portfolioItem = mapper.Map<PortfolioItemResource, PortfolioItem>(portfolioItemResource);
-
 
             if(await userService.FindAsync(user.Id) == null)
             {
