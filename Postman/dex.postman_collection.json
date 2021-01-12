@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1cb2e405-341a-46b7-bf51-fd09125b27c9",
+		"_postman_id": "e9c5d0f6-18e8-465c-ad36-ceffa44759d1",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -11728,7 +11728,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_DataOfficer-User-CreateUserWithoutInstitution@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"999666\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_DataOfficer-User-CreateUserWithoutInstitution@example.com\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11795,7 +11795,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"9996\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_DataOfficer-User-CreateUserWithInstitution@example.com\",\n    \"institutionId\": {{institutionIdFromUser}}\n}",
+											"raw": "{\n\t\"identityId\": 9996,\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_DataOfficer-User-CreateUserWithInstitution@example.com\",\n    \"institutionId\": {{institutionIdFromUser}}\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -11931,7 +11931,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "\"9996\""
+												"value": "9996"
 											}
 										],
 										"body": {
@@ -12134,7 +12134,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "\"9996\""
+												"value": "9996"
 											}
 										],
 										"body": {

@@ -1,5 +1,4 @@
-using AngleSharp;
-using MessageBrokerPublisher;
+using MessageBrokerPublisher.HelperClasses;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Models;
-using NotificationSystem.Notifications;
 
 namespace JobScheduler
 {
@@ -15,17 +13,18 @@ namespace JobScheduler
     {
         private readonly ILogger<GraduationWorker> logger;
         private readonly IApiRequestHandler requestHandler;
-        private readonly INotificationSender notificationSender;
+        private readonly IEmailSender emailSender;
         private readonly Config config;
 
         public GraduationWorker(ILogger<GraduationWorker> logger,
                                 IApiRequestHandler apiRequestHandler,
-                                INotificationSender notificationSender,
+                                IEmailSender emailSender,
                                 Config config)
         {
+            
             this.logger = logger;
             requestHandler = apiRequestHandler;
-            this.notificationSender = notificationSender;
+            this.emailSender = emailSender;
             this.config = config;
         }
 
@@ -55,9 +54,8 @@ namespace JobScheduler
                 {
                     foreach(UserTask userTask in userTasks)
                     {
-                        EmailNotification notification = new EmailNotification(userTask.User.Email, "User graduation mail here,no template yet");
-                        notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(notification), Subject.EMAIL);
-
+                        emailSender.Send(userTask.User.Email, "test", "test");
+                        
                         logger.LogInformation("Found expected graduating user: " + userTask.User.Id);
                         requestHandler.SetGraduationTaskStatusToMailed(userTask.Id);
                     }

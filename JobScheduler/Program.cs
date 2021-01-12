@@ -1,5 +1,6 @@
 using IdentityModel.Client;
 using MessageBrokerPublisher;
+using MessageBrokerPublisher.HelperClasses;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -58,6 +59,7 @@ namespace JobScheduler
                            services.AddScoped<IApiRequestHandler, ApiRequestHandler>();
                            services.AddHostedService<GraduationWorker>();
                            services.AddSingleton(config);
+                           services.AddScoped<IEmailSender, EmailSender>();
 
                        });
         }

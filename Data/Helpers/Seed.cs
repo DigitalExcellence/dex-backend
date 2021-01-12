@@ -59,7 +59,11 @@ namespace Data.Helpers
             Role registeredUserRole = new Role()
             {
                 Name = nameof(Defaults.Roles.RegisteredUser),
+
                 Scopes = new List<RoleScope>()
+                         {
+                             new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                         }
             };
             roles.Add(registeredUserRole);
 

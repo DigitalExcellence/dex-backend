@@ -2,7 +2,7 @@ using MessageBrokerPublisher;
 using MessageBrokerPublisher.Models;
 using MessageBrokerPublisher.Services;
 
-namespace API.HelperClasses
+namespace MessageBrokerPublisher.HelperClasses
 {
     /// <summary>
     /// EmailSender Interface

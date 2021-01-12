@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <ProjectReference Include="..\API\1_API.csproj" />
+      <ProjectReference Include="..\MessageBrokerPublisher\MessageBrokerPublisher.csproj" />
       <ProjectReference Include="..\Models\5_Models.csproj" />
   </ItemGroup>
 </Project>

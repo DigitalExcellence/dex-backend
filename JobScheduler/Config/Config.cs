@@ -2,10 +2,6 @@ using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RestSharp;
-using RestSharp.Authenticators;
-using RestSharp.Serialization.Json;
-using Serilog;
 using System;
 
 namespace JobScheduler
