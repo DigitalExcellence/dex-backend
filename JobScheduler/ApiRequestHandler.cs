@@ -1,17 +1,8 @@
-using AutoMapper.Configuration;
-using IdentityModel.Client;
 using Models;
 using Newtonsoft.Json;
-using RestSharp;
-using RestSharp.Authenticators;
 using System.Net.Http;
-using Serilog;
-using Serilog.Core;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using System.Net;
 
 namespace JobScheduler
 {
@@ -31,14 +22,17 @@ namespace JobScheduler
         /// </summary>
         private readonly HttpClient client;
 
-        public ApiRequestHandler(IHttpClientFactory factory)
+        private readonly Config config;
+
+        public ApiRequestHandler(IHttpClientFactory factory, Config config)
         {
             client = factory.CreateClient("client");
+            this.config = config;
         }
 
         public async Task<List<UserTask>> GetExpectedGraduationUsersAsync()
         {
-            HttpResponseMessage response = await client.GetAsync("api/UserTask/CreateUserTasks/6");
+            HttpResponseMessage response = await client.GetAsync("api/UserTask/CreateUserTasks/" + config.JobSchedulerConfig.TimeRange);
             return JsonConvert.DeserializeObject<List<UserTask>>(await response.Content.ReadAsStringAsync());
         }
 

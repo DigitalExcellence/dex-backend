@@ -26,7 +26,8 @@ namespace JobScheduler
                                                   .AddEnvironmentVariables();
 
             IConfiguration configuration = configurationBuilder.Build();
-            Config config = new Config(configuration);
+            Config config = configuration.GetSection("Config")
+                                         .Get<Config>();
 
             return Host.CreateDefaultBuilder(args)
                        .ConfigureAppConfiguration(builder => configurationBuilder.Build())
@@ -56,6 +57,7 @@ namespace JobScheduler
                            services.AddScoped<INotificationSender, NotificationSender>();
                            services.AddScoped<IApiRequestHandler, ApiRequestHandler>();
                            services.AddHostedService<GraduationWorker>();
+                           services.AddSingleton(config);
 
                        });
         }

@@ -1,3 +1,4 @@
+using AngleSharp;
 using MessageBrokerPublisher;
 using System;
 using System.Threading;
@@ -15,14 +16,17 @@ namespace JobScheduler
         private readonly ILogger<GraduationWorker> logger;
         private readonly IApiRequestHandler requestHandler;
         private readonly INotificationSender notificationSender;
+        private readonly Config config;
 
         public GraduationWorker(ILogger<GraduationWorker> logger,
                                 IApiRequestHandler apiRequestHandler,
-                                INotificationSender notificationSender)
+                                INotificationSender notificationSender,
+                                Config config)
         {
             this.logger = logger;
             requestHandler = apiRequestHandler;
             this.notificationSender = notificationSender;
+            this.config = config;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,7 +41,7 @@ namespace JobScheduler
                 logger.LogInformation("Graduation job finished: {time}", DateTimeOffset.Now);
 
                 // Time between job. 
-                await Task.Delay(10000, stoppingToken);
+                await Task.Delay(config.JobSchedulerConfig.TimeBetweenJobsInMs, stoppingToken);
             }
         }
 
