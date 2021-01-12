@@ -28,7 +28,7 @@ using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-//TODO: CREATE WIZARD PROJECT RESOURCE RESULT AND IMPLEMENT THIS RESOURCE RESULT AS RETURN MODEL
+
 namespace API.Controllers
 {
     /// <summary>
@@ -51,6 +51,7 @@ namespace API.Controllers
         /// <param name="dataProviderService">The source manager service which is used to communicate with the logic layer.</param>
         /// <param name="dataSourceModelService">The data source model service which is used to communicate with the logic layer.</param>
         /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
+        /// <param name="fileUploader">The file uploader which is used for uploading files.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         public WizardController(
             IDataProviderService dataProviderService,
@@ -66,50 +67,23 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
-        ///// <summary>
-        ///// This method is responsible for retrieving the wizard information.
-        ///// </summary>
-        ///// <param name="sourceURI">The source URI which is used for searching the project.</param>
-        ///// <returns>This method returns the filled in project.</returns>
-        ///// <response code="200">This endpoint returns the project with the specified source Uri.</response>
-        ///// <response code="400">The 400 Bad Request status code is returned when the source Uri is not specified.</response>
-        ///// <response code="404">The 404 Not Found status code is returned when the project could not be found with the specified source Uri.</response>
-        //[HttpGet("/test")]
-        //[Authorize]
-        //[ProducesResponseType(typeof(Project), (int) HttpStatusCode.OK)]
-        //[ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        //[ProducesResponseType((int) HttpStatusCode.NotFound)]
-        //public IActionResult GetWizardInformation(Uri sourceURI)
-        //{
-        //    if(sourceURI == null)
-        //    {
-        //        ProblemDetails problem = new ProblemDetails
-        //        {
-        //            Title = "Source uri is null or empty.",
-        //            Detail = "The incoming source uri is not valid.",
-        //            Instance = "6D63D9FA-91D6-42D5-9ACB-461FBEB0D2ED"
-        //        };
-        //        return BadRequest(problem);
-        //    }
-        //    Project project = sourceManagerService.FetchProject(sourceURI);
-        //    if(project == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    if(project.Name == null && project.ShortDescription == null && project.Description == null)
-        //    {
-        //        ProblemDetails problem = new ProblemDetails
-        //        {
-        //            Title = "Project not found.",
-        //            Detail = "The incoming source uri aims at a gitlab which is either not instantiated or is a group.",
-        //            Instance = "E56D89C5-8760-4503-839C-F695092C79BF"
-        //        };
-        //        return BadRequest(problem);
-        //    }
-        //    return Ok(project);
-        //}
-
+        /// <summary>
+        /// This method is responsible for retrieving a project form an external data source by
+        /// the specified source uri.
+        /// </summary>
+        /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
+        /// <param name="sourceUri">The uri that specifies which project will get retrieved.</param>
+        /// <returns>This method returns the found project with the specified source uri.</returns>
+        /// <response code="200">This endpoint returns the project with the specified source uri.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the source uri is empty
+        /// or whenever the data source guid is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no data source is found
+        /// with the specified data source guid or no project is found with the specified source uri.</response>
         [HttpGet("project/uri/{sourceUri}")]
+        [Authorize]
+        [ProducesResponseType(typeof(WizardProjectResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByUriFromExternalDataSource(
             [FromQuery] string dataSourceGuid,
             Uri sourceUri)
