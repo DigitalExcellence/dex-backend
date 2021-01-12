@@ -110,7 +110,6 @@ namespace Data
         /// </value>
         public DbSet<ProjectLike> ProjectLike { get; set; }
 
-        public DbSet<File> File { get; set; }
         /// <summary>
         /// Gets or sets the data source.
         /// </summary>
