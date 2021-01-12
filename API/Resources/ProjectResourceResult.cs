@@ -15,13 +15,14 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
 using System;
 using System.Collections.Generic;
 
 namespace API.Resources
 {
     /// <summary>
-    ///     The view model result of project
+    ///     The view model result of project.
     /// </summary>
     public class ProjectResourceResult
     {
@@ -31,52 +32,60 @@ namespace API.Resources
         public int Id { get; set; }
 
         /// <summary>
-        ///     This gets or sets the user
+        ///     This gets or sets the user.
         /// </summary>
         public LimitedUserResourceResult User { get; set; }
 
         /// <summary>
-        ///     This gets or sets the userId
+        ///     This gets or sets the userId.
         /// </summary>
         public int UserId { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Name
+        ///     This gets or sets the Name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Description
+        ///     This gets or sets the Description.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Short Description
+        ///     This gets or sets the Short Description.
         /// </summary>
         public string ShortDescription { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Uri
+        ///     This gets or sets the Uri.
         /// </summary>
         public string Uri { get; set; }
 
         /// <summary>
-        ///     This gets or sets the collaborators
+        ///     This gets or sets the collaborators.
         /// </summary>
         public ICollection<CollaboratorResourceResult> Collaborators { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Created time of the project
+        ///     This gets or sets the Created time of the project.
         /// </summary>
         public DateTime Created { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Updated time of the project
+        ///     This gets or sets the Updated time of the project.
         /// </summary>
         public DateTime Updated { get; set; }
         /// <summary>
-        /// This gets or set the file of the project
+        /// This gets or set the file of the project.
         /// </summary>
         public FileResourceResult ProjectIcon { get; set; }
+        /// <summary>
+        /// This gets or sets the call to action.
+        /// </summary>
+        public CallToActionResourceResult CallToAction { get; set; }
+        /// <summary>
+        /// This gets or sets the likes of the project.
+        /// </summary>
+        public List<ProjectLikesResourceResult> Likes { get; set; }
     }
 }

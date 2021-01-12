@@ -18,6 +18,7 @@
 using API.Configuration;
 using API.Extensions;
 using API.Filters;
+using API.InternalResources;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
@@ -25,7 +26,6 @@ using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -156,6 +156,13 @@ namespace API
 
                 o.AddPolicy(nameof(Defaults.Scopes.DataSourceWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.DataSourceWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
+
             });
 
             services.AddCors();
@@ -297,37 +304,67 @@ namespace API
                                     Log.Logger.Error(e, "User is not authorized.");
                                     await next();
                                 }
-                                if(await userService.GetUserByIdentityIdAsync(identityId)
-                                                    .ConfigureAwait(false) ==
-                                   null)
+                                IInstitutionService institutionService =
+                                    context.RequestServices.GetService<IInstitutionService>();
+                                UserCreateInternalResource userInformation = context.GetUserInformation(Config);
+                                User user = await userService.GetUserByIdentityIdAsync(identityId)
+                                                             .ConfigureAwait(false);
+                                if(user == null)
                                 {
                                     IRoleService roleService = context.RequestServices.GetService<IRoleService>();
                                     Role registeredUserRole =
                                         (await roleService.GetAll()).FirstOrDefault(
                                             i => i.Name == nameof(Defaults.Roles.RegisteredUser));
 
-                                    User newUser = context.GetUserInformation(Config);
-                                    if(newUser == null)
+                                    if(userInformation == null)
                                     {
                                         // Then it probably belongs swagger so we set the username as developer.
-                                        newUser = new User()
-                                                  {
-                                                      Name = "Developer",
-                                                      Email = "Developer@DEX.com",
-                                                      IdentityId = identityId,
-                                                      Role = registeredUserRole,
-                                                      InstitutionId = 1
-                                                  };
+                                        User newUser = new User
+                                        {
+                                            Name = "Developer",
+                                            Email = "Developer@DEX.com",
+                                            IdentityId = identityId,
+                                            Role = registeredUserRole,
+                                            InstitutionId = 1
+                                        };
                                         userService.Add(newUser);
                                     } else
                                     {
-                                        newUser.Role = registeredUserRole;
+                                        User newUser = new User
+                                                       {
+                                                           Name = userInformation.Name,
+                                                           Email = userInformation.Email,
+                                                           IdentityId = userInformation.IdentityId,
+                                                           Role = registeredUserRole,
+                                                       };
+                                        Institution institution =
+                                            await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                userInformation.IdentityInstitutionId);
+                                        if( institution != null)
+                                        {
+                                            newUser.InstitutionId = institution.Id;
+                                        }
                                         userService.Add(newUser);
                                     }
                                     await dbContext.SaveChangesAsync()
                                                    .ConfigureAwait(false);
                                 }
 
+                                // If the user is already in the database and the Update institution on login is set to true
+                                else if(Config.OriginalConfiguration.GetValue<bool>("UpdateInstitutionOnLogin"))
+                                {
+                                    if(userInformation != null)
+                                    {
+                                        Institution institution = await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                                      userInformation.IdentityInstitutionId);
+                                        if(institution != null)
+                                            user.InstitutionId = institution.Id;
+                                        
+                                        userService.Update(user);
+                                        await dbContext.SaveChangesAsync()
+                                                       .ConfigureAwait(false);
+                                    }
+                                }
                                 await next()
                                     .ConfigureAwait(false);
                             });
@@ -344,7 +381,6 @@ namespace API
                 o.DisplayRequestDuration();
                 o.OAuthClientId(Config.Swagger.ClientId);
             });
-
         }
 
         /// <summary>

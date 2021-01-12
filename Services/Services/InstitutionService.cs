@@ -18,6 +18,7 @@
 using Models;
 using Repositories;
 using Services.Base;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,10 +29,17 @@ namespace Services.Services
     {
 
         /// <summary>
-        /// This method gets the institution with the specified id asynchronous.
+        /// This method gets all the institutions asynchronous.
         /// </summary>
-        /// <returns>This method returns the found institution with the specified id.</returns>
+        /// <returns>This method returns a list of institutions.</returns>
         Task<IEnumerable<Institution>> GetInstitutionsAsync();
+
+        /// <summary>
+        /// This method gets the institution with the specified identity id asynchronous.
+        /// </summary>
+        /// <param name="institutionIdentityId">The identity id which is used for searching the institution.</param>
+        /// <returns>This method returns the found institution with the specified identity id.</returns>
+        Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId);
 
     }
 
@@ -45,6 +53,11 @@ namespace Services.Services
         public async Task<IEnumerable<Institution>> GetInstitutionsAsync()
         {
             return await Repository.GetInstitutionsAsync();
+        }
+
+        public async Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId)
+        {
+            return await Repository.GetInstitutionByInstitutionIdentityId(institutionIdentityId);
         }
 
     }

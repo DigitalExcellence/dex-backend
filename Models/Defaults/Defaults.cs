@@ -125,6 +125,9 @@ namespace Models.Defaults
             [Description("This scope gives write access to the datasource namespace")]
             public const string DataSourceWrite = "datasource:write";
 
+            [Description("This scope gives write access to the Call To Action option namespace")]
+            public const string CallToActionOptionWrite = "callToAction:write";
+
         }
 
     }

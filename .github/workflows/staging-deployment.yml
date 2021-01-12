@@ -2,21 +2,21 @@ name: Staging Deployment
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, release/* ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v2
       - name: Run docker compose build
         run:  docker-compose -f docker-compose.deploy.yml build
-      - name: Docker login 
+      - name: Docker login
         run:  docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Push docker images to dockerhub
         run:  docker-compose -f docker-compose.deploy.yml push
-      - name: Push to server 
+      - name: Push to server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.STAGING_VPS_IP }}
