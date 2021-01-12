@@ -181,6 +181,8 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
         {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
             if(projectId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -206,7 +208,18 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
+            {
+                return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            }
+            if(project.InstitutePrivate == false)
+            {
+                return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            } else
+            {
+                return NoContent();
+            }
+
         }
 
         /// <summary>
