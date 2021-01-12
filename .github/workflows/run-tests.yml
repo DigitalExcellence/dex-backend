@@ -24,6 +24,9 @@ jobs:
 
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+      env:
+        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
+        App__SendGrid__EmailFrom: test@dex.software
 
   integration-test:
     runs-on: ubuntu-18.04
@@ -45,4 +48,4 @@ jobs:
         node-version: '10.15.3'
 
     - name: Postman tests
-      run: npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --delay-request=200
+      run: npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --delay-request=200 -n 3

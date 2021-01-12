@@ -112,5 +112,12 @@ namespace NotificationSystem.Configuration
         /// </value>
         [Required]
         public string EmailFrom { get; set; }
+
+
+        /// <summary>
+        ///     Gets or sets the email sandbox settings.
+        /// </summary>
+        [Required]
+        public bool SandboxMode { get; set; }
     }
 }

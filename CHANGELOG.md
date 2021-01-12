@@ -20,6 +20,8 @@ Graduation system for users whose FHICT account becomes unavailable. [#287](http
 
 ### Fixed
 
+- Refactored Postman tests - [#328](https://github.com/DigitalExcellence/dex-backend/issues/328)
+
 ### Security
 
 ## Release v.0.9.0-beta - 09-12-2020

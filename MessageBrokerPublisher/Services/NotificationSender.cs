@@ -1,3 +1,4 @@
+using MessageBrokerPublisher.Services;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
@@ -26,40 +27,19 @@ namespace MessageBrokerPublisher
     /// </summary>
     public class NotificationSender : INotificationSender
     {
-        private readonly string hostName = Environment.GetEnvironmentVariable("App__RabbitMQ__Hostname");
-        private readonly string user = Environment.GetEnvironmentVariable("App__RabbitMQ__Username");
-        private readonly string password = Environment.GetEnvironmentVariable("App__RabbitMQ__Password");
+       
 
-        private ConnectionFactory connectionFactory;
+        IConnection connection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationSender"/> class.
         /// </summary>
-        public NotificationSender()
+        public NotificationSender(IRabbitMQConnectionFactory connectionFactory)
         {
-
-            if (String.IsNullOrEmpty(hostName))
-            {
-                hostName = "localhost";
-                user = "guest";
-                password = "guest";
-            }
-            CreateConnectionFactory();
-
+            connection = connectionFactory.CreateConnection();
+            
         }
-        private void CreateConnectionFactory()
-        {
-            connectionFactory = new ConnectionFactory
-            {
-                UserName = user,
-                Password = password,
-                HostName = hostName
-            };
-        }
-        private IConnection CreateConnection()
-        {
-            return connectionFactory.CreateConnection();
-        }
+        
 
         /// <summary>
         /// Registers a specified message to a specified queue on the messagebroker.
@@ -68,7 +48,6 @@ namespace MessageBrokerPublisher
         public void RegisterNotification(string payload, Subject subject)
         {
             string subjectString = subject.ToString();
-            IConnection connection = CreateConnection();
             IModel channel = connection.CreateModel();
             channel.QueueDeclare(queue: subjectString, durable: true, exclusive: false, autoDelete: false, arguments: null);
             channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
@@ -76,7 +55,8 @@ namespace MessageBrokerPublisher
             byte[] body = Encoding.UTF8.GetBytes(payload);
             IBasicProperties properties = channel.CreateBasicProperties();
             properties.Persistent = true;
-            channel.BasicPublish(exchange: "", routingKey: subjectString, basicProperties: properties, body: body);
+            channel.BasicPublish(exchange: "", routingKey: subjectString, false, basicProperties: properties, body: body);
+            Console.WriteLine("Task published");
         }
     }
 }
