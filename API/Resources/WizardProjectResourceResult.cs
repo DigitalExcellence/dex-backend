@@ -15,30 +15,20 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
 using System.Collections.Generic;
 
 namespace API.Resources
 {
     /// <summary>
-    ///     The view model result of project
+    /// The view model of the project resource results from the wizard
     /// </summary>
-    public class ProjectResourceResult
+    public class WizardProjectResourceResult
     {
+
         /// <summary>
         ///     Get or Set Id of a Project Resource Result
         /// </summary>
         public int Id { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the user
-        /// </summary>
-        public LimitedUserResourceResult User { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the userId
-        /// </summary>
-        public int UserId { get; set; }
 
         /// <summary>
         ///     This gets or sets the Name
@@ -66,17 +56,10 @@ namespace API.Resources
         public ICollection<CollaboratorResourceResult> Collaborators { get; set; }
 
         /// <summary>
-        ///     This gets or sets the Created time of the project
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the Updated time of the project
-        /// </summary>
-        public DateTime Updated { get; set; }
-        /// <summary>
         /// This gets or set the file of the project
         /// </summary>
         public FileResourceResult ProjectIcon { get; set; }
+
     }
+
 }

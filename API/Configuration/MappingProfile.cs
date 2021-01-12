@@ -87,6 +87,8 @@ namespace API.Configuration
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
 
+            CreateMap<Project, WizardProjectResourceResult>();
+
             CreateMap<IDataSourceAdaptee, DataSourceResourceResult>();
             CreateMap<DataSourceResource, DataSource>();
             CreateMap<DataSource, DataSourceResourceResult>();

@@ -158,7 +158,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            return Ok(project);
+            return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace API.Controllers
             }
 
             IEnumerable<Project> projects = await dataProviderService.GetAllProjects(dataSourceGuid, token, needsAuth);
-            return Ok(projects);
+            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<WizardProjectResourceResult>>(projects));
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(project);
+            return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
         }
 
         /// <summary>
