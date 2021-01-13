@@ -20,7 +20,6 @@ using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -307,7 +306,7 @@ namespace API.Controllers
                         Detail = "The user has not enough rights to update the institution id",
                         Instance = "DD72C521-1D06-4E11-A0E0-AAE515E7F900"
                     };
-                    return StatusCode(StatusCodes.Status403Forbidden, problem);
+                    return Unauthorized(problem);
                 }
             }
 
