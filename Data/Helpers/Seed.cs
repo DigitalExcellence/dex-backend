@@ -244,7 +244,7 @@ namespace Data.Helpers
             {
                 List<User> usersThatLiked = new List<User>();
                 Random random = new Random();
-                int randomLikes = random.Next(0, 15);
+                int randomLikes = random.Next(5, 15);
                 for(int i = 0; i < randomLikes; i++)
                 {
                     ProjectLike projectLike = new ProjectLike
