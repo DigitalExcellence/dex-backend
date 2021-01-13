@@ -15,8 +15,8 @@ namespace NotificationSystem
         {
             string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                .AddJsonFile("appsettingsnotificationsystem.json", true, true)
+                .AddJsonFile($"appsettingsnotificationsystem.{environmentName}.json", true, true)
                 .AddEnvironmentVariables()
                 .Build();
             Config config = configuration.GetSection("App").Get<Config>();

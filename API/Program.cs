@@ -85,8 +85,8 @@ namespace API
                           .ConfigureAppConfiguration((hostingContext, config) =>
                           {
                               IWebHostEnvironment env = hostingContext.HostingEnvironment;
-                              config.AddJsonFile("appsettings.json", true, true)
-                                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+                              config.AddJsonFile("appsettingsapi.json", true, true)
+                                    .AddJsonFile($"appsettingsapi.{env.EnvironmentName}.json", true, true);
                               config.AddEnvironmentVariables();
                           })
                           .UseSentry()
