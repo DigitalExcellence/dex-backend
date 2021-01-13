@@ -74,15 +74,16 @@ services:
     depends_on: 
       - rabbitmq
     environment:
-      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
-      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
-      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
-      - App__Elastic__Hostname=${App__Elastic__Hostname}
-      - App__Elastic__Username=${App__Elastic__Username}
-      - App__Elastic__Password=${App__Elastic__Password}
-      - App__Elastic__IndexUrl=${App__Elastic__IndexUrl}
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__Elastic__Hostname=elasticsearch
+      - App__Elastic__Username=elastic
+      - App__Elastic__Password=changeme
+      - App__Elastic__IndexUrl=projects/_doc
     networks:
-      rabbitmq-network:  
+      rabbitmq-network: 
+      mssql-network: 
 
   api:
     container_name: api
@@ -110,6 +111,7 @@ services:
       - 5001:5001
 
   elasticsearch:
+    container_name: elasticsearch
     build:
       context: elasticsearch/
       args:

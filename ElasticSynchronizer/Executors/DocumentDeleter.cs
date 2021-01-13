@@ -34,11 +34,15 @@ namespace ElasticSynchronizer.Executors
         public DocumentDeleter(Config config)
         {
             this.config = config;
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
             restClient = new RestClient(config.Elastic.Hostname)
                          {
                              Authenticator =
                                  new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
                          };
+            
         }
 
         public void ParsePayload(string jsonBody)
@@ -60,6 +64,9 @@ namespace ElasticSynchronizer.Executors
 
         private void DeleteDocument()
         {
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
             RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.DELETE);
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)

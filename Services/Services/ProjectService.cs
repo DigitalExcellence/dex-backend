@@ -207,7 +207,11 @@ namespace Services.Services
 
         private void CreateProjectIndexElastic()
         {
-            string body = System.IO.File.ReadAllText(Path.GetFullPath("../Services/Resources/ElasticSearch/IndexProjects.json")).Replace("\n", "").Replace("\r", "");
+            Console.WriteLine("Paths");
+            Console.WriteLine(Directory.GetParent(Directory.GetCurrentDirectory()));
+            
+            Console.WriteLine(Path.GetFullPath("../Services/Resources/ElasticSearch/IndexProjects.json"));
+            string body = System.IO.File.ReadAllText(Path.GetFullPath("./Resources/ElasticSearch/IndexProjects.json")).Replace("\n", "").Replace("\r", "").Replace(" ","");
             Console.WriteLine(body);
             notificationSender.RegisterNotification(body, Subject.ELASTIC_CREATE_INDEX);
         }

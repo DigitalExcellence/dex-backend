@@ -23,6 +23,7 @@ using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,7 +46,9 @@ namespace ElasticSynchronizer.Workers
             RabbitMQSubscriber subscriber = new RabbitMQSubscriber(new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password));
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
-
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
             ICallbackService documentsDeleterService = new DocumentDeleter(config);
             EventingBasicConsumer consumer = listener.CreateConsumer(documentsDeleterService);
 

@@ -61,6 +61,9 @@ namespace ElasticSynchronizer.Executors
 
         private void CreateOrUpdateDocument()
         {
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
             RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.POST);
             request.AddParameter("application/json", JsonConvert.SerializeObject(projectEs), ParameterType.RequestBody);
             IRestResponse response = restClient.Execute(request);

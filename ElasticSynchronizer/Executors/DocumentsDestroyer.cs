@@ -60,6 +60,9 @@ namespace ElasticSynchronizer.Executors
 
         private void DeleteDocuments()
         {
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
             string jsonBody = "{\"query\": {\"match_all\": { }}}";
             RestRequest request = new RestRequest(config.Elastic.IndexUrl, Method.DELETE);
             request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);

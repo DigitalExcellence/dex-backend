@@ -23,6 +23,8 @@ using RestSharp;
 using RestSharp.Authenticators;
 using SendGrid;
 using System;
+using System.Net.Http;
+using System.Text;
 
 namespace ElasticSynchronizer.Executors
 {
@@ -30,11 +32,13 @@ namespace ElasticSynchronizer.Executors
     {
         private string indexBody;
         private readonly RestClient restClient;
+        private readonly HttpClient httpClient;
         private readonly Config config;
 
         public IndexCreator(Config config)
         {
             this.config = config;
+            httpClient = new HttpClient();
             restClient = new RestClient(config.Elastic.Hostname)
                          {
                              Authenticator =
@@ -59,15 +63,17 @@ namespace ElasticSynchronizer.Executors
             return true;
         }
 
-        private void CreateIndex()
+        private async void CreateIndex()
         {
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
             Console.WriteLine(indexBody);
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl, Method.POST);
-            request.AddParameter("application/json", indexBody, ParameterType.RequestBody);
-            IRestResponse response = restClient.Execute(request);
-            if(!response.IsSuccessful)
+            var request = await httpClient.PostAsync(config.Elastic.Hostname + config.Elastic.IndexUrl, new StringContent(indexBody, Encoding.UTF8, "application/json"));
+            Console.WriteLine(request.StatusCode + " " + request.Content + " " + request.Content);
+            if(!request.IsSuccessStatusCode)
             {
-                Console.WriteLine(response.Content);
+                Console.WriteLine(request.Content);
             }
         }
 
