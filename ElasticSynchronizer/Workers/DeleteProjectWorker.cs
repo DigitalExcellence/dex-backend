@@ -23,6 +23,7 @@ using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RestSharp;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,11 +34,13 @@ namespace ElasticSynchronizer.Workers
         private readonly ILogger<DeleteProjectWorker> logger;
         private readonly string subject = "ELASTIC_DELETE";
         private readonly Config config;
+        private readonly RestClient restClient;
 
-        public DeleteProjectWorker(ILogger<DeleteProjectWorker> logger, Config config)
+        public DeleteProjectWorker(ILogger<DeleteProjectWorker> logger, Config config, RestClient restClient)
         {
             this.logger = logger;
             this.config = config;
+            this.restClient = restClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -46,7 +49,7 @@ namespace ElasticSynchronizer.Workers
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
 
-            ICallbackService documentDeleterService = new DocumentDeleter(config);
+            ICallbackService documentDeleterService = new DocumentDeleter(config, restClient);
             EventingBasicConsumer consumer = listener.CreateConsumer(documentDeleterService);
 
             listener.StartConsumer(consumer, subject);

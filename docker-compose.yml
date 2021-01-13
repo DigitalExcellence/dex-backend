@@ -80,7 +80,7 @@ services:
       - App__Elastic__Hostname=elasticsearch
       - App__Elastic__Username=elastic
       - App__Elastic__Password=changeme
-      - App__Elastic__IndexUrl=projects/_doc
+      - App__Elastic__IndexUrl=projects/
     networks:
       rabbitmq-network: 
       mssql-network: 

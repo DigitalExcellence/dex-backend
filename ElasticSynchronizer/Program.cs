@@ -16,11 +16,17 @@
 */
 
 using ElasticSynchronizer.Configuration;
+using ElasticSynchronizer.Helperclasses;
 using ElasticSynchronizer.Workers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RestSharp;
+using RestSharp.Authenticators;
 using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 
 namespace ElasticSynchronizer
 {
@@ -38,15 +44,25 @@ namespace ElasticSynchronizer
                 .ConfigureServices((hostContext, services) =>
                 {
                     string environmentName = Environment.GetEnvironmentVariable("ELASTIC_DOTNET_ENVIRONMENT");
+
                     IConfiguration configuration = new ConfigurationBuilder()
                                                    .AddJsonFile("appsettings.json", true, true)
                                                    .AddJsonFile($"appsettings.{environmentName}.json", true, true)
                                                    .AddEnvironmentVariables()
                                                    .Build();
+                    Config config = configuration.GetSection("App").Get<Config>();
 
                     services.AddScoped<Config>( c => configuration.GetSection("App")
                                                                   .Get<Config>()  );
-
+                    
+                    var builder = new UriBuilder(Dns.GetHostEntry(config.Elastic.Hostname).AddressList.FirstOrDefault().ToString()+":9200");
+                    var uri = builder.Uri;
+                    Console.WriteLine("Hier: " + uri);
+                    services.AddScoped<RestClient>( client => new RestClient(uri)
+                    {
+                        Authenticator =
+                                 new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
+                    });
                     services.AddHostedService<DeleteProjectWorker>();
                     services.AddHostedService<UpdateProjectWorker>();
                     services.AddHostedService<DeleteDocumentsWorker>();

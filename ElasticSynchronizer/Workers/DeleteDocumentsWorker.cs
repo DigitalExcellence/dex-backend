@@ -23,6 +23,7 @@ using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RestSharp;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,11 +35,13 @@ namespace ElasticSynchronizer.Workers
         private readonly ILogger<DeleteDocumentsWorker> logger;
         private readonly string subject = "ELASTIC_DELETE_ALL";
         private readonly Config config;
+        private readonly RestClient restClient;
 
-        public DeleteDocumentsWorker(ILogger<DeleteDocumentsWorker> logger, Config config)
+        public DeleteDocumentsWorker(ILogger<DeleteDocumentsWorker> logger, Config config, RestClient restClient)
         {
             this.logger = logger;
             this.config = config;
+            this.restClient = restClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -49,7 +52,7 @@ namespace ElasticSynchronizer.Workers
             Console.WriteLine("Hier: ");
             Console.WriteLine(config.Elastic.Hostname);
             Console.WriteLine(config.Elastic.IndexUrl);
-            ICallbackService documentsDeleterService = new DocumentDeleter(config);
+            ICallbackService documentsDeleterService = new DocumentDeleter(config, restClient);
             EventingBasicConsumer consumer = listener.CreateConsumer(documentsDeleterService);
 
             listener.StartConsumer(consumer, subject);

@@ -23,6 +23,7 @@ using NotificationSystem.Contracts;
 using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RestSharp;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,11 +34,13 @@ namespace ElasticSynchronizer.Workers
         private readonly ILogger<UpdateProjectWorker> logger;
         private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
         private readonly Config config;
+        private readonly RestClient restClient;
 
-        public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config)
+        public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config, RestClient restClient)
         {
             this.logger = logger;
             this.config = config;
+            this.restClient = restClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -47,7 +50,7 @@ namespace ElasticSynchronizer.Workers
             RabbitMQListener listener = new RabbitMQListener(channel);
 
 
-            ICallbackService documentUpdaterService = new DocumentUpdater(config);
+            ICallbackService documentUpdaterService = new DocumentUpdater(config, restClient);
             EventingBasicConsumer consumer = listener.CreateConsumer(documentUpdaterService);
 
             listener.StartConsumer(consumer, subject);

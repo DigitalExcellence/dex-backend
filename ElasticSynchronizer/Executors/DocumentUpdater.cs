@@ -32,14 +32,13 @@ namespace ElasticSynchronizer.Executors
         private readonly RestClient restClient;
         private readonly Config config;
 
-        public DocumentUpdater(Config config)
+        public DocumentUpdater(Config config, RestClient restClient)
         {
             this.config = config;
-            restClient = new RestClient(config.Elastic.Hostname)
-                         {
-                             Authenticator =
-                                 new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
-                         };
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
+            this.restClient = restClient;
         }
 
         public void ParsePayload(string jsonBody)
@@ -61,14 +60,16 @@ namespace ElasticSynchronizer.Executors
 
         private void CreateOrUpdateDocument()
         {
-            Console.WriteLine("Hier: ");
-            Console.WriteLine(config.Elastic.Hostname);
-            Console.WriteLine(config.Elastic.IndexUrl);
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.POST);
-            request.AddParameter("application/json", JsonConvert.SerializeObject(projectEs), ParameterType.RequestBody);
+            string body = JsonConvert.SerializeObject(projectEs);
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + projectEs.Id, Method.PUT);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            Console.WriteLine(body);
+
             IRestResponse response = restClient.Execute(request);
+            
             if(!response.IsSuccessful)
             {
+                Console.WriteLine("Failed: " + response.StatusDescription + response.StatusCode);
                 Console.WriteLine(response.Content);
             }
         }

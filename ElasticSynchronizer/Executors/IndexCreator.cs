@@ -32,18 +32,15 @@ namespace ElasticSynchronizer.Executors
     {
         private string indexBody;
         private readonly RestClient restClient;
-        private readonly HttpClient httpClient;
         private readonly Config config;
 
-        public IndexCreator(Config config)
+        public IndexCreator(Config config, RestClient restClient)
         {
             this.config = config;
-            httpClient = new HttpClient();
-            restClient = new RestClient(config.Elastic.Hostname)
-                         {
-                             Authenticator =
-                                 new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
-                         };
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
+            this.restClient = restClient;
         }
 
         public void ParsePayload(string jsonBody)
@@ -63,17 +60,19 @@ namespace ElasticSynchronizer.Executors
             return true;
         }
 
-        private async void CreateIndex()
+        private void CreateIndex()
         {
             Console.WriteLine("Hier: ");
             Console.WriteLine(config.Elastic.Hostname);
             Console.WriteLine(config.Elastic.IndexUrl);
             Console.WriteLine(indexBody);
-            var request = await httpClient.PostAsync(config.Elastic.Hostname + config.Elastic.IndexUrl, new StringContent(indexBody, Encoding.UTF8, "application/json"));
-            Console.WriteLine(request.StatusCode + " " + request.Content + " " + request.Content);
-            if(!request.IsSuccessStatusCode)
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl, Method.PUT);
+            request.AddParameter("application/json", indexBody, ParameterType.RequestBody);
+            Console.WriteLine(restClient.BuildUri(request).ToString());
+            IRestResponse response = restClient.Execute(request);
+            if(!response.IsSuccessful)
             {
-                Console.WriteLine(request.Content);
+                Console.WriteLine(response.Content);
             }
         }
 

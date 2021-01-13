@@ -29,6 +29,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Net;
+using System.Linq;
 
 namespace Services.Services
 {
@@ -212,8 +214,19 @@ namespace Services.Services
             
             Console.WriteLine(Path.GetFullPath("../Services/Resources/ElasticSearch/IndexProjects.json"));
             string body = System.IO.File.ReadAllText(Path.GetFullPath("./Resources/ElasticSearch/IndexProjects.json")).Replace("\n", "").Replace("\r", "").Replace(" ","");
-            Console.WriteLine(body);
-            notificationSender.RegisterNotification(body, Subject.ELASTIC_CREATE_INDEX);
+            var builder = new UriBuilder(Dns.GetHostEntry("elasticsearch").AddressList.FirstOrDefault().ToString() + ":9200");
+            var uri = builder.Uri;
+            RestClient restClient = new RestClient(uri)
+            {
+                Authenticator =
+                                 new HttpBasicAuthenticator("elastic", "changeme")
+            };
+
+            RestRequest request = new RestRequest("projects", Method.PUT);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse response = restClient.Execute(request);
+            Console.WriteLine(response.Content + response.StatusCode);
+            //notificationSender.RegisterNotification(body, Subject.ELASTIC_CREATE_INDEX);
         }
 
     }
