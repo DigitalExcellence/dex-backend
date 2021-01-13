@@ -49,6 +49,8 @@ namespace ElasticSynchronizer
 
                     services.AddHostedService<DeleteProjectWorker>();
                     services.AddHostedService<UpdateProjectWorker>();
+                    services.AddHostedService<DeleteDocumentsWorker>();
+                    services.AddHostedService<CreateIndexWorker>();
                 });
     }
 }

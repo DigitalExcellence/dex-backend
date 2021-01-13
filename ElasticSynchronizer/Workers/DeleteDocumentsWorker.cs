@@ -28,13 +28,13 @@ using System.Threading.Tasks;
 
 namespace ElasticSynchronizer.Workers
 {
-    public class UpdateProjectWorker : BackgroundService
+    public class DeleteDocumentsWorker : BackgroundService
     {
-        private readonly ILogger<UpdateProjectWorker> logger;
-        private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
+        private readonly ILogger<DeleteDocumentsWorker> logger;
+        private readonly string subject = "ELASTIC_DELETE_ALL";
         private readonly Config config;
 
-        public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config)
+        public DeleteDocumentsWorker(ILogger<DeleteDocumentsWorker> logger, Config config)
         {
             this.logger = logger;
             this.config = config;
@@ -46,9 +46,8 @@ namespace ElasticSynchronizer.Workers
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
 
-
-            ICallbackService documentUpdaterService = new DocumentUpdater(config);
-            EventingBasicConsumer consumer = listener.CreateConsumer(documentUpdaterService);
+            ICallbackService documentsDeleterService = new DocumentDeleter(config);
+            EventingBasicConsumer consumer = listener.CreateConsumer(documentsDeleterService);
 
             listener.StartConsumer(consumer, subject);
         }

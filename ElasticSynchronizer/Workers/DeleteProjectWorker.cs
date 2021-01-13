@@ -46,8 +46,8 @@ namespace ElasticSynchronizer.Workers
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
 
-            ICallbackService notificationService = new DocumentDeleter(config);
-            EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
+            ICallbackService documentDeleterService = new DocumentDeleter(config);
+            EventingBasicConsumer consumer = listener.CreateConsumer(documentDeleterService);
 
             listener.StartConsumer(consumer, subject);
         }

@@ -21,6 +21,8 @@ namespace NotificationSystem
                 .Build();
             Config config = configuration.GetSection("App").Get<Config>();
 
+            Console.WriteLine(config.RabbitMQ.Username);
+
             IRabbitMQConnectionFactory connectionFactory = new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password);
 
             RabbitMQSubscriber subscriber = new RabbitMQSubscriber(connectionFactory);

@@ -66,7 +66,7 @@ namespace ElasticSynchronizer.Executors
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)
             {
-                Console.WriteLine(response);
+                Console.WriteLine(response.Content);
             }
         }
 

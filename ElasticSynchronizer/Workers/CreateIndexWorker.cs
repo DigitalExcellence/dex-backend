@@ -28,13 +28,13 @@ using System.Threading.Tasks;
 
 namespace ElasticSynchronizer.Workers
 {
-    public class UpdateProjectWorker : BackgroundService
+    public class CreateIndexWorker : BackgroundService
     {
         private readonly ILogger<UpdateProjectWorker> logger;
-        private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
+        private readonly string subject = "ELASTIC_CREATE_INDEX";
         private readonly Config config;
 
-        public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config)
+        public CreateIndexWorker(ILogger<UpdateProjectWorker> logger, Config config)
         {
             this.logger = logger;
             this.config = config;
@@ -47,8 +47,8 @@ namespace ElasticSynchronizer.Workers
             RabbitMQListener listener = new RabbitMQListener(channel);
 
 
-            ICallbackService documentUpdaterService = new DocumentUpdater(config);
-            EventingBasicConsumer consumer = listener.CreateConsumer(documentUpdaterService);
+            ICallbackService indexCreatorService = new IndexCreator(config);
+            EventingBasicConsumer consumer = listener.CreateConsumer(indexCreatorService);
 
             listener.StartConsumer(consumer, subject);
         }

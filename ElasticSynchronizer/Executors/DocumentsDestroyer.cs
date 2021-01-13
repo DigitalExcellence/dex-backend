@@ -25,13 +25,13 @@ using System;
 
 namespace ElasticSynchronizer.Executors
 {
-    public class DocumentDeleter : ICallbackService
+    public class DocumentsDestroyer : ICallbackService
     {
-        private ProjectES projectEs;
+        private string date;
         private readonly RestClient restClient;
         private readonly Config config;
 
-        public DocumentDeleter(Config config)
+        public DocumentsDestroyer(Config config)
         {
             this.config = config;
             restClient = new RestClient(config.Elastic.Hostname)
@@ -43,13 +43,13 @@ namespace ElasticSynchronizer.Executors
 
         public void ParsePayload(string jsonBody)
         {
-            projectEs = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
+            date = jsonBody;
         }
 
 
         public void ExecuteTask()
         {
-            DeleteDocument();
+            DeleteDocuments();
         }
 
 
@@ -58,9 +58,11 @@ namespace ElasticSynchronizer.Executors
             return true;
         }
 
-        private void DeleteDocument()
+        private void DeleteDocuments()
         {
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.DELETE);
+            string jsonBody = "{\"query\": {\"match_all\": { }}}";
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl, Method.DELETE);
+            request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)
             {

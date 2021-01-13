@@ -24,9 +24,11 @@ using RestSharp;
 using RestSharp.Authenticators;
 using Services.Base;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Services.Services
 {
@@ -190,10 +192,24 @@ namespace Services.Services
 
         public void MigrateDatabase(List<ESProjectFormat> projectsToExport)
         {
+            CreateProjectIndexElastic();
+            DeleteAllPreviousDocumentsElastic();
             foreach(ESProjectFormat pr in projectsToExport)
             {
                 notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(pr), Subject.ELASTIC_CREATE_OR_UPDATE);
             }
+        }
+
+        private void DeleteAllPreviousDocumentsElastic()
+        {
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(DateTime.Now), Subject.ELASTIC_DELETE_ALL);
+        }
+
+        private void CreateProjectIndexElastic()
+        {
+            string body = System.IO.File.ReadAllText(Path.GetFullPath("../Services/Resources/ElasticSearch/IndexProjects.json")).Replace("\n", "").Replace("\r", "");
+            Console.WriteLine(body);
+            notificationSender.RegisterNotification(body, Subject.ELASTIC_CREATE_INDEX);
         }
 
     }

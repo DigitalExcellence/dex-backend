@@ -21,17 +21,18 @@ using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
 using RestSharp.Authenticators;
+using SendGrid;
 using System;
 
 namespace ElasticSynchronizer.Executors
 {
-    public class DocumentDeleter : ICallbackService
+    public class IndexCreator : ICallbackService
     {
-        private ProjectES projectEs;
+        private string indexBody;
         private readonly RestClient restClient;
         private readonly Config config;
 
-        public DocumentDeleter(Config config)
+        public IndexCreator(Config config)
         {
             this.config = config;
             restClient = new RestClient(config.Elastic.Hostname)
@@ -43,13 +44,13 @@ namespace ElasticSynchronizer.Executors
 
         public void ParsePayload(string jsonBody)
         {
-            projectEs = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
+            indexBody = jsonBody;
         }
 
 
         public void ExecuteTask()
         {
-            DeleteDocument();
+            CreateIndex();
         }
 
 
@@ -58,9 +59,11 @@ namespace ElasticSynchronizer.Executors
             return true;
         }
 
-        private void DeleteDocument()
+        private void CreateIndex()
         {
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.DELETE);
+            Console.WriteLine(indexBody);
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl, Method.POST);
+            request.AddParameter("application/json", indexBody, ParameterType.RequestBody);
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)
             {
@@ -68,7 +71,17 @@ namespace ElasticSynchronizer.Executors
             }
         }
 
+        
     }
 }
+
+
+
+
+
+
+
+
+
 
 
