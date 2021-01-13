@@ -259,7 +259,7 @@ namespace Data.Helpers
                         User u = users[randomUserId];
                         if(!usersThatLiked.Contains(u))
                         {
-                            projectLike.CreatorOfProject = u;
+                            projectLike.ProjectLiker = u;
                             usersThatLiked.Add(u);
                             userFound = true;
                         }

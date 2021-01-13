@@ -21,11 +21,12 @@ using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
 using RestSharp.Authenticators;
+using SendGrid;
 using System;
 
 namespace ElasticSynchronizer.Executors
 {
-    public class DocumentUpdater : INotificationService
+    public class DocumentUpdater : ICallbackService
     {
         private ProjectES projectEs;
         private readonly RestClient restClient;
@@ -68,6 +69,8 @@ namespace ElasticSynchronizer.Executors
                 Console.WriteLine(response);
             }
         }
+
+        
     }
 }
 

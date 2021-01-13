@@ -25,7 +25,7 @@ using System;
 
 namespace ElasticSynchronizer.Executors
 {
-    public class DocumentDeleter : INotificationService
+    public class DocumentDeleter : ICallbackService
     {
         private ProjectES projectEs;
         private readonly RestClient restClient;

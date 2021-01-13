@@ -30,6 +30,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBrokerPublisher", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSynchronizer", "ElasticSynchronizer\ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSystem.Tests", "NotificationSystem.Tests\NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +84,14 @@ Global
 		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C85546CD-EFA2-42C5-A698-175BAE85515E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85546CD-EFA2-42C5-A698-175BAE85515E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85546CD-EFA2-42C5-A698-175BAE85515E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85546CD-EFA2-42C5-A698-175BAE85515E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -42,11 +42,11 @@ namespace ElasticSynchronizer.Workers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password);
+            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password));
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
 
-            INotificationService notificationService = new DocumentDeleter(config);
+            ICallbackService notificationService = new DocumentDeleter(config);
             EventingBasicConsumer consumer = listener.CreateConsumer(notificationService);
 
             listener.StartConsumer(consumer, subject);

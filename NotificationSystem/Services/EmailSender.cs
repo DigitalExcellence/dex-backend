@@ -11,16 +11,22 @@ using SendGrid.Helpers.Mail;
 
 namespace NotificationSystem.Services
 {
-    public class EmailSender : INotificationService
+    public class EmailSender : ICallbackService
     {
-        private readonly SendGridClient client;
+        private readonly ISendGridClient client;
         private readonly EmailAddress from;
+        private readonly bool sandboxMode;
         private EmailNotification notification;
+        private Response response;
 
-        public EmailSender(Config config)
+        public EmailNotification Notification { get => notification; set => notification = value; }
+        
+
+        public EmailSender(ISendGridClient sendGridClient,  string emailFrom, bool sandboxMode = false)
         {
-            client = new SendGridClient(config.SendGrid.ApiKey);
-            from = new EmailAddress(config.SendGrid.EmailFrom);
+            client = sendGridClient;
+            from = new EmailAddress(emailFrom);
+            this.sandboxMode = sandboxMode;
         }
 
         public void ParsePayload(string jsonBody)
@@ -30,21 +36,20 @@ namespace NotificationSystem.Services
 
         public void ExecuteTask()
         {
-            EmailNotification emailNotification = notification;            
-            Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Wait();
-            
+            EmailNotification emailNotification = notification;
+            response = Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Result;
         }
 
         public bool ValidatePayload()
         {
             EmailNotification emailNotification = notification;
 
-            if (string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
+            if(string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
             {
                 return false;
             }
 
-            if (string.IsNullOrEmpty(emailNotification.TextContent))
+            if(string.IsNullOrEmpty(emailNotification.TextContent))
             {
                 return false;
             }
@@ -52,12 +57,16 @@ namespace NotificationSystem.Services
             return true;
         }
 
-        private async Task Execute(string recipient, string textContent, string htmlContent = null)
+        private async Task<Response> Execute(string recipient, string textContent, string htmlContent = null)
         {
             string subject = "You have a new notification on DeX";
             EmailAddress to = new EmailAddress(recipient);
             SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, textContent, htmlContent);
-            _ = await client.SendEmailAsync(msg);
+            msg.SetSandBoxMode(this.sandboxMode);
+
+            return await client.SendEmailAsync(msg);
         }
+
+        public Response Response { get => response; set => response = value; }
     }
 }

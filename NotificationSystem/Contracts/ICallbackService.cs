@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SendGrid;
 
 namespace NotificationSystem.Contracts
 {
-    public interface INotificationService
+    public interface ICallbackService
     {
         void ParsePayload(string jsonBody);
         bool ValidatePayload();
