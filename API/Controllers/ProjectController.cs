@@ -115,6 +115,9 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllProjects(
             [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
+
             ProblemDetails problem = new ProblemDetails
                                      {
                                          Title = "Invalid search request."
@@ -146,10 +149,26 @@ namespace API.Controllers
 
             ProjectFilterParams projectFilterParams =
                 mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+
             IEnumerable<Project> projects =
                 await projectService.GetAllWithUsersAndCollaboratorsAsync(projectFilterParams);
+
+            List<Project> filteredProjects = new List<Project>();
+
+            foreach(Project project in projects)
+            {
+                if(project.InstitutePrivate == false)
+                {
+                    filteredProjects.Add(project);
+                }
+                else if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
+                {
+                    filteredProjects.Add(project);
+                }
+            }
+
             IEnumerable<ProjectResultResource> results =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(filteredProjects);
             ProjectResultsResource resultsResource = new ProjectResultsResource
                                                      {
                                                          Results = results.ToArray(),
@@ -215,7 +234,8 @@ namespace API.Controllers
             if(project.InstitutePrivate == false)
             {
                 return Ok(mapper.Map<Project, ProjectResourceResult>(project));
-            } else
+            }
+            else
             {
                 return NoContent();
             }
