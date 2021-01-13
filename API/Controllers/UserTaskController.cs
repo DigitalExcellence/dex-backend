@@ -17,6 +17,8 @@
 
 using API.Configuration;
 using API.Extensions;
+using API.Resources;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -44,6 +46,7 @@ namespace API.Controllers
         private readonly IUserTaskService userTaskService;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly IMapper mapper;
         private readonly Config configuration;
 
         /// <summary>
@@ -56,27 +59,46 @@ namespace API.Controllers
         public UserTaskController(IUserTaskService userTaskService,
                                   IUserService userService,
                                   IRoleService roleService,
+                                  IMapper mapper,
                                   Config configuration)
         {
             this.userTaskService = userTaskService;
             this.userService = userService;
             this.roleService = roleService;
+            this.mapper = mapper;
             this.configuration = configuration;
         }
 
         /// <summary>
         /// Creates and returns all graduation user tasks for expecting graduation users.
         /// </summary>
+        /// <param name="withinAmountOfMonths">This value determines the range of graduating users. The range is between now and entered number of months.</param>
         /// <returns> All user tasks which are created or open for graduation users. </returns>
         /// <response code="200">This endpoint returns a list of user tasks.</response>
         [HttpGet("CreateUserTasks/{withinAmountOfMonths}")]
-        [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
         [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> CreateUserTasksForGraduatingUsers(int withinAmountOfMonths)
         {
-            List<UserTask> userTasks = await userTaskService.GetAllOpenGraduateUserTasks(withinAmountOfMonths);
+            // First check if worker service is trying to execute method to prevent internal server error.
+            bool isAllowed = HttpContext.User.HasClaim("client_role", Defaults.Roles.BackendApplication);
 
-            return Ok(userTasks);
+            if(isAllowed == false)
+            {
+                User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+                if(currentUser.Role.Name == Defaults.Roles.Administrator)
+                {
+                    isAllowed = true;
+                }
+            }
+
+            if(isAllowed)
+            {
+                List<UserTask> userTasks = await userTaskService.GetAllOpenGraduateUserTasks(withinAmountOfMonths);
+                
+                return Ok(userTasks);
+            }
+
+            return Forbid();
         }
 
         /// <summary>
