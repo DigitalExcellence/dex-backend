@@ -142,6 +142,17 @@ namespace Data
         /// </value>
         public DbSet<UserUser> UserUser { get; set; }
 
+        /// <summary>
+        /// Gets or sets the wizard page.
+        /// </summary>
+        public DbSet<WizardPage> WizardPage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the DataSourceWizardPage which represents the link between a
+        /// data source and a wizard page.
+        /// </summary>
+        public DbSet<DataSourceWizardPage> DataSourceWizardPage { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

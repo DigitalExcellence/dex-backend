@@ -23,6 +23,11 @@ namespace Models
     public class DataSourceWizardPage
     {
         /// <summary>
+        /// Gets or sets a value for the Id property.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets a value for the DataSource property.
         /// </summary>
         public DataSource DataSource { get; set; }
