@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1cb2e405-341a-46b7-bf51-fd09125b27c9",
+		"_postman_id": "20b49bc3-8980-4930-8148-c92b4773cfee",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -192,7 +192,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n\t\"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n    \"name\": \"Data Officer Postman User\",\r\n    \"email\": \"dataOfficerUser@postman.com\"\r\n}",
+											"raw": "{\r\n\t\"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n    \"name\": \"Data Officer Postman User\",\r\n    \"email\": \"dataOfficerUser@postman.com\",\r\n    \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -12314,7 +12314,7 @@
 									"response": []
 								},
 								{
-									"name": "User-UpdateUser-Self-DataOfficer",
+									"name": "User-UpdateUser-SelfWithSameInstitution-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -12338,6 +12338,10 @@
 													"",
 													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
 													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
+													"});",
+													"",
+													"pm.test(\"Check if institution id is 1\", function () {",
+													"    pm.expect(jsonData.institution.id).to.equal(1);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12377,7 +12381,7 @@
 									"response": []
 								},
 								{
-									"name": "User-GetUser-Other-DifferentInstitution-DataOfficer",
+									"name": "User-UpdateUser-SelfWithWrongInstitution-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -12387,14 +12391,18 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
+													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Instance guid should be: DD72C521-1D06-4E11-A0E0-AAE515E7F900\", function () {",
+													"    pm.expect(jsonData.instance).to.equal(\"DD72C521-1D06-4E11-A0E0-AAE515E7F900\");",
 													"});",
 													""
 												],
@@ -12403,7 +12411,7 @@
 										}
 									],
 									"request": {
-										"method": "GET",
+										"method": "PUT",
 										"header": [
 											{
 												"key": "IdentityId",
@@ -12411,15 +12419,86 @@
 												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_DataOfficer-alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n  \"institutionId\": {{createdInstitutionId}}\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
+											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{createdUserId}}"
+												"{{dataOfficerUserId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UpdateUser-OtherWithSameInstitution-SameInstitutionId-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"var institutionId = pm.environment.get(\"institutionIdFromUser\");",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Institution Id is \" + institutionId, function() {",
+													"    pm.expect(jsonData.institution.id).to.equal(parseInt(institutionId));",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}},\r\n  \"institutionId\": {{institutionIdFromUser}}\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserWithInstitutionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserWithInstitutionId}}"
 											]
 										}
 									},
@@ -12475,16 +12554,13 @@
 									"response": []
 								},
 								{
-									"name": "User-GetUser-Self-DataOfficer",
+									"name": "User-UpdateUser-OtherWithSameInstitution-NoInstitutionId-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var aliceIdentityId = parseInt(pm.environment.get(\"dataOfficerUserIdentityId\"));",
-													"",
 													"var jsonData = pm.response.json();",
-													"pm.environment.set(\"dataOfficerUserId\", jsonData.id);",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
@@ -12498,8 +12574,8 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Identity ID is correct and matching: \" + aliceIdentityId, function () {",
-													"    pm.expect(parseInt(jsonData.identityId)).to.eql(aliceIdentityId);",
+													"pm.test(\"Check if institution is null\", function () {",
+													"    pm.expect(jsonData.institution).to.equal(null);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12507,7 +12583,7 @@
 										}
 									],
 									"request": {
-										"method": "GET",
+										"method": "PUT",
 										"header": [
 											{
 												"key": "IdentityId",
@@ -12515,14 +12591,24 @@
 												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
-											"raw": "{{apiUrl}}/api/User",
+											"raw": "{{apiUrl}}/api/User/{{createdUserWithInstitutionId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"User"
+												"User",
+												"{{createdUserWithInstitutionId}}"
 											]
 										}
 									},
@@ -12572,6 +12658,55 @@
 											}
 										},
 										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserWithInstitutionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserWithInstitutionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-GetUser-Other-DifferentInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
 											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
 											"host": [
 												"{{apiUrl}}"
@@ -12580,6 +12715,60 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-GetUser-Self-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var aliceIdentityId = parseInt(pm.environment.get(\"dataOfficerUserIdentityId\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"dataOfficerUserId\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Identity ID is correct and matching: \" + aliceIdentityId, function () {",
+													"    pm.expect(parseInt(jsonData.identityId)).to.eql(aliceIdentityId);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User"
 											]
 										}
 									},
@@ -15018,6 +15207,73 @@
 						{
 							"name": "Cleanup Data Officer",
 							"item": [
+								{
+									"name": "User-UpdateUser-SelfWithNoInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
+													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
+													"});",
+													"",
+													"pm.test(\"Check if institution is null\", function () {",
+													"    pm.expect(jsonData.institution).to.equal(null);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_DataOfficer-alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{dataOfficerUserId}}"
+											]
+										}
+									},
+									"response": []
+								},
 								{
 									"name": "Project-DeleteProject-Self-DataOfficer",
 									"event": [
