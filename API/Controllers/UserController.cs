@@ -259,12 +259,27 @@ namespace API.Controllers
                 }
             }
 
+            User userToUpdate = await userService.FindAsync(userId);
+            if(userToUpdate == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with that user id.",
+                    Instance = "EF4DA55A-C31A-4BC4-AE30-098DEB0D3457"
+                };
+                return NotFound(problem);
+            }
+
             User currentUser = await HttpContext.GetContextUser(userService)
                                                 .ConfigureAwait(false);
             bool hasFullAllowance = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
-            bool hasInstitutionExcludedAllowance =
-                userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.InstitutionUserWrite)) ||
-                currentUser.Id == userId;
+
+            // Has institution excluded allowance if it's your own account or if the user has right scope for the same institution.
+            // In the last case, the institution has to be the same.
+            bool hasInstitutionExcludedAllowance = currentUser.Id == userId ||
+                                                   await authorizationHelper.SameInstitutionAndInstitutionScope(currentUser,
+                                                                    nameof(Defaults.Scopes.InstitutionUserWrite), userToUpdate.Id);
 
             if(!hasFullAllowance &&
                !hasInstitutionExcludedAllowance)
@@ -278,27 +293,14 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            
-            User user = await userService.FindAsync(userId);
-            if(user == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with that user id.",
-                    Instance = "EF4DA55A-C31A-4BC4-AE30-098DEB0D3457"
-                };
-                return NotFound(problem);
-            }
-
-            // The has institution excluded allowance and own id can update everything except the institution id.
+            // Roles that have the institution excluded allowance and own account can update everything except the institution id.
             if(hasInstitutionExcludedAllowance)
             {
                 // Check if no institution is specified, and if an institution is specified, this institution can't be
                 // updated. However, the institution can be null, because the data officer has enough rights to delete
                 // a user from their institution.
                 if(userResource.InstitutionId != null &&
-                   userResource.InstitutionId != user.InstitutionId)
+                   userResource.InstitutionId != userToUpdate.InstitutionId)
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
@@ -310,12 +312,12 @@ namespace API.Controllers
                 }
             }
 
-            mapper.Map(userResource, user);
+            mapper.Map(userResource, userToUpdate);
 
-            userService.Update(user);
+            userService.Update(userToUpdate);
             userService.Save();
 
-            return Ok(mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserResourceResult>(userToUpdate));
         }
 
         /// <summary>

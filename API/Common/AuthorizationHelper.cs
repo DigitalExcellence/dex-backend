@@ -54,10 +54,15 @@ namespace API.Common
         {
             bool hasUserWriteScope = userService.UserHasScope(loggedInUser.IdentityId, scope);
             bool hasCorrectDataOfficerRights =
-                userService.UserHasScope(loggedInUser.IdentityId, dataOfficerScope) &&
-                await userService.HasSameInstitution(loggedInUser.Id, propertyOfUserId);
+                await SameInstitutionAndInstitutionScope(loggedInUser, dataOfficerScope, propertyOfUserId);
             bool isAllowed = hasUserWriteScope || hasCorrectDataOfficerRights;
             return isAllowed;
+        }
+
+        public async Task<bool> SameInstitutionAndInstitutionScope(User loggedInUser, string institutionScope, int propertyOfUserId)
+        {
+            return userService.UserHasScope(loggedInUser.IdentityId, institutionScope) &&
+                   await userService.HasSameInstitution(loggedInUser.Id, propertyOfUserId);
         }
 
     }

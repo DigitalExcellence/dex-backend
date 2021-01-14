@@ -42,6 +42,10 @@ namespace API.Common
                                               string dataOfficerScope,
                                               int propertyOfUserId);
 
+        Task<bool> SameInstitutionAndInstitutionScope(User loggedInUser,
+                                                      string institutionScope,
+                                                      int propertyOfUserId);
+
     }
 
 }
