@@ -275,7 +275,7 @@ namespace API.Controllers
                                                 .ConfigureAwait(false);
             bool hasFullAllowance = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
 
-            // Has institution excluded allowance if it's your own account or if the user has right scope for the same institution.
+            // Has institution excluded allowance if it's your own account or if the user has the right scope for the same institution.
             // In the last case, the institution has to be the same.
             bool hasInstitutionExcludedAllowance = currentUser.Id == userId ||
                                                    await authorizationHelper.SameInstitutionAndInstitutionScope(currentUser,
@@ -293,7 +293,7 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            // Roles that have the institution excluded allowance and own account can update everything except the institution id.
+            // Roles that have the institution excluded allowance or it's own account can update everything except the institution id.
             if(hasInstitutionExcludedAllowance)
             {
                 // Check if no institution is specified, and if an institution is specified, this institution can't be
