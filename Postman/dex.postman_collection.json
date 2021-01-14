@@ -12483,7 +12483,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}},\r\n  \"institutionId\": {{institutionIdFromUser}}\r\n}",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"institutionId\": {{institutionIdFromUser}},\r\n  \"identityId\": \"9996\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -12593,7 +12593,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": \"9996\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -12650,7 +12650,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": \"9996\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -15208,73 +15208,6 @@
 							"name": "Cleanup Data Officer",
 							"item": [
 								{
-									"name": "User-UpdateUser-SelfWithNoInstitution-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
-													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
-													"});",
-													"",
-													"pm.test(\"Check if institution is null\", function () {",
-													"    pm.expect(jsonData.institution).to.equal(null);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"postman_DataOfficer-alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"{{dataOfficerUserId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Project-DeleteProject-Self-DataOfficer",
 									"event": [
 										{
@@ -15353,7 +15286,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -15365,6 +15298,73 @@
 												"api",
 												"Project",
 												"{{projectIdWithInstitution}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UpdateUser-SelfWithNoInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
+													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
+													"});",
+													"",
+													"pm.test(\"Check if institution is null\", function () {",
+													"    pm.expect(jsonData.institution).to.equal(null);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_DataOfficer-alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{dataOfficerUserId}}"
 											]
 										}
 									},
