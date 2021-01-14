@@ -16,6 +16,7 @@
 */
 
 using API.Common;
+using API.Configuration;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
@@ -26,6 +27,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -483,6 +485,31 @@ namespace API.Controllers
             userUserService.Remove(userToUnfollow);
 
             userUserService.Save();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Get recommended projects for the user who is logged in.
+        /// </summary>
+        /// <returns> Ok </returns>
+        [HttpGet("projectrecommendations")]
+        public async Task<IActionResult> GetRecommendedProjects()
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "1245BE3A-A200-4275-8622-D2D8ECEC55D3"
+                };
+                return NotFound(problem);
+            }
+
+            List<Project> projectRecommendations = userService.GetRecommendedProjects(user.Id);
+
             return Ok();
         }
     }

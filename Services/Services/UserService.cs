@@ -15,11 +15,22 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using MessageBrokerPublisher;
 using Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Repositories;
+using RestSharp;
+using RestSharp.Authenticators;
 using Services.Base;
+using Services.Resources;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using File = Models.File;
 
 namespace Services.Services
 {
@@ -37,11 +48,24 @@ namespace Services.Services
         Task<bool> HasSameInstitution(int ownUserId, int requestUserId);
 
         bool UserWithRoleExists(Role role);
+
+        List<Project> GetRecommendedProjects(int userId);
+
     }
 
     public class UserService : Service<User>, IUserService
     {
-        public UserService(IUserRepository repository) : base(repository) { }
+        private RestClient elasticRestClient;
+        private readonly ElasticConfig elasticConfig;
+
+        public UserService(IUserRepository repository, ElasticConfig config) : base(repository)
+        {
+            elasticConfig = config;
+            elasticRestClient = new RestClient(config.Hostname)
+                                     {
+                                         Authenticator = new HttpBasicAuthenticator(config.Username, config.Password)
+                                     };
+        }
 
         protected new IUserRepository Repository => (IUserRepository) base.Repository;
 
@@ -81,5 +105,64 @@ namespace Services.Services
         {
             return Repository.UserWithRoleExists(role);
         }
+
+        public List<Project> GetRecommendedProjects(int userId)
+        {
+            int similarUserId = GetSimilarUser(userId);
+            List<ESProjectFormat> elasticSearchProjects = GetLikedProjectsFromSimilarUser(userId, similarUserId);
+            return ConvertProjects(elasticSearchProjects);
+        }
+
+        private int GetSimilarUser(int userId)
+        {
+            RestRequest request = new RestRequest(elasticConfig.IndexUrl + "_search?size=0", Method.POST);
+
+            string body = System
+                          .IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(),
+                                                            "../Services/Resources/GetSimilarUsers.json"))
+                          .Replace("ReplaceWithUserId", userId.ToString());
+
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = elasticRestClient.Execute(request);
+            if(!restResponse.IsSuccessful)
+            {
+
+            }
+
+            int foundUserId = JToken.Parse(restResponse.Content)
+                               .SelectTokens("aggregations.user-liked.bucket.buckets")
+                               .First()[1].Value<int>("key");
+            
+            return foundUserId;
+        }
+
+        private List<ESProjectFormat> GetLikedProjectsFromSimilarUser(int userId, int similarUserId)
+        {
+            RestRequest request = new RestRequest(elasticConfig.IndexUrl + "_search", Method.POST);
+
+            string body = System
+                          .IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(),
+                                                            "../Services/Resources/GetProjectRecommendations.json"))
+                          .Replace("ReplaceWithUserId", userId.ToString())
+                          .Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
+
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = elasticRestClient.Execute(request);
+            if(!restResponse.IsSuccessful)
+            {
+
+            }
+
+            /*List<ESProjectFormat> esProjects = JToken.Parse(restResponse.Content)
+                                            .SelectTokens("hits.hits").Cast<List<ESProjectFormat>>();*/
+
+            throw new NotImplementedException();
+        }
+
+        private List<Project> ConvertProjects(List<ESProjectFormat> elasticSearchProjects)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

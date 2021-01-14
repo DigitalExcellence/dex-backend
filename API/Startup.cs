@@ -36,6 +36,7 @@ using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
 using Serilog;
+using Services.Resources;
 using Services.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
@@ -63,6 +64,9 @@ namespace API
         {
             Config = configuration.GetSection("App")
                                   .Get<Config>();
+            ElasticConfig = configuration.GetSection("App")
+                                         .GetSection("Elastic")
+                                         .Get<ElasticConfig>();
             Config.OriginalConfiguration = configuration;
             Environment = environment;
         }
@@ -71,6 +75,11 @@ namespace API
         ///     Config file of API
         /// </summary>
         public Config Config { get; }
+
+        /// <summary>
+        ///     Config file of Elastic
+        /// </summary>
+        public ElasticConfig ElasticConfig { get; }
 
         /// <summary>
         ///     Environment of the API
@@ -217,6 +226,7 @@ namespace API
 
             // Add application services.
             services.AddSingleton(Config);
+            services.AddSingleton(ElasticConfig);
             services.AddServicesAndRepositories();
             services.AddProblemDetails();
         }
