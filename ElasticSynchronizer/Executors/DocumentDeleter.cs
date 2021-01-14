@@ -16,6 +16,7 @@
 */
 
 using ElasticSynchronizer.Configuration;
+using ElasticSynchronizer.Helperclasses;
 using ElasticSynchronizer.Models;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
@@ -31,14 +32,13 @@ namespace ElasticSynchronizer.Executors
         private readonly RestClient restClient;
         private readonly Config config;
 
-        public DocumentDeleter(Config config)
+        public DocumentDeleter(Config config, RestClient restClient)
         {
             this.config = config;
-            restClient = new RestClient(config.Elastic.Hostname)
-                         {
-                             Authenticator =
-                                 new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
-                         };
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
+            this.restClient = restClient;
         }
 
         public void ParsePayload(string jsonBody)
@@ -60,11 +60,14 @@ namespace ElasticSynchronizer.Executors
 
         private void DeleteDocument()
         {
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl + projectEs.Id, Method.DELETE);
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + projectEs.Id, Method.DELETE);
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)
             {
-                Console.WriteLine(response);
+                Console.WriteLine(response.Content);
             }
         }
 

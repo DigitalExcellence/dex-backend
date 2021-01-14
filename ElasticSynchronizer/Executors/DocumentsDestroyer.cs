@@ -21,18 +21,17 @@ using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
 using RestSharp.Authenticators;
-using SendGrid;
 using System;
 
 namespace ElasticSynchronizer.Executors
 {
-    public class DocumentUpdater : ICallbackService
+    public class DocumentsDestroyer : ICallbackService
     {
-        private ProjectES projectEs;
+        private string date;
         private readonly RestClient restClient;
         private readonly Config config;
 
-        public DocumentUpdater(Config config, RestClient restClient)
+        public DocumentsDestroyer(Config config, RestClient restClient)
         {
             this.config = config;
             Console.WriteLine("Hier: ");
@@ -43,13 +42,13 @@ namespace ElasticSynchronizer.Executors
 
         public void ParsePayload(string jsonBody)
         {
-            projectEs = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
+            date = jsonBody;
         }
 
 
         public void ExecuteTask()
         {
-            CreateOrUpdateDocument();
+            DeleteDocuments();
         }
 
 
@@ -58,33 +57,22 @@ namespace ElasticSynchronizer.Executors
             return true;
         }
 
-        private void CreateOrUpdateDocument()
+        private void DeleteDocuments()
         {
-            string body = JsonConvert.SerializeObject(projectEs);
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + projectEs.Id, Method.PUT);
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            Console.WriteLine(body);
-
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
+            string jsonBody = "{\"query\": {\"match_all\": { }}}";
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/", Method.DELETE);
+            request.AddParameter("application/json", jsonBody, ParameterType.RequestBody);
             IRestResponse response = restClient.Execute(request);
-            
             if(!response.IsSuccessful)
             {
-                Console.WriteLine("Failed: " + response.StatusDescription + response.StatusCode);
                 Console.WriteLine(response.Content);
             }
         }
 
-        
     }
 }
-
-
-
-
-
-
-
-
-
 
 

@@ -5,8 +5,8 @@ services:
     container_name: rabbitmq
     image: 'bitnami/rabbitmq:3.8.9'
     environment:
-      - RABBITMQ_USERNAME=${App__RabbitMQ__Username}
-      - RABBITMQ_PASSWORD=${App__RabbitMQ__Password}
+      - RABBITMQ_USERNAME=test
+      - RABBITMQ_PASSWORD=test
     ports:
       - 5672:5672
       - 5671:5671
@@ -55,11 +55,11 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
-      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
-      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
-      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
-      - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__SendGrid__ApiKey=test
+      - App__SendGrid__EmailFrom=test
     stdin_open: true
     tty: true
     networks:
@@ -74,15 +74,16 @@ services:
     depends_on: 
       - rabbitmq
     environment:
-      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
-      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
-      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
-      - App__Elastic__Hostname=${App__Elastic__Hostname}
-      - App__Elastic__Username=${App__Elastic__Username}
-      - App__Elastic__Password=${App__Elastic__Password}
-      - App__Elastic__IndexUrl=${App__Elastic__IndexUrl}
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__Elastic__Hostname=elasticsearch
+      - App__Elastic__Username=elastic
+      - App__Elastic__Password=changeme
+      - App__Elastic__IndexUrl=projects/
     networks:
-      rabbitmq-network:  
+      rabbitmq-network: 
+      mssql-network: 
 
   api:
     container_name: api
@@ -99,9 +100,9 @@ services:
       - ASPNETCORE_HTTPS_PORT=5001
       - ASPNETCORE_Kestrel__Certificates__Default__Password=xI90DrNea7M6UJFNDwip6t
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
-      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
-      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
-      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
     networks:
       mssql-network:
       rabbitmq-network:
@@ -110,6 +111,7 @@ services:
       - 5001:5001
 
   elasticsearch:
+    container_name: elasticsearch
     build:
       context: elasticsearch/
       args:

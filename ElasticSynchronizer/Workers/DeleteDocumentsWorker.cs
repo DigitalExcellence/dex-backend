@@ -24,19 +24,20 @@ using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RestSharp;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ElasticSynchronizer.Workers
 {
-    public class UpdateProjectWorker : BackgroundService
+    public class DeleteDocumentsWorker : BackgroundService
     {
-        private readonly ILogger<UpdateProjectWorker> logger;
-        private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
+        private readonly ILogger<DeleteDocumentsWorker> logger;
+        private readonly string subject = "ELASTIC_DELETE_ALL";
         private readonly Config config;
         private readonly RestClient restClient;
 
-        public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config, RestClient restClient)
+        public DeleteDocumentsWorker(ILogger<DeleteDocumentsWorker> logger, Config config, RestClient restClient)
         {
             this.logger = logger;
             this.config = config;
@@ -48,10 +49,11 @@ namespace ElasticSynchronizer.Workers
             RabbitMQSubscriber subscriber = new RabbitMQSubscriber(new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password));
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
-
-
-            ICallbackService documentUpdaterService = new DocumentUpdater(config, restClient);
-            EventingBasicConsumer consumer = listener.CreateConsumer(documentUpdaterService);
+            Console.WriteLine("Hier: ");
+            Console.WriteLine(config.Elastic.Hostname);
+            Console.WriteLine(config.Elastic.IndexUrl);
+            ICallbackService documentsDeleterService = new DocumentDeleter(config, restClient);
+            EventingBasicConsumer consumer = listener.CreateConsumer(documentsDeleterService);
 
             listener.StartConsumer(consumer, subject);
         }

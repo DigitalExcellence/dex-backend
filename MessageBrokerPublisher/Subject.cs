@@ -8,6 +8,8 @@ namespace MessageBrokerPublisher
     {
         EMAIL,
         ELASTIC_CREATE_OR_UPDATE,
-        ELASTIC_DELETE
+        ELASTIC_DELETE,
+        ELASTIC_DELETE_ALL,
+        ELASTIC_CREATE_INDEX
     }
 }

@@ -24,9 +24,13 @@ using RestSharp;
 using RestSharp.Authenticators;
 using Services.Base;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Net;
+using System.Linq;
 
 namespace Services.Services
 {
@@ -190,10 +194,39 @@ namespace Services.Services
 
         public void MigrateDatabase(List<ESProjectFormat> projectsToExport)
         {
+            CreateProjectIndexElastic();
+            DeleteAllPreviousDocumentsElastic();
             foreach(ESProjectFormat pr in projectsToExport)
             {
                 notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(pr), Subject.ELASTIC_CREATE_OR_UPDATE);
             }
+        }
+
+        private void DeleteAllPreviousDocumentsElastic()
+        {
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(DateTime.Now), Subject.ELASTIC_DELETE_ALL);
+        }
+
+        private void CreateProjectIndexElastic()
+        {
+            Console.WriteLine("Paths");
+            Console.WriteLine(Directory.GetParent(Directory.GetCurrentDirectory()));
+            
+            Console.WriteLine(Path.GetFullPath("../Services/Resources/ElasticSearch/IndexProjects.json"));
+            string body = System.IO.File.ReadAllText(Path.GetFullPath("./Resources/ElasticSearch/IndexProjects.json")).Replace("\n", "").Replace("\r", "").Replace(" ","");
+            var builder = new UriBuilder(Dns.GetHostEntry("elasticsearch").AddressList.FirstOrDefault().ToString() + ":9200");
+            var uri = builder.Uri;
+            RestClient restClient = new RestClient(uri)
+            {
+                Authenticator =
+                                 new HttpBasicAuthenticator("elastic", "changeme")
+            };
+
+            RestRequest request = new RestRequest("projects", Method.PUT);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse response = restClient.Execute(request);
+            Console.WriteLine(response.Content + response.StatusCode);
+            //notificationSender.RegisterNotification(body, Subject.ELASTIC_CREATE_INDEX);
         }
 
     }

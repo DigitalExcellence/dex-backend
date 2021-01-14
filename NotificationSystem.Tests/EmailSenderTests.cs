@@ -177,9 +177,10 @@ namespace NotificationSystem.Tests
             // Act
             EmailSender sender = new EmailSender(sendGridClient, config.SendGrid.EmailFrom, true);
             sender.ParsePayload(payload);
+            sender.ExecuteTask();
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.OK, sender.ExecuteTask().StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, sender.Response.StatusCode);
         }
 
         [Test]
@@ -202,9 +203,10 @@ namespace NotificationSystem.Tests
             // Act
             EmailSender sender = new EmailSender(sendGridClient, config.SendGrid.EmailFrom, true);
             sender.ParsePayload(payload);
+            sender.ExecuteTask();
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized, sender.ExecuteTask().StatusCode);
+            Assert.AreEqual(HttpStatusCode.Unauthorized, sender.Response.StatusCode);
         }
 
         // Valid SendGrid API key should be set in NotificationSystem/appsettings.Development.json or
@@ -229,9 +231,10 @@ namespace NotificationSystem.Tests
             // Act
             EmailSender sender = new EmailSender(sendGridClient, "test@example.com", true);
             sender.ParsePayload(payload);
+            sender.ExecuteTask();
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest, sender.ExecuteTask().StatusCode);
+            Assert.AreEqual(HttpStatusCode.BadRequest, sender.Response.StatusCode);
         }
     }
 }
