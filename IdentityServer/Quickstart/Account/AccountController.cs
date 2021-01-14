@@ -447,8 +447,9 @@ namespace IdentityServer
             return vm;
         }
 
-        [ValidateAntiForgeryToken] 
+        
         [HttpPut]
+        /*[ValidateAntiForgeryToken]*/
         public async Task<IActionResult> ChangeCredentials()
         {
             string pass = Request.Headers.FirstOrDefault(x => x.Key == "password").Value.FirstOrDefault();

@@ -123,9 +123,7 @@ namespace Data.Helpers
                 Name = nameof(Defaults.Roles.Alumni),
                 Scopes = new List<RoleScope>()
                 {
-                    new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
-                    new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
+                    
                 }
             };
             roles.Add(alumniRole);
