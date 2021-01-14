@@ -92,6 +92,9 @@ namespace API.Extensions
 
             services.AddScoped<IDataProviderLoader, DataProviderLoader>();
 
+            services.AddScoped<IWizardPageService, WizardPageService>();
+            services.AddScoped<IWizardPageRepository, WizardPageRepository>();
+
             services.AddExternalDataSources();
 
             return services;

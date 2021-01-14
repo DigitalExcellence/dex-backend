@@ -16,6 +16,7 @@
 */
 
 using Models;
+using Repositories;
 using Repositories.Base;
 using Services.Base;
 
@@ -33,6 +34,8 @@ namespace Services.Services
     {
 
         public WizardPageService(IRepository<WizardPage> repository) : base(repository) { }
+
+        protected new IWizardPageRepository Repository => (IWizardPageRepository) base.Repository;
 
     }
 

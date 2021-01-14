@@ -18,10 +18,12 @@
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Serilog;
+using Services.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,14 +42,25 @@ namespace API.Controllers
 
         private readonly IWizardPageService wizardPageService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WizardPageController"/> class.
+        /// </summary>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
+        /// <param name="wizardPageService">The wizard page service which is used to communicate with the logic layer.</param>
         public WizardPageController(IMapper mapper, IWizardPageService wizardPageService)
         {
             this.mapper = mapper;
             this.wizardPageService = wizardPageService;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving all the wizard pages stored in the database.
+        /// </summary>
+        /// <returns>This method returns a collection of wizard pages.</returns>
+        /// <response code="200">This endpoint returns the collection of wizard pages.</response>
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(typeof(IEnumerable<WizardPageResourceResult>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllPages()
         {
             IEnumerable<WizardPage> pages = await wizardPageService.GetAll();
@@ -55,8 +68,20 @@ namespace API.Controllers
             return Ok(models);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a wizard page by the specified id.
+        /// </summary>
+        /// <param name="id">The id which is used for searching the project wizard page.</param>
+        /// <returns>This method returns the wizard page with the specified id.</returns>
+        /// <response code="200">This endpoint returns a wizard page with the specified id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the id is not specified.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no wizard page could be
+        /// found with the specified id.</response>
         [HttpGet("{id}")]
         [Authorize]
+        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPageById(int id)
         {
             if(id <= 0)
@@ -86,8 +111,18 @@ namespace API.Controllers
             return Ok(model);
         }
 
+        /// <summary>
+        /// This method is responsible for creating a wizard page.
+        /// </summary>
+        /// <param name="wizardPageResource">The wizard page resource is used for creating the wizard page.</param>
+        /// <returns>This method returns the created wizard page.</returns>
+        /// <response code="200">This endpoint returns the created wizard page.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the id is invalid or
+        /// when a database update exception occured.</response>
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateWizardPage(WizardPageResource wizardPageResource)
         {
             if(wizardPageResource == null)
@@ -105,7 +140,7 @@ namespace API.Controllers
 
             try
             {
-                wizardPageService.Add(wizardPage);
+                await wizardPageService.AddAsync(wizardPage);
                 wizardPageService.Save();
                 WizardPageResourceResult createdPage = mapper.Map<WizardPage, WizardPageResourceResult>(wizardPage);
                 return Created(nameof(CreateWizardPage), createdPage);
@@ -123,9 +158,34 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// This method is responsible for updating a wizard page.
+        /// </summary>
+        /// <param name="wizardPageResource">The wizard page resource is used for updating the wizard page.</param>
+        /// <param name="id">The id is used for searching the wizard page that will get updated.</param>
+        /// <returns>This method returns the updated wizard page.</returns>
+        /// <response code="200">This endpoint returns the updated wizard page.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the id is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no wizard page could could get found with
+        /// the specified id.</response>
         [HttpPut("{id}")]
+        [Authorize]
+        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdatedWizardPage(int id, [FromBody] WizardPageResource wizardPageResource)
         {
+            if(id <= 0)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Invalid id specified.",
+                    Detail = "The specified id is invalid.",
+                    Instance = "EC827999-28A5-42EF-A160-F8729F26DB13"
+                };
+                return BadRequest(problem);
+            }
+
             WizardPage wizardPage = await wizardPageService.FindAsync(id);
             if(wizardPage == null)
             {
@@ -147,10 +207,33 @@ namespace API.Controllers
             return Ok(model);
         }
 
+        /// <summary>
+        /// This method is responsible for deleting a wizard page.
+        /// </summary>
+        /// <param name="id">The id is used for searching the wizard page that will get deleted.</param>
+        /// <returns>This method returns status code 200 Ok. The wizard page is deleted.</returns>
+        /// <response code="200">This endpoint returns status cod 200 Ok. The wizard page is deleted.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the id is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no wizard page could could get found with
+        /// the specified id.</response>
         [HttpDelete("{id}")]
+        [Authorize]
+        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteWizardPage(int id)
         {
-            WizardPage wizardPage = wizardPageService.FindAsync(id);
+            if(id <= 0)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Invalid id specified.",
+                    Detail = "The specified id is invalid.",
+                    Instance = "CB6F045F-0F2A-4988-B1F2-3B6B1E8F34AD"
+                };
+                return BadRequest(problem);
+            }
+            WizardPage wizardPage = await wizardPageService.FindAsync(id);
             if(wizardPage == null)
             {
                 ProblemDetails problem = new ProblemDetails

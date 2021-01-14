@@ -28,7 +28,7 @@ namespace Repositories
 
     }
 
-    public class WizardPageRepository : Repository<WizardPage>
+    public class WizardPageRepository : Repository<WizardPage>, IWizardPageRepository
     {
 
         public WizardPageRepository(DbContext dbContext) : base(dbContext) { }
