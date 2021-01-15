@@ -16,6 +16,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace Models
 {
@@ -50,6 +51,8 @@ namespace Models
         /// Gets or sets a value for the UpdatedAt property.
         /// </summary>
         public DateTime UpdatedAt { get; set; }
+        
+        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
 
     }
 

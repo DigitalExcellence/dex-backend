@@ -22,20 +22,20 @@ namespace Models
     /// </summary>
     public class DataSourceWizardPage
     {
-        /// <summary>
-        /// Gets or sets a value for the Id property.
-        /// </summary>
-        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets a value for the DataSource property.
         /// </summary>
         public DataSource DataSource { get; set; }
 
+        public int DataSourceId { get; set; }
+
         /// <summary>
         /// Gets or sets a value for the WizardPage property.
         /// </summary>
         public WizardPage WizardPage { get; set; }
+
+        public int WizardPageId { get; set; }
 
         /// <summary>
         /// Gets or sets a value for the AuthFlow property.
