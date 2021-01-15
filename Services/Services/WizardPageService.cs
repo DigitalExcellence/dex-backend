@@ -33,7 +33,7 @@ namespace Services.Services
     public class WizardPageService : Service<WizardPage>, IWizardPageService
     {
 
-        public WizardPageService(IRepository<WizardPage> repository) : base(repository) { }
+        public WizardPageService(IWizardPageRepository repository) : base(repository) { }
 
         protected new IWizardPageRepository Repository => (IWizardPageRepository) base.Repository;
 

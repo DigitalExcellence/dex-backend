@@ -15,20 +15,25 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
+using Repositories;
+using Repositories.Base;
+using Services.Base;
+
 namespace Services.Services
 {
 
-    public interface IDataSourceWizardPageService
+    public interface IDataSourceWizardPageService : IService<DataSourceWizardPage>
     {
 
 
 
     }
 
-    public class DataSourceWizardPageService
+    public class DataSourceWizardPageService : Service<DataSourceWizardPage>, IDataSourceWizardPageService
     {
 
-        
+        public DataSourceWizardPageService(IDataSourceWizardPageRepository repository) : base(repository) { }
 
     }
 

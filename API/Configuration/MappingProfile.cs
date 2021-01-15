@@ -137,6 +137,9 @@ namespace API.Configuration
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToLower()))
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToLower()));
             CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
+
+            CreateMap<WizardPageResource, WizardPage>();
+            CreateMap<WizardPage, WizardPageResourceResult>();
         }
     }
 }

@@ -41,6 +41,8 @@ namespace Services.DataProviders
 
         Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth);
 
+        Task<IDataSourceAdaptee> RetrieveDataSourceByGuid(string guid);
+
     }
 
     /// <summary>
@@ -111,6 +113,12 @@ namespace Services.DataProviders
             }
 
             return sources.Where(s => s is IPublicDataSourceAdaptee);
+        }
+
+        public async Task<IDataSourceAdaptee> RetrieveDataSourceByGuid(string guid)
+        {
+            IDataSourceAdaptee source = await dataProviderLoader.GetDataSourceByGuid(guid);
+            return source;
         }
 
     }

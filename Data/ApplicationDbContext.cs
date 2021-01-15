@@ -158,6 +158,7 @@ namespace Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
+            modelBuilder.ApplyConfiguration(new DataSourceWizardPageConfiguration());
         }
     }
 

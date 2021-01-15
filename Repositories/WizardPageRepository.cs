@@ -18,6 +18,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System.Threading.Tasks;
 
 namespace Repositories
 {
@@ -32,6 +33,14 @@ namespace Repositories
     {
 
         public WizardPageRepository(DbContext dbContext) : base(dbContext) { }
+
+        public override async Task<WizardPage> FindAsync(int id)
+        {
+            return await GetDbSet<WizardPage>()
+                         .Include(w => w.DataSourceWizardPages)
+                         .ThenInclude(dw => dw.DataSource)
+                         .SingleOrDefaultAsync(w => w.Id == id);
+        }
 
     }
 
