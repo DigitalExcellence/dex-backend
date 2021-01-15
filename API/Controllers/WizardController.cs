@@ -41,9 +41,6 @@ namespace API.Controllers
     public class WizardController : ControllerBase
     {
         private readonly IDataProviderService dataProviderService;
-        private readonly IDataSourceModelService dataSourceModelService;
-        private readonly IFileService fileService;
-        private readonly IFileUploader fileUploader;
         private readonly IMapper mapper;
 
         private readonly ISourceManagerService sourceManagerService;
@@ -65,9 +62,6 @@ namespace API.Controllers
             IMapper mapper)
         {
             this.dataProviderService = dataProviderService;
-            this.dataSourceModelService = dataSourceModelService;
-            this.fileService = fileService;
-            this.fileUploader = fileUploader;
             this.mapper = mapper;
 
             this.sourceManagerService = sourceManagerService;
@@ -245,100 +239,6 @@ namespace API.Controllers
 
             return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
         }
-
-        /// <summary>
-        /// This method is responsible for retrieving data sources.
-        /// </summary>
-        /// <param name="needsAuth">This parameter specifies whether the data sources should need authentication.</param>
-        /// <returns>This method returns a collection of data sources.</returns>
-        /// <response code="200">This endpoint returns the available data sources with the specified flow.</response>
-        [HttpGet("dataSources")]
-        [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<IDataSourceAdaptee>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
-        {
-            IEnumerable<IDataSourceAdaptee> dataSources = await dataProviderService.RetrieveDataSources(needsAuth);
-            IEnumerable<DataSourceResourceResult> dataSourceResourceResult =
-                mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceResourceResult>>(dataSources);
-            return Ok(dataSourceResourceResult);
-        }
-
-        /// <summary>
-        /// This method is responsible for updating the data source in the database.
-        /// </summary>
-        /// <param name="guid"></param>
-        /// <param name="dataSourceResource"></param>
-        /// <returns>This method returns the updated data source resource result.</returns>
-        /// <response code="200">This endpoint returns the updated data source.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid
-        /// or whenever no file is found with the specified id.</response>
-        [HttpPut("dataSource/{guid}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.DataSourceWrite))]
-        [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateDataSource(string guid, [FromBody] DataSourceResource dataSourceResource)
-        {
-            if(!Guid.TryParse(guid, out Guid _))
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Specified guid is not valid.",
-                    Detail = "The specified guid is not a real or valid guid.",
-                    Instance = "F472CEEC-BBC7-41A7-87C9-24B669DB9D80"
-                };
-                return BadRequest(problem);
-            }
-
-            DataSource dataSourceModel = await dataSourceModelService.GetDataSourceByGuid(guid);
-
-            if(dataSourceModel == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed retrieving the data source.",
-                    Detail = "The database does not contain an institution with that guid.",
-                    Instance = "031FE0E3-D8CF-4DEC-81D5-E89B33BED8D0"
-                };
-                return NotFound(problem);
-            }
-            
-            if(dataSourceResource.IconId != 0)
-            {
-                if(dataSourceModel.Icon != null)
-                {
-                    File fileToDelete = await fileService.FindAsync(dataSourceModel.Icon.Id);
-                    fileUploader.DeleteFileFromDirectory(fileToDelete);
-                    await fileService.RemoveAsync(dataSourceModel.Icon.Id);
-                    fileService.Save();
-                }
-
-                File file = await fileService.FindAsync(dataSourceResource.IconId);
-                if(file != null)
-                {
-                    dataSourceModel.Icon = file;
-                } else
-                {
-                    ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "File was not found.",
-                        Detail = "The specified file was not found while updating project.",
-                        Instance = "7A6BF2DE-A0BC-4C84-8CC4-89EC0C706EAB"
-                    };
-                    return NotFound(problem);
-                }
-            }
-
-            mapper.Map(dataSourceResource, dataSourceModel);
-
-            dataSourceModelService.Update(dataSourceModel);
-            dataSourceModelService.Save();
-
-            return Ok(mapper.Map<DataSource, DataSourceResourceResult>(dataSourceModel));
-        }
-
-
 
         [HttpGet("teestt")]
         [Authorize]
