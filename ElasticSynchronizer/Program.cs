@@ -58,7 +58,7 @@ namespace ElasticSynchronizer
                     var builder = new UriBuilder(Dns.GetHostEntry(config.Elastic.Hostname).AddressList.FirstOrDefault().ToString()+":9200");
                     var uri = builder.Uri;
                     Console.WriteLine("Hier: " + uri);
-                    services.AddScoped<RestClient>( client => new RestClient(uri)
+                    services.AddScoped(client => new RestClient(uri)
                     {
                         Authenticator =
                                  new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)

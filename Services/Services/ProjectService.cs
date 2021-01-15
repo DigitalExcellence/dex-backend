@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Net;
 using System.Linq;
+using Services.Resources;
 
 namespace Services.Services
 {
@@ -79,10 +80,14 @@ namespace Services.Services
     {
 
         private INotificationSender notificationSender;
+        private IConnectionFactoryElasticSearch connection;
+        private ElasticConfig elasticConfig;
 
-        public ProjectService(IProjectRepository repository, INotificationSender notificationSender) : base(repository)
+        public ProjectService(IProjectRepository repository, INotificationSender notificationSender, IConnectionFactoryElasticSearch connectionFactoryElasticSearch, ElasticConfig elasticConfig) : base(repository)
         {
             this.notificationSender = notificationSender;
+            connection = connectionFactoryElasticSearch;
+            this.elasticConfig = elasticConfig;
         }
 
         protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
@@ -209,24 +214,13 @@ namespace Services.Services
 
         private void CreateProjectIndexElastic()
         {
-            Console.WriteLine("Paths");
-            Console.WriteLine(Directory.GetParent(Directory.GetCurrentDirectory()));
-            
-            Console.WriteLine(Path.GetFullPath("../Services/Resources/ElasticSearch/IndexProjects.json"));
             string body = System.IO.File.ReadAllText(Path.GetFullPath("./Resources/ElasticSearch/IndexProjects.json")).Replace("\n", "").Replace("\r", "").Replace(" ","");
-            var builder = new UriBuilder(Dns.GetHostEntry("elasticsearch").AddressList.FirstOrDefault().ToString() + ":9200");
-            var uri = builder.Uri;
-            RestClient restClient = new RestClient(uri)
-            {
-                Authenticator =
-                                 new HttpBasicAuthenticator("elastic", "changeme")
-            };
+            RestClient client = connection.CreateRestClientForElasticRequests();
 
-            RestRequest request = new RestRequest("projects", Method.PUT);
+            RestRequest request = new RestRequest(elasticConfig.IndexUrl, Method.PUT);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
-            IRestResponse response = restClient.Execute(request);
+            IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content + response.StatusCode);
-            //notificationSender.RegisterNotification(body, Subject.ELASTIC_CREATE_INDEX);
         }
 
     }
