@@ -293,7 +293,7 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "the portfolio doesn't exist.",
+                    Title = "the portfolio item doesn't exist.",
                     Detail = "The portfolio item id could not be found in the database.",
                     Instance = "A130226D-B26D-4C41-9CCF-C988B6FE3F08"
                 };
@@ -321,10 +321,6 @@ namespace API.Controllers
         public async Task<IActionResult> CreatePortfolioItemAsync(int portfolioId, int projectId, PortfolioItemResource portfolioItemResource)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
-
-            if(!isAllowed)
-                return Unauthorized();
 
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
