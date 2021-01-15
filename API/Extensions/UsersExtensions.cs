@@ -99,6 +99,7 @@ namespace API.Extensions
             return await userService.GetUserByIdentityIdAsync(identityProverId);
         }
 
+
         /// <summary>
         /// Gets the user information synchronous.
         /// this is triggered when a user makes a request who does not have an account already.
@@ -147,5 +148,16 @@ namespace API.Extensions
             };
             return newUser ;
         }
+
+        public static bool CheckIfUserIsAuthenticated(this ClaimsPrincipal claimsPrincipal)
+        {
+            if(claimsPrincipal.Identities.Any(i => i.IsAuthenticated))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
     }
 }
