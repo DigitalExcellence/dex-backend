@@ -72,7 +72,7 @@ namespace Services.Services
 
         public override void Update(Project entity)
         {
-            /// Sanitze description before executing default behaviour.
+            // Sanitize description before executing default behaviour.
             HtmlSanitizer sanitizer = new HtmlSanitizer();
             entity.Description = sanitizer.Sanitize(entity.Description);
             base.Update(entity);

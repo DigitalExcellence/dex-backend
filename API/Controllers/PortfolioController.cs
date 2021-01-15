@@ -228,8 +228,9 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
-            if(!isAllowed)
+            if(portfolio.User.Id != user.Id)
                 return Forbid();
+
 
             if(portfolio == null)
             {

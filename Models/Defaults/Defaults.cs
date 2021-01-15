@@ -70,10 +70,10 @@ namespace Models.Defaults
 
         public static class Scopes
         {
-            [Description("This scope gives read access to the project namespace")]
+            [Description("This scope gives read access to the portfolio namespace")]
             public const string PortfolioRead = "portfolio:read";
 
-            [Description("This scope gives write access to the project namespace")]
+            [Description("This scope gives write access to the portfolio namespace")]
             public const string PortfolioWrite = "portfolio:write";
 
             [Description("This scope gives read access to the project namespace")]

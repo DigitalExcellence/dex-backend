@@ -30,10 +30,5 @@ namespace API.Resources
         /// this sets or gets the content
         /// </summary>
         public string Content { get; set; }
-
-        ///// <summary>
-        ///// this sets or gets the content
-        ///// </summary>
-        //public int Project { get; set; }
     }
 }
