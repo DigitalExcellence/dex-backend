@@ -42,6 +42,17 @@ namespace API.Common
                                               string dataOfficerScope,
                                               int propertyOfUserId);
 
+        /// <summary>
+        /// This method checks if a user has the same institution, and both should not have null. It
+        /// also checks if the user has the correct institution scope that allows changes in the
+        /// same institution.
+        /// </summary>
+        /// <param name="loggedInUser">The user model of the logged in user.</param>
+        /// <param name="institutionScope">The required scope for accessing this
+        /// endpoint for data officers within the same institution.</param>
+        /// <param name="propertyOfUserId">The id of the user owner of the property
+        /// which the logged in user wants to access.</param>
+        /// <returns>Bool: true if the user is allowed, false if the user is not allowed.</returns>
         Task<bool> SameInstitutionAndInstitutionScope(User loggedInUser,
                                                       string institutionScope,
                                                       int propertyOfUserId);
