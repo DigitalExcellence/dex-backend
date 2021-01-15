@@ -11,11 +11,6 @@ namespace API.Resources
     /// </summary>
     public class PortfolioItemResource
     {
-        ///// <summary>
-        ///// This sets or gets the portfolio associated with the item
-        ///// </summary>
-        //public int PortfolioId { get; set; }
-
         /// <summary>
         /// This sets or gets the position
         /// </summary>
