@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
-using Repositories;
 using Services.DataProviders;
 using Services.Services;
 using System;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 namespace API.Controllers
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -28,30 +27,26 @@ namespace API.Controllers
         private readonly IFileService fileService;
         private readonly IFileUploader fileUploader;
         private readonly IDataProviderService dataProviderService;
-        private readonly IDataSourceWizardPageService dataSourceWizardPageService;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="DataSourceController"/> class.
         /// </summary>
-        /// <param name="mapper"></param>
-        /// <param name="dataSourceModelService"></param>
-        /// <param name="fileService"></param>
-        /// <param name="fileUploader"></param>
-        /// <param name="dataProviderService"></param>
-        /// <param name="dataSourceWizardPageService"></param>
+        /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
+        /// <param name="dataSourceModelService">The data source model service which is used to communicate with the logic layer.</param>
+        /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
+        /// <param name="fileUploader">The file uploader service which is used for uploading files.</param>
+        /// <param name="dataProviderService">The data provider service which is used to communicate with the logic layer.</param>
         public DataSourceController(IMapper mapper,
                                     IDataSourceModelService dataSourceModelService,
                                     IFileService fileService,
                                     IFileUploader fileUploader,
-                                    IDataProviderService dataProviderService,
-                                    IDataSourceWizardPageService dataSourceWizardPageService)
+                                    IDataProviderService dataProviderService)
         {
             this.mapper = mapper;
             this.dataSourceModelService = dataSourceModelService;
             this.fileService = fileService;
             this.fileUploader = fileUploader;
             this.dataProviderService = dataProviderService;
-            this.dataSourceWizardPageService = dataSourceWizardPageService;
         }
 
 
@@ -73,10 +68,14 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// This method is responsible for retrieving a data source by guid.
         /// </summary>
-        /// <param name="guid"></param>
-        /// <returns></returns>
+        /// <param name="guid">The guid is used for searching the data source with this specified guid.</param>
+        /// <returns>This method returns a data source with the specified guid.</returns>
+        /// <response code="200">This endpoint returns the found data source with the specified guid.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified guid is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no data source with the specified
+        /// guid could be found.</response>
         [HttpGet("guid")]
         [Authorize]
         [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
@@ -116,8 +115,9 @@ namespace API.Controllers
         /// <summary>
         /// This method is responsible for updating the data source in the database.
         /// </summary>
-        /// <param name="guid"></param>
-        /// <param name="dataSourceResource"></param>
+        /// <param name="guid">The guid parameter is used for searching the data source that should get updated.</param>
+        /// <param name="dataSourceResource">The data source resource contains the new data that gets used
+        /// for updating the specified data source.</param>
         /// <returns>This method returns the updated data source resource result.</returns>
         /// <response code="200">This endpoint returns the updated data source.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>

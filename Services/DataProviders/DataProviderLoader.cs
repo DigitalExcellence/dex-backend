@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -59,7 +59,7 @@ namespace Services.DataProviders
             List<IDataSourceAdaptee> dataSources = GetLocalAdapteeImplementations();
             await UpdateDatabaseWithLocalAdapteeImplementations(dataSources);
             IEnumerable<IDataSourceAdaptee> updatedDataSourceAdaptees = await UpdateModelsWithRepositoryValues(dataSources.ToArray());
-            return updatedDataSourceAdaptees.Where(d => d.IsVisible);
+            return updatedDataSourceAdaptees;
         }
 
         public async Task<IDataSourceAdaptee> GetDataSourceByGuid(string guid)
@@ -80,7 +80,7 @@ namespace Services.DataProviders
                 source.IsVisible = sourceModel.IsVisible;
                 source.Icon = sourceModel.Icon;
             }
-            
+
             return sources;
         }
 
@@ -116,7 +116,7 @@ namespace Services.DataProviders
                 sources.Where(s => sourceModels.SingleOrDefault(m => m.Guid == s.Guid) == null);
             await dataSourceModelRepository.AddRangeAsync(
                 mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
-            
+
             // For every model in the database, check if an adaptee is found. Whenever
             // no adaptee is found, this should get removed from the database.
             List<DataSource> modelsWithoutAdaptee =
