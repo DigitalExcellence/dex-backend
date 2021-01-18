@@ -152,7 +152,7 @@ namespace Services.Services
 
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {
-            return Repository.FindUserProjectsWithUserAndCollaboratorsAsync(userId);
+            return Repository.FindUserProjects(userId);
         }
     }
 
