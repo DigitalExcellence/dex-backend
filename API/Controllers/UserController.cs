@@ -95,7 +95,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The user could not be found in the database.",
-                    Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                    Instance = "d9a88dca-5c91-49c4-bf7d-7cac0c6d5673"
                 };
                 return NotFound(problem);
             }
@@ -164,15 +164,14 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUserProjects()
         {
-            string identityId = HttpContext.User.GetIdentityId(HttpContext);
-            User user = await userService.GetUserByIdentityIdAsync(identityId);
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The user could not be found in the database.",
-                    Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                    Instance = "ddcfef77-af2a-4ef0-a6bc-bd458b79306d"
                 };
                 return NotFound(problem);
             }
@@ -396,7 +395,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with this user id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                    Instance = "3263372d-298a-46e1-b9bb-28db87f021b6"
                 };
                 return NotFound(problem);
             }
@@ -457,7 +456,7 @@ namespace API.Controllers
                 {
                     Title = "You can not follow yourself",
                     Detail = "You can not follow yourself",
-                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                    Instance = "3a72f272-98eb-4d74-9e1a-990a3d41f189"
                 };
                 return NotFound(problem);
             }
