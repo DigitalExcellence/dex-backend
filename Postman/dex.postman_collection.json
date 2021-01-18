@@ -11844,47 +11844,6 @@
 									"name": "tests",
 									"item": [
 										{
-											"name": "Gdpr-RemoveSelf-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-															"\r",
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 200\", function () {\r",
-															"    pm.response.to.have.status(200);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{createdGdprUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										},
-										{
 											"name": "Gdpr-RemoveOther-Registered",
 											"event": [
 												{
@@ -11921,6 +11880,47 @@
 														"api",
 														"User",
 														"{{administratorUserId}}"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Gdpr-RemoveSelf-Registered",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+															"\r",
+															"eval(pm.environment.get(\"commonTests\"))();\r",
+															"\r",
+															"pm.test(\"Status code is 200\", function () {\r",
+															"    pm.response.to.have.status(200);\r",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{createdGdprUserIdentityId}}"
+													}
+												],
+												"url": {
+													"raw": "{{apiUrl}}/api/User",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User"
 													]
 												}
 											},
@@ -20310,6 +20310,51 @@
 														"api",
 														"User",
 														"{{prUserIdentityId}}"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Cleanup",
+									"item": [
+										{
+											"name": "User-DeleteUserOtherInstitute-Administrator Copy",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"eval(pm.environment.get(\"commonTests\"))();",
+															"",
+															"pm.test(\"Status code is 200\", function () {",
+															"    pm.response.to.have.status(200);",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "IdentityId",
+														"type": "text",
+														"value": "{{administratorUserIdentityId}}"
+													}
+												],
+												"url": {
+													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
+													"host": [
+														"{{apiUrl}}"
+													],
+													"path": [
+														"api",
+														"User",
+														"{{createdGdprUserId}}"
 													]
 												}
 											},
