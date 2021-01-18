@@ -440,8 +440,6 @@ namespace Repositories
         public async Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId)
         {
             RestRequest request = new RestRequest("_search", Method.POST);
-            //string jsonFileName = "GetProjectRecommendations";
-            //string body = System.IO.File.ReadAllText(Path.GetFullPath("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json")).Replace("ReplaceWithUserId", userId.ToString()).Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
             string body = queries.ProjectRecommendations
                 .Replace("ReplaceWithUserId", userId.ToString())
                 .Replace("ReplaceWithSimilarUserId", similarUserId.ToString());

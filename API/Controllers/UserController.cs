@@ -23,9 +23,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGeneration;
 using Models;
 using Models.Defaults;
 using Serilog;
+using Services.Resources;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -508,9 +510,22 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id);
+            try
+            {
+                List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id, 10);
+                return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectRecommendations));
 
-            return Ok(projectRecommendations);
+            } catch(RecommendationNotFoundException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the recommendations",
+                                             Detail = e.Message,
+                                             Instance = "948319D2-1A19-4E00-AF50-DB5D096AFD39"
+                                         };
+                return NotFound(problem);
+            }
+            
         }
     }
 }
