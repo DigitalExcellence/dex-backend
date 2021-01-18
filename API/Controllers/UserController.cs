@@ -510,7 +510,7 @@ namespace API.Controllers
 
             List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id);
 
-            return Ok();
+            return Ok(projectRecommendations);
         }
     }
 }
