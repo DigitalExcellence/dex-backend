@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using File = Models.File;
 
@@ -49,7 +50,7 @@ namespace Services.Services
 
         bool UserWithRoleExists(Role role);
 
-        Task<List<Project>> GetRecommendedProjects(int userId);
+        Task<List<Project>> GetRecommendedProjects(int userId, int amountOfProjects);
 
     }
 
@@ -103,17 +104,45 @@ namespace Services.Services
             return Repository.UserWithRoleExists(role);
         }
 
-        public async Task<List<Project>> GetRecommendedProjects(int userId)
+        public async Task<List<Project>> GetRecommendedProjects(int userId, int amountOfProjects)
         {
-            int similarUserId = GetSimilarUser(userId);
-            List<Project> projects = await projectRepository.GetLikedProjectsFromSimilarUser(userId, similarUserId);
-            return projects;
+            // Get all similar users
+            IEnumerable<int> similarUserIds = GetSimilarUsers(userId);
+            List<Project> recommendedProjects = new List<Project>();
+
+            // Iterate through users and their liked projects (which are not liked by user with userId) to find projects to recommend. When 10 projects are found the projects are returned.
+            foreach(int user in similarUserIds)
+            {
+                List<Project> projectsFromUser = await projectRepository.GetLikedProjectsFromSimilarUser(userId, user);
+                foreach(Project project in projectsFromUser.Where(project => !recommendedProjects.Contains(project)))
+                {
+                    recommendedProjects.Add(project);
+                    if(recommendedProjects.Count == amountOfProjects)
+                    {
+                        return recommendedProjects;
+                    }
+                }
+            }
+
+            if(recommendedProjects.Count == 0)
+            {
+                throw new RecommendationNotFoundException("similar user(s) do not have any projects you do not like yet.");
+            }
+            
+            return recommendedProjects;
         }
 
-        private int GetSimilarUser(int userId)
+        private IEnumerable<int> GetSimilarUsers(int userId)
         {
-            int foundUserId = Repository.GetSimilarUser(userId);
-            return foundUserId;
+            try
+            {
+                List<int> foundUserId = Repository.GetSimilarUsers(userId);
+                return foundUserId;
+            } catch(ArgumentOutOfRangeException)
+            {
+                throw new RecommendationNotFoundException("no similar users could be found.");
+            }
+            
         }
 
        

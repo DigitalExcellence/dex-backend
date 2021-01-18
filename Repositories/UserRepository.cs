@@ -68,7 +68,7 @@ namespace Repositories
         /// <param name="roleName">Name of the role.</param>
         /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
-        int GetSimilarUser(int userId);
+        List<int> GetSimilarUsers(int userId);
     }
     /// <summary>
     /// UserRepository
@@ -107,18 +107,26 @@ namespace Repositories
 
         
 
-        public int GetSimilarUser(int userId)
-        {
-            //string jsonFileName = "GetSimilarUsers";            
+        public List<int> GetSimilarUsers(int userId)
+        {            
             RestRequest request = new RestRequest("_search?size=0", Method.POST);
-            //string body = System.IO.File.ReadAllText(Path.GetFullPath("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json")).Replace("ReplaceWithUserId", userId.ToString());
             string body = queries.SimilarUsers.Replace("ReplaceWithUserId", userId.ToString());
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             IRestResponse restResponse = client.Execute(request);
-            int foundUserId = JToken.Parse(restResponse.Content)
-                               .SelectTokens("aggregations.user-liked.bucket.buckets")
-                               .First()[1].Value<int>("key");
-            return foundUserId;
+
+            // Put user id's of similar users in a list.
+            List<int> similarUserIds = new List<int>();
+            JToken users = JToken.Parse(restResponse.Content)
+                              .SelectTokens("aggregations.user-liked.bucket.buckets").First();
+            foreach(JToken user in users)
+            {
+                int id = user.First().ToObject<int>();
+                similarUserIds.Add(id);
+            }
+            // First result is the user itself, remove that one.
+            similarUserIds.RemoveAt(0);
+
+            return similarUserIds;
         }
 
 
