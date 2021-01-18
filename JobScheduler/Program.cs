@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Polly;
+using System.Linq;
+using System.Net;
 
 
 namespace JobScheduler
@@ -29,6 +31,8 @@ namespace JobScheduler
             IConfiguration configuration = configurationBuilder.Build();
             Config config = configuration.GetSection("Config")
                                          .Get<Config>();
+
+           
 
             return Host.CreateDefaultBuilder(args)
                        .ConfigureAppConfiguration(builder => configurationBuilder.Build())

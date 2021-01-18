@@ -8,8 +8,8 @@ services:
         context: .
         dockerfile: JobScheduler/Dockerfile
     environment:
-        - Config__IdentityServerConfig__IdentityUrl=http://identity:5004
-        - Config__ApiConfig__ApiUrl=https://api:5001
+        - Config__IdentityServerConfig__IdentityUrl=http://identity:5005/
+        - Config__ApiConfig__ApiUrl=https://api:5001/
         - App__RabbitMQ__Hostname=rabbitmq
         - App__RabbitMQ__Username=test
         - App__RabbitMQ__Password=test
