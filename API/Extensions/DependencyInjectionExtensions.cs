@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
+using Repositories.ElasticSearch;
 using Services.Resources;
 using Services.Services;
 using Services.Sources;
@@ -94,7 +95,7 @@ namespace API.Extensions
             services.AddScoped<INotificationSender, NotificationSender>();
             services.AddScoped<IRabbitMQConnectionFactory, RabbitMQConnectionFactory>();
 
-            services.AddScoped<IConnectionFactoryElasticSearch, ConnectionFactoryElasticSearch>();
+            services.AddSingleton<Queries>();
             return services;
         }
     }

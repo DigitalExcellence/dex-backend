@@ -66,13 +66,13 @@ namespace Services.Services
         ///     Returns all projects and projects in the format of ElasticSearch.
         /// </summary>
         /// <returns></returns>
-        Task<List<ESProjectFormat>> GetAllESProjectsFromProjects();
+        Task<List<ESProjectFormatDTO>> GetAllESProjectsFromProjects();
 
         /// <summary>
         ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
         /// </summary>
         /// <param name="projectsToExport"></param>
-        void MigrateDatabase(List<ESProjectFormat> projectsToExport);
+        void MigrateDatabase(List<ESProjectFormatDTO> projectsToExport);
 
     }
 
@@ -80,13 +80,11 @@ namespace Services.Services
     {
 
         private INotificationSender notificationSender;
-        private IConnectionFactoryElasticSearch connection;
         private ElasticConfig elasticConfig;
 
-        public ProjectService(IProjectRepository repository, INotificationSender notificationSender, IConnectionFactoryElasticSearch connectionFactoryElasticSearch, ElasticConfig elasticConfig) : base(repository)
+        public ProjectService(IProjectRepository repository, INotificationSender notificationSender, ElasticConfig elasticConfig) : base(repository)
         {
             this.notificationSender = notificationSender;
-            connection = connectionFactoryElasticSearch;
             this.elasticConfig = elasticConfig;
         }
 
@@ -174,13 +172,13 @@ namespace Services.Services
             return Repository.FindWithUserAndCollaboratorsAsync(id);
         }
 
-        public async Task<List<ESProjectFormat>> GetAllESProjectsFromProjects()
+        public async Task<List<ESProjectFormatDTO>> GetAllESProjectsFromProjects()
         {
             IEnumerable<Project> projectsToConvert = await Repository.GetAllWithUsersAndCollaboratorsAsync();
-            List<ESProjectFormat> convertedProjects = new List<ESProjectFormat>();
+            List<ESProjectFormatDTO> convertedProjects = new List<ESProjectFormatDTO>();
             foreach(Project project in projectsToConvert)
             {
-                ESProjectFormat convertedProject = new ESProjectFormat();
+                ESProjectFormatDTO convertedProject = new ESProjectFormatDTO();
                 List<int> likes = new List<int>();
                 foreach(ProjectLike projectLike in project.Likes)
                 {
@@ -197,30 +195,26 @@ namespace Services.Services
             return convertedProjects;
         }
 
-        public void MigrateDatabase(List<ESProjectFormat> projectsToExport)
+        public void MigrateDatabase(List<ESProjectFormatDTO> projectsToExport)
         {
+            DeleteIndex();
             CreateProjectIndexElastic();
-            DeleteAllPreviousDocumentsElastic();
-            foreach(ESProjectFormat pr in projectsToExport)
+            
+            foreach(ESProjectFormatDTO pr in projectsToExport)
             {
                 notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(pr), Subject.ELASTIC_CREATE_OR_UPDATE);
             }
         }
 
-        private void DeleteAllPreviousDocumentsElastic()
+        private void DeleteIndex()
         {
-            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(DateTime.Now), Subject.ELASTIC_DELETE_ALL);
+            Repository.DeleteIndex();
         }
+
 
         private void CreateProjectIndexElastic()
         {
-            string body = System.IO.File.ReadAllText(Path.GetFullPath("./Resources/ElasticSearch/IndexProjects.json")).Replace("\n", "").Replace("\r", "").Replace(" ","");
-            RestClient client = connection.CreateRestClientForElasticRequests();
-
-            RestRequest request = new RestRequest(elasticConfig.IndexUrl, Method.PUT);
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
-            Console.WriteLine(response.Content + response.StatusCode);
+            Repository.CreateProjectIndex();
         }
 
     }

@@ -36,8 +36,8 @@ namespace MessageBrokerPublisher.Services
             if(string.IsNullOrEmpty(hostName))
             {
                 hostName = "localhost";
-                user = "guest";
-                password = "guest";
+                user = "test";
+                password = "test";
             }
         }
 

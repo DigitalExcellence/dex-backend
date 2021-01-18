@@ -15,13 +15,18 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Data;
 using MessageBrokerPublisher;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Newtonsoft.Json.Linq;
 using Repositories.Base;
+using Repositories.ElasticSearch;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -55,6 +60,9 @@ namespace Repositories
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId);
+        void CreateProjectIndex();
+        void DeleteIndex();
 
     }
 
@@ -62,8 +70,12 @@ namespace Repositories
     {
 
         INotificationSender notificationSender;
-        public ProjectRepository(DbContext dbContext, INotificationSender notificationSender) : base(dbContext) {
+        RestClient elasticSearchContext;
+        Queries queries;
+        public ProjectRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, INotificationSender notificationSender, Queries queries) : base(dbContext) {
             this.notificationSender = notificationSender;
+            this.elasticSearchContext = elasticSearchContext.CreateRestClientForElasticRequests();
+            this.queries = queries;
         }
 
         /// <summary>
@@ -402,6 +414,73 @@ namespace Repositories
             return projectsToReturn;
         }
 
+        public void CreateProjectIndex()
+        {
+            string body = queries.IndexProjects;
+            RestRequest request = new RestRequest(Method.PUT);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            elasticSearchContext.Execute(request);
+        }
+
+        private string ParseJsonFileForQuery(string jsonFileName)
+        {
+            Console.WriteLine("Current: " + Directory.GetCurrentDirectory());
+            Console.WriteLine("Path relative: " + Path.GetFullPath("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json"));
+            Console.WriteLine("Path executable" + Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location));
+            Console.WriteLine(Path.GetFullPath(Directory.GetCurrentDirectory() + "/../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json"));
+            Console.WriteLine(Path.Combine(Directory.GetCurrentDirectory(), "./Repositories/ElasticSearch"));
+
+            string body = System.IO.File.ReadAllText("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json")
+                .Replace("\n", "")
+                .Replace("\r", "")
+                .Replace(" ", "");
+            return body;
+        }
+
+        public async Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId)
+        {
+            RestRequest request = new RestRequest("_search", Method.POST);
+            //string jsonFileName = "GetProjectRecommendations";
+            //string body = System.IO.File.ReadAllText(Path.GetFullPath("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json")).Replace("ReplaceWithUserId", userId.ToString()).Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
+            string body = queries.ProjectRecommendations
+                .Replace("ReplaceWithUserId", userId.ToString())
+                .Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = elasticSearchContext.Execute(request);
+
+            List<ESProjectFormatDTO> esProjectFormats = new List<ESProjectFormatDTO>();
+
+            ParseJsonToESProjectFormatDTOList(restResponse, esProjectFormats);
+            return await ConvertProjects(esProjectFormats);
+
+        }
+
+        private static void ParseJsonToESProjectFormatDTOList(IRestResponse restResponse, List<ESProjectFormatDTO> esProjectFormats)
+        {
+            JObject esProjects = JObject.Parse(restResponse.Content);
+            JToken projects = esProjects.GetValue("hits")["hits"];
+            foreach(JToken project in projects)
+            {
+                esProjectFormats.Add(project.Last.First.ToObject<ESProjectFormatDTO>());
+            }
+        }
+
+        private async Task<List<Project>> ConvertProjects(List<ESProjectFormatDTO> elasticSearchProjects)
+        {
+            List<Project> projects = new List<Project>();
+            foreach(ESProjectFormatDTO p in elasticSearchProjects)
+            {
+                projects.Add(await FindWithUserAndCollaboratorsAsync(p.Id));
+            }
+            return projects;
+        }
+
+
+        public void DeleteIndex()
+        {
+            RestRequest request = new RestRequest(Method.DELETE);
+            elasticSearchContext.Execute(request);
+        }
     }
 
 }

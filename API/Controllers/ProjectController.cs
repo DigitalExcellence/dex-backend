@@ -114,7 +114,7 @@ namespace API.Controllers
         {
             try
             {
-                List<ESProjectFormat> projectsToExport = await projectService.GetAllESProjectsFromProjects();
+                List<ESProjectFormatDTO> projectsToExport = await projectService.GetAllESProjectsFromProjects();
                 projectService.MigrateDatabase(projectsToExport);
 
                 return Ok(projectsToExport);

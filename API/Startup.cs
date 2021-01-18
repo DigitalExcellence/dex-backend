@@ -19,6 +19,7 @@ using API.Configuration;
 using API.Extensions;
 using API.Filters;
 using API.InternalResources;
+using Bogus.Extensions;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
@@ -98,6 +99,9 @@ namespace API
                 o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
+
+            services.AddSingleton<IElasticSearchContext>(new ElasticSearchContext(ElasticConfig.Hostname, ElasticConfig.Username, ElasticConfig.Password, ElasticConfig.IndexUrl));
+
             services.AddAutoMapper();
 
             services.UseConfigurationValidation();

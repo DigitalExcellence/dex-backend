@@ -103,6 +103,10 @@ services:
       - App__RabbitMQ__Hostname=rabbitmq
       - App__RabbitMQ__Username=test
       - App__RabbitMQ__Password=test
+      - App__Elastic__Hostname=elasticsearch
+      - App__Elastic__Username=elastic
+      - App__Elastic__Password=changeme
+      - App__Elastic__IndexUrl=projects/ 
     networks:
       mssql-network:
       rabbitmq-network:

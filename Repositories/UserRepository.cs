@@ -15,9 +15,16 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Data;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Newtonsoft.Json.Linq;
 using Repositories.Base;
+using Repositories.ElasticSearch;
+using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,7 +68,7 @@ namespace Repositories
         /// <param name="roleName">Name of the role.</param>
         /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
-
+        int GetSimilarUser(int userId);
     }
     /// <summary>
     /// UserRepository
@@ -70,11 +77,16 @@ namespace Repositories
     /// <seealso cref="Repositories.IUserRepository" />
     public class UserRepository : Repository<User>, IUserRepository
     {
+        private RestClient client;
+        private Queries queries;
         /// <summary>
         /// Initializes a new instance of the <see cref="UserRepository"/> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        public UserRepository(DbContext dbContext) : base(dbContext) { }
+        public UserRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, Queries queries) : base(dbContext) {
+            client = elasticSearchContext.CreateRestClientForElasticRequests();
+            this.queries = queries;
+        }
 
         /// <summary>
         /// Finds the asynchronous.
@@ -92,6 +104,24 @@ namespace Repositories
                              .Include(s => s.LikedProjectsByUsers)
                              .SingleOrDefaultAsync();
         }
+
+        
+
+        public int GetSimilarUser(int userId)
+        {
+            //string jsonFileName = "GetSimilarUsers";            
+            RestRequest request = new RestRequest("_search?size=0", Method.POST);
+            //string body = System.IO.File.ReadAllText(Path.GetFullPath("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json")).Replace("ReplaceWithUserId", userId.ToString());
+            string body = queries.SimilarUsers.Replace("ReplaceWithUserId", userId.ToString());
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = client.Execute(request);
+            int foundUserId = JToken.Parse(restResponse.Content)
+                               .SelectTokens("aggregations.user-liked.bucket.buckets")
+                               .First()[1].Value<int>("key");
+            return foundUserId;
+        }
+
+
         /// <summary>
         /// Gets the user asynchronous.
         /// </summary>

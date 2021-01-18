@@ -49,22 +49,19 @@ namespace Services.Services
 
         bool UserWithRoleExists(Role role);
 
-        List<Project> GetRecommendedProjects(int userId);
+        Task<List<Project>> GetRecommendedProjects(int userId);
 
     }
 
     public class UserService : Service<User>, IUserService
     {
-        private RestClient elasticRestClient;
         private readonly ElasticConfig elasticConfig;
+        private readonly IProjectRepository projectRepository;
 
-        public UserService(IUserRepository repository, ElasticConfig config) : base(repository)
+        public UserService(IUserRepository repository, IProjectRepository projectRepository, ElasticConfig config) : base(repository)
         {
             elasticConfig = config;
-            elasticRestClient = new RestClient(config.Hostname)
-                                     {
-                                         Authenticator = new HttpBasicAuthenticator(config.Username, config.Password)
-                                     };
+            this.projectRepository = projectRepository;
         }
 
         protected new IUserRepository Repository => (IUserRepository) base.Repository;
@@ -96,8 +93,8 @@ namespace Services.Services
 
         public async Task<bool> HasSameInstitution(int ownUserId, int requestUserId)
         {
-            var ownUserInfo = await Repository.FindAsync(ownUserId);
-            var userRequestInfo = await Repository.FindAsync(requestUserId);
+            User ownUserInfo = await Repository.FindAsync(ownUserId);
+            User userRequestInfo = await Repository.FindAsync(requestUserId);
             return ownUserInfo.Institution == userRequestInfo.Institution && ownUserInfo.Institution != null;
         }
 
@@ -106,63 +103,20 @@ namespace Services.Services
             return Repository.UserWithRoleExists(role);
         }
 
-        public List<Project> GetRecommendedProjects(int userId)
+        public async Task<List<Project>> GetRecommendedProjects(int userId)
         {
             int similarUserId = GetSimilarUser(userId);
-            List<ESProjectFormat> elasticSearchProjects = GetLikedProjectsFromSimilarUser(userId, similarUserId);
-            return ConvertProjects(elasticSearchProjects);
+            List<Project> projects = await projectRepository.GetLikedProjectsFromSimilarUser(userId, similarUserId);
+            return projects;
         }
 
         private int GetSimilarUser(int userId)
         {
-            RestRequest request = new RestRequest(elasticConfig.IndexUrl + "_search?size=0", Method.POST);
-
-            string body = System
-                          .IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(),
-                                                            "../Services/Resources/GetSimilarUsers.json"))
-                          .Replace("ReplaceWithUserId", userId.ToString());
-
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            IRestResponse restResponse = elasticRestClient.Execute(request);
-            if(!restResponse.IsSuccessful)
-            {
-
-            }
-
-            int foundUserId = JToken.Parse(restResponse.Content)
-                               .SelectTokens("aggregations.user-liked.bucket.buckets")
-                               .First()[1].Value<int>("key");
-            
+            int foundUserId = Repository.GetSimilarUser(userId);
             return foundUserId;
         }
 
-        private List<ESProjectFormat> GetLikedProjectsFromSimilarUser(int userId, int similarUserId)
-        {
-            RestRequest request = new RestRequest(elasticConfig.IndexUrl + "_search", Method.POST);
-
-            string body = System
-                          .IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(),
-                                                            "../Services/Resources/GetProjectRecommendations.json"))
-                          .Replace("ReplaceWithUserId", userId.ToString())
-                          .Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
-
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            IRestResponse restResponse = elasticRestClient.Execute(request);
-            if(!restResponse.IsSuccessful)
-            {
-
-            }
-
-            /*List<ESProjectFormat> esProjects = JToken.Parse(restResponse.Content)
-                                            .SelectTokens("hits.hits").Cast<List<ESProjectFormat>>();*/
-
-            throw new NotImplementedException();
-        }
-
-        private List<Project> ConvertProjects(List<ESProjectFormat> elasticSearchProjects)
-        {
-            throw new NotImplementedException();
-        }
+       
 
     }
 }

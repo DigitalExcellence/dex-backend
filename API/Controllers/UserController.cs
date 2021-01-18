@@ -508,7 +508,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            List<Project> projectRecommendations = userService.GetRecommendedProjects(user.Id);
+            List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id);
 
             return Ok();
         }
