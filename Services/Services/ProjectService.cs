@@ -35,7 +35,7 @@ using Services.Resources;
 
 namespace Services.Services
 {
-
+    
     public interface IProjectService : IService<Project>
     {
 
@@ -63,16 +63,12 @@ namespace Services.Services
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
         /// <summary>
-        ///     Returns all projects and projects in the format of ElasticSearch.
-        /// </summary>
-        /// <returns></returns>
-        Task<List<ESProjectFormatDTO>> GetAllESProjectsFromProjects();
-
-        /// <summary>
         ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
         /// </summary>
         /// <param name="projectsToExport"></param>
-        void MigrateDatabase(List<ESProjectFormatDTO> projectsToExport);
+        void MigrateDatabase(List<Project> projectsToExport);
+
+        Task<List<Project>> GetAllWithUserAndCollaboratorsAsync();
 
     }
 
@@ -172,38 +168,17 @@ namespace Services.Services
             return Repository.FindWithUserAndCollaboratorsAsync(id);
         }
 
-        public async Task<List<ESProjectFormatDTO>> GetAllESProjectsFromProjects()
+        
+        public Task<List<Project>> GetAllWithUserAndCollaboratorsAsync()
         {
-            IEnumerable<Project> projectsToConvert = await Repository.GetAllWithUsersAndCollaboratorsAsync();
-            List<ESProjectFormatDTO> convertedProjects = new List<ESProjectFormatDTO>();
-            foreach(Project project in projectsToConvert)
-            {
-                ESProjectFormatDTO convertedProject = new ESProjectFormatDTO();
-                List<int> likes = new List<int>();
-                foreach(ProjectLike projectLike in project.Likes)
-                {
-                    likes.Add(projectLike.UserId);
-                }
-                convertedProject.Description = project.Description;
-                convertedProject.ProjectName = project.Name;
-                convertedProject.Id = project.Id;
-                convertedProject.Created = project.Created;
-                convertedProject.Likes = likes;
-                convertedProjects.Add(convertedProject);
-
-            }
-            return convertedProjects;
+            return Repository.GetAllWithUsersAndCollaboratorsAsync();
         }
-
-        public void MigrateDatabase(List<ESProjectFormatDTO> projectsToExport)
+        public void MigrateDatabase(List<Project> projectsToExport)
         {
             DeleteIndex();
             CreateProjectIndexElastic();
+            Repository.MigrateDatabase(projectsToExport);
             
-            foreach(ESProjectFormatDTO pr in projectsToExport)
-            {
-                notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(pr), Subject.ELASTIC_CREATE_OR_UPDATE);
-            }
         }
 
         private void DeleteIndex()

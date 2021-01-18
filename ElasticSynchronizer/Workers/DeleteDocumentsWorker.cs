@@ -17,6 +17,7 @@
 
 using ElasticSynchronizer.Configuration;
 using ElasticSynchronizer.Executors;
+using ElasticSynchronizer.Helperclasses;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotificationSystem.Contracts;

@@ -114,10 +114,10 @@ namespace API.Controllers
         {
             try
             {
-                List<ESProjectFormatDTO> projectsToExport = await projectService.GetAllESProjectsFromProjects();
+                List<Project> projectsToExport = await projectService.GetAllWithUserAndCollaboratorsAsync();
                 projectService.MigrateDatabase(projectsToExport);
 
-                return Ok(projectsToExport);
+                return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectsToExport));
             } catch(Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -678,10 +678,10 @@ namespace API.Controllers
             try
             {
                 ProjectLike like = new ProjectLike(projectToLike, currentUser);
-                await userProjectLikeService.AddAsync(like)
-                                            .ConfigureAwait(false);
+                userProjectLikeService.Add(like);
 
                 userProjectLikeService.Save();
+                await userProjectLikeService.SyncProjectToES(projectToLike);
                 return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(like));
             } catch(DbUpdateException e)
             {
@@ -758,6 +758,7 @@ namespace API.Controllers
             userProjectLikeService.Remove(projectLike);
 
             userProjectLikeService.Save();
+            await userProjectLikeService.SyncProjectToES(projectToLike);
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
         }
 

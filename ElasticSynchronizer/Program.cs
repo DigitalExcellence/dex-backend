@@ -54,9 +54,10 @@ namespace ElasticSynchronizer
 
                     services.AddScoped<Config>( c => configuration.GetSection("App")
                                                                   .Get<Config>()  );
-                    
-                    var builder = new UriBuilder(Dns.GetHostEntry(config.Elastic.Hostname).AddressList.FirstOrDefault().ToString()+":9200");
-                    var uri = builder.Uri;
+
+                    UriBuilder builder = new UriBuilder("http://" + config.Elastic.Hostname + ":9200/");
+
+                    Uri uri = builder.Uri;
                     Console.WriteLine("Hier: " + uri);
                     services.AddScoped(client => new RestClient(uri)
                     {

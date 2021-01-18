@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using MessageBrokerPublisher;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
@@ -33,12 +34,23 @@ namespace Repositories
     public class UserProjectLikeRepository : Repository<ProjectLike>,
                                              IUserProjectLikeRepository
     {
-        public UserProjectLikeRepository(DbContext dbContext) :
-            base(dbContext) { }
+        private INotificationSender notificationSender;
+        public UserProjectLikeRepository(DbContext dbContext, INotificationSender notificationSender) :
+            base(dbContext) {
+            this.notificationSender = notificationSender;
+        }
 
         public override void Add(ProjectLike projectLike)
         {
             DbContext.Add(projectLike);
+        }
+
+
+
+        public override void Save()
+        {
+            base.Save();
+
         }
 
         public override void Remove(ProjectLike projectLike)
@@ -67,6 +79,8 @@ namespace Repositories
             }
             return false;
         }
+
+
     }
 
 }

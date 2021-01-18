@@ -28,7 +28,7 @@ namespace ElasticSynchronizer.Executors
 {
     public class DocumentDeleter : ICallbackService
     {
-        private ProjectES projectEs;
+        private ESProjectDTO eSProject;
         private readonly RestClient restClient;
         private readonly Config config;
 
@@ -43,7 +43,7 @@ namespace ElasticSynchronizer.Executors
 
         public void ParsePayload(string jsonBody)
         {
-            projectEs = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
+            eSProject = JsonConvert.DeserializeObject<ESProjectDTO>(jsonBody);
         }
 
 
@@ -63,7 +63,7 @@ namespace ElasticSynchronizer.Executors
             Console.WriteLine("Hier: ");
             Console.WriteLine(config.Elastic.Hostname);
             Console.WriteLine(config.Elastic.IndexUrl);
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + projectEs.Id, Method.DELETE);
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + eSProject.Id, Method.DELETE);
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)
             {

@@ -20,6 +20,7 @@ using Repositories;
 using Repositories.Base;
 using Services.Base;
 using System;
+using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -27,14 +28,18 @@ namespace Services.Services
     public interface IUserProjectLikeService : IService<ProjectLike>
     {
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
+        Task SyncProjectToES(Project project);
     }
 
     public class UserProjectLikeService : Service<ProjectLike>,
                                           IUserProjectLikeService
     {
-
-        public UserProjectLikeService(IUserProjectLikeRepository repository) :
-            base(repository) { }
+        IProjectRepository projectRepository;
+        public UserProjectLikeService(IUserProjectLikeRepository repository, IProjectRepository projectRepository) :
+            base(repository)
+        {
+            this.projectRepository = projectRepository;
+        }
 
         private new IUserProjectLikeRepository Repository =>
             (IUserProjectLikeRepository) base.Repository;
@@ -44,11 +49,16 @@ namespace Services.Services
             Repository.Add(projectEntity);
         }
 
-        public override void Remove(ProjectLike projectLike)
+        public override void Remove(ProjectLike projectEntity)
         {
-            Repository.Remove(projectLike);
+            Repository.Remove(projectEntity);
+            
         }
 
+        public async Task SyncProjectToES(Project project)
+        {
+             await projectRepository.SyncProjectToES(project);
+        }
         bool IUserProjectLikeService.CheckIfUserAlreadyLiked(int userId, int projectId)
         {
             if(Repository.CheckIfUserAlreadyLiked(userId, projectId))

@@ -16,6 +16,7 @@
 */
 
 using ElasticSynchronizer.Configuration;
+using ElasticSynchronizer.Helperclasses;
 using ElasticSynchronizer.Models;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
@@ -28,7 +29,7 @@ namespace ElasticSynchronizer.Executors
 {
     public class DocumentUpdater : ICallbackService
     {
-        private ProjectES projectEs;
+        private ESProjectDTO eSProject;
         private readonly RestClient restClient;
         private readonly Config config;
 
@@ -43,7 +44,7 @@ namespace ElasticSynchronizer.Executors
 
         public void ParsePayload(string jsonBody)
         {
-            projectEs = JsonConvert.DeserializeObject<ProjectES>(jsonBody);
+            eSProject = JsonConvert.DeserializeObject<ESProjectDTO>(jsonBody);
         }
 
 
@@ -60,8 +61,8 @@ namespace ElasticSynchronizer.Executors
 
         private void CreateOrUpdateDocument()
         {
-            string body = JsonConvert.SerializeObject(projectEs);
-            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + projectEs.Id, Method.PUT);
+            string body = JsonConvert.SerializeObject(eSProject);
+            RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + eSProject.Id, Method.PUT);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             Console.WriteLine(body);
 

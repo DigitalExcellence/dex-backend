@@ -34,7 +34,6 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-
     public interface IProjectRepository : IRepository<Project>
     {
 
@@ -56,14 +55,14 @@ namespace Repositories
             bool orderByAsc = true,
             bool? highlighted = null
         );
-
+        Task SyncProjectToES(Project project);
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
         Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId);
         void CreateProjectIndex();
         void DeleteIndex();
-
+        void MigrateDatabase(List<Project> projectsToExport);
     }
 
     public class ProjectRepository : Repository<Project>, IProjectRepository
@@ -248,14 +247,36 @@ namespace Repositories
         public override void Add(Project entity)
         {
             base.Add(entity);
-            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_CREATE_OR_UPDATE);
+            _ = entity.Likes;
+            ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
+            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+        }
+
+        public override Task AddAsync(Project entity)
+        {
+            _ = entity.Likes;
+            ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
+            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+            return base.AddAsync(entity);
         }
 
         public override void Remove(Project entity)
         {
             base.Remove(entity);
-            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_DELETE);
+            ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
+            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
         }
+
+        public override Task RemoveAsync(int id)
+        {
+            
+            return base.RemoveAsync(id);
+        }
+
+
 
         /// <summary>
         /// This method redacts user email from the Project if isPublic setting is set to false.
@@ -422,26 +443,10 @@ namespace Repositories
             elasticSearchContext.Execute(request);
         }
 
-        private string ParseJsonFileForQuery(string jsonFileName)
-        {
-            Console.WriteLine("Current: " + Directory.GetCurrentDirectory());
-            Console.WriteLine("Path relative: " + Path.GetFullPath("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json"));
-            Console.WriteLine("Path executable" + Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location));
-            Console.WriteLine(Path.GetFullPath(Directory.GetCurrentDirectory() + "/../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json"));
-            Console.WriteLine(Path.Combine(Directory.GetCurrentDirectory(), "./Repositories/ElasticSearch"));
-
-            string body = System.IO.File.ReadAllText("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json")
-                .Replace("\n", "")
-                .Replace("\r", "")
-                .Replace(" ", "");
-            return body;
-        }
 
         public async Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId)
         {
             RestRequest request = new RestRequest("_search", Method.POST);
-            //string jsonFileName = "GetProjectRecommendations";
-            //string body = System.IO.File.ReadAllText(Path.GetFullPath("../Repositories/ElasticSearch/Queries/" + jsonFileName + ".json")).Replace("ReplaceWithUserId", userId.ToString()).Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
             string body = queries.ProjectRecommendations
                 .Replace("ReplaceWithUserId", userId.ToString())
                 .Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
@@ -480,6 +485,25 @@ namespace Repositories
         {
             RestRequest request = new RestRequest(Method.DELETE);
             elasticSearchContext.Execute(request);
+        }
+
+        public void MigrateDatabase(List<Project> projectsToExport)
+        {
+            List<ESProjectFormatDTO> projectsToExportDTOs = ProjectConverter.ProjectsToProjectESDTOs(projectsToExport);
+            foreach(ESProjectFormatDTO project in projectsToExportDTOs)
+            {
+                notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(project), Subject.ELASTIC_CREATE_OR_UPDATE);
+            }
+        }
+
+        public async Task SyncProjectToES(Project project)
+        {
+            Project projectToSync = await FindAsync(project.Id);
+            ESProjectFormatDTO eSProjectDTO = new ESProjectFormatDTO();
+            ProjectConverter.ProjectToESProjectDTO(projectToSync, eSProjectDTO);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
+                     
+            
         }
     }
 

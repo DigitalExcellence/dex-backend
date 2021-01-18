@@ -23,7 +23,7 @@ namespace ElasticSynchronizer.Models
     /// <summary>
     /// This model is the model used to create, update or delete documents in Elastic Search.
     /// </summary>
-    public class ProjectES
+    public class ESProjectDTO
     {
         /// <summary>
         /// This gets or sets the created date of the project 

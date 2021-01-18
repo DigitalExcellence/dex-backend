@@ -17,6 +17,7 @@
 
 using ElasticSynchronizer.Configuration;
 using ElasticSynchronizer.Executors;
+using ElasticSynchronizer.Helperclasses;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotificationSystem.Contracts;
@@ -35,6 +36,7 @@ namespace ElasticSynchronizer.Workers
         private readonly string subject = "ELASTIC_DELETE";
         private readonly Config config;
         private readonly RestClient restClient;
+        
 
         public DeleteProjectWorker(ILogger<DeleteProjectWorker> logger, Config config, RestClient restClient)
         {
