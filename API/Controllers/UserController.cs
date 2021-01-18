@@ -118,7 +118,7 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the user id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpGet("{userId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.UserRead))]
+        [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
@@ -312,9 +312,9 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns status code 200. The account with the specified id is deleted.</response>
         /// <response code="401">The 401 Unauthorized status code is returned when the user is not allowed to delete the account.</response>
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
+        [Authorize]
         [HttpDelete]
         [HttpDelete("{userId}")]
-        [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
