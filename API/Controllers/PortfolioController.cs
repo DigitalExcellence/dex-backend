@@ -371,15 +371,13 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
-                //portfolioItemResource.ProjectId = project.Id;
                 portfolioItem.ProjectId = 0;
             }
-
-            //portfolioItemResource.PortfolioId = portfolio.Id;
+            portfolioItem.ProjectId = project.Id;
 
             try
             {
-                portfolioItem.Portfolio = portfolio;
+                portfolioItem.PortfolioId = portfolio.Id;
                 portfolioItemService.Add(portfolioItem);
                 portfolioItemService.Save();
                 PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);

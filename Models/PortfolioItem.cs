@@ -9,7 +9,7 @@ namespace Models
     {
         public PortfolioItem(Portfolio portfolio, Project project)
         {
-            Portfolio = portfolio;
+            PortfolioId = portfolio.Id;
             ProjectId = project.Id;
         }
 
@@ -18,7 +18,7 @@ namespace Models
         public int Id { get; set; }
 
         [Required]
-        public Portfolio Portfolio { get; set; }
+        public int PortfolioId { get; set; }
 
         public int Position { get; set; }
 
