@@ -84,6 +84,7 @@ namespace Services.Tests
                 "InstitutionRead",
                 "InstitutionWrite",
                 "FileWrite",
+                "DataSourceWrite",
                 "CallToActionOptionWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
