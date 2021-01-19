@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Refactored Postman tests - [#328](https://github.com/DigitalExcellence/dex-backend/issues/328)
+- Resolve update institution id for data officer bug - [#352](https://github.com/DigitalExcellence/dex-backend/issues/352)
 
 ### Security
 

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "470ce833-b465-47d1-b5e2-c5f317312588",
+		"_postman_id": "20b49bc3-8980-4930-8148-c92b4773cfee",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -192,7 +192,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n\t\"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n    \"name\": \"Data Officer Postman User\",\r\n    \"email\": \"dataOfficerUser@postman.com\"\r\n}",
+											"raw": "{\r\n\t\"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n    \"name\": \"Data Officer Postman User\",\r\n    \"email\": \"dataOfficerUser@postman.com\",\r\n    \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -3220,326 +3220,6 @@
 										}
 									},
 									"response": []
-								}
-							]
-						},
-						{
-							"name": "Gdpr",
-							"item": [
-								{
-									"name": "Preperation",
-									"item": [
-										{
-											"name": "User-CreateUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var userName = pm.environment.get(\"userName\");",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdGdprUserId\", jsonData.id);",
-															"pm.environment.set(\"createdGdprUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"identityId\": \"6969\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Project-CreateProject-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var registeredUserId = pm.environment.get(\"createdGdprUserId\");",
-															"var projectName = pm.environment.get(\"projectName\");",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"var jsonData = pm.response.json();",
-															"pm.environment.set(\"gdprProjectId\", jsonData.id);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
-															"    pm.expect(jsonData.name).to.eql(projectName);",
-															"});",
-															"",
-															"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
-															"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{createdGdprUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_description\",\r\n  \"shortDescription\": \"postmantest_shortdesc\",\r\n  \"uri\": \"postmantest_uri\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_collfullname\",\r\n      \"role\": \"postmantest_collrole\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/Project",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"Project"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "Tests",
-									"item": [
-										{
-											"name": "Gdpr-RemoveUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 200\", function () {\r",
-															"    pm.response.to.have.status(200);\r",
-															"});\r",
-															""
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"value": "{{administratorUserIdentityId}}",
-														"type": "text"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-GetUserAfterDataRemoval-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var createdUserId = parseInt(pm.environment.get(\"createdGdprUserId\"));",
-															"var createdUserIdentityId = pm.environment.get(\"createdGdprUserIdentityId\");",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 404\", function () {",
-															"    pm.response.to.have.status(404);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Project-GetProjectAfterDataRemoval-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var projectId = parseInt(pm.environment.get(\"projectId\"));",
-															"var projectName = pm.environment.get(\"projectName\");",
-															"",
-															"var removedUserId = parseInt(pm.environment.get(\"GdprRemovedUserId\"));",
-															"var removedUserName = pm.environment.get(\"GdprRemovedUserName\");",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"    pm.response.to.be.ok;",
-															"    pm.response.to.be.withBody;",
-															"    pm.response.to.be.json;",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/Project/{{gdprProjectId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"Project",
-														"{{gdprProjectId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "Cleanup",
-									"item": [
-										{
-											"name": "Project-DeleteProject-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 200\", function () {\r",
-															"    pm.response.to.have.status(200);\r",
-															"});\r",
-															"\r",
-															""
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/Project/{{gdprProjectId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"Project",
-														"{{gdprProjectId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
 								}
 							]
 						},
@@ -7017,206 +6697,6 @@
 											""
 										]
 									}
-								}
-							]
-						},
-						{
-							"name": "Gdpr",
-							"item": [
-								{
-									"name": "Preperation",
-									"item": [
-										{
-											"name": "User-CreateUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var userName = pm.environment.get(\"userName\");",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdGdprUserId\", jsonData.id);",
-															"pm.environment.set(\"createdGdprUserIdentityId\", jsonData.identityId);",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"identityId\": \"696969\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "tests",
-									"item": [
-										{
-											"name": "Gdpr-RemoveUser-Guest",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-															"\r",
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 401\", function () {\r",
-															"    pm.response.to.have.status(401);\r",
-															"});\r",
-															""
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"auth": {
-													"type": "noauth"
-												},
-												"method": "DELETE",
-												"header": [],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Gdpr-RemoveUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-															"\r",
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 200\", function () {\r",
-															"    pm.response.to.have.status(200);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"value": "{{administratorUserIdentityId}}",
-														"type": "text"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-GetUserAfterDataRemoval-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var createdUserId = parseInt(pm.environment.get(\"createdGdprUserId\"));",
-															"var createdUserIdentityId = pm.environment.get(\"createdGdprUserIdentityId\");",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 404\", function () {",
-															"    pm.response.to.have.status(404);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
 								}
 							]
 						},
@@ -11774,207 +11254,6 @@
 							]
 						},
 						{
-							"name": "Gdpr",
-							"item": [
-								{
-									"name": "Preperation",
-									"item": [
-										{
-											"name": "User-CreateUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var userName = pm.environment.get(\"userName\");",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.environment.set(\"createdGdprUserId\", jsonData.id);",
-															"pm.environment.set(\"createdGdprUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"identityId\": \"696969690\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "tests",
-									"item": [
-										{
-											"name": "Gdpr-RemoveOther-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-															"\r",
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 401\", function () {\r",
-															"    pm.response.to.have.status(401);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{createdGdprUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{administratorUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{administratorUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Gdpr-RemoveSelf-Registered",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-															"\r",
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 200\", function () {\r",
-															"    pm.response.to.have.status(200);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{createdGdprUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-GetUserAfterDataRemoval-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var createdUserId = parseInt(pm.environment.get(\"createdGdprUserId\"));",
-															"var createdUserIdentityId = pm.environment.get(\"createdGdprUserIdentityId\");",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 404\", function () {",
-															"    pm.response.to.have.status(404);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								}
-							]
-						},
-						{
 							"name": "File",
 							"item": [
 								{
@@ -13035,7 +12314,7 @@
 									"response": []
 								},
 								{
-									"name": "User-UpdateUser-Self-DataOfficer",
+									"name": "User-UpdateUser-SelfWithSameInstitution-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -13059,6 +12338,10 @@
 													"",
 													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
 													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
+													"});",
+													"",
+													"pm.test(\"Check if institution id is 1\", function () {",
+													"    pm.expect(jsonData.institution.id).to.equal(1);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -13098,7 +12381,7 @@
 									"response": []
 								},
 								{
-									"name": "User-GetUser-Other-DifferentInstitution-DataOfficer",
+									"name": "User-UpdateUser-SelfWithWrongInstitution-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -13108,14 +12391,18 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
+													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Instance guid should be: DD72C521-1D06-4E11-A0E0-AAE515E7F900\", function () {",
+													"    pm.expect(jsonData.instance).to.equal(\"DD72C521-1D06-4E11-A0E0-AAE515E7F900\");",
 													"});",
 													""
 												],
@@ -13124,7 +12411,7 @@
 										}
 									],
 									"request": {
-										"method": "GET",
+										"method": "PUT",
 										"header": [
 											{
 												"key": "IdentityId",
@@ -13132,15 +12419,86 @@
 												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_DataOfficer-alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\",\r\n  \"institutionId\": {{createdInstitutionId}}\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
+											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{createdUserId}}"
+												"{{dataOfficerUserId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UpdateUser-OtherWithSameInstitution-SameInstitutionId-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"var institutionId = pm.environment.get(\"institutionIdFromUser\");",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Institution Id is \" + institutionId, function() {",
+													"    pm.expect(jsonData.institution.id).to.equal(parseInt(institutionId));",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"institutionId\": {{institutionIdFromUser}},\r\n  \"identityId\": \"9996\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserWithInstitutionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserWithInstitutionId}}"
 											]
 										}
 									},
@@ -13196,6 +12554,173 @@
 									"response": []
 								},
 								{
+									"name": "User-UpdateUser-OtherWithSameInstitution-NoInstitutionId-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if institution is null\", function () {",
+													"    pm.expect(jsonData.institution).to.equal(null);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": \"9996\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserWithInstitutionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserWithInstitutionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UpdateUser-Other-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": \"9996\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserWithInstitutionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserWithInstitutionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-GetUser-Other-DifferentInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "User-GetUser-Self-DataOfficer",
 									"event": [
 										{
@@ -13244,63 +12769,6 @@
 											"path": [
 												"api",
 												"User"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-UpdateUser-Other-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"{{createdUserId}}"
 											]
 										}
 									},
@@ -15586,444 +15054,6 @@
 							]
 						},
 						{
-							"name": "Gdpr",
-							"item": [
-								{
-									"name": "Preperation",
-									"item": [
-										{
-											"name": "User-CreateUserInInstitute-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var userName = pm.environment.get(\"userName\");",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.environment.set(\"createdGdprUserId\", jsonData.id);",
-															"pm.environment.set(\"createdGdprUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"identityId\": \"9090\",\n    \"institutionId\": 1,\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-CreateUserInOtherInstitute-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var userName = pm.environment.get(\"userName\");",
-															"var jsonData = pm.response.json();",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.environment.set(\"createdGdprOtherInstituteUserId\", jsonData.id);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"identityId\": \"909069\",\n    \"institutionId\": {{createdInstitutionId}},\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-CreateUserWithoutInstitute-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var userName = pm.environment.get(\"userName\");",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.environment.set(\"createdGdprWithoutInstituteUserId\", jsonData.id);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"identityId\": \"90906969\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "tests",
-									"item": [
-										{
-											"name": "Gdpr-RemoveUserInInstitute-DataOfficer",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 200\", function () {\r",
-															"    pm.response.to.have.status(200);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"value": "{{dataOfficerUserIdentityId}}",
-														"type": "text"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Gdpr-RemoveUserInOtherInstitute-DataOfficer",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 401\", function () {\r",
-															"    pm.response.to.have.status(401);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{dataOfficerUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprOtherInstituteUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprOtherInstituteUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Gdpr-RemoveUserWithoutInstitute-DataOfficer",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();\r",
-															"\r",
-															"pm.test(\"Status code is 401\", function () {\r",
-															"    pm.response.to.have.status(401);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{dataOfficerUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprWithoutInstituteUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprWithoutInstituteUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-GetUserAfterDataRemoval-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var createdUserId = parseInt(pm.environment.get(\"createdGdprUserId\"));",
-															"var createdUserIdentityId = pm.environment.get(\"createdGdprUserIdentityId\");",
-															"",
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 404\", function () {",
-															"    pm.response.to.have.status(404);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "Cleanup",
-									"item": [
-										{
-											"name": "User-DeleteUserOtherInstitute-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprOtherInstituteUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprOtherInstituteUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-DeleteUserWithoutInstitute-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprWithoutInstituteUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprWithoutInstituteUserId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								}
-							]
-						},
-						{
 							"name": "File",
 							"item": [
 								{
@@ -16256,7 +15286,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -16268,6 +15298,73 @@
 												"api",
 												"Project",
 												"{{projectIdWithInstitution}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-UpdateUser-SelfWithNoInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var updatedAliceEmail = pm.environment.get(\"updatedAliceEmail\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if email update matches: \" + updatedAliceEmail, function () {",
+													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
+													"});",
+													"",
+													"pm.test(\"Check if institution is null\", function () {",
+													"    pm.expect(jsonData.institution).to.equal(null);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_DataOfficer-alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{dataOfficerUserIdentityId}}\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{dataOfficerUserId}}"
 											]
 										}
 									},
@@ -20076,291 +19173,6 @@
 											""
 										]
 									}
-								}
-							]
-						},
-						{
-							"name": "Gdpr",
-							"item": [
-								{
-									"name": "Preperation",
-									"item": [
-										{
-											"name": "User-CreateUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var userName = pm.environment.get(\"userName\");",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.environment.set(\"createdGdprUserId\", jsonData.id);",
-															"pm.environment.set(\"createdGdprUserIdentityId\", jsonData.identityId);",
-															"",
-															"pm.test(\"Status code is 201\", function () {",
-															"    pm.response.to.have.status(201);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"     pm.response.to.be.success;",
-															"     pm.response.to.be.withBody;",
-															"     pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Check if created Username matches: \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"identityId\": \"90906909969\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{apiUrl}}/api/User",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "Tests",
-									"item": [
-										{
-											"name": "User-GetUser-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var createdUserId = parseInt(pm.environment.get(\"createdGdprUserId\"));",
-															"var createdUserIdentityId = pm.environment.get(\"createdGdprUserIdentityId\");",
-															"var userName = pm.environment.get(\"userName\");",
-															"",
-															"var jsonData = pm.response.json();",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});",
-															"",
-															"pm.test(\"Response must be valid and have a json body\", function () {",
-															"    pm.response.to.be.ok;",
-															"    pm.response.to.be.withBody;",
-															"    pm.response.to.be.json;",
-															"});",
-															"",
-															"pm.test(\"Check if updated identity Id matches: \" + createdUserIdentityId, function () {",
-															"    pm.expect(jsonData.identityId).to.eql(createdUserIdentityId);",
-															"});",
-															"",
-															"pm.test(\"Check if updated Id matches: \" + createdUserId, function () {",
-															"    pm.expect(jsonData.id).to.eql(createdUserId);",
-															"});",
-															"",
-															"pm.test(\"Check previously created UserName with id \" + userName, function () {",
-															"    pm.expect(jsonData.name).to.eql(userName);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Gdpr-RemoveOtherUser-PR",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-															"\r",
-															"pm.test(\"Status code is 401\", function () {\r",
-															"    pm.response.to.have.status(401);\r",
-															"});\r",
-															"\r",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"value": "{{prUserIdentityId}}",
-														"type": "text"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{administratorUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{administratorUserId}}"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "User-GetUserAfterDataRemoval-Administrator",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-															"var createdUserId = parseInt(pm.environment.get(\"createdGdprUserId\"));",
-															"var createdUserIdentityId = pm.environment.get(\"createdGdprUserIdentityId\");",
-															"",
-															"pm.test(\"Status code is 404\", function () {",
-															"    pm.response.to.have.status(404);",
-															"});",
-															"",
-															"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-															"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{prUserIdentityId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{prUserIdentityId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
-								},
-								{
-									"name": "Cleanup",
-									"item": [
-										{
-											"name": "User-DeleteUserOtherInstitute-Administrator Copy",
-											"event": [
-												{
-													"listen": "test",
-													"script": {
-														"exec": [
-															"eval(pm.environment.get(\"commonTests\"))();",
-															"",
-															"pm.test(\"Status code is 200\", function () {",
-															"    pm.response.to.have.status(200);",
-															"});"
-														],
-														"type": "text/javascript"
-													}
-												}
-											],
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "IdentityId",
-														"type": "text",
-														"value": "{{administratorUserIdentityId}}"
-													}
-												],
-												"url": {
-													"raw": "{{apiUrl}}/api/User/{{createdGdprUserId}}",
-													"host": [
-														"{{apiUrl}}"
-													],
-													"path": [
-														"api",
-														"User",
-														"{{createdGdprUserId}}"
-													]
-												}
-											},
-											"response": []
-										}
-									]
 								}
 							]
 						},

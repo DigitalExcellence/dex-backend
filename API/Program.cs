@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using MessageBrokerPublisher;
+using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -78,13 +80,14 @@ namespace API
         /// <returns>The webhostbuilder instance.</returns>
         public static IWebHostBuilder CreateHostBuilder(string[] args)
         {
+            // Appsettings is renamed because of an issue where the project loaded another appsettings.json
             return WebHost.CreateDefaultBuilder(args)
                           .UseContentRoot(Directory.GetCurrentDirectory())
                           .ConfigureAppConfiguration((hostingContext, config) =>
                           {
                               IWebHostEnvironment env = hostingContext.HostingEnvironment;
-                              config.AddJsonFile("appsettings.json", true, true)
-                                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+                              config.AddJsonFile("appsettingsapi.json", true, true)
+                                    .AddJsonFile($"appsettingsapi.{env.EnvironmentName}.json", true, true);
                               config.AddEnvironmentVariables();
                           })
                           .UseSentry()
