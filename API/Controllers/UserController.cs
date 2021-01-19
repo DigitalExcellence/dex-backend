@@ -314,7 +314,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [Authorize]
         [HttpDelete]
-        [HttpDelete("{userId}")]
+        [HttpDelete("{userId?}")]
         [ProducesResponseType((int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
@@ -360,7 +360,7 @@ namespace API.Controllers
             foreach(Project project in projects)
             {
                 // TODO: Extend with collaborator when that becomes a user object.
-                if(project.UserId == userId)
+                if(project.UserId == toDeleteUser.Id)
                 {
                     project.User = placeholderUser;
                     projectService.Update(project);
