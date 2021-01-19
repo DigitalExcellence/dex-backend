@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace API.Resources
 {
     /// <summary>
-    /// The View model of a portfolio item
+    /// the view model result of portfolio item
     /// </summary>
     public class PortfolioItemResource
     {
