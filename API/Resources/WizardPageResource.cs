@@ -29,9 +29,20 @@ namespace API.Resources
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Description property.
+        /// Gets or sets a value for the Description sproperty.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Follows Auth Flow property which specifies whether
+        /// the auth flow or the public flow should get used.
+        /// </summary>
+        public bool FollowsAuthFlow { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Order Index property.
+        /// </summary>
+        public int OrderIndex { get; set; }
 
     }
 

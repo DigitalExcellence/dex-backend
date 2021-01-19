@@ -57,6 +57,8 @@ namespace Services.DataProviders
 
         public string Description { get; set; }
 
+        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
+
         public string OauthUrl { get; }
 
         public Task<IEnumerable<Project>> GetAllPublicProjects(string username)

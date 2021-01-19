@@ -16,6 +16,7 @@
 */
 
 using Models;
+using System.Collections.Generic;
 
 namespace Services.DataProviders
 {
@@ -33,6 +34,8 @@ namespace Services.DataProviders
         public File Icon { get; set; }
 
         public string Description { get; set; }
+
+        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
 
     }
 

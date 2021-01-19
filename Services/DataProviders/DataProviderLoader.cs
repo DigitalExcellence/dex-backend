@@ -32,7 +32,7 @@ namespace Services.DataProviders
     public interface IDataProviderLoader
     {
 
-        Task<IEnumerable<IDataSourceAdaptee>> GetAllDataSources();
+        Task<List<IDataSourceAdaptee>> GetAllDataSources();
 
         Task<IDataSourceAdaptee> GetDataSourceByGuid(string guid);
 
@@ -54,11 +54,11 @@ namespace Services.DataProviders
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<IDataSourceAdaptee>> GetAllDataSources()
+        public async Task<List<IDataSourceAdaptee>> GetAllDataSources()
         {
             List<IDataSourceAdaptee> dataSources = GetLocalAdapteeImplementations();
             await UpdateDatabaseWithLocalAdapteeImplementations(dataSources);
-            IEnumerable<IDataSourceAdaptee> updatedDataSourceAdaptees = await UpdateModelsWithRepositoryValues(dataSources.ToArray());
+            List<IDataSourceAdaptee> updatedDataSourceAdaptees = await UpdateModelsWithRepositoryValues(dataSources);
             return updatedDataSourceAdaptees;
         }
 
@@ -68,7 +68,7 @@ namespace Services.DataProviders
                 .SingleOrDefault(d => d.Guid == guid);
         }
 
-        private async Task<IEnumerable<IDataSourceAdaptee>> UpdateModelsWithRepositoryValues(IDataSourceAdaptee[] sources)
+        private async Task<List<IDataSourceAdaptee>> UpdateModelsWithRepositoryValues(List<IDataSourceAdaptee> sources)
         {
             DataSource[] sourceModels = (await dataSourceModelRepository.GetAll()).ToArray();
             foreach(DataSource sourceModel in sourceModels)
@@ -79,6 +79,7 @@ namespace Services.DataProviders
                 source.Description = sourceModel.Description;
                 source.IsVisible = sourceModel.IsVisible;
                 source.Icon = sourceModel.Icon;
+                source.DataSourceWizardPages = sourceModel.DataSourceWizardPages.OrderBy(page => page.AuthFlow).ThenBy(page => page.OrderIndex).ToList();
             }
 
             return sources;

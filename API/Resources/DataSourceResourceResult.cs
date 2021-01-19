@@ -16,6 +16,7 @@
 */
 
 using Models;
+using System.Collections.Generic;
 
 namespace API.Resources
 {
@@ -49,6 +50,11 @@ namespace API.Resources
         /// Gets or sets the icon of the data source.
         /// </summary>
         public File Icon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the wizard pages of the data source.
+        /// </summary>
+        public IEnumerable<WizardPageResourceResult> WizardPages { get; set; }
 
     }
 

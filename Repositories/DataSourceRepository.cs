@@ -55,6 +55,8 @@ namespace Repositories
             return await GetDbSet<DataSource>()
                          .Where(d => d.Guid == guid)
                          .Include(d => d.Icon)
+                         .Include(w => w.DataSourceWizardPages)
+                         .ThenInclude(dw => dw.WizardPage)
                          .SingleOrDefaultAsync();
         }
 
@@ -62,6 +64,8 @@ namespace Repositories
         {
             return await GetDbSet<DataSource>()
                          .Include(d => d.Icon)
+                         .Include(w => w.DataSourceWizardPages)
+                         .ThenInclude(dw => dw.WizardPage)
                          .ToListAsync();
         }
 

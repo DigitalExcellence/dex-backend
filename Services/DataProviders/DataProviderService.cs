@@ -103,14 +103,14 @@ namespace Services.DataProviders
 
         public async Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth)
         {
-            IEnumerable<IDataSourceAdaptee> sources =  await dataProviderLoader.GetAllDataSources();
+            List<IDataSourceAdaptee> sources =  await dataProviderLoader.GetAllDataSources();
 
             if(needsAuth == null) return sources;
 
+            sources = FilterAuthPages(sources, needsAuth.Value);
+
             if(needsAuth.Value)
-            {
                 return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
-            }
 
             return sources.Where(s => s is IPublicDataSourceAdaptee);
         }
@@ -119,6 +119,17 @@ namespace Services.DataProviders
         {
             IDataSourceAdaptee source = await dataProviderLoader.GetDataSourceByGuid(guid);
             return source;
+        }
+
+        private List<IDataSourceAdaptee> FilterAuthPages(List<IDataSourceAdaptee> adaptees, bool authFlow)
+        {
+            foreach(IDataSourceAdaptee source in adaptees)
+            {
+                source.DataSourceWizardPages = source.DataSourceWizardPages.Where(page => page.AuthFlow == authFlow)
+                                                     .ToList();
+            }
+
+            return adaptees;
         }
 
     }

@@ -114,9 +114,16 @@ namespace API.Configuration
 
             CreateMap<Project, WizardProjectResourceResult>();
 
-            CreateMap<IDataSourceAdaptee, DataSourceResourceResult>();
+            CreateMap<IDataSourceAdaptee, DataSourceResourceResult>()
+                .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
             CreateMap<DataSourceResource, DataSource>();
-            CreateMap<DataSource, DataSourceResourceResult>();
+
+            CreateMap<DataSourceWizardPage, WizardPageResourceResult>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name));
+
+            CreateMap<DataSource, DataSourceResourceResult>()
+                .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
             CreateMap<IDataSourceAdaptee, DataSource>();
 
             CreateExternalSourceMappingProfiles();

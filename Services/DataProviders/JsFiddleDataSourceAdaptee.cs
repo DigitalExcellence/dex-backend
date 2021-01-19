@@ -60,6 +60,8 @@ namespace Services.DataProviders
 
         public string Description { get; set; }
 
+        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
+
         public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
             IEnumerable<JsFiddleDataSourceResourceResult> resourceResult = await FetchAllFiddlesFromUser(username);
