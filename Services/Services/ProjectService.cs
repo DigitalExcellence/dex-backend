@@ -15,22 +15,15 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using AngleSharp;
 using Ganss.XSS;
 using MessageBrokerPublisher;
 using Models;
 using Repositories;
-using RestSharp;
-using RestSharp.Authenticators;
 using Services.Base;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Reflection;
-using System.Net;
-using System.Linq;
 using Services.Resources;
 
 namespace Services.Services
@@ -68,6 +61,11 @@ namespace Services.Services
         /// <param name="projectsToExport"></param>
         void MigrateDatabase(List<Project> projectsToExport);
 
+        /// <summary>
+        ///     Get project by id with users and collaborators
+        /// </summary>
+        /// <param name="id">The parameter is the id of the project.</param>
+        /// <returns>The project with users and collaborators</returns>
         Task<List<Project>> GetAllWithUserAndCollaboratorsAsync();
 
     }
@@ -75,17 +73,16 @@ namespace Services.Services
     public class ProjectService : Service<Project>, IProjectService
     {
 
-        private INotificationSender notificationSender;
-        private ElasticConfig elasticConfig;
 
-        public ProjectService(IProjectRepository repository, INotificationSender notificationSender, ElasticConfig elasticConfig) : base(repository)
-        {
-            this.notificationSender = notificationSender;
-            this.elasticConfig = elasticConfig;
-        }
+        public ProjectService(IProjectRepository repository) : base(repository) { }
 
         protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
 
+
+        /// <summary>
+        ///     Adds a project to the database.
+        /// </summary>
+        /// <param name="entity">The project to add</param>
         public override void Add(Project entity)
         {
             // Sanitize description before executing default behaviour.
@@ -94,6 +91,10 @@ namespace Services.Services
             base.Add(entity);
         }
 
+        /// <summary>
+        ///     Updates a project.
+        /// </summary>
+        /// <param name="entity">The project to add</param>
         public override void Update(Project entity)
         {
             // Sanitize description before executing default behaviour.
@@ -163,12 +164,21 @@ namespace Services.Services
             return (int) Math.Ceiling(count / (decimal) projectFilterParams.AmountOnPage);
         }
 
+        /// <summary>
+        ///     Get project by id with users and collaborators
+        /// </summary>
+        /// <param name="id">The parameter is the id of the project.</param>
+        /// <returns>The project with users and collaborators</returns>
         public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
             return Repository.FindWithUserAndCollaboratorsAsync(id);
         }
 
-        
+        /// <summary>
+        ///     Get project by id with users and collaborators
+        /// </summary>
+        /// <param name="id">The parameter is the id of the project.</param>
+        /// <returns>The project with users and collaborators</returns>
         public Task<List<Project>> GetAllWithUserAndCollaboratorsAsync()
         {
             return Repository.GetAllWithUsersAndCollaboratorsAsync();
@@ -184,12 +194,17 @@ namespace Services.Services
             
         }
 
+        /// <summary>
+        ///     Deletes the old ElasticSearch index.
+        /// </summary>
         private void DeleteIndex()
         {
             Repository.DeleteIndex();
         }
 
-
+        /// <summary>
+        ///     (Re)creates the new Elastic Search index.
+        /// </summary>
         private void CreateProjectIndexElastic()
         {
             Repository.CreateProjectIndex();
