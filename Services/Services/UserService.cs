@@ -124,6 +124,7 @@ namespace Services.Services
                 }
             }
 
+            // If no recommendations were found for similar users then throw error. 
             if(recommendedProjects.Count == 0)
             {
                 throw new RecommendationNotFoundException("similar user(s) do not have any projects you do not like yet.");
@@ -134,15 +135,15 @@ namespace Services.Services
 
         private IEnumerable<int> GetSimilarUsers(int userId)
         {
-            try
+            List<int> foundUserIds = Repository.GetSimilarUsers(userId);
+
+            // If no similar users were found then throw error.
+            if(foundUserIds.Count == 0)
             {
-                List<int> foundUserId = Repository.GetSimilarUsers(userId);
-                return foundUserId;
-            } catch(ArgumentOutOfRangeException)
-            {
-                throw new RecommendationNotFoundException("no similar users could be found.");
+                throw new RecommendationNotFoundException("no similar user(s) were found.");
             }
-            
+
+            return foundUserIds;
         }
 
        
