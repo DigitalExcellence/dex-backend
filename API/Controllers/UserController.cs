@@ -263,22 +263,8 @@ namespace API.Controllers
                 }
             }
 
-            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
-
-            if(currentUser.Id != userId && !isAllowed)
-            {
-                ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed to edit the user.",
-                     Detail = "The user is not allowed to edit this user.",
-                     Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
-                 };
-                return Unauthorized(problem);
-            }
-
-            User user = await userService.FindAsync(userId);
-            if(user == null)
+            User userToUpdate = await userService.FindAsync(userId);
+            if(userToUpdate == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -289,12 +275,53 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            mapper.Map(userResource, user);
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                                .ConfigureAwait(false);
+            bool hasFullAllowance = userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.UserWrite));
 
-            userService.Update(user);
+            // Has institution excluded allowance if it's your own account or if the user has the right scope for the same institution.
+            // In the last case, the institution has to be the same.
+            bool hasInstitutionExcludedAllowance = currentUser.Id == userId ||
+                                                   await authorizationHelper.SameInstitutionAndInstitutionScope(currentUser,
+                                                                    nameof(Defaults.Scopes.InstitutionUserWrite), userToUpdate.Id);
+
+            if(!hasFullAllowance &&
+               !hasInstitutionExcludedAllowance)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to edit the user.",
+                    Detail = "The user is not allowed to edit this user.",
+                    Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
+                };
+                return Unauthorized(problem);
+            }
+
+            // Roles that have the institution excluded allowance or it's own account can update everything except the institution id.
+            if(hasInstitutionExcludedAllowance)
+            {
+                // Check if no institution is specified, and if an institution is specified, this institution can't be
+                // updated. However, the institution can be null, because the data officer has enough rights to delete
+                // a user from their institution.
+                if(userResource.InstitutionId != null &&
+                   userResource.InstitutionId != userToUpdate.InstitutionId)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed to edit the user",
+                        Detail = "The user has not enough rights to update the institution id",
+                        Instance = "DD72C521-1D06-4E11-A0E0-AAE515E7F900"
+                    };
+                    return Unauthorized(problem);
+                }
+            }
+
+            mapper.Map(userResource, userToUpdate);
+
+            userService.Update(userToUpdate);
             userService.Save();
 
-            return Ok(mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserResourceResult>(userToUpdate));
         }
 
         /// <summary>

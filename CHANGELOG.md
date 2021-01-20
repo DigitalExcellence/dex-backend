@@ -21,6 +21,7 @@ Graduation system for users whose FHICT account becomes unavailable. [#287](http
 ### Fixed
 
 - Refactored Postman tests - [#328](https://github.com/DigitalExcellence/dex-backend/issues/328)
+- Resolve update institution id for data officer bug - [#352](https://github.com/DigitalExcellence/dex-backend/issues/352)
 
 ### Security
 
