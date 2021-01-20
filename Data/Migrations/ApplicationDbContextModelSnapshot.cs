@@ -468,7 +468,7 @@ namespace _4_Data.Migrations
                         .WithMany("Likes")
                         .HasForeignKey("LikedProjectId");
 
-                    b.HasOne("Models.User", "CreatorOfProject")
+                    b.HasOne("Models.User", "ProjectLiker")
                         .WithMany("LikedProjectsByUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

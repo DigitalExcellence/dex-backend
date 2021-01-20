@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201205133647_AddDateToLikes")]
-    partial class AddDateToLikes
+    [Migration("20210120084422_MergedMigration")]
+    partial class MergedMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -299,9 +299,15 @@ namespace _4_Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime?>("AccountCreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpectedGraduationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("IdentityId")
                         .IsRequired()
@@ -352,6 +358,29 @@ namespace _4_Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserProject");
+                });
+
+            modelBuilder.Entity("Models.UserTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTask");
                 });
 
             modelBuilder.Entity("Models.UserUser", b =>
@@ -441,7 +470,7 @@ namespace _4_Data.Migrations
                         .WithMany("Likes")
                         .HasForeignKey("LikedProjectId");
 
-                    b.HasOne("Models.User", "CreatorOfProject")
+                    b.HasOne("Models.User", "ProjectLiker")
                         .WithMany("LikedProjectsByUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -479,6 +508,13 @@ namespace _4_Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.UserTask", b =>
+                {
+                    b.HasOne("Models.User", "User")
+                        .WithMany("UserTasks")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Models.UserUser", b =>

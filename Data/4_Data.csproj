@@ -12,6 +12,23 @@
     <None Remove="Configurations\IdentityMigrations\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20201006000639_InitLikedProjectByUserTable.cs" />
+    <Compile Remove="Migrations\20201006000639_InitLikedProjectByUserTable.Designer.cs" />
+    <Compile Remove="Migrations\20201111140957_RenamedTableToUserTasks.cs" />
+    <Compile Remove="Migrations\20201111140957_RenamedTableToUserTasks.Designer.cs" />
+    <Compile Remove="Migrations\20201119130835_AddedIdentityIdToInstitution.cs" />
+    <Compile Remove="Migrations\20201119130835_AddedIdentityIdToInstitution.Designer.cs" />
+    <Compile Remove="Migrations\20201129133208_AddedCallToActions.cs" />
+    <Compile Remove="Migrations\20201129133208_AddedCallToActions.Designer.cs" />
+    <Compile Remove="Migrations\20201203182047_UserTaskModelRefactor.cs" />
+    <Compile Remove="Migrations\20201203182047_UserTaskModelRefactor.Designer.cs" />
+    <Compile Remove="Migrations\20201205133647_AddDateToLikes.cs" />
+    <Compile Remove="Migrations\20201205133647_AddDateToLikes.Designer.cs" />
+    <Compile Remove="Migrations\20210118102224_Initial.cs" />
+    <Compile Remove="Migrations\20210118102224_Initial.Designer.cs" />
+  </ItemGroup>
+
   
     <ItemGroup>
     <PackageReference Include="Bogus" Version="29.0.1" />
