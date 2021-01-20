@@ -59,6 +59,12 @@ namespace API.Configuration
         /// </value>
         public SwaggerConfig Swagger { get; set; }
 
+        /// <summary>
+        /// Gets or sets the RabbitMQ configuration.
+        /// </summary>
+        /// <value>
+        /// The RabbitMQ.
+        /// </value>
         public RabbitMQConfig RabbitMQ { get; set; }
         /// <summary>
         ///     Validates this instance.
@@ -67,7 +73,8 @@ namespace API.Configuration
         {
             Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
             Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
-            Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
+            Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true)
+            Validator.ValidateObject(RabbitMQ, new ValidationContext(RabbitMQ), true);
         }
     }
 

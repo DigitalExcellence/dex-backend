@@ -33,12 +33,9 @@ namespace MessageBrokerPublisher.Services
         /// </summary>
         public RabbitMQConnectionFactory(string hostName, string user, string password)
         {
-            if(string.IsNullOrEmpty(hostName))
-            {
-                this.hostName = hostName;
-                this.user = user;
-                this.password = password;
-            }
+            this.hostName = hostName;
+            this.user = user;
+            this.password = password;
         }
 
 
