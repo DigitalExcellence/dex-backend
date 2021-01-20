@@ -16,7 +16,6 @@
 */
 
 using ElasticSynchronizer.Configuration;
-using ElasticSynchronizer.Helperclasses;
 using ElasticSynchronizer.Workers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,9 +23,6 @@ using Microsoft.Extensions.Hosting;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 
 namespace ElasticSynchronizer
 {
@@ -50,24 +46,20 @@ namespace ElasticSynchronizer
                                                    .AddJsonFile($"appsettings.{environmentName}.json", true, true)
                                                    .AddEnvironmentVariables()
                                                    .Build();
+
                     Config config = configuration.GetSection("App").Get<Config>();
-
-                    services.AddScoped<Config>( c => configuration.GetSection("App")
-                                                                  .Get<Config>()  );
-
                     UriBuilder builder = new UriBuilder("http://" + config.Elastic.Hostname + ":9200/");
-
                     Uri uri = builder.Uri;
-                    Console.WriteLine("Hier: " + uri);
+
+                    services.AddScoped( c => config);
                     services.AddScoped(client => new RestClient(uri)
                     {
                         Authenticator =
                                  new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
                     });
+
                     services.AddHostedService<DeleteProjectWorker>();
                     services.AddHostedService<UpdateProjectWorker>();
-                    services.AddHostedService<DeleteDocumentsWorker>();
-                    services.AddHostedService<CreateIndexWorker>();
                 });
     }
 }

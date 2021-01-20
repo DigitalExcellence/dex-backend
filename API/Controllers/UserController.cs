@@ -494,8 +494,8 @@ namespace API.Controllers
         /// Get recommended projects for the user who is logged in.
         /// </summary>
         /// <returns> Ok </returns>
-        [HttpGet("projectrecommendations")]
-        public async Task<IActionResult> GetRecommendedProjects()
+        [HttpGet("projectrecommendations/{amount}")]
+        public async Task<IActionResult> GetRecommendedProjects(int amount)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
@@ -512,7 +512,7 @@ namespace API.Controllers
 
             try
             {
-                List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id, 10);
+                List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id, amount);
                 return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectRecommendations));
 
             } catch(RecommendationNotFoundException e)
