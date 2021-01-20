@@ -68,6 +68,7 @@ namespace API.Configuration
             Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
             Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
+            Validator.ValidateObject(RabbitMQ, new ValidationContext(RabbitMQ), true);
         }
     }
 
