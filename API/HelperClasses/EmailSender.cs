@@ -23,16 +23,14 @@ namespace API.HelperClasses
     /// </summary>
     public class EmailSender : IEmailSender
     {
-        private RabbitMQConnectionFactory factory;
-        private NotificationSender notificationSender;
+        private INotificationSender notificationSender;
 
         /// <summary>
         ///  Constructor to instantiate the email sender
         /// </summary>
-        public EmailSender()
+        public EmailSender(INotificationSender notificationSender)
         {
-            factory = new RabbitMQConnectionFactory();
-            notificationSender = new NotificationSender(factory);
+            this.notificationSender = notificationSender;
         }
 
         /// <summary>

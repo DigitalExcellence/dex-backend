@@ -59,6 +59,7 @@ namespace API.Configuration
         /// </value>
         public SwaggerConfig Swagger { get; set; }
 
+        public RabbitMQConfig RabbitMQ { get; set; }
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -142,5 +143,38 @@ namespace API.Configuration
         /// </value>
         [Required]
         public string ClientId { get; set; }
+    }
+
+    /// <summary>
+    /// Contains the RabbitMQConfig configuration.
+    /// </summary>
+    public class RabbitMQConfig
+    {
+        /// <summary>
+        /// Gets or sets the hostname.
+        /// </summary>
+        /// <value>
+        /// The hostname.
+        /// </value>
+        [Required]
+        public string Hostname { get; set; }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>
+        /// The username.
+        /// </value>
+        [Required]
+        public string Username { get; set; }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>
+        /// The username.
+        /// </value>
+        [Required]
+        public string Password { get; set; }
     }
 }

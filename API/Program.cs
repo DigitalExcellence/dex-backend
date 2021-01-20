@@ -80,6 +80,7 @@ namespace API
         /// <returns>The webhostbuilder instance.</returns>
         public static IWebHostBuilder CreateHostBuilder(string[] args)
         {
+            // Appsettings is renamed because of an issue where the project loaded another appsettings.json
             return WebHost.CreateDefaultBuilder(args)
                           .UseContentRoot(Directory.GetCurrentDirectory())
                           .ConfigureAppConfiguration((hostingContext, config) =>
