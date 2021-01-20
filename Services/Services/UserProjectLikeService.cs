@@ -34,7 +34,8 @@ namespace Services.Services
     public class UserProjectLikeService : Service<ProjectLike>,
                                           IUserProjectLikeService
     {
-        IProjectRepository projectRepository;
+        private readonly IProjectRepository projectRepository;
+
         public UserProjectLikeService(IUserProjectLikeRepository repository, IProjectRepository projectRepository) :
             base(repository)
         {

@@ -68,9 +68,10 @@ namespace Repositories
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
 
-        INotificationSender notificationSender;
-        RestClient elasticSearchContext;
-        Queries queries;
+        private readonly INotificationSender notificationSender;
+        private readonly RestClient elasticSearchContext;
+        private readonly Queries queries;
+
         public ProjectRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, INotificationSender notificationSender, Queries queries) : base(dbContext) {
             this.notificationSender = notificationSender;
             this.elasticSearchContext = elasticSearchContext.CreateRestClientForElasticRequests();
@@ -489,9 +490,11 @@ namespace Repositories
 
         public void MigrateDatabase(List<Project> projectsToExport)
         {
+            // Converts the Projects to Elastic format.
             List<ESProjectFormatDTO> projectsToExportDTOs = ProjectConverter.ProjectsToProjectESDTOs(projectsToExport);
             foreach(ESProjectFormatDTO project in projectsToExportDTOs)
             {
+                // Registers an Elastic formatted project at the message broker to be inserted into Elastic DB.
                 notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(project), Subject.ELASTIC_CREATE_OR_UPDATE);
             }
         }

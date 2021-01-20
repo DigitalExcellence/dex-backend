@@ -175,8 +175,11 @@ namespace Services.Services
         }
         public void MigrateDatabase(List<Project> projectsToExport)
         {
+            // Creates the old index so the eventual old Elastic DB is deleted.
             DeleteIndex();
+            // (Re)creates the index in Elastic.
             CreateProjectIndexElastic();
+            // Migrates the data from MSSQL to Elastic.
             Repository.MigrateDatabase(projectsToExport);
             
         }
