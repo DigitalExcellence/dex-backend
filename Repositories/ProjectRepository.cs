@@ -192,7 +192,7 @@ namespace Repositories
         /// This method will retrieve a project with user and collaborators async. Project will be redacted if user
         /// has that setting configured.
         /// </summary>
-/// <param name="id">The unique identifier which is used for searching the correct project.</param>
+        /// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
         /// This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
@@ -216,7 +216,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method updates the specified entity excluding the user object.
+        /// This method updates the specified entity excluding the user object in the database and ES Index.
         /// </summary>
         /// <param name="entity">The entity parameter represents the updated project object.</param>
         public override void Update(Project entity)
@@ -241,10 +241,17 @@ namespace Repositories
             }
 
             DbSet.Update(entity);
+            _ = entity.Likes;
+            ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
+            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_CREATE_OR_UPDATE);
 
         }
 
+        /// <summary>
+        /// This method adds the given project to the database and ES Index.
+        /// </summary>
+        /// <param name="entity">The entity parameter represents a project to be added.</param>
         public override void Add(Project entity)
         {
             base.Add(entity);
@@ -254,6 +261,13 @@ namespace Repositories
             notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
         }
 
+        /// <summary>
+        /// This method asynchronously adds the project to the database and ES Index.
+        /// </summary>
+        /// <param name="entity">The project parameter represents the project to be added.</param>
+        /// <returns>
+        /// The task wherein the addition of the project from the database is executed.
+        /// </returns>
         public override Task AddAsync(Project entity)
         {
             _ = entity.Likes;
@@ -263,20 +277,35 @@ namespace Repositories
             return base.AddAsync(entity);
         }
 
+        /// <summary>
+        /// This method removes the project from the database and ES Index.
+        /// </summary>
+        /// <param name="entity">The entity parameter represents a project to be removed.</param>
         public override void Remove(Project entity)
         {
             base.Remove(entity);
+            _ = entity.Likes;
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
         }
 
+        /// <summary>
+        /// This method asynchronously removes the project from the database and ES Index coupled to the given id.
+        /// </summary>
+        /// <param name="id">The project parameter represents unique identifier.</param>
+        /// <returns>
+        /// The task wherein the removal of the project from the database is executed.
+        /// </returns>
         public override Task RemoveAsync(int id)
         {
-            
+            Project entity = DbSet.Find(id);
+            _ = entity.Likes;
+            ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
+            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
             return base.RemoveAsync(id);
         }
-
 
 
         /// <summary>

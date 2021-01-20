@@ -74,7 +74,6 @@ namespace ElasticSynchronizer.Executors
             string body = JsonConvert.SerializeObject(eSProject);
             RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + eSProject.Id, Method.PUT);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
-            Console.WriteLine(body);
 
             IRestResponse response = restClient.Execute(request);
             
