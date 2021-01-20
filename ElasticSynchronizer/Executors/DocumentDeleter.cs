@@ -16,12 +16,10 @@
 */
 
 using ElasticSynchronizer.Configuration;
-using ElasticSynchronizer.Helperclasses;
 using ElasticSynchronizer.Models;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
-using RestSharp.Authenticators;
 using System;
 
 namespace ElasticSynchronizer.Executors
@@ -35,38 +33,47 @@ namespace ElasticSynchronizer.Executors
         public DocumentDeleter(Config config, RestClient restClient)
         {
             this.config = config;
-            Console.WriteLine("Hier: ");
-            Console.WriteLine(config.Elastic.Hostname);
-            Console.WriteLine(config.Elastic.IndexUrl);
             this.restClient = restClient;
         }
 
+        /// <summary>
+        /// Parses the payload.
+        /// </summary>
         public void ParsePayload(string jsonBody)
         {
             eSProject = JsonConvert.DeserializeObject<ESProjectDTO>(jsonBody);
         }
 
-
+        /// <summary>
+        /// Executes the DeleteDocument Method.
+        /// </summary>
         public void ExecuteTask()
         {
             DeleteDocument();
         }
 
-
+        /// <summary>
+        /// Validates the payload.
+        /// </summary>
         public bool ValidatePayload()
         {
+            if (eSProject.Id <= 0)
+            {
+                throw new Exception("Invalid Project Id");
+            }
             return true;
         }
 
+        /// <summary>
+        /// Sends API Call to the ElasticSearch Index, requesting the deletion of given Project.
+        /// </summary>
         private void DeleteDocument()
         {
-            Console.WriteLine("Hier: ");
-            Console.WriteLine(config.Elastic.Hostname);
-            Console.WriteLine(config.Elastic.IndexUrl);
             RestRequest request = new RestRequest(config.Elastic.IndexUrl + "_doc/" + eSProject.Id, Method.DELETE);
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)
             {
+                Console.WriteLine("Failed: " + response.StatusDescription + response.StatusCode);
                 Console.WriteLine(response.Content);
             }
         }

@@ -16,13 +16,10 @@
 */
 
 using ElasticSynchronizer.Configuration;
-using ElasticSynchronizer.Helperclasses;
 using ElasticSynchronizer.Models;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
-using RestSharp.Authenticators;
-using SendGrid;
 using System;
 
 namespace ElasticSynchronizer.Executors
@@ -36,29 +33,42 @@ namespace ElasticSynchronizer.Executors
         public DocumentUpdater(Config config, RestClient restClient)
         {
             this.config = config;
-            Console.WriteLine("Hier: ");
-            Console.WriteLine(config.Elastic.Hostname);
-            Console.WriteLine(config.Elastic.IndexUrl);
             this.restClient = restClient;
         }
 
+        /// <summary>
+        /// Parses the payload.
+        /// </summary>
         public void ParsePayload(string jsonBody)
         {
             eSProject = JsonConvert.DeserializeObject<ESProjectDTO>(jsonBody);
         }
 
 
+        /// <summary>
+        /// Executes the CreateOrUpdateDocument method.
+        /// </summary>
         public void ExecuteTask()
         {
             CreateOrUpdateDocument();
         }
 
 
+        /// <summary>
+        /// Validates the payload.
+        /// </summary>
         public bool ValidatePayload()
         {
+            if(eSProject.Id <= 0)
+            {
+                throw new Exception("Invalid Project Id");
+            }
             return true;
         }
 
+        /// <summary>
+        /// Sends API Call to the ElasticSearch Index, requesting the creation or update of given Project.
+        /// </summary>
         private void CreateOrUpdateDocument()
         {
             string body = JsonConvert.SerializeObject(eSProject);
