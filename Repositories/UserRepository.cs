@@ -108,14 +108,21 @@ namespace Repositories
         
 
         public List<int> GetSimilarUsers(int userId)
-        {            
+        {
+            List<int> similarUserIds = new List<int>();
+
             RestRequest request = new RestRequest("_search?size=0", Method.POST);
             string body = queries.SimilarUsers.Replace("ReplaceWithUserId", userId.ToString());
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             IRestResponse restResponse = client.Execute(request);
 
+            if(!restResponse.IsSuccessful)
+            {
+                return similarUserIds;
+            }
+
             // Put user id's of similar users in a list.
-            List<int> similarUserIds = new List<int>();
+            
             JToken users = JToken.Parse(restResponse.Content)
                               .SelectTokens("aggregations.user-liked.bucket.buckets").First();
             foreach(JToken user in users)
@@ -124,7 +131,10 @@ namespace Repositories
                 similarUserIds.Add(id);
             }
             // First result is the user itself, remove that one.
-            similarUserIds.RemoveAt(0);
+            if(similarUserIds.Count != 0)
+            {
+                similarUserIds.RemoveAt(0);
+            }
 
             return similarUserIds;
         }
