@@ -14,11 +14,6 @@ namespace API.Resources
         /// <summary>
         /// this sets or gets the portfolio id
         /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// this sets or gets the portfolio id
-        /// </summary>
         public int PortfolioId { get; set; }
 
         /// <summary>

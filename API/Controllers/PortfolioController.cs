@@ -176,6 +176,9 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdatePortfolio(int portfolioId, [FromBody] PortfolioResource portfolioResource)
         {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
+
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             if(portfolio == null)
             {
@@ -188,9 +191,9 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
-            if(portfolio.User.Id != user.Id)
+
+            if(!(portfolio.User.Id == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -225,7 +228,11 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
-                        if(portfolio == null)
+            if(portfolio.User.Id != user.Id)
+                return Forbid();
+
+
+            if(portfolio == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -235,9 +242,6 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-
-            if(portfolio.User.Id != user.Id)
-                return Forbid();
 
             if(!(portfolio.User.Id == user.Id || isAllowed))
             {
@@ -321,17 +325,6 @@ namespace API.Controllers
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
             PortfolioItem portfolioItem = mapper.Map<PortfolioItemResource, PortfolioItem>(portfolioItemResource);
-
-            if(!(portfolio.User.Id == user.Id))
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Not authorized to add to portfolio.",
-                    Detail = "The user is not allowed to edit the portfolio.",
-                    Instance = "8E923F1E-ED73-4C7D-A9F3-C8FF9D71258C"
-                };
-                return Unauthorized(problem);
-            }
 
             if(await userService.FindAsync(user.Id) == null)
             {
@@ -438,8 +431,9 @@ namespace API.Controllers
             }
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
-            if(!(portfolio.User.Id == user.Id))
+            if(!(portfolio.User.Id == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
                 {

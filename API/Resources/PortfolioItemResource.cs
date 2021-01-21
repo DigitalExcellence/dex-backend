@@ -12,6 +12,11 @@ namespace API.Resources
     public class PortfolioItemResource
     {
         /// <summary>
+        /// This sets or gets the id
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// This sets or gets the position
         /// </summary>
         public int Position { get; set; }
