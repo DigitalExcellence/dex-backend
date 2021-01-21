@@ -319,7 +319,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> CreatePortfolioItemAsync(int portfolioId, int projectId, PortfolioItemResource portfolioItemResource)
-        {
+            {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
@@ -371,12 +371,15 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
+            }
+            else
+            {
                 portfolioItem.ProjectId = 0;
             }
-            portfolioItem.ProjectId = project.Id;
 
             try
             {
+                portfolioItem.ProjectId = project.Id;
                 portfolioItem.PortfolioId = portfolio.Id;
                 portfolioItemService.Add(portfolioItem);
                 portfolioItemService.Save();
@@ -478,7 +481,7 @@ namespace API.Controllers
 
             bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
-            if(!(portfolio.User.Id == user.Id || isAllowed))
+            if(!(portfolio.User.Id == user.Id))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
