@@ -68,7 +68,7 @@ namespace Services.Tests
             List<string> currentScopes = new List<string>()
             {
                 "ProjectRead",
-                "AdminProjectWrite",
+                "ProjectWrite",
                 "UserRead",
                 "UserWrite",
                 "HighlightRead",
@@ -84,7 +84,9 @@ namespace Services.Tests
                 "InstitutionRead",
                 "InstitutionWrite",
                 "FileWrite",
-                "CallToActionOptionWrite"
+                "CallToActionOptionWrite",
+                "UserTaskWrite",
+                "AdminProjectWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
             Assert.AreEqual(currentScopes,retrievedScopes);
