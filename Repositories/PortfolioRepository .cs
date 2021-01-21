@@ -56,6 +56,7 @@ namespace Repositories
             Portfolio portfolio = await GetDbSet<Portfolio>()
            .Where(s => s.Id == id)
            .Include(s => s.PortfolioItem)
+           .Include(s => s.User)
            .SingleOrDefaultAsync();
 
             return portfolio;
