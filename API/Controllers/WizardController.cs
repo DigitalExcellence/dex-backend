@@ -71,7 +71,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByUriFromExternalDataSource(
             [FromQuery] string dataSourceGuid,
-            Uri sourceUri)
+            string sourceUri)
         {
             if(sourceUri == null)
             {

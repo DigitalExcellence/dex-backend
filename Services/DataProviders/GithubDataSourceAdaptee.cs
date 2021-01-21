@@ -15,8 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using AngleSharp;
 using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
 using Repositories;
@@ -30,6 +30,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Services.DataProviders
 {
@@ -172,7 +173,14 @@ namespace Services.DataProviders
 
         private async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
-            IRestClient client = restClientFactory.Create(sourceUri);
+            string domain = sourceUri.GetLeftPart(UriPartial.Authority);
+
+            // Get the project path without the prefix slash
+            string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
+                                          .Substring(1);
+            Uri serializedUrl = new Uri(BaseUrl + "repos/" + projectPath);
+
+            IRestClient client = restClientFactory.Create(serializedUrl);
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
             if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))

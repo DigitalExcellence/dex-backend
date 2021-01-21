@@ -18,6 +18,7 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace Services.DataProviders
 
         bool IsExistingDataSourceGuid(string dataSourceGuid);
 
-        Task<Project> GetProjectFromUri(string dataSourceGuid, Uri sourceUri);
+        Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri);
 
         Task<string> GetOauthUrl(string guid);
 
@@ -79,11 +80,27 @@ namespace Services.DataProviders
             return dataProviderLoader.GetDataSourceByGuid(dataSourceGuid) != null;
         }
 
-        public async Task<Project> GetProjectFromUri(string dataSourceGuid, Uri sourceUri)
+        public async Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
-            return await dataProviderAdapter.GetProjectByUri(sourceUri);
+
+
+            
+            sourceUri = sourceUri.Replace("%2F", "/");
+            if(sourceUri[^1] == '/')
+                sourceUri = sourceUri.Remove(sourceUri.Length - 1);
+            Uri serializedUrl;
+
+            try
+            {
+                Uri.TryCreate(sourceUri, UriKind.RelativeOrAbsolute, out serializedUrl);
+            } catch(InvalidOperationException)
+            {
+                Uri.TryCreate("https://" + sourceUri, UriKind.Absolute, out serializedUrl);
+            }
+
+            return await dataProviderAdapter.GetProjectByUri(serializedUrl);
         }
 
         public async Task<string> GetOauthUrl(string guid)
