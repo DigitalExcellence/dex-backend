@@ -16,6 +16,7 @@
 */
 
 using Newtonsoft.Json;
+using System;
 
 namespace Services.DataProviders.Resources
 {
@@ -24,40 +25,139 @@ namespace Services.DataProviders.Resources
     /// </summary>
     public class GithubDataSourceResourceResult
     {
-        /// <summary>
-        /// Gets or sets the unique identifier of the incoming project.
-        /// </summary>
-        /// <value>
-        /// The unique identifier of the project.
-        /// </value>
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the incoming project.
-        /// </summary>
-        /// <value>
-        /// The name of the project.
-        /// </value>
+        [JsonProperty("node_id")]
+        public string NodeId { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the description of the incoming project.
-        /// </summary>
-        /// <value>
-        /// The unique description of the project.
-        /// </value>
+        [JsonProperty("full_name")]
+        public string FullName { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        /// <summary>
-        /// Gets or sets the boolean that represents whether the incoming project is private.
-        /// </summary>
-        /// <value>
-        /// <see langword="true"/> represents that the project is private, <see langword="false"/> represents that the project is public.
-        /// </value>
         [JsonProperty("private")]
         public bool IsPrivate { get; set; }
+
+        [JsonProperty("owner")]
+        public GithubDataSourceOwnerResourceResult Owner { get; set; }
+
+        [JsonProperty("size")]
+        public long Size { get; set; }
+
+        [JsonProperty("stargazers_count")]
+        public long StargazersCount { get; set; }
+
+        [JsonProperty("watchers_count")]
+        public long WatchersCount { get; set; }
+
+        [JsonProperty("language")]
+        public string Language { get; set; }
+
+        [JsonProperty("has_issues")]
+        public bool HasIssues { get; set; }
+
+        [JsonProperty("has_projects")]
+        public bool HasProjects { get; set; }
+
+        [JsonProperty("has_downloads")]
+        public bool HasDownloads { get; set; }
+
+        [JsonProperty("has_wiki")]
+        public bool HasWiki { get; set; }
+
+        [JsonProperty("has_pages")]
+        public bool HasPages { get; set; }
+
+        [JsonProperty("forks_count")]
+        public long ForksCount { get; set; }
+
+        [JsonProperty("mirror_url")]
+        public object MirrorUrl { get; set; }
+
+        [JsonProperty("archived")]
+        public bool Archived { get; set; }
+
+        [JsonProperty("disabled")]
+        public bool Disabled { get; set; }
+
+        [JsonProperty("license")]
+        public GithubDataSourceLicenseResourceResult License { get; set; }
+
+        [JsonProperty("forks")]
+        public long Forks { get; set; }
+
+        [JsonProperty("open_issues")]
+        public long OpenIssues { get; set; }
+
+        [JsonProperty("watchers")]
+        public long Watchers { get; set; }
+
+        [JsonProperty("default_branch")]
+        public string DefaultBranch { get; set; }
+
+        [JsonProperty("temp_clone_token")]
+        public object TempCloneToken { get; set; }
+
+        [JsonProperty("network_count")]
+        public long NetworkCount { get; set; }
+
+        [JsonProperty("subscribers_count")]
+        public long SubscribersCount { get; set; }
+
+    }
+
+    public class GithubDataSourceOwnerResourceResult
+    {
+
+        [JsonProperty("login")]
+        public string Login { get; set; }
+
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        [JsonProperty("node_id")]
+        public string NodeId { get; set; }
+
+        [JsonProperty("avatar_url")]
+        public Uri AvatarUrl { get; set; }
+
+        [JsonProperty("gravatar_id")]
+        public string GravatarId { get; set; }
+
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        [JsonProperty("html_url")]
+        public Uri HtmlUrl { get; set; }
+
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("site_admin")]
+        public bool SiteAdmin { get; set; }
+
+    }
+
+    public class GithubDataSourceLicenseResourceResult
+    {
+        [JsonProperty("key")]
+        public string Key { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("spdx_id")]
+        public string SpdxId { get; set; }
+
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        [JsonProperty("node_id")]
+        public string NodeId { get; set; }
     }
 }
