@@ -20,6 +20,7 @@ using Moq;
 using NUnit.Framework;
 using Repositories;
 using Repositories.Tests.DataSources;
+using Services.Resources;
 using Services.Services;
 using Services.Tests.Base;
 using System.Collections.Generic;
@@ -30,8 +31,21 @@ namespace Services.Tests
     [TestFixture]
     public class UserServiceTest : ServiceTest<User, UserService, IUserRepository>
     {
-        protected new IUserService Service => (IUserService) base.Service;
+        protected new IUserService Service;
+        protected  Mock<IUserRepository> UserRepositoryMock;
+        protected Mock<IProjectRepository> ProjectRepositoryMock;
+        protected Mock<ElasticConfig> ElasticConfig;
 
+        [SetUp]
+        public override void  Initialize()
+        {
+            // Mock the repository
+            UserRepositoryMock = new Mock<IUserRepository>();
+            ProjectRepositoryMock = new Mock<IProjectRepository>();
+            ElasticConfig = new Mock<ElasticConfig>();
+
+            Service = new UserService(UserRepositoryMock.Object, ProjectRepositoryMock.Object, ElasticConfig.Object);
+        }
         /// <summary>
         /// Test if repository method is called
         /// </summary>
@@ -42,7 +56,7 @@ namespace Services.Tests
             int userId = 1;
             User user = new User();
 
-            RepositoryMock.Setup(
+            UserRepositoryMock.Setup(
                repository => repository.GetUserAsync(userId))
                .Returns(
                    Task.FromResult(user)
@@ -63,13 +77,13 @@ namespace Services.Tests
         {
             int userId = 1;
 
-            RepositoryMock.Setup(
+            UserRepositoryMock.Setup(
                 repository => repository.RemoveUserAsync(userId));
 
             await Service.RemoveUserAsync(userId);
 
             Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.RemoveUserAsync(userId), Times.Once);
+                UserRepositoryMock.Verify(repository => repository.RemoveUserAsync(userId), Times.Once);
             });
         }
 
@@ -77,56 +91,126 @@ namespace Services.Tests
         [Test]
         public override void AddRangeTest_GoodFlow([UserDataSource(50)]IEnumerable<User> entities)
         {
-            base.AddRangeTest_GoodFlow(entities);
+            UserRepositoryMock.Setup(
+               repository => repository.AddRange(entities));
+
+            Service.AddRange(entities);
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.AddRange(entities), Times.Once);
+            });
         }
+
+        
+
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void AddTest_GoodFlow([UserDataSource]User entity)
         {
-            base.AddTest_GoodFlow(entity);
+            UserRepositoryMock.Setup(
+                repository => repository.Add(entity));
+
+            Service.Add(entity);
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.Add(entity), Times.Once);
+            });
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
-        public override Task FindAsyncTest_GoodFlow([UserDataSource]User entity)
+        public override async Task FindAsyncTest_GoodFlow([UserDataSource]User entity)
         {
-            return base.FindAsyncTest_GoodFlow(entity);
+            UserRepositoryMock.Setup(
+                repository => repository.FindAsync(1))
+                .Returns(
+                    Task.FromResult(entity)
+                );
+
+            User retrievedEntity = await Service.FindAsync(1);
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.FindAsync(1), Times.Once);
+            });
+
+            Assert.AreEqual(entity, retrievedEntity);
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
-        public override Task GetAll([UserDataSource(50)]List<User> entities)
+        public override async Task GetAll([UserDataSource(50)]List<User> entities)
         {
-            return base.GetAll(entities);
+            int amountToTest = entities.Count;
+            UserRepositoryMock.Setup(
+                repository => repository.GetAll())
+                .Returns(
+                    Task.FromResult((IEnumerable<User>) entities)
+                );
+
+            List<User> retrievedList = (List<User>) await Service.GetAll();
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.GetAll(), Times.Once);
+            });
+
+            Assert.AreEqual(amountToTest, retrievedList.Count);
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void Remove([UserDataSource]User entity)
         {
-            base.Remove(entity);
+            UserRepositoryMock.Setup(
+                repository => repository.Remove(entity));
+
+            Service.Remove(entity);
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.Remove(entity), Times.Once);
+            });
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
-        public Task RemoveAsync()
+        public  async Task RemoveAsync()
         {
-            return base.RemoveAsync(1);
+            UserRepositoryMock.Setup(
+                repository => repository.RemoveAsync(1));
+
+            await Service.RemoveAsync(1);
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.RemoveAsync(1), Times.Once);
+            });
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void Save()
         {
-            base.Save();
+            UserRepositoryMock.Setup(
+                repository => repository.Save());
+
+            Service.Save();
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.Save(), Times.Once);
+            });
         }
 
         ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
         [Test]
         public override void Update([UserDataSource]User entity)
         {
-            base.Update(entity);
+            UserRepositoryMock.Setup(
+                repository => repository.Update(entity));
+
+            Service.Update(entity);
+
+            Assert.DoesNotThrow(() => {
+                UserRepositoryMock.Verify(repository => repository.Update(entity), Times.Once);
+            });
         }
     }
 }

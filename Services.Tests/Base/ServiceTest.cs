@@ -49,7 +49,7 @@ namespace Services.Tests.Base
         /// Initialize the service with reflection
         /// </summary>
         [SetUp]
-        public void Initialize() 
+        public virtual void Initialize() 
         {
             // Mock the repository
             RepositoryMock = new Mock<TRepository>();
