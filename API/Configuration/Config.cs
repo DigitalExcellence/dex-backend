@@ -176,10 +176,10 @@ namespace API.Configuration
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the username.
+        /// Gets or sets the password.
         /// </summary>
         /// <value>
-        /// The username.
+        /// The password.
         /// </value>
         [Required]
         public string Password { get; set; }

@@ -90,7 +90,7 @@ namespace API.Extensions
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
                         
-            services.AddScoped<INotificationSender, NotificationSender>();
+            services.AddScoped<ITaskPublisher, TaskPublisher>();
             return services;
         }
     }
