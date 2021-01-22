@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "faf77c22-e9b3-4acb-8c93-bbc5100bd60d",
-		"name": "DEV",
+		"_postman_id": "e3b3043f-915c-4501-bad2-0ce57743cb88",
+		"name": "DEV Copy",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -3734,6 +3734,430 @@
 							]
 						},
 						{
+							"name": "Portfolio",
+							"item": [
+								{
+									"name": "Portfolio-GetPortfolio-NonExisting-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.badRequest;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Portfolio/9999999999",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Portfolio",
+												"9999999999"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Portfolio-CreatePortfolio-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
+													"var adminUserName = pm.environment.get(\"adminUserName\");\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
+													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {\r",
+													"    pm.expect(jsonData.userName).to.eql(adminUserName);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Portfolio-GetPortfolio-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var portfolioId = parseInt(pm.environment.get(\"portfolioId\"));\r",
+													"var portfolioUri = parseInt(pm.environment.get(\"portfolioUri\"));\r",
+													"var portfolioTitle = parseInt(pm.environment.get(\"portfolioTitle\"));\r",
+													"var portfolioTemplate = parseInt(pm.environment.get(2));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var adminUserName = pm.environment.get(\"adminUserName\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {\r",
+													"    pm.expect(jsonData.userName).to.eql(adminUserName);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Title is correct and matching: \" + portfolioTitle, function () {\r",
+													"    pm.expect(parseInt(jsonData.title)).to.eql(portfolioTitle);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Portfolio",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Portfolio-UpdatePortfolio-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitleUpdated\");\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
+													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitleUpdated}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Portfolio",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PortfolioItem-CreatePortfolioItem-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var portfolioId = 1;\r",
+													"var projectId = 1;\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolioId title is set correctly and matching: \" + portfolioId, function () {\r",
+													"    pm.expect(jsonData.portfolioId).to.eql(portfolioId);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"string\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/item?portfolioId=1&projectId=1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"item"
+											],
+											"query": [
+												{
+													"key": "portfolioId",
+													"value": "1"
+												},
+												{
+													"key": "projectId",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PortfolioItem-UpdatePortfolioItem-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var content = \"this is a put request\";\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolio item content is set correctly and matching: \" + content, function () {\r",
+													"    pm.expect(jsonData.content).to.eql(content);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"this is a put request\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/item/1?portfolioId=1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"item",
+												"1"
+											],
+											"query": [
+												{
+													"key": "portfolioId",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Cleanup",
 							"item": [
 								{
@@ -4294,484 +4718,6 @@
 												"api",
 												"Institution",
 												"{{createdInstitutionId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "Portfolio",
-							"item": [
-								{
-									"name": "Portfolio-GetPortfolio-NonExisting-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.test(\"Status code is 400\", function () {\r",
-													"    pm.response.to.have.status(400);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.badRequest;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/9999999999",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Portfolio",
-												"9999999999"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Portfolio-CreatePortfolio-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
-													"var adminUserName = pm.environment.get(\"adminUserName\");\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 201\", function () {\r",
-													"    pm.response.to.have.status(201);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
-													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {\r",
-													"    pm.expect(jsonData.userName).to.eql(adminUserName);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Portfolio-GetPortfolio-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioId = parseInt(pm.environment.get(\"portfolioId\"));\r",
-													"var portfolioUri = parseInt(pm.environment.get(\"portfolioUri\"));\r",
-													"var portfolioTitle = parseInt(pm.environment.get(\"portfolioTitle\"));\r",
-													"var portfolioTemplate = parseInt(pm.environment.get(2));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var adminUserName = pm.environment.get(\"adminUserName\");\r",
-													"\r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.ok;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {\r",
-													"    pm.expect(jsonData.userName).to.eql(adminUserName);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Title is correct and matching: \" + portfolioTitle, function () {\r",
-													"    pm.expect(parseInt(jsonData.title)).to.eql(portfolioTitle);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Portfolio",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Portfolio-UpdatePortfolio-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioTitle = pm.environment.get(\"portfolioTitleUpdated\");\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
-													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitleUpdated}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Portfolio",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PortfolioItem-CreatePortfolioItem-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var portfolioId = 1;\r",
-													"var projectId = 1;\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 201\", function () {\r",
-													"    pm.response.to.have.status(201);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolioId title is set correctly and matching: \" + portfolioId, function () {\r",
-													"    pm.expect(jsonData.portfolioId).to.eql(portfolioId);\r",
-													"});\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"string\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item?portfolioId=1&projectId=1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"item"
-											],
-											"query": [
-												{
-													"key": "portfolioId",
-													"value": "1"
-												},
-												{
-													"key": "projectId",
-													"value": "1"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PortfolioItem-UpdatePortfolioItem-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var content = \"this is a put request\";\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio item content is set correctly and matching: \" + content, function () {\r",
-													"    pm.expect(jsonData.content).to.eql(content);\r",
-													"});\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"this is a put request\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item/1?portfolioId=1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"item",
-												"1"
-											],
-											"query": [
-												{
-													"key": "portfolioId",
-													"value": "1"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PortfolioItem-GetPortfolioItem-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioId = parseInt(pm.environment.get(\"portfolioId\"));\r",
-													"var portfolioItemProjectId = parseInt(pm.environment.get(\"portfolioId\"));\r",
-													"\r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.ok;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio item exists on portfolio\", function() {\r",
-													"    jsonData.portfolioItem.forEach(function(portfolioItem) {\r",
-													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", 1);\r",
-													"    });\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"1"
 											]
 										}
 									},
@@ -7632,95 +7578,6 @@
 							]
 						},
 						{
-							"name": "Cleanup Administrator",
-							"item": [
-								{
-									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"CallToActionOption",
-												"{{callToActionOptionId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-DeleteProject-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{adminProjectId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
 							"name": "Portfolio",
 							"item": [
 								{
@@ -8120,6 +7977,95 @@
 												"Portfolio",
 												"item",
 												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Cleanup Administrator",
+							"item": [
+								{
+									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"CallToActionOption",
+												"{{callToActionOptionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{adminProjectId}}"
 											]
 										}
 									},
@@ -12289,208 +12235,6 @@
 							]
 						},
 						{
-							"name": "Cleanup Registered",
-							"item": [
-								{
-									"name": "Project-DeleteProject-Self-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{projectId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "Cleanup Administrator",
-							"item": [
-								{
-									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"CallToActionOption",
-												"{{callToActionOptionId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-DeleteProject-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{adminProjectId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "User-DeleteUser-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"{{createdUserId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
 							"name": "Portfolio",
 							"item": [
 								{
@@ -13005,6 +12749,208 @@
 										}
 									},
 									"response": []
+								}
+							]
+						},
+						{
+							"name": "Cleanup Registered",
+							"item": [
+								{
+									"name": "Project-DeleteProject-Self-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Cleanup Administrator",
+							"item": [
+								{
+									"name": "CallToActionOption-DeleteCallToActionOption-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/CallToActionOption/{{callToActionOptionId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"CallToActionOption",
+												"{{callToActionOptionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{adminProjectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User-DeleteUser-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{createdUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
 								}
 							]
 						}
@@ -16608,6 +16554,470 @@
 							]
 						},
 						{
+							"name": "Portfolio",
+							"item": [
+								{
+									"name": "Portoflio-CreatePortfolio-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
+													"var registeredUserId = pm.environment.get(\"dataOfficerUserId\");\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
+													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Portfolio-GetPortfolio-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolio title is set correctly and matches: \" + portfolioTitle, function () {\r",
+													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/3",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"3"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Porfolio-UpdatePortfolio-Other-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/3",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"3"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PortfolioItem-CreatePortfolioItem-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var portfolioId = 3;\r",
+													"var projectId = 1;\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolioId title is set correctly and matching: \" + portfolioId, function () {\r",
+													"    pm.expect(jsonData.portfolioId).to.eql(portfolioId);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"string\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/item?portfolioId=3&projectId=1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"item"
+											],
+											"query": [
+												{
+													"key": "portfolioId",
+													"value": "3"
+												},
+												{
+													"key": "projectId",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PortfolioItem-UpdatePortfolioItem-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var content = \"this is a put request\";\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolio item content is set correctly and matching: \" + content, function () {\r",
+													"    pm.expect(jsonData.content).to.eql(content);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"this is a put request\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/item/3?portfolioId=3",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"item",
+												"3"
+											],
+											"query": [
+												{
+													"key": "portfolioId",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PortfolioItem-GetPortfolioItem-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var portfolioId = parseInt(pm.environment.get(\"portfolioId\"));\r",
+													"var portfolioItemProjectId = parseInt(pm.environment.get(\"portfolioId\"));\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolio item exists on portfolio\", function() {\r",
+													"    jsonData.portfolioItem.forEach(function(portfolioItem) {\r",
+													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", 3);\r",
+													"    });\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/3",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"3"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PortfolioItem-DeletePortfolioItem-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/item/3?portfolioId=3",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"item",
+												"3"
+											],
+											"query": [
+												{
+													"key": "portfolioId",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Cleanup Data Officer",
 							"item": [
 								{
@@ -17017,470 +17427,6 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "Portfolio",
-							"item": [
-								{
-									"name": "Portoflio-CreatePortfolio-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
-													"var registeredUserId = pm.environment.get(\"dataOfficerUserId\");\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 201\", function () {\r",
-													"    pm.response.to.have.status(201);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
-													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Portfolio-GetPortfolio-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
-													"\r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.ok;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio title is set correctly and matches: \" + portfolioTitle, function () {\r",
-													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/3",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"3"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Porfolio-UpdatePortfolio-Other-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.unauthorized;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/3",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Portfolio",
-												"3"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PortfolioItem-CreatePortfolioItem-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var portfolioId = 3;\r",
-													"var projectId = 1;\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 201\", function () {\r",
-													"    pm.response.to.have.status(201);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolioId title is set correctly and matching: \" + portfolioId, function () {\r",
-													"    pm.expect(jsonData.portfolioId).to.eql(portfolioId);\r",
-													"});\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"string\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item?portfolioId=3&projectId=1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"item"
-											],
-											"query": [
-												{
-													"key": "portfolioId",
-													"value": "3"
-												},
-												{
-													"key": "projectId",
-													"value": "1"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PortfolioItem-UpdatePortfolioItem-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var content = \"this is a put request\";\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio item content is set correctly and matching: \" + content, function () {\r",
-													"    pm.expect(jsonData.content).to.eql(content);\r",
-													"});\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"this is a put request\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item/3?portfolioId=3",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"item",
-												"3"
-											],
-											"query": [
-												{
-													"key": "portfolioId",
-													"value": "3"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PortfolioItem-GetPortfolioItem-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioId = parseInt(pm.environment.get(\"portfolioId\"));\r",
-													"var portfolioItemProjectId = parseInt(pm.environment.get(\"portfolioId\"));\r",
-													"\r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.ok;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio item exists on portfolio\", function() {\r",
-													"    jsonData.portfolioItem.forEach(function(portfolioItem) {\r",
-													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", 1);\r",
-													"    });\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/3",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"3"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "PortfolioItem-DeletePortofolioItem-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item/3?portfolioId=3",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"item",
-												"3"
-											],
-											"query": [
-												{
-													"key": "portfolioId",
-													"value": "3"
-												}
 											]
 										}
 									},
@@ -21196,6 +21142,184 @@
 							]
 						},
 						{
+							"name": "Portfolio",
+							"item": [
+								{
+									"name": "Portfolio-CreatePortfolio-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var PrUserId = pm.environment.get(\"PrUserId\");\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolio title is set correctly and matches: \" + portfolioTitle, function () {\r",
+													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Portfolio-GetPortfolio-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitleUpdated\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Porfolio-UpdatePortfolio-Other-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"template\": 10,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Portfolio/4",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Portfolio",
+												"4"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Cleanup PR",
 							"item": [
 								{
@@ -21374,184 +21498,6 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "Portfolio",
-							"item": [
-								{
-									"name": "Portfolio-CreatePortfolio-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var PrUserId = pm.environment.get(\"PrUserId\");\r",
-													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
-													"\r",
-													"var jsonData = pm.response.json();\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 201\", function () {\r",
-													"    pm.response.to.have.status(201);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio title is set correctly and matches: \" + portfolioTitle, function () {\r",
-													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{prUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Portfolio-GetPortfolio-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioTitle = pm.environment.get(\"portfolioTitleUpdated\");\r",
-													"\r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.ok;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{prUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Porfolio-UpdatePortfolio-Other-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.ok;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{prUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"template\": 10,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/4",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Portfolio",
-												"4"
 											]
 										}
 									},
