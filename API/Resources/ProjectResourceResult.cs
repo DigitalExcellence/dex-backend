@@ -87,5 +87,10 @@ namespace API.Resources
         /// This gets or sets the likes of the project.
         /// </summary>
         public List<ProjectLikesResourceResult> Likes { get; set; }
+
+        /// <summary>
+        /// Sets or gets if project is visible to institute members only or not
+        /// </summary>
+        public bool InstitutePrivate { get; set; }
     }
 }

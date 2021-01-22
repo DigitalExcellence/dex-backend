@@ -62,6 +62,9 @@ namespace Models
         public CallToAction CallToAction { get; set; }
 
         public List<ProjectLike> Likes { get; set; }
+        public bool InstitutePrivate { get; set; }
+
+
 
     }
 
