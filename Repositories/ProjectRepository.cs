@@ -244,8 +244,8 @@ namespace Repositories
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_CREATE_OR_UPDATE);
-
+            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+            
 
         }
 
