@@ -235,15 +235,14 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
-        [Route("oauth/callback/{provider}")]
-        [Authorize]
+        [HttpGet("oauth/callback/{provider}")]
         [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DataProviderCallback(string provider, string code)
         {
             IDataSourceAdaptee dataSourceAdaptee;
-            if(!Guid.TryParse(provider, out Guid _))
+            if(Guid.TryParse(provider, out Guid _))
             {
                 dataSourceAdaptee = await dataProviderService.RetrieveDataSourceByGuid(code);
             } else

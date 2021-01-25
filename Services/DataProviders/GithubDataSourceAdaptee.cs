@@ -16,6 +16,7 @@
 */
 
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
 using RestSharp;
@@ -28,7 +29,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Services.DataProviders
 {
@@ -55,9 +55,13 @@ namespace Services.DataProviders
         {
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
+            IConfigurationSection configurationSection = configuration.GetSection("App")
+                                                                      .GetSection(Title);
+            clientId = configurationSection.GetSection("ClientId")
+                                           .Value;
+            clientSecret = configurationSection.GetSection("ClientSecret")
+                                               .Value;
 
-            clientId = configuration.GetSection($"{Title}ClientId").Value;
-            clientSecret = configuration.GetSection($"{Title}ClientSecret").Value;
             OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo&state={Title}";
         }
 
