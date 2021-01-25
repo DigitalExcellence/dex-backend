@@ -1,7 +1,12 @@
+using Data;
+using Microsoft.EntityFrameworkCore;
 using Models;
+using Moq;
 using NUnit.Framework;
+using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
 using Repositories.Tests.DataSources;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,7 +15,20 @@ namespace Repositories.Tests
     [TestFixture]
     public class UserRepositoryTest : RepositoryTest<User, UserRepository>
     {
-        protected new IUserRepository Repository => (IUserRepository)base.Repository;
+        protected Mock<IElasticSearchContext> ElasticSearchContext;
+        protected Mock<Queries> Queries;
+
+        [SetUp]
+        public override void Initialize()
+        {
+            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+            ElasticSearchContext = new Mock<IElasticSearchContext>();
+            Queries = new Mock<Queries>();
+
+            ElasticSearchContext.Setup(x => x.CreateRestClientForElasticRequests()).Verifiable();
+            Repository = new UserRepository(DbContext, ElasticSearchContext.Object, Queries.Object);
+            ElasticSearchContext.Verify();
+        }
 
         /// <summary>
         /// User is retrieved correctly
@@ -80,6 +98,7 @@ namespace Repositories.Tests
         [Test]
         public override Task AddAsyncTest_GoodFlow([UserDataSource]User entity)
         {
+
             return base.AddAsyncTest_GoodFlow(entity);
         }
 
