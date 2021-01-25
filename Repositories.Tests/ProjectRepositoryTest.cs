@@ -34,7 +34,7 @@ namespace Repositories.Tests
             ElasticSearchContext = new Mock<IElasticSearchContext>();
             TaskPublisher = new Mock<ITaskPublisher>();
             Queries = new Mock<Queries>();
-            Repository = new ProjectRepository(DbContext, ElasticSearchContext.Object, )
+            Repository = new ProjectRepository(DbContext, ElasticSearchContext.Object, TaskPublisher.Object, Queries.Object);
         }
 
 
