@@ -23,6 +23,7 @@ using RestSharp;
 using Services.DataProviders.Resources;
 using Services.Sources;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -109,11 +110,11 @@ namespace Services.DataProviders
             return mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(projects);
         }
 
-        public async Task<Project> GetProject(int projectId, string accessToken)
+        public async Task<Project> GetProjectById(string accessToken, string projectId)
         {
             IEnumerable<GithubDataSourceResourceResult> projects = await FetchAllGithubProjects(accessToken);
             if(projects == null) return null;
-            GithubDataSourceResourceResult projectWithSpecifiedId = projects.SingleOrDefault(project => project.Id == projectId);
+            GithubDataSourceResourceResult projectWithSpecifiedId = projects.SingleOrDefault(project => project.Id.ToString() == projectId);
             return mapper.Map<GithubDataSourceResourceResult, Project>(projectWithSpecifiedId);
         }
 
@@ -192,9 +193,27 @@ namespace Services.DataProviders
             return JsonConvert.DeserializeObject<GithubDataSourceResourceResult>(response.Content);
         }
 
-        public Task<Project> GetPublicProjectById(string identifier)
+        public async Task<Project> GetPublicProjectById(string identifier)
         {
-            throw new NotImplementedException();
+            GithubDataSourceResourceResult project = await FetchGithubProjectById(identifier);
+            return mapper.Map<GithubDataSourceResourceResult, Project>(project);
+        }
+
+        private async Task<GithubDataSourceResourceResult> FetchGithubProjectById(string identifier)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"repositories/{identifier}", Method.GET);
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(response.StatusCode != HttpStatusCode.OK ||
+               string.IsNullOrEmpty(response.Content))
+            {
+                return null;
+            }
+
+            GithubDataSourceResourceResult resourceResult =
+                JsonConvert.DeserializeObject<GithubDataSourceResourceResult>(response.Content);
+            return resourceResult;
         }
 
     }

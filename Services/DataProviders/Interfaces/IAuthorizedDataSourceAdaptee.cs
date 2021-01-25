@@ -31,6 +31,8 @@ namespace Services.DataProviders
 
         Task<IEnumerable<Project>> GetAllProjects(string accessToken);
 
+        Task<Project> GetProjectById(string accessToken, string projectId);
+
     }
 
 }

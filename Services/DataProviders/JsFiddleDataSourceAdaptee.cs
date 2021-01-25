@@ -88,7 +88,7 @@ namespace Services.DataProviders
 
         public Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         public Task<Project> GetPublicProjectById(string identifier)

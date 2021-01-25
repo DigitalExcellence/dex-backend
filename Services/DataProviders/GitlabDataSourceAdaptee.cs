@@ -111,6 +111,11 @@ namespace Services.DataProviders
             throw new NotImplementedException();
         }
 
+        public Task<Project> GetProjectById(string accessToken, string projectId)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }

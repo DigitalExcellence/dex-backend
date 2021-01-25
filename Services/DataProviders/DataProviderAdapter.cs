@@ -58,9 +58,17 @@ namespace Services.DataProviders
             return await GetAllProjectWithAccessToken(token);
         }
 
-        public Task<Project> GetProjectByGuid(string token, string id, bool needsAuth)
+        public async Task<Project> GetProjectByGuid(string token, string id, bool needsAuth)
         {
-            throw new NotImplementedException();
+            if(!needsAuth)
+            {
+                IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
+                if(publicDataSource == null) return null;
+                return await publicDataSource.GetPublicProjectById(id);
+            }
+            IAuthorizedDataSourceAdaptee authorizedDataSource = adaptee as IAuthorizedDataSourceAdaptee;
+            if(authorizedDataSource == null) return null;
+            return await authorizedDataSource.GetProjectById(token, id);
         }
 
         public async Task<Project> GetProjectByUri(Uri sourceUri)

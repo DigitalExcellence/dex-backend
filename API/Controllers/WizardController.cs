@@ -199,7 +199,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
+            if(!dataProviderService.IsExistingDataSourceGuid(dataSourceGuid))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
