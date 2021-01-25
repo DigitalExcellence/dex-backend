@@ -25,10 +25,13 @@ namespace Repositories.ElasticSearch
         public static void ProjectToESProjectDTO(Project project, ESProjectFormatDTO convertedProject)
         {
             List<int> likes = new List<int>();
-            foreach(ProjectLike projectLike in project.Likes)
+            if (project.Likes != null)
             {
-                likes.Add(projectLike.UserId);
-            }
+                foreach(ProjectLike projectLike in project.Likes)
+                {
+                    likes.Add(projectLike.UserId);
+                }
+            }            
             convertedProject.Description = project.Description;
             convertedProject.ProjectName = project.Name;
             convertedProject.Id = project.Id;

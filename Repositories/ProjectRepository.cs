@@ -241,12 +241,20 @@ namespace Repositories
             }
 
             DbSet.Update(entity);
-            _ = entity.Likes;
+            SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(entity), Subject.ELASTIC_CREATE_OR_UPDATE);
-            
 
+
+        }
+
+        private static void SetLikes(Project entity)
+        {
+            if (entity.Likes != null)
+            {
+                SetLikes(entity);
+            }            
         }
 
         /// <summary>
@@ -256,10 +264,30 @@ namespace Repositories
         public override void Add(Project entity)
         {
             base.Add(entity);
-            _ = entity.Likes;
+            SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+        }
+
+        public override void AddRange(IEnumerable<Project> entities)
+        {
+            List<Project> entityList = entities.ToList();
+            for(int i = 0; i < entityList.Count; i++)
+            {
+                entityList[i] = UpdateCreatedField(entityList[i]);
+                entityList[i] = UpdateUpdatedField(entityList[i]);
+            }
+            DbSet.AddRange(entityList);
+            entityList.ForEach(x =>
+            {
+                SetLikes(x);
+                ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
+                ProjectConverter.ProjectToESProjectDTO(x, projectToSync);
+                TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync),
+                    Subject.ELASTIC_CREATE_OR_UPDATE);
+            });
+            
         }
 
         /// <summary>
@@ -271,7 +299,7 @@ namespace Repositories
         /// </returns>
         public override Task AddAsync(Project entity)
         {
-            _ = entity.Likes;
+            SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
@@ -285,7 +313,7 @@ namespace Repositories
         public override void Remove(Project entity)
         {
             base.Remove(entity);
-            _ = entity.Likes;
+            SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
@@ -301,7 +329,7 @@ namespace Repositories
         public override Task RemoveAsync(int id)
         {
             Project entity = DbSet.Find(id);
-            _ = entity.Likes;
+            SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
