@@ -49,10 +49,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.CallBase = true;
             connectionFactoryMock.Setup(x => x.CreateConnection()).Returns(connectionMock.Object);
 
-            INotificationSender notificationSender = new NotificationSender(connectionFactoryMock.Object);
+            ITaskPublisher notificationSender = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act
-            notificationSender.RegisterNotification(payload, Subject.EMAIL);
+            notificationSender.RegisterTask(payload, Subject.EMAIL);
 
             // Assert
             connectionFactoryMock.Verify();
@@ -98,10 +98,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.CallBase = true;
             connectionFactoryMock.Setup(x => x.CreateConnection()).Returns(connectionMock.Object);
 
-            INotificationSender notificationSender = new NotificationSender(connectionFactoryMock.Object);
+            ITaskPublisher notificationSender = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => notificationSender.RegisterNotification(null, Subject.EMAIL));
+            Assert.Throws<ArgumentNullException>(() => notificationSender.RegisterTask(null, Subject.EMAIL));
         }
     }
 }

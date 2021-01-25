@@ -59,6 +59,12 @@ namespace API.Configuration
         /// </value>
         public SwaggerConfig Swagger { get; set; }
 
+        /// <summary>
+        /// Gets or sets the RabbitMQ configuration.
+        /// </summary>
+        /// <value>
+        /// The RabbitMQ.
+        /// </value>
         public RabbitMQConfig RabbitMQ { get; set; }
         /// <summary>
         ///     Validates this instance.
@@ -170,10 +176,10 @@ namespace API.Configuration
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the username.
+        /// Gets or sets the password.
         /// </summary>
         /// <value>
-        /// The username.
+        /// The password.
         /// </value>
         [Required]
         public string Password { get; set; }

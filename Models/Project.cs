@@ -64,6 +64,9 @@ namespace Models
 
         [JsonIgnore]
         public List<ProjectLike> Likes { get; set; }
+        public bool InstitutePrivate { get; set; }
+
+
 
     }
 
