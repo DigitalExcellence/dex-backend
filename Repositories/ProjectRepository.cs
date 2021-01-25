@@ -251,9 +251,13 @@ namespace Repositories
 
         private static void SetLikes(Project entity)
         {
-            if (entity.Likes != null)
+            if (entity != null)
             {
-                SetLikes(entity);
+                if (entity.Likes != null)
+                {
+                    _ = entity.Likes;
+                }
+                
             }            
         }
 
