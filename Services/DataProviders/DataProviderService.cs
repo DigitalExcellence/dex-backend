@@ -140,6 +140,12 @@ namespace Services.DataProviders
             return source;
         }
 
+        public async Task<IDataSourceAdaptee> RetrieveDataSourceByName(string name)
+        {
+            IDataSourceAdaptee source = await dataProviderLoader.GetDataSourceByName(name);
+            return source;
+        }
+
         private List<IDataSourceAdaptee> FilterAuthPages(List<IDataSourceAdaptee> adaptees, bool authFlow)
         {
             foreach(IDataSourceAdaptee source in adaptees)

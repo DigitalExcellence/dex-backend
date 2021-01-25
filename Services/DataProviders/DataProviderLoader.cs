@@ -36,6 +36,8 @@ namespace Services.DataProviders
 
         Task<IDataSourceAdaptee> GetDataSourceByGuid(string guid);
 
+        Task<IDataSourceAdaptee> GetDataSourceByName(string name);
+
     }
 
     public class DataProviderLoader : IDataProviderLoader
@@ -66,6 +68,11 @@ namespace Services.DataProviders
         {
             return (await GetAllDataSources())
                 .SingleOrDefault(d => d.Guid == guid);
+        }
+
+        public async Task<IDataSourceAdaptee> GetDataSourceByName(string name)
+        {
+            return (await GetAllDataSources()).SingleOrDefault(d => d.Title == name);
         }
 
         private async Task<List<IDataSourceAdaptee>> UpdateModelsWithRepositoryValues(List<IDataSourceAdaptee> sources)
