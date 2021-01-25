@@ -12,7 +12,7 @@ namespace MessageBrokerPublisher.Tests
     public class Tests
     {
         [Test]
-        public void RegisterNotification_EmailNotification_NotificationRegistered()
+        public void RegisterTask_EmailNotification_NotificationRegistered()
         {
             // Arrange
             EmailNotificationRegister notification = new EmailNotificationRegister("test@example.com", "plain text content");
@@ -49,10 +49,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.CallBase = true;
             connectionFactoryMock.Setup(x => x.CreateConnection()).Returns(connectionMock.Object);
 
-            ITaskPublisher notificationSender = new TaskPublisher(connectionFactoryMock.Object);
+            ITaskPublisher TaskPublisher = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act
-            notificationSender.RegisterTask(payload, Subject.EMAIL);
+            TaskPublisher.RegisterTask(payload, Subject.EMAIL);
 
             // Assert
             connectionFactoryMock.Verify();
@@ -61,7 +61,7 @@ namespace MessageBrokerPublisher.Tests
         }
 
         [Test]
-        public void RegisterNotification_EmailNotification_WithoutPayload_Throws()
+        public void RegisterTask_EmailNotification_WithoutPayload_Throws()
         {
             // Arrange
             EmailNotificationRegister notification = new EmailNotificationRegister("test@example.com", "plain text content");
@@ -98,10 +98,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.CallBase = true;
             connectionFactoryMock.Setup(x => x.CreateConnection()).Returns(connectionMock.Object);
 
-            ITaskPublisher notificationSender = new TaskPublisher(connectionFactoryMock.Object);
+            ITaskPublisher TaskPublisher = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => notificationSender.RegisterTask(null, Subject.EMAIL));
+            Assert.Throws<ArgumentNullException>(() => TaskPublisher.RegisterTask(null, Subject.EMAIL));
         }
     }
 }

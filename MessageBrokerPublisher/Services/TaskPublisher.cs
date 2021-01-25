@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MessageBrokerPublisher
 {
     ///<summary>
-    ///Interface for the NotificationSender.
+    ///Interface for the TaskPublisher.
     ///</summary>
     ///
     public interface ITaskPublisher
@@ -27,7 +27,7 @@ namespace MessageBrokerPublisher
     /// When working with this class in the API environment, you can request an instance
     /// in the constructor, since it's registered in the IOC and thus can be used with
     /// dependency injection.
-    /// When using this class outside of the API, just instantiate a new NotificationSender,
+    /// When using this class outside of the API, just instantiate a new TaskPublisher,
     /// and pass in a instance of the RabbitMQConnectionFactory class, providing the paramaters:
     /// Hostname, Username and password. For example when running a local instance of RabbitMQ,
     /// these would be respectively: localhost, guest, guest.

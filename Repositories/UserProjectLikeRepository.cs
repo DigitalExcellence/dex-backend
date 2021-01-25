@@ -34,10 +34,10 @@ namespace Repositories
     public class UserProjectLikeRepository : Repository<ProjectLike>,
                                              IUserProjectLikeRepository
     {
-        private INotificationSender notificationSender;
-        public UserProjectLikeRepository(DbContext dbContext, INotificationSender notificationSender) :
+        private ITaskPublisher TaskPublisher;
+        public UserProjectLikeRepository(DbContext dbContext, ITaskPublisher TaskPublisher) :
             base(dbContext) {
-            this.notificationSender = notificationSender;
+            this.TaskPublisher = TaskPublisher;
         }
 
         public override void Add(ProjectLike projectLike)

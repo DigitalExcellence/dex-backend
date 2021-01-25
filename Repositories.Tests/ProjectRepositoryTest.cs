@@ -1,8 +1,14 @@
+using Data;
+using MessageBrokerPublisher;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Moq;
 using NUnit.Framework;
+using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
 using Repositories.Tests.DataSources;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +17,27 @@ namespace Repositories.Tests
     [TestFixture]
     public class ProjectRepositoryTest : RepositoryTest<Project, ProjectRepository>
     {
-        protected new IProjectRepository Repository => (IProjectRepository)base.Repository;
+        protected new ApplicationDbContext DbContext;
+        protected new IProjectRepository Repository;
+        protected Mock<IElasticSearchContext> ElasticSearchContext;
+        protected Mock<ITaskPublisher> TaskPublisher;
+        protected Mock<Queries> Queries;
+
+        /// <summary>
+        /// Initialize runs before every test
+        /// Initialize the repository with reflection
+        /// </summary>
+        [SetUp]
+        public virtual void Initialize()
+        {
+            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+            ElasticSearchContext = new Mock<IElasticSearchContext>();
+            TaskPublisher = new Mock<ITaskPublisher>();
+            Queries = new Mock<Queries>();
+            Repository = new ProjectRepository(DbContext, ElasticSearchContext.Object, )
+        }
+
+
 
         /// <summary>
         /// Test if project with user relations are retrieved correctly
