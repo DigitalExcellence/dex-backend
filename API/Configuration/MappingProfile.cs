@@ -126,6 +126,8 @@ namespace API.Configuration
                 .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
             CreateMap<IDataSourceAdaptee, DataSource>();
 
+            CreateMap<OauthTokens, OauthTokensResourceResult>();
+
             CreateExternalSourceMappingProfiles();
         }
 

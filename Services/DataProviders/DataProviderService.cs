@@ -44,6 +44,8 @@ namespace Services.DataProviders
 
         Task<IDataSourceAdaptee> RetrieveDataSourceByGuid(string guid);
 
+        Task<IDataSourceAdaptee> RetrieveDataSourceByName(string name);
+
     }
 
     /// <summary>

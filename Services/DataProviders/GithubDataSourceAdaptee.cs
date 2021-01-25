@@ -15,11 +15,9 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using AngleSharp;
 using AutoMapper;
 using Models;
 using Newtonsoft.Json;
-using Repositories;
 using RestSharp;
 using Services.DataProviders.Resources;
 using Services.Sources;

@@ -24,6 +24,7 @@ using Models;
 using Services.DataProviders;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -223,6 +224,60 @@ namespace API.Controllers
             }
 
             return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
+        }
+
+        /// <summary>
+        /// This method is responsible for converting the code from the data provider to the correct tokens.
+        /// </summary>
+        /// <param name="provider">The guid or name that specifies the data source.</param>
+        /// <param name="code">The access token which is used for authentication.</param>
+        /// <returns>This method returns the project data source resource result</returns>
+        /// <response code="200">This endpoint returns the project with the specified id.</response>
+        /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
+        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
+        [Route("oauth/callback/{provider}")]
+        [Authorize]
+        [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DataProviderCallback(string provider, string code)
+        {
+            IDataSourceAdaptee dataSourceAdaptee;
+            if(!Guid.TryParse(provider, out Guid _))
+            {
+                dataSourceAdaptee = await dataProviderService.RetrieveDataSourceByGuid(code);
+            } else
+            {
+                dataSourceAdaptee = await dataProviderService.RetrieveDataSourceByName(provider);
+            }
+
+            if(dataSourceAdaptee == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Data source not found.",
+                    Detail = "Data source could not be found with specified data source guid.",
+                    Instance = "5B4E11A6-8209-4F49-B76A-1EF4297D990F"
+                };
+                return NotFound(problem);
+            }
+
+            IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee = dataSourceAdaptee as IAuthorizedDataSourceAdaptee;
+
+            if(authorizedDataSourceAdaptee == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "The specified provider does not allowed authorization",
+                    Detail = "The specified provider is not able to verify the code",
+                    Instance = "EB1F47B2-5526-41F3-8C69-8068F12A92D1"
+                };
+                return BadRequest(problem);
+            }
+
+            OauthTokens tokens = await authorizedDataSourceAdaptee.GetTokens(code);
+            OauthTokensResourceResult resourceResult = mapper.Map<OauthTokens, OauthTokensResourceResult>(tokens);
+            return Ok(resourceResult);
         }
     }
 }
