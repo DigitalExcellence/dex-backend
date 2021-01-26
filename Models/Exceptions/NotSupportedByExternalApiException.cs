@@ -26,11 +26,6 @@ namespace Models.Exceptions
     public class NotSupportedByExternalApiException : Exception
     {
         /// <summary>
-        /// The constructor of the class to generate the exception.
-        /// </summary>
-        public NotSupportedByExternalApiException() : base() { }
-
-        /// <summary>
         /// The constructor of the class to generate the exception with a specified message.
         /// </summary>
         /// <param name="failedDataSource">The name of the data source which does not support the functionality.</param>

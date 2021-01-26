@@ -17,6 +17,7 @@
 
 using AutoMapper;
 using Models;
+using Models.Exceptions;
 using Newtonsoft.Json;
 using RestSharp;
 using Services.DataProviders.Resources;
@@ -88,12 +89,12 @@ namespace Services.DataProviders
 
         public Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedByExternalApiException(Title, nameof(GetPublicProjectFromUri));
         }
 
         public Task<Project> GetPublicProjectById(string identifier)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedByExternalApiException(Title, nameof(GetPublicProjectById));
         }
 
     }
