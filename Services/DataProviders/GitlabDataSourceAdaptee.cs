@@ -23,6 +23,7 @@ using Services.DataProviders.Resources;
 using Services.Sources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -106,7 +107,22 @@ namespace Services.DataProviders
             string[] separatingStrings = { "/" };
             string[] splitted = cleanUri.ToString().Split(separatingStrings, StringSplitOptions.RemoveEmptyEntries);
 
-           Uri convertedUri= new Uri("https://gitlab.com/api/v4/projects/" + splitted[0] + "%2F" + splitted[1]);
+            string seperator = "%2F";
+            string convertedStringUri = "https://gitlab.com/api/v4/projects/";
+
+            for(int i = 0; i < splitted.Count(); i++)
+            {
+                if(i == splitted.Count()-1)
+                {
+                    string temp = convertedStringUri + splitted[i];
+                    convertedStringUri = temp;
+                } else
+                {
+                    string temp = convertedStringUri + splitted[i] + seperator;
+                    convertedStringUri = temp;
+                }
+            }
+            Uri convertedUri = new Uri(convertedStringUri);
            return convertedUri;
         }
 
