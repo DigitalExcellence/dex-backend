@@ -21,10 +21,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Exceptions;
 using Services.DataProviders;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -107,18 +107,30 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            Project project = await dataProviderService.GetProjectFromUri(dataSourceGuid, sourceUri);
-            if(project == null)
+            try
+            {
+                Project project = await dataProviderService.GetProjectFromUri(dataSourceGuid, sourceUri);
+                if(project == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Project could not be found.",
+                        Detail = "The project could not be found with the specified source Uri and data source guid",
+                        Instance = "993252E8-61C4-422D-A547-EB9F56BA47B7"
+                    };
+                    return NotFound(problem);
+                }
+                return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
+            } catch(NotSupportedByExternalApiException e)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Project could not be found.",
-                    Detail = "The project could not be found with the specified source Uri and data source guid",
-                    Instance = "993252E8-61C4-422D-A547-EB9F56BA47B7"
+                    Title = "External API does not support the functionality from the method.",
+                    Detail = e.Message,
+                    Instance = "DD815174-8711-4EF0-B01B-776709EDF485"
                 };
-                return NotFound(problem);
+                return BadRequest(problem);
             }
-            return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
         }
 
         /// <summary>
@@ -163,8 +175,20 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IEnumerable<Project> projects = await dataProviderService.GetAllProjects(dataSourceGuid, token, needsAuth);
-            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<WizardProjectResourceResult>>(projects));
+            try
+            {
+                IEnumerable<Project> projects = await dataProviderService.GetAllProjects(dataSourceGuid, token, needsAuth);
+                return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<WizardProjectResourceResult>>(projects));
+            } catch(NotSupportedByExternalApiException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "External API does not support the functionality from the method.",
+                    Detail = e.Message,
+                    Instance = "8492B945-7C09-425B-9D1D-77869CE67146"
+                };
+                return BadRequest(problem);
+            }
         }
 
         /// <summary>
@@ -210,20 +234,32 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            Project project = await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectId, needsAuth);
+            try
+            {
+                Project project = await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectId, needsAuth);
 
-            if(project == null)
+                if(project == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Project not found",
+                                                 Detail = "Project could not be found with specified project guid",
+                                                 Instance = "0D96A77A-D35F-487C-B552-BF6D1C0CDD42"
+                                             };
+                    return NotFound(problem);
+                }
+
+                return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
+            } catch(NotSupportedByExternalApiException e)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Project not found",
-                    Detail = "Project could not be found with specified project guid",
-                    Instance = "0D96A77A-D35F-487C-B552-BF6D1C0CDD42"
+                    Title = "External API does not support the functionality from the method.",
+                    Detail = e.Message,
+                    Instance = "F20B0D1F-D6B7-4BCE-9BC8-28B9E9618214"
                 };
-                return NotFound(problem);
+                return BadRequest(problem);
             }
-
-            return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
         }
 
         /// <summary>
@@ -274,9 +310,21 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            OauthTokens tokens = await authorizedDataSourceAdaptee.GetTokens(code);
-            OauthTokensResourceResult resourceResult = mapper.Map<OauthTokens, OauthTokensResourceResult>(tokens);
-            return Ok(resourceResult);
+            try
+            {
+                OauthTokens tokens = await authorizedDataSourceAdaptee.GetTokens(code);
+                OauthTokensResourceResult resourceResult = mapper.Map<OauthTokens, OauthTokensResourceResult>(tokens);
+                return Ok(resourceResult);
+            } catch(NotSupportedByExternalApiException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "External API does not support the functionality from the method.",
+                    Detail = e.Message,
+                    Instance = "CDFFA448-38B1-450F-8D14-FB89FB7B5462"
+                };
+                return BadRequest(problem);
+            }
         }
     }
 }
