@@ -138,6 +138,8 @@ namespace API.Configuration
 
             CreateMap<GithubDataSourceResourceResult, Project>();
 
+            CreateMap<GitlabDataSourceResourceResult, Project>();
+
             CreateMap<CallToActionResource, CallToAction>()
                 .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));
             CreateMap<CallToAction, CallToActionResourceResult>();

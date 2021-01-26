@@ -61,9 +61,22 @@ namespace Services.DataProviders
 
         public string OauthUrl { get; }
 
-        public Task<IEnumerable<Project>> GetAllPublicProjects(string username)
+        public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
-            throw new NotImplementedException();
+            Uri requestUri = new Uri(BaseUrl+"users/"+username+"/projects");
+
+            IRestClient client = restClientFactory.Create(requestUri);
+            RestRequest request = new RestRequest(Method.GET);
+
+            IRestResponse response = await client.ExecuteAsync(request);
+            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
+            {
+                return null;
+            }
+            IEnumerable<GitlabDataSourceResourceResult> gitlabDataSourceResourceResults =  JsonConvert.DeserializeObject<IEnumerable<GitlabDataSourceResourceResult>>(response.Content);
+            IEnumerable<Project> projects = mapper.Map<IEnumerable<GitlabDataSourceResourceResult>, IEnumerable<Project>>(gitlabDataSourceResourceResults);
+
+            return projects;
         }
 
         public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
@@ -90,6 +103,7 @@ namespace Services.DataProviders
             }
             return JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
         }
+       
 
         private async Task<string> FetchPublicReadme(string readmeUrl)
         {
