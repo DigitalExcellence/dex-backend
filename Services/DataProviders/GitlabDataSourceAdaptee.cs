@@ -81,7 +81,10 @@ namespace Services.DataProviders
 
         public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
-            IRestClient client = restClientFactory.Create(sourceUri);
+            Uri requestUri = ConvertUri(sourceUri);
+
+
+            IRestClient client = restClientFactory.Create(requestUri);
             RestRequest request = new RestRequest(Method.GET);
 
             IRestResponse response = await client.ExecuteAsync(request);
@@ -93,6 +96,18 @@ namespace Services.DataProviders
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(gitlabDataSourceResourceResults);
 
             return project;
+        }
+
+        //Convert uri from normal web uri to api uri
+        private Uri ConvertUri(Uri sourceUri)
+        {
+            string uriString = sourceUri.ToString();
+            string cleanUri = uriString.Replace("https://gitlab.com/", "");
+            string[] separatingStrings = { "/" };
+            string[] splitted = cleanUri.ToString().Split(separatingStrings, StringSplitOptions.RemoveEmptyEntries);
+
+           Uri convertedUri= new Uri("https://gitlab.com/api/v4/projects/" + splitted[0] + "%2F" + splitted[1]);
+           return convertedUri;
         }
 
         public async Task<Project> GetPublicProjectById(string identifier)
