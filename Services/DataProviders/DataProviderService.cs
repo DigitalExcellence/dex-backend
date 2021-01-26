@@ -87,8 +87,6 @@ namespace Services.DataProviders
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
 
-
-            
             sourceUri = sourceUri.Replace("%2F", "/");
             if(sourceUri[^1] == '/')
                 sourceUri = sourceUri.Remove(sourceUri.Length - 1);
