@@ -18,7 +18,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Services.DataProviders.Resources
+namespace Services.ExternalDataProviders.Resources
 {
     /// <summary>
     /// Viewmodel for the project github data source.

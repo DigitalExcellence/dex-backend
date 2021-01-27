@@ -22,7 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Services.DataProviders
+namespace Services.ExternalDataProviders
 {
 
     public interface IDataProviderService

@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Exceptions;
-using Services.DataProviders;
+using Services.ExternalDataProviders;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -17,25 +17,21 @@
 
 using Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Services.DataProviders
+namespace Services.ExternalDataProviders
 {
 
-    public interface IDataSourceAdaptee
+    public interface IAuthorizedDataSourceAdaptee : IDataSourceAdaptee
     {
-        string Guid { get; }
 
-        string Title { get; set; }
+        string OauthUrl { get; }
 
-        string BaseUrl { get; set; }
+        Task<OauthTokens> GetTokens(string code);
 
-        public bool IsVisible { get; set; }
+        Task<IEnumerable<Project>> GetAllProjects(string accessToken);
 
-        public File Icon { get; set; }
-
-        public string Description { get; set; }
-
-        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
+        Task<Project> GetProjectById(string accessToken, string projectId);
 
     }
 

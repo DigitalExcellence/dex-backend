@@ -23,7 +23,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
-using Services.DataProviders;
+using Services.ExternalDataProviders;
 using Services.Services;
 using System;
 using System.Collections.Generic;

@@ -15,40 +15,28 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Newtonsoft.Json;
+using Models;
+using System.Collections.Generic;
 
-namespace Services.DataProviders.Resources
+namespace Services.ExternalDataProviders
 {
 
-    public class JsFiddleDataSourceResourceResult
+    public interface IDataSourceAdaptee
     {
+        string Guid { get; }
 
-        [JsonProperty("framework")]
-        public string Framework { get; set; }
+        string Title { get; set; }
 
-        [JsonProperty("version")]
-        public int Version { get; set; }
+        string BaseUrl { get; set; }
 
-        [JsonProperty("description")]
+        public bool IsVisible { get; set; }
+
+        public File Icon { get; set; }
+
         public string Description { get; set; }
 
-        [JsonProperty("title")]
-        public string Title { get; set; }
-
-        [JsonProperty("url")]
-        public string Url { get; set; }
-
-        [JsonProperty("author")]
-        public string Author { get; set; }
-
-        [JsonProperty("latest_version")]
-        public int LatestVersion { get; set; }
-
-        [JsonProperty("created")]
-        public string Created { get; set; }
-
+        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
 
     }
-
 
 }

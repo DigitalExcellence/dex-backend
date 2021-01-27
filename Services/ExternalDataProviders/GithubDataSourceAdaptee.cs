@@ -20,7 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
 using RestSharp;
-using Services.DataProviders.Resources;
+using Services.ExternalDataProviders.Resources;
 using Services.Sources;
 using System;
 using System.Collections;
@@ -31,7 +31,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Services.DataProviders
+namespace Services.ExternalDataProviders
 {
 
     public class GithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee

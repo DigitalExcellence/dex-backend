@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
-using Services.DataProviders;
+using Services.ExternalDataProviders;
 using Services.Services;
 using Services.Sources;
 

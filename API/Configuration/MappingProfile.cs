@@ -18,8 +18,8 @@
 using API.Resources;
 using AutoMapper;
 using Models;
-using Services.DataProviders;
-using Services.DataProviders.Resources;
+using Services.ExternalDataProviders;
+using Services.ExternalDataProviders.Resources;
 using System.Collections.Generic;
 
 namespace API.Configuration

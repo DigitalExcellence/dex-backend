@@ -20,7 +20,7 @@ using Models;
 using Models.Exceptions;
 using Newtonsoft.Json;
 using RestSharp;
-using Services.DataProviders.Resources;
+using Services.ExternalDataProviders.Resources;
 using Services.Sources;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Services.DataProviders
+namespace Services.ExternalDataProviders
 {
 
     public class JsFiddleDataSourceAdaptee : IPublicDataSourceAdaptee

@@ -17,7 +17,7 @@
 
 using Newtonsoft.Json;
 
-namespace Services.DataProviders.Resources
+namespace Services.ExternalDataProviders.Resources
 {
 
     public class GitlabDataSourceResourceResult
