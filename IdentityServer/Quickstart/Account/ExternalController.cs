@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -67,7 +67,6 @@ namespace IdentityServer
             this.logger = logger;
             this.events = events;
             this.config = config;
-            //this.dataProviderService = dataProviderService;
         }
 
         /// <summary>
@@ -85,7 +84,7 @@ namespace IdentityServer
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
             }
-            // start challenge and roundtrip the return URL and scheme 
+            // start challenge and roundtrip the return URL and scheme
             AuthenticationProperties props = new AuthenticationProperties
             {
                 RedirectUri = Url.Action(nameof(Callback)),
@@ -308,36 +307,6 @@ namespace IdentityServer
 
             return Redirect(returnUrl);
         }
-
-        ///// <summary>
-        ///// This method returns the url of the oauth login page of the correct data provider.
-        ///// </summary>
-        ///// <param name="guid">The guid is used for identifying the data provider.</param>
-        ///// <returns>This method returns the url of the oauth login page.</returns>
-        //[HttpGet]
-        //public async Task<IActionResult> ExternalAuthentication(string guid, string redirectUrl)
-        //{
-        //    HttpContext.Response.Cookies.Append("redirectUrl", redirectUrl);
-
-        //    string oauthUrl = await dataProviderService.GetOauthUrl(guid);
-        //    return Redirect(oauthUrl);
-        //}
-
-        ///// <summary>
-        ///// This method converts the retrieved code to the tokens to use in the external API.
-        ///// </summary>
-        ///// <param name="code">This is the retrieved code from the login page from the external data source.</param>
-        ///// <param name="state">This is a random string which can be a variable, for example the guid.</param>
-        ///// <returns>This method returns the correct tokens.</returns>
-        //public async Task<IActionResult> RetrieveTokens(string code, string state)
-        //{
-        //    OauthTokens tokens = await dataProviderService.GetTokens(code, state);
-
-        //    HttpContext.Response.Headers.Add("OauthTokens", JsonConvert.SerializeObject(tokens));
-
-        //    string returnUrl = Request.Cookies["redirectUrl"];
-        //    return Redirect(returnUrl);
-        //}
 
         /// <summary>
         /// Finds the user from external provider.
