@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210120084422_MergedMigration")]
-    partial class MergedMigration
+    [Migration("20210128180958_Merge")]
+    partial class Merge
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -199,6 +199,9 @@ namespace _4_Data.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("InstitutePrivate")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

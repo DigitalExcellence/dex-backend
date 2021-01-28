@@ -27,6 +27,8 @@
     <Compile Remove="Migrations\20201205133647_AddDateToLikes.Designer.cs" />
     <Compile Remove="Migrations\20210118102224_Initial.cs" />
     <Compile Remove="Migrations\20210118102224_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20210120084422_MergedMigration.cs" />
+    <Compile Remove="Migrations\20210120084422_MergedMigration.Designer.cs" />
   </ItemGroup>
 
   
