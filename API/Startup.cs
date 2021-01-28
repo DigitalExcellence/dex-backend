@@ -408,6 +408,15 @@ namespace API
                 context.AddRange(Seed.SeedRoles());
                 context.SaveChanges();
             }
+
+            // Temporary here to update role and rolescopes for the user graduation feature. This updates the database which is necessary for staging and production.
+            if(context.RoleScope.SingleOrDefault(b => b.Scope == "AdminProjectWrite") == null)
+            {
+                context.RoleScope.AddRange(Seed.UpdateRoleScopes());
+                context.Role.Add(Seed.SeedAlumniRole());
+                context.SaveChanges();
+            }
+
             List<Role> roles = context.Role.ToList();
             if(!context.User.Any())
             {

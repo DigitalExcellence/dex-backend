@@ -142,6 +142,16 @@ namespace Data
         /// </value>
         public DbSet<UserTask> UserTask { get; set; }
 
+        /// <summary>
+        /// Gets or sets the RoleScope
+        /// </summary>
+        /// /// <value>
+        /// The role scope.
+        /// </value>
+        public DbSet<RoleScope> RoleScope { get; set; }
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

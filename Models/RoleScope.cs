@@ -15,6 +15,13 @@ namespace Models
         {
             Scope = scope;
         }
+
+        public RoleScope(string scope, int roleId)
+        {
+            RoleId = roleId;
+            Scope = scope;
+        }
+
         public int RoleId { get; set; }
         public int Id { get; set; }
         public string Scope { get; set; }

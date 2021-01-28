@@ -29,6 +29,43 @@ namespace Data.Helpers
     public static class Seed
     {
         /// <summary>
+        /// Temporary method which is meant to update the rolescopes in staging / production after user graduation feature is implemented.
+        /// </summary>
+        /// <returns>List of new rolescopes.</returns>
+        public static List<RoleScope> UpdateRoleScopes()
+        {
+            List<RoleScope> roleScopes = new List<RoleScope>();
+            for(int i = 1; i < 5; i++)
+            {
+                RoleScope roleScope = new RoleScope("ProjectWrite", i );
+                roleScope.RoleId = i;
+                roleScopes.Add(roleScope);
+            }
+            
+            RoleScope adminRoleScope = new RoleScope("AdminProjectWrite", 4);
+            roleScopes.Add(adminRoleScope);
+
+            return roleScopes;
+
+        }
+
+        /// <summary>
+        /// Temporary method which is meant to add the alumni role in staging / production after user graduation feature is implemented.
+        /// </summary>
+        /// <returns>Alumni role.</returns>
+        public static Role SeedAlumniRole()
+        {
+            Role alumniRole = new Role
+            {
+                Name = Defaults.Roles.Alumni
+            };
+
+            return alumniRole;
+        }
+
+
+
+        /// <summary>
         ///     Seed random users into the database using fake date from Bogus
         /// </summary>
         public static List<User> SeedUsers(List<Role> roles)
