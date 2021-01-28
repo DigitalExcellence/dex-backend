@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -25,7 +25,7 @@ using Services.Sources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Services.ExternalDataProviders
@@ -65,7 +65,7 @@ namespace Services.ExternalDataProviders
 
         public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
-            IEnumerable<JsFiddleDataSourceResourceResult> resourceResult = await FetchAllFiddlesFromUser(username);
+            JsFiddleDataSourceResourceResult[] resourceResult = (await FetchAllFiddlesFromUser(username)).ToArray();
             if(!resourceResult.Any()) return null;
             return mapper.Map<IEnumerable<JsFiddleDataSourceResourceResult>, IEnumerable<Project>>(resourceResult);
         }
@@ -76,11 +76,8 @@ namespace Services.ExternalDataProviders
             IRestRequest request = new RestRequest($"user/{username}/demo/list.json", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(response.StatusCode != HttpStatusCode.OK ||
-               string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
 
             IEnumerable<JsFiddleDataSourceResourceResult> resourceResult =
                 JsonConvert.DeserializeObject<IEnumerable<JsFiddleDataSourceResourceResult>>(response.Content);
