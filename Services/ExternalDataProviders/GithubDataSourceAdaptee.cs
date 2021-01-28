@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -20,15 +20,13 @@ using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Authenticators;
 using Services.ExternalDataProviders.Resources;
 using Services.Sources;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Services.ExternalDataProviders
@@ -84,23 +82,18 @@ namespace Services.ExternalDataProviders
 
         public async Task<OauthTokens> GetTokens(string code)
         {
-            using HttpClient client = new HttpClient();
-            Dictionary<string, string> accessRefreshTokenRequirements = new Dictionary<string, string>
-            {
-                { "client_id",  clientId },
-                { "client_secret", clientSecret},
-                {"code", code },
-                {"state", Title }
-            };
-            FormUrlEncodedContent data = new FormUrlEncodedContent(accessRefreshTokenRequirements);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("Ruby77");
-            HttpResponseMessage response = await client.PostAsync("https://github.com/login/oauth/access_token", data);
+            Uri baseGithubUrl = new Uri("https://github.com/");
+            IRestClient client = restClientFactory.Create(baseGithubUrl);
+            IRestRequest request = new RestRequest("login/oauth/access_token");
+            client.Authenticator = new HttpBasicAuthenticator(clientId, clientSecret);
+            request.AddParameter("code", code);
+            IRestResponse response = await client.ExecuteAsync(request);
 
-            if(response.IsSuccessStatusCode)
-                return await response.Content.ReadAsAsync<OauthTokens>();
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
 
-            throw new Exception(response.ReasonPhrase);
+            OauthTokens tokens = JsonConvert.DeserializeObject<OauthTokens>(response.Content);
+            return tokens;
         }
 
         public async Task<IEnumerable<Project>> GetAllProjects(string accessToken)
@@ -132,12 +125,8 @@ namespace Services.ExternalDataProviders
             request.AddQueryParameter("visibility", "all");
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(response.StatusCode != HttpStatusCode.OK ||
-               string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
-
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
             IEnumerable<GithubDataSourceResourceResult> projects =
                 JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
             return projects;
@@ -145,7 +134,7 @@ namespace Services.ExternalDataProviders
 
         public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
-            IEnumerable<GithubDataSourceResourceResult> resourceResults = await FetchAllPublicGithubRepositories(username);
+            GithubDataSourceResourceResult[] resourceResults = (await FetchAllPublicGithubRepositories(username)).ToArray();
             if(!resourceResults.Any()) return null;
             return mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(resourceResults);
         }
@@ -156,12 +145,8 @@ namespace Services.ExternalDataProviders
             IRestRequest request = new RestRequest($"users/{username}/repos", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(response.StatusCode != HttpStatusCode.OK ||
-               string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
-
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
             IEnumerable<GithubDataSourceResourceResult> resourceResults =
                 JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
             return resourceResults;
@@ -186,10 +171,9 @@ namespace Services.ExternalDataProviders
             IRestClient client = restClientFactory.Create(serializedUrl);
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
-            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
+
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
             return JsonConvert.DeserializeObject<GithubDataSourceResourceResult>(response.Content);
         }
 
@@ -205,12 +189,8 @@ namespace Services.ExternalDataProviders
             IRestRequest request = new RestRequest($"repositories/{identifier}", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(response.StatusCode != HttpStatusCode.OK ||
-               string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
-
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
             GithubDataSourceResourceResult resourceResult =
                 JsonConvert.DeserializeObject<GithubDataSourceResourceResult>(response.Content);
             return resourceResult;
