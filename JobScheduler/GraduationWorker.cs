@@ -31,13 +31,11 @@ namespace JobScheduler
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // Wait till API and Identity are started
-            await Task.Delay(10000);
+            await Task.Delay(20000);
 
             while(!stoppingToken.IsCancellationRequested)
             {
-                logger.LogInformation("Graduation job started: {time}", DateTimeOffset.Now);
-                GraduationJob();
-                logger.LogInformation("Graduation job finished: {time}", DateTimeOffset.Now);
+                await GraduationJob();
 
                 // Time between job. 
                 await Task.Delay(config.JobSchedulerConfig.TimeBetweenJobsInMs, stoppingToken);

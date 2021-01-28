@@ -55,6 +55,7 @@ namespace API.Controllers
         /// <param name="userTaskService"> The user task service is responsible for getting and setting the tasks that users should follow up.</param>
         /// <param name="userService"> The user service is responsible for getting and setting users. </param>
         /// <param name="roleService"> The role service is responsible for getting and setting roles. </param>
+        /// <param name="mapper"> The mapper is responsible to map object to other types. </param>
         /// <param name="configuration"> The configuration is responsible for configuration settings. </param>
         public UserTaskController(IUserTaskService userTaskService,
                                   IUserService userService,
