@@ -166,9 +166,9 @@ namespace Services.ExternalDataProviders
             // Get the project path without the prefix slash
             string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
                                           .Substring(1);
-            Uri serializedUrl = new Uri(BaseUrl + "repos/" + projectPath);
+            Uri serializedUri = new Uri(BaseUrl + "repos/" + projectPath);
 
-            IRestClient client = restClientFactory.Create(serializedUrl);
+            IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 

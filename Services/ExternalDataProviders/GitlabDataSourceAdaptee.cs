@@ -1,30 +1,33 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Extensions;
 using Services.ExternalDataProviders.Resources;
 using Services.Sources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Services.ExternalDataProviders
@@ -38,12 +41,29 @@ namespace Services.ExternalDataProviders
         /// </summary>
         private readonly IRestClientFactory restClientFactory;
 
+        /// <summary>
+        /// Mapper object from auto mapper that will automatically maps one object to another.
+        /// </summary>
         private readonly IMapper mapper;
 
-        public GitlabDataSourceAdaptee(IRestClientFactory restClientFactory, IMapper mapper)
+        private readonly string clientSecret;
+        private readonly string clientId;
+
+        public GitlabDataSourceAdaptee(
+            IRestClientFactory restClientFactory,
+            IMapper mapper,
+            IConfiguration configuration)
         {
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
+            IConfigurationSection configurationSection = configuration.GetSection("App")
+                                                                      .GetSection(Title);
+
+            clientId = configurationSection.GetSection("ClientId")
+                                           .Value;
+            clientSecret = configurationSection.GetSection("ClientSecret")
+                                               .Value;
+            OauthUrl = "";
         }
 
         public string Guid => "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
@@ -64,39 +84,50 @@ namespace Services.ExternalDataProviders
 
         public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
-            Uri requestUri = new Uri(BaseUrl+"users/"+username+"/projects");
+            GitlabDataSourceResourceResult[] resourceResults =
+                (await FetchAllPublicGitlabRepositories(username)).ToArray();
+            if(!resourceResults.Any()) return null;
+            return mapper.Map<IEnumerable<GitlabDataSourceResourceResult>, IEnumerable<Project>>(resourceResults);
+        }
 
-            IRestClient client = restClientFactory.Create(requestUri);
-            RestRequest request = new RestRequest(Method.GET);
-
+        private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(
+            string username)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"users/{username}/projects");
             IRestResponse response = await client.ExecuteAsync(request);
-            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
-            IEnumerable<GitlabDataSourceResourceResult> gitlabDataSourceResourceResults =  JsonConvert.DeserializeObject<IEnumerable<GitlabDataSourceResourceResult>>(response.Content);
-            IEnumerable<Project> projects = mapper.Map<IEnumerable<GitlabDataSourceResourceResult>, IEnumerable<Project>>(gitlabDataSourceResourceResults);
 
-            return projects;
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+
+            IEnumerable<GitlabDataSourceResourceResult> resourceResults =
+                JsonConvert.DeserializeObject<IEnumerable<GitlabDataSourceResourceResult>>(response.Content);
+            return resourceResults;
         }
 
         public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
-            Uri requestUri = ConvertUri(sourceUri);
-
-
-            IRestClient client = restClientFactory.Create(requestUri);
-            RestRequest request = new RestRequest(Method.GET);
-
-            IRestResponse response = await client.ExecuteAsync(request);
-            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
-            GitlabDataSourceResourceResult gitlabDataSourceResourceResults = JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
-            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(gitlabDataSourceResourceResults);
-
+            GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri);
+            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             return project;
+        }
+
+        private async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        {
+            string domain = sourceUri.GetLeftPart(UriPartial.Authority);
+
+            string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
+                                          .Substring(1);
+            Uri serializedUri = new Uri(BaseUrl + "repos/" + projectPath);
+
+            IRestClient client = restClientFactory.Create(serializedUri);
+            RestRequest request = new RestRequest(Method.GET);
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+
+            return JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
         }
 
         //Convert uri from normal web uri to api uri
@@ -128,34 +159,23 @@ namespace Services.ExternalDataProviders
 
         public async Task<Project> GetPublicProjectById(string identifier)
         {
-            Uri requestUri = new Uri(BaseUrl + "projects/" + identifier);
-
-            IRestClient client = restClientFactory.Create(requestUri);
-            RestRequest request = new RestRequest(Method.GET);
-
-            IRestResponse response = await client.ExecuteAsync(request);
-            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
-            GitlabDataSourceResourceResult gitlabDataSourceResourceResults = JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
-            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(gitlabDataSourceResourceResults);
-
-            return project;
+            GitlabDataSourceResourceResult resourceResult = await FetchGitlabRepositoryById(identifier);
+            return mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
         }
 
-        private async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        private async Task<GitlabDataSourceResourceResult> FetchGitlabRepositoryById(string identifier)
         {
-            IRestClient client = restClientFactory.Create(sourceUri);
-            RestRequest request = new RestRequest(Method.GET);
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
-            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
-            {
-                return null;
-            }
-            return JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
+
+            if(string.IsNullOrEmpty(response.ContentType)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+
+            GitlabDataSourceResourceResult resourceResult =
+                JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
+            return resourceResult;
         }
-       
 
         private async Task<string> FetchPublicReadme(string readmeUrl)
         {
