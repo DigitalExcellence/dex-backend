@@ -16,12 +16,14 @@
 */
 
 using API.Common;
+using API.Configuration;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Models;
 using Models.Defaults;
 using Serilog;
@@ -29,6 +31,8 @@ using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -49,6 +53,7 @@ namespace API.Controllers
         private readonly IUserUserService userUserService;
         private readonly IProjectService projectService;
         private readonly IEmbedService embedService;
+        private readonly IdentityServerConfig configuration;
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
         /// </summary>
@@ -68,7 +73,8 @@ namespace API.Controllers
         IAuthorizationHelper authorizationHelper,
         IUserUserService userUserService,
         IProjectService projectService,
-        IEmbedService embedService
+        IEmbedService embedService,
+        IConfiguration configuration
         )
         {
             this.userService = userService;
@@ -79,6 +85,7 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.institutionService = institutionService;
             this.userUserService = userUserService;
+            this.configuration = configuration.GetSection("App").Get<Config>().IdentityServer;
         }
 
         /// <summary>
@@ -356,7 +363,7 @@ namespace API.Controllers
                 toDeleteUser = await userService.GetUserAsync((int) userId);
                 isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
                                                                      nameof(Defaults.Scopes.UserWrite),
-                                                                     nameof(Defaults.Scopes.InstitutionUserWrite),                                                       (int) userId);
+                                                                     nameof(Defaults.Scopes.InstitutionUserWrite), (int) userId);
             } else
             {
                 toDeleteUser = currentUser;
@@ -406,7 +413,25 @@ namespace API.Controllers
 
             userService.Save();
 
-            return Ok();
+            using HttpClient client = new HttpClient();
+            client.BaseAddress = new System.Uri(configuration.IdentityUrl);
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response = await client.PostAsync("/account/delete/", new StringContent(toDeleteUser.IdentityId));
+
+            if(response.IsSuccessStatusCode)
+            {
+                return Ok("Yes");
+            } else
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the user.",
+                    Detail = "Identity server could not delete this user.",
+                    Instance = "6294BC64-13F2-4F32-91E6-E199DF3F87E1"
+                };
+                return Problem(problem.Detail, problem.Instance, 500, problem.Title);
+            };
         }
 
         /// <summary>
