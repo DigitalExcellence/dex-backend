@@ -1,6 +1,7 @@
 using IdentityModel.Client;
 using MessageBrokerPublisher;
 using MessageBrokerPublisher.HelperClasses;
+using MessageBrokerPublisher.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -59,11 +60,12 @@ namespace JobScheduler
                            {
                                client.BaseAddress = new Uri(config.ApiConfig.ApiUrl);
                            });
-                           services.AddScoped<INotificationSender, NotificationSender>();
+                           services.AddScoped<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password));
+                           services.AddScoped<ITaskPublisher, TaskPublisher>();
+                           services.AddScoped<IEmailSender, EmailSender>();
                            services.AddScoped<IApiRequestHandler, ApiRequestHandler>();
                            services.AddHostedService<GraduationWorker>();
                            services.AddSingleton(config);
-                           services.AddScoped<IEmailSender, EmailSender>();
 
                        });
         }

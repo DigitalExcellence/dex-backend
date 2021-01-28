@@ -52,9 +52,7 @@ namespace JobScheduler
                 {
                     foreach(UserTask userTask in userTasks)
                     {
-                        emailSender.Send(userTask.User.Email, "test", "test");
-                        
-                        logger.LogInformation("Found expected graduating user: " + userTask.User.Id);
+                        emailSender.Send(userTask.User.Email, "DeX: you are graduating, please convert your account.", null);
                         requestHandler.SetGraduationTaskStatusToMailed(userTask.Id);
                     }
                 }
