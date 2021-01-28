@@ -150,10 +150,12 @@ namespace API
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
-                    
-
+                
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
             });
 
             services.AddCors();
@@ -372,7 +374,6 @@ namespace API
                 o.DisplayRequestDuration();
                 o.OAuthClientId(Config.Swagger.ClientId);
             });
-
         }
 
         /// <summary>

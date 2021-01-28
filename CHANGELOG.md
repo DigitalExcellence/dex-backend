@@ -11,10 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
-- Collaborators are now included on the project overview page - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
-- Added functionality to retrieve a users project - [#313](https://github.com/DigitalExcellence/dex-backend/issues/313)
-
 ### Changed
 
 ### Deprecated
@@ -23,12 +19,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed issue where unused project icons where left in the database & File System - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
-- Refactored Postman CLI files to make them work from Postman folder. - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
-- Fixed issue where searching for a project did not include the project icon. - [#307](https://github.com/DigitalExcellence/dex-backend/issues/307)
+- Refactored Postman tests - [#328](https://github.com/DigitalExcellence/dex-backend/issues/328)
+- Resolve update institution id for data officer bug - [#352](https://github.com/DigitalExcellence/dex-backend/issues/352)
 
 ### Security
 
+## Release v.0.9.0-beta - 09-12-2020
+
+
+
+### Added
+
+- Automatically link users to their institution - [#295](https://github.com/DigitalExcellence/dex-backend/issues/295)
+- Added call to actions for projects and call to action options - [#312](https://github.com/DigitalExcellence/dex-backend/issues/312)
+- Collaborators are now included on the project overview page - [#317](https://github.com/DigitalExcellence/dex-backend/issues/317)
+- Added new endpoint for ability to like and unlike projects - [#229](https://github.com/DigitalExcellence/dex-backend/issues/229)
+- Project retrieval endpoints now include likes - [#329](https://github.com/DigitalExcellence/dex-backend/issues/329)
+
+### Fixed
+
+- Fixed issue where unused project icons where left in the database & File System - [#271](https://github.com/DigitalExcellence/dex-backend/issues/271)
+- Refactored Postman CLI files to make them work from Postman folder - [#304](https://github.com/DigitalExcellence/dex-backend/issues/304)
+- Fixed issue where searching for a project did not include the project icon - [#307](https://github.com/DigitalExcellence/dex-backend/issues/307)
+- Fixed issue where project icons would get deleted when they should not - [#332](https://github.com/DigitalExcellence/dex-backend/issues/332)
+- Fixes issue where retrieving projects performed badly due to large amount of collaborators - [#331](https://github.com/DigitalExcellence/dex-backend/issues/331)
 
 
 ## Release v.0.8.0-beta - 06-11-2020
@@ -42,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added function to follow users and let users follow projects - [#228](https://github.com/DigitalExcellence/dex-backend/pull/258)
 - Added a new dex user that can be used to add projects manually - [#270](https://github.com/DigitalExcellence/dex-backend/issues/270)
 - Added data officer role and CRUD functionalities for institutions - [#265](https://github.com/DigitalExcellence/dex-backend/issues/265)
+- Added notification system - [#256](https://github.com/DigitalExcellence/dex-backend/issues/256)
 
 ### Fixed
 

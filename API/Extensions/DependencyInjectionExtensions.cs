@@ -18,6 +18,8 @@
 using API.Common;
 using API.HelperClasses;
 using Data;
+using MessageBrokerPublisher;
+using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,6 +84,14 @@ namespace API.Extensions
             services.AddScoped<IUserUserService, UserUserService>();
             services.AddScoped<IUserUserRepository, UserUserRepository>();
 
+            services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
+            services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
+
+            services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
+            services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
+                        
+            services.AddScoped<INotificationSender, NotificationSender>();
+            services.AddScoped<IRabbitMQConnectionFactory, RabbitMQConnectionFactory>();
             return services;
         }
     }

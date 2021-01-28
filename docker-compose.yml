@@ -1,7 +1,21 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: 'bitnami/rabbitmq:3.8.9'
+    environment:
+      - RABBITMQ_USERNAME=test
+      - RABBITMQ_PASSWORD=test
+    ports:
+      - 5672:5672
+      - 5671:5671
+      - 15672:15672
+    networks:
+      rabbitmq-network:
+
   db:
+    container_name: database
     build:
       context: .
       dockerfile: Data/Dockerfile
@@ -11,6 +25,8 @@ services:
       mssql-network:
 
   identity:
+    container_name: identity
+    restart: on-failure
     build:
       context: .
       dockerfile: IdentityServer/Dockerfile.dev
@@ -30,7 +46,28 @@ services:
       - 5004:5004
       - 5005:5005
 
+  notificationservice:
+    container_name: notificationservice
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: NotificationSystem/Dockerfile
+    depends_on:
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__SendGrid__ApiKey=test
+      - App__SendGrid__EmailFrom=test
+    stdin_open: true
+    tty: true
+    networks:
+      rabbitmq-network:
+
   api:
+    container_name: api
+    restart: on-failure
     build:
       context: .
       dockerfile: API/Dockerfile.dev
@@ -43,11 +80,18 @@ services:
       - ASPNETCORE_HTTPS_PORT=5001
       - ASPNETCORE_Kestrel__Certificates__Default__Password=xI90DrNea7M6UJFNDwip6t
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
     networks:
       mssql-network:
+      rabbitmq-network:
     ports:
       - 5000:5000
       - 5001:5001
+    deploy:
+       restart_policy:
+        condition: on-failure
 
 networks:
   mssql-network:
@@ -56,3 +100,5 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
+  rabbitmq-network:
+    driver: bridge
