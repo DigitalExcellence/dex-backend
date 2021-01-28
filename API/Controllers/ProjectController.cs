@@ -28,6 +28,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -115,6 +116,8 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllProjects(
             [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
+            
+
             ProblemDetails problem = new ProblemDetails
                                      {
                                          Title = "Invalid search request."
@@ -146,10 +149,44 @@ namespace API.Controllers
 
             ProjectFilterParams projectFilterParams =
                 mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+
             IEnumerable<Project> projects =
                 await projectService.GetAllWithUsersAndCollaboratorsAsync(projectFilterParams);
+
+            List<Project> filteredProjects = new List<Project>();
+
+
+                if(HttpContext.User.CheckIfUserIsAuthenticated())
+                {
+                    User currentUser = await HttpContext.GetContextUser(userService)
+                                                .ConfigureAwait(false);
+
+                    foreach(Project project in projects)
+                    {
+                        if(project.InstitutePrivate == false)
+                        {
+                            filteredProjects.Add(project);
+                        }
+                        if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
+                        {
+                            filteredProjects.Add(project);
+                        }
+                    }
+                }
+                else
+                { 
+                    foreach(Project project in projects)
+                    {
+                        if(project.InstitutePrivate == false)
+                        {
+                            filteredProjects.Add(project);
+                        }
+                    }
+                }
+
+
             IEnumerable<ProjectResultResource> results =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(filteredProjects);
             ProjectResultsResource resultsResource = new ProjectResultsResource
                                                      {
                                                          Results = results.ToArray(),
@@ -181,6 +218,8 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
         {
+            
+            
             if(projectId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -206,8 +245,31 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            if(HttpContext.User.CheckIfUserIsAuthenticated())
+            {
+                User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
+
+                if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
+                {
+                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+                }
+                if(project.InstitutePrivate == false)
+                {
+                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+                }
+            }
+            else
+            {
+                if(project.InstitutePrivate == false)
+                {
+                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+                }
+            }
+
+            return NoContent();
         }
+
 
         /// <summary>
         ///     This method is responsible for creating a Project.
