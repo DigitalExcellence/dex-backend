@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b70ac846-ac47-4361-a247-3e7faa2a92f8",
-		"name": "DEV Copy",
+		"_postman_id": "a6fe5db7-1692-40d8-b4ef-cbf80e2eddf1",
+		"name": "Dev",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -25,8 +25,7 @@
 													"var jsonData = pm.response.json();\r",
 													"pm.environment.set(\"registeredUserId\", jsonData.id)"
 												],
-												"type": "text/javascript",
-												"id": "6f5d05a1-611f-47e5-94dc-597a5441d68b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -66,9 +65,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "PR",
@@ -83,8 +80,7 @@
 													"var jsonData = pm.response.json();\r",
 													"pm.environment.set(\"prUserId\", jsonData.id)"
 												],
-												"type": "text/javascript",
-												"id": "e43ac561-759c-4e0a-b864-ba69043ad438"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -128,8 +124,7 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript",
-												"id": "d1fb80fe-cf49-4f44-8641-ef31c33a5cde"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -166,9 +161,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "DataOfficer",
@@ -184,8 +177,7 @@
 													"pm.environment.set(\"dataOfficerUserId\", jsonData.id)\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "29536392-c90b-44c6-8242-844ba9f3aa02"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -229,8 +221,7 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript",
-												"id": "7f1b8684-1a1d-45f0-a314-f309a39b69b9"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -267,9 +258,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						}
 					],
 					"event": [
@@ -279,8 +268,7 @@
 								"type": "text/javascript",
 								"exec": [
 									""
-								],
-								"id": "eee570f2-5b75-48dd-820a-5c938728c299"
+								]
 							}
 						},
 						{
@@ -289,13 +277,10 @@
 								"type": "text/javascript",
 								"exec": [
 									""
-								],
-								"id": "ae1d95d6-731d-469e-83a4-1cc733ff88d2"
+								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Project-GetAllProjects-Guest",
@@ -325,8 +310,7 @@
 									"",
 									""
 								],
-								"type": "text/javascript",
-								"id": "b0b22638-090d-466b-ad69-907c8ee88414"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -388,8 +372,7 @@
 									"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 									"});"
 								],
-								"type": "text/javascript",
-								"id": "ded59c75-ccb2-4fb0-8e50-37144161af49"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -452,8 +435,7 @@
 									"    pm.expect(jsonData.name).to.eql(userName);",
 									"});"
 								],
-								"type": "text/javascript",
-								"id": "06f5fbc6-6cec-42c6-a1e5-fa6ebc367246"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -499,8 +481,7 @@
 									"\r",
 									"pm.environment.set(\"projectToBeDeletedByUnauthorizedRoles\", jsonData.id);"
 								],
-								"type": "text/javascript",
-								"id": "aaabf699-0612-4f94-8a8d-71ba96997d0e"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -536,8 +517,7 @@
 					"response": []
 				}
 			],
-			"description": "Warmup the API to ensure fast response times",
-			"protocolProfileBehavior": {}
+			"description": "Warmup the API to ensure fast response times"
 		},
 		{
 			"name": "ACL",
@@ -573,8 +553,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "8c4d02a9-de2a-4ba6-8185-f851225d312d"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -583,8 +562,7 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript",
-												"id": "2931ecb9-44a4-45ce-af92-3725240dec76"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -656,8 +634,7 @@
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "48628f0b-15e9-4071-bf61-e24f185ee392"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -713,8 +690,7 @@
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ed4a201a-f0ed-4d58-9542-645b8e78a53e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -787,8 +763,7 @@
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "247dab4d-d3f7-4b28-b309-8392c5179ca6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -850,8 +825,7 @@
 													"    pm.expect(parseInt(jsonData.identityId)).to.eql(administratorUserIdentityId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7242359a-880a-4678-a479-e259de7d3273"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -877,9 +851,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowUser",
@@ -911,8 +883,7 @@
 													"    pm.expect(jsonData.id).to.eql(userIdToFollow);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "074f5004-254b-4d56-bd0b-ae1bb3d2f91d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -962,8 +933,7 @@
 													"    pm.response.to.have.status(200);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6ad1c84e-e591-411c-9f85-bdafbb45a84f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1008,8 +978,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "8c4d85e1-209c-4f7a-87cb-280dfbf4dd5c"
+										]
 									}
 								},
 								{
@@ -1018,13 +987,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "eb836c82-1baa-471a-8427-ba2135b9e1bf"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Project",
@@ -1068,8 +1034,7 @@
 													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6e74df34-f7f3-4f5e-bcf0-c8e5e24a4e6d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1147,8 +1112,7 @@
 													"    pm.expect(jsonData.results[foundAt].name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "14118082-13f3-4527-9a8a-fe9790e9b3ee"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1212,8 +1176,7 @@
 													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "bd75c234-ddc5-4faf-8679-dded18c91e68"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1268,8 +1231,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "54a80d87-f3b7-4520-b10f-0e24cbef2bd7"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1342,8 +1304,7 @@
 													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c805aa9b-6224-458d-8634-6a4f0b1b8032"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1391,8 +1352,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "0959e88c-cb3d-45bb-b9d1-a38809daf662"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1441,8 +1401,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "6e63284f-2e7e-4ea7-a776-136fd1f147bc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1492,8 +1451,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "2a697b5a-b056-42f5-b49d-757f46a2e264"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1521,9 +1479,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowProject",
@@ -1554,8 +1510,7 @@
 													"    pm.expect(jsonData.id).to.eql(projectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "fe8ea48c-8975-4788-b1b9-337d6ba9ac85"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1605,8 +1560,7 @@
 													"    pm.response.to.have.status(200);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e861293e-f669-4962-91fc-c4cfa6849df2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1643,9 +1597,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Highlight",
@@ -1676,8 +1628,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "0307d6f0-dbeb-45ea-98aa-3cfc44f7a90d"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -1691,8 +1642,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "54ced88e-dd9c-44ec-a472-063f8b3248c2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1766,8 +1716,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d3e80d43-c4e6-4e9d-b013-00d978d1f8d0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1824,8 +1773,7 @@
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6a9d8151-27d2-44d0-be21-64e9dfdfb405"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1907,8 +1855,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "27c00be2-de2f-43a5-b4d6-e26a4905732d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -1964,8 +1911,7 @@
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "78fc4379-b19e-4b0c-b9de-268a0d3aed84"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -1975,8 +1921,7 @@
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
 												],
-												"type": "text/javascript",
-												"id": "82518294-086b-4d51-af88-3c02f62896cd"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2040,8 +1985,7 @@
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5690f2fa-d52b-4bef-8ba7-3873ddea3b4e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2090,8 +2034,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "78825681-14a0-41af-890d-f9a4201cf037"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2118,9 +2061,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Embed",
@@ -2150,8 +2091,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "425d9290-0b03-4be3-af76-a6b8ef035bea"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2225,8 +2165,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "9511d07f-64f0-45f9-9584-cf4274249bc6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2279,8 +2218,7 @@
 													"    pm.expect(jsonData.id).to.eql(embeddedProjectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c2e5dc43-23ed-444a-91f5-ec36492e5461"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2329,8 +2267,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "8753cfed-8a4a-45d2-8a2a-7a6e0c6e9cac"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2379,8 +2316,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "da9c35c8-f1f6-4c44-9f28-ea43cc4cb2c4"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2407,9 +2343,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Role",
@@ -2448,8 +2382,7 @@
 													"    pm.expect(jsonData.scopes.scope).to.eql(scopeName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f8569e37-3e87-434b-a3a9-46a34178acc2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2528,8 +2461,7 @@
 													"    pm.expect(jsonData[foundAt].name).to.eql(roleName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b13e6c0f-7b69-4bf3-a575-0587228940bd"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2590,8 +2522,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c3baf15e-1ea6-4725-a215-6e4c5b64ccd9"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2646,8 +2577,7 @@
 													"    pm.expect(jsonData.name).to.eql(roleName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4cfc8cb9-f40c-4b6d-9403-5d9195cf3171"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2701,8 +2631,7 @@
 													"    pm.expect(jsonData.name).to.eql(updatedRoleName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "df858172-9436-41ea-8093-aa61fb87b910"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2765,8 +2694,7 @@
 													"    pm.expect(jsonData.name).to.eql(updatedRoleName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "cbb3ad32-8f7e-4cd2-b937-1ca368d534b0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2820,8 +2748,7 @@
 													"    pm.expect(jsonData.role.id).to.eql(roleId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "72bca94c-084e-411e-9c1d-a87a4bc672a3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2896,8 +2823,7 @@
 													"    pm.expect(jsonData.role.id).to.eql(roleId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4c2e178a-84c9-469c-bb04-c71a3f73f49e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2946,8 +2872,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "b2b99103-7cfb-4147-a44e-e78559aa797f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -2974,9 +2899,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Search",
@@ -3008,8 +2931,7 @@
 													"    pm.expect(jsonData.results[0].name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5e268990-8ec9-440c-ae6b-c049e4b2574d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3037,15 +2959,11 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Wizard",
-							"item": [],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							"item": []
 						},
 						{
 							"name": "Institution",
@@ -3079,8 +2997,7 @@
 													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "467fd54f-41ce-4668-8207-9a00a03ec117"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3147,8 +3064,7 @@
 													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "781fea31-5aa4-4aa8-9eab-5ca47e21af4b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3203,8 +3119,7 @@
 													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "cfa8c230-2406-48d3-ac27-f721ace68966"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3272,8 +3187,7 @@
 													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1dcfaf9e-7142-45cf-8754-c1c0acdc2532"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3307,9 +3221,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "File",
@@ -3341,8 +3253,7 @@
 													"\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "06550f25-7762-4bee-b16d-06f27d447ebc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3401,8 +3312,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "af4e37e0-c032-4b15-aae2-d7b26f12d449"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3449,8 +3359,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "23dc53ae-cd70-459b-a1b9-71f89c5cb0bc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3477,9 +3386,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "CallToActionOption",
@@ -3516,8 +3423,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "3a9d0a95-b97c-462d-ae13-545470a7d96a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3592,8 +3498,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "35e364db-5bbf-4cc7-9d1a-9938c9c1f06a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3651,8 +3556,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "55e36b86-5b4f-48a1-bed3-5ffb615d9e92"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3729,8 +3633,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "773cfd6c-226c-4b06-a7ca-9e9f8564ce88"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3792,8 +3695,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "5e8db454-4b58-4bd5-ab5c-d365ff86ea8e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3829,9 +3731,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Portfolio",
@@ -3842,7 +3742,6 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "f16883c2-94e5-4b3c-bf59-d98e9fc9203f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
@@ -3939,8 +3838,7 @@
 													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c0932fc1-c6fe-4b90-ad56-2fd2a9efffb3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -3989,8 +3887,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "babac814-1fb1-47de-8b79-554d2a5f9391"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4023,7 +3920,6 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "442e0bfb-4a47-4d8c-85f7-03b60cc9f21c",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"\r",
@@ -4083,7 +3979,6 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "1edc8198-9beb-46ce-87b4-3ef5f65f57e9",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
@@ -4161,85 +4056,6 @@
 									"response": []
 								},
 								{
-									"name": "PortfolioItem-UpdatePortfolioItem-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var content = \"this is a put request\";\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio item content is set correctly and matching: \" + content, function () {\r",
-													"    pm.expect(jsonData.content).to.eql(content);\r",
-													"});\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript",
-												"id": "6da6db42-2d2f-4915-9b23-5c7a2e08be36"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"this is a put request\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item/{{portfolioItemId}}?portfolioId={{portfolioId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"item",
-												"{{portfolioItemId}}"
-											],
-											"query": [
-												{
-													"key": "portfolioId",
-													"value": "{{portfolioId}}"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "PortfolioItem-GetPortfolioItem-Administrator",
 									"event": [
 										{
@@ -4268,12 +4084,11 @@
 													"\r",
 													"pm.test(\"portfolio item exists on portfolio\", function() {\r",
 													"    jsonData.portfolioItem.forEach(function(portfolioItem) {\r",
-													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", 2);\r",
+													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", portfolioId);\r",
 													"    });\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e9fe6a44-e382-481f-af5c-e17bd2992e98"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4287,14 +4102,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/{{portfolioItemId}}",
+											"raw": "{{apiUrl}}/api/portfolio/{{portfolioId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"portfolio",
-												"{{portfolioItemId}}"
+												"{{portfolioId}}"
 											]
 										}
 									},
@@ -4321,8 +4136,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "92c82f34-d1e5-4371-85fd-1666c4b8966c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4355,10 +4169,80 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Portoflio-CreatePortfolio-Administrator Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
+													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Identity Id is set correctly and matches: \" + administratorUserId, function () {\r",
+													"    pm.expect(jsonData.userId).to.eql(administratorUserId);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"template\": 1,\r\n  \"title\": \"{{portfolioTitle}}\",\r\n  \"publicUri\": \"This is a test uri\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio"
+											]
+										}
+									},
+									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup",
@@ -4380,8 +4264,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "fe461319-8c0f-4833-b175-245abfcc198a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4425,8 +4308,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "bce96b44-56ff-4982-a5b8-05a48b4c38a3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4470,8 +4352,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "76961726-35d5-4b51-9690-543f8e721ee1"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4515,8 +4396,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1320354b-1550-47ac-b725-038b773f1738"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4560,8 +4440,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "77caf595-f587-4d61-a385-2deba98c4a92"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4605,8 +4484,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3cfb0cf8-2798-40c7-b8c1-0242111dd35d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4650,8 +4528,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "cf070b35-12e1-4ce0-9c46-aee3df219dc6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4678,9 +4555,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Checkup-on-Cleanup",
@@ -4708,8 +4583,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "769244c5-62da-4c4c-a313-878804e14523"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4759,8 +4633,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "9dfcd46d-cf02-4ad9-9704-1198d43004b2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4810,8 +4683,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4eb76792-fa50-40a7-9989-dedd8f529a61"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4861,8 +4733,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "644c7cf5-4b1d-42e5-9ddf-fb1fd4494292"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4912,8 +4783,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b2a33045-abbb-4228-8406-3fb080920697"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -4940,13 +4810,9 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Guest",
@@ -4997,8 +4863,7 @@
 													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d288c09e-a5a7-4d4f-b47b-f419247e2f79"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5061,8 +4926,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f7a5db7a-63b8-4503-b6d3-15ae4c3ef9e8"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -5076,8 +4940,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "6b5dcc99-b1c5-446d-af37-bdc2281aa06e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5140,8 +5003,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "555d98ad-b05f-4aad-8512-9e4c7ed5357d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5212,8 +5074,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "104e738a-d33d-4298-ac8b-ca9d9ea33a26"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5247,6 +5108,88 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "portfolioItem-CreatePortfolioItem",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
+													"var portfolioId = parseInt(pm.environment.get(\"portfolioId\"));\r",
+													"var projectId = parseInt(pm.environment.get(\"adminProjectId\"));\r",
+													" \r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"portfolioItemId\", jsonData.id);\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"portfolioId title is set correctly and matching: \" + portfolioId, function () {\r",
+													"    pm.expect(jsonData.portfolioId).to.eql(portfolioId);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"string\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/portfolio/item?portfolioId={{portfolioId}}&projectId={{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"portfolio",
+												"item"
+											],
+											"query": [
+												{
+													"key": "portfolioId",
+													"value": "{{portfolioId}}"
+												},
+												{
+													"key": "projectId",
+													"value": "{{projectId}}"
+												}
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"description": "For some requests, we need to have data available. The variables need to be filled so the request can succeed. We put these preparation requests in this folder. We will clean them up in the cleanup folder.",
@@ -5257,8 +5200,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "6cfde463-1cbc-428c-a104-4a25e5e8d69b"
+										]
 									}
 								},
 								{
@@ -5267,13 +5209,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "eef15604-b907-4752-a415-f330625a1067"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "User",
@@ -5300,8 +5239,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "22ad2573-7bcb-4a1b-b93f-de6fc6b10736"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5354,8 +5292,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5f26d978-382c-4a0c-b5e3-7736ca001dc0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5400,8 +5337,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "0349b176-09b2-4385-a0f1-a137f3a01fef"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5455,8 +5391,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e40fd5d8-b145-4714-b761-0ba5a5a77806"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5488,8 +5423,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "56b313a9-091c-4a51-8b45-b3b3b3f7c943"
+										]
 									}
 								},
 								{
@@ -5498,13 +5432,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "1b05321d-6cb6-4f93-bb86-5e8d4df1bd8a"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowUser",
@@ -5525,8 +5456,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "e03f2180-adff-4a3b-8674-5cb3e0f41f62"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5581,8 +5511,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "57d6010f-35ad-48e1-85c6-b40b118e1a5a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5623,9 +5552,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Project",
@@ -5653,8 +5580,7 @@
 													"",
 													""
 												],
-												"type": "text/javascript",
-												"id": "dd1bd5b7-e8e2-4a9b-a79b-cda32e3e0f8b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5729,8 +5655,7 @@
 													"    pm.expect(jsonData.results[foundAt].name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "de81b448-47d1-4da5-bbaa-e903bad36f0c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5780,8 +5705,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5c4c7cf2-7dff-4a1a-a7d5-d513e9d30e4d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5824,8 +5748,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5fbc2024-dcd5-4755-86d8-ff3dfba4221d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5879,8 +5802,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b49e6e08-ad53-4353-869f-bed7460a2bcd"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5923,8 +5845,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "61da8ba6-3bb7-4d46-b5bb-bd84195b9d9c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -5978,8 +5899,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "d740ce97-b14d-4b68-ba12-f0f8c936ca4b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6022,8 +5942,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "fc207bea-40e8-42fe-a0aa-63a0cbb4d5e6"
+										]
 									}
 								},
 								{
@@ -6032,13 +5951,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "381c7308-bfe0-4900-a670-75c49ca67b3c"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowProject",
@@ -6059,8 +5975,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "a54630b4-d0e9-4f21-87dc-ce53247214b4"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6115,8 +6030,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "b967247c-de5f-4126-be7f-17c33141ed27"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6157,9 +6071,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Highlight",
@@ -6186,8 +6098,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "ad9f5a52-86e0-422a-b45b-d2543caeabfb"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -6196,8 +6107,7 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript",
-												"id": "b5752c27-d67a-4552-8260-d0bc91e4a098"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6247,8 +6157,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "dc2cb4ea-daa7-420b-9c76-9d38fdee2aa3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6298,8 +6207,7 @@
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "55046ef8-a7bb-4b72-9c31-c3b96458f1b0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6342,8 +6250,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "b61223c0-b21f-4e27-b90e-207bf39daf7f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6387,8 +6294,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "14cc05d9-8ce7-4f50-9247-b7bff3dc344f"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -6397,8 +6303,7 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript",
-												"id": "4149940c-23e4-4e64-b542-29381df1d3fc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6449,8 +6354,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6a0df8d9-033f-4743-bb97-4232af61136a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6482,8 +6386,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "5a3779c0-8856-4037-b792-1d58987584be"
+										]
 									}
 								},
 								{
@@ -6492,13 +6395,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "10b747f8-28e9-4fb9-99d1-4751aa40aba5"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Embed",
@@ -6524,8 +6424,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "0ad43ee4-3d05-4f0d-ad76-7b7a7aa2a08c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6575,8 +6474,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "819b0e83-5d0c-44aa-9ce3-ed6e4e570829"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6617,8 +6515,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c3fab578-c0d5-43ba-a470-d6f0df2e3603"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6660,8 +6557,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "681c8291-89fd-4c45-8e0e-a6cdee3895e1"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6693,8 +6589,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "5832cd0e-d2be-4913-8576-c0c87f45e532"
+										]
 									}
 								},
 								{
@@ -6703,13 +6598,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "7c3f2848-d0f4-4235-b657-0817ffc79dd0"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Role",
@@ -6736,8 +6628,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "9eb0c41b-4011-48f7-9692-fd6824349643"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6788,8 +6679,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "cb5e596a-25ac-4b03-96da-ff242fa8759a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6831,8 +6721,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "d2bae1da-b4fd-4874-b3fe-879e049a8b99"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6875,8 +6764,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "024d71ec-3504-463d-b0c2-156bc39b4398"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6919,8 +6807,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "600b62e6-0bea-4c5a-81b3-c9551d622165"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -6972,8 +6859,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "f2b2cf06-a99e-4242-9e02-c92e33b53312"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7032,8 +6918,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "fa8f73c3-f784-411d-aa39-d074b0b22dc3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7072,8 +6957,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "46339044-1099-4cc3-b574-7c9cde87c825"
+										]
 									}
 								},
 								{
@@ -7082,13 +6966,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "5970631b-4669-4069-8ff3-43ae93980169"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Search",
@@ -7112,8 +6993,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4ad1fd73-df42-4d00-a964-dc4fadb46920"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7149,8 +7029,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "547da63f-4ff9-4b1a-97d8-a110a6ea3144"
+										]
 									}
 								},
 								{
@@ -7159,13 +7038,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "9dd6d0b3-6e24-491c-8577-da188506c29e"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Wizard",
@@ -7180,8 +7056,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "d8ba66c2-0145-4490-9f88-274e1453af4c"
+										]
 									}
 								},
 								{
@@ -7190,13 +7065,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "b1b079b8-f4b4-4cdc-9d4a-441e755f54e1"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Institution",
@@ -7223,8 +7095,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "335183ff-94da-4e49-85fd-9b83a4fac99a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7277,8 +7148,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3df1a145-d703-4009-aafe-9fb5edacc2ed"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7323,8 +7193,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "fcd0e5cf-c118-46c8-b185-9129d44b0b64"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7378,8 +7247,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "56c06dd1-dcac-4775-980e-10850431aa0e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7411,8 +7279,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "6debeb20-8476-4c96-a7ec-f6b89a3063e9"
+										]
 									}
 								},
 								{
@@ -7421,13 +7288,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "10cb1d26-427e-4d73-a44b-ea9fe3fc9b5c"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "File",
@@ -7453,8 +7317,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "394c76da-0a5b-4cab-94f9-c30c10ca6eb8"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7501,8 +7364,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "4e1c60a2-44cc-4cb9-867f-770ed7512306"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7546,8 +7408,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d53e8b53-09dd-4f2f-8d6f-fc837436d393"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7571,9 +7432,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "CallToActionOption",
@@ -7599,8 +7458,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5e6f156c-7da1-467b-aa43-95ea929c7b8e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7653,8 +7511,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1e2600ae-5fdb-4de5-a2bb-2b40449aa499"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7698,8 +7555,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7cc9fc53-bb51-4a3d-ab32-768ad2e12bfc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7744,8 +7600,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "24a6438c-afa9-4930-8313-abcccc45f5bb"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7791,8 +7646,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d8ebbf66-bc2e-4f86-a467-3b6920d2e13f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7846,8 +7700,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c3037e02-b97a-4554-a98e-26fb3c440ab9"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7879,8 +7732,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "fec17a26-f937-4e6c-922b-4252d617d0f6"
+										]
 									}
 								},
 								{
@@ -7889,13 +7741,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "ea57dd02-f214-4a3e-adbc-f1c36f1027e9"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Portfolio",
@@ -7908,7 +7757,7 @@
 											"script": {
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioTitle = pm.environment.get(\"portfolioTitleUpdated\");\r",
+													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
 													"\r",
 													"var jsonData = pm.response.json();\r",
 													"\r",
@@ -7931,8 +7780,7 @@
 													"    pm.globals.get(\"variable_key\");\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7e36ca8d-32f9-4643-a632-a496a624ebfd"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -7943,14 +7791,14 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/{{portfolioId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"portfolio",
-												"1"
+												"{{portfolioId}}"
 											]
 										}
 									},
@@ -7980,8 +7828,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e4cd9682-05d4-44c1-9ddc-f322e85bb836"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8029,8 +7876,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "228ed294-d9ab-4673-b7ce-01cb4812b329"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8078,8 +7924,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1ef998ce-172c-4e36-b950-c324ba36041d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8104,14 +7949,14 @@
 									"response": []
 								},
 								{
-									"name": "PortfolioItem-GetProject-Guest",
+									"name": "PortfolioItem-GetPortfolioItem-Guest",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var portfolioItemId = 2;\r",
+													"var portfolioItemId = pm.environment.get(\"portfolioItemId\");\r",
 													"\r",
 													"var jsonData = pm.response.json();\r",
 													"\r",
@@ -8130,12 +7975,10 @@
 													"});\r",
 													"\r",
 													"pm.test(\"portfolio item id is set correctly and matches: \" + portfolioItemId, function () {\r",
-													"    pm.expect(jsonData.portfolioId).to.eql(1);\r",
-													"    pm.globals.get(\"variable_key\");\r",
+													"    pm.expect(jsonData.portfolioId).to.eql(portfolioItemId);\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "83561174-f3c8-47fd-85aa-7756ac85c076"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8146,7 +7989,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item/1",
+											"raw": "{{apiUrl}}/api/portfolio/item/{{portfolioItemId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -8154,7 +7997,7 @@
 												"api",
 												"portfolio",
 												"item",
-												"1"
+												"{{portfolioItemId}}"
 											]
 										}
 									},
@@ -8184,8 +8027,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1c2a9214-a56c-4ee1-b9a6-54cb04175950"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8234,8 +8076,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8ba40a28-7d99-446a-a72a-85f062944b37"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8284,8 +8125,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "74be94e5-fa30-4475-b727-c0147a38ac33"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8310,9 +8150,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup Administrator",
@@ -8334,8 +8172,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d5fe7f14-1ee0-4e62-8097-1dc702a94a03"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8375,8 +8212,7 @@
 													"    pm.response.to.have.status(200);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d04eaa3e-0f30-4bba-8ee5-7c76e3409d6a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8403,9 +8239,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						}
 					],
 					"event": [
@@ -8415,8 +8249,7 @@
 								"type": "text/javascript",
 								"exec": [
 									""
-								],
-								"id": "a34b8a54-705a-40fc-b815-b22d7311a5e1"
+								]
 							}
 						},
 						{
@@ -8425,13 +8258,10 @@
 								"type": "text/javascript",
 								"exec": [
 									""
-								],
-								"id": "71d6bdfb-8bc9-4c86-af94-bffd336e53e6"
+								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Registered",
@@ -8472,8 +8302,7 @@
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "99739672-a9b1-41e8-a812-791a973458bc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8551,8 +8380,7 @@
 													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ac7b69c4-836b-45d3-a7a8-d1a6ce8b9157"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8615,8 +8443,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7d623e8a-770f-4fcb-aca1-0810353f7c63"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -8630,8 +8457,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "21a206ef-ae8b-42c8-b334-5b96e44bbb35"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8695,8 +8521,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "55606a82-e81b-4f60-bf62-fc753c5732c0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8767,8 +8592,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "865cd02d-667e-4c21-9ce1-aed02aba503d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8812,8 +8636,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "855917dc-805a-46e3-9215-7db22481d520"
+										]
 									}
 								},
 								{
@@ -8822,13 +8645,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "319dd1da-8d6a-4b0e-ad3c-5e8e790df0a9"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "User",
@@ -8857,8 +8677,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "127c9128-4e2f-4d1f-a467-4c57be911e3b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8915,8 +8734,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "1fdcb71a-b2a1-4b65-ab35-719ff9a7ec14"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -8971,8 +8789,7 @@
 													"    pm.expect(parseInt(jsonData.identityId)).to.eql(aliceIdentityId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a9987558-71d4-44e2-b1b2-65d623c7ff32"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9025,8 +8842,7 @@
 													"    pm.expect(jsonData.email).to.eql(updatedAliceEmail);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e9bef2e1-0bd5-43d1-a0d9-826e2939029e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9083,8 +8899,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "931c86c6-6b79-44ea-9c0a-58472e801e3a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9141,8 +8956,7 @@
 													"     pm.response.to.be.unauthorized;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "2a6095f7-ae46-45bd-a0a7-31c4ada18d07"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9178,8 +8992,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "e57963b0-f415-45e4-b1f7-ead40d95faf7"
+										]
 									}
 								},
 								{
@@ -9188,13 +9001,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "777706b3-9d1f-43e2-9dc2-9d4b927ff9fc"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowUser",
@@ -9225,8 +9035,7 @@
 													"    pm.expect(jsonData.id).to.eql(userId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f6567306-f7a0-4195-8038-7cd48fb2d716"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9277,8 +9086,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "00854cc7-f905-40d9-a7d5-396e0822f950"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9323,8 +9131,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "a380043d-4415-4391-9899-e91708ec64a3"
+										]
 									}
 								},
 								{
@@ -9333,13 +9140,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "8eca4097-29e1-4808-81bf-799b70457f79"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Project",
@@ -9371,8 +9175,7 @@
 													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8a281f47-b199-4a5a-88f5-ee1ab37fe3ac"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9450,8 +9253,7 @@
 													"    pm.expect(jsonData.results[foundAt].name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b572d73f-5190-4c51-bd84-87d9f12026d5"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9504,8 +9306,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c4fd4569-b7eb-462f-942f-024f94463707"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9551,8 +9352,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "59c4f49f-06b3-420b-8d33-f31206dd9943"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9606,8 +9406,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6744c669-4da6-49cf-8970-e9cd535786bc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9662,8 +9461,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "30597343-bd9b-4ae4-b84f-62d3297e8694"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9721,8 +9519,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "f83bd87c-b025-4000-9cc6-c2a563da091c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9772,8 +9569,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "62f474a3-741f-4372-bfa8-e49a8116f1ac"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9822,8 +9618,7 @@
 													"     pm.response.to.be.unauthorized;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5e6988cb-0361-4f1c-a9a4-632678ab8eee"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9850,9 +9645,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowProject",
@@ -9884,8 +9677,7 @@
 													"    pm.expect(jsonData.id).to.eql(projectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a9cfc780-1ea2-41d0-a00e-b42f1f6c901e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9936,8 +9728,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "510f790a-e6aa-4585-a488-2cddbcf5047f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -9982,8 +9773,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "b25f7f2a-0934-4474-8d54-b3766bf9ec01"
+										]
 									}
 								},
 								{
@@ -9992,13 +9782,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "c9a5f4ac-2e98-4a68-a455-3ca9340592cb"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Embed",
@@ -10028,8 +9815,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "64118634-072b-4310-aeed-cbfaad3747ff"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10085,8 +9871,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "40b0079c-5d70-4474-8b81-843bcff014d9"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10142,8 +9927,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "54fd4dd7-025b-4a67-976f-f50fc7ad55a3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10196,8 +9980,7 @@
 													"    pm.expect(jsonData.id).to.eql(embeddedProjectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "dae6c7ac-0714-4007-9c68-31abe833132f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10245,8 +10028,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d509b999-8698-4863-af26-9f5a4fc4d212"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10294,8 +10076,7 @@
 													"     pm.response.to.be.unauthorized;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d8a5da24-b63b-4c88-a689-5807ab55014c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10322,9 +10103,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Highlight",
@@ -10350,8 +10129,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "53f4aeb9-ad69-4d54-ab80-be30c19f0ab2"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -10365,8 +10143,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "3c263377-34d3-4200-a494-43d6e97cd045"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10440,8 +10217,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "bda09235-e8a5-4f16-bef3-d001bfde504a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10498,8 +10274,7 @@
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "abf0ee9a-a36f-416a-84e0-e8db56d2de76"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10548,8 +10323,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "a46b9fb4-4211-4026-803c-aca2e985f386"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10598,8 +10372,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "47704c1c-c7e9-48ee-aea0-7ce9966bbd32"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10656,8 +10429,7 @@
 													"     pm.response.to.be.forbidden;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5afa0caf-a2ca-4731-954b-ce90bdae7038"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10684,9 +10456,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Role",
@@ -10712,8 +10482,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1d05457a-410a-4173-884f-1d90717895ff"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10769,8 +10538,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b46b8bc3-2def-4b14-a00b-2bb797537bcd"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10817,8 +10585,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "79fd6b5a-e3ba-4271-b65d-84dc6aea0e71"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10866,8 +10633,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ddeea5c0-50d5-4e20-9563-aedaeb017663"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10915,8 +10681,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "753a3713-d3ad-47a8-ac3e-145f5d0caff5"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -10973,8 +10738,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "bc644423-fbf4-4db2-86fb-c1c6e3451378"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11043,8 +10807,7 @@
 													"     pm.response.to.be.forbidden;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "15f5023f-0a7a-4d86-ab76-fba9bcb984eb"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11071,9 +10834,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Search",
@@ -11097,8 +10858,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f932e15b-e72e-43ae-b7c4-be983c46143a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11126,15 +10886,11 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Wizard",
-							"item": [],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							"item": []
 						},
 						{
 							"name": "Institution",
@@ -11161,8 +10917,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "e4c6617e-4f0a-4b9a-bc4b-9e7f9393fae0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11221,8 +10976,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "426c6b08-783f-44a6-b597-94713256325d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11273,8 +11027,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "cbb64fed-b3a6-460b-a082-f67d38d5916d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11334,8 +11087,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8c138c8c-3398-4847-a4e7-33b7eda42ab3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11373,8 +11125,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "363758c0-e94d-4de8-815e-71f27a51ae2c"
+										]
 									}
 								},
 								{
@@ -11383,13 +11134,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "ff153a2d-19c5-4f78-a497-fab3f47ecf2e"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "ProjectIcon",
@@ -11421,8 +11169,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "583183ea-27fa-46bf-aa82-2461919ccf49"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11481,8 +11228,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b90542b0-f5af-4064-8d4e-36f2efe7c52d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11549,8 +11295,7 @@
 													"    pm.expect(jsonData.projectIcon.id).to.eql(ProjectIconRegisteredFileId)",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4562fe0d-4308-4329-a3ec-756f5b117e2a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11598,8 +11343,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d73f8d25-7dfc-4af4-8571-7738ff3e05b1"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11653,8 +11397,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1c02bb4d-6d68-46f9-8b9e-14db6c6c374e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11711,8 +11454,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8e3242ab-6764-41ff-a98b-83fc55bc30ee"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11766,8 +11508,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6c354595-f97e-425d-8fc8-8d6b2e97acad"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11830,8 +11571,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ad3e8d8d-2738-45d3-b93c-7562b4c809fd"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11899,8 +11639,7 @@
 													"    pm.expect(jsonData.projectIcon.id).to.eql(newRegisteredFileId)",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e963dbd1-7b48-4fd6-81b9-d80fd6d820a3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11948,8 +11687,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3b02fa4b-c761-4374-b69e-2acc2f365bba"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -11997,8 +11735,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "731fe489-8a1b-4c19-8dd7-bddaf3c4b4d5"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12039,8 +11776,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "c9c22749-2827-4da9-aa1b-229a9417ee31"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12088,8 +11824,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ba833c56-1216-4036-b3ca-504a462036de"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12125,8 +11860,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "542a0950-81bc-48ae-8799-47392839b8df"
+										]
 									}
 								},
 								{
@@ -12135,13 +11869,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "e9363d7a-60b0-4c31-a06a-02f47b79e7e8"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "CallToActionOption",
@@ -12168,8 +11899,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "4d647e3c-8f74-4e6f-8b3d-54ae3278b1b0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12244,8 +11974,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "5cb8d94a-ae9c-469a-b83f-7e226339cedf"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12303,8 +12032,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "398e0f53-0546-4ef1-a15a-b1e9a9361e30"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12369,8 +12097,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "00f6c2e5-5dcb-43d7-bda7-9664e5ec600f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12419,8 +12146,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3fe5e039-87f1-4e07-b240-e4dc64c9a8a2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12477,8 +12203,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "99bc8d06-91ec-4ef6-841a-abf99cd8b62c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12513,8 +12238,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "11bc93a4-0f15-47ae-8304-769feff2e111"
+										]
 									}
 								},
 								{
@@ -12523,13 +12247,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "fc84ddda-7fce-44b7-9be7-5a6ba5306f3d"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "File",
@@ -12550,8 +12271,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e8b56b89-99dc-4afd-9e78-015662778bab"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12600,8 +12320,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "53ef2e5d-7723-406e-be2a-303bfdaf0c56"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12654,8 +12373,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1bf134b6-f62f-491d-afd9-a7b8b55d0f0e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12682,9 +12400,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Portfolio",
@@ -12695,7 +12411,6 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "3001d7f9-6727-4478-898d-10c7d156989f",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"var portfolioTitle = pm.environment.get(\"portfolioTitle\");\r",
@@ -12788,8 +12503,7 @@
 													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "24c9ca16-20b8-475b-b22d-460a4e690d15"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12838,8 +12552,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "34240d4d-7efa-4968-a41f-34583d6a3104"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12853,14 +12566,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/{{portfolioId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"portfolio",
-												"1"
+												"{{portfolioId}}"
 											]
 										}
 									},
@@ -12889,8 +12602,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f3c96cf5-5734-41ac-89ad-660b266c39f9"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -12932,7 +12644,6 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "56629863-749c-4ebe-a77e-2056590f5307",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
@@ -13010,85 +12721,6 @@
 									"response": []
 								},
 								{
-									"name": "PortfolioItem-UpdatePortfolioItem-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
-													"var content = \"this is a put request\";\r",
-													" \r",
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"portfolio item content is set correctly and matching: \" + content, function () {\r",
-													"    pm.expect(jsonData.content).to.eql(content);\r",
-													"});\r",
-													"\r",
-													""
-												],
-												"type": "text/javascript",
-												"id": "30954217-176c-48d5-9e27-05c5edd43761"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"position\": 0,\r\n  \"type\": 0,\r\n  \"content\": \"this is a put request\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/portfolio/item/{{portfolioItemId}}?portfolioId={{portfolioId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"portfolio",
-												"item",
-												"{{portfolioItemId}}"
-											],
-											"query": [
-												{
-													"key": "portfolioId",
-													"value": "{{portfolioId}}"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "PortfolioItem-GetPortfolioItem-Registered",
 									"event": [
 										{
@@ -13117,12 +12749,12 @@
 													"\r",
 													"pm.test(\"portfolio item exists on portfolio\", function() {\r",
 													"    jsonData.portfolioItem.forEach(function(portfolioItem) {\r",
-													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", 2);\r",
+													"        pm.expect(portfolioItem).to.have.property(\"position\", 0);\r",
+													"        pm.globals.unset(\"variable_key\");\r",
 													"    });\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "544c9ace-83d3-4302-b1e6-eac5c397e816"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13170,8 +12802,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "295542a6-edec-42f2-9043-3817b5d8039c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13205,9 +12836,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup Registered",
@@ -13229,8 +12858,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "23277e37-e9ae-467f-a04f-f5adf10a5571"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13257,9 +12885,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup Administrator",
@@ -13281,8 +12907,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8ba1820f-85ef-4297-ae02-0ad43582ecea"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13322,8 +12947,7 @@
 													"    pm.response.to.have.status(200);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "78212d1f-caac-457f-8ae2-e5ed3eb7b278"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13367,8 +12991,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "79486b1d-201b-48d7-8963-1606b70dde11"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13403,8 +13026,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "3fbf68a6-5fd4-4faa-9cfe-8968969546fe"
+										]
 									}
 								},
 								{
@@ -13413,17 +13035,12 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "20610de0-bc2d-4f3c-92d3-f12091df9cef"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Data Officer",
@@ -13463,8 +13080,7 @@
 													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "03a951cb-c382-42cd-9fc3-c9f930355f89"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13532,8 +13148,7 @@
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a03542d4-fc3e-44c5-83d5-0fc4c3b44806"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13600,8 +13215,7 @@
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "46f356c7-e052-4436-a275-184c618cd39e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13679,8 +13293,7 @@
 													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c1e83083-8d91-403b-a8b7-ab7048eed19d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13743,8 +13356,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "f4794b2e-d7cb-4b84-8c05-3d42843ff134"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13807,8 +13419,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "830f3a18-b5d9-4f51-8ddd-42037f860b70"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -13822,8 +13433,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "09626712-b9d4-4a45-988d-65c20207dd23"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13887,8 +13497,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "bab30a63-ea89-435a-be9b-ea166718a050"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -13950,8 +13559,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4688b878-b814-4593-897b-2b33c386352b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14022,8 +13630,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "e5b41c7b-9780-4575-ac7b-d8668dc62a5e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14067,8 +13674,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "0749b821-9c55-44fb-8b3e-55cd69ade1a8"
+										]
 									}
 								},
 								{
@@ -14077,13 +13683,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "682455f3-8715-406f-a116-6f87beda4075"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "User",
@@ -14110,8 +13713,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "5022c70c-646f-43f9-afec-6e9be520c8c6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14177,8 +13779,7 @@
 													"    pm.expect(jsonData.institution.id).to.equal(1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "62146253-0ecb-4fb8-b4a7-8594834c613e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14240,8 +13841,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "f82f7855-2844-40c3-b5a9-9970bfed1da8"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14303,8 +13903,7 @@
 													"    pm.expect(jsonData.institution.id).to.equal(parseInt(institutionId));",
 													"})"
 												],
-												"type": "text/javascript",
-												"id": "d22bbd9b-afd4-4225-a108-9c8060187e49"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14362,8 +13961,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "12b0fdae-cde5-4d1e-8982-f556bf230eb8"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14415,8 +14013,7 @@
 													"    pm.expect(jsonData.institution).to.equal(null);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d06e05e0-58f4-4128-b14c-0736c77de9e0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14473,8 +14070,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8e3f402a-37ed-45f8-8b25-169d7cabaae6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14532,8 +14128,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "a946912c-352c-4039-8814-8b5e2180e862"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14588,8 +14183,7 @@
 													"    pm.expect(parseInt(jsonData.identityId)).to.eql(aliceIdentityId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5c3497fb-46b0-43c5-8c63-950a9d252cce"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14624,8 +14218,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "efc793f0-ef49-482c-a7e2-b87453907f8f"
+										]
 									}
 								},
 								{
@@ -14634,13 +14227,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "721b5849-3caa-48dd-82f3-2d127db08087"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Project",
@@ -14672,8 +14262,7 @@
 													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6c49d650-b504-4b60-aaff-92f55bbc3289"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14751,8 +14340,7 @@
 													"    pm.expect(jsonData.results[foundAt].name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8507abb8-a1dd-4e8f-9577-6d50a3582c21"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14805,8 +14393,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "784a68e1-cfb5-4fdc-8670-4a815e461c30"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14852,8 +14439,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8b81f3aa-f0c6-4b71-be8d-3b5c056dc3b3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14907,8 +14493,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c2ab7c8f-1f29-432f-9fff-bd33c0fbee21"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -14963,8 +14548,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d791a94e-460e-4ea6-af38-7329627c414c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15022,8 +14606,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "cb569769-59c5-4683-8896-5660fb0ed340"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15073,8 +14656,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "62b85f84-8833-4f8b-83ee-09cbac8e154b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15123,8 +14705,7 @@
 													"     pm.response.to.be.unauthorized;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8be0c3e9-4328-4fea-a9bd-34c5898d3c6a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15151,9 +14732,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Embed",
@@ -15183,8 +14762,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "316e96e1-867c-41ba-ae9a-256ca58613c5"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15240,8 +14818,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "dd40ff2d-0510-4e5c-a803-c2b6c98f7ecc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15297,8 +14874,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d437c4e3-5bb0-42a5-8471-c49a2e9e07f8"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15351,8 +14927,7 @@
 													"    pm.expect(jsonData.id).to.eql(embeddedProjectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "12519b64-fe0a-4fcc-97c8-4ac3607c12b3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15400,8 +14975,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d3774bef-d907-452d-8e1e-7617bb42ae78"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15449,8 +15023,7 @@
 													"     pm.response.to.be.unauthorized;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4694495d-b753-46c5-9411-51c94a6a0901"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15498,8 +15071,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d10cdb4c-1917-494c-9ca8-9a051d59bffc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15526,9 +15098,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Highlight",
@@ -15554,8 +15124,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "123b840a-b302-4c5e-8292-6d1a542b4b22"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -15569,8 +15138,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "9700dbb9-97ba-42ae-b0da-fdb7fa46122c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15644,8 +15212,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1fbe64a0-724e-4194-94b3-8214826d10e9"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15702,8 +15269,7 @@
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7a33730d-7599-4c91-a196-ee4e88d93a72"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15752,8 +15318,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "ab499d55-7c28-4290-8397-340853b42388"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15802,8 +15367,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "5de85cb5-e163-4769-a739-9cf1def055fc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15860,8 +15424,7 @@
 													"     pm.response.to.be.forbidden;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a0716594-46a1-4d18-98ab-8e0a0ed97b3d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15888,9 +15451,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Role",
@@ -15916,8 +15477,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "42ddee28-25c9-4646-b54a-e37f9e1f4b27"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -15973,8 +15533,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b634e074-92de-42f0-b989-d336f7d145ce"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16021,8 +15580,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f39a789f-9f09-4699-ad23-51c204b70e0b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16070,8 +15628,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "bc61b9c2-c8c2-428f-b87b-dbf4e269aaf9"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16119,8 +15676,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "fae0b491-f39f-49c4-a674-59d81a05c622"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16177,8 +15733,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f1a31828-6a5d-4740-9b7c-cafc648f337b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16247,8 +15802,7 @@
 													"     pm.response.to.be.forbidden;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e269d432-5831-4bff-b3d9-4528bd99a0c0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16275,9 +15829,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Search",
@@ -16301,8 +15853,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c3e8d293-6e8c-4cb0-b659-a04b2ccc0054"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16330,15 +15881,11 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Wizard",
-							"item": [],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							"item": []
 						},
 						{
 							"name": "Institution",
@@ -16365,8 +15912,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "794101dd-673d-480c-9daa-6645082ff62c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16419,8 +15965,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8a9cfbb1-dafc-4a06-865e-e3954e41b854"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16465,8 +16010,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "fc33a8fb-38bc-4262-8943-c180cc19ef52"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16520,8 +16064,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8bc28d31-8900-46a7-93e9-1db3b18ae8cc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16553,8 +16096,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "fae30acc-d025-4344-a73e-876ee858e9db"
+										]
 									}
 								},
 								{
@@ -16563,13 +16105,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "9c4a4399-eae2-4bc7-b662-2463df2a29e2"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "CallToActionOption",
@@ -16596,8 +16135,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "3ec92668-8ec9-4c30-a19a-c2dd1c58bbae"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16672,8 +16210,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "4a6c17ba-8b40-42f8-992e-53285c02b68d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16731,8 +16268,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "d736f1d7-dd73-4edd-9374-a06e6dcbc60e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16797,8 +16333,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "3ce218fd-7551-45fd-861c-cc29ce3359a8"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16847,8 +16382,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "dd593c71-553a-4bbd-8df5-a28d55827c87"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16905,8 +16439,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "47ee5278-71c3-4fd0-ab5e-84b272c27357"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -16941,8 +16474,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "2d9c70f0-d1bd-4602-bcbd-4b774478d964"
+										]
 									}
 								},
 								{
@@ -16951,13 +16483,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "3d597af3-0c3c-433d-925d-a193f1d470ab"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "File",
@@ -16984,8 +16513,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "822abdf8-ae1d-4b0f-89c2-7b421a788cee"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17039,8 +16567,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "8c9cfffb-42ba-4c81-b6a0-781db7d4e97c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17083,8 +16610,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "121a4eaa-0ff4-46d4-87fc-66534fdcd8f5"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17111,9 +16637,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Portfolio",
@@ -17124,7 +16648,6 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "b2e52036-df19-4255-b695-ff4b158f01ab",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"pm.globals.get(\"variable_key\");\r",
@@ -17152,10 +16675,6 @@
 													"\r",
 													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
 													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Identity Id is set correctly and matches: \" + dataOfficerUserId, function () {\r",
-													"    pm.expect(jsonData.userId).to.eql(dataOfficerUserId);\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -17223,8 +16742,7 @@
 													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e6d58d2b-95df-4ed6-ae9c-dc107b7742e2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17273,8 +16791,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "38934967-24ea-4ea8-844d-85d8efb8c784"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17324,8 +16841,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "00306c16-429a-49fb-a492-6844f3ac95bd"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17367,7 +16883,6 @@
 										{
 											"listen": "test",
 											"script": {
-												"id": "a3351429-98e0-4947-af0f-2503dc7dd95a",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
@@ -17457,7 +16972,7 @@
 													" \r",
 													"var jsonData = pm.response.json();\r",
 													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"// pm.environment.set(\"portfolioId\", jsonData.id);\r",
 													"\r",
 													"pm.test(\"Status code is 200\", function () {\r",
 													"    pm.response.to.have.status(200);\r",
@@ -17479,8 +16994,7 @@
 													"\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "8307734f-4fa1-4cb5-ae98-3b2bd5a9b1ca"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17552,12 +17066,11 @@
 													"\r",
 													"pm.test(\"portfolio item exists on portfolio\", function() {\r",
 													"    jsonData.portfolioItem.forEach(function(portfolioItem) {\r",
-													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", 2);\r",
+													"        pm.expect(portfolioItem).to.have.property(\"type\", 0);\r",
 													"    });\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3089c20a-640c-4c34-89f2-9b7956b67387"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17605,8 +17118,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ef799a07-38e4-4c1a-ab16-163abb477020"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17640,9 +17152,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup Data Officer",
@@ -17668,8 +17178,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6c5a93b0-c14c-4775-bfd3-020cacaf02fa"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17717,8 +17226,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4345af7a-4087-4f9b-8541-2807603fcc55"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17776,8 +17284,7 @@
 													"    pm.expect(jsonData.institution).to.equal(null);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "466ef68f-ae6f-4886-9b7c-40ff7af6826c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17821,8 +17328,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "d5b8eac0-d0e4-4e2d-ba4b-a1133fa78743"
+										]
 									}
 								},
 								{
@@ -17831,13 +17337,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "0d4c2912-c460-4729-9f7b-40d5b65dce92"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup Administrator",
@@ -17859,8 +17362,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ba4a6525-8dcb-452d-9a44-454c3dd1ef9c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17900,8 +17402,7 @@
 													"    pm.response.to.have.status(200);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3f8a2ccc-554a-4cfa-857f-063866d0a36d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17945,8 +17446,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7ce2f6ea-461f-47d1-a248-e81d425233c6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -17994,8 +17494,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "6f746344-9997-4a6c-b254-5d01f8288db4"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18043,8 +17542,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3bdba0eb-bd9c-4b55-9d7c-19cb4b864d94"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18071,13 +17569,9 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "PR",
@@ -18119,8 +17613,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "029bd807-74e2-41ea-91f7-a46a91e7c966"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18198,8 +17691,7 @@
 													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a3cb3eea-3513-4304-8937-cc2533df20fb"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18262,8 +17754,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f3d5b025-79df-4ea0-863c-614b1bc138cc"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -18277,8 +17768,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "631730df-4bdc-4c8b-9ffc-7fe88c30d79f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18341,8 +17831,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "65b2ff69-c05d-4007-b003-e655656c0139"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18413,8 +17902,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "1cec8e12-204d-41e1-b734-cf9b5d205301"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18458,8 +17946,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "41df2ee9-caf5-4dad-8676-0dba9f433206"
+										]
 									}
 								},
 								{
@@ -18468,13 +17955,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "29c19f56-26e7-4d46-a3b4-6372d71a618f"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "User",
@@ -18501,8 +17985,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "4203b66c-7780-48aa-b011-bc0bc9b42e3e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18559,8 +18042,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "e72dfb34-ed76-453d-9e46-11598676e369"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18615,8 +18097,7 @@
 													"    pm.expect(parseInt(jsonData.identityId)).to.eql(prUserIdentityId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ab72c5e2-b75a-4dd0-8f5b-b1b6eaa8c39b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18669,8 +18150,7 @@
 													"    pm.expect(jsonData.email).to.eql(updatedPrUserEmail);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3e87c14e-fe42-4bb1-ab8f-939078ed8948"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18727,8 +18207,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b07e4d64-2f8c-492f-a8d8-2d0cdd293f8c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18773,8 +18252,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "8ce64b4e-9e93-405d-b1ae-6279e562a998"
+										]
 									}
 								},
 								{
@@ -18783,13 +18261,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "a8c5efc4-8807-478f-869b-fb5fd6d937ef"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowUser",
@@ -18820,8 +18295,7 @@
 													"    pm.expect(jsonData.id).to.eql(userId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e80d6e02-0c24-4fef-97c8-22279899a471"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18872,8 +18346,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "2669bbc8-0b53-446c-8018-adad8ff12652"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -18918,8 +18391,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "65a65d6b-170e-4e25-90e0-e5981e40eca6"
+										]
 									}
 								},
 								{
@@ -18928,13 +18400,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "69331fce-466a-414b-9133-f678d2dab47c"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Project",
@@ -18966,8 +18435,7 @@
 													"    pm.expect(jsonData.user.id).to.eql(PrUserId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b9f91dd5-ba8d-4f7d-8901-97af60193d0b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19045,8 +18513,7 @@
 													"    pm.expect(jsonData.results[foundAt].name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "b21121f4-a90c-48b3-a7f6-d534e93df75b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19099,8 +18566,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "abce04b6-61bf-4bf3-aaf3-bb48bcb17ae2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19146,8 +18612,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c3a13f56-e996-4de0-afc4-d52bd1121461"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19201,8 +18666,7 @@
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "03081937-b34d-440c-a0f7-9b2dab413b29"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19257,8 +18721,7 @@
 													"    pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d7bf7deb-e122-401e-b751-cf91a04a716a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19316,8 +18779,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "d5fd219a-bc95-4c0f-adb0-f31436aaeac0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19367,8 +18829,7 @@
 													"});\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "563eaebb-a364-49eb-9d96-0d26d93f4434"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19417,8 +18878,7 @@
 													"     pm.response.to.be.unauthorized;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4b41965c-9012-4bc6-8cc1-420eeec7766f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19445,9 +18905,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "FollowProject",
@@ -19478,8 +18936,7 @@
 													"    pm.expect(jsonData.id).to.eql(projectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "853e966e-6c32-443e-a17b-f4be3e90df08"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19530,8 +18987,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "9832e95a-52a3-4352-a8f6-8eb5cb1fff26"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19576,8 +19032,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "b6d3f91a-16c3-4e9e-b7e7-32d4ef13a1a4"
+										]
 									}
 								},
 								{
@@ -19586,13 +19041,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "c8469241-9926-4a63-8b73-4cdd340eccb6"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Embed",
@@ -19622,8 +19074,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "4430e3a3-c3d7-4571-995d-075141d40f91"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19683,8 +19134,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "c556d039-2322-4abd-bdf2-8ec945f6c601"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19740,8 +19190,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d1af87d9-2fde-4d2d-bcd4-db464d8e9cde"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19794,8 +19243,7 @@
 													"    pm.expect(jsonData.id).to.eql(embeddedProjectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "10301d78-caca-4439-a75f-f658979395ea"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19849,8 +19297,7 @@
 													"    pm.expect(jsonData.id).to.eql(otherEmbeddedProjectId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "43d810bc-b04c-4417-93d7-faadaa39988c"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19898,8 +19345,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7b7c65a0-b388-4b81-92bd-7aa1006064b3"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19947,8 +19393,7 @@
 													"     pm.response.to.be.ok;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3ee69fb2-85bc-4b7c-a7f3-c4917f9a20ba"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -19975,9 +19420,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Highlight",
@@ -20005,8 +19448,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f9d61c32-9af4-4a0b-8636-ea5144e8457f"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -20020,8 +19462,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "c415d803-cd4f-42a6-afad-e8ae1e989c0d"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20087,8 +19528,7 @@
 													"    pm.expect(jsonData.id).to.eql(highlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "f66d9bf9-cd1c-4eb4-8b19-6ee30a23e86f"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20170,8 +19610,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "bce0f595-f0ee-485b-b654-5d7e893fcf14"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20220,8 +19659,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "636c9bce-9f55-448f-a97d-9dd7a5ef09e1"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -20231,8 +19669,7 @@
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
 												],
-												"type": "text/javascript",
-												"id": "0b5364d3-1e00-4678-9bd2-71330d865788"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20290,8 +19727,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "51538917-4521-44f2-80e4-f23d5ddd6371"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -20305,8 +19741,7 @@
 													"postman.setEnvironmentVariable(\"future_timestamp\", future_timestamp.toISOString());\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "088d472e-8328-4d95-9831-6b0c5846f7f6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20372,8 +19807,7 @@
 													"    pm.expect(jsonData.id).to.eql(adminHighlightId);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "41e82c7f-5dd3-4d50-8007-fdfbd70fd8f7"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20455,8 +19889,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7e00b23f-7a66-4e59-a2ba-969db490eccf"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20505,8 +19938,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "9705dcf8-f802-4b82-871c-651ed48b6de1"
+												"type": "text/javascript"
 											}
 										},
 										{
@@ -20516,8 +19948,7 @@
 													"var current_timestamp = new Date();\r",
 													"postman.setEnvironmentVariable(\"current_timestamp\", current_timestamp.toISOString());"
 												],
-												"type": "text/javascript",
-												"id": "7e5ee422-4545-47a5-b17a-69b4be688a66"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20592,8 +20023,7 @@
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "63998b98-bde4-4fb2-894b-5608c96ee733"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20636,8 +20066,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "0fee3c51-7cae-4e00-a0cc-7040ae0c42c5"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20681,8 +20110,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d6f26f9e-d29a-49b6-af19-56c341a0f0b1"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20709,9 +20137,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Role",
@@ -20737,8 +20163,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4281e565-19d1-4922-82d7-df7f254a53f6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20794,8 +20219,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "4b4b4f4c-1432-43ce-8c27-367be1b6ebc2"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20842,8 +20266,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "c47f99f8-d310-480e-9478-adba61f84a59"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20891,8 +20314,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a9aaa779-385c-493f-b8f4-97de610f3f69"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20940,8 +20362,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "80642dee-5482-4539-9a38-a30a03774e8b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -20998,8 +20419,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "41e9f891-442d-4ea0-989e-6038a991bcbb"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21047,9 +20467,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Search",
@@ -21073,8 +20491,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "0a1556cf-d350-4846-8590-6e6431a81bdf"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21102,15 +20519,11 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Wizard",
-							"item": [],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							"item": []
 						},
 						{
 							"name": "Institution",
@@ -21137,8 +20550,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "0c145646-76a9-4b99-8ab7-b0b8c2d42f00"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21191,8 +20603,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "315e4390-faa2-475b-b22f-573a197c0aeb"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21237,8 +20648,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a08d697b-a947-4d18-bbcf-f4fb39ff021e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21292,8 +20702,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "d9108c16-5c20-47e2-a321-8449995d53b6"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21325,8 +20734,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "040b3590-1113-4b44-a397-15e36d6999fe"
+										]
 									}
 								},
 								{
@@ -21335,13 +20743,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "f25acb94-7990-4557-b694-a655715ff84e"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "CallToActionOption",
@@ -21368,8 +20773,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "f9569358-92ac-4e78-b005-f7b9cd1cf891"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21444,8 +20848,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "aa259844-8c0c-4c20-83c4-952440af6952"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21503,8 +20906,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "91a536e1-be75-4078-b5a0-7919bd976372"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21569,8 +20971,7 @@
 													"});",
 													""
 												],
-												"type": "text/javascript",
-												"id": "9508676e-8469-4e6b-808d-81b5ccb4920a"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21619,8 +21020,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "78d8e156-5a77-41fa-babb-95d8602888ee"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21677,8 +21077,7 @@
 													"     pm.response.to.be.json;",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "ef3609fe-4810-4dc9-a34f-b96eef884149"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21713,8 +21112,7 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "bcaa8a56-38ad-4d35-b575-4fb0e7980402"
+										]
 									}
 								},
 								{
@@ -21723,13 +21121,10 @@
 										"type": "text/javascript",
 										"exec": [
 											""
-										],
-										"id": "3e67974e-889b-4620-93ff-22dc1845575e"
+										]
 									}
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "File",
@@ -21757,8 +21152,7 @@
 													"     pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "e8d80d59-9000-45e3-b138-a64167b2c0ab"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21812,8 +21206,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "1fc2b4cc-217a-48db-aa06-79ad45fbe0ac"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21856,8 +21249,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "2be07257-ab3c-4be1-bf85-20e3a5c36d81"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -21884,20 +21276,17 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Portfolio",
 							"item": [
 								{
-									"name": "Portoflio-CreatePortfolio-Registered",
+									"name": "Portoflio-CreatePortfolio-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "498a3ef8-f9b0-44a8-b52a-4e90654e74a7",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
@@ -21924,10 +21313,6 @@
 													"\r",
 													"pm.test(\"portfolioTitle title is set correctly and matching: \" + portfolioTitle, function () {\r",
 													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Identity Id is set correctly and matches: \" + PrUserId, function () {\r",
-													"    pm.expect(jsonData.userId).to.eql(PrUserId);\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -21966,7 +21351,7 @@
 									"response": []
 								},
 								{
-									"name": "Portfolio-GetPortfolio-Registered",
+									"name": "Portfolio-GetPortfolio-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -21995,8 +21380,7 @@
 													"    pm.expect(jsonData.title).to.eql(portfolioTitle);\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "076688e4-e6ea-4334-a1ce-4f69e33e8166"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22024,7 +21408,7 @@
 									"response": []
 								},
 								{
-									"name": "Portfolio-GetPortfolio-Other-Registered",
+									"name": "Portfolio-GetPortfolio-Other-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -22045,8 +21429,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "973345cc-3300-45a2-942a-b43c5bb817f0"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22074,7 +21457,7 @@
 									"response": []
 								},
 								{
-									"name": "Porfolio-UpdatePortfolio-Other-Registered",
+									"name": "Porfolio-UpdatePortfolio-Other-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -22096,8 +21479,7 @@
 													"    pm.response.to.be.json;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "a08d9f6b-d3b2-4d9a-997e-fd3b14710531"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22134,12 +21516,11 @@
 									"response": []
 								},
 								{
-									"name": "PortfolioItem-CreatePortfolioItem-Registered",
+									"name": "PortfolioItem-CreatePortfolioItem-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
-												"id": "4325a33c-6e4d-433e-87f7-307e6f1ab086",
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));\r",
@@ -22217,7 +21598,7 @@
 									"response": []
 								},
 								{
-									"name": "PortfolioItem-UpdatePortfolioItem-Registered",
+									"name": "PortfolioItem-UpdatePortfolioItem-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -22229,7 +21610,7 @@
 													" \r",
 													"var jsonData = pm.response.json();\r",
 													"\r",
-													"pm.environment.set(\"portfolioId\", jsonData.id);\r",
+													"// pm.environment.set(\"portfolioId\", jsonData.id);\r",
 													"\r",
 													"pm.test(\"Status code is 200\", function () {\r",
 													"    pm.response.to.have.status(200);\r",
@@ -22251,8 +21632,7 @@
 													"\r",
 													""
 												],
-												"type": "text/javascript",
-												"id": "9a1a50ce-2de0-4d2d-bf5a-91b3b3ecf66e"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22296,7 +21676,7 @@
 									"response": []
 								},
 								{
-									"name": "PortfolioItem-GetPortfolioItem-Registered",
+									"name": "PortfolioItem-GetPortfolioItem-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -22324,12 +21704,11 @@
 													"\r",
 													"pm.test(\"portfolio item exists on portfolio\", function() {\r",
 													"    jsonData.portfolioItem.forEach(function(portfolioItem) {\r",
-													"        pm.expect(portfolioItem).to.have.property(\"portfolioId\", 2);\r",
+													"        pm.expect(portfolioItem).to.have.property(\"type\", 0);\r",
 													"    });\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "3b3c3fd2-64ea-4e0a-8a7d-4637704a8b07"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22357,7 +21736,7 @@
 									"response": []
 								},
 								{
-									"name": "PortfolioItem-DeletePortofolioItem-Registered",
+									"name": "PortfolioItem-DeletePortofolioItem-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -22377,8 +21756,7 @@
 													"     pm.response.to.be.ok;\r",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "fb42a31e-55e6-4083-a059-c70565b062dc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22412,9 +21790,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup PR",
@@ -22436,8 +21812,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "9db7ea41-4290-4cbd-8e44-ceb11999bedc"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22464,9 +21839,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "Cleanup Administrator",
@@ -22488,8 +21861,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "cb54515c-934f-458d-9ba0-154249edd806"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22533,8 +21905,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "7c2023aa-fc08-4973-8100-2f6dc0d7c788"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22578,8 +21949,7 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
-												"type": "text/javascript",
-												"id": "2dd66e12-4a1a-4f3b-b874-5c231495d792"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22606,16 +21976,11 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Global",
@@ -22634,8 +21999,7 @@
 									"    pm.expect(avgResponseTime <= responseTimeThreshold);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"id": "18796d5e-4b70-40ff-ace5-477a2ecac167"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -22659,8 +22023,7 @@
 						"type": "text/javascript",
 						"exec": [
 							""
-						],
-						"id": "898a6f04-a725-49d0-81c6-8f59ebab40ab"
+						]
 					}
 				},
 				{
@@ -22669,12 +22032,10 @@
 						"type": "text/javascript",
 						"exec": [
 							""
-						],
-						"id": "b858c3ac-e3b7-4768-a258-3bddea06f1df"
+						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Cleanup",
@@ -22719,9 +22080,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "PR",
@@ -22735,8 +22094,7 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript",
-												"id": "e507946d-bcdb-4064-bf89-51885ce2f205"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22763,9 +22121,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "DataOfficer",
@@ -22779,8 +22135,7 @@
 												"exec": [
 													""
 												],
-												"type": "text/javascript",
-												"id": "3ca505be-0253-4083-8457-5da14c9eba7b"
+												"type": "text/javascript"
 											}
 										}
 									],
@@ -22807,13 +22162,9 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Delete-ProjectForFollowing",
@@ -22832,8 +22183,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"id": "ac740ff5-5c45-4e57-84db-e72b924162d8"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -22877,8 +22227,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"id": "88bc5c8a-5e46-4329-bbdd-8747b7a88e56"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -22922,8 +22271,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"id": "867ae98f-25ed-48eb-a574-be030929d066"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -22967,8 +22315,7 @@
 									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 									"});"
 								],
-								"type": "text/javascript",
-								"id": "5fbd065b-b819-47cb-acad-8c78e1c03c8f"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -22995,8 +22342,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
 	"auth": {
@@ -23060,8 +22406,7 @@
 					"    pm.environment.set('accessToken', newAccessToken);",
 					"    pm.variables.set('accessToken', newAccessToken);",
 					"});"
-				],
-				"id": "caf8154d-7633-4f36-8832-62c037b055f1"
+				]
 			}
 		},
 		{
@@ -23070,10 +22415,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "be131d4a-724e-4f11-bda8-4ad17404abca"
+				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
