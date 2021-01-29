@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  jobscheduler:
+    image: digitalexcellence/jobscheduler:latest
+    container_name: jobscheduler
+    restart: on-failure
+    environment:
+        - Config__IdentityServerConfig__IdentityUrl=https://identity.dex.software
+        - Config__ApiConfig__ApiUrl=https://api.dex.software
+        - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+        - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
+        - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
+    networks:
+        rabbitmq-network:
+  
   db:
     image: digitalexcellence/database
     container_name: db
