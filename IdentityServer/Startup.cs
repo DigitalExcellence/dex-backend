@@ -29,6 +29,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Models;
+using Models.Defaults;
 using Repositories;
 using Services.Services;
 using System;
@@ -120,8 +121,14 @@ namespace IdentityServer
             builder.Services.AddTransient<IProfileService, ProfileService>();
             services.AddSingleton(Config);
 
-            // sets the authentication schema.
-            services.AddAuthentication(options =>
+            services.AddAuthorization(o =>
+            {
+                o.AddPolicy(nameof(Defaults.Roles.BackendApplication),
+                            policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
+            });
+
+                // sets the authentication schema.
+                services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
                 options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;

@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Models;
+using Models.Defaults;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -449,7 +450,7 @@ namespace IdentityServer
 
         
         [HttpPut]
-        /*[ValidateAntiForgeryToken]*/
+        [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
         public async Task<IActionResult> ChangeCredentials()
         {
             string pass = Request.Headers.FirstOrDefault(x => x.Key == "password").Value.FirstOrDefault();
