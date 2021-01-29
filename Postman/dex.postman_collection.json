@@ -3771,7 +3771,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {\r",
-													"    pm.expect(jsonData.userId).to.eql(34);\r",
+													"    pm.expect(jsonData.userId).to.eql(registeredUserId);\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12366,7 +12366,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {\r",
-													"    pm.expect(jsonData.userId).to.eql(34);\r",
+													"    pm.expect(jsonData.userId).to.eql(registeredUserId);\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -16685,7 +16685,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {\r",
-													"    pm.expect(jsonData.userId).to.eql(34);\r",
+													"    pm.expect(jsonData.userId).to.eql(registeredUserId);\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -21290,7 +21290,7 @@
 							]
 						},
 						{
-							"name": "Portfolio Copy",
+							"name": "Portfolio",
 							"item": [
 								{
 									"name": "Portoflio-CreatePortfolio-Registered",
@@ -21327,7 +21327,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {\r",
-													"    pm.expect(jsonData.userId).to.eql(34);\r",
+													"    pm.expect(jsonData.userId).to.eql(registeredUserId);\r",
 													"});"
 												],
 												"type": "text/javascript"
