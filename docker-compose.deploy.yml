@@ -2,7 +2,9 @@ version: '3.7'
 
 services:
   jobscheduler:
-    image: digitalexcellence/jobscheduler:latest
+    build:
+      context: .
+      dockerfile: JobScheduler/Dockerfile
     container_name: jobscheduler
     restart: on-failure
     environment:
