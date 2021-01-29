@@ -98,6 +98,8 @@ namespace API.Extensions
          
             services.AddScoped<INotificationSender, NotificationSender>();
             services.AddScoped<IRabbitMQConnectionFactory, RabbitMQConnectionFactory>();
+                        
+            services.AddScoped<ITaskPublisher, TaskPublisher>();
             return services;
         }
     }
