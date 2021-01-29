@@ -257,9 +257,6 @@ namespace _4_Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("InstitutePrivate")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -519,7 +516,7 @@ namespace _4_Data.Migrations
                         .WithMany("Likes")
                         .HasForeignKey("LikedProjectId");
 
-                    b.HasOne("Models.User", "ProjectLiker")
+                    b.HasOne("Models.User", "CreatorOfProject")
                         .WithMany("LikedProjectsByUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

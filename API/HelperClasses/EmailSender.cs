@@ -23,14 +23,16 @@ namespace API.HelperClasses
     /// </summary>
     public class EmailSender : IEmailSender
     {
-        private ITaskPublisher notificationSender;
+        private RabbitMQConnectionFactory factory;
+        private NotificationSender notificationSender;
 
         /// <summary>
         ///  Constructor to instantiate the email sender
         /// </summary>
-        public EmailSender(ITaskPublisher notificationSender)
+        public EmailSender()
         {
-            this.notificationSender = notificationSender;
+            factory = new RabbitMQConnectionFactory();
+            notificationSender = new NotificationSender(factory);
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace API.HelperClasses
         public void Send(string recipient, string textContent, string htmlContent = null)
         {
             EmailNotificationRegister emailNotification = new EmailNotificationRegister(recipient, textContent, htmlContent);
-            notificationSender.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(emailNotification), Subject.EMAIL);
+            notificationSender.RegisterNotification(Newtonsoft.Json.JsonConvert.SerializeObject(emailNotification), Subject.EMAIL);
         }
     }
 }

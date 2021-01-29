@@ -24,18 +24,21 @@ namespace MessageBrokerPublisher.Services
     /// </summary>
     public class RabbitMQConnectionFactory : IRabbitMQConnectionFactory
     {
-        private readonly string hostName;
-        private readonly string user;
-        private readonly string password;
+        private readonly string hostName = Environment.GetEnvironmentVariable("App__RabbitMQ__Hostname");
+        private readonly string user = Environment.GetEnvironmentVariable("App__RabbitMQ__Username");
+        private readonly string password = Environment.GetEnvironmentVariable("App__RabbitMQ__Password");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RabbitMQConnectionFactory"/> class.
         /// </summary>
-        public RabbitMQConnectionFactory(string hostName, string user, string password)
+        public RabbitMQConnectionFactory()
         {
-            this.hostName = hostName;
-            this.user = user;
-            this.password = password;
+            if(string.IsNullOrEmpty(hostName))
+            {
+                hostName = "localhost";
+                user = "guest";
+                password = "guest";
+            }
         }
 
 
