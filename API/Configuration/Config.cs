@@ -60,6 +60,13 @@ namespace API.Configuration
         public SwaggerConfig Swagger { get; set; }
 
         /// <summary>
+        /// Gets or sets the RabbitMQ configuration.
+        /// </summary>
+        /// <value>
+        /// The RabbitMQ.
+        /// </value>
+        public RabbitMQConfig RabbitMQ { get; set; }
+        /// <summary>
         ///     Validates this instance.
         /// </summary>
         public void Validate()
@@ -67,6 +74,7 @@ namespace API.Configuration
             Validator.ValidateObject(Frontend, new ValidationContext(Frontend), true);
             Validator.ValidateObject(IdentityServer, new ValidationContext(IdentityServer), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
+            Validator.ValidateObject(RabbitMQ, new ValidationContext(RabbitMQ), true);
         }
     }
 
@@ -142,5 +150,38 @@ namespace API.Configuration
         /// </value>
         [Required]
         public string ClientId { get; set; }
+    }
+
+    /// <summary>
+    /// Contains the RabbitMQConfig configuration.
+    /// </summary>
+    public class RabbitMQConfig
+    {
+        /// <summary>
+        /// Gets or sets the hostname.
+        /// </summary>
+        /// <value>
+        /// The hostname.
+        /// </value>
+        [Required]
+        public string Hostname { get; set; }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>
+        /// The username.
+        /// </value>
+        [Required]
+        public string Username { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        /// <value>
+        /// The password.
+        /// </value>
+        [Required]
+        public string Password { get; set; }
     }
 }
