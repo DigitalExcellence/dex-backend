@@ -1,22 +1,7 @@
 version: '3.7'
 
 services:
-  jobscheduler:
-    build:
-      context: .
-      dockerfile: JobScheduler/Dockerfile
-    container_name: jobscheduler
-    restart: on-failure
-    environment:
-        - Config__IdentityServerConfig__IdentityUrl=${IDENTITY_URL}
-        - Config__ApiConfig__ApiUrl=${API_URL}
-        - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
-        - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
-        - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
-    networks:
-        rabbitmq-network:
-  
-  
+
   db:
     build:
       context: .
@@ -102,6 +87,21 @@ services:
     tty: true
     networks:
       rabbitmq-network:
+
+  jobscheduler:
+    build:
+      context: .
+      dockerfile: JobScheduler/Dockerfile
+    container_name: jobscheduler
+    restart: on-failure
+    environment:
+        - Config__IdentityServerConfig__IdentityUrl=${IDENTITY_URL}
+        - Config__ApiConfig__ApiUrl=${API_URL}
+        - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+        - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
+        - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
+    networks:
+        rabbitmq-network:
 
 networks:
   mssql-network:

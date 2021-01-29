@@ -1,21 +1,6 @@
 version: '3.8'
 
 services:
-  jobscheduler:
-    container_name: jobscheduler
-    restart: on-failure
-    build:
-        context: .
-        dockerfile: JobScheduler/Dockerfile
-    environment:
-        - Config__IdentityServerConfig__IdentityUrl=http://identity:5005/
-        - Config__ApiConfig__ApiUrl=https://api:5001/
-        - Config__RabbitMQ__Hostname=rabbitmq
-        - Config__RabbitMQ__Username=test
-        - Config__RabbitMQ__Password=test
-    networks:
-        rabbitmq-network:
-  
   rabbitmq:
     container_name: rabbitmq
     image: 'bitnami/rabbitmq:3.8.9'
@@ -61,25 +46,6 @@ services:
       - 5004:5004
       - 5005:5005
 
-  notificationservice:
-    container_name: notificationservice
-    restart: on-failure
-    build:
-      context: .
-      dockerfile: NotificationSystem/Dockerfile
-    depends_on:
-      - rabbitmq
-    environment:
-      - App__RabbitMQ__Hostname=rabbitmq
-      - App__RabbitMQ__Username=test
-      - App__RabbitMQ__Password=test
-      - App__SendGrid__ApiKey=test
-      - App__SendGrid__EmailFrom=test
-    stdin_open: true
-    tty: true
-    networks:
-      rabbitmq-network:
-
   api:
     container_name: api
     restart: on-failure
@@ -107,6 +73,41 @@ services:
     deploy:
        restart_policy:
         condition: on-failure
+
+
+  notificationservice:
+    container_name: notificationservice
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: NotificationSystem/Dockerfile
+    depends_on:
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__SendGrid__ApiKey=test
+      - App__SendGrid__EmailFrom=test
+    stdin_open: true
+    tty: true
+    networks:
+      rabbitmq-network:
+
+  jobscheduler:
+    container_name: jobscheduler
+    restart: on-failure
+    build:
+        context: .
+        dockerfile: JobScheduler/Dockerfile
+    environment:
+        - Config__IdentityServerConfig__IdentityUrl=http://identity:5005/
+        - Config__ApiConfig__ApiUrl=https://api:5001/
+        - Config__RabbitMQ__Hostname=rabbitmq
+        - Config__RabbitMQ__Username=test
+        - Config__RabbitMQ__Password=test
+    networks:
+        rabbitmq-network:
 
 networks:
   mssql-network:
