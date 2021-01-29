@@ -3775,13 +3775,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/9999999999",
+											"raw": "{{apiUrl}}/api/portfolio/9999999999",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"9999999999"
 											]
 										}
@@ -3914,13 +3914,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"1"
 											]
 										}
@@ -3982,13 +3982,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"1"
 											]
 										}
@@ -7622,13 +7622,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"1"
 											]
 										}
@@ -7670,13 +7670,13 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"1"
 											]
 										}
@@ -7766,13 +7766,13 @@
 										"method": "PUT",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"1"
 											]
 										}
@@ -7821,13 +7821,13 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/item/1",
+											"raw": "{{apiUrl}}/api/portfolio/item/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"item",
 												"1"
 											]
@@ -7870,13 +7870,13 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/item/1",
+											"raw": "{{apiUrl}}/api/portfolio/item/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"item",
 												"1"
 											]
@@ -7919,13 +7919,13 @@
 										"method": "POST",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/item/1",
+											"raw": "{{apiUrl}}/api/portfolio/item/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"item",
 												"1"
 											]
@@ -7968,13 +7968,13 @@
 										"method": "PUT",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/item/1",
+											"raw": "{{apiUrl}}/api/portfolio/item/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"item",
 												"1"
 											]
@@ -12272,7 +12272,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {\r",
-													"    pm.expect(jsonData.userId).to.eql(35);\r",
+													"    pm.expect(jsonData.userId).to.eql(34);\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12403,13 +12403,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/1",
+											"raw": "{{apiUrl}}/api/portfolio/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"1"
 											]
 										}
@@ -12462,13 +12462,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/2",
+											"raw": "{{apiUrl}}/api/portfolio/2",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"2"
 											]
 										}
@@ -21304,13 +21304,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Portfolio/4",
+											"raw": "{{apiUrl}}/api/portfolio/4",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Portfolio",
+												"portfolio",
 												"4"
 											]
 										}

@@ -177,7 +177,6 @@ namespace API.Controllers
         public async Task<IActionResult> UpdatePortfolio(int portfolioId, [FromBody] PortfolioResource portfolioResource)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             if(portfolio == null)
@@ -193,7 +192,7 @@ namespace API.Controllers
 
 
 
-            if(!(portfolio.User.Id == user.Id || isAllowed))
+            if(!(portfolio.User.Id == user.Id))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -226,7 +225,6 @@ namespace API.Controllers
         {
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
             if(portfolio.User.Id != user.Id)
                 return Forbid();
@@ -243,7 +241,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(!(portfolio.User.Id == user.Id || isAllowed))
+            if(!(portfolio.User.Id == user.Id))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -431,9 +429,8 @@ namespace API.Controllers
             }
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
-            if(!(portfolio.User.Id == user.Id || isAllowed))
+            if(!(portfolio.User.Id == user.Id))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -478,8 +475,6 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.PortfolioWrite));
 
             if(!(portfolio.User.Id == user.Id))
             {
