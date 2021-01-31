@@ -257,5 +257,46 @@ namespace Data.Helpers
 
             return highlights;
         }
+
+        /// <summary>
+        /// This method seeds call to action options.
+        /// </summary>
+        /// <returns>Returns a list of call to actions options that can be seeded into the database.</returns>
+        public static List<CallToActionOption> SeedCallToActionOptions()
+        {
+            return new List<CallToActionOption>
+                                                           {
+                                                               new CallToActionOption
+                                                               {
+                                                                   Type = "title",
+                                                                   Value = "Join today"
+                                                               },
+                                                               new CallToActionOption
+                                                               {
+                                                                   Type = "title",
+                                                                   Value = "Provide feedback"
+                                                               },
+                                                               new CallToActionOption
+                                                               {
+                                                                   Type = "title",
+                                                                   Value = "Apply now"
+                                                               },
+                                                               new CallToActionOption
+                                                               {
+                                                                   Type = "title",
+                                                                   Value = "Collaborate with us"
+                                                               },
+                                                               new CallToActionOption
+                                                               {
+                                                                   Type = "title",
+                                                                   Value = "More information"
+                                                               },
+                                                               new CallToActionOption
+                                                               {
+                                                                   Type = "title",
+                                                                   Value = "Get in touch"
+                                                               },
+                                                           };
+        }
     }
 }
