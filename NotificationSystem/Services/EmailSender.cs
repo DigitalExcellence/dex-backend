@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NotificationSystem.Configuration;
 using NotificationSystem.Contracts;
 using NotificationSystem.Notifications;
@@ -12,36 +13,41 @@ namespace NotificationSystem.Services
 {
     public class EmailSender : INotificationService
     {
-        private readonly SendGridClient client;
+        private readonly ISendGridClient client;
         private readonly EmailAddress from;
+        private readonly bool sandboxMode;
+        private EmailNotification notification;
 
-        public EmailSender(Config config)
+        public EmailNotification Notification { get => notification; set => notification = value; }
+
+        public EmailSender(ISendGridClient sendGridClient,  string emailFrom, bool sandboxMode = false)
         {
-            client = new SendGridClient(config.SendGrid.ApiKey);
-            from = new EmailAddress(config.SendGrid.EmailFrom);
+            client = sendGridClient;
+            from = new EmailAddress(emailFrom);
+            this.sandboxMode = sandboxMode;
         }
 
-
-        public void SendNotification(INotification notification)
+        public void ParsePayload(string jsonBody)
         {
-            EmailNotification emailNotification = (EmailNotification) notification;
-
-            if (ValidateNotification(emailNotification))
-            {
-                Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Wait();
-            }
+            notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
         }
 
-        public bool ValidateNotification(INotification notification)
+        public Response ExecuteTask()
         {
-            EmailNotification emailNotification = (EmailNotification) notification;
+            EmailNotification emailNotification = notification;
+            return Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Result;
+        }
 
-            if (string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
+        public bool ValidatePayload()
+        {
+            EmailNotification emailNotification = notification;
+
+            if(string.IsNullOrEmpty(emailNotification.RecipientEmail) || string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
             {
                 return false;
             }
 
-            if (string.IsNullOrEmpty(emailNotification.TextContent))
+            if(string.IsNullOrEmpty(emailNotification.TextContent))
             {
                 return false;
             }
@@ -49,12 +55,14 @@ namespace NotificationSystem.Services
             return true;
         }
 
-        private async Task Execute(string recipient, string textContent, string htmlContent = null)
+        private async Task<Response> Execute(string recipient, string textContent, string htmlContent = null)
         {
             string subject = "You have a new notification on DeX";
             EmailAddress to = new EmailAddress(recipient);
             SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, textContent, htmlContent);
-            _ = await client.SendEmailAsync(msg);
+            msg.SetSandBoxMode(this.sandboxMode);
+
+            return await client.SendEmailAsync(msg);
         }
     }
 }
