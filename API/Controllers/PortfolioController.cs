@@ -192,7 +192,7 @@ namespace API.Controllers
 
 
 
-            if(!(portfolio.User.Id == user.Id))
+            if(portfolio.User.Id != user.Id)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
