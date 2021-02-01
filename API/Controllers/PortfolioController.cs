@@ -275,7 +275,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetPortfolioItem(int portfolioItemId)
         {
-            if(portfolioItemId < 0)
+            if(portfolioItemId <= 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
