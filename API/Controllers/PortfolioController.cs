@@ -250,7 +250,7 @@ namespace API.Controllers
         #region PortfolioItem
 
         /// <summary>
-        /// This method is responsible for retrieving a single portfolio.
+        /// This method is responsible for retrieving a single portfolio item.
         /// </summary>
         /// <param name="portfolioItemId">the portfolio item identifier which is used for searching a portfolio item.</param>
         /// <returns>This method returns the user resource result.</returns>
@@ -386,7 +386,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for updating the portfolio with the specified identifier.
+        /// This method is responsible for updating the portfolio item with the specified identifier.
         /// </summary>
         /// <param name="portfolioId">The portfolio identifier which is used for searching the portfolio.</param>
         /// <param name="portfolioItemId">The portfolio item identifier which is used for searching the portfolio item</param>
@@ -435,7 +435,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for deleting the portfolio.
+        /// This method is responsible for deleting the portfolio item.
         /// </summary>
         /// <param name="portfolioId">The portfolio identifier which is used for searching the portfolio.</param>
         /// <param name="portfolioItemId">The portfolio Item identifier which is used for searching the portfolio item.</param>
