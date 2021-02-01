@@ -379,7 +379,7 @@ namespace API.Controllers
             {
                 portfolioItem.ProjectId = project.Id;
                 portfolioItem.PortfolioId = portfolio.Id;
-                portfolioItemService.Add(portfolioItem);
+                await portfolioItemService.AddAsync(portfolioItem);
                 portfolioItemService.Save();
                 PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);
                 return Created(nameof(CreatePortfolioItemAsync), portfolioItem);
