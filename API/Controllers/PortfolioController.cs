@@ -141,7 +141,7 @@ namespace API.Controllers
             try
             {
                 portfolio.User = user;
-                portfolioService.Add(portfolio);
+                await portfolioService.AddAsync(portfolio);
                 portfolioService.Save();
                 PortfolioResourceResult model = mapper.Map<Portfolio, PortfolioResourceResult>(portfolio);
                 return Created(nameof(CreatePortfolioAsync), model);
