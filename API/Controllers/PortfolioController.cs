@@ -73,7 +73,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetPortfolio(int portfolioId)
         {
-            if(portfolioId < 0)
+            if(portfolioId <= 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -141,7 +141,7 @@ namespace API.Controllers
             try
             {
                 portfolio.User = user;
-                portfolioService.Add(portfolio);
+                await portfolioService.AddAsync(portfolio);
                 portfolioService.Save();
                 PortfolioResourceResult model = mapper.Map<Portfolio, PortfolioResourceResult>(portfolio);
                 return Created(nameof(CreatePortfolioAsync), model);
@@ -192,7 +192,7 @@ namespace API.Controllers
 
 
 
-            if(!(portfolio.User.Id == user.Id))
+            if(portfolio.User.Id != user.Id)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -262,7 +262,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetPortfolioItem(int portfolioItemId)
         {
-            if(portfolioItemId < 0)
+            if(portfolioItemId <= 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -366,7 +366,7 @@ namespace API.Controllers
             {
                 portfolioItem.ProjectId = project.Id;
                 portfolioItem.PortfolioId = portfolio.Id;
-                portfolioItemService.Add(portfolioItem);
+                await portfolioItemService.AddAsync(portfolioItem);
                 portfolioItemService.Save();
                 PortfolioItemResourceResult model = mapper.Map<PortfolioItem, PortfolioItemResourceResult>(portfolioItem);
                 return Created(nameof(CreatePortfolioItemAsync), portfolioItem);
@@ -417,7 +417,7 @@ namespace API.Controllers
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
-            if(!(portfolio.User.Id == user.Id))
+            if(portfolio.User.Id != user.Id)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -463,7 +463,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(!(portfolio.User.Id == user.Id))
+            if(portfolio.User.Id != user.Id)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
