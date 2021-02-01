@@ -430,7 +430,7 @@ namespace API.Controllers
 
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
-            if(!(portfolio.User.Id == user.Id))
+            if(portfolio.User.Id != user.Id)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
