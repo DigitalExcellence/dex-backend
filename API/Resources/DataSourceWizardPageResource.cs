@@ -15,39 +15,28 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
-
 namespace API.Resources
 {
     /// <summary>
-    /// The view model of a data source.
+    /// The view model for the wizard page in the data source. This model differs from the wizard page resource model
+    /// by having the order index and auth flow property and the wizard page id refers to the model of the wizard page resource model.
     /// </summary>
-    public class DataSourceResource
+    public class DataSourceWizardPageResource
     {
         /// <summary>
-        /// Gets or Set the Title of the data source.
+        /// Gets or sets the wizard page id. This references a wizard page model.
         /// </summary>
-        public string Title { get; set; }
+        public int WizardPageId { get; set; }
 
         /// <summary>
-        /// Gets or sets the Description of the data source.
+        /// Gets or sets the order index of the wizard page in this data source.
         /// </summary>
-        public string Description { get; set; }
+        public int OrderIndex { get; set; }
 
         /// <summary>
-        /// Gets or sets the visibility of the data source.
+        /// Gets or sets the auth flow of the wizard page in this data source.
         /// </summary>
-        public bool IsVisible { get; set; }
+        public bool AuthFlow { get; set; }
 
-        /// <summary>
-        /// Gets or sets the icon id of the data source.
-        /// </summary>
-        public int IconId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the wizard page resources for the data source.
-        /// </summary>
-        public IEnumerable<DataSourceWizardPageResource> WizardPageResources { get; set; }
     }
-
 }
