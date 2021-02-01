@@ -37,7 +37,6 @@ namespace API.Controllers
     [ApiController]
     public class WizardPageController : ControllerBase
     {
-
         private readonly IMapper mapper;
 
         private readonly IWizardPageService wizardPageService;
