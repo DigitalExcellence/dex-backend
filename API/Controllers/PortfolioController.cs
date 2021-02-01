@@ -226,10 +226,6 @@ namespace API.Controllers
             Portfolio portfolio = await portfolioService.FindAsync(portfolioId).ConfigureAwait(false);
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
 
-            if(portfolio.User.Id != user.Id)
-                return Forbid();
-
-
             if(portfolio == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -241,17 +237,8 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(!(portfolio.User.Id == user.Id))
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to delete the portfolio.",
-                    Detail = "The user is not allowed to delete the portfolio.",
-                    Instance = "2BA2DD8D-EA05-4796-B0C0-C7F3F0CEE5D4"
-                };
-                return Unauthorized(problem);
-            }
-
+            if(portfolio.User.Id != user.Id)
+                return Forbid();
 
             await portfolioService.RemoveAsync(portfolioId);
             portfolioService.Save();
