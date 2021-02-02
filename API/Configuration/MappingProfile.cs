@@ -116,7 +116,10 @@ namespace API.Configuration
 
             CreateMap<IDataSourceAdaptee, DataSourceResourceResult>()
                 .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
-            CreateMap<DataSourceResource, DataSource>();
+
+            CreateMap<DataSourceResource, DataSource>()
+                .ForMember(dest => dest.DataSourceWizardPages, opt => opt.MapFrom(src => src.WizardPageResources));
+            CreateMap<DataSourceWizardPageResource, DataSourceWizardPage>();
 
             CreateMap<DataSourceWizardPage, WizardPageResourceResult>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))

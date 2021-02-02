@@ -202,7 +202,9 @@ namespace API.Controllers
             dataSourceModelService.Update(dataSourceModel);
             dataSourceModelService.Save();
 
-            return Ok(mapper.Map<DataSource, DataSourceResourceResult>(dataSourceModel));
+            //TODO: validate why description is not mapped properly.
+            DataSourceResourceResult model = mapper.Map<DataSource, DataSourceResourceResult>(dataSourceModel);
+            return Ok(model);
         }
     }
 }
