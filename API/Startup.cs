@@ -18,6 +18,7 @@
 using API.Configuration;
 using API.Extensions;
 using API.Filters;
+using API.HelperClasses;
 using API.InternalResources;
 using Data;
 using Data.Helpers;
@@ -427,6 +428,9 @@ namespace API
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
             context.Database.Migrate();
+
+            SeedHelper.InsertRoles(Seed.SeedRoles(), context);
+            
             if(!context.Role.Any())
             {
                 // seed roles
@@ -434,13 +438,13 @@ namespace API
                 context.SaveChanges();
             }
 
-            // Temporary here to update role and rolescopes for the user graduation feature. This updates the database which is necessary for staging and production.
+            /*// Temporary here to update role and rolescopes for the user graduation feature. This updates the database which is necessary for staging and production.
             if(context.RoleScope.SingleOrDefault(b => b.Scope == "AdminProjectWrite") == null)
             {
                 context.RoleScope.AddRange(Seed.UpdateRoleScopes());
                 context.Role.Add(Seed.SeedAlumniRole());
                 context.SaveChanges();
-            }
+            }*/
 
             List<Role> roles = context.Role.ToList();
             if(!context.User.Any())
