@@ -429,45 +429,33 @@ namespace API
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
             context.Database.Migrate();
 
+            // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
             SeedHelper.InsertRoles(Seed.SeedRoles(), context);
-            
-            if(!context.Role.Any())
-            {
-                // seed roles
-                context.AddRange(Seed.SeedRoles());
-                context.SaveChanges();
-            }
-
-            /*// Temporary here to update role and rolescopes for the user graduation feature. This updates the database which is necessary for staging and production.
-            if(context.RoleScope.SingleOrDefault(b => b.Scope == "AdminProjectWrite") == null)
-            {
-                context.RoleScope.AddRange(Seed.UpdateRoleScopes());
-                context.Role.Add(Seed.SeedAlumniRole());
-                context.SaveChanges();
-            }*/
-
             List<Role> roles = context.Role.ToList();
-            if(!context.User.Any())
-            {
-                // seed admin
-                context.User.Add(Seed.SeedAdminUser(roles));
-                context.SaveChanges();
 
-                if(!env.IsProduction())
+            if(!env.IsProduction())
+            {
+                if(!context.Institution.Any())
                 {
                     // Seed institutions
                     context.Institution.Add(Seed.SeedInstitution());
                     context.SaveChanges();
-
-                    //Seed random users
-                    context.User.Add(Seed.SeedPrUser(roles));
+                }
+                if(!context.User.Any())
+                {
                     context.User.AddRange(Seed.SeedUsers(roles));
-                    context.User.Add(Seed.SeedDataOfficerUser(roles));
-                    context.User.Add(Seed.SeedAlumniUser(roles));
                     context.SaveChanges();
                 }
+
             }
 
+            // Check if admin user in DB matches seed, if it doesn't match: database is updated.
+            
+            SeedHelper.InsertUser(Seed.SeedAdminUser(roles), context);
+            SeedHelper.InsertUser(Seed.SeedDataOfficerUser(roles), context);
+            SeedHelper.InsertUser(Seed.SeedAlumniUser(roles), context);
+            SeedHelper.InsertUser(Seed.SeedPrUser(roles), context);
+            
             if(!env.IsProduction())
             {
                 if(!context.Project.Any())

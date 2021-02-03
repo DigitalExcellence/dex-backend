@@ -61,32 +61,23 @@ namespace API.HelperClasses
             return roleScopesNotInDb;
         }
 
-
-        /*public void SynchronizeSeedWithDb(List<TEntity> entitiesInSeed)
+        public static void InsertUser(User seedUser, ApplicationDbContext context)
         {
-            List<TEntity> entitiesNotInDb = new List<TEntity>();
-            List<TEntity> entitiesInDb = dbSet.ToList();
+            List<User> usersInDb = context.User.AsQueryable()
+                                          .Include(e => e.Role).ToList();
 
-            foreach(TEntity entityInSeed in entitiesInSeed)
+            if(usersInDb.Find(e => e.IdentityId == seedUser.IdentityId) != null)
             {
-                if(!entitiesInDb.Contains(entityInSeed))
-                {
-                    entitiesNotInDb.Add(entityInSeed);
-                }
+                User foundEntity = usersInDb.Find(e => e.IdentityId == seedUser.IdentityId);
+                foundEntity.Role = seedUser.Role;
+                context.Update(foundEntity);
+                context.SaveChanges();
+                return;
             }
 
-            dbSet.AddRange(entitiesNotInDb);
+            context.User.Add(seedUser);
+            context.SaveChanges();
         }
-
-        public void SynchronizeSeedWithDb(TEntity entityInSeed)
-        {
-            List<TEntity> entitiesInDb = dbSet.ToList();
-
-            if(!entitiesInDb.Contains(entityInSeed))
-            {
-                dbSet.Add(entityInSeed);
-            }
-        }*/
 
     }
 }
