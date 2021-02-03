@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0e065413-c5f3-47f2-831a-c120cb883a13",
+		"_postman_id": "df1aada2-0b73-48b4-abea-ff4064d38b9d",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -340,7 +340,6 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 									"var projectName = pm.environment.get(\"projectName\");",
 									"var adminUserName = pm.environment.get(\"adminUserName\");",
 									"",
@@ -366,10 +365,6 @@
 									"",
 									"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
 									"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
-									"});",
-									"",
-									"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
-									"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1002,12 +997,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
+													"pm.environment.set(\"adminProjectId\", jsonData.id);",
 													"pm.environment.set(\"projectId\", jsonData.id);",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
@@ -1028,10 +1023,6 @@
 													"",
 													"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
-													"});",
-													"",
-													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1274,7 +1265,6 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
 													"",
@@ -1298,10 +1288,6 @@
 													"",
 													"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
 													"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
-													"});",
-													"",
-													"pm.test(\"Identity ID is correct and matching: \" + administratorUserId, function () {",
-													"    pm.expect(parseInt(jsonData.user.id)).to.eql(administratorUserId);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1684,12 +1670,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var projectId = pm.environment.get(\"projectId\");",
+													"var adminProjectId = pm.environment.get(\"adminProjectId\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"var foundAt;",
-													"console.warn(\"test\");",
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
@@ -1698,6 +1683,18 @@
 													"        }",
 													"    }",
 													"    return -1;",
+													"}",
+													"",
+													"function findHighlight(jsonData, idToFind){",
+													"    for(var i = 0; i< jsonData.length; i++)",
+													"    {",
+													"        if(jsonData[i].projectId == idToFind) ",
+													"        { ",
+													"            return i; ",
+													"        }",
+													"    }",
+													"    return -1;",
+													"    ",
 													"}",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
@@ -1712,8 +1709,8 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Highlight is in list and matching: \" + projectId, function () {",
-													"    foundAt = findItem(jsonData, projectId);",
+													"pm.test(\"Highlight is in list and matching: \" + adminProjectId, function () {",
+													"    foundAt = findHighlight(jsonData, adminProjectId);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});"
 												],
