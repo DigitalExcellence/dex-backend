@@ -49,6 +49,8 @@ services:
       - App__Frontend__ClientId=${PRODUCTION_API_FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${PRODUCTION_API_FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=https://identity.dex.software
+      - App__IdentityServer__ClientId=${PRODUCTION_API_AUTHENTICATION_CLIENT_ID}
+      - App__IdentityServer__ClientSecret=${PRODUCTION_API_AUTHENTICATION_CLIENT_SECRET}
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
@@ -96,6 +98,10 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.dex.software/external/callback/fhict
+      - App__ApiAuthentication__ClientId=${PRODUCTION_API_AUTHENTICATION_CLIENT_ID}
+      - App__ApiAuthentication__ClientSecret=${PRODUCTION_API_AUTHENTICATION_CLIENT_SECRET}
+      - App__JobScheduler__ClientId={$PRODUCTION_JOBSCHEDULER_CLIENT_ID}
+      - App__JobScheduler__ClientSecret={$PRODUCTION_JOBSCHEDULER_CLIENT_SECRET}
       - Cert_File=/app/identity.dex.software_pfx.pfx
       - Cert_Thumb=${CERT_THUMB}
       - Cert_Password=${CERT_PASSWORD}

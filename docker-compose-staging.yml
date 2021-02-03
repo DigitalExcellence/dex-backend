@@ -55,10 +55,13 @@ services:
       - App__Frontend__ClientId=${STAGING_API_FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${STAGING_API_FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=https://identity.staging.dex.software
+      - App__IdentityServer__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__IdentityServer__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - SENTRY_DSN=https://c4cad5ec89d74853a66347a7b19c213b@o395685.ingest.sentry.io/5247967
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=http"
@@ -103,6 +106,10 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.staging.dex.software/external/callback/fhict
+      - App__ApiAuthentication__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
+      - App__JobScheduler__ClientId={$JOBSCHEDULER_CLIENT_ID}
+      - App__JobScheduler__ClientSecret={$JOBSCHEDULER_CLIENT_SECRET}
       - Cert_File=/app/identity.staging.dex.software_pfx.pfx
       - Cert_Thumb=${CERT_THUMB}
       - Cert_Password=${CERT_PASSWORD}
