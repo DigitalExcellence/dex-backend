@@ -14,7 +14,8 @@ namespace Data.Configurations
             builder.HasKey(dw => new
                                  {
                                      dw.DataSourceId,
-                                     dw.WizardPageId
+                                     dw.WizardPageId,
+                                     dw.AuthFlow
                                  });
 
             builder.HasOne(dw => dw.DataSource)
