@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2d0d7eb9-b9fe-425d-bc08-924812c50e73",
+		"_postman_id": "0e065413-c5f3-47f2-831a-c120cb883a13",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -19613,7 +19613,7 @@
 									},
 									{
 										"key": "email",
-										"value": "niray11@live.nl",
+										"value": "alumniTest@postman.com",
 										"type": "text"
 									},
 									{
@@ -23469,14 +23469,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/User/{{registeredUserId}}",
+											"raw": "{{apiUrl}}/api/User/{{alumniUserId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"User",
-												"{{registeredUserId}}"
+												"{{alumniUserId}}"
 											]
 										}
 									},

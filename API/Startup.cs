@@ -23,6 +23,7 @@ using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
+using IdentityModel.Client;
 using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
+using Polly;
 using Serilog;
 using Services.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -176,8 +178,7 @@ namespace API
             services.AddControllersWithViews()
                     .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
                     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
-                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                ;
+                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(o =>
             {
@@ -227,6 +228,30 @@ namespace API
                                                  new[] {""}
                                              }
                                          });
+
+
+            });
+
+            services.AddAccessTokenManagement(options =>
+                    {
+                        options.Client.Clients.Add("identityserver",
+                                                   new ClientCredentialsTokenRequest
+                                                   {
+                                                       Address = Config.IdentityServer.IdentityUrl + "/connect/token",
+                                                       ClientId = Config.IdentityServer.ClientId,
+                                                       ClientSecret = Config.IdentityServer.ClientSecret
+                                                   });
+
+                    }).ConfigureBackchannelHttpClient()
+                    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(new[]
+                                                     {
+                                                         TimeSpan.FromSeconds(1),
+                                                         TimeSpan.FromSeconds(2),
+                                                         TimeSpan.FromSeconds(3)
+                                                     }));
+            services.AddClientAccessTokenClient("identityclient", configureClient: client =>
+            {
+                client.BaseAddress = new Uri(string.Concat(Config.IdentityServer.IdentityUrl + "/"));
             });
 
             // Add application services.

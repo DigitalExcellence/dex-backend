@@ -120,15 +120,10 @@ namespace IdentityServer
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             builder.Services.AddTransient<IProfileService, ProfileService>();
             services.AddSingleton(Config);
+            services.AddLocalApiAuthentication();
 
-            services.AddAuthorization(o =>
-            {
-                o.AddPolicy(nameof(Defaults.Roles.BackendApplication),
-                            policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
-            });
-
-                // sets the authentication schema.
-                services.AddAuthentication(options =>
+            // sets the authentication schema.
+            services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
                 options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;

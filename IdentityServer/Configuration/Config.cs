@@ -61,6 +61,8 @@ namespace Configuration
 
         public JobSchedulerConfig JobScheduler { get; set; }
 
+        public ApiAuthentication ApiAuthentication { get; set; }
+
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -71,6 +73,7 @@ namespace Configuration
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
             Validator.ValidateObject(FfhictOIDC, new ValidationContext(FfhictOIDC), true);
             Validator.ValidateObject(JobScheduler, new ValidationContext(JobScheduler), true);
+            Validator.ValidateObject(ApiAuthentication, new ValidationContext(ApiAuthentication), true);
         }
 
         /// <summary>
@@ -272,6 +275,29 @@ namespace Configuration
         /// </value>
         [Required]
         public string ClientSecret { get; set; }
+    }
+
+    public class ApiAuthentication
+    {
+
+        /// <summary>
+        ///     Gets or sets the api authentication identifier.
+        /// </summary>
+        /// <value>
+        ///     The client identifier.
+        /// </value>
+        [Required]
+        public string ClientId { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the api authentication secret.
+        /// </summary>
+        /// <value>
+        ///     The api authentication secret.
+        /// </value>
+        [Required]
+        public string ClientSecret { get; set; }
+
     }
 
 }

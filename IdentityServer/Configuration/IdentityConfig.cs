@@ -21,7 +21,6 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using Models.Defaults;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 
 namespace IdentityServer.Configuration
@@ -59,13 +58,33 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.FileWrite)),
                         new Scope(nameof(Defaults.Scopes.UserTaskWrite))
                     }
-                }
+                },
+                new ApiResource(IdentityServerConstants.LocalApi.ScopeName), 
             };
 
         public static IEnumerable<Client> Clients(Config config)
         {
             return new[]
                    {
+                       // machine to machine client (API -> Identity)
+                        new Client
+                        {
+                            ClientId = "dex-api",
+                            AllowedGrantTypes = GrantTypes.ClientCredentials,
+                            ClientSecrets =
+                            {
+                                new Secret(config.ApiAuthentication.ClientSecret.Sha256())
+                            },
+                            AllowedScopes =
+                            {
+                                IdentityServerConstants.LocalApi.ScopeName
+                            },
+                            Claims = new List<Claim>
+                                     {
+                                         new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                     }
+                        }, 
+
                        // machine to machine client (Identity -> API)
                        new Client
                        {
@@ -162,7 +181,7 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.ClientCredentials,
                            ClientSecrets =
                            {
-                               new Secret("dex-jobscheduler".Sha256())
+                               new Secret(config.JobScheduler.ClientSecret.Sha256())
                            },
                            AllowedScopes =
                            {

@@ -31,13 +31,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualBasic;
 using Models;
 using Models.Defaults;
 using Services.Services;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -448,24 +452,5 @@ namespace IdentityServer
             return vm;
         }
 
-        
-        [HttpPut]
-        [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
-        public async Task<IActionResult> ChangeCredentials()
-        {
-            string pass = Request.Headers.FirstOrDefault(x => x.Key == "password").Value.FirstOrDefault();
-            string email = Request.Headers.FirstOrDefault(x => x.Key == "email").Value.FirstOrDefault();
-            string subjectId = Request.Headers.FirstOrDefault(x => x.Key == "subjectId").Value.FirstOrDefault();
-
-            IdentityUser identityUser = await identityUserService.FindBySubjectId(subjectId);
-            identityUser.Email = email;
-            identityUser.Username = email;
-            identityUser.Password = LoginHelper.GetHashPassword(pass);
-
-            identityUserService.Update(identityUser);
-            identityUserService.Save();
-
-            return Ok();
-        }
     }
 }

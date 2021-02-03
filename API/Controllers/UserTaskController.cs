@@ -29,6 +29,7 @@ using RestSharp;
 using Services.Services;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 
 namespace API.Controllers
 {
@@ -48,6 +49,7 @@ namespace API.Controllers
         private readonly IRoleService roleService;
         private readonly IMapper mapper;
         private readonly Config configuration;
+        private readonly HttpClient identityHttpClient;
 
         /// <summary>
         /// The constructor for user tasks
@@ -61,13 +63,15 @@ namespace API.Controllers
                                   IUserService userService,
                                   IRoleService roleService,
                                   IMapper mapper,
-                                  Config configuration)
+                                  Config configuration,
+                                  IHttpClientFactory clientFactory)
         {
             this.userTaskService = userTaskService;
             this.userService = userService;
             this.roleService = roleService;
             this.mapper = mapper;
             this.configuration = configuration;
+            identityHttpClient = clientFactory.CreateClient("identityclient");
         }
 
         /// <summary>
@@ -161,12 +165,12 @@ namespace API.Controllers
             List<UserTask> userTasks = await userTaskService.GetUserTasksForUser(user.Id);
             UserTask userTask = userTasks.Find(u => u.Type == UserTaskType.GraduationReminder);
 
-            if(userTask == null)
+            if(userTask == null || userTask.Status == UserTaskStatus.Completed)
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
                                              Title = "No graduation user task exists.",
-                                             Detail = "The database does not contain a user task for graduating.",
+                                             Detail = "The database does not contain a (uncompleted) user task for graduating.",
                                              Instance = "A10E4AE8-633D-4334-BADA-99B7AD077B6D"
                                          };
                 return NotFound(problem);
@@ -186,27 +190,21 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            
+
             // Rest call to Identity server to change credentials. Credentials are in the headers due to security issues.
-            RestClient restClient = new RestClient(configuration.IdentityServer.IdentityUrl);
-            RestRequest restRequest = new RestRequest("/Account/ChangeCredentials")
-                                      {
-                                          Method = Method.PUT
-                                      };
-
-            restRequest.AddHeader("password", Request.Headers.FirstOrDefault(h => h.Key == "password")
+            identityHttpClient.DefaultRequestHeaders.Add("password", Request.Headers.FirstOrDefault(h => h.Key == "password")
                                                      .Value.FirstOrDefault());
-            restRequest.AddHeader("email", Request.Headers.FirstOrDefault(h => h.Key == "email")
-                                                  .Value.FirstOrDefault());
-            restRequest.AddHeader("subjectId", user.IdentityId);
-            IRestResponse response = restClient.Execute(restRequest);
+            identityHttpClient.DefaultRequestHeaders.Add("email", Request.Headers.FirstOrDefault(h => h.Key == "email")
+                                                                         .Value.FirstOrDefault());
+            identityHttpClient.DefaultRequestHeaders.Add("subjectId", user.IdentityId);
+            HttpResponseMessage resp = await identityHttpClient.PutAsync("ExternalAccount", new StringContent("test"));
 
-            if(!response.IsSuccessful)
+            if(!resp.IsSuccessStatusCode)
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
                                              Title = "IdentityServer had an error.",
-                                             Detail = response.ErrorMessage,
+                                             Detail = resp.ReasonPhrase,
                                              Instance = "94B362FE-F038-43AF-B2C3-462513D1C7F8"
                                          };
                 return StatusCode(503, problem);
@@ -215,7 +213,10 @@ namespace API.Controllers
             userTask.Status = UserTaskStatus.Completed;
             userTaskService.Update(userTask);
 
+
             user.Role = alumniRole;
+            user.Email = Request.Headers.FirstOrDefault(h => h.Key == "email")
+                                         .Value.FirstOrDefault();
             userService.Update(user);
 
             userTaskService.Save();
