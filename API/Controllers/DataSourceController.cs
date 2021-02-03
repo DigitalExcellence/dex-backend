@@ -27,6 +27,7 @@ using Services.ExternalDataProviders;
 using Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -44,6 +45,7 @@ namespace API.Controllers
         private readonly IFileService fileService;
         private readonly IFileUploader fileUploader;
         private readonly IDataProviderService dataProviderService;
+        private readonly IIndexOrderHelper<int> indexOrderHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataSourceController"/> class.
@@ -195,6 +197,26 @@ namespace API.Controllers
                     };
                     return NotFound(problem);
                 }
+            }
+
+            int[] wizardPageOrderIndexesAuthFlow = dataSourceResource.WizardPageResources.Where(p => p.AuthFlow).Select(p => p.OrderIndex).ToArray();
+            int[] wizardPageOrderIndexesPublicFlow = dataSourceResource.WizardPageResources.Where(p => !p.AuthFlow).Select(p => p.OrderIndex).ToArray();
+
+            bool authFlowIsValid = wizardPageOrderIndexesAuthFlow.Length == 0 ||
+                                   indexOrderHelper.ValidateAscendingConsecutiveOrder(wizardPageOrderIndexesAuthFlow, 1);
+
+            bool publicFlowIsValid = wizardPageOrderIndexesPublicFlow.Length == 0 ||
+                                     indexOrderHelper.ValidateAscendingConsecutiveOrder(wizardPageOrderIndexesPublicFlow, 1);
+
+            if(!authFlowIsValid || !publicFlowIsValid)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "The order from the wizard page indexes is invalid.",
+                                             Detail = "The order indexes from the wizard pages should start at 1, be consecutive and have no doubles.",
+                                             Instance = "A5F70346-8044-42AC-8BFD-76FCD108ABBE"
+                                         };
+                return BadRequest(problem);
             }
 
             mapper.Map(dataSourceResource, dataSourceModel);

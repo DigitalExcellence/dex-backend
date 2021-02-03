@@ -78,6 +78,7 @@ namespace API.Extensions
             services.AddScoped<IInstitutionRepository, InstitutionRepository>();
 
             services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
+            services.AddScoped(typeof(IIndexOrderHelper<>), typeof(IndexOrderHelper<>));
 
             services.AddScoped<IUserProjectService, UserProjectService>();
             services.AddScoped<IUserProjectRepository, UserProjectRepository>();
@@ -114,7 +115,7 @@ namespace API.Extensions
 
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
-                        
+
             services.AddScoped<INotificationSender, NotificationSender>();
             services.AddScoped<IRabbitMQConnectionFactory, RabbitMQConnectionFactory>();
             return services;
