@@ -55,17 +55,20 @@ namespace API.Controllers
         /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
         /// <param name="fileUploader">The file uploader service which is used for uploading files.</param>
         /// <param name="dataProviderService">The data provider service which is used to communicate with the logic layer.</param>
+        /// <param name="indexOrderHelper">The index order helper, helps validating the index order of the wizard pages.</param>
         public DataSourceController(IMapper mapper,
                                     IDataSourceModelService dataSourceModelService,
                                     IFileService fileService,
                                     IFileUploader fileUploader,
-                                    IDataProviderService dataProviderService)
+                                    IDataProviderService dataProviderService,
+                                    IIndexOrderHelper<int> indexOrderHelper)
         {
             this.mapper = mapper;
             this.dataSourceModelService = dataSourceModelService;
             this.fileService = fileService;
             this.fileUploader = fileUploader;
             this.dataProviderService = dataProviderService;
+            this.indexOrderHelper = indexOrderHelper;
         }
 
 
