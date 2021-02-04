@@ -37,8 +37,10 @@ namespace Data.Helpers
             List<RoleScope> roleScopes = new List<RoleScope>();
             for(int i = 1; i < 5; i++)
             {
-                RoleScope roleScope = new RoleScope("ProjectWrite", i );
-                roleScope.RoleId = i;
+                RoleScope roleScope = new RoleScope("ProjectWrite", i)
+                                      {
+                                          RoleId = i
+                                      };
                 roleScopes.Add(roleScope);
             }
             

@@ -47,8 +47,6 @@ namespace API.Controllers
         private readonly IUserTaskService userTaskService;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
-        private readonly IMapper mapper;
-        private readonly Config configuration;
         private readonly HttpClient identityHttpClient;
 
         /// <summary>
@@ -57,20 +55,15 @@ namespace API.Controllers
         /// <param name="userTaskService"> The user task service is responsible for getting and setting the tasks that users should follow up.</param>
         /// <param name="userService"> The user service is responsible for getting and setting users. </param>
         /// <param name="roleService"> The role service is responsible for getting and setting roles. </param>
-        /// <param name="mapper"> The mapper is responsible to map object to other types. </param>
-        /// <param name="configuration"> The configuration is responsible for configuration settings. </param>
+        /// <param name="clientFactory"> The client factory is a HttpClient which is used to communicate with the identity server. </param>
         public UserTaskController(IUserTaskService userTaskService,
                                   IUserService userService,
                                   IRoleService roleService,
-                                  IMapper mapper,
-                                  Config configuration,
                                   IHttpClientFactory clientFactory)
         {
             this.userTaskService = userTaskService;
             this.userService = userService;
             this.roleService = roleService;
-            this.mapper = mapper;
-            this.configuration = configuration;
             identityHttpClient = clientFactory.CreateClient("identityclient");
         }
 

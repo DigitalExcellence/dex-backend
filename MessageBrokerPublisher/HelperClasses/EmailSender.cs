@@ -23,7 +23,7 @@ namespace MessageBrokerPublisher.HelperClasses
     /// </summary>
     public class EmailSender : IEmailSender
     {
-        private ITaskPublisher notificationSender;
+        private readonly ITaskPublisher notificationSender;
 
         /// <summary>
         ///  Constructor to instantiate the email sender

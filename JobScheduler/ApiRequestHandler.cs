@@ -18,10 +18,13 @@ namespace JobScheduler
     public class ApiRequestHandler : IApiRequestHandler
     {
         /// <summary>
-        /// This is the HttpClient
+        ///     This is the HttpClient
         /// </summary>
         private readonly HttpClient client;
 
+        /// <summary>
+        ///     This is the configuration of the jobscheduler
+        /// </summary>
         private readonly Config config;
 
         public ApiRequestHandler(IHttpClientFactory factory, Config config)
