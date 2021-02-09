@@ -122,7 +122,7 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "No data source with the specified guid fount.",
+                    Title = "No data source with the specified guid found.",
                     Detail = "The database does not contain an institution with that guid.",
                     Instance = "3B2C12E3-CDE0-4853-A687-C1024E096479"
                 };

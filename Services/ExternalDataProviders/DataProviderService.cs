@@ -18,32 +18,86 @@
 using Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.ExternalDataProviders
 {
 
+    /// <summary>
+    /// The interface of the data provider service.
+    /// </summary>
     public interface IDataProviderService
     {
 
+        /// <summary>
+        /// This method is responsible for retrieving all projects from a data source.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
+        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
+        /// <returns>This method returns a collection of projects.</returns>
         Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth);
 
-        Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id, bool needsAuth);
+        /// <summary>
+        /// This method is responsible for retrieving a project by id.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
+        /// <param name="id">The id of the project which will get used for searching the correct project.</param>
+        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
+        /// <returns>This method returns a project with the specified identifier.</returns>
+        Task<Project> GetProjectById(string dataSourceGuid, string token, int id, bool needsAuth);
 
+        /// <summary>
+        /// This method validates whether a data source with the specified guid exists.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that will get checked.</param>
+        /// <returns>This method return whether the data source exists or does not exists.</returns>
         bool IsExistingDataSourceGuid(string dataSourceGuid);
 
+        /// <summary>
+        /// This method is responsible for retrieving a project by uri.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
+        /// <returns>This method returns a project from the specified uri.</returns>
         Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri);
 
-        Task<string> GetOauthUrl(string guid);
+        /// <summary>
+        /// This method is responsible for retrieving the oauth url from the specified data source.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <returns>This method returns the oauth url from the specified data source.</returns>
+        Task<string> GetOauthUrl(string dataSourceGuid);
 
-        Task<OauthTokens> GetTokens(string code, string guid);
+        /// <summary>
+        /// This method is responsible for returning the Oauth url from the specified  data source.
+        /// </summary>
+        /// <param name="code">The code which is used to retrieve Oauth tokens from the external data source.</param>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <returns>This method returns the Oauth tokens from the external data source.</returns>
+        Task<OauthTokens> GetTokens(string code, string dataSourceGuid);
 
+        /// <summary>
+        /// This method is responsible for returning the data sources.
+        /// </summary>
+        /// <param name="needsAuth">The needsAuth parameter specifies whether the returned data sources should follow a specific auth flow.</param>
+        /// <returns>This method returns a collection of data source adaptees.</returns>
         Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth);
 
+        /// <summary>
+        /// This method is responsible for retrieving a data source by guid.
+        /// </summary>
+        /// <param name="guid">The data source guid that specifies which data source should get retrieved.</param>
+        /// <returns>This method returns the data source with the specified guid.</returns>
         Task<IDataSourceAdaptee> RetrieveDataSourceByGuid(string guid);
 
+        /// <summary>
+        /// This method is responsible for retrieving a data source by name.
+        /// </summary>
+        /// <param name="name">The name of the data source that specified which data source should get retrieved.</param>
+        /// <returns>This method returns the data source with the specified name.</returns>
         Task<IDataSourceAdaptee> RetrieveDataSourceByName(string name);
 
     }
@@ -63,6 +117,13 @@ namespace Services.ExternalDataProviders
             this.dataProviderLoader = dataProviderLoader;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving all projects from a data source.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
+        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
+        /// <returns>This method returns a collection of projects.</returns>
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
@@ -70,18 +131,37 @@ namespace Services.ExternalDataProviders
             return await dataProviderAdapter.GetAllProjects(token, needsAuth);
         }
 
-        public async Task<Project> GetProjectByGuid(string dataSourceGuid, string accessToken, int id, bool needsAuth)
+        /// <summary>
+        /// This method is responsible for retrieving a project by id.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
+        /// <param name="id">The id of the project which will get used for searching the correct project.</param>
+        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
+        /// <returns>This method returns a project with the specified identifier.</returns>
+        public async Task<Project> GetProjectById(string dataSourceGuid, string token, int id, bool needsAuth)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
-            return await dataProviderAdapter.GetProjectByGuid(accessToken, id.ToString(), needsAuth);
+            return await dataProviderAdapter.GetProjectByGuid(token, id.ToString(), needsAuth);
         }
 
+        /// <summary>
+        /// This method validates whether a data source with the specified guid exists.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that will get checked.</param>
+        /// <returns>This method return whether the data source exists or does not exists.</returns>
         public bool IsExistingDataSourceGuid(string dataSourceGuid)
         {
             return dataProviderLoader.GetDataSourceByGuid(dataSourceGuid) != null;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a project by uri.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
+        /// <returns>This method returns a project from the specified uri.</returns>
         public async Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
@@ -103,21 +183,37 @@ namespace Services.ExternalDataProviders
             return await dataProviderAdapter.GetProjectByUri(serializedUrl);
         }
 
-        public async Task<string> GetOauthUrl(string guid)
+        /// <summary>
+        /// This method is responsible for retrieving the oauth url from the specified data source.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <returns>This method returns the oauth url from the specified data source.</returns>
+        public async Task<string> GetOauthUrl(string dataSourceGuid)
         {
-            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(guid);
+            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
             return dataProviderAdapter.GetOauthUrl();
         }
 
-        public async Task<OauthTokens> GetTokens(string code, string guid)
+        /// <summary>
+        /// This method is responsible for returning the Oauth url from the specified  data source.
+        /// </summary>
+        /// <param name="code">The code which is used to retrieve Oauth tokens from the external data source.</param>
+        /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
+        /// <returns>This method returns the Oauth tokens from the external data source.</returns>
+        public async Task<OauthTokens> GetTokens(string code, string dataSourceGuid)
         {
-            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(guid);
+            IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
             return await dataProviderAdapter.GetTokens(code);
 
         }
 
+        /// <summary>
+        /// This method is responsible for returning the data sources.
+        /// </summary>
+        /// <param name="needsAuth">The needsAuth parameter specifies whether the returned data sources should follow a specific auth flow.</param>
+        /// <returns>This method returns a collection of data source adaptees.</returns>
         public async Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth)
         {
             List<IDataSourceAdaptee> sources =  await dataProviderLoader.GetAllDataSources();
@@ -132,12 +228,22 @@ namespace Services.ExternalDataProviders
             return sources.Where(s => s is IPublicDataSourceAdaptee);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a data source by guid.
+        /// </summary>
+        /// <param name="guid">The data source guid that specifies which data source should get retrieved.</param>
+        /// <returns>This method returns the data source with the specified guid.</returns>
         public async Task<IDataSourceAdaptee> RetrieveDataSourceByGuid(string guid)
         {
             IDataSourceAdaptee source = await dataProviderLoader.GetDataSourceByGuid(guid);
             return source;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a data source by name.
+        /// </summary>
+        /// <param name="name">The name of the data source that specified which data source should get retrieved.</param>
+        /// <returns>This method returns the data source with the specified name.</returns>
         public async Task<IDataSourceAdaptee> RetrieveDataSourceByName(string name)
         {
             IDataSourceAdaptee source = await dataProviderLoader.GetDataSourceByName(name);

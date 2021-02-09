@@ -260,7 +260,7 @@ namespace API.Controllers
             try
             {
                 Project project =
-                    await dataProviderService.GetProjectByGuid(dataSourceGuid, accessToken, projectId, needsAuth);
+                    await dataProviderService.GetProjectById(dataSourceGuid, accessToken, projectId, needsAuth);
 
                 if(project == null)
                 {

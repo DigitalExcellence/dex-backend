@@ -18,7 +18,7 @@
 namespace Models
 {
     /// <summary>
-    /// This class works as the link between the data source and the wizard page. 
+    /// This class works as the link between the data source and the wizard page.
     /// </summary>
     public class DataSourceWizardPage
     {
@@ -28,6 +28,9 @@ namespace Models
         /// </summary>
         public DataSource DataSource { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the DataSourceId property.
+        /// </summary>
         public int DataSourceId { get; set; }
 
         /// <summary>
@@ -35,6 +38,9 @@ namespace Models
         /// </summary>
         public WizardPage WizardPage { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the WizardPageId property.
+        /// </summary>
         public int WizardPageId { get; set; }
 
         /// <summary>
