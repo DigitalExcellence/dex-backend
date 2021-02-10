@@ -442,6 +442,16 @@ namespace API
 
                 // TODO seed embedded projects
             }
+            // Seed call to action options
+            List<CallToActionOption> options = Seed.SeedCallToActionOptions();
+            foreach(CallToActionOption callToActionOption in options)
+            {
+                if(!context.CallToActionOption.Any(s => s.Type == callToActionOption.Type && s.Value == callToActionOption.Value))
+                {
+                    context.CallToActionOption.Add(callToActionOption);
+                    context.SaveChanges();
+                }
+            }
         }
 
         /// <summary>
