@@ -161,8 +161,7 @@ namespace API.Controllers
                 institutionService.Save();
                 InstitutionResourceResult model = mapper.Map<Institution, InstitutionResourceResult>(institution);
                 return Created(nameof(CreateInstitution), model);
-            }
-            catch(DbUpdateException e)
+            } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
 

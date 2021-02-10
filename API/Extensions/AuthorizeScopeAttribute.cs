@@ -39,7 +39,7 @@ namespace API.Extensions
         /// <param name="claimValue">The claim value.</param>
         public AuthorizeScopeAttribute(string claimValue) : base(typeof(AuthorizeScopeFilter))
         {
-            Arguments = new object[] {new Claim("scope", claimValue)};
+            Arguments = new object[] { new Claim("scope", claimValue) };
         }
     }
 
@@ -69,8 +69,8 @@ namespace API.Extensions
             bool hasClaim = context.HttpContext.User.Claims.Any(c => c.Type == claim.Type && c.Value == claim.Value);
 
             //Get all scopes from the user
-                IEnumerable<Claim> scopes =
-                context.HttpContext.User.FindAll("scope");
+            IEnumerable<Claim> scopes =
+            context.HttpContext.User.FindAll("scope");
             bool hasIdentityClaim = false;
 
             foreach(Claim scope in scopes)

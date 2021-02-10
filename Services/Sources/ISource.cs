@@ -15,19 +15,41 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
 using Models;
+using System;
 
 namespace Services.Sources
 {
 
+    /// <summary>
+    ///     This is the source interface
+    /// </summary>
     public interface ISource
     {
+        /// <summary>
+        ///     This is the interface method which checks if the project uri matches
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns>boolean</returns>
         bool ProjectURIMatches(Uri uri);
+
+        /// <summary>
+        ///     This is the interface method which searches for the specified term
+        /// </summary>
+        /// <param name="searchTerm"></param>
         void Search(string searchTerm);
 
+        /// <summary>
+        ///     This is the interface method which gets the specified source by URI
+        /// </summary>
+        /// <param name="uri"></param>
         void GetSource(Uri uri);
 
+        /// <summary>
+        ///     This is the interface method which gets the project information by URI
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns>Project entity</returns>
         Project GetProjectInformation(Uri uri);
 
     }

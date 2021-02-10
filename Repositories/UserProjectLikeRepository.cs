@@ -34,7 +34,8 @@ namespace Repositories
                                              IUserProjectLikeRepository
     {
         public UserProjectLikeRepository(DbContext dbContext) :
-            base(dbContext) { }
+            base(dbContext)
+        { }
 
         public override void Add(ProjectLike projectLike)
         {
@@ -59,7 +60,7 @@ namespace Repositories
         {
             ProjectLike projectLike = GetDbSet<ProjectLike>()
                 .SingleOrDefault(project =>
-                                     (project.ProjectLiker.Id == userId) && project.LikedProject.Id == projectId);
+                                     project.ProjectLiker.Id == userId && project.LikedProject.Id == projectId);
 
             if(projectLike != null)
             {

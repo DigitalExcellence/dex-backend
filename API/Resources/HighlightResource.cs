@@ -34,7 +34,6 @@ namespace API.Resources
         /// </summary>
         public string Description { get; set; }
 
-
         /// <summary>
         ///     This gets or sets the start date that the highlight should start
         /// </summary>

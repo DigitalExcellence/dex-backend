@@ -19,7 +19,6 @@ using API.Common;
 using API.HelperClasses;
 using Data;
 using MessageBrokerPublisher;
-using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,7 +88,7 @@ namespace API.Extensions
 
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
-                        
+
             services.AddScoped<ITaskPublisher, TaskPublisher>();
             return services;
         }

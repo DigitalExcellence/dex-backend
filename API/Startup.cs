@@ -152,7 +152,7 @@ namespace API
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
-                
+
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
 
@@ -178,10 +178,10 @@ namespace API
                                  Description =
                                      "Dex API Swagger surface. DeX provides a platform for students, teachers and employees to share and work on projects and ideas. Find, create, share and work on projects and ideas on DeX",
                                  License = new OpenApiLicense
-                                           {
-                                               Name = "GNU Lesser General Public License v3.0",
-                                               Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
-                                           }
+                                 {
+                                     Name = "GNU Lesser General Public License v3.0",
+                                     Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
+                                 }
                              });
                 o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
 
@@ -190,16 +190,16 @@ namespace API
                                         {
                                             Type = SecuritySchemeType.OAuth2,
                                             Flows = new OpenApiOAuthFlows
-                                                    {
-                                                        Implicit = new OpenApiOAuthFlow
-                                                                   {
-                                                                       AuthorizationUrl = GetAuthorizationUrl(),
-                                                                       Scopes = new Dictionary<string, string>
+                                            {
+                                                Implicit = new OpenApiOAuthFlow
+                                                {
+                                                    AuthorizationUrl = GetAuthorizationUrl(),
+                                                    Scopes = new Dictionary<string, string>
                                                                            {
                                                                                {"dex-api", "Resource scope"},
                                                                            }
-                                                                   }
-                                                    }
+                                                }
+                                            }
                                         });
                 o.AddSecurityRequirement(new OpenApiSecurityRequirement
                                          {
@@ -232,8 +232,8 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
-            Defaults.Path.filePath = Path.Combine(env.WebRootPath, "Images");
-            
+            Defaults.Path.FilePath = Path.Combine(env.WebRootPath, "Images");
+
 
             UpdateDatabase(app, env);
             if(env.IsDevelopment())
@@ -245,14 +245,14 @@ namespace API
             } else if(env.IsProduction())
             {
                 app.UseExceptionHandler(new ExceptionHandlerOptions
-                                        {
-                                            ExceptionHandler = context =>
-                                            {
-                                                context.Response.ContentType = "text/HTML";
-                                                context.Response.Redirect("/Error.html");
-                                                return Task.CompletedTask;
-                                            }
-                                        });
+                {
+                    ExceptionHandler = context =>
+                    {
+                        context.Response.ContentType = "text/HTML";
+                        context.Response.Redirect("/Error.html");
+                        return Task.CompletedTask;
+                    }
+                });
             } else
             {
                 app.UseExceptionHandler();
@@ -262,7 +262,7 @@ namespace API
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
-                               {
+            {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, "Uploads", "Images")),
                 RequestPath = "/Uploads/Images"
@@ -326,16 +326,16 @@ namespace API
                                     } else
                                     {
                                         User newUser = new User
-                                                       {
-                                                           Name = userInformation.Name,
-                                                           Email = userInformation.Email,
-                                                           IdentityId = userInformation.IdentityId,
-                                                           Role = registeredUserRole,
-                                                       };
+                                        {
+                                            Name = userInformation.Name,
+                                            Email = userInformation.Email,
+                                            IdentityId = userInformation.IdentityId,
+                                            Role = registeredUserRole,
+                                        };
                                         Institution institution =
                                             await institutionService.GetInstitutionByInstitutionIdentityId(
                                                 userInformation.IdentityInstitutionId);
-                                        if( institution != null)
+                                        if(institution != null)
                                         {
                                             newUser.InstitutionId = institution.Id;
                                         }
@@ -354,7 +354,7 @@ namespace API
                                                                       userInformation.IdentityInstitutionId);
                                         if(institution != null)
                                             user.InstitutionId = institution.Id;
-                                        
+
                                         userService.Update(user);
                                         await dbContext.SaveChangesAsync()
                                                        .ConfigureAwait(false);

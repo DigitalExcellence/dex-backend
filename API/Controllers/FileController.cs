@@ -20,16 +20,16 @@ using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Models.Exceptions;
 using Services.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using File = Models.File;
 
 namespace API.Controllers
@@ -119,12 +119,12 @@ namespace API.Controllers
             } catch(FileExistException fileExistException)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = fileExistException.Message,
-                     Detail = "Please rename filename.",
-                     Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
+                {
+                    Title = fileExistException.Message,
+                    Detail = "Please rename filename.",
+                    Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
                 };
-                return BadRequest(problem); 
+                return BadRequest(problem);
             }
         }
 
@@ -177,10 +177,10 @@ namespace API.Controllers
             if(file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "File was not found.",
-                     Detail = "File was not found.",
-                     Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
+                {
+                    Title = "File was not found.",
+                    Detail = "File was not found.",
+                    Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
                 };
                 return NotFound(problem);
             }
@@ -189,13 +189,13 @@ namespace API.Controllers
             if(!(file.Uploader.Id.Equals(user.Id) || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Not authorized.",
-                     Detail = "You do not have the required permissions to delete this file.",
-                     Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
-                 };
+                {
+                    Title = "Not authorized.",
+                    Detail = "You do not have the required permissions to delete this file.",
+                    Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
+                };
                 return Unauthorized(problem);
-                
+
             }
 
             try
@@ -208,15 +208,15 @@ namespace API.Controllers
             } catch(FileNotFoundException)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "File could not be deleted because the path does not exist.",
-                     Detail = "File could not be found.",
-                     Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
-                 };
+                {
+                    Title = "File could not be deleted because the path does not exist.",
+                    Detail = "File could not be found.",
+                    Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
+                };
 
                 return NotFound(problem);
-            } 
-            
+            }
+
         }
 
     }

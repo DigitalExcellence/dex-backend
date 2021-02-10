@@ -194,9 +194,9 @@ namespace Services.Tests
         {
             GitLabResourceResult resource = new GitLabResourceResult
             {
-                name = "repo name",
-                readme_url = "readme url",
-                web_url = "repo url"
+                Name = "repo name",
+                ReadmeUrl = "readme url",
+                WebUrl = "repo url"
             };
 
             string response = JsonConvert.SerializeObject(resource);
@@ -258,24 +258,24 @@ namespace Services.Tests
             // Prepare
             Uri projectUri = new Uri("http://example.com/group/project");
             GitLabResourceResult gitLabResourceResult = new GitLabResourceResult();
-            gitLabResourceResult.name = "repo name";
-            gitLabResourceResult.description = "repo description";
-            gitLabResourceResult.web_url = "web url";
-            gitLabResourceResult.readme_url = "http://example.com/readme";
+            gitLabResourceResult.Name = "repo name";
+            gitLabResourceResult.Description = "repo description";
+            gitLabResourceResult.WebUrl = "web url";
+            gitLabResourceResult.ReadmeUrl = "http://example.com/readme";
             string data = JsonConvert.SerializeObject(gitLabResourceResult);
             string readmeContent = "This is a readme";
 
 
             RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri("http://example.com/api/v4/projects/group%2Fproject")))
                                  .Returns(MockRestClient(HttpStatusCode.OK, data));
-            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri(gitLabResourceResult.readme_url)))
+            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri(gitLabResourceResult.ReadmeUrl)))
                                  .Returns(MockRestClient(HttpStatusCode.OK, readmeContent));
             // Ask
             Project project = Source.GetProjectInformation(projectUri);
             // Assert
-            Assert.AreEqual(project.Name, gitLabResourceResult.name);
-            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.description);
-            Assert.AreEqual(project.Uri, gitLabResourceResult.web_url);
+            Assert.AreEqual(project.Name, gitLabResourceResult.Name);
+            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.Description);
+            Assert.AreEqual(project.Uri, gitLabResourceResult.WebUrl);
             Assert.AreEqual(project.Description, readmeContent);
         }
 
@@ -305,9 +305,9 @@ namespace Services.Tests
             // Prepare
             Uri projectUri = new Uri("http://example.com/group/project");
             GitLabResourceResult gitLabResourceResult = new GitLabResourceResult();
-            gitLabResourceResult.name = "repo name";
-            gitLabResourceResult.description = "repo description";
-            gitLabResourceResult.web_url = "web url";
+            gitLabResourceResult.Name = "repo name";
+            gitLabResourceResult.Description = "repo description";
+            gitLabResourceResult.WebUrl = "web url";
             string data = JsonConvert.SerializeObject(gitLabResourceResult);
            
             RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri("http://example.com/api/v4/projects/group%2Fproject")))
@@ -315,9 +315,9 @@ namespace Services.Tests
             // Ask
             Project project = Source.GetProjectInformation(projectUri);
             // Assert
-            Assert.AreEqual(project.Name, gitLabResourceResult.name);
-            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.description);
-            Assert.AreEqual(project.Uri, gitLabResourceResult.web_url);
+            Assert.AreEqual(project.Name, gitLabResourceResult.Name);
+            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.Description);
+            Assert.AreEqual(project.Uri, gitLabResourceResult.WebUrl);
             Assert.IsNull(project.Description);
         }
     }

@@ -32,9 +32,9 @@ namespace API.Resources
         /// IFormFile 
         /// </summary>
         [Required(ErrorMessage = "Please add a file")]
-        [AllowedExtensions(new [] { ".jpg", ".png", ".jpeg"})]
+        [AllowedExtensions(new[] { ".jpg", ".png", ".jpeg" })]
         [MaxFileSize(2097152)]
         public IFormFile File { get; set; }
-        
+
     }
 }

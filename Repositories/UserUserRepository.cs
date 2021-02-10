@@ -52,7 +52,7 @@ namespace Repositories
         bool IUserUserRepository.CheckIfUserFollows(int userId, int followedUserId)
         {
             UserUser userUser = GetDbSet<UserUser>()
-                              .Where(s => (s.User.Id == userId)
+                              .Where(s => s.User.Id == userId
                               && s.FollowedUser.Id == followedUserId)
                               .SingleOrDefault();
 

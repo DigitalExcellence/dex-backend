@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the interface for the embed service
+    /// </summary>
     public interface IEmbedService : IService<EmbeddedProject>
     {
         /// <summary>
@@ -48,8 +51,8 @@ namespace Services.Services
     /// <summary>
     /// EmbedService
     /// </summary>
-    /// <seealso cref="Services.Base.Service{Models.EmbeddedProject}" />
-    /// <seealso cref="Services.Services.IEmbedService" />
+    /// <seealso cref="EmbeddedProject" />
+    /// <seealso cref="IEmbedService" />
     public class EmbedService : Service<EmbeddedProject>, IEmbedService
     {
         /// <summary>

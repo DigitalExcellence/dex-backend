@@ -1,3 +1,20 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using Microsoft.AspNetCore.Http;
 using Models.Defaults;
 using Models.Exceptions;
@@ -9,7 +26,7 @@ using File = Models.File;
 
 namespace API.HelperClasses
 {
-    
+
 
     /// <summary>
     /// Interface for file uploader
@@ -44,7 +61,7 @@ namespace API.HelperClasses
         /// </summary>
         public FileUploader()
         {
-            uploadPath = Defaults.Path.filePath;
+            uploadPath = Defaults.Path.FilePath;
         }
 
         /// <summary>
@@ -77,7 +94,8 @@ namespace API.HelperClasses
         /// <returns> Bool which tells if file is deleted successfully or not </returns>
         public void DeleteFileFromDirectory(File file)
         {
-            if(System.IO.File.Exists(Path.Combine(uploadPath, file.Name))) {
+            if(System.IO.File.Exists(Path.Combine(uploadPath, file.Name)))
+            {
                 System.IO.File.Delete(Path.Combine(uploadPath, file.Name));
                 return;
             }

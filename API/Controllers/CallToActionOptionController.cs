@@ -88,7 +88,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetAllCallToActionOptionsFromType(string typeName)
         {
-            if (string.IsNullOrEmpty(typeName))
+            if(string.IsNullOrEmpty(typeName))
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -101,7 +101,7 @@ namespace API.Controllers
 
             IEnumerable<CallToActionOption> type =
                 await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(typeName.ToLower());
-            if (type == null)
+            if(type == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -136,7 +136,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetCallToActionOptionById(int id)
         {
-            if (id <= 0)
+            if(id <= 0)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -148,7 +148,7 @@ namespace API.Controllers
             }
 
             CallToActionOption callToActionOption = await callToActionOptionService.FindAsync(id);
-            if (callToActionOption == null)
+            if(callToActionOption == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -198,9 +198,9 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                     Title = "Failed creating the call to action option.",
-                     Detail = "Identical call to action option already exists.",
-                     Instance = "1DA7B168-FAD1-41B6-A90F-3AAEB26147CE"
+                    Title = "Failed creating the call to action option.",
+                    Detail = "Identical call to action option already exists.",
+                    Instance = "1DA7B168-FAD1-41B6-A90F-3AAEB26147CE"
                 };
                 return BadRequest(problem);
             }

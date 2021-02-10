@@ -52,7 +52,7 @@ namespace Repositories
         bool IUserProjectRepository.CheckIfUserFollows(int userId, int projectId)
         {
             UserProject userProject = GetDbSet<UserProject>()
-                              .Where(s => (s.UserId == userId)
+                              .Where(s => s.UserId == userId
                               && s.Project.Id == projectId)
                               .SingleOrDefault();
 

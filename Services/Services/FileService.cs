@@ -18,9 +18,6 @@
 using Models;
 using Repositories;
 using Services.Base;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -32,6 +29,9 @@ namespace Services.Services
 
     }
 
+    /// <summary>
+    /// This is the file service
+    /// </summary>
     public class FileService : Service<File>, IFileService
     {
 

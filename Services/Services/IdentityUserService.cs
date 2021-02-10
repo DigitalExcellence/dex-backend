@@ -1,11 +1,25 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using Models;
 using Repositories;
 using Services.Base;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Services
@@ -13,7 +27,7 @@ namespace Services.Services
     /// <summary>
     /// The IdentityUser service.
     /// </summary>
-    /// <seealso cref="Services.Base.IService{Models.IdentityUser}" />
+    /// <seealso cref="IdentityUser" />
     public interface IIdentityUserService : IService<IdentityUser>
     {
         /// <summary>
@@ -67,13 +81,20 @@ namespace Services.Services
     /// <summary>
     /// The IdentityUser Service.
     /// </summary>
-    /// <seealso cref="Services.Base.Service{Models.IdentityUser}" />
-    /// <seealso cref="Services.Services.IIdentityUserService" />
+    /// <seealso cref="IdentityUser" />
+    /// <seealso cref="IIdentityUserService" />
     public class IdentityUserService : Service<IdentityUser>, IIdentityUserService
     {
 
+        /// <summary>
+        ///     This is the constructor of the identity user service
+        /// </summary>
+        /// <param name="repository"></param>
         public IdentityUserService(IIdentityUserRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IIdentityUserRepository Repository => (IIdentityUserRepository) base.Repository;
 
         /// <summary>

@@ -21,12 +21,15 @@ using System;
 namespace Services.Sources
 {
 
+    /// <summary>
+    ///     This is the interface of the GitHub Source
+    /// </summary>
     public interface IGitHubSource : ISource {}
 
     /// <summary>
     /// GitHubSource
     /// </summary>
-    /// <seealso cref="Services.Sources.ISource" />
+    /// <seealso cref="ISource" />
     public class GitHubSource : IGitHubSource
     {
         /// <summary>

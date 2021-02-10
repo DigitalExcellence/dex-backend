@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the search service interface
+    /// </summary>
     public interface ISearchService
     {
 
@@ -54,11 +57,20 @@ namespace Services.Services
 
     }
 
+    /// <summary>
+    ///     This is the search service
+    /// </summary>
     public class SearchService : ISearchService
     {
-
+        /// <summary>
+        ///     Gets the project repository
+        /// </summary>
         private readonly IProjectRepository projectRepository;
 
+        /// <summary>
+        /// This is the search service constructor
+        /// </summary>
+        /// <param name="projectRepository"></param>
         public SearchService(IProjectRepository projectRepository)
         {
             this.projectRepository = projectRepository;

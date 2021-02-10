@@ -64,12 +64,12 @@ namespace API.Resources
         /// Gets or sets the institution where the user is registered.
         /// </summary>
         public Institution Institution { get; set; }
-       
+
         /// <summary>
         /// Gets or sets the followed projects for user
         /// </summary>
         public List<UserProjectResourceResult> UserProject { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the liked projects by registered users.
         /// </summary>
