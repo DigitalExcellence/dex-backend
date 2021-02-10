@@ -106,11 +106,13 @@ namespace Services.ExternalDataProviders
             if(!needsAuth)
             {
                 IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
-                if(publicDataSource == null) return null;
+                if(publicDataSource == null)
+                    throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
                 return await publicDataSource.GetPublicProjectById(id);
             }
             IAuthorizedDataSourceAdaptee authorizedDataSource = adaptee as IAuthorizedDataSourceAdaptee;
-            if(authorizedDataSource == null) return null;
+            if(authorizedDataSource == null)
+                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
             return await authorizedDataSource.GetProjectById(token, id);
         }
 
@@ -122,7 +124,8 @@ namespace Services.ExternalDataProviders
         public async Task<Project> GetProjectByUri(Uri sourceUri)
         {
             IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
-            if(publicDataSource == null) return null;
+            if(publicDataSource == null)
+                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
             return await publicDataSource.GetPublicProjectFromUri(sourceUri);
         }
 
@@ -145,14 +148,16 @@ namespace Services.ExternalDataProviders
         public async Task<OauthTokens> GetTokens(string code)
         {
             IAuthorizedDataSourceAdaptee dataProvider = adaptee as IAuthorizedDataSourceAdaptee;
-            if(dataProvider == null) return null;
+            if(dataProvider == null)
+                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
             return await dataProvider.GetTokens(code);
         }
 
         private async Task<IEnumerable<Project>> GetAllProjectWithAccessToken(string accessToken)
         {
             IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee = adaptee as IAuthorizedDataSourceAdaptee;
-            if(authorizedDataSourceAdaptee == null) return null;
+            if(authorizedDataSourceAdaptee == null)
+                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
             IEnumerable<Project> projects = await authorizedDataSourceAdaptee.GetAllProjects(accessToken);
             return projects;
         }
@@ -160,7 +165,8 @@ namespace Services.ExternalDataProviders
         private async Task<IEnumerable<Project>> GetAllProjectsWithoutAccessToken(string username)
         {
             IPublicDataSourceAdaptee publicDataSourceAdaptee = adaptee as IPublicDataSourceAdaptee;
-            if(publicDataSourceAdaptee == null) return null;
+            if(publicDataSourceAdaptee == null)
+                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
             IEnumerable<Project> projects = await publicDataSourceAdaptee.GetAllPublicProjects(username);
             return projects;
         }

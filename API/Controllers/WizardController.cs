@@ -143,6 +143,15 @@ namespace API.Controllers
                                              Instance = "AA4FC30F-85F0-4120-A479-728DADABAB32"
                                          };
                 return BadRequest(problem);
+            } catch(NotSupportedException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "The specified data source is not supported.",
+                                             Detail = e.Message,
+                                             Instance = "E7834AC0-43D0-4D40-AB7C-E120A6EFCD5B"
+                                         };
+                return BadRequest(problem);
             }
         }
 
@@ -209,6 +218,15 @@ namespace API.Controllers
                                              Title = "An problem encountered while using the external API.",
                                              Detail = e.Message,
                                              Instance = "DE7A6BFD-2A72-46CC-AB6E-1D8568F2EB19"
+                                         };
+                return BadRequest(problem);
+            } catch(NotSupportedException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "The specified data source is not supported.",
+                                             Detail = e.Message,
+                                             Instance = "E1500627-AAF8-46E3-9B20-8A3C952CDBC3"
                                          };
                 return BadRequest(problem);
             }
@@ -292,6 +310,15 @@ namespace API.Controllers
                                              Instance = "21D8A923-02CB-4F1B-86C0-88FDA002294D"
                                          };
                 return BadRequest(problem);
+            } catch(NotSupportedException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "The specified data source is not supported.",
+                                             Detail = e.Message,
+                                             Instance = "0D02B0F5-71F8-427E-AB28-D4831B91639D"
+                                         };
+                return BadRequest(problem);
             }
         }
 
@@ -366,6 +393,15 @@ namespace API.Controllers
                                              Title = "An problem encountered while using the external API.",
                                              Detail = e.Message,
                                              Instance = "7D445CB5-7C19-449C-B9FF-4214E4BE4CF0"
+                                         };
+                return BadRequest(problem);
+            } catch(NotSupportedException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "The specified data source is not supported.",
+                                             Detail = e.Message,
+                                             Instance = "7F2C173E-F001-49CA-8DF8-C18A0837B4AF"
                                          };
                 return BadRequest(problem);
             }
