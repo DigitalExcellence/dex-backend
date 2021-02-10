@@ -94,7 +94,7 @@ namespace Services.Tests
         /// Tests if isValidScope returns true on an existing scope.
         /// </summary>
         [Test]
-        public void isValidScope_true()
+        public void IsValidScope_true()
         {
             List<string> currentScopes = new List<string>()
                                          {
@@ -119,7 +119,7 @@ namespace Services.Tests
         /// Tests if isValidScope returns false on a non existing scope.
         /// </summary>
         [Test]
-        public void isValidScope_false()
+        public void IsValidScope_false()
         {
             bool isValidScope = Service.IsValidScope("role:read");
 

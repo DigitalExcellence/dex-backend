@@ -26,7 +26,9 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-
+    /// <summary>
+    ///     This is the embed repository interface
+    /// </summary>
     public interface IEmbedRepository : IRepository<EmbeddedProject>
     {
         /// <summary>
@@ -35,11 +37,13 @@ namespace Repositories
         /// <param name="guid">The unique identifier.</param>
         /// <returns>The embeddedProject with the specified guid.</returns>
         Task<EmbeddedProject> GetEmbeddedProjectAsync(Guid guid);
+
         /// <summary>
         /// Gets the embedded projects asynchronous.
         /// </summary>
         /// <returns>All the embeddedProjects</returns>
         Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync();
+
         /// <summary>
         /// Determines whether [is non existing unique identifier] [the specified unique identifier].
         /// </summary>
@@ -47,11 +51,12 @@ namespace Repositories
         /// <returns>A boolean if the guid already exists return false else return true.</returns>
         Task<bool> IsNonExistingGuidAsync(Guid guid);
     }
+
     /// <summary>
     /// EmbedRepository
     /// </summary>
-    /// <seealso cref="Repositories.Base.Repository{Models.EmbeddedProject}" />
-    /// <seealso cref="Repositories.IEmbedRepository" />
+    /// <seealso cref="EmbeddedProject" />
+    /// <seealso cref="IEmbedRepository" />
     public class EmbedRepository : Repository<EmbeddedProject>, IEmbedRepository
     {
         /// <summary>

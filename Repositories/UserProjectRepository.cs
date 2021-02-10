@@ -22,39 +22,58 @@ using System.Linq;
 
 namespace Repositories
 {
-
+    /// <summary>
+    ///     This is the user (follows) project repository
+    /// </summary>
     public interface IUserProjectRepository : IRepository<UserProject>
     {
-        bool CheckIfUserFollows(int userId,int projectId);
+        /// <summary>
+        ///     This interface method checks if the user already follows the project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns>boolean</returns>
+        bool CheckIfUserFollows(int userId, int projectId);
     }
 
+    /// <summary>
+    ///     This is the user (follows) project repository
+    /// </summary>
     public class UserProjectRepository : Repository<UserProject>, IUserProjectRepository
     {
+        /// <summary>
+        ///     This is the user (follows) project constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public UserProjectRepository(DbContext dbContext) : base(dbContext) { }
 
-        public override void Add(UserProject userProject)
-        {
-            DbContext.Add(userProject);
-        }
-
+        /// <summary>
+        ///     This method removes the project follow from the database
+        /// </summary>
+        /// <param name="userProject"></param>
         public override void Remove(UserProject userProject)
         {
-            UserProject projectToRemove = GetDbSet<UserProject>()
-                .Where
-                (s => s.UserId == userProject.User.Id
-                && s.Project.Id == userProject.Project.Id)
-                .SingleOrDefault();
+            UserProject projectToRemove = GetDbSet
+                    <UserProject>()
+                .SingleOrDefault(s => s.UserId == userProject.User.Id
+                                   && s.Project.Id == userProject.Project.Id);
 
-                GetDbSet<UserProject>()
-                .Remove(projectToRemove);
+            GetDbSet<UserProject>()
+            .Remove(projectToRemove);
         }
 
+        /// <summary>
+        ///     This method checks if the user already follows the project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns>boolean</returns>
         bool IUserProjectRepository.CheckIfUserFollows(int userId, int projectId)
         {
-            UserProject userProject = GetDbSet<UserProject>()
-                              .Where(s => s.UserId == userId
-                              && s.Project.Id == projectId)
-                              .SingleOrDefault();
+            UserProject userProject = GetDbSet
+                    <UserProject>()
+                .SingleOrDefault(s => s.UserId == userId
+                                   && s.Project.Id == projectId);
 
             if(userProject != null)
             {

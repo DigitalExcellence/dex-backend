@@ -28,10 +28,21 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-
+    /// <summary>
+    ///     This is the interface of the project repository
+    /// </summary>
     public interface IProjectRepository : IRepository<Project>
     {
 
+        /// <summary>
+        /// This interface method gets all projects including their owner and collaborators
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="orderByAsc"></param>
+        /// <param name="highlighted"></param>
+        /// <returns>List of projects</returns>
         Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
             int? skip = null,
             int? take = null,
@@ -40,8 +51,23 @@ namespace Repositories
             bool? highlighted = null
         );
 
+        /// <summary>
+        /// This interface method counts the amount of projects matching the filters.
+        /// </summary>
+        /// <param name="highlighted"></param>
+        /// <returns>number of projects found</returns>
         Task<int> CountAsync(bool? highlighted = null);
 
+        /// <summary>
+        /// This interface method searches the database for projects matching the search query and parameters.
+        /// </summary>
+        /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns thee projects matching the search query and parameters.</returns>
         Task<IEnumerable<Project>> SearchAsync(
             string query,
             int? skip = null,
@@ -51,15 +77,36 @@ namespace Repositories
             bool? highlighted = null
         );
 
+        /// <summary>
+        /// This interface method counts the amount of projects matching the filters and the search query.
+        /// </summary>
+        /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <returns>This method returns the amount of projects matching the filters.</returns>
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
+        /// <summary>
+        /// This method will retrieve a project with user and collaborators async. Project will be redacted if user
+        /// has that setting configured.
+        /// </summary>
+        /// <param name="id">The unique identifier which is used for searching the correct project.</param>
+        /// <returns>
+        /// This method returns possibly redacted Project object with user and collaborators.
+        /// </returns>
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
     }
 
+    /// <summary>
+    ///     This is the project repository
+    /// </summary>
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
 
+        /// <summary>
+        ///     This is the constructor of the project repository
+        /// </summary>
+        /// <param name="dbContext"></param>
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
@@ -176,7 +223,7 @@ namespace Repositories
         /// This method will retrieve a project with user and collaborators async. Project will be redacted if user
         /// has that setting configured.
         /// </summary>
-/// <param name="id">The unique identifier which is used for searching the correct project.</param>
+        /// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
         /// This method returns possibly redacted Project object with user and collaborators.
         /// </returns>

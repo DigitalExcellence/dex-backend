@@ -22,39 +22,58 @@ using System.Linq;
 
 namespace Repositories
 {
-
+    /// <summary>
+    ///     This is the interface for the user (follows) user repository
+    /// </summary>
     public interface IUserUserRepository : IRepository<UserUser>
     {
-        bool CheckIfUserFollows(int userId,int followedUserId);
+        /// <summary>
+        ///     This interface method checks if the user is already followed
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="followedUserId"></param>
+        /// <returns>boolean</returns>
+        bool CheckIfUserFollows(int userId, int followedUserId);
     }
 
+    /// <summary>
+    ///     This the user (follows) user repository
+    /// </summary>
     public class UserUserRepository : Repository<UserUser>, IUserUserRepository
     {
+        /// <summary>
+        ///     This the user (follows) user repository constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public UserUserRepository(DbContext dbContext) : base(dbContext) { }
 
-        public override void Add(UserUser userUser)
-        {
-            DbContext.Add(userUser);
-        }
-
+        /// <summary>
+        ///     This is the overridden remove method which unfollows the user
+        /// </summary>
+        /// <param name="userUser"></param>
         public override void Remove(UserUser userUser)
         {
-            UserUser userUnfollow = GetDbSet<UserUser>()
-                .Where
-                (s => s.User.Id == userUser.User.Id
-                && s.FollowedUser.Id == userUser.FollowedUser.Id)
-                .SingleOrDefault();
+            UserUser userUnfollow = GetDbSet
+                    <UserUser>()
+                .SingleOrDefault(s => s.User.Id == userUser.User.Id
+                                   && s.FollowedUser.Id == userUser.FollowedUser.Id);
 
-                GetDbSet<UserUser>()
-                .Remove(userUnfollow);
+            GetDbSet<UserUser>()
+            .Remove(userUnfollow);
         }
 
+        /// <summary>
+        ///     This method checks if the user is already followed
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="followedUserId"></param>
+        /// <returns>boolean</returns>
         bool IUserUserRepository.CheckIfUserFollows(int userId, int followedUserId)
         {
-            UserUser userUser = GetDbSet<UserUser>()
-                              .Where(s => s.User.Id == userId
-                              && s.FollowedUser.Id == followedUserId)
-                              .SingleOrDefault();
+            UserUser userUser = GetDbSet
+                    <UserUser>()
+                .SingleOrDefault(s => s.User.Id == userId
+                                   && s.FollowedUser.Id == followedUserId);
 
             if(userUser != null)
             {

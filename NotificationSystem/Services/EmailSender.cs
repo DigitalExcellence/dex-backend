@@ -60,7 +60,7 @@ namespace NotificationSystem.Services
             string subject = "You have a new notification on DeX";
             EmailAddress to = new EmailAddress(recipient);
             SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, textContent, htmlContent);
-            msg.SetSandBoxMode(this.sandboxMode);
+            msg.SetSandBoxMode(sandboxMode);
 
             return await client.SendEmailAsync(msg);
         }
