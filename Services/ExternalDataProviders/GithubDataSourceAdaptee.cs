@@ -32,6 +32,9 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
+    /// <summary>
+    /// This class is responsible for communicating with the external Github API.
+    /// </summary>
     public class GithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
     {
         /// <summary>
@@ -47,6 +50,12 @@ namespace Services.ExternalDataProviders
         private readonly string clientSecret;
         private readonly string clientId;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GithubDataSourceAdaptee" /> class./>
+        /// </summary>
+        /// <param name="configuration">The configuration which is used to retrieve keys from the configuration file.</param>
+        /// <param name="restClientFactory">The rest client factory which is used to create rest clients.</param>
+        /// <param name="mapper">The mapper which is used to map Github resource results to projects.</param>
         public GithubDataSourceAdaptee(
             IConfiguration configuration,
             IRestClientFactory restClientFactory,
@@ -64,22 +73,52 @@ namespace Services.ExternalDataProviders
             OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo&state={Title}";
         }
 
+        /// <summary>
+        /// Gets the value for the guid from the Github data source adaptee.
+        /// </summary>
         public string Guid => "de38e528-1d6d-40e7-83b9-4334c51c19be";
 
+        /// <summary>
+        /// Gets or sets a value for the Title property from the Github data source adaptee.
+        /// </summary>
         public string Title { get; set; } = "Github";
 
+        /// <summary>
+        /// Gets the value for the Base Url from the Github data source adaptee.
+        /// </summary>
         public string BaseUrl { get; set; } = "https://api.github.com/";
 
+        /// <summary>
+        /// Gets or sets a value for the IsVisible property from the Github data source adaptee.
+        /// </summary>
         public bool IsVisible { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the Icon property from the Github data source adaptee.
+        /// </summary>
         public File Icon { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the Description property from the Github data source adaptee.
+        /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the DataSourceWizardPages property from the Github data source adaptee.
+        /// </summary>
         public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value for the OauthUrl property from the Github data source adaptee.
+        /// </summary>
         public string OauthUrl { get; }
 
+        /// <summary>
+        /// This method is responsible for retrieving Oauth tokens from the Github API.
+        /// </summary>
+        /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
+        /// <returns>This method returns the Oauth tokens.</returns>
+        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         public async Task<OauthTokens> GetTokens(string code)
         {
             Uri baseGithubUrl = new Uri("https://github.com/");
@@ -96,6 +135,11 @@ namespace Services.ExternalDataProviders
             return tokens;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving all projects from the user, via the access token, from the Github API.
+        /// </summary>
+        /// <param name="accessToken">The access token which will be used to retrieve all projects from the user.</param>
+        /// <returns>This method returns a collection of projects from the user.</returns>
         public async Task<IEnumerable<Project>> GetAllProjects(string accessToken)
         {
             IEnumerable<GithubDataSourceResourceResult> projects = await FetchAllGithubProjects(accessToken);
@@ -103,6 +147,12 @@ namespace Services.ExternalDataProviders
             return mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(projects);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a project from the user, via the access token, by id from the Github API.
+        /// </summary>
+        /// <param name="accessToken">The access token which will be used to retrieve the correct project from the user.</param>
+        /// <param name="projectId">The identifier of the project that will be used to search the correct project.</param>
+        /// <returns>This method returns a project with this specified identifier.</returns>
         public async Task<Project> GetProjectById(string accessToken, string projectId)
         {
             IEnumerable<GithubDataSourceResourceResult> projects = await FetchAllGithubProjects(accessToken);
@@ -132,6 +182,11 @@ namespace Services.ExternalDataProviders
             return projects;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving all public projects from a user, via the username, from the Github API.
+        /// </summary>
+        /// <param name="username">The username which will be used to search to retrieve all public projects from the user.</param>
+        /// <returns>This method returns a collections of public projects from the user</returns>
         public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
         {
             GithubDataSourceResourceResult[] resourceResults = (await FetchAllPublicGithubRepositories(username)).ToArray();
@@ -152,6 +207,11 @@ namespace Services.ExternalDataProviders
             return resourceResults;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a public project from a uri, from the Github API.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
+        /// <returns>This method returns a public project from the specified source uri.</returns>
         public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
             GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri);
@@ -177,6 +237,11 @@ namespace Services.ExternalDataProviders
             return JsonConvert.DeserializeObject<GithubDataSourceResourceResult>(response.Content);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving a public project from the user, by id from the Github API.
+        /// </summary>
+        /// <param name="identifier">The identifier which will be used to retrieve the correct project.</param>
+        /// <returns>This method returns a public project with the specified identifier.</returns>
         public async Task<Project> GetPublicProjectById(string identifier)
         {
             GithubDataSourceResourceResult project = await FetchGithubProjectById(identifier);
