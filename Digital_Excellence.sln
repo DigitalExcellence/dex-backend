@@ -3,34 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "1_API", "API\1_API.csproj", "{F40BA6E7-D870-47A8-A672-DEA4D5FA96F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "100_API", "API\100_API.csproj", "{F40BA6E7-D870-47A8-A672-DEA4D5FA96F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2_Services", "Services\2_Services.csproj", "{9940A638-7501-49EE-A816-560A2908A029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "110_Services", "Services\110_Services.csproj", "{9940A638-7501-49EE-A816-560A2908A029}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3_Repositories", "Repositories\3_Repositories.csproj", "{860D05B3-46CB-4EA9-9F83-63BBF44AFB2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "120_Repositories", "Repositories\120_Repositories.csproj", "{860D05B3-46CB-4EA9-9F83-63BBF44AFB2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "5_Models", "Models\5_Models.csproj", "{22BBD62E-AD77-46E5-86F8-900737BE19FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "140_Models", "Models\140_Models.csproj", "{22BBD62E-AD77-46E5-86F8-900737BE19FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4_Data", "Data\4_Data.csproj", "{B626B71A-6C31-4921-896C-A8946092D159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "130_Data", "Data\130_Data.csproj", "{B626B71A-6C31-4921-896C-A8946092D159}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6_IdentityServer", "IdentityServer\6_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "150_IdentityServer", "IdentityServer\150_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2_Services.Tests", "Services.Tests\2_Services.Tests.csproj", "{D7ABD315-4B00-4A5F-8961-8147ED6602C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "111_Services.Tests", "Services.Tests\111_Services.Tests.csproj", "{D7ABD315-4B00-4A5F-8961-8147ED6602C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3_Repositories.Tests", "Repositories.Tests\3_Repositories.Tests.csproj", "{471B1E44-E308-4C6D-B595-15AD939820DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "121_Repositories.Tests", "Repositories.Tests\121_Repositories.Tests.csproj", "{471B1E44-E308-4C6D-B595-15AD939820DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{445ECBDE-DF20-43B3-BD4B-4881F05203A2}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSystem", "NotificationSystem\NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "170_NotificationSystem", "NotificationSystem\170_NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBrokerPublisher", "MessageBrokerPublisher\MessageBrokerPublisher.csproj", "{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "160_MessageBrokerPublisher", "MessageBrokerPublisher\160_MessageBrokerPublisher.csproj", "{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "161_MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\161_MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSystem.Tests", "NotificationSystem.Tests\NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "171_NotificationSystem.Tests", "NotificationSystem.Tests\171_NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\5_Models.csproj" />
-    <ProjectReference Include="..\Repositories\3_Repositories.csproj" />
+    <ProjectReference Include="..\Models\140_Models.csproj" />
+    <ProjectReference Include="..\Repositories\120_Repositories.csproj" />
   </ItemGroup>
 
 </Project>
