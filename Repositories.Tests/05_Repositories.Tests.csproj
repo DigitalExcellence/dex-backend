@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\130_Data.csproj" />
-    <ProjectReference Include="..\Repositories\120_Repositories.csproj" />
+    <ProjectReference Include="..\Data\06_Data.csproj" />
+    <ProjectReference Include="..\Repositories\04_Repositories.csproj" />
   </ItemGroup>
 
 </Project>
