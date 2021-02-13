@@ -83,7 +83,6 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<DataSourceResourceResult>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
-            //TODO: Fix this mapping here
             IEnumerable<IDataSourceAdaptee> dataSources = await dataProviderService.RetrieveDataSources(needsAuth);
             IEnumerable<DataSourceResourceResult> dataSourceResourceResult =
                 mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceResourceResult>>(dataSources);
@@ -203,23 +202,23 @@ namespace API.Controllers
                 }
             }
 
-            int[] wizardPageOrderIndexesAuthFlow = dataSourceResource.WizardPageResources.Where(p => p.AuthFlow).Select(p => p.OrderIndex).ToArray();
-            int[] wizardPageOrderIndexesPublicFlow = dataSourceResource.WizardPageResources.Where(p => !p.AuthFlow).Select(p => p.OrderIndex).ToArray();
+            int[] wizardPageOrderIndexesAuthFlow = dataSourceResource.WizardPageResources?.Where(p => p.AuthFlow).Select(p => p.OrderIndex).ToArray();
+            int[] wizardPageOrderIndexesPublicFlow = dataSourceResource.WizardPageResources?.Where(p => !p.AuthFlow).Select(p => p.OrderIndex).ToArray();
 
-            bool authFlowIsValid = wizardPageOrderIndexesAuthFlow.Length == 0 ||
+            bool authFlowIsValid = wizardPageOrderIndexesAuthFlow?.Length == 0 ||
                                    indexOrderHelper.ValidateAscendingConsecutiveOrder(wizardPageOrderIndexesAuthFlow, 1);
 
-            bool publicFlowIsValid = wizardPageOrderIndexesPublicFlow.Length == 0 ||
+            bool publicFlowIsValid = wizardPageOrderIndexesPublicFlow?.Length == 0 ||
                                      indexOrderHelper.ValidateAscendingConsecutiveOrder(wizardPageOrderIndexesPublicFlow, 1);
 
             if(!authFlowIsValid || !publicFlowIsValid)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "The order from the wizard page indexes is invalid.",
-                                             Detail = "The order indexes from the wizard pages should start at 1, be consecutive and have no doubles.",
-                                             Instance = "A5F70346-8044-42AC-8BFD-76FCD108ABBE"
-                                         };
+                    {
+                        Title = "The order from the wizard page indexes is invalid.",
+                        Detail = "The order indexes from the wizard pages should start at 1, be consecutive and have no doubles.",
+                        Instance = "A5F70346-8044-42AC-8BFD-76FCD108ABBE"
+                    };
                 return BadRequest(problem);
             }
 
@@ -228,8 +227,8 @@ namespace API.Controllers
             dataSourceModelService.Update(dataSourceModel);
             dataSourceModelService.Save();
 
-            //TODO: validate why description is not mapped properly.
-            DataSourceResourceResult model = mapper.Map<DataSource, DataSourceResourceResult>(dataSourceModel);
+            DataSource updatedDataSourceModel = await dataSourceModelService.GetDataSourceByGuid(guid);
+            DataSourceResourceResult model = mapper.Map<DataSource, DataSourceResourceResult>(updatedDataSourceModel);
             return Ok(model);
         }
     }

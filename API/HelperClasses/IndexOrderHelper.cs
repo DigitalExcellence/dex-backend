@@ -54,19 +54,22 @@ namespace API.HelperClasses
         /// and will return false whenever this is not the case.</returns>
         public bool ValidateAscendingConsecutiveOrder(T[] indexes, T startingIndex)
         {
-            // Check if there are no doubles
-            if(indexes.Length !=
-               indexes.Distinct()
-                      .Count())
-                return false;
+            if(indexes != null)
+            {
+                // Check if there are no doubles
+                if(indexes.Length !=
+                   indexes.Distinct()
+                          .Count())
+                    return false;
 
-            // Check if there is nothing smaller then the starting index
-            if(indexes.Min().CompareTo(startingIndex) < 0)
-                return false;
+                // Check if there is nothing smaller then the starting index
+                if(indexes.Min().CompareTo(startingIndex) < 0)
+                    return false;
 
-            // Check if the highest index is same as the length of the list.
-            if(indexes.Max().CompareTo(indexes.Length) != 0)
-                return false;
+                // Check if the highest index is same as the length of the list.
+                if(indexes.Max().CompareTo(indexes.Length) != 0)
+                    return false;
+            }
 
             return true;
         }
