@@ -19,7 +19,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-//TODO: CHANGE RETURN NULL TO EXCEPTION, SO IT'S CATCH-ABLE?
+
 namespace Services.ExternalDataProviders
 {
 
