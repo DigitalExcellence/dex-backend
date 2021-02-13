@@ -154,6 +154,11 @@ namespace API.Configuration
 
             CreateMap<WizardPageResource, WizardPage>();
             CreateMap<WizardPage, WizardPageResourceResult>();
+
+            CreateMap<DataSourceWizardPage, DataSourceWizardPageResourceResult>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.WizardPage.Description));
         }
     }
 }

@@ -83,6 +83,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<DataSourceResourceResult>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
+            //TODO: Fix this mapping here
             IEnumerable<IDataSourceAdaptee> dataSources = await dataProviderService.RetrieveDataSources(needsAuth);
             IEnumerable<DataSourceResourceResult> dataSourceResourceResult =
                 mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceResourceResult>>(dataSources);
