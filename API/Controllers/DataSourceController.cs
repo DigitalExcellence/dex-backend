@@ -46,6 +46,7 @@ namespace API.Controllers
         private readonly IFileUploader fileUploader;
         private readonly IDataProviderService dataProviderService;
         private readonly IIndexOrderHelper<int> indexOrderHelper;
+        private readonly IWizardPageService wizardPageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataSourceController"/> class.
@@ -56,12 +57,14 @@ namespace API.Controllers
         /// <param name="fileUploader">The file uploader service which is used for uploading files.</param>
         /// <param name="dataProviderService">The data provider service which is used to communicate with the logic layer.</param>
         /// <param name="indexOrderHelper">The index order helper, helps validating the index order of the wizard pages.</param>
+        /// <param name="wizardPageService">The wizard page service which is used to communicate with the logic layer.</param>
         public DataSourceController(IMapper mapper,
                                     IDataSourceModelService dataSourceModelService,
                                     IFileService fileService,
                                     IFileUploader fileUploader,
                                     IDataProviderService dataProviderService,
-                                    IIndexOrderHelper<int> indexOrderHelper)
+                                    IIndexOrderHelper<int> indexOrderHelper,
+                                    IWizardPageService wizardPageService)
         {
             this.mapper = mapper;
             this.dataSourceModelService = dataSourceModelService;
@@ -69,6 +72,7 @@ namespace API.Controllers
             this.fileUploader = fileUploader;
             this.dataProviderService = dataProviderService;
             this.indexOrderHelper = indexOrderHelper;
+            this.wizardPageService = wizardPageService;
         }
 
 
@@ -173,6 +177,18 @@ namespace API.Controllers
                     Detail = "The database does not contain an institution with that guid.",
                     Instance = "031FE0E3-D8CF-4DEC-81D5-E89B33BED8D0"
                 };
+                return NotFound(problem);
+            }
+
+            if(!await wizardPageService.ValidateWizardPagesExist(
+                    dataSourceResource.WizardPageResources.Select(w => w.WizardPageId)))
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Not all specified wizard pages could be found.",
+                                             Detail = "One or more specified wizard page ids don't exist",
+                                             Instance ="EF1490B0-DB22-4A0D-B6D1-D6E89192381E"
+                                         };
                 return NotFound(problem);
             }
 
