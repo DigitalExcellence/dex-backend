@@ -293,4 +293,108 @@ namespace Services.ExternalDataProviders.Resources
         [JsonProperty("node_id")]
         public string NodeId { get; set; }
     }
+
+    /// <summary>
+    /// Viewmodel for the github data source readme source.
+    /// </summary>
+    public class GithubDataSourceReadmeResourceResult
+    {
+
+        /// <summary>
+        /// Gets or sets a value for the Type property.
+        /// </summary>
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Encoding property.
+        /// </summary>
+        [JsonProperty("encoding")]
+        public string Encoding { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Size property.
+        /// </summary>
+        [JsonProperty("size")]
+        public long Size { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Name property.
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Path property.
+        /// </summary>
+        [JsonProperty("path")]
+        public string Path { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Content property.
+        /// </summary>
+        [JsonProperty("content")]
+        public string Content { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Sha property.
+        /// </summary>
+        [JsonProperty("sha")]
+        public string Sha { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Url property.
+        /// </summary>
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the GitUrl property.
+        /// </summary>
+        [JsonProperty("git_url")]
+        public Uri GitUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the HtmlUrl property.
+        /// </summary>
+        [JsonProperty("html_url")]
+        public Uri HtmlUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the DownloadUrl property.
+        /// </summary>
+        [JsonProperty("download_url")]
+        public Uri DownloadUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Link property.
+        /// </summary>
+        [JsonProperty("_links")]
+        public GithubDataSourceReadmeLinksResourceResult Links { get; set; }
+
+    }
+
+    /// <summary>
+    /// Viewmodel for the github data source link source.
+    /// </summary>
+    public class GithubDataSourceReadmeLinksResourceResult
+    {
+        /// <summary>
+        /// Gets or sets a value for the Git property.
+        /// </summary>
+        [JsonProperty("git")]
+        public Uri Git { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Self property.
+        /// </summary>
+        [JsonProperty("self")]
+        public Uri Self { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for the Html property.
+        /// </summary>
+        [JsonProperty("html")]
+        public Uri Html { get; set; }
+    }
 }
