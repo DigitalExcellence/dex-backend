@@ -180,6 +180,18 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
+            if(dataSourceModelService.GetDataSourceByName(dataSourceResource.Title) != null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Specified name of the data source already exists",
+                                             Detail =
+                                                 "Another data source already has the specified name, no doubles are allowed",
+                                             Instance = "804F134C-E679-4AF5-B602-18433F26019A"
+                                         };
+                return BadRequest(problem);
+            }
+
             if(!await wizardPageService.ValidateWizardPagesExist(
                     dataSourceResource.WizardPageResources.Select(w => w.WizardPageId)))
             {

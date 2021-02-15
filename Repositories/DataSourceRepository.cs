@@ -18,6 +18,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,13 @@ namespace Repositories
         /// </summary>
         /// <returns>This method returns a data source model with the specified guid.</returns>
         Task<DataSource> GetDataSourceByGuid(string guid);
+
+        /// <summary>
+        /// This method finds the data source by the specified name.
+        /// </summary>
+        /// <param name="name">The name which will be used to find the correct data source.</param>
+        /// <returns>This method returns the data source with the specified name.</returns>
+        Task<DataSource> GetDataSourceByName(string name);
 
     }
 
@@ -62,6 +70,16 @@ namespace Repositories
                          .Include(w => w.DataSourceWizardPages)
                          .ThenInclude(dw => dw.WizardPage)
                          .SingleOrDefaultAsync();
+        }
+
+        public async Task<DataSource> GetDataSourceByName(string name)
+        {
+            return await GetDbSet<DataSource>()
+                       .Where(d => d.Title == name)
+                       .Include(d => d.Icon)
+                       .Include(w => w.DataSourceWizardPages)
+                       .ThenInclude(dw => dw.WizardPage)
+                       .SingleOrDefaultAsync();
         }
 
         /// <summary>

@@ -19,6 +19,7 @@ using Models;
 using Repositories;
 using Repositories.Base;
 using Services.Base;
+using System;
 using System.Threading.Tasks;
 
 namespace Services.Services
@@ -37,6 +38,13 @@ namespace Services.Services
         /// <param name="guid">The guid which will be used to find the correct data source.</param>
         /// <returns>This method returns the data source with the specified guid.</returns>
         Task<DataSource> GetDataSourceByGuid(string guid);
+
+        /// <summary>
+        /// This method finds the data source by the specified name.
+        /// </summary>
+        /// <param name="name">The name which will be used to find the correct data source.</param>
+        /// <returns>This method returns the data source with the specified name.</returns>
+        Task<DataSource> GetDataSourceByName(string name);
 
     }
 
@@ -64,6 +72,16 @@ namespace Services.Services
         public async Task<DataSource> GetDataSourceByGuid(string guid)
         {
             return await Repository.GetDataSourceByGuid(guid);
+        }
+
+        /// <summary>
+        /// This method finds the data source by the specified name.
+        /// </summary>
+        /// <param name="name">The name which will be used to find the correct data source.</param>
+        /// <returns>This method returns the data source with the specified name.</returns>
+        public async Task<DataSource> GetDataSourceByName(string name)
+        {
+            return await Repository.GetDataSourceByName(name);
         }
 
     }
