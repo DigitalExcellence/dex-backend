@@ -57,7 +57,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a project form an external data source by
+        /// This method is responsible for retrieving a project from an external data source by
         /// the specified source uri.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
