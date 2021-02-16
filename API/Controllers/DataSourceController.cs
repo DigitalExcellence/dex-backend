@@ -180,7 +180,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(dataSourceModelService.GetDataSourceByName(dataSourceResource.Title) != null)
+            if(await dataSourceModelService.GetDataSourceByName(dataSourceResource.Title) != null)
             {
                 ProblemDetails problem = new ProblemDetails
                                          {

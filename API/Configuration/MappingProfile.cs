@@ -139,7 +139,8 @@ namespace API.Configuration
             CreateMap<JsFiddleDataSourceResourceResult, Project>()
                 .ForMember(d => d.Name, opt => opt.MapFrom(m => m.Title));
 
-            CreateMap<GithubDataSourceResourceResult, Project>();
+            CreateMap<GithubDataSourceResourceResult, Project>()
+                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
 
             CreateMap<GitlabDataSourceResourceResult, Project>();
 
