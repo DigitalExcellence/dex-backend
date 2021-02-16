@@ -101,6 +101,12 @@ namespace Services.ExternalDataProviders
             return mapper.Map<IEnumerable<JsFiddleDataSourceResourceResult>, IEnumerable<Project>>(resourceResult);
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving the content from all fiddles from a user.
+        /// </summary>
+        /// <param name="username">The username which is used to retrieve the correct fiddles.</param>
+        /// <returns>This method returns a collection of JsFiddle data source resource results.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
         private async Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
