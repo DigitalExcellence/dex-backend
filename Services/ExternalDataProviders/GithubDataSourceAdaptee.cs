@@ -69,8 +69,10 @@ namespace Services.ExternalDataProviders
                                            .Value;
             clientSecret = configurationSection.GetSection("ClientSecret")
                                                .Value;
+            RedirectUri = configurationSection.GetSection("RedirectUri")
+                                              .Value;
 
-            OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo&state={Title}";
+            OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo";
         }
 
         /// <summary>
@@ -112,6 +114,12 @@ namespace Services.ExternalDataProviders
         /// Gets or sets a value for the OauthUrl property from the Github data source adaptee.
         /// </summary>
         public string OauthUrl { get; }
+
+        //Todo: use this in requests
+        /// <summary>
+        /// Gets or sets a value for the RedirectUri property from the Gitlab data source adaptee.
+        /// </summary>
+        public string RedirectUri { get; }
 
         /// <summary>
         /// This method is responsible for retrieving Oauth tokens from the Github API.

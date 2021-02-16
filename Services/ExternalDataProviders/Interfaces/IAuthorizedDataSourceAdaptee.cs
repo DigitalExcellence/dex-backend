@@ -34,6 +34,11 @@ namespace Services.ExternalDataProviders
         string OauthUrl { get; }
 
         /// <summary>
+        /// Gets or sets a value for the RedirectUrl property from the data source adaptee.
+        /// </summary>
+        string RedirectUri { get; }
+
+        /// <summary>
         /// This method is responsible for retrieving Oauth tokens from the external data source adaptee API.
         /// </summary>
         /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>

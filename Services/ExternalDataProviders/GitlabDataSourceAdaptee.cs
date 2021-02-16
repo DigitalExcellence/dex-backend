@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Models;
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Authenticators;
 using Services.ExternalDataProviders.Resources;
 using Services.Sources;
 using System;
@@ -34,7 +35,7 @@ namespace Services.ExternalDataProviders
     /// <summary>
     /// This class is responsible for communicating with the external Gitlab API.
     /// </summary>
-    public class GitlabDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
+    public class GitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IAuthorizedDataSourceAdaptee
     {
 
         /// <summary>
@@ -70,7 +71,11 @@ namespace Services.ExternalDataProviders
                                            .Value;
             clientSecret = configurationSection.GetSection("ClientSecret")
                                                .Value;
-            OauthUrl = "";
+            RedirectUri = configurationSection.GetSection("RedirectUri")
+                                              .Value;
+
+            OauthUrl =
+                $"https://gitlab.com/oauth/authorize?client_id={clientId}&redirect_uri={RedirectUri}&response_type=code&scope=read_repository";
         }
 
         /// <summary>
@@ -112,6 +117,11 @@ namespace Services.ExternalDataProviders
         /// Gets or sets a value for the OauthUrl property from the Gitlab data source adaptee.
         /// </summary>
         public string OauthUrl { get; }
+
+        /// <summary>
+        /// Gets or sets a value for the RedirectUri property from the Gitlab data source adaptee.
+        /// </summary>
+        public string RedirectUri { get;}
 
         /// <summary>
         /// This method is responsible for retrieving all public projects from a user, via the username, from the Gitlab API.
@@ -158,8 +168,8 @@ namespace Services.ExternalDataProviders
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
             string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
-                                          .Substring(1);
-            Uri serializedUri = new Uri(BaseUrl + "repos/" + projectPath);
+                                          .Substring(1).Replace("/", "%2F");
+            Uri serializedUri = new Uri(BaseUrl + "projects/" + projectPath);
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
@@ -233,33 +243,31 @@ namespace Services.ExternalDataProviders
             return response.Content;
         }
 
-        /// <summary>
-        /// This method is responsible for retrieving Oauth tokens from the Gitlab API.
-        /// </summary>
-        /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
-        /// <returns>This method returns the Oauth tokens.</returns>
-        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
-        public Task<OauthTokens> GetTokens(string code)
+        public async Task<OauthTokens> GetTokens(string code)
         {
-            throw new NotImplementedException();
+            Uri baseUriGitlab = new Uri("https://gitlab.com/");
+            IRestClient client = restClientFactory.Create(baseUriGitlab);
+            IRestRequest request = new RestRequest("oauth/token");
+
+            client.Authenticator = new HttpBasicAuthenticator(clientId, clientSecret);
+            request.AddParameter("code", code);
+            request.AddParameter("grant_type", "authorization_code");
+            request.AddParameter("redirect_uri", RedirectUri);
+
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
+
+            OauthTokens tokens = JsonConvert.DeserializeObject<OauthTokens>(response.Content);
+            return tokens;
         }
 
-        /// <summary>
-        /// This method is responsible for retrieving all projects from the user, via the access token, from the Gitlab API.
-        /// </summary>
-        /// <param name="accessToken">The access token which will be used to retrieve all projects from the user.</param>
-        /// <returns>This method returns a collection of projects from the user.</returns>
         public Task<IEnumerable<Project>> GetAllProjects(string accessToken)
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// This method is responsible for retrieving a project from the user, via the access token, by id from the Github API.
-        /// </summary>
-        /// <param name="accessToken">The access token which will be used to retrieve the correct project from the user.</param>
-        /// <param name="projectId">The identifier of the project that will be used to search the correct project.</param>
-        /// <returns>This method returns a project with this specified identifier.</returns>
         public Task<Project> GetProjectById(string accessToken, string projectId)
         {
             throw new NotImplementedException();
