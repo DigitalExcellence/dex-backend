@@ -26,12 +26,12 @@ using Services.Sources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Services.ExternalDataProviders
 {
-
     /// <summary>
     /// This class is responsible for communicating with the external Github API.
     /// </summary>
@@ -142,9 +142,15 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns a collection of projects from the user.</returns>
         public async Task<IEnumerable<Project>> GetAllProjects(string accessToken)
         {
-            IEnumerable<GithubDataSourceResourceResult> projects = await FetchAllGithubProjects(accessToken);
-            if(projects == null) return null;
-            return mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(projects);
+            List<GithubDataSourceResourceResult> githubDataSources = (await FetchAllGithubProjects(accessToken)).ToList();
+            List<Project> projects = mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(githubDataSources).ToList();
+            for(int i = 0; i < projects.Count; i++)
+            {
+                GithubDataSourceResourceResult githubDatasource = githubDataSources[i];
+                Project p = projects[i];
+                p.Description = await FetchReadme(githubDatasource.Owner.Login, githubDatasource.Name, accessToken) ?? p.Description;
+            }
+            return projects;
         }
 
         /// <summary>
@@ -156,11 +162,19 @@ namespace Services.ExternalDataProviders
         public async Task<Project> GetProjectById(string accessToken, string projectId)
         {
             IEnumerable<GithubDataSourceResourceResult> projects = await FetchAllGithubProjects(accessToken);
-            if(projects == null) return null;
-            GithubDataSourceResourceResult projectWithSpecifiedId = projects.SingleOrDefault(project => project.Id.ToString() == projectId);
-            return mapper.Map<GithubDataSourceResourceResult, Project>(projectWithSpecifiedId);
+            GithubDataSourceResourceResult projectWithSpecifiedId = projects?.SingleOrDefault(resource => resource.Id.ToString() == projectId);
+            if(projectWithSpecifiedId == null) return null;
+            Project p = mapper.Map<GithubDataSourceResourceResult, Project>(projectWithSpecifiedId);
+            p.Description = await FetchReadme(projectWithSpecifiedId.Owner.Login, projectWithSpecifiedId.Name, accessToken) ?? p.Description;
+            return p;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving all the github repository contents.
+        /// </summary>
+        /// <param name="accessToken">The access token which is used to authenticate.</param>
+        /// <returns>This method returns a collection of github data source resource results.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
         private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
@@ -169,7 +183,7 @@ namespace Services.ExternalDataProviders
             request.AddHeaders(new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("Authorization", $"Bearer {accessToken}"),
-                new KeyValuePair<string, string>("accept", $"application/vnd.github.v3+json")
+                new KeyValuePair<string, string>("accept", "application/vnd.github.v3+json")
             });
 
             request.AddQueryParameter("visibility", "all");
@@ -191,9 +205,22 @@ namespace Services.ExternalDataProviders
         {
             GithubDataSourceResourceResult[] resourceResults = (await FetchAllPublicGithubRepositories(username)).ToArray();
             if(!resourceResults.Any()) return null;
-            return mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(resourceResults);
+            List<Project> projects = mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(resourceResults).ToList();
+            for(int i = 0; i < projects.Count; i++)
+            {
+                GithubDataSourceResourceResult githubDatasource = resourceResults[i];
+                Project p = projects[i];
+                p.Description = await FetchReadme(githubDatasource.Owner.Login, githubDatasource.Name) ?? p.Description;
+            }
+            return projects;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving the content from all public repositories from a user.
+        /// </summary>
+        /// <param name="username">The username which is used to retrieve projects from the correct user.</param>
+        /// <returns>This method returns a collection of github data source resource results.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
         private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
@@ -215,10 +242,17 @@ namespace Services.ExternalDataProviders
         public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
             GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri);
-            Project project = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
-            return project;
+            Project p = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
+            p.Description = await FetchReadme(githubDataSource.Owner.Login, githubDataSource.Name) ?? p.Description;
+            return p;
         }
 
+        /// <summary>
+        /// This method is responsible for retrieving the content from a repository by uri.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a github data source resource result from the specified uri.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
         private async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
@@ -244,11 +278,19 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns a public project with the specified identifier.</returns>
         public async Task<Project> GetPublicProjectById(string identifier)
         {
-            GithubDataSourceResourceResult project = await FetchGithubProjectById(identifier);
-            return mapper.Map<GithubDataSourceResourceResult, Project>(project);
+            GithubDataSourceResourceResult projectResourceResult = await FetchPublicGithubProjectById(identifier);
+            Project p = mapper.Map<GithubDataSourceResourceResult, Project>(projectResourceResult);
+            p.Description = await FetchReadme(projectResourceResult.Owner.Login, projectResourceResult.Name) ?? p.Description;
+            return p;
         }
 
-        private async Task<GithubDataSourceResourceResult> FetchGithubProjectById(string identifier)
+        /// <summary>
+        /// This method is responsible for retrieving the content from a public repositories from an identifier.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a github data source resource result.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
+        private async Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repositories/{identifier}", Method.GET);
@@ -259,6 +301,65 @@ namespace Services.ExternalDataProviders
             GithubDataSourceResourceResult resourceResult =
                 JsonConvert.DeserializeObject<GithubDataSourceResourceResult>(response.Content);
             return resourceResult;
+        }
+
+        /// <summary>
+        /// This method is responsible for retrieving the readme from a repository.
+        /// </summary>
+        /// <param name="user">This parameter represents the owners of the repository. This is in most cases the name of the user
+        /// or in some other case the name of the organization.</param>
+        /// <param name="repository">This parameter represents the name of the repository.</param>
+        /// <param name="accessToken">This parameter is the access token, which is used to retrieve a readme from a private
+        /// repository. In case of a public repository, the default value is null.</param>
+        /// <returns>This method returns the content of the readme.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
+        private async Task<string> FetchReadme(string user, string repository, string accessToken = null)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"repos/{user}/{repository}/readme");
+
+            if(accessToken != null)
+            {
+                request.AddHeaders(new List<KeyValuePair<string, string>>
+                                   {
+                                       new KeyValuePair<string, string>("Authorization", $"Bearer {accessToken}"),
+                                       new KeyValuePair<string, string>("accept", "application/vnd.github.v3+json")
+                                   });
+            }
+
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            GithubDataSourceReadmeResourceResult resourceResult =
+                JsonConvert.DeserializeObject<GithubDataSourceReadmeResourceResult>(response.Content);
+
+            return await FetchReadmeContent(resourceResult.DownloadUrl);
+        }
+
+        /// <summary>
+        /// This method is responsible for retrieving the content from the readme.
+        /// </summary>
+        /// <param name="downloadUri">The download uri parameter represents the uri where the content of the readme gets downloaded.</param>
+        /// <returns>This method will return the content from the readme.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
+        private async Task<string> FetchReadmeContent(Uri downloadUri)
+        {
+            IRestClient client = restClientFactory.Create(downloadUri);
+            IRestRequest request = new RestRequest(Method.GET);
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(!response.IsSuccessful)
+            {
+                if(response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                throw new ExternalException(response.ErrorMessage);
+            }
+
+            return response.Content;
         }
 
     }
