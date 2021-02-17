@@ -115,7 +115,6 @@ namespace Services.ExternalDataProviders
         /// </summary>
         public string OauthUrl { get; }
 
-        //Todo: use this in requests
         /// <summary>
         /// Gets or sets a value for the RedirectUri property from the Gitlab data source adaptee.
         /// </summary>
@@ -134,6 +133,7 @@ namespace Services.ExternalDataProviders
             IRestRequest request = new RestRequest("login/oauth/access_token");
             client.Authenticator = new HttpBasicAuthenticator(clientId, clientSecret);
             request.AddParameter("code", code);
+            request.AddParameter("redirect_uri", RedirectUri);
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(string.IsNullOrEmpty(response.Content)) return null;
