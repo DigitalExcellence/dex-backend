@@ -150,8 +150,10 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns a collection of projects from the user.</returns>
         public async Task<IEnumerable<Project>> GetAllProjects(string accessToken)
         {
-            List<GithubDataSourceResourceResult> githubDataSources = (await FetchAllGithubProjects(accessToken)).ToList();
-            List<Project> projects = mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(githubDataSources).ToList();
+            List<GithubDataSourceResourceResult> githubDataSources =
+                (await FetchAllGithubProjects(accessToken)).ToList();
+            List<Project> projects =
+                mapper.Map<List<GithubDataSourceResourceResult>, List<Project>>(githubDataSources);
             for(int i = 0; i < projects.Count; i++)
             {
                 GithubDataSourceResourceResult githubDatasource = githubDataSources[i];
