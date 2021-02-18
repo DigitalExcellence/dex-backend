@@ -65,6 +65,7 @@ namespace Services.ExternalDataProviders
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
             IConfigurationSection configurationSection = configuration.GetSection("App")
+                                                                      .GetSection("DataSources")
                                                                       .GetSection(Title);
 
             clientId = configurationSection.GetSection("ClientId")
@@ -75,7 +76,7 @@ namespace Services.ExternalDataProviders
                                               .Value;
 
             OauthUrl =
-                $"https://gitlab.com/oauth/authorize?client_id={clientId}&redirect_uri={RedirectUri}&response_type=code&scope=read_repository";
+                $"https://gitlab.com/oauth/authorize?client_id={clientId}&redirect_uri={RedirectUri}&response_type=code&scope=read_repository+read_user";
         }
 
         /// <summary>

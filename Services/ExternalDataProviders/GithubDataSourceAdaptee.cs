@@ -64,6 +64,7 @@ namespace Services.ExternalDataProviders
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
             IConfigurationSection configurationSection = configuration.GetSection("App")
+                                                                      .GetSection("DataSources")
                                                                       .GetSection(Title);
             clientId = configurationSection.GetSection("ClientId")
                                            .Value;
