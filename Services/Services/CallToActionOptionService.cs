@@ -19,12 +19,14 @@ using Models;
 using Repositories;
 using Services.Base;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.Services
 {
 
+    /// <summary>
+    /// This is the interface for the call to action option service
+    /// </summary>
     public interface ICallToActionOptionService : IService<CallToActionOption>
     {
         /// <summary>
@@ -41,6 +43,9 @@ namespace Services.Services
 
     }
 
+    /// <summary>
+    ///     This is the call to action option service
+    /// </summary>
     public class CallToActionOptionService : Service<CallToActionOption>, ICallToActionOptionService
     {
         /// <summary>
@@ -49,13 +54,26 @@ namespace Services.Services
         /// <param name="repository">The repository.</param>
         public CallToActionOptionService(ICallToActionOptionRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository.
+        /// </summary>
         protected new ICallToActionOptionRepository Repository => (ICallToActionOptionRepository) base.Repository;
 
+        /// <summary>
+        ///     This is the method which gets all call to actions options by type asynchronous
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns>IEnumerable of call to action options</returns>
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName)
         {
             return await Repository.GetCallToActionOptionsFromTypeAsync(typeName);
         }
 
+        /// <summary>
+        ///     This is the method which gets all call to action options by value asynchronous
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>IEnumerable of call to action options</returns>
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value)
         {
             return await Repository.GetCallToActionOptionFromValueAsync(value);

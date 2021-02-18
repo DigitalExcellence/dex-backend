@@ -21,25 +21,66 @@ using System.Threading.Tasks;
 namespace Repositories.Base
 {
 
+    /// <summary>
+    ///     This is the interface of the base repository class
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public interface IRepository<TEntity> where TEntity : class
     {
-
+        /// <summary>
+        ///     This is the interface method which find an entity by identifier asynchronous 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Entity</returns>
         Task<TEntity> FindAsync(int id);
 
+        /// <summary>
+        ///     This is the interface method which adds an entity
+        /// </summary>
+        /// <param name="entity"></param>
         void Add(TEntity entity);
 
+        /// <summary>
+        ///     This is the interface method which adds multiple entities
+        /// </summary>
+        /// <param name="entities"></param>
         void AddRange(IEnumerable<TEntity> entities);
 
+        /// <summary>
+        ///     This is the interface method which updates an entity
+        /// </summary>
+        /// <param name="entity"></param>
         void Update(TEntity entity);
 
+        /// <summary>
+        ///     This is the interface method which removes an entity asynchronous
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task RemoveAsync(int id);
 
+        /// <summary>
+        ///     This is the interface method which removes an entity
+        /// </summary>
+        /// <param name="entity"></param>
         void Remove(TEntity entity);
 
+        /// <summary>
+        ///     This is the interface method which gets all entities
+        /// </summary>
+        /// <returns>IEnumerable with entities</returns>
         Task<IEnumerable<TEntity>> GetAll();
 
+        /// <summary>
+        ///     This is the interface method which saves the changes that were made
+        /// </summary>
         void Save();
 
+        /// <summary>
+        ///     This is the interface method which adds an entity asynchronous
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         Task AddAsync(TEntity entity);
 
     }

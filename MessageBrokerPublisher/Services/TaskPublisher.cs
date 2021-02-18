@@ -34,9 +34,8 @@ namespace MessageBrokerPublisher
     /// </summary>
     public class TaskPublisher : ITaskPublisher
     {
-       
 
-        IConnection connection;
+        private readonly IConnection connection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskPublisher"/> class.

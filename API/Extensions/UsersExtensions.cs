@@ -17,10 +17,7 @@
 
 using API.Configuration;
 using API.InternalResources;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Models;
 using Models.Defaults;
 using Newtonsoft.Json;
@@ -28,12 +25,10 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using Services.Services;
 using System;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace API.Extensions
 {
@@ -146,9 +141,14 @@ namespace API.Extensions
                 IdentityId = (string) jsonResponse["sub"],
                 IdentityInstitutionId = providerId
             };
-            return newUser ;
+            return newUser;
         }
 
+        /// <summary>
+        ///     This method checks if the user is authenticated
+        /// </summary>
+        /// <param name="claimsPrincipal"></param>
+        /// <returns>boolean</returns>
         public static bool CheckIfUserIsAuthenticated(this ClaimsPrincipal claimsPrincipal)
         {
             if(claimsPrincipal.Identities.Any(i => i.IsAuthenticated))

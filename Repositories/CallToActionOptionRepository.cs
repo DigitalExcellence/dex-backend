@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 namespace Repositories
 {
 
+    /// <summary>
+    ///     This is the call to action option repository interface
+    /// </summary>
     public interface ICallToActionOptionRepository : IRepository<CallToActionOption>
     {
         /// <summary>
@@ -41,11 +44,22 @@ namespace Repositories
 
     }
 
+    /// <summary>
+    ///     This is the call to action option repository implementation
+    /// </summary>
     public class CallToActionOptionRepository : Repository<CallToActionOption>, ICallToActionOptionRepository
     {
 
+        /// <summary>
+        ///     This is the call to action option repository constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public CallToActionOptionRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        /// This method gets all the call to action options with the specified type asynchronous.
+        /// </summary>
+        /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName)
         {
             return await GetDbSet<CallToActionOption>()
@@ -53,6 +67,10 @@ namespace Repositories
                          .ToListAsync();
         }
 
+        /// <summary>
+        /// This method gets all the call to action options with the specified value asynchronous.
+        /// </summary>
+        /// <returns>This method returns a list of call to action options with the specified value id.</returns>
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value)
         {
             return await GetDbSet<CallToActionOption>()

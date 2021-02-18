@@ -15,9 +15,9 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
 using Models;
 using Services.Sources;
+using System;
 
 namespace Services.Services
 {
@@ -71,8 +71,7 @@ namespace Services.Services
             if(gitLabSource.ProjectURIMatches(sourceURI))
             {
                 return gitLabSource.GetProjectInformation(sourceURI);
-            }
-            else
+            } else
             {
                 return null;
             }

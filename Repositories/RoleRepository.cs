@@ -26,13 +26,28 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
+    /// <summary>
+    ///     This is the interface of the role repository
+    /// </summary>
     public interface IRoleRepository : IRepository<Role>
     {
+        /// <summary>
+        ///     This interface method gets all roles asynchronously
+        /// </summary>
+        /// <returns></returns>
         Task<List<Role>> GetAllAsync();
     }
 
+    /// <summary>
+    ///     This is the role repository
+    /// </summary>
     public class RoleRepository : Repository<Role>, IRoleRepository
     {
+        /// <summary>
+        ///     This is the role repository constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public RoleRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
@@ -81,9 +96,9 @@ namespace Repositories
                     else
                     {
                         RoleScope newScope = new RoleScope(newRoleScope.Scope)
-                                             {
-                                                 RoleId = role.Id
-                                             };
+                        {
+                            RoleId = role.Id
+                        };
                         existingRole.Scopes.Add(newScope);
                     }
                 }

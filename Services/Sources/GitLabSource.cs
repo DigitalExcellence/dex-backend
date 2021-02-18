@@ -26,6 +26,9 @@ using System.Text.RegularExpressions;
 namespace Services.Sources
 {
 
+    /// <summary>
+    ///     This is the interface of the GitLab source
+    /// </summary>
     public interface IGitLabSource : ISource
     {
         /// <summary>
@@ -106,18 +109,22 @@ namespace Services.Sources
             {
                 return project;
             }
-            project.Name = resourceResult.name;
-            project.ShortDescription = resourceResult.description;
-            project.Uri = resourceResult.web_url;
-            if(!string.IsNullOrEmpty(resourceResult.readme_url))
+            project.Name = resourceResult.Name;
+            project.ShortDescription = resourceResult.Description;
+            project.Uri = resourceResult.WebUrl;
+            if(!string.IsNullOrEmpty(resourceResult.ReadmeUrl))
             {
-                project.Description = FetchReadme(resourceResult.readme_url);
+                project.Description = FetchReadme(resourceResult.ReadmeUrl);
             }
 
             return project;
         }
 
-
+        /// <summary>
+        ///     This method checks if the project uri matches
+        /// </summary>
+        /// <param name="sourceUri"></param>
+        /// <returns></returns>
         public bool ProjectURIMatches(Uri sourceUri)
         {
             //Create a valid URL

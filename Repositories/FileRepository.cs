@@ -18,17 +18,13 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace Repositories
 {
     /// <summary>
     /// IFileRepository
     /// </summary>
-    /// /// <seealso cref="Repositories.Base.IRepository{Models.File}" />
+    /// /// <seealso cref="File" />
     public interface IFileRepository : IRepository<File>
     {
 
@@ -38,8 +34,8 @@ namespace Repositories
     /// <summary>
     /// FileRepository
     /// </summary>
-    /// <seealso cref="Repositories.Base.Repository{Models.File}" />
-    /// <seealso cref="Repositories.IFileRepository" />
+    /// <seealso cref="File" />
+    /// <seealso cref="IFileRepository" />
     public class FileRepository : Repository<File>, IFileRepository
     {
 

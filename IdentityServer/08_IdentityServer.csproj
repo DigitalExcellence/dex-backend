@@ -23,9 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Data\4_Data.csproj" />
-        <ProjectReference Include="..\Models\5_Models.csproj" />
-        <ProjectReference Include="..\Repositories\3_Repositories.csproj" />
-        <ProjectReference Include="..\Services\2_Services.csproj" />
+        <ProjectReference Include="..\Data\06_Data.csproj" />
+        <ProjectReference Include="..\Models\07_Models.csproj" />
+        <ProjectReference Include="..\Repositories\04_Repositories.csproj" />
+        <ProjectReference Include="..\Services\02_Services.csproj" />
     </ItemGroup>
 </Project>

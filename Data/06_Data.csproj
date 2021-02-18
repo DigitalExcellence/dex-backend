@@ -23,9 +23,9 @@
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Models\5_Models.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Models\07_Models.csproj" />
+  </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Configurations\IdentityMigrations\" />
