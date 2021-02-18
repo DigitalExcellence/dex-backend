@@ -180,15 +180,18 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(await dataSourceModelService.GetDataSourceByName(dataSourceResource.Title) != null)
+            DataSource dataSourceWithSpecifiedName =
+                await dataSourceModelService.GetDataSourceByName(dataSourceResource.Title);
+
+            if(dataSourceWithSpecifiedName != null && dataSourceWithSpecifiedName.Guid != guid)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Specified name of the data source already exists",
-                                             Detail =
-                                                 "Another data source already has the specified name, no doubles are allowed",
-                                             Instance = "804F134C-E679-4AF5-B602-18433F26019A"
-                                         };
+                {
+                    Title = "Specified name of the data source already exists",
+                    Detail =
+                        "Another data source already has the specified name, no doubles are allowed",
+                    Instance = "804F134C-E679-4AF5-B602-18433F26019A"
+                };
                 return BadRequest(problem);
             }
 
