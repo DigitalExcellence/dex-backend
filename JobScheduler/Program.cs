@@ -7,8 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Polly;
-using System.Linq;
-using System.Net;
 
 
 namespace JobScheduler

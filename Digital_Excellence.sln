@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.env = .env
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "7_JobScheduler", "JobScheduler\7_JobScheduler.csproj", "{7282F142-E5E0-4E93-822B-327A8A5BE328}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "13_JobScheduler", "JobScheduler\13_JobScheduler.csproj", "{7282F142-E5E0-4E93-822B-327A8A5BE328}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "11_NotificationSystem", "NotificationSystem\11_NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
 EndProject
