@@ -155,12 +155,6 @@ namespace Services.ExternalDataProviders
                 (await FetchAllGithubProjects(accessToken)).ToList();
             List<Project> projects =
                 mapper.Map<List<GithubDataSourceResourceResult>, List<Project>>(githubDataSources);
-            for(int i = 0; i < projects.Count; i++)
-            {
-                GithubDataSourceResourceResult githubDatasource = githubDataSources[i];
-                Project p = projects[i];
-                p.Description = await FetchReadme(githubDatasource.Owner.Login, githubDatasource.Name, accessToken) ?? p.Description;
-            }
             return projects;
         }
 
@@ -217,12 +211,6 @@ namespace Services.ExternalDataProviders
             GithubDataSourceResourceResult[] resourceResults = (await FetchAllPublicGithubRepositories(username)).ToArray();
             if(!resourceResults.Any()) return null;
             List<Project> projects = mapper.Map<IEnumerable<GithubDataSourceResourceResult>, IEnumerable<Project>>(resourceResults).ToList();
-            for(int i = 0; i < projects.Count; i++)
-            {
-                GithubDataSourceResourceResult githubDatasource = resourceResults[i];
-                Project p = projects[i];
-                p.Description = await FetchReadme(githubDatasource.Owner.Login, githubDatasource.Name) ?? p.Description;
-            }
             return projects;
         }
 
@@ -340,7 +328,14 @@ namespace Services.ExternalDataProviders
 
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(!response.IsSuccessful)
+            {
+                if(response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                throw new ExternalException(response.ErrorMessage);
+            }
             if(string.IsNullOrEmpty(response.Content)) return null;
             GithubDataSourceReadmeResourceResult resourceResult =
                 JsonConvert.DeserializeObject<GithubDataSourceReadmeResourceResult>(response.Content);
