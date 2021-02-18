@@ -131,7 +131,7 @@ namespace Services.ExternalDataProviders
         {
             Uri baseGithubUrl = new Uri("https://github.com/");
             IRestClient client = restClientFactory.Create(baseGithubUrl);
-            IRestRequest request = new RestRequest("login/oauth/access_token");
+            IRestRequest request = new RestRequest("login/oauth/access_token", Method.POST);
             client.Authenticator = new HttpBasicAuthenticator(clientId, clientSecret);
             request.AddParameter("code", code);
             request.AddParameter("redirect_uri", RedirectUri);

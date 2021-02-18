@@ -235,7 +235,7 @@ namespace Services.ExternalDataProviders
         {
             Uri baseUriGitlab = new Uri("https://gitlab.com/");
             IRestClient client = restClientFactory.Create(baseUriGitlab);
-            IRestRequest request = new RestRequest("oauth/token");
+            IRestRequest request = new RestRequest("oauth/token", Method.POST);
             client.Authenticator = new HttpBasicAuthenticator(clientId, clientSecret);
             request.AddParameter("code", code);
             request.AddParameter("grant_type", "authorization_code");
