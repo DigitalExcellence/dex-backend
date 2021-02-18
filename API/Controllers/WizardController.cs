@@ -159,7 +159,8 @@ namespace API.Controllers
         /// This method is responsible for retrieving projects from an external data source.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
-        /// <param name="token">The token which is used for retrieving the projects from the user.</param>
+        /// <param name="token">The token which is used for retrieving the projects from the user. This token can be the
+        /// access token for the auth flow, but can also be the username for the public flow.</param>
         /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
         /// <returns>This method returns a collection of all the projects.</returns>
         /// <response code="200">This endpoint returns the project with the specified id.</response>
@@ -236,7 +237,8 @@ namespace API.Controllers
         /// This method is responsible for retrieving a specified project from an external data source.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
-        /// <param name="accessToken">The access token which is used for authentication.</param>
+        /// <param name="token">The token which is used for retrieving the projects from the user. This token can be the
+        /// access token for the auth flow, but can also be the username for the public flow.</param>
         /// <param name="projectId">The id of the project which is used for searching a specific project.</param>
         /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
         /// <returns>This method returns the project data source resource result</returns>
@@ -249,7 +251,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
-            [FromQuery] string accessToken,
+            [FromQuery] string token,
             int projectId,
             [FromQuery] bool needsAuth)
         {
@@ -278,7 +280,7 @@ namespace API.Controllers
             try
             {
                 Project project =
-                    await dataProviderService.GetProjectById(dataSourceGuid, accessToken, projectId, needsAuth);
+                    await dataProviderService.GetProjectById(dataSourceGuid, token, projectId, needsAuth);
 
                 if(project == null)
                 {
