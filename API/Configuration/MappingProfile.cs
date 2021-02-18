@@ -142,7 +142,8 @@ namespace API.Configuration
             CreateMap<GithubDataSourceResourceResult, Project>()
                 .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
 
-            CreateMap<GitlabDataSourceResourceResult, Project>();
+            CreateMap<GitlabDataSourceResourceResult, Project>()
+                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
 
             CreateMap<CallToActionResource, CallToAction>()
                 .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));

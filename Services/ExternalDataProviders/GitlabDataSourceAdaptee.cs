@@ -167,6 +167,7 @@ namespace Services.ExternalDataProviders
         {
             GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
             return project;
         }
 
@@ -202,7 +203,9 @@ namespace Services.ExternalDataProviders
         public async Task<Project> GetPublicProjectById(string identifier)
         {
             GitlabDataSourceResourceResult resourceResult = await FetchPublicGitlabRepositoryById(identifier);
-            return mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            return project;
         }
 
         /// <summary>
@@ -295,7 +298,9 @@ namespace Services.ExternalDataProviders
         public async Task<Project> GetProjectById(string accessToken, string projectId)
         {
             GitlabDataSourceResourceResult resourceResult = await FetchGitlabRepositoryById(projectId, accessToken);
-            return mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            return project;
         }
 
         /// <summary>
@@ -338,6 +343,31 @@ namespace Services.ExternalDataProviders
             GitlabDataSourceUserResourceResult userResourceResult =
                 JsonConvert.DeserializeObject<GitlabDataSourceUserResourceResult>(response.Content);
             return userResourceResult;
+        }
+
+        /// <summary>
+        /// This method is responsible for retrieving the readme from a repository.
+        /// </summary>
+        /// <param name="readmeUri">This parameter represents the owners of the repository. This is in most cases the name of the user
+        /// or in some other case the name of the organization.</param>
+        /// <returns>This method returns the content of the readme.</returns>
+        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
+        private async Task<string> FetchReadme(string readmeUri)
+        {
+            readmeUri = readmeUri.Replace("blob", "raw");
+
+            IRestClient client = restClientFactory.Create(new Uri(readmeUri));
+            IRestRequest request = new RestRequest();
+
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(!response.IsSuccessful ||
+               string.IsNullOrEmpty(response.Content))
+            {
+                return null;
+            }
+
+            return response.Content;
         }
 
     }
