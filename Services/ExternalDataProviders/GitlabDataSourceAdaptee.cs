@@ -348,8 +348,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         /// This method is responsible for retrieving the readme from a repository.
         /// </summary>
-        /// <param name="readmeUri">This parameter represents the owners of the repository. This is in most cases the name of the user
-        /// or in some other case the name of the organization.</param>
+        /// <param name="readmeUri">This parameter represents the the uri of the readme file that should get retrieved.</param>
         /// <returns>This method returns the content of the readme.</returns>
         /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
         private async Task<string> FetchReadme(string readmeUri)
