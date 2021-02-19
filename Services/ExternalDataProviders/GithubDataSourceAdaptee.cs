@@ -73,7 +73,7 @@ namespace Services.ExternalDataProviders
             RedirectUri = configurationSection.GetSection("RedirectUri")
                                               .Value;
 
-            OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo";
+            OauthUrl = "https://github.com/login/oauth/authorize?client_id=" + clientId + $"&scope=repo read:org";
         }
 
         /// <summary>
