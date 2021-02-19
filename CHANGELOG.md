@@ -5,23 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
 ## [Unreleased]
 
 
 
 ### Added
 
+
 ### Changed
+
 
 ### Deprecated
 
+
 ### Removed
+
+
+### Fixed
+
+
+### Security
+
+
+## Release v.1.0.1-beta - 31-01-2021
+
+
+
+### Added
+
+- Added ability to make projects private to a specific institution - [#310](https://github.com/DigitalExcellence/dex-backend/issues/310)
+
+### Changed
+
+- Refactored Message Broker Publisher to make use of app settings and connection factory - [#356](https://github.com/DigitalExcellence/dex-backend/issues/356)
+- Project Likes now returns ProjectLiker instead of CreatorOfProject attribute - [#341](https://github.com/DigitalExcellence/dex-backend/issues/341)
 
 ### Fixed
 
 - Refactored Postman tests - [#328](https://github.com/DigitalExcellence/dex-backend/issues/328)
-
-### Security
+- Resolve update institution id for data officer bug - [#352](https://github.com/DigitalExcellence/dex-backend/issues/352)
 
 ## Release v.0.9.0-beta - 09-12-2020
 

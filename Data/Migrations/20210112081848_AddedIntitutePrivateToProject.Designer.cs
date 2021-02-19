@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210112081848_AddedIntitutePrivateToProject")]
+    partial class AddedIntitutePrivateToProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,56 +82,6 @@ namespace _4_Data.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Collaborators");
-                });
-
-            modelBuilder.Entity("Models.DataSource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Guid")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("IconId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsVisible")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IconId");
-
-                    b.ToTable("DataSource");
-                });
-
-            modelBuilder.Entity("Models.DataSourceWizardPage", b =>
-                {
-                    b.Property<int>("DataSourceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WizardPageId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("AuthFlow")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OrderIndex")
-                        .HasColumnType("int");
-
-                    b.HasKey("DataSourceId", "WizardPageId", "AuthFlow");
-
-                    b.HasIndex("WizardPageId");
-
-                    b.ToTable("DataSourceWizardPage");
                 });
 
             modelBuilder.Entity("Models.EmbeddedProject", b =>
@@ -427,57 +379,11 @@ namespace _4_Data.Migrations
                     b.ToTable("UserUser");
                 });
 
-            modelBuilder.Entity("Models.WizardPage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WizardPage");
-                });
-
             modelBuilder.Entity("Models.Collaborator", b =>
                 {
                     b.HasOne("Models.Project", null)
                         .WithMany("Collaborators")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.DataSource", b =>
-                {
-                    b.HasOne("Models.File", "Icon")
-                        .WithMany()
-                        .HasForeignKey("IconId");
-                });
-
-            modelBuilder.Entity("Models.DataSourceWizardPage", b =>
-                {
-                    b.HasOne("Models.DataSource", "DataSource")
-                        .WithMany("DataSourceWizardPages")
-                        .HasForeignKey("DataSourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.WizardPage", "WizardPage")
-                        .WithMany("DataSourceWizardPages")
-                        .HasForeignKey("WizardPageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

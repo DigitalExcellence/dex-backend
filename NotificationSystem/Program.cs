@@ -14,9 +14,10 @@ namespace NotificationSystem
         private static void Main()
         {
             string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            // Appsettings is renamed because of an issue where the project loaded another appsettings.json
             IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                .AddJsonFile("appsettingsnotificationsystem.json", true, true)
+                .AddJsonFile($"appsettingsnotificationsystem.{environmentName}.json", true, true)
                 .AddEnvironmentVariables()
                 .Build();
             Config config = configuration.GetSection("App").Get<Config>();
