@@ -84,7 +84,9 @@ namespace Services.Tests
                 "InstitutionRead",
                 "InstitutionWrite",
                 "FileWrite",
-                "CallToActionOptionWrite"
+                "CallToActionOptionWrite",
+                "UserTaskWrite",
+                "AdminProjectWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
             Assert.AreEqual(currentScopes,retrievedScopes);
@@ -94,12 +96,12 @@ namespace Services.Tests
         /// Tests if isValidScope returns true on an existing scope.
         /// </summary>
         [Test]
-        public void isValidScope_true()
+        public void IsValidScope_true()
         {
             List<string> currentScopes = new List<string>()
                                          {
                                              "ProjectRead",
-                                             "ProjectWrite",
+                                             "AdminProjectWrite",
                                              "UserRead",
                                              "UserWrite",
                                              "HighlightRead",
@@ -119,7 +121,7 @@ namespace Services.Tests
         /// Tests if isValidScope returns false on a non existing scope.
         /// </summary>
         [Test]
-        public void isValidScope_false()
+        public void IsValidScope_false()
         {
             bool isValidScope = Service.IsValidScope("role:read");
 

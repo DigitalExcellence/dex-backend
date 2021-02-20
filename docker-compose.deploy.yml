@@ -1,6 +1,7 @@
 version: '3.7'
 
 services:
+
   db:
     build:
       context: .
@@ -36,6 +37,8 @@ services:
       - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=${IDENTITY_URL}
+      - App__IdentityServer__ClientId=${API_CLIENT_ID}
+      - App__IdentityServer__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - SENTRY_DSN=${SENTRY_DSN}
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
@@ -55,6 +58,8 @@ services:
       - App__Api__DeXApiUrl=${API_URL}
       - App__Api__ClientId=${API_CLIENT_ID}
       - App__Api__ClientSecret=${API_CLIENT_SECRET}
+      - App__ApiAuthentication__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - App__Frontend__RedirectUriFrontend=${REDIRECT_URI_FRONTEND}
       - App__Frontend__RefreshUriFrontend=${REFRESH_URI_FRONTEND}
       - App__Frontend__RedirectUriFrontendPostman=${REDIRECT_URI_FRONTEND_POSTMAN}
@@ -66,7 +71,10 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=${FFHICTOIDC_REDIRECT_URI}
+      - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
+      - App__JobScheduler__ClientSecet=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
       - SENTRY_DSN=${SENTRY_DSN}
+      
     image: digitalexcellence/identity
 
   notificationservice:
@@ -86,6 +94,23 @@ services:
     tty: true
     networks:
       rabbitmq-network:
+
+  jobscheduler:
+    build:
+      context: .
+      dockerfile: JobScheduler/Dockerfile
+    container_name: jobscheduler
+    restart: on-failure
+    environment:
+        - Config__IdentityServerConfig__IdentityUrl=${IDENTITY_URL}
+        - Config__IdentityServerConfig__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
+        - Config__IdentityServerConfig__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
+        - Config__ApiConfig__ApiUrl=${API_URL}
+        - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+        - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
+        - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
+    networks:
+        rabbitmq-network:
 
 networks:
   mssql-network:

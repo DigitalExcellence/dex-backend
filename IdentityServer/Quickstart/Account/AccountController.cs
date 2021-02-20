@@ -17,6 +17,7 @@
 
 using IdentityModel;
 using IdentityServer.Quickstart;
+using IdentityServer.Quickstart.Account;
 using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
@@ -29,12 +30,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualBasic;
 using Models;
+using Models.Defaults;
 using Services.Services;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -446,5 +453,4 @@ namespace IdentityServer
         }
 
     }
-
 }

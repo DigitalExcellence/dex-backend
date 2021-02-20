@@ -18,13 +18,17 @@
 using API.Configuration;
 using API.Extensions;
 using API.Filters;
+using API.HelperClasses;
 using API.InternalResources;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
+using IdentityModel.Client;
 using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +40,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
+using Polly;
 using Serilog;
 using Services.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -108,8 +113,13 @@ namespace API
                         options.ApiSecret = Config.Frontend.ClientSecret;
                         options.EnableCaching = true;
                     });
+
             services.AddAuthorization(o =>
             {
+                
+                o.AddPolicy(nameof(Defaults.Roles.BackendApplication),
+                    policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
+                
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
@@ -120,6 +130,9 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.AdminProjectWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.AdminProjectWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
@@ -152,20 +165,21 @@ namespace API
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
-                
+
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
             });
 
             services.AddCors();
             services.AddControllersWithViews()
                     .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
                     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
-                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                ;
+                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(o =>
             {
@@ -178,10 +192,10 @@ namespace API
                                  Description =
                                      "Dex API Swagger surface. DeX provides a platform for students, teachers and employees to share and work on projects and ideas. Find, create, share and work on projects and ideas on DeX",
                                  License = new OpenApiLicense
-                                           {
-                                               Name = "GNU Lesser General Public License v3.0",
-                                               Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
-                                           }
+                                 {
+                                     Name = "GNU Lesser General Public License v3.0",
+                                     Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
+                                 }
                              });
                 o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
 
@@ -190,16 +204,16 @@ namespace API
                                         {
                                             Type = SecuritySchemeType.OAuth2,
                                             Flows = new OpenApiOAuthFlows
-                                                    {
-                                                        Implicit = new OpenApiOAuthFlow
-                                                                   {
-                                                                       AuthorizationUrl = GetAuthorizationUrl(),
-                                                                       Scopes = new Dictionary<string, string>
+                                            {
+                                                Implicit = new OpenApiOAuthFlow
+                                                {
+                                                    AuthorizationUrl = GetAuthorizationUrl(),
+                                                    Scopes = new Dictionary<string, string>
                                                                            {
                                                                                {"dex-api", "Resource scope"},
                                                                            }
-                                                                   }
-                                                    }
+                                                }
+                                            }
                                         });
                 o.AddSecurityRequirement(new OpenApiSecurityRequirement
                                          {
@@ -215,6 +229,30 @@ namespace API
                                                  new[] {""}
                                              }
                                          });
+
+
+            });
+
+            services.AddAccessTokenManagement(options =>
+                    {
+                        options.Client.Clients.Add("identityserver",
+                                                   new ClientCredentialsTokenRequest
+                                                   {
+                                                       Address = Config.IdentityServer.IdentityUrl + "/connect/token",
+                                                       ClientId = Config.IdentityServer.ClientId,
+                                                       ClientSecret = Config.IdentityServer.ClientSecret
+                                                   });
+
+                    }).ConfigureBackchannelHttpClient()
+                    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(new[]
+                                                     {
+                                                         TimeSpan.FromSeconds(1),
+                                                         TimeSpan.FromSeconds(2),
+                                                         TimeSpan.FromSeconds(3)
+                                                     }));
+            services.AddClientAccessTokenClient("identityclient", configureClient: client =>
+            {
+                client.BaseAddress = new Uri(string.Concat(Config.IdentityServer.IdentityUrl + "/"));
             });
 
             // Add application services.
@@ -232,8 +270,8 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
-            Defaults.Path.filePath = Path.Combine(env.WebRootPath, "Images");
-            
+            Defaults.Path.FilePath = Path.Combine(env.WebRootPath, "Images");
+
 
             UpdateDatabase(app, env);
             if(env.IsDevelopment())
@@ -245,14 +283,14 @@ namespace API
             } else if(env.IsProduction())
             {
                 app.UseExceptionHandler(new ExceptionHandlerOptions
-                                        {
-                                            ExceptionHandler = context =>
-                                            {
-                                                context.Response.ContentType = "text/HTML";
-                                                context.Response.Redirect("/Error.html");
-                                                return Task.CompletedTask;
-                                            }
-                                        });
+                {
+                    ExceptionHandler = context =>
+                    {
+                        context.Response.ContentType = "text/HTML";
+                        context.Response.Redirect("/Error.html");
+                        return Task.CompletedTask;
+                    }
+                });
             } else
             {
                 app.UseExceptionHandler();
@@ -262,7 +300,7 @@ namespace API
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
-                               {
+            {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, "Uploads", "Images")),
                 RequestPath = "/Uploads/Images"
@@ -326,16 +364,16 @@ namespace API
                                     } else
                                     {
                                         User newUser = new User
-                                                       {
-                                                           Name = userInformation.Name,
-                                                           Email = userInformation.Email,
-                                                           IdentityId = userInformation.IdentityId,
-                                                           Role = registeredUserRole,
-                                                       };
+                                        {
+                                            Name = userInformation.Name,
+                                            Email = userInformation.Email,
+                                            IdentityId = userInformation.IdentityId,
+                                            Role = registeredUserRole,
+                                        };
                                         Institution institution =
                                             await institutionService.GetInstitutionByInstitutionIdentityId(
                                                 userInformation.IdentityInstitutionId);
-                                        if( institution != null)
+                                        if(institution != null)
                                         {
                                             newUser.InstitutionId = institution.Id;
                                         }
@@ -354,7 +392,7 @@ namespace API
                                                                       userInformation.IdentityInstitutionId);
                                         if(institution != null)
                                             user.InstitutionId = institution.Id;
-                                        
+
                                         userService.Update(user);
                                         await dbContext.SaveChangesAsync()
                                                        .ConfigureAwait(false);
@@ -390,33 +428,34 @@ namespace API
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
             context.Database.Migrate();
-            if(!context.Role.Any())
-            {
-                // seed roles
-                context.AddRange(Seed.SeedRoles());
-                context.SaveChanges();
-            }
-            List<Role> roles = context.Role.ToList();
-            if(!context.User.Any())
-            {
-                // seed admin
-                context.User.Add(Seed.SeedAdminUser(roles));
-                context.SaveChanges();
 
-                if(!env.IsProduction())
+            // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
+            SeedHelper.InsertRoles(Seed.SeedRoles(), context);
+            List<Role> roles = context.Role.ToList();
+
+            if(!env.IsProduction())
+            {
+                if(!context.Institution.Any())
                 {
                     // Seed institutions
                     context.Institution.Add(Seed.SeedInstitution());
                     context.SaveChanges();
-
-                    //Seed random users
-                    context.User.Add(Seed.SeedPrUser(roles));
+                }
+                if(!context.User.Any())
+                {
                     context.User.AddRange(Seed.SeedUsers(roles));
-                    context.User.Add(Seed.SeedDataOfficerUser(roles));
                     context.SaveChanges();
                 }
+
             }
 
+            // Check if admin user in DB matches seed, if it doesn't match: database is updated.
+            
+            SeedHelper.InsertUser(Seed.SeedAdminUser(roles), context);
+            SeedHelper.InsertUser(Seed.SeedDataOfficerUser(roles), context);
+            SeedHelper.InsertUser(Seed.SeedAlumniUser(roles), context);
+            SeedHelper.InsertUser(Seed.SeedPrUser(roles), context);
+            
             if(!env.IsProduction())
             {
                 if(!context.Project.Any())

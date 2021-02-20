@@ -29,8 +29,8 @@ namespace Repositories
     /// <summary>
     /// The IdentityUser Repository
     /// </summary>
-    /// <seealso cref="Repositories.Base.IRepository{Models.IdentityUser}" />
-    public interface IIdentityUserRepository: IRepository<IdentityUser>
+    /// <seealso cref="IdentityUser" />
+    public interface IIdentityUserRepository : IRepository<IdentityUser>
     {
         /// <summary>
         /// Gets the IdentityUser with the specified subjectIdentifier.
@@ -63,18 +63,27 @@ namespace Repositories
         /// <returns>The retrieved IdentityUser</returns>
         Task<IdentityUser> AutoProvisionUser(string provider, string providerUserId, List<Claim> claimsList);
 
+        Task<IdentityUser> FindBySubjectId(string subjectId);
+
     }
 
     /// <summary>
     /// The IdentityUser Repository
     /// </summary>
-    /// <seealso cref="Repositories.Base.Repository{Models.IdentityUser}" />
-    /// <seealso cref="Repositories.IIdentityUserRepository" />
+    /// <seealso cref="IdentityUser" />
+    /// <seealso cref="IIdentityUserRepository" />
     public class IdentityUserRepository : Repository<IdentityUser>, IIdentityUserRepository
     {
-
+        /// <summary>
+        ///     This is the identity user repository constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public IdentityUserRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        ///     This is a overridden Add method which adds a new IdentityUser to the database.
+        /// </summary>
+        /// <param name="entity"></param>
         public override void Add(IdentityUser entity)
         {
             entity.SubjectId = Guid.NewGuid().ToString();
@@ -136,14 +145,20 @@ namespace Repositories
         public async Task<IdentityUser> AutoProvisionUser(string provider, string providerUserId, List<Claim> claimsList)
         {
             IdentityUser user = new IdentityUser()
-                                {
-                                    ProviderId = provider,
-                                    ExternalSubjectId = providerUserId,
-                                };
+            {
+                ProviderId = provider,
+                ExternalSubjectId = providerUserId,
+            };
             GetDbSet<IdentityUser>().Add(user);
             DbContext.SaveChanges();
             return await GetDbSet<IdentityUser>()
                 .Where(i => i.ProviderId == provider && i.ExternalSubjectId == providerUserId).SingleOrDefaultAsync();
+        }
+
+        public async Task<IdentityUser> FindBySubjectId(string subjectId)
+        {
+            return await GetDbSet<IdentityUser>()
+                       .Where(i => i.SubjectId == subjectId).SingleOrDefaultAsync();
         }
 
     }

@@ -20,26 +20,67 @@ using System.Threading.Tasks;
 
 namespace Services.Base
 {
-
+    /// <summary>
+    ///     This is the base service class
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public interface IService<TEntity> where TEntity : class
     {
 
+        /// <summary>
+        ///     This is the interface method for finding a single entity by the identifier.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>entity</returns>
         Task<TEntity> FindAsync(int id);
 
+        /// <summary>
+        ///     This is the interface method for adding an entity.
+        /// </summary>
+        /// <param name="entity"></param>
         void Add(TEntity entity);
 
+        /// <summary>
+        ///     This is the interface method adding an entity asynchronous
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         Task AddAsync(TEntity entity);
 
+        /// <summary>
+        ///     This is the interface method for adding multiple entities at once
+        /// </summary>
+        /// <param name="entities"></param>
         void AddRange(IEnumerable<TEntity> entities);
 
+        /// <summary>
+        ///     This is the interface method to update an entity
+        /// </summary>
+        /// <param name="entity"></param>
         void Update(TEntity entity);
 
+        /// <summary>
+        ///     This is the interface method to remove an entity asynchronous
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task RemoveAsync(int id);
 
+        /// <summary>
+        ///     This is the interface method to remove an entity
+        /// </summary>
+        /// <param name="entity"></param>
         void Remove(TEntity entity);
 
+        /// <summary>
+        ///     This is the interface method to get all entities
+        /// </summary>
+        /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAll();
 
+        /// <summary>
+        ///     This is the interface method to save changes that were made
+        /// </summary>
         void Save();
 
     }

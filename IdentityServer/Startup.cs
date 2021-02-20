@@ -29,6 +29,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Models;
+using Models.Defaults;
 using Repositories;
 using Services.Services;
 using System;
@@ -119,6 +120,7 @@ namespace IdentityServer
             builder.AddInMemoryClients(IdentityConfig.Clients(Config));
             builder.Services.AddTransient<IProfileService, ProfileService>();
             services.AddSingleton(Config);
+            services.AddLocalApiAuthentication();
 
             // sets the authentication schema.
             services.AddAuthentication(options =>

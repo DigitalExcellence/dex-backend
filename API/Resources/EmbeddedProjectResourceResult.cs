@@ -15,8 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
 using Models;
+using System;
 
 namespace API.Resources
 {
@@ -25,7 +25,7 @@ namespace API.Resources
     /// Embedded project resource result
     /// </summary>
     /// <seealso cref="API.Resources.EmbeddedProjectResource" />
-    public class EmbeddedProjectResourceResult: EmbeddedProjectResource
+    public class EmbeddedProjectResourceResult : EmbeddedProjectResource
     {
 
         /// <summary>

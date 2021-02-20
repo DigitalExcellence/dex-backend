@@ -16,6 +16,7 @@
 */
 
 using Models;
+using System;
 using System.Collections.Generic;
 
 namespace API.Resources
@@ -64,16 +65,26 @@ namespace API.Resources
         /// Gets or sets the institution where the user is registered.
         /// </summary>
         public Institution Institution { get; set; }
-       
+
         /// <summary>
         /// Gets or sets the followed projects for user
         /// </summary>
         public List<UserProjectResourceResult> UserProject { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the liked projects by registered users.
         /// </summary>
         public List<UserProjectLikeResourceResult> LikedProjectsByUsers { get; set; }
+
+        /// <summary>
+        /// Gets or set the tasks the user should follow up.
+        /// </summary>
+        public List<UserTaskResourceResult> UserTask { get; set; }
+
+        /// <summary>
+        /// This gets or sets the Expected Graduation DateTime.
+        /// </summary>
+        public DateTime? ExpectedGraduationDateTime { get; set; }
     }
 
 }

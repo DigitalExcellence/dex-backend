@@ -16,7 +16,6 @@
 */
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,22 +24,47 @@ using System.Threading.Tasks;
 
 namespace Repositories.Base
 {
+
+    /// <summary>
+    ///     This is the abstract base class of the repositories
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
+        /// <summary>
+        ///     This is the protected constructor of the abstract base class
+        /// </summary>
+        /// <param name="dbContext"></param>
         protected Repository(DbContext dbContext)
         {
             DbContext = dbContext;
         }
 
+        /// <summary>
+        ///     Gets the database context
+        /// </summary>
         protected DbContext DbContext { get; }
 
+        /// <summary>
+        ///     Sets the database context to the right context
+        /// </summary>
         protected DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
+        /// <summary>
+        ///     This method finds an entity by identifier asynchronous
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Entity</returns>
         public virtual async Task<TEntity> FindAsync(int id)
         {
             return await DbSet.FindAsync(id).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     This method sets the created date
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Entity</returns>
         public virtual TEntity UpdateCreatedField(TEntity entity)
         {
             if(entity == null)
@@ -56,6 +80,11 @@ namespace Repositories.Base
             return entity;
         }
 
+        /// <summary>
+        ///     This method sets / updates the datetime of the updated field
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Entity</returns>
         public virtual TEntity UpdateUpdatedField(TEntity entity)
         {
             if(entity == null)
@@ -71,13 +100,23 @@ namespace Repositories.Base
             return entity;
         }
 
+        /// <summary>
+        ///     This method adds the entity to the database
+        /// </summary>
+        /// <param name="entity"></param>
         public virtual void Add(TEntity entity)
         {
             entity = UpdateCreatedField(entity);
             entity = UpdateUpdatedField(entity);
-            
+
             DbSet.Add(entity);
         }
+
+        /// <summary>
+        ///     This method adds the entity to the database asynchronously
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public virtual async Task AddAsync(TEntity entity)
         {
             entity = UpdateCreatedField(entity);
@@ -85,6 +124,11 @@ namespace Repositories.Base
 
             await DbSet.AddAsync(entity).ConfigureAwait(false);
         }
+
+        /// <summary>
+        ///     This method adds multiple entities at once to the database
+        /// </summary>
+        /// <param name="entities"></param>
         public virtual void AddRange(IEnumerable<TEntity> entities)
         {
             List<TEntity> entityList = entities.ToList();
@@ -96,6 +140,10 @@ namespace Repositories.Base
             DbSet.AddRange(entityList);
         }
 
+        /// <summary>
+        ///     This method updates an entity which is already in the database.
+        /// </summary>
+        /// <param name="entity"></param>
         public virtual void Update(TEntity entity)
         {
             entity = UpdateUpdatedField(entity);
@@ -104,6 +152,11 @@ namespace Repositories.Base
             DbSet.Update(entity);
         }
 
+        /// <summary>
+        ///     This method removes an entity from the database by identifier asynchronously.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public virtual async Task RemoveAsync(int id)
         {
             TEntity entity = await FindAsync(id).ConfigureAwait(false);
@@ -115,6 +168,10 @@ namespace Repositories.Base
             Remove(entity);
         }
 
+        /// <summary>
+        ///     This method removes an entity from the database
+        /// </summary>
+        /// <param name="entity"></param>
         public virtual void Remove(TEntity entity)
         {
             if(DbContext.Entry(entity)
@@ -127,16 +184,28 @@ namespace Repositories.Base
             DbSet.Remove(entity);
         }
 
+        /// <summary>
+        ///     This method gets all entities from the database
+        /// </summary>
+        /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
             return await DbSet.ToListAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     This method saves the changes that were made
+        /// </summary>
         public virtual void Save()
         {
             DbContext.SaveChanges();
         }
 
+        /// <summary>
+        ///     This method gets the database set
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Database set of entity T</returns>
         protected DbSet<T> GetDbSet<T>() where T : class
         {
             return DbContext.Set<T>();

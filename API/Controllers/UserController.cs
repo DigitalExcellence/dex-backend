@@ -26,6 +26,8 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -46,6 +48,7 @@ namespace API.Controllers
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly IInstitutionService institutionService;
         private readonly IUserUserService userUserService;
+       
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class
         /// </summary>
@@ -55,6 +58,7 @@ namespace API.Controllers
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer.</param>
         /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
         /// <param name="userUserService">The user user service is responsible for users that are following users.</param>
+        
         public UserController(IUserService userService,
                               IMapper mapper,
                               IRoleService roleService,
@@ -87,10 +91,10 @@ namespace API.Controllers
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed getting the user account.",
-                     Detail = "The user could not be found in the database.",
-                     Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
                 };
                 return NotFound(problem);
             }
@@ -238,11 +242,11 @@ namespace API.Controllers
                 if(institutionId < 1)
                 {
                     ProblemDetails problem = new ProblemDetails
-                     {
-                         Title = "Failed getting institution.",
-                         Detail = "The id of an institution can't be smaller than 1",
-                         Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
-                     };
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The id of an institution can't be smaller than 1",
+                        Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                    };
                     return BadRequest(problem);
                 }
 
@@ -250,11 +254,11 @@ namespace API.Controllers
                 if(foundInstitution == null)
                 {
                     ProblemDetails problem = new ProblemDetails
-                     {
-                         Title = "Failed getting institution.",
-                         Detail = "The institution could not be found in the database.",
-                         Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
-                     };
+                    {
+                        Title = "Failed getting institution.",
+                        Detail = "The institution could not be found in the database.",
+                        Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                    };
                     return NotFound(problem);
                 }
             }
@@ -349,7 +353,7 @@ namespace API.Controllers
             userService.Save();
             return Ok();
         }
-       
+
 
         /// <summary>
         /// This method is responsible for deleting a user account.
@@ -374,11 +378,11 @@ namespace API.Controllers
             if(user.Id != userId && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed to delete the user.",
-                     Detail = "The user is not allowed to delete this user.",
-                     Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
-                 };
+                {
+                    Title = "Failed to delete the user.",
+                    Detail = "The user is not allowed to delete this user.",
+                    Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
+                };
                 return Unauthorized(problem);
             }
 
@@ -453,7 +457,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            UserUser userUser = new UserUser(user,followedUser);
+            UserUser userUser = new UserUser(user, followedUser);
             userUserService.Add(userUser);
 
             userUserService.Save();
@@ -494,7 +498,7 @@ namespace API.Controllers
                 return Conflict(problem);
             }
 
-            User followedUser= await userService.FindAsync(followedUserId);
+            User followedUser = await userService.FindAsync(followedUserId);
 
             if(await userService.FindAsync(followedUserId) == null)
             {
@@ -511,6 +515,40 @@ namespace API.Controllers
 
             userUserService.Save();
             return Ok();
+        }
+
+
+        /// <summary>
+        /// This method changes the expected graduation date for the user.
+        /// </summary>
+        /// <param name="userResource"></param>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The account has changed the graduation date.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user is not found.</response>
+        [HttpPut("graduationdate")]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [Authorize]
+        public async Task<IActionResult> SetUserGraduationDate([FromBody] UserResource userResource)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "DB0A5629-4A79-48BB-870E-C02FE7C1A768"
+                };
+                return NotFound(problem);
+            }
+
+            user.ExpectedGraduationDate = userResource.ExpectedGraduationDateTime;
+
+            userService.Update(user);
+            userService.Save();
+
+            return Ok(mapper.Map<User, UserResourceResult> (user));
         }
     }
 }

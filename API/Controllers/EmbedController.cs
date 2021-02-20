@@ -79,7 +79,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
-            IEnumerable<EmbeddedProject> embeddedProjects= await embedService.GetEmbeddedProjectsAsync();
+            IEnumerable<EmbeddedProject> embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
 
             return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
         }
@@ -102,11 +102,11 @@ namespace API.Controllers
             if(string.IsNullOrEmpty(guid))
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "No Guid specified.",
-                     Detail = "There was no guid specified.",
-                     Instance = "DA33DBE1-55DC-4574-B65F-C7A76A7309CF"
-                 };
+                {
+                    Title = "No Guid specified.",
+                    Detail = "There was no guid specified.",
+                    Instance = "DA33DBE1-55DC-4574-B65F-C7A76A7309CF"
+                };
                 return BadRequest(problem);
             }
 
@@ -114,17 +114,16 @@ namespace API.Controllers
             try
             {
                 validGuid = new Guid(guid);
-            }
-            catch(FormatException e)
+            } catch(FormatException e)
             {
-                Log.Logger.Error(e,"Guid format error");
+                Log.Logger.Error(e, "Guid format error");
 
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "The given guid was not a valid guid.",
-                     Detail = "The format of the guid was not valid, see  https://github.com/DigitalExcellence/dex-backend/wiki/Specific-error-details for a detailed explanation.",
-                     Instance = "DA33DBE1-55DC-4574-B62F-C7B76A7309CF"
-                 };
+                {
+                    Title = "The given guid was not a valid guid.",
+                    Detail = "The format of the guid was not valid, see  https://github.com/DigitalExcellence/dex-backend/wiki/Specific-error-details for a detailed explanation.",
+                    Instance = "DA33DBE1-55DC-4574-B62F-C7B76A7309CF"
+                };
                 return NotFound(problem);
             }
 
@@ -217,7 +216,7 @@ namespace API.Controllers
                 return Created(nameof(CreateEmbeddedProject), mapper.Map<EmbeddedProject, EmbeddedProjectResourceResult>(embeddedProject));
             } catch(DbUpdateException e)
             {
-                Log.Logger.Error(e,"Database exception");
+                Log.Logger.Error(e, "Database exception");
 
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -247,7 +246,7 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteEmbeddedProject(string guid)
         {
             EmbeddedProject embeddedProject = await embedService.FindAsync(new Guid(guid));
-            if( embeddedProject == null)
+            if(embeddedProject == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {

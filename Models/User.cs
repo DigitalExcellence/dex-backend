@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -32,6 +33,9 @@ namespace Models
             UserProject = new List<UserProject>();
             FollowedUsers = new List<UserUser>();
             LikedProjectsByUsers = new List<ProjectLike>();
+            UserTasks = new List<UserTask>();
+            AccountCreationDate = DateTime.Now;
+            ExpectedGraduationDate = DateTime.Now.AddYears(4);
         }
 
         public int Id { get; set; }
@@ -65,6 +69,10 @@ namespace Models
         /// </value>
         public bool IsPublic { get; set; }
 
+        public DateTime? AccountCreationDate { get; set; }
+
+        public DateTime? ExpectedGraduationDate { get; set; }
+
         /// <summary>
         /// Gets or sets the value of the list object which keeps project list
         /// who liked by an individual user.
@@ -85,6 +93,10 @@ namespace Models
         /// </summary>
         public Institution Institution { get; set; }
 
-    }
+        /// <summary>
+        /// Gets or sets the user tasks
+        /// </summary>
+        public List<UserTask> UserTasks { get; set; }
 
+    }
 }

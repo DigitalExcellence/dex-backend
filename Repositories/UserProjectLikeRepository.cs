@@ -23,24 +23,40 @@ using System.Linq;
 namespace Repositories
 {
 
+    /// <summary>
+    ///     This is the interface of the project like repository
+    /// </summary>
     public interface IUserProjectLikeRepository : IRepository<ProjectLike>
     {
 
+        /// <summary>
+        ///     This interface method checks if the user already liked a certain project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
 
     }
 
+    /// <summary>
+    ///     This is the project like repository
+    /// </summary>
     public class UserProjectLikeRepository : Repository<ProjectLike>,
                                              IUserProjectLikeRepository
     {
+        /// <summary>
+        ///     This is the project like repository constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public UserProjectLikeRepository(DbContext dbContext) :
-            base(dbContext) { }
+            base(dbContext)
+        { }
 
-        public override void Add(ProjectLike projectLike)
-        {
-            DbContext.Add(projectLike);
-        }
-
+        /// <summary>
+        ///     This method removes the project like
+        /// </summary>
+        /// <param name="projectLike"></param>
         public override void Remove(ProjectLike projectLike)
         {
             ProjectLike projectToRemove = GetDbSet
@@ -54,12 +70,18 @@ namespace Repositories
                 .Remove(projectToRemove);
         }
 
+        /// <summary>
+        ///     This method checks if the user already liked a certain project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         bool IUserProjectLikeRepository
             .CheckIfUserAlreadyLiked(int userId, int projectId)
         {
             ProjectLike projectLike = GetDbSet<ProjectLike>()
                 .SingleOrDefault(project =>
-                                     (project.ProjectLiker.Id == userId) && project.LikedProject.Id == projectId);
+                                     project.ProjectLiker.Id == userId && project.LikedProject.Id == projectId);
 
             if(projectLike != null)
             {

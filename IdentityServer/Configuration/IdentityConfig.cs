@@ -21,7 +21,6 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using Models.Defaults;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 
 namespace IdentityServer.Configuration
@@ -48,6 +47,7 @@ namespace IdentityServer.Configuration
                     Scopes =
                     {
                         new Scope(nameof(Defaults.Scopes.ProjectRead)),
+                        new Scope(nameof(Defaults.Scopes.AdminProjectWrite)),
                         new Scope(nameof(Defaults.Scopes.ProjectWrite)),
                         new Scope(nameof(Defaults.Scopes.UserWrite)),
                         new Scope(nameof(Defaults.Scopes.UserRead)),
@@ -55,15 +55,36 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.HighlightRead)),
                         new Scope(nameof(Defaults.Scopes.EmbedWrite)),
                         new Scope(nameof(Defaults.Scopes.EmbedRead)),
-                        new Scope(nameof(Defaults.Scopes.FileWrite))
+                        new Scope(nameof(Defaults.Scopes.FileWrite)),
+                        new Scope(nameof(Defaults.Scopes.UserTaskWrite))
                     }
-                }
+                },
+                new ApiResource(IdentityServerConstants.LocalApi.ScopeName), 
             };
 
         public static IEnumerable<Client> Clients(Config config)
         {
             return new[]
-            {
+                   {
+                       // machine to machine client (API -> Identity)
+                        new Client
+                        {
+                            ClientId = "dex-api",
+                            AllowedGrantTypes = GrantTypes.ClientCredentials,
+                            ClientSecrets =
+                            {
+                                new Secret(config.ApiAuthentication.ClientSecret.Sha256())
+                            },
+                            AllowedScopes =
+                            {
+                                IdentityServerConstants.LocalApi.ScopeName
+                            },
+                            Claims = new List<Claim>
+                                     {
+                                         new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                     }
+                        }, 
+
                        // machine to machine client (Identity -> API)
                        new Client
                        {
@@ -76,6 +97,7 @@ namespace IdentityServer.Configuration
                            AllowedScopes =
                            {
                                nameof(Defaults.Scopes.ProjectRead),
+                               nameof(Defaults.Scopes.AdminProjectWrite),
                                nameof(Defaults.Scopes.ProjectWrite),
                                nameof(Defaults.Scopes.UserWrite),
                                nameof(Defaults.Scopes.UserRead),
@@ -83,7 +105,8 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.HighlightWrite),
                                nameof(Defaults.Scopes.EmbedWrite),
                                nameof(Defaults.Scopes.EmbedRead),
-                               nameof(Defaults.Scopes.FileWrite)
+                               nameof(Defaults.Scopes.FileWrite),
+                               nameof(Defaults.Scopes.UserTaskWrite)
                            },
                            Claims = new List<Claim>
                                     {
@@ -106,28 +129,29 @@ namespace IdentityServer.Configuration
                            RequireConsent = false,
 
                            // where to redirect to after login
-                           RedirectUris = new List<string> {
-                               config.Frontend.RedirectUriFrontend,
-                               config.Frontend.RedirectUriPostman,
-                               config.Frontend.RefreshUriFrontend
-                           },
+                           RedirectUris = new List<string>
+                                          {
+                                              config.Frontend.RedirectUriFrontend,
+                                              config.Frontend.RedirectUriPostman,
+                                              config.Frontend.RefreshUriFrontend
+                                          },
 
                            // where to redirect to after logout
-                           PostLogoutRedirectUris = new List<string> {
-                               config.Frontend.PostLogoutUriFrontend
-                           },
+                           PostLogoutRedirectUris = new List<string>
+                                                    {
+                                                        config.Frontend.PostLogoutUriFrontend
+                                                    },
 
                            AllowedScopes = new List<string>
-                            {
-                                IdentityServerConstants.StandardScopes.OpenId,
-                                IdentityServerConstants.StandardScopes.Profile,
-                                IdentityServerConstants.StandardScopes.Email,
-                                "dex-api"
-                            },
+                                           {
+                                               IdentityServerConstants.StandardScopes.OpenId,
+                                               IdentityServerConstants.StandardScopes.Profile,
+                                               IdentityServerConstants.StandardScopes.Email,
+                                               "dex-api"
+                                           },
                            AllowAccessTokensViaBrowser = true,
                            AllowOfflineAccess = true
                        },
-
                        new Client
                        {
                            ClientId = "Swagger-UI",
@@ -135,20 +159,43 @@ namespace IdentityServer.Configuration
                            AllowedGrantTypes = GrantTypes.Implicit,
                            AllowAccessTokensViaBrowser = true,
                            AlwaysIncludeUserClaimsInIdToken = true,
-                           RedirectUris = new List<string> {
-                               config.Swagger.RedirectUrisSwagger
-                           },
-                           PostLogoutRedirectUris = new List<string> {
-                               config.Swagger.PostLogoutUrisSwagger
-                           },
+                           RedirectUris = new List<string>
+                                          {
+                                              config.Swagger.RedirectUrisSwagger
+                                          },
+                           PostLogoutRedirectUris = new List<string>
+                                                    {
+                                                        config.Swagger.PostLogoutUrisSwagger
+                                                    },
                            AllowedScopes = new List<string>
+                                           {
+                                               IdentityServerConstants.StandardScopes.OpenId,
+                                               IdentityServerConstants.StandardScopes.Profile,
+                                               "dex-api",
+                                           },
+                       },
+                       new Client
+                       {
+                           ClientId = config.JobScheduler.ClientId,
+                           ClientName = "Digital Excellence Job Scheduler",
+                           AllowedGrantTypes = GrantTypes.ClientCredentials,
+                           ClientSecrets =
                            {
-                                IdentityServerConstants.StandardScopes.OpenId,
-                                IdentityServerConstants.StandardScopes.Profile,
-                                "dex-api",
-                            },
+                               new Secret(config.JobScheduler.ClientSecret.Sha256())
+                           },
+                           AllowedScopes =
+                           {
+                                "dex-api"
+                           },
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                    }
+
                        }
                    };
+
+
         }
 
     }

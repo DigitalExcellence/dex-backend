@@ -26,18 +26,36 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-
+    /// <summary>
+    ///     This is the highlight repository interface
+    /// </summary>
     public interface IHighlightRepository : IRepository<Highlight>
     {
-
+        /// <summary>
+        ///     This interface method gets all highlights asynchronous
+        /// </summary>
+        /// <returns>List of highlights</returns>
         Task<List<Highlight>> GetHighlightsAsync();
+
+        /// <summary>
+        ///     This interface method gets all highlights by project id asynchronous.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>List of highlights</returns>
         Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId);
 
     }
 
+    /// <summary>
+    ///     This is the highlight repository implementation
+    /// </summary>
     public class HighlightRepository : Repository<Highlight>, IHighlightRepository
     {
 
+        /// <summary>
+        ///     This is the highlight repository constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public HighlightRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
@@ -101,6 +119,11 @@ namespace Repositories
             return RedactUser(highlights);
         }
 
+        /// <summary>
+        ///     This method gets all highlights by project id asynchronous.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>List of highlights</returns>
         public async Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId)
         {
             return await GetDbSet<Highlight>()

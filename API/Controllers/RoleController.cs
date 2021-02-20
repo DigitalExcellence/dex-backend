@@ -7,7 +7,6 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -134,7 +133,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
         [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateRoleAsync([FromBody]RoleResource roleResource)
+        public async Task<IActionResult> CreateRoleAsync([FromBody] RoleResource roleResource)
         {
             if(roleResource == null)
             {
@@ -167,8 +166,7 @@ namespace API.Controllers
                 await roleService.AddAsync(role).ConfigureAwait(false);
                 roleService.Save();
                 return Created(nameof(CreateRoleAsync), mapper.Map<Role, RoleResourceResult>(role));
-            }
-            catch(DbUpdateException e)
+            } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
 
@@ -209,7 +207,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            mapper.Map<RoleResource, Role>(roleResource,currentRole);
+            mapper.Map<RoleResource, Role>(roleResource, currentRole);
             foreach(RoleScope roleScope in currentRole.Scopes)
             {
                 if(!roleService.IsValidScope(roleScope.Scope))
@@ -274,10 +272,10 @@ namespace API.Controllers
             if(userService.UserWithRoleExists(role))
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Role is still assigned.",
-                     Detail = "The role is still assigned to a user.",
-                     Instance = "46E4AD0A-5947-4F9B-8001-A4D77CBC1A92"
+                {
+                    Title = "Role is still assigned.",
+                    Detail = "The role is still assigned to a user.",
+                    Instance = "46E4AD0A-5947-4F9B-8001-A4D77CBC1A92"
                 };
                 return BadRequest(problem);
             }

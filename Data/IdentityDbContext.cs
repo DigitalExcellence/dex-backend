@@ -26,10 +26,13 @@ namespace Data
     /// <summary>
     /// ApplicationDatabaseContext
     /// </summary>
-    /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
+    /// <seealso cref="DbContext" />
     public class IdentityDbContext : DbContext
     {
-
+        /// <summary>
+        ///     The identityDBContext constructor
+        /// </summary>
+        /// <param name="options"></param>
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options) : base(options) { }
 
         /// <summary>

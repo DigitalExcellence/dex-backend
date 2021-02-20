@@ -24,26 +24,57 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the interface for the highlight service.
+    /// </summary>
     public interface IHighlightService : IService<Highlight>
     {
 
+        /// <summary>
+        ///     This is the interface method which gets all highlights asynchronous
+        /// </summary>
+        /// <returns></returns>
         Task<List<Highlight>> GetHighlightsAsync();
+
+        /// <summary>
+        /// This is the interface method which gets all highlights by project id asynchronous
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId);
 
     }
 
+    /// <summary>
+    ///     This is the highlight service
+    /// </summary>
     public class HighlightService : Service<Highlight>, IHighlightService
     {
 
+        /// <summary>
+        ///     This is the constructor of the highlight service
+        /// </summary>
+        /// <param name="repository"></param>
         public HighlightService(IHighlightRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IHighlightRepository Repository => (IHighlightRepository) base.Repository;
 
+        /// <summary>
+        ///     This is the method which gets all highlights asynchronous
+        /// </summary>
+        /// <returns>List of highlights</returns>
         public async Task<List<Highlight>> GetHighlightsAsync()
         {
             return await Repository.GetHighlightsAsync();
         }
 
+        /// <summary>
+        ///     This is the method which gets all highlights by project id asynchronous
+        /// </summary>
+        /// <returns>List of highlights</returns>
         public async Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId)
         {
             return await Repository.GetHighlightsByProjectIdAsync(projectId).ConfigureAwait(false);

@@ -135,7 +135,24 @@ namespace API.Configuration
         /// </value>
         [Url]
         public string DevelopmentIdentityUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the client identifier. Use for authorization from the API to the IdentityServer
+        /// </summary>
+        /// <value>
+        ///     The client identifier
+        /// </value>
+        public string ClientId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the client secret
+        /// </summary>
+        /// <value>
+        ///     The client secret
+        /// </value>
+        public string ClientSecret { get; set; }
     }
+
 
     /// <summary>
     /// Contains the swagger configuration.

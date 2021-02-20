@@ -27,20 +27,48 @@ using static Models.Defaults.Defaults;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the interface for the role service
+    /// </summary>
     public interface IRoleService : IService<Role>
     {
 
+        /// <summary>
+        /// This is the interface method to get all roles ansynchronous
+        /// </summary>
+        /// <returns>A list of roles</returns>
         Task<List<Role>> GetAllAsync();
+
+        /// <summary>
+        ///     This is the interface method which gets all valid scopes
+        /// </summary>
+        /// <returns>List of strings</returns>
         List<string> GetValidScopes();
+
+        /// <summary>
+        ///     This is the interface method which check if a scope is valid
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns>Boolean</returns>
         bool IsValidScope(string scope);
 
     }
 
+    /// <summary>
+    ///     This is the role service
+    /// </summary>
     public class RoleService : Service<Role>, IRoleService
     {
 
+        /// <summary>
+        ///     This is the role service constructor
+        /// </summary>
+        /// <param name="repository"></param>
         public RoleService(IRoleRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IRoleRepository Repository => (IRoleRepository) base.Repository;
 
         /// <summary>

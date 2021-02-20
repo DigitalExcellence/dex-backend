@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-
+Graduation system for users whose FHICT account becomes unavailable. [#287](https://github.com/DigitalExcellence/dex-backend/issues/287)
 ### Changed
 
 

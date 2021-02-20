@@ -18,6 +18,8 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,7 +28,7 @@ namespace Repositories
     /// <summary>
     /// IUserRepository
     /// </summary>
-    /// <seealso cref="Repositories.Base.IRepository{Models.User}" />
+    /// <seealso cref="User" />
     public interface IUserRepository : IRepository<User>
     {
         /// <summary>
@@ -55,19 +57,27 @@ namespace Repositories
         /// <param name="scope">The scope.</param>
         /// <returns>true if the user that has this scope.</returns>
         bool UserHasScope(string identityId, string scope);
+
         /// <summary>
         /// Users the with role exists.
         /// </summary>
-        /// <param name="roleName">Name of the role.</param>
+        /// <param name="role"></param>
         /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
+
+        /// <summary>
+        /// Gets the expected graduating user in time range between now and entered amount of months.
+        /// </summary>
+        /// <param name="amountOfMonths"></param>
+        /// <returns></returns>
+        Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
     }
     /// <summary>
     /// UserRepository
     /// </summary>
-    /// <seealso cref="Repositories.Base.Repository{Models.User}" />
-    /// <seealso cref="Repositories.IUserRepository" />
+    /// <seealso cref="User" />
+    /// <seealso cref="IUserRepository" />
     public class UserRepository : Repository<User>, IUserRepository
     {
         /// <summary>
@@ -87,7 +97,7 @@ namespace Repositories
                              .Where(s => s.Id == userId)
                              .Include(s => s.Role)
                              .ThenInclude(s => s.Scopes)
-                             .Include(u =>  u.Institution)
+                             .Include(u => u.Institution)
                              .Include(f => f.UserProject)
                              .Include(s => s.LikedProjectsByUsers)
                              .SingleOrDefaultAsync();
@@ -122,6 +132,7 @@ namespace Repositories
                          .Include(u => u.Institution)
                          .Include(f => f.UserProject)
                          .Include(s => s.LikedProjectsByUsers)
+                         .Include(u => u.UserTasks)
                          .SingleOrDefaultAsync();
         }
 
@@ -176,7 +187,7 @@ namespace Repositories
         /// <summary>
         /// Users the with role exists.
         /// </summary>
-        /// <param name="roleName">Name of the role.</param>
+        /// <param name="role"></param>
         /// <returns>true if a user exists with the given role.</returns>
         public bool UserWithRoleExists(Role role)
         {
@@ -185,7 +196,17 @@ namespace Repositories
                 .SingleOrDefault(r => r.Role.Id == role.Id) != null;
         }
 
+        public async Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths)
+        {
+            DateTime now = DateTime.Now;
+            DateTime max = DateTime.Now.AddMonths(amountOfMonths);
 
+
+            return await GetDbSet<User>()
+                           .Where(u => u.ExpectedGraduationDate >= now && u.ExpectedGraduationDate <= max)
+                           .ToListAsync();
+        }
+
+        
     }
-
 }

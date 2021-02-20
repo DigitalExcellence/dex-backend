@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
+
 namespace API.Resources
 {
 
@@ -48,6 +50,11 @@ namespace API.Resources
         /// This gets or sets the Institution Id.
         /// </summary>
         public int? InstitutionId { get; set; }
+
+        /// <summary>
+        /// This gets or sets the Expected Graduation DateTime.
+        /// </summary>
+        public DateTime? ExpectedGraduationDateTime { get; set; }
 
     }
 

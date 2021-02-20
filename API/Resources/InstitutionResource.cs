@@ -23,7 +23,7 @@ namespace API.Resources
     /// </summary>
     public class InstitutionResource
     {
-        
+
         /// <summary>
         /// Gets or sets a value for the name of the institution.
         /// </summary>

@@ -29,6 +29,45 @@ namespace Data.Helpers
     public static class Seed
     {
         /// <summary>
+        /// Temporary method which is meant to update the rolescopes in staging / production after user graduation feature is implemented.
+        /// </summary>
+        /// <returns>List of new rolescopes.</returns>
+        public static List<RoleScope> UpdateRoleScopes()
+        {
+            List<RoleScope> roleScopes = new List<RoleScope>();
+            for(int i = 1; i < 5; i++)
+            {
+                RoleScope roleScope = new RoleScope("ProjectWrite", i)
+                                      {
+                                          RoleId = i
+                                      };
+                roleScopes.Add(roleScope);
+            }
+            
+            RoleScope adminRoleScope = new RoleScope("AdminProjectWrite", 4);
+            roleScopes.Add(adminRoleScope);
+
+            return roleScopes;
+
+        }
+
+        /// <summary>
+        /// Temporary method which is meant to add the alumni role in staging / production after user graduation feature is implemented.
+        /// </summary>
+        /// <returns>Alumni role.</returns>
+        public static Role SeedAlumniRole()
+        {
+            Role alumniRole = new Role
+            {
+                Name = Defaults.Roles.Alumni
+            };
+
+            return alumniRole;
+        }
+
+
+
+        /// <summary>
         ///     Seed random users into the database using fake date from Bogus
         /// </summary>
         public static List<User> SeedUsers(List<Role> roles)
@@ -59,7 +98,11 @@ namespace Data.Helpers
             Role registeredUserRole = new Role()
             {
                 Name = nameof(Defaults.Roles.RegisteredUser),
+
                 Scopes = new List<RoleScope>()
+                         {
+                             new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                         }
             };
             roles.Add(registeredUserRole);
 
@@ -72,6 +115,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                     new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                 }
             };
             roles.Add(prRole);
@@ -85,6 +129,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                 }
            };
             roles.Add(dataOfficerRole);
@@ -94,7 +139,7 @@ namespace Data.Helpers
                 Name = nameof(Defaults.Roles.Administrator),
                 Scopes = new List<RoleScope>
                 {
-                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.AdminProjectWrite)),
                     new RoleScope(nameof(Defaults.Scopes.UserWrite)),
                     new RoleScope(nameof(Defaults.Scopes.UserRead)),
                     new RoleScope(nameof(Defaults.Scopes.RoleRead)),
@@ -106,10 +151,21 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.InstitutionRead)),
                     new RoleScope(nameof(Defaults.Scopes.InstitutionWrite)),
                     new RoleScope(nameof(Defaults.Scopes.FileWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite))
+                    new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                 }
             };
             roles.Add(administratorRole);
+
+            Role alumniRole = new Role()
+            {
+                Name = nameof(Defaults.Roles.Alumni),
+                Scopes = new List<RoleScope>()
+                {
+                    
+                }
+            };
+            roles.Add(alumniRole);
 
             return roles;
         }
@@ -179,6 +235,20 @@ namespace Data.Helpers
                 Name = "data officer Sam",
                 Role = dataOfficerRole,
                 InstitutionId = 1
+            };
+
+            return user;
+        }
+
+        public static User SeedAlumniUser(List<Role> roles)
+        {
+            Role alumniRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Alumni));
+            User user = new User
+            {
+                IdentityId = "123456789",
+                Email = "Alumni@dex.software",
+                Name = "Alumni test",
+                Role = alumniRole
             };
 
             return user;

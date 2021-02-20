@@ -15,38 +15,49 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Ganss.XSS;
 using Models;
 using Repositories;
 using Services.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
+    /// <summary>
+    ///     This is the user (follow) user service
+    /// </summary>
     public interface IUserUserService : IService<UserUser>
     {
-        bool CheckIfUserFollows(int userId,int follwedUserId);
+        /// <summary>
+        ///     This is the interface method which checks if the user already follows a certain user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="follwedUserId"></param>
+        /// <returns>boolean</returns>
+        bool CheckIfUserFollows(int userId, int follwedUserId);
     }
 
+    /// <summary>
+    ///     This is the user (follows) user service
+    /// </summary>
     public class UserUserService : Service<UserUser>, IUserUserService
     {
+        /// <summary>
+        ///     This is the user (follows) user service constructor
+        /// </summary>
+        /// <param name="repository"></param>
         public UserUserService(IUserUserRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IUserUserRepository Repository => (IUserUserRepository) base.Repository;
 
-        public override void Add(UserUser entity)
-        {
-            Repository.Add(entity);
-        }
 
-        public override void Remove(UserUser userUser)
-        {
-            Repository.Remove(userUser);
-        }
-
+        /// <summary>
+        ///     This is the interface method which checks if the user already follows a certain user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="follwedUserId"></param>
+        /// <returns>boolean</returns>
         bool IUserUserService.CheckIfUserFollows(int userId, int follwedUserId)
         {
             if(Repository.CheckIfUserFollows(userId, follwedUserId))
