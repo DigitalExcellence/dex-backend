@@ -95,7 +95,7 @@ services:
       - App__Api__DeXApiUrl=https://api.staging.dex.software
       - App__Api__ClientId=${API_CLIENT_ID}
       - App__Api__ClientSecret=${API_CLIENT_SECRET}
-      - App__ApiAuthentication__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__ApiAuthentication__ClientId=${API_CLIENT_ID}
       - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - App__Frontend__RedirectUriFrontend=https://staging.dex.software/auth-callback
       - App__Frontend__RedirectUriPostman=https://www.postman.com/oauth2/callback
@@ -108,8 +108,6 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.staging.dex.software/external/callback/fhict
-      - App__ApiAuthentication__ClientId=${API_AUTHENTICATION_CLIENT_ID}
-      - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - App__JobScheduler__ClientId={$JOBSCHEDULER_CLIENT_ID}
       - App__JobScheduler__ClientSecret={$JOBSCHEDULER_CLIENT_SECRET}
       - Cert_File=/app/identity.staging.dex.software_pfx.pfx
