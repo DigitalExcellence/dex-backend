@@ -16,6 +16,7 @@
 */
 
 using Models;
+using System;
 using System.Collections.Generic;
 
 namespace API.Resources
@@ -79,6 +80,11 @@ namespace API.Resources
         /// Gets or set the tasks the user should follow up.
         /// </summary>
         public List<UserTaskResourceResult> UserTask { get; set; }
+
+        /// <summary>
+        /// This gets or sets the Expected Graduation DateTime.
+        /// </summary>
+        public DateTime? ExpectedGraduationDateTime { get; set; }
     }
 
 }

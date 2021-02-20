@@ -526,6 +526,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns status code 200. The account has changed the graduation date.</response>
         /// <response code="404">The 404 Not Found status code is returned when the user is not found.</response>
         [HttpPut("graduationdate")]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [Authorize]
         public async Task<IActionResult> SetUserGraduationDate([FromBody] UserResource userResource)
         {

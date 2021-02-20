@@ -71,9 +71,11 @@ namespace API.Configuration
 
 
             CreateMap<User, UserResourceResult>()
-                .ForMember(q=> q.UserTask, opt => opt.MapFrom(q => q.UserTasks));
+                .ForMember(q => q.UserTask, opt => opt.MapFrom(q => q.UserTasks))
+                .ForMember(q => q.ExpectedGraduationDateTime, opt => opt.MapFrom(q => q.ExpectedGraduationDate));
 
-            CreateMap<UserResource, User>();
+            CreateMap<UserResource, User>()
+                .ForMember(q => q.ExpectedGraduationDate, opt => opt.MapFrom(q => q.ExpectedGraduationDateTime));
 
             CreateMap<User, LimitedUserResourceResult>();
 
