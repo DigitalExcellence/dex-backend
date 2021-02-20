@@ -176,7 +176,7 @@ namespace IdentityServer.Configuration
                        },
                        new Client
                        {
-                           ClientId = "dex-jobscheduler",
+                           ClientId = config.JobScheduler.ClientId,
                            ClientName = "Digital Excellence Job Scheduler",
                            AllowedGrantTypes = GrantTypes.ClientCredentials,
                            ClientSecrets =

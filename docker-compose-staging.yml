@@ -55,7 +55,7 @@ services:
       - App__Frontend__ClientId=${STAGING_API_FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${STAGING_API_FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=https://identity.staging.dex.software
-      - App__IdentityServer__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__IdentityServer__ClientId=${API_CLIENT_ID}
       - App__IdentityServer__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - SENTRY_DSN=https://c4cad5ec89d74853a66347a7b19c213b@o395685.ingest.sentry.io/5247967
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}

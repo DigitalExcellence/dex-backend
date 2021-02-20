@@ -49,7 +49,7 @@ services:
       - App__Frontend__ClientId=${PRODUCTION_API_FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${PRODUCTION_API_FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=https://identity.dex.software
-      - App__IdentityServer__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__IdentityServer__ClientId=${API_CLIENT_ID}
       - App__IdentityServer__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
