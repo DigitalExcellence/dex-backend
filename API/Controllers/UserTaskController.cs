@@ -107,6 +107,7 @@ namespace API.Controllers
         /// <response code="404">This status code is returned when no user was found.</response>
         [HttpGet]
         [ProducesResponseType(typeof(List<UserTask>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUserTasksForCurrentUser()
         {
             User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
@@ -138,7 +139,7 @@ namespace API.Controllers
         [Authorize]
         [ProducesResponseType(typeof(User), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), 503)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.ServiceUnavailable)]
         public async Task<IActionResult> ConvertToAlumni()
         {
             User user = await HttpContext.GetContextUser(userService)
@@ -226,9 +227,22 @@ namespace API.Controllers
         [HttpPut("SetToMailed/{userTaskId}")]
         [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
         [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> SetUserTasksToStatusMailed(int userTaskId)
         {
             UserTask userTask = await userTaskService.FindAsync(userTaskId);
+
+            if(userTask == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "User task was not found.",
+                                             Detail = "User task with this ID does not exist.",
+                                             Instance = "CA523709-D2CB-4EC5-BE31-32758D2587D0"
+                };
+                return NotFound(problem);
+            }
+
             userTask.Status = UserTaskStatus.Mailed;
             userTaskService.Update(userTask);
             userTaskService.Save();
