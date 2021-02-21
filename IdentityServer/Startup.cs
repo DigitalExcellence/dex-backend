@@ -92,9 +92,7 @@ namespace IdentityServer
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
 
-            services.AddScoped<DbContext, IdentityDbContext>();
-            services.AddScoped<IIdentityUserService, IdentityUserService>();
-            services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();
+            services.AddServicesAndRepositories();
 
             // configures the OpenIdConnect handlers to persist the state parameter into the server-side IDistributedCache.
             services.AddOidcStateDataFormatterCache();

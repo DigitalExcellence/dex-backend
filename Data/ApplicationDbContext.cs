@@ -37,7 +37,7 @@ namespace Data
         /// The user.
         /// </value>
         public DbSet<User> User { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the Call to Action.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Data
         /// The call to action.
         /// </value>
         public DbSet<CallToAction> CallToAction { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the project.
         /// </summary>
@@ -61,7 +61,7 @@ namespace Data
         /// The call to action options.
         /// </value>
         public DbSet<Project> Project { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the collaborators.
         /// </summary>
@@ -69,7 +69,7 @@ namespace Data
         /// The collaborators.
         /// </value>
         public DbSet<Collaborator> Collaborators { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the highlight.
         /// </summary>
@@ -77,7 +77,7 @@ namespace Data
         /// The highlight.
         /// </value>
         public DbSet<Highlight> Highlight { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the embedded project.
         /// </summary>
@@ -85,7 +85,7 @@ namespace Data
         /// The embedded project.
         /// </value>
         public DbSet<EmbeddedProject> EmbeddedProject { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the role.
         /// </summary>
@@ -93,7 +93,7 @@ namespace Data
         /// The role.
         /// </value>
         public DbSet<Role> Role { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the institution.
         /// </summary>
@@ -111,6 +111,14 @@ namespace Data
         public DbSet<ProjectLike> ProjectLike { get; set; }
 
         /// <summary>
+        /// Gets or sets the data source.
+        /// </summary>
+        /// <value>
+        /// The data source.
+        /// </value>
+        public DbSet<DataSource> DataSource { get; set; }
+
+        /// <summary>
         /// Gets or sets the call to action option.
         /// </summary>
         /// <value>
@@ -119,7 +127,7 @@ namespace Data
         public DbSet<CallToActionOption> CallToActionOption { get; set; }
 
         /// <summary>
-        /// Gets or sets the user follwoing the project.
+        /// Gets or sets the user following the project.
         /// </summary>
         /// <value>
         /// The user following the project.
@@ -150,13 +158,23 @@ namespace Data
         /// </value>
         public DbSet<RoleScope> RoleScope { get; set; }
 
+        /// <summary>
+        /// Gets or sets the wizard page.
+        /// </summary>
+        public DbSet<WizardPage> WizardPage { get; set; }
 
+        /// <summary>
+        /// Gets or sets the DataSourceWizardPage which represents the link between a
+        /// data source and a wizard page.
+        /// </summary>
+        public DbSet<DataSourceWizardPage> DataSourceWizardPage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
+            modelBuilder.ApplyConfiguration(new DataSourceWizardPageConfiguration());
         }
     }
 

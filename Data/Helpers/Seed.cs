@@ -43,7 +43,7 @@ namespace Data.Helpers
                                       };
                 roleScopes.Add(roleScope);
             }
-            
+
             RoleScope adminRoleScope = new RoleScope("AdminProjectWrite", 4);
             roleScopes.Add(adminRoleScope);
 
@@ -153,6 +153,7 @@ namespace Data.Helpers
                     new RoleScope(nameof(Defaults.Scopes.FileWrite)),
                     new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                    new RoleScope(nameof(Defaults.Scopes.DataSourceWrite))
                 }
             };
             roles.Add(administratorRole);
@@ -162,7 +163,7 @@ namespace Data.Helpers
                 Name = nameof(Defaults.Roles.Alumni),
                 Scopes = new List<RoleScope>()
                 {
-                    
+
                 }
             };
             roles.Add(alumniRole);

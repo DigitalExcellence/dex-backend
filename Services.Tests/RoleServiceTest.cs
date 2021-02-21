@@ -84,9 +84,10 @@ namespace Services.Tests
                 "InstitutionRead",
                 "InstitutionWrite",
                 "FileWrite",
-                "CallToActionOptionWrite",
                 "UserTaskWrite",
-                "AdminProjectWrite"
+                "AdminProjectWrite",
+                "DataSourceWrite",
+                "CallToActionOptionWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
             Assert.AreEqual(currentScopes,retrievedScopes);

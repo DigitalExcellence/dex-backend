@@ -116,10 +116,10 @@ namespace API
 
             services.AddAuthorization(o =>
             {
-                
+
                 o.AddPolicy(nameof(Defaults.Roles.BackendApplication),
                     policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
-                
+
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
@@ -166,13 +166,18 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
 
+                o.AddPolicy(nameof(Defaults.Scopes.DataSourceWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.DataSourceWrite))));
+
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
+
                 o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
+
             });
 
             services.AddCors();
@@ -449,7 +454,7 @@ namespace API
 
             }
 
-            
+
             if(!env.IsProduction())
             {
                 if(!context.Project.Any())
