@@ -43,6 +43,12 @@ services:
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__DataSources__Github__ClientId=${App__DataSources__Github__ClientId}
+      - App__DataSources__Github__ClientSecret=${App__DataSources__Github__ClientSecret}
+      - App__DataSources__Github__RedirectUri=${App__DataSources__Github__RedirectUri}
+      - App__DataSources__Gitlab__ClientId=${App__DataSources__Gitlab__ClientId}
+      - App__DataSources__Gitlab__ClientSecret=${App__DataSources__Gitlab__ClientSecret}
+      - App__DataSources__Gitlab__RedirectUri=${App__DataSources__Gitlab__RedirectUri}
     image:  digitalexcellence/api
     networks:
       mssql-network:

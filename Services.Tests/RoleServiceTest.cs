@@ -91,7 +91,7 @@ namespace Services.Tests
                 "AdminProjectWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
-            
+
             retrievedScopes.Should()
                            .BeEquivalentTo(currentScopes);
         }
