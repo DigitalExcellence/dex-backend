@@ -449,12 +449,6 @@ namespace API
 
             }
 
-            // Check if admin user in DB matches seed, if it doesn't match: database is updated.
-            
-            SeedHelper.InsertUser(Seed.SeedAdminUser(roles), context);
-            SeedHelper.InsertUser(Seed.SeedDataOfficerUser(roles), context);
-            SeedHelper.InsertUser(Seed.SeedAlumniUser(roles), context);
-            SeedHelper.InsertUser(Seed.SeedPrUser(roles), context);
             
             if(!env.IsProduction())
             {
