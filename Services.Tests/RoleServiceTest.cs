@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using FluentAssertions;
 using Models;
 using Moq;
 using NUnit.Framework;
@@ -83,14 +84,16 @@ namespace Services.Tests
                 "InstitutionEmbedWrite",
                 "InstitutionRead",
                 "InstitutionWrite",
-                "FileWrite",
-                "UserTaskWrite",
-                "AdminProjectWrite",
                 "DataSourceWrite",
-                "CallToActionOptionWrite"
+                "FileWrite",
+                "CallToActionOptionWrite",
+                "UserTaskWrite",
+                "AdminProjectWrite"
             };
             List<string> retrievedScopes = Service.GetValidScopes();
-            Assert.AreEqual(currentScopes,retrievedScopes);
+            
+            retrievedScopes.Should()
+                           .BeEquivalentTo(currentScopes);
         }
 
         /// <summary>
