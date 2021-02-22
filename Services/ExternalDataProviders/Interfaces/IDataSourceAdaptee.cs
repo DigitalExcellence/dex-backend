@@ -22,42 +22,43 @@ namespace Services.ExternalDataProviders
 {
 
     /// <summary>
-    /// The interface for a data source adaptee.
+    ///     The interface for a data source adaptee.
     /// </summary>
     public interface IDataSourceAdaptee
     {
+
         /// <summary>
-        /// Gets the value for the guid from the data source adaptee.
+        ///     Gets the value for the guid from the data source adaptee.
         /// </summary>
         string Guid { get; }
 
         /// <summary>
-        /// Gets or sets a value for the Title property from the data source adaptee.
+        ///     Gets or sets a value for the Title property from the data source adaptee.
         /// </summary>
         string Title { get; set; }
 
         /// <summary>
-        /// Gets the value for the Base Url from the data source adaptee.
+        ///     Gets the value for the Base Url from the data source adaptee.
         /// </summary>
         string BaseUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the IsVisible property from the data source adaptee.
+        ///     Gets or sets a value for the IsVisible property from the data source adaptee.
         /// </summary>
         public bool IsVisible { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Icon property from the data source adaptee.
+        ///     Gets or sets a value for the Icon property from the data source adaptee.
         /// </summary>
         public File Icon { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Description property from the data source adaptee.
+        ///     Gets or sets a value for the Description property from the data source adaptee.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the DataSourceWizardPages property from the data source adaptee.
+        ///     Gets or sets a value for the DataSourceWizardPages property from the data source adaptee.
         /// </summary>
         public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
 

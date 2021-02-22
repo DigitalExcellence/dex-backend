@@ -23,11 +23,13 @@ using Services.ExternalDataProviders.Resources;
 
 namespace API.Configuration
 {
+
     /// <summary>
     ///     This profiles adds every resource mapping.
     /// </summary>
     public class MappingProfile : Profile
     {
+
         /// <summary>
         ///     Create a map for every resource mapping.
         /// </summary>
@@ -59,17 +61,17 @@ namespace API.Configuration
             CreateMap<UserUserResourceResult, UserUser>();
 
             CreateMap<UserUser, UserUserResourceResult>()
-                 .ForMember(q => q.Id, opt => opt.MapFrom(q => q.FollowedUser.Id))
-                 .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
-                 .ForAllOtherMembers(o => o.Ignore());
+                .ForMember(q => q.Id, opt => opt.MapFrom(q => q.FollowedUser.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
+                .ForAllOtherMembers(o => o.Ignore());
 
             CreateMap<UserProject, UserProjectResourceResult>()
-                 .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
-                 .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
-                 .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
-                 .ForMember(q => q.Uri, opt => opt.MapFrom(p => p.Project.Uri))
-                 .ForMember(q => q.Description, opt => opt.MapFrom(p => p.Project.Description))
-                 .ForAllOtherMembers(o => o.Ignore());
+                .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
+                .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
+                .ForMember(q => q.Uri, opt => opt.MapFrom(p => p.Project.Uri))
+                .ForMember(q => q.Description, opt => opt.MapFrom(p => p.Project.Description))
+                .ForAllOtherMembers(o => o.Ignore());
 
 
             CreateMap<User, UserResourceResult>()
@@ -105,8 +107,9 @@ namespace API.Configuration
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
 
             CreateMap<FileResourceResult, File>();
-            CreateMap<File, FileResourceResult>().ForMember(e => e.UploaderUserId,
-                                                            opt => opt.MapFrom(e => e.Uploader.Id));
+            CreateMap<File, FileResourceResult>()
+                .ForMember(e => e.UploaderUserId,
+                           opt => opt.MapFrom(e => e.Uploader.Id));
 
             CreateMap<RoleScopeResource, RoleScope>();
             CreateMap<RoleScope, RoleScopeResource>();
@@ -170,5 +173,7 @@ namespace API.Configuration
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.WizardPage.Description));
         }
+
     }
+
 }

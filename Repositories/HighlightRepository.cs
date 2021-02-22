@@ -26,11 +26,13 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     /// <summary>
     ///     This is the highlight repository interface
     /// </summary>
     public interface IHighlightRepository : IRepository<Highlight>
     {
+
         /// <summary>
         ///     This interface method gets all highlights asynchronous
         /// </summary>
@@ -59,63 +61,33 @@ namespace Repositories
         public HighlightRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// Redacts the user email property of the highlighted project.
-        /// </summary>
-        /// <param name="highlight">The highlight object.</param>
-        /// <returns>redacted highlight object.</returns>
-        private Highlight RedactUser(Highlight highlight)
-        {
-            if(highlight == null) return highlight;
-
-            if(highlight.Project?.User?.IsPublic == false)
-            {
-                highlight.Project.User.Email = Defaults.Privacy.RedactedEmail;
-            }
-            return highlight;
-        }
-
-        /// <summary>
-        /// Redacts the user email property of the highlighted project.
-        /// </summary>
-        /// <param name="highlights">List of highlight objects.</param>
-        /// <returns>redacted highlight objects.</returns>
-        private List<Highlight> RedactUser(List<Highlight> highlights)
-        {
-            for(int i = 0; i < highlights.Count; i++)
-            {
-                highlights[i] = RedactUser(highlights[i]);
-            }
-            return highlights;
-        }
-
-        /// <summary>
-        /// find highlight by id.
+        ///     find highlight by id.
         /// </summary>
         /// <param name="id">The highlight id.</param>
         /// <returns>the found highlight.</returns>
         public override async Task<Highlight> FindAsync(int id)
         {
             Highlight project = await GetDbSet<Highlight>()
-                   .Where(s => s.Id == id)
-                   .Include(p => p.Project)
-                   .Include(p => p.Project.ProjectIcon)
-                   .SingleOrDefaultAsync();
+                                      .Where(s => s.Id == id)
+                                      .Include(p => p.Project)
+                                      .Include(p => p.Project.ProjectIcon)
+                                      .SingleOrDefaultAsync();
 
             return RedactUser(project);
         }
 
         /// <summary>
-        /// Gets the highlights asynchronous.
+        ///     Gets the highlights asynchronous.
         /// </summary>
         /// <returns>list of all the highlights.</returns>
         public async Task<List<Highlight>> GetHighlightsAsync()
         {
             List<Highlight> highlights = await GetDbSet<Highlight>()
-                         .Where(s => s.StartDate <= DateTime.Now || s.StartDate == null)
-                         .Where(s => s.EndDate >= DateTime.Now || s.EndDate == null)
-                         .Include(p => p.Project)
-                         .Include(p => p.Project.ProjectIcon)
-                         .ToListAsync();
+                                               .Where(s => s.StartDate <= DateTime.Now || s.StartDate == null)
+                                               .Where(s => s.EndDate >= DateTime.Now || s.EndDate == null)
+                                               .Include(p => p.Project)
+                                               .Include(p => p.Project.ProjectIcon)
+                                               .ToListAsync();
             return RedactUser(highlights);
         }
 
@@ -132,6 +104,37 @@ namespace Repositories
                          .Include(p => p.Project.ProjectIcon)
                          .ToListAsync();
         }
+
+        /// <summary>
+        ///     Redacts the user email property of the highlighted project.
+        /// </summary>
+        /// <param name="highlight">The highlight object.</param>
+        /// <returns>redacted highlight object.</returns>
+        private Highlight RedactUser(Highlight highlight)
+        {
+            if(highlight == null) return highlight;
+
+            if(highlight.Project?.User?.IsPublic == false)
+            {
+                highlight.Project.User.Email = Defaults.Privacy.RedactedEmail;
+            }
+            return highlight;
+        }
+
+        /// <summary>
+        ///     Redacts the user email property of the highlighted project.
+        /// </summary>
+        /// <param name="highlights">List of highlight objects.</param>
+        /// <returns>redacted highlight objects.</returns>
+        private List<Highlight> RedactUser(List<Highlight> highlights)
+        {
+            for(int i = 0; i < highlights.Count; i++)
+            {
+                highlights[i] = RedactUser(highlights[i]);
+            }
+            return highlights;
+        }
+
     }
 
 }

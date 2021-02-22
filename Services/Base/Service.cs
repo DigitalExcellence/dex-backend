@@ -21,12 +21,14 @@ using System.Threading.Tasks;
 
 namespace Services.Base
 {
+
     /// <summary>
     ///     This is the abstract base class for the services
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public abstract class Service<TEntity> : IService<TEntity> where TEntity : class
     {
+
         /// <summary>
         ///     This is the protected constructor for the abstract class
         /// </summary>
@@ -48,7 +50,8 @@ namespace Services.Base
         /// <returns>The found entity</returns>
         public virtual async Task<TEntity> FindAsync(int id)
         {
-            return await Repository.FindAsync(id).ConfigureAwait(false);
+            return await Repository.FindAsync(id)
+                                   .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -67,7 +70,8 @@ namespace Services.Base
         /// <returns></returns>
         public virtual async Task AddAsync(TEntity entity)
         {
-            await Repository.AddAsync(entity).ConfigureAwait(false);
+            await Repository.AddAsync(entity)
+                            .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -142,7 +146,8 @@ namespace Services.Base
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            return await Repository.GetAll().ConfigureAwait(false);
+            return await Repository.GetAll()
+                                   .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -152,5 +157,7 @@ namespace Services.Base
         {
             Repository.Save();
         }
+
     }
+
 }

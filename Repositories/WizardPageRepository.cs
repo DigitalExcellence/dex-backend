@@ -29,7 +29,7 @@ namespace Repositories
     {
 
         /// <summary>
-        /// This method returns a range of wizard pages from the specified collection of wizard ids.
+        ///     This method returns a range of wizard pages from the specified collection of wizard ids.
         /// </summary>
         /// <param name="wizardPageIds">The collection of wizard page ids that will get retrieved.</param>
         /// <returns>This method will return a collection of wizard pages from the specified collection of ids.</returns>
@@ -43,7 +43,7 @@ namespace Repositories
         public WizardPageRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// This method returns the wizard page with the specified id.
+        ///     This method returns the wizard page with the specified id.
         /// </summary>
         /// <returns>This method returns a wizard page with the specified id.</returns>
         public override async Task<WizardPage> FindAsync(int id)
@@ -55,7 +55,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method returns a range of wizard pages from the specified collection of wizard ids.
+        ///     This method returns a range of wizard pages from the specified collection of wizard ids.
         /// </summary>
         /// <param name="wizardPageIds">The collection of wizard page ids that will get retrieved.</param>
         /// <returns>This method will return a collection of wizard pages from the specified collection of ids.</returns>

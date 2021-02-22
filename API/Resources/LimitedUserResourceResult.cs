@@ -17,6 +17,7 @@
 
 namespace API.Resources
 {
+
     /// <summary>
     ///     the view model result of user.
     /// </summary>

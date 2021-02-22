@@ -17,14 +17,15 @@
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// The view model of a wizard page result.
+    ///     The view model of a wizard page result.
     /// </summary>
     public class WizardPageResourceResult : WizardPageResource
     {
 
         /// <summary>
-        /// Gets or sets a value for the Id property.
+        ///     Gets or sets a value for the Id property.
         /// </summary>
         public int Id { get; set; }
 

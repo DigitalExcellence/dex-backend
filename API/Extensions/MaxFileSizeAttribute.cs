@@ -20,15 +20,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Extensions
 {
+
     /// <summary>
-    /// Attribute for maximum file size
+    ///     Attribute for maximum file size
     /// </summary>
     public class MaxFileSizeAttribute : ValidationAttribute
     {
+
         private readonly int maxFileSize;
 
         /// <summary>
-        /// Constructor for maximum filesize attribute
+        ///     Constructor for maximum filesize attribute
         /// </summary>
         /// <param name="maxFileSize"></param>
         public MaxFileSizeAttribute(int maxFileSize)
@@ -37,13 +39,14 @@ namespace API.Extensions
         }
 
         /// <summary>
-        /// Methods which checks if file is not larger than allowed size
+        ///     Methods which checks if file is not larger than allowed size
         /// </summary>
         /// <param name="value"></param>
         /// <param name="validationContext"></param>
         /// <returns></returns>
         protected override ValidationResult IsValid(
-            object value, ValidationContext validationContext)
+            object value,
+            ValidationContext validationContext)
         {
             IFormFile file = value as IFormFile;
             if(file == null)
@@ -60,7 +63,7 @@ namespace API.Extensions
         }
 
         /// <summary>
-        /// Error messsage
+        ///     Error messsage
         /// </summary>
         /// <returns></returns>
         public string GetErrorMessage()
@@ -69,12 +72,14 @@ namespace API.Extensions
         }
 
         /// <summary>
-        /// Error message
+        ///     Error message
         /// </summary>
         /// <returns></returns>
         public string FileIsNullError()
         {
             return "File is null";
         }
+
     }
+
 }

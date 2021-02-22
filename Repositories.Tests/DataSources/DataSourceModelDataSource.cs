@@ -26,18 +26,20 @@ using System.Linq;
 
 namespace Repositories.Tests.DataSources
 {
+
     /// <summary>
-    /// This attribute can generate a variable amount of data sources.
+    ///     This attribute can generate a variable amount of data sources.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public class DataSourceModelDataSource : Attribute, IParameterDataSource
     {
 
+        private readonly int amountToGenerate;
+
         private readonly IFakeDataGenerator<DataSource> fakeDataGenerator;
-        private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// Initializes DataSourceModelDataSource
+        ///     Initializes DataSourceModelDataSource
         /// </summary>
         public DataSourceModelDataSource()
         {
@@ -45,8 +47,8 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Initializes DataSourceModelDataSource
-        /// and setting the amount of data sources to be generated.
+        ///     Initializes DataSourceModelDataSource
+        ///     and setting the amount of data sources to be generated.
         /// </summary>
         public DataSourceModelDataSource(int amount) : this()
         {
@@ -54,7 +56,7 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// This method will generate the requested data sources.
+        ///     This method will generate the requested data sources.
         /// </summary>
         /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance</param>
         /// <returns>This method returns the generated data.</returns>

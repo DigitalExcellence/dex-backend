@@ -15,17 +15,14 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Microsoft.Extensions.Configuration;
 using NetEscapades.Configuration.Validation;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace NotificationSystem.Configuration
 {
+
     /// <summary>
-    /// Config class
+    ///     Config class
     /// </summary>
     /// <seealso cref="NetEscapades.Configuration.Validation.IValidatable" />
     public class Config : IValidatable
@@ -55,13 +52,15 @@ namespace NotificationSystem.Configuration
             Validator.ValidateObject(RabbitMQ, new ValidationContext(RabbitMQ), true);
             Validator.ValidateObject(SendGrid, new ValidationContext(SendGrid), true);
         }
+
     }
 
     /// <summary>
-    /// Configuration settings for Rabbit MQ Instance
+    ///     Configuration settings for Rabbit MQ Instance
     /// </summary>
     public class RabbitMQConfig
     {
+
         /// <summary>
         ///     Gets or sets the hostname.
         /// </summary>
@@ -88,13 +87,15 @@ namespace NotificationSystem.Configuration
         /// </value>
         [Required]
         public string Password { get; set; }
+
     }
 
     /// <summary>
-    /// Configuration settings for Sendgrid
+    ///     Configuration settings for Sendgrid
     /// </summary>
     public class SendGridConfig
     {
+
         /// <summary>
         ///     Gets or sets the api key.
         /// </summary>
@@ -119,5 +120,7 @@ namespace NotificationSystem.Configuration
         /// </summary>
         [Required]
         public bool SandboxMode { get; set; }
+
     }
+
 }

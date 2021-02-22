@@ -32,8 +32,8 @@ namespace API.Controllers
 {
 
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the wizard, for exampling retrieving.
+    ///     This class is responsible for handling HTTP requests that are related
+    ///     to the wizard, for exampling retrieving.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -44,7 +44,7 @@ namespace API.Controllers
         private readonly IMapper mapper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WizardController"/> class.
+        ///     Initializes a new instance of the <see cref="WizardController" /> class.
         /// </summary>
         /// <param name="dataProviderService">The source manager service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
@@ -57,17 +57,21 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a project from an external data source by
-        /// the specified source uri.
+        ///     This method is responsible for retrieving a project from an external data source by
+        ///     the specified source uri.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
         /// <param name="sourceUri">The uri that specifies which project will get retrieved.</param>
         /// <returns>This method returns the found project with the specified source uri.</returns>
         /// <response code="200">This endpoint returns the project with the specified source uri.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the source uri is empty
-        /// or whenever the data source guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source is found
-        /// with the specified data source guid or no project is found with the specified source uri.</response>
+        /// <response code="400">
+        ///     The 400 Bad Request status code is returned when the source uri is empty
+        ///     or whenever the data source guid is invalid.
+        /// </response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no data source is found
+        ///     with the specified data source guid or no project is found with the specified source uri.
+        /// </response>
         [HttpGet("project/uri/{sourceUri}")]
         [Authorize]
         [ProducesResponseType(typeof(WizardProjectResourceResult), StatusCodes.Status200OK)]
@@ -156,16 +160,21 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving projects from an external data source.
+        ///     This method is responsible for retrieving projects from an external data source.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
-        /// <param name="token">The token which is used for retrieving the projects from the user. This token can be the
-        /// access token for the auth flow, but can also be the username for the public flow.</param>
+        /// <param name="token">
+        ///     The token which is used for retrieving the projects from the user. This token can be the
+        ///     access token for the auth flow, but can also be the username for the public flow.
+        /// </param>
         /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
         /// <returns>This method returns a collection of all the projects.</returns>
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no data source is found with the specified data
+        ///     source guid.
+        /// </response>
         [HttpGet("projects")]
         [Authorize]
         [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
@@ -234,17 +243,22 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a specified project from an external data source.
+        ///     This method is responsible for retrieving a specified project from an external data source.
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
-        /// <param name="token">The token which is used for retrieving the projects from the user. This token can be the
-        /// access token for the auth flow, but can also be the username for the public flow.</param>
+        /// <param name="token">
+        ///     The token which is used for retrieving the projects from the user. This token can be the
+        ///     access token for the auth flow, but can also be the username for the public flow.
+        /// </param>
         /// <param name="projectId">The id of the project which is used for searching a specific project.</param>
         /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
         /// <returns>This method returns the project data source resource result</returns>
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no data source is found with the specified data
+        ///     source guid.
+        /// </response>
         [HttpGet("project/{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
@@ -325,14 +339,17 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for converting the code from the data provider to the correct tokens.
+        ///     This method is responsible for converting the code from the data provider to the correct tokens.
         /// </summary>
         /// <param name="provider">The guid or name that specifies the data source.</param>
         /// <param name="code">The access token which is used for authentication.</param>
         /// <returns>This method returns the project data source resource result</returns>
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no data source is found with the specified data
+        ///     source guid.
+        /// </response>
         [HttpGet("oauth/callback/{provider}")]
         [ProducesResponseType(typeof(Project), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

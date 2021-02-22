@@ -30,10 +30,11 @@ namespace Services.Tests
 {
 
     /// <summary>
-    /// The data source model service tests class. This class tests the logic in the data source model service.
+    ///     The data source model service tests class. This class tests the logic in the data source model service.
     /// </summary>
     /// <seealso cref="IDataSourceModelRepository" />
-    public class DataSourceModelServiceTest : ServiceTest<DataSource, DataSourceModelService, IDataSourceModelRepository>
+    public class
+        DataSourceModelServiceTest : ServiceTest<DataSource, DataSourceModelService, IDataSourceModelRepository>
     {
 
         protected new IDataSourceModelService Service => base.Service;
@@ -66,7 +67,7 @@ namespace Services.Tests
         {
             // Arrange
             RepositoryMock.Setup(repository => repository.GetDataSourceByGuid(It.IsAny<string>()))
-                          .ReturnsAsync((DataSource)null);
+                          .ReturnsAsync((DataSource) null);
 
             // Act
             DataSource actualDataSource = await Service.GetDataSourceByGuid(It.IsAny<string>());

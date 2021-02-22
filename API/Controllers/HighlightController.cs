@@ -31,19 +31,21 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the highlights, for example creating, retrieving, updating or deleting.
+    ///     This class is responsible for handling HTTP requests that are related
+    ///     to the highlights, for example creating, retrieving, updating or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class HighlightController : ControllerBase
     {
+
         private readonly IHighlightService highlightService;
         private readonly IMapper mapper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HighlightController"/> class
+        ///     Initializes a new instance of the <see cref="HighlightController" /> class
         /// </summary>
         /// <param name="highlightService">The highlight service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to resource results.</param>
@@ -54,7 +56,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all active highlights.
+        ///     This method is responsible for retrieving all active highlights.
         /// </summary>
         /// <returns>This method returns a list of highlight resource results.</returns>
         /// <response code="200">This endpoint returns a list highlights.</response>
@@ -68,7 +70,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a single highlight by the identifier.
+        ///     This method is responsible for retrieving a single highlight by the identifier.
         /// </summary>
         /// <param name="highlightId">The highlight identifier which is used to find the highlight.</param>
         /// <returns>This method returns a highlight resource result.</returns>
@@ -84,11 +86,11 @@ namespace API.Controllers
             if(highlightId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlight.",
-                    Detail = "the highlight id cannot be smaller then 0.",
-                    Instance = "BBC86ABA-142B-4BEB-801B-03100C08500B"
-                };
+                                         {
+                                             Title = "Failed getting highlight.",
+                                             Detail = "the highlight id cannot be smaller then 0.",
+                                             Instance = "BBC86ABA-142B-4BEB-801B-03100C08500B"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -96,11 +98,11 @@ namespace API.Controllers
             if(highlight == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlight.",
-                    Detail = "The database does not contain a highlight with this id.",
-                    Instance = "1EA0824A-D017-4BAB-9606-2872487D1EDA"
-                };
+                                         {
+                                             Title = "Failed getting highlight.",
+                                             Detail = "The database does not contain a highlight with this id.",
+                                             Instance = "1EA0824A-D017-4BAB-9606-2872487D1EDA"
+                                         };
                 return NotFound(problem);
             }
 
@@ -108,13 +110,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all highlight by project id.
+        ///     This method is responsible for retrieving all highlight by project id.
         /// </summary>
         /// <param name="projectId">The project identifier which is used to retrieve the corresponding highlights.</param>
         /// <returns></returns>
         /// <response code="200">This endpoint returns a list of highlights from a project.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified project id is not valid.</response>
-        /// <response code="404">The 404 Not Found status code is return when there are no highlight found with the specified project id.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is return when there are no highlight found with the specified
+        ///     project id.
+        /// </response>
         [HttpGet("Project/{projectId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
         [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
@@ -125,35 +130,37 @@ namespace API.Controllers
             if(projectId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlights.",
-                    Detail = "The project id cannot be smaller than 0.",
-                    Instance = "744F5E01-FC84-4D4A-9A73-0D7C48886A30"
-                };
+                                         {
+                                             Title = "Failed getting highlights.",
+                                             Detail = "The project id cannot be smaller than 0.",
+                                             Instance = "744F5E01-FC84-4D4A-9A73-0D7C48886A30"
+                                         };
                 return BadRequest(problem);
             }
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsByProjectIdAsync(projectId);
             if(!highlights.Any())
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlights.",
-                    Detail = "The database does not contain highlights with this project id.",
-                    Instance = "D8D040F1-7B29-40AF-910B-D1B1CE809ADC"
-                };
+                                         {
+                                             Title = "Failed getting highlights.",
+                                             Detail = "The database does not contain highlights with this project id.",
+                                             Instance = "D8D040F1-7B29-40AF-910B-D1B1CE809ADC"
+                                         };
                 return NotFound(problem);
             }
             return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
         }
 
         /// <summary>
-        /// This method is responsible for creating a highlight.
+        ///     This method is responsible for creating a highlight.
         /// </summary>
         /// <param name="highlightResource">The highlight resource which is used to create the highlight.</param>
         /// <returns>This method returns the created highlight resource result.</returns>
         /// <response code="201">This endpoint returns the created highlight.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the specified
-        /// resource is invalid or the highlight could not be saved to the database.</response>
+        /// <response code="400">
+        ///     The 400 Bad Request status code is returned when the specified
+        ///     resource is invalid or the highlight could not be saved to the database.
+        /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.Created)]
@@ -163,11 +170,11 @@ namespace API.Controllers
             if(highlightResource == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed creating highlight.",
-                    Detail = "The highlight resource is null.",
-                    Instance = "2206D5EC-9E20-44A7-A729-0205BEA994E5"
-                };
+                                         {
+                                             Title = "Failed creating highlight.",
+                                             Detail = "The highlight resource is null.",
+                                             Instance = "2206D5EC-9E20-44A7-A729-0205BEA994E5"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -183,23 +190,26 @@ namespace API.Controllers
                 Log.Logger.Error(e, "Database exception");
 
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed Saving highlight.",
-                    Detail = "Failed saving the highlight to the database.",
-                    Instance = "764E41C3-06A5-47D6-9642-C9E8A0B7CFC7"
-                };
+                                         {
+                                             Title = "Failed Saving highlight.",
+                                             Detail = "Failed saving the highlight to the database.",
+                                             Instance = "764E41C3-06A5-47D6-9642-C9E8A0B7CFC7"
+                                         };
                 return BadRequest(problem);
             }
         }
 
         /// <summary>
-        /// This method is responsible for updating the highlight.
+        ///     This method is responsible for updating the highlight.
         /// </summary>
         /// <param name="highlightId">The highlight identifier which is used to find the highlight.</param>
         /// <param name="highlightResource">The highlight resource which is used to update the highlight.</param>
         /// <returns>This method return the updated highlight resource result</returns>
         /// <response code="200">This endpoint returns the updated highlight.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no highlight is found with the specified highlight id.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no highlight is found with the specified highlight
+        ///     id.
+        /// </response>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
@@ -211,11 +221,11 @@ namespace API.Controllers
             if(highlight == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the highlight.",
-                    Detail = "The database does not contain a highlight with that id.",
-                    Instance = "795CDB7E-DB46-4A24-8F12-7557BDD79D15"
-                };
+                                         {
+                                             Title = "Failed getting the highlight.",
+                                             Detail = "The database does not contain a highlight with that id.",
+                                             Instance = "795CDB7E-DB46-4A24-8F12-7557BDD79D15"
+                                         };
                 return NotFound(problem);
             }
 
@@ -228,7 +238,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for deleting the highlight by the identifier.
+        ///     This method is responsible for deleting the highlight by the identifier.
         /// </summary>
         /// <param name="highlightId">The highlight identifier which is used to find the highlight.</param>
         /// <returns>This method returns status code 200.</returns>
@@ -243,16 +253,18 @@ namespace API.Controllers
             if(await highlightService.FindAsync(highlightId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting highlight.",
-                    Detail = "The database does not contain a highlight with that id.",
-                    Instance = "E5B9B140-8B1C-434A-913B-4DB460342BE1"
-                };
+                                         {
+                                             Title = "Failed getting highlight.",
+                                             Detail = "The database does not contain a highlight with that id.",
+                                             Instance = "E5B9B140-8B1C-434A-913B-4DB460342BE1"
+                                         };
                 return NotFound(problem);
             }
             await highlightService.RemoveAsync(highlightId);
             highlightService.Save();
             return Ok();
         }
+
     }
+
 }

@@ -26,47 +26,114 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     /// <summary>
     ///     This is the embed repository interface
     /// </summary>
     public interface IEmbedRepository : IRepository<EmbeddedProject>
     {
+
         /// <summary>
-        /// Gets the embedded project asynchronous.
+        ///     Gets the embedded project asynchronous.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>The embeddedProject with the specified guid.</returns>
         Task<EmbeddedProject> GetEmbeddedProjectAsync(Guid guid);
 
         /// <summary>
-        /// Gets the embedded projects asynchronous.
+        ///     Gets the embedded projects asynchronous.
         /// </summary>
         /// <returns>All the embeddedProjects</returns>
         Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync();
 
         /// <summary>
-        /// Determines whether [is non existing unique identifier] [the specified unique identifier].
+        ///     Determines whether [is non existing unique identifier] [the specified unique identifier].
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>A boolean if the guid already exists return false else return true.</returns>
         Task<bool> IsNonExistingGuidAsync(Guid guid);
+
     }
 
     /// <summary>
-    /// EmbedRepository
+    ///     EmbedRepository
     /// </summary>
     /// <seealso cref="EmbeddedProject" />
     /// <seealso cref="IEmbedRepository" />
     public class EmbedRepository : Repository<EmbeddedProject>, IEmbedRepository
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmbedRepository"/> class.
+        ///     Initializes a new instance of the <see cref="EmbedRepository" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public EmbedRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// Redacts the user.
+        ///     Finds the embedded project with the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>The embedded project with the specified identifier.</returns>
+        public override async Task<EmbeddedProject> FindAsync(int id)
+        {
+            EmbeddedProject embeddedProject = await GetDbSet<EmbeddedProject>()
+                                                    .Where(s => s.Id == id)
+                                                    .Include(p => p.User)
+                                                    .SingleOrDefaultAsync();
+
+            return RedactUser(embeddedProject);
+        }
+
+        /// <summary>
+        ///     Gets the embedded embeddedProject asynchronous.
+        /// </summary>
+        /// <param name="guid">The unique identifier.</param>
+        /// <returns>The embedded project with the specified guid.</returns>
+        public async Task<EmbeddedProject> GetEmbeddedProjectAsync(Guid guid)
+        {
+            EmbeddedProject embeddedProject = await GetDbSet<EmbeddedProject>()
+                                                    .Where(e => e.Guid == guid)
+                                                    .Include(p => p.Project)
+                                                    .ThenInclude(p => p.Collaborators)
+                                                    .Include(u => u.User)
+                                                    .FirstOrDefaultAsync();
+
+            return RedactUser(embeddedProject);
+        }
+
+        /// <summary>
+        ///     Gets the embedded embeddedProjects asynchronous.
+        /// </summary>
+        /// <returns>Returns all the Embedded Projects.</returns>
+        public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync()
+        {
+            List<EmbeddedProject> embeddedProjects = await GetDbSet<EmbeddedProject>()
+                                                           .Include(u => u.User)
+                                                           .Include(p => p.Project)
+                                                           .ThenInclude(p => p.Collaborators)
+                                                           .Include(p => p.Project)
+                                                           .ThenInclude(p => p.User)
+                                                           .ToListAsync();
+            return RedactUser(embeddedProjects);
+        }
+
+        /// <summary>
+        ///     Determines whether [is non existing unique identifier] [the specified unique identifier].
+        /// </summary>
+        /// <param name="guid">The unique identifier.</param>
+        /// <returns>
+        ///     <c>true</c> if [is non existing unique identifier] [the specified unique identifier]; otherwise, <c>false</c>.
+        /// </returns>
+        public async Task<bool> IsNonExistingGuidAsync(Guid guid)
+        {
+            return await GetDbSet<EmbeddedProject>()
+                         .Where(e => e.Guid == guid)
+                         .FirstOrDefaultAsync() ==
+                   null;
+        }
+
+        /// <summary>
+        ///     Redacts the user.
         /// </summary>
         /// <param name="embeddedProject">The embedded project.</param>
         /// <returns>The embedded project with the selected fields redacted.</returns>
@@ -87,7 +154,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Redacts the user.
+        ///     Redacts the user.
         /// </summary>
         /// <param name="embeddedProjects">The embedded projects.</param>
         /// <returns>List of embedded projects with the selected fields redacted.</returns>
@@ -100,64 +167,6 @@ namespace Repositories
             return embeddedProjects;
         }
 
-        /// <summary>
-        /// Finds the embedded project with the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>The embedded project with the specified identifier.</returns>
-        public override async Task<EmbeddedProject> FindAsync(int id)
-        {
-            EmbeddedProject embeddedProject = await GetDbSet<EmbeddedProject>()
-                                    .Where(s => s.Id == id)
-                                    .Include(p => p.User)
-                                    .SingleOrDefaultAsync();
-
-            return RedactUser(embeddedProject);
-        }
-        /// <summary>
-        /// Gets the embedded embeddedProject asynchronous.
-        /// </summary>
-        /// <param name="guid">The unique identifier.</param>
-        /// <returns>The embedded project with the specified guid.</returns>
-        public async Task<EmbeddedProject> GetEmbeddedProjectAsync(Guid guid)
-        {
-            EmbeddedProject embeddedProject = await GetDbSet<EmbeddedProject>()
-                .Where(e => e.Guid == guid)
-                .Include(p => p.Project)
-                .ThenInclude(p => p.Collaborators)
-                .Include(u => u.User)
-                .FirstOrDefaultAsync();
-
-            return RedactUser(embeddedProject);
-        }
-
-        /// <summary>
-        /// Gets the embedded embeddedProjects asynchronous.
-        /// </summary>
-        /// <returns>Returns all the Embedded Projects.</returns>
-        public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync()
-        {
-            List<EmbeddedProject> embeddedProjects = await GetDbSet<EmbeddedProject>()
-                .Include(u => u.User)
-                .Include(p => p.Project).ThenInclude(p => p.Collaborators)
-                .Include(p => p.Project).ThenInclude(p => p.User)
-                .ToListAsync();
-            return RedactUser(embeddedProjects);
-        }
-
-        /// <summary>
-        /// Determines whether [is non existing unique identifier] [the specified unique identifier].
-        /// </summary>
-        /// <param name="guid">The unique identifier.</param>
-        /// <returns>
-        ///   <c>true</c> if [is non existing unique identifier] [the specified unique identifier]; otherwise, <c>false</c>.
-        /// </returns>
-        public async Task<bool> IsNonExistingGuidAsync(Guid guid)
-        {
-            return await GetDbSet<EmbeddedProject>()
-                .Where(e => e.Guid == guid)
-                .FirstOrDefaultAsync() == null;
-        }
     }
 
 }

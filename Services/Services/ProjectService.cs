@@ -34,7 +34,7 @@ namespace Services.Services
     {
 
         /// <summary>
-        /// Get a list of all the projects
+        ///     Get a list of all the projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
@@ -105,7 +105,7 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Get a list of all the projects
+        ///     Get a list of all the projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
@@ -138,7 +138,11 @@ namespace Services.Services
             }
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
-            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip, take, orderBy, orderByDirection, projectFilterParams.Highlighted);
+            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip,
+                                                                   take,
+                                                                   orderBy,
+                                                                   orderByDirection,
+                                                                   projectFilterParams.Highlighted);
         }
 
         /// <summary>

@@ -30,14 +30,17 @@ namespace API.Resources
         ///     This gets or sets the the id of highlight
         /// </summary>
         public int Id { get; set; }
+
         /// <summary>
         ///     This gets or sets the id of the project that this highlight is associated with
         /// </summary>
         public int ProjectId { get; set; }
+
         /// <summary>
         ///     This gets or sets the description of the project that this highlight is associated with
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
         ///     This gets or sets the project of this highlight
         /// </summary>
@@ -52,6 +55,7 @@ namespace API.Resources
         ///     This gets or sets the end date that highlight should end
         /// </summary>
         public DateTime? EndDate { get; set; }
+
     }
 
 }

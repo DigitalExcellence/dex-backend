@@ -25,6 +25,7 @@ namespace API.Resources
     /// </summary>
     public class UserProjectLikeResourceResult
     {
+
         /// <summary>
         ///     Gets or sets the id of the project that being liked.
         /// </summary>
@@ -53,7 +54,7 @@ namespace API.Resources
         ///     Gets or sets the uri of project that being liked.
         /// </summary>
         /// <value>
-        ///    The string representation of the Project's Uri
+        ///     The string representation of the Project's Uri
         /// </value>
         public string Uri { get; set; }
 
@@ -66,4 +67,5 @@ namespace API.Resources
         public string Description { get; set; }
 
     }
+
 }

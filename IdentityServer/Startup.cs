@@ -29,28 +29,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Models;
-using Models.Defaults;
-using Repositories;
-using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
-
-
-
-
 namespace IdentityServer
 {
+
     /// <summary>
     ///     Startup file for Identity Server
     /// </summary>
     public class Startup
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Startup"/> class.
+        ///     Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
         /// <param name="configuration">The configuration from appsettings.</param>
         /// <param name="environment">The environment.</param>
@@ -73,15 +68,15 @@ namespace IdentityServer
         public Config Config { get; }
 
         /// <summary>
-        /// Gets the environment.
+        ///     Gets the environment.
         /// </summary>
         /// <value>
-        /// The environment.
+        ///     The environment.
         /// </value>
         public IWebHostEnvironment Environment { get; }
 
         /// <summary>
-        /// Configures the services.
+        ///     Configures the services.
         /// </summary>
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
@@ -122,52 +117,58 @@ namespace IdentityServer
 
             // sets the authentication schema.
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-                options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-            })
-                    // Adds Fontys Single Sign On authentication.
-                    .AddOpenIdConnect("FHICT", "Fontys", options =>
                     {
-                        options.ClientId = Config.FfhictOIDC.ClientId;
-                        options.ClientSecret = Config.FfhictOIDC.ClientSecret;
-                        options.Authority = Config.FfhictOIDC.Authority;
-                        options.ResponseType = "code";
-                        options.Scope.Clear();
+                        options.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                        options.DefaultSignInScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                        options.DefaultChallengeScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+                    })
 
-                        string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
-                        foreach(string scope in scopes)
-                        {
-                            options.Scope.Add(scope);
-                        }
+                    // Adds Fontys Single Sign On authentication.
+                    .AddOpenIdConnect("FHICT",
+                                      "Fontys",
+                                      options =>
+                                      {
+                                          options.ClientId = Config.FfhictOIDC.ClientId;
+                                          options.ClientSecret = Config.FfhictOIDC.ClientSecret;
+                                          options.Authority = Config.FfhictOIDC.Authority;
+                                          options.ResponseType = "code";
+                                          options.Scope.Clear();
 
-                        // Set this flow to get the refresh token.
-                        // options.Scope.Add("offline_access");
+                                          string[] scopes = Config.FfhictOIDC.Scopes.Split(" ");
+                                          foreach(string scope in scopes)
+                                          {
+                                              options.Scope.Add(scope);
+                                          }
 
-                        options.SaveTokens = true;
-                        options.GetClaimsFromUserInfoEndpoint = true;
+                                          // Set this flow to get the refresh token.
+                                          // options.Scope.Add("offline_access");
 
-                        // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
-                        options.Events.OnRedirectToIdentityProvider = async n =>
-                        {
-                            n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
-                            await Task.FromResult(0);
-                        };
-                    }
-                    // Add jwt validation this is so that the DGS can authenticate.
-                    ).AddJwtBearer(o =>
+                                          options.SaveTokens = true;
+                                          options.GetClaimsFromUserInfoEndpoint = true;
+
+                                          // This sets the redirect uri, this is needed because the blackbox implementation does not implement fontys SSO.
+                                          options.Events.OnRedirectToIdentityProvider = async n =>
+                                          {
+                                              n.ProtocolMessage.RedirectUri = Config.FfhictOIDC.RedirectUri;
+                                              await Task.FromResult(0);
+                                          };
+                                      }
+
+                        // Add jwt validation this is so that the DGS can authenticate.
+                    )
+                    .AddJwtBearer(o =>
                     {
                         o.SaveToken = true;
                         o.Authority = Config.Self.JwtAuthority;
                         o.RequireHttpsMetadata = false;
-                        o.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            ValidateActor = false,
-                            ValidateAudience = false,
-                            NameClaimType = "name",
-                            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-                        };
+                        o.TokenValidationParameters = new TokenValidationParameters
+                                                      {
+                                                          ValidateActor = false,
+                                                          ValidateAudience = false,
+                                                          NameClaimType = "name",
+                                                          RoleClaimType =
+                                                              "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                                                      };
                     })
                     .AddCookie();
 
@@ -178,11 +179,9 @@ namespace IdentityServer
             {
                 X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 certStore.Open(OpenFlags.ReadOnly);
-                X509Certificate2Collection certCollection = certStore.Certificates.Find(
-                    X509FindType.FindByIssuerName,
+                X509Certificate2Collection certCollection = certStore.Certificates.Find(X509FindType.FindByIssuerName,
                     "Let's Encrypt Authority X3",
-                    false
-                );
+                    false);
                 if(certCollection.Count > 0)
                 {
                     X509Certificate2 certificate = certCollection[0];
@@ -204,7 +203,7 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Configures the specified application.
+        ///     Configures the specified application.
         /// </summary>
         /// <param name="app">The application builder instance.</param>
         /// <param name="env">The environmental variable.</param>
@@ -225,7 +224,7 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Updates the database.
+        ///     Updates the database.
         /// </summary>
         /// <param name="app">The application.</param>
         /// <param name="env">The environmental variable.</param>
@@ -237,7 +236,10 @@ namespace IdentityServer
             using IdentityDbContext context = serviceScope.ServiceProvider.GetService<IdentityDbContext>();
             context.Database.Migrate();
             List<IdentityUser> identityUsers = TestUsers.GetDefaultIdentityUsers();
-            foreach(IdentityUser identityUser in identityUsers.Where(identityUser => !context.IdentityUser.Any(e => e.SubjectId == identityUser.SubjectId)))
+            foreach(IdentityUser identityUser in identityUsers.Where(identityUser =>
+                                                                         !context.IdentityUser.Any(
+                                                                             e => e.SubjectId ==
+                                                                                 identityUser.SubjectId)))
             {
                 if(env.IsProduction())
                 {
@@ -247,5 +249,7 @@ namespace IdentityServer
             }
             context.SaveChanges();
         }
+
     }
+
 }

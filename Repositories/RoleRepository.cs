@@ -20,7 +20,6 @@ using Models;
 using Repositories.Base;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,11 +31,13 @@ namespace Repositories
     /// </summary>
     public interface IRoleRepository : IRepository<Role>
     {
+
         /// <summary>
         ///     This interface method gets all roles asynchronously
         /// </summary>
         /// <returns></returns>
         Task<List<Role>> GetAllAsync();
+
     }
 
     /// <summary>
@@ -44,6 +45,7 @@ namespace Repositories
     /// </summary>
     public class RoleRepository : Repository<Role>, IRoleRepository
     {
+
         /// <summary>
         ///     This is the role repository constructor
         /// </summary>
@@ -51,7 +53,7 @@ namespace Repositories
         public RoleRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// Updates the specified role.
+        ///     Updates the specified role.
         /// </summary>
         /// <param name="role">The role.</param>
         /// <exception cref="ArgumentNullException">Role argument is null</exception>
@@ -63,16 +65,18 @@ namespace Repositories
                 throw new ArgumentNullException("Role argument is null");
             }
             Role existingRole = GetDbSet<Role>()
-                                 .Where(p => p.Id == role.Id)
-                                 .Include(p => p.Scopes)
-                                 .SingleOrDefault();
+                                .Where(p => p.Id == role.Id)
+                                .Include(p => p.Scopes)
+                                .SingleOrDefault();
 
             if(existingRole == null)
             {
                 throw new DbUpdateConcurrencyException("Cannot update non existing object..");
-            };
+            }
+            ;
 
-            DbContext.Entry(existingRole).CurrentValues.SetValues(role);
+            DbContext.Entry(existingRole)
+                     .CurrentValues.SetValues(role);
 
             foreach(RoleScope existingScope in existingRole.Scopes.ToList())
             {
@@ -82,23 +86,27 @@ namespace Repositories
                     GetDbSet<RoleScope>()
                         .Remove(existingScope);
                 }
+
                 // add or update
                 foreach(RoleScope newRoleScope in role.Scopes)
                 {
                     RoleScope existingRoleScope = existingRole.Scopes
-                                                       .SingleOrDefault(c => c.Id == newRoleScope.Id);
+                                                              .SingleOrDefault(c => c.Id == newRoleScope.Id);
+
                     //update
                     if(existingRoleScope != null)
                     {
-                        DbContext.Entry(existingRoleScope).CurrentValues.SetValues(newRoleScope);
+                        DbContext.Entry(existingRoleScope)
+                                 .CurrentValues.SetValues(newRoleScope);
                     }
+
                     //add
                     else
                     {
                         RoleScope newScope = new RoleScope(newRoleScope.Scope)
-                        {
-                            RoleId = role.Id
-                        };
+                                             {
+                                                 RoleId = role.Id
+                                             };
                         existingRole.Scopes.Add(newScope);
                     }
                 }
@@ -107,7 +115,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Find role by identifier.
+        ///     Find role by identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>The retrieved role.</returns>
@@ -120,7 +128,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Gets all the roles with scopes.
+        ///     Gets all the roles with scopes.
         /// </summary>
         /// <returns>A list of all roles and scopes.</returns>
         public Task<List<Role>> GetAllAsync()
@@ -131,16 +139,17 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Remove the role with the specified identifier.
+        ///     Remove the role with the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <exception cref="KeyNotFoundException">Id: {id} not found</exception>
         public override async Task RemoveAsync(int id)
         {
             Role roleToDelete = await GetDbSet<Role>()
-                .Where(r => r.Id == id)
-                .Include(r => r.Scopes)
-                .SingleOrDefaultAsync().ConfigureAwait(false);
+                                      .Where(r => r.Id == id)
+                                      .Include(r => r.Scopes)
+                                      .SingleOrDefaultAsync()
+                                      .ConfigureAwait(false);
 
             if(roleToDelete == null)
             {
@@ -149,10 +158,14 @@ namespace Repositories
 
             if(roleToDelete.Scopes != null)
             {
-                GetDbSet<RoleScope>().RemoveRange(roleToDelete.Scopes);
+                GetDbSet<RoleScope>()
+                    .RemoveRange(roleToDelete.Scopes);
             }
 
-            GetDbSet<Role>().Remove(roleToDelete);
+            GetDbSet<Role>()
+                .Remove(roleToDelete);
         }
+
     }
+
 }

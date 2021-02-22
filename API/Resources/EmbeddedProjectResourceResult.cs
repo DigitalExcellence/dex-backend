@@ -22,41 +22,41 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// Embedded project resource result
+    ///     Embedded project resource result
     /// </summary>
     /// <seealso cref="API.Resources.EmbeddedProjectResource" />
     public class EmbeddedProjectResourceResult : EmbeddedProjectResource
     {
 
         /// <summary>
-        /// Gets or sets the identifier.
+        ///     Gets or sets the identifier.
         /// </summary>
         /// <value>
-        /// The identifier.
+        ///     The identifier.
         /// </value>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the project.
+        ///     Gets or sets the project.
         /// </summary>
         /// <value>
-        /// The project.
+        ///     The project.
         /// </value>
         public Project Project { get; set; }
 
         /// <summary>
-        /// Gets or sets the unique identifier.
+        ///     Gets or sets the unique identifier.
         /// </summary>
         /// <value>
-        /// The unique identifier.
+        ///     The unique identifier.
         /// </value>
         public Guid Guid { get; set; }
 
         /// <summary>
-        /// Gets or sets the user.
+        ///     Gets or sets the user.
         /// </summary>
         /// <value>
-        /// The user.
+        ///     The user.
         /// </value>
         public User User { get; set; }
 

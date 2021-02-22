@@ -20,39 +20,40 @@ using System.Collections.Generic;
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// Resource Result for a data source.
+    ///     Resource Result for a data source.
     /// </summary>
     public class DataSourceResourceResult
     {
 
         /// <summary>
-        /// Get or set the guid of a data source.
+        ///     Get or set the guid of a data source.
         /// </summary>
         public string Guid { get; set; }
 
         /// <summary>
-        /// Gets or Set the Title of the data source.
+        ///     Gets or Set the Title of the data source.
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the Description of the data source.
+        ///     Gets or sets the Description of the data source.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the visibility of the data source.
+        ///     Gets or sets the visibility of the data source.
         /// </summary>
         public bool IsVisible { get; set; }
 
         /// <summary>
-        /// Gets or sets the icon of the data source.
+        ///     Gets or sets the icon of the data source.
         /// </summary>
         public File Icon { get; set; }
 
         /// <summary>
-        /// Gets or sets the wizard pages of the data source.
+        ///     Gets or sets the wizard pages of the data source.
         /// </summary>
         public IEnumerable<DataSourceWizardPageResourceResult> WizardPages { get; set; }
 

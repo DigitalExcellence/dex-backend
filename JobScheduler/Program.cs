@@ -96,10 +96,10 @@ namespace JobScheduler
                                                                    client.BaseAddress =
                                                                        new Uri(config.ApiConfig.ApiUrl);
                                                                });
-                           services.AddScoped<IRabbitMQConnectionFactory>(
-                               c => new RabbitMQConnectionFactory(config.RabbitMQ.Hostname,
-                                                                  config.RabbitMQ.Username,
-                                                                  config.RabbitMQ.Password));
+                           services.AddScoped<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(
+                                                                              config.RabbitMQ.Hostname,
+                                                                              config.RabbitMQ.Username,
+                                                                              config.RabbitMQ.Password));
                            services.AddScoped<ITaskPublisher, TaskPublisher>();
                            services.AddScoped<IEmailSender, EmailSender>();
                            services.AddScoped<IApiRequestHandler, ApiRequestHandler>();

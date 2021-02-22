@@ -26,17 +26,19 @@ using System.Linq;
 
 namespace Repositories.Tests.DataSources
 {
+
     /// <summary>
-    /// Attribute to generate roles
+    ///     Attribute to generate roles
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public class RoleDataSourceAttribute : Attribute, IParameterDataSource
     {
+
+        private readonly int amountToGenerate;
         private readonly IFakeDataGenerator<Role> fakeDataGenerator;
-        private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// Initializes roleDataSourceAttribute
+        ///     Initializes roleDataSourceAttribute
         /// </summary>
         public RoleDataSourceAttribute()
         {
@@ -44,8 +46,8 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Initializes roleDataSourceAttribute
-        /// and setting the amount of users to be generated
+        ///     Initializes roleDataSourceAttribute
+        ///     and setting the amount of users to be generated
         /// </summary>
         public RoleDataSourceAttribute(int amount) : this()
         {
@@ -53,7 +55,7 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Generate the data and return it
+        ///     Generate the data and return it
         /// </summary>
         /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance</param>
         /// <returns>The generated data</returns>
@@ -61,10 +63,13 @@ namespace Repositories.Tests.DataSources
         {
             if(amountToGenerate <= 1)
             {
-                return new[] { fakeDataGenerator.Generate() };
+                return new[] {fakeDataGenerator.Generate()};
             }
-            List<Role> roles = fakeDataGenerator.GenerateRange(amountToGenerate).ToList();
-            return new[] { roles };
+            List<Role> roles = fakeDataGenerator.GenerateRange(amountToGenerate)
+                                                .ToList();
+            return new[] {roles};
         }
+
     }
+
 }

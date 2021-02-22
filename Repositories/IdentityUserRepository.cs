@@ -26,28 +26,30 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     /// <summary>
-    /// The IdentityUser Repository
+    ///     The IdentityUser Repository
     /// </summary>
     /// <seealso cref="IdentityUser" />
     public interface IIdentityUserRepository : IRepository<IdentityUser>
     {
+
         /// <summary>
-        /// Gets the IdentityUser with the specified subjectIdentifier.
+        ///     Gets the IdentityUser with the specified subjectIdentifier.
         /// </summary>
         /// <param name="subjectId">The subject identifier.</param>
         /// <returns>The retrieved IdentityUser object.</returns>
         Task<IdentityUser> FindAsync(string subjectId);
 
         /// <summary>
-        /// Gets the IdentityUser by its username.
+        ///     Gets the IdentityUser by its username.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns>The retrieved IdentityUser</returns>
         Task<IdentityUser> FindByUsername(string username);
 
         /// <summary>
-        /// Gets the IdentityUser by its external provider data.
+        ///     Gets the IdentityUser by its external provider data.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
@@ -55,7 +57,7 @@ namespace Repositories
         Task<IdentityUser> FindByExternalProvider(string provider, string providerUserId);
 
         /// <summary>
-        /// Creates a new IdentityUser from claims.
+        ///     Creates a new IdentityUser from claims.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
@@ -68,12 +70,13 @@ namespace Repositories
     }
 
     /// <summary>
-    /// The IdentityUser Repository
+    ///     The IdentityUser Repository
     /// </summary>
     /// <seealso cref="IdentityUser" />
     /// <seealso cref="IIdentityUserRepository" />
     public class IdentityUserRepository : Repository<IdentityUser>, IIdentityUserRepository
     {
+
         /// <summary>
         ///     This is the identity user repository constructor
         /// </summary>
@@ -86,16 +89,17 @@ namespace Repositories
         /// <param name="entity"></param>
         public override void Add(IdentityUser entity)
         {
-            entity.SubjectId = Guid.NewGuid().ToString();
+            entity.SubjectId = Guid.NewGuid()
+                                   .ToString();
             base.Add(entity);
         }
 
         /// <summary>
-        /// Gets the IdentityUser with the specified subjectIdentifier.
+        ///     Gets the IdentityUser with the specified subjectIdentifier.
         /// </summary>
         /// <param name="subjectId">The subject identifier.</param>
         /// <returns>
-        /// The retrieved IdentityUser object.
+        ///     The retrieved IdentityUser object.
         /// </returns>
         public async Task<IdentityUser> FindAsync(string subjectId)
         {
@@ -105,11 +109,11 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Gets the IdentityUser by its username.
+        ///     Gets the IdentityUser by its username.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
         public async Task<IdentityUser> FindByUsername(string username)
         {
@@ -119,12 +123,12 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Gets the IdentityUser by its external provider data.
+        ///     Gets the IdentityUser by its external provider data.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
         public async Task<IdentityUser> FindByExternalProvider(string provider, string providerUserId)
         {
@@ -134,32 +138,38 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Creates a new IdentityUser from claims.
+        ///     Creates a new IdentityUser from claims.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
         /// <param name="claimsList">The claims list.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
-        public async Task<IdentityUser> AutoProvisionUser(string provider, string providerUserId, List<Claim> claimsList)
+        public async Task<IdentityUser> AutoProvisionUser(string provider,
+                                                          string providerUserId,
+                                                          List<Claim> claimsList)
         {
-            IdentityUser user = new IdentityUser()
-            {
-                ProviderId = provider,
-                ExternalSubjectId = providerUserId,
-            };
-            GetDbSet<IdentityUser>().Add(user);
+            IdentityUser user = new IdentityUser
+                                {
+                                    ProviderId = provider,
+                                    ExternalSubjectId = providerUserId
+                                };
+            GetDbSet<IdentityUser>()
+                .Add(user);
             DbContext.SaveChanges();
             return await GetDbSet<IdentityUser>()
-                .Where(i => i.ProviderId == provider && i.ExternalSubjectId == providerUserId).SingleOrDefaultAsync();
+                         .Where(i => i.ProviderId == provider && i.ExternalSubjectId == providerUserId)
+                         .SingleOrDefaultAsync();
         }
 
         public async Task<IdentityUser> FindBySubjectId(string subjectId)
         {
             return await GetDbSet<IdentityUser>()
-                       .Where(i => i.SubjectId == subjectId).SingleOrDefaultAsync();
+                         .Where(i => i.SubjectId == subjectId)
+                         .SingleOrDefaultAsync();
         }
 
     }
+
 }

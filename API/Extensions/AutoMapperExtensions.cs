@@ -21,11 +21,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Extensions
 {
+
     /// <summary>
     ///     AutoMapperExtensions
     /// </summary>
     public static class AutoMapperExtensions
     {
+
         /// <summary>
         ///     Adds the autoMapper.
         /// </summary>
@@ -41,5 +43,7 @@ namespace API.Extensions
 
             return services;
         }
+
     }
+
 }

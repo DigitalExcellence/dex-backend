@@ -22,25 +22,33 @@ using System;
 
 namespace Repositories.Tests.DataGenerators
 {
+
     /// <summary>
-    /// FakeDataGenerator for the highlights
+    ///     FakeDataGenerator for the highlights
     /// </summary>
     public class HighlightDataGenerator : FakeDataGenerator<Highlight>
     {
+
         /// <summary>
-        /// Initializes the highlightDataGenerator
-        /// and define dataGenerator options
+        ///     Initializes the highlightDataGenerator
+        ///     and define dataGenerator options
         /// </summary>
         public HighlightDataGenerator()
         {
             Faker<User> projectUser = new Faker<User>()
                                       .RuleFor(user => user.Name, faker => faker.Name.FirstName())
                                       .RuleFor(user => user.Email, faker => faker.Internet.Email())
-                                      .RuleFor(user => user.IdentityId, faker => faker.Random.Int().ToString());
+                                      .RuleFor(user => user.IdentityId,
+                                               faker => faker.Random.Int()
+                                                             .ToString());
             Faker<Project> fakeProject = new Faker<Project>()
                                          .RuleFor(project => project.Name, faker => faker.Name.FirstName())
-                                         .RuleFor(project => project.ShortDescription, faker => faker.Lorem.Words(10).ToString())
-                                         .RuleFor(project => project.Description, faker => faker.Lorem.Words(40).ToString())
+                                         .RuleFor(project => project.ShortDescription,
+                                                  faker => faker.Lorem.Words(10)
+                                                                .ToString())
+                                         .RuleFor(project => project.Description,
+                                                  faker => faker.Lorem.Words(40)
+                                                                .ToString())
                                          .RuleFor(project => project.Uri, faker => faker.Internet.Url())
                                          .RuleFor(project => project.Created, faker => faker.Date.Past())
                                          .RuleFor(project => project.Updated, DateTime.Now)
@@ -51,5 +59,7 @@ namespace Repositories.Tests.DataGenerators
                     .RuleFor(highlight => highlight.StartDate, faker => faker.Date.Past())
                     .RuleFor(highlight => highlight.EndDate, faker => faker.Date.Future());
         }
+
     }
+
 }

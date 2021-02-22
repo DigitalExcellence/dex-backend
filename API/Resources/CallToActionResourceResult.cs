@@ -19,13 +19,14 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// Resource Result for call to action
+    ///     Resource Result for call to action
     /// </summary>
     public class CallToActionResourceResult
         : CallToActionResource
     {
+
         /// <summary>
-        /// Gets or sets the id of the call to action.
+        ///     Gets or sets the id of the call to action.
         /// </summary>
         public int Id { get; set; }
 

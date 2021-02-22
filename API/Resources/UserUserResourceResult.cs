@@ -17,19 +17,23 @@
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// Object to return to frontend with the UserUser
+    ///     Object to return to frontend with the UserUser
     /// </summary>
     public class UserUserResourceResult
     {
+
         /// <summary>
-        /// Set or gets id
+        ///     Set or gets id
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// User object to follow
+        ///     User object to follow
         /// </summary>
         public string Name { get; set; }
+
     }
+
 }

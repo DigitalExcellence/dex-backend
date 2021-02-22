@@ -26,6 +26,7 @@ namespace Services.Sources
     /// </summary>
     public interface ISource
     {
+
         /// <summary>
         ///     This is the interface method which checks if the project uri matches
         /// </summary>

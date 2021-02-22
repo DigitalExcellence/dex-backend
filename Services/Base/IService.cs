@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 
 namespace Services.Base
 {
+
     /// <summary>
     ///     This is the base service class
     /// </summary>
@@ -52,6 +53,7 @@ namespace Services.Base
         /// </summary>
         /// <param name="entities"></param>
         void AddRange(IEnumerable<TEntity> entities);
+
         Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         /// <summary>

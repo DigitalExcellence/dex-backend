@@ -27,6 +27,7 @@ namespace Services.Services
     /// </summary>
     public interface IUserProjectService : IService<UserProject>
     {
+
         /// <summary>
         ///     This is the interface method which checks if a user already follows a project
         /// </summary>
@@ -34,6 +35,7 @@ namespace Services.Services
         /// <param name="projectId"></param>
         /// <returns>boolean</returns>
         bool CheckIfUserFollows(int userId, int projectId);
+
     }
 
     /// <summary>
@@ -41,6 +43,7 @@ namespace Services.Services
     /// </summary>
     public class UserProjectService : Service<UserProject>, IUserProjectService
     {
+
         /// <summary>
         ///     This is the constructor of the user project service
         /// </summary>
@@ -66,5 +69,7 @@ namespace Services.Services
             }
             return false;
         }
+
     }
+
 }

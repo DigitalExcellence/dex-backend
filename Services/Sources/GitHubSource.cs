@@ -24,21 +24,22 @@ namespace Services.Sources
     /// <summary>
     ///     This is the interface of the GitHub Source
     /// </summary>
-    public interface IGitHubSource : ISource {}
+    public interface IGitHubSource : ISource { }
 
     /// <summary>
-    /// GitHubSource
+    ///     GitHubSource
     /// </summary>
     /// <seealso cref="ISource" />
     public class GitHubSource : IGitHubSource
     {
+
         /// <summary>
-        /// The rest client factory
+        ///     The rest client factory
         /// </summary>
         private readonly IRestClientFactory restClientFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GitLabSource"/> class.
+        ///     Initializes a new instance of the <see cref="GitLabSource" /> class.
         /// </summary>
         /// <param name="restClientFactory"></param>
         public GitHubSource(IRestClientFactory restClientFactory)
@@ -47,7 +48,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// Gets the source.
+        ///     Gets the source.
         /// </summary>
         /// <param name="uri">The URI of the source project.</param>
         /// <exception cref="NotImplementedException"></exception>
@@ -57,7 +58,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// Gets the project information.
+        ///     Gets the project information.
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <returns>The project object.</returns>
@@ -65,11 +66,10 @@ namespace Services.Sources
         public Project GetProjectInformation(Uri uri)
         {
             throw new NotImplementedException();
-
         }
 
         /// <summary>
-        /// Projects the URI matches.
+        ///     Projects the URI matches.
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <returns>true if the project uri matches.</returns>
@@ -80,7 +80,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// Searches the specified search term.
+        ///     Searches the specified search term.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <exception cref="NotImplementedException"></exception>
@@ -88,5 +88,7 @@ namespace Services.Sources
         {
             throw new NotImplementedException();
         }
+
     }
+
 }

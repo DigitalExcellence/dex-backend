@@ -1,20 +1,41 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
+using NotificationSystem.Contracts;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System;
 using System.Text;
-using NotificationSystem.Contracts;
-using RabbitMQ.Client.Events;
-using Newtonsoft.Json;
-using NotificationSystem.Notifications;
 
 namespace NotificationSystem.Services
 {
+
     public interface IRabbitMQListener
     {
+
         EventingBasicConsumer CreateConsumer(INotificationService notificationService);
+
         void StartConsumer(EventingBasicConsumer consumer, string subject);
+
     }
+
     public class RabbitMQListener : IRabbitMQListener
     {
+
         private readonly IModel channel;
 
         public RabbitMQListener(IModel channel)
@@ -29,13 +50,17 @@ namespace NotificationSystem.Services
             return consumer;
         }
 
+        public void StartConsumer(EventingBasicConsumer consumer, string subject)
+        {
+            channel.BasicConsume(subject,
+                                 false,
+                                 consumer);
+        }
+
         public EventingBasicConsumer SetCallBack(INotificationService notificationService, IBasicConsumer basicConsumer)
         {
             EventingBasicConsumer consumer = (EventingBasicConsumer) basicConsumer;
-            consumer.Received += (sender, ea) =>
-            {
-                CallBack(notificationService, ea);
-            };
+            consumer.Received += (sender, ea) => { CallBack(notificationService, ea); };
             return consumer;
         }
 
@@ -49,7 +74,7 @@ namespace NotificationSystem.Services
                 notificationService.ParsePayload(jsonBody);
                 notificationService.ValidatePayload();
                 notificationService.ExecuteTask();
-                channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                channel.BasicAck(ea.DeliveryTag, false);
                 Console.WriteLine("Task executed");
             } catch(Exception e)
             {
@@ -58,11 +83,6 @@ namespace NotificationSystem.Services
             }
         }
 
-        public void StartConsumer(EventingBasicConsumer consumer, string subject)
-        {
-            channel.BasicConsume(queue: subject,
-                autoAck: false,
-                consumer: consumer);            
-        }
     }
+
 }

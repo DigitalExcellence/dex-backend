@@ -37,7 +37,7 @@ namespace Services.Services
         Task<List<Highlight>> GetHighlightsAsync();
 
         /// <summary>
-        /// This is the interface method which gets all highlights by project id asynchronous
+        ///     This is the interface method which gets all highlights by project id asynchronous
         /// </summary>
         /// <param name="projectId"></param>
         /// <returns></returns>
@@ -77,8 +77,10 @@ namespace Services.Services
         /// <returns>List of highlights</returns>
         public async Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId)
         {
-            return await Repository.GetHighlightsByProjectIdAsync(projectId).ConfigureAwait(false);
+            return await Repository.GetHighlightsByProjectIdAsync(projectId)
+                                   .ConfigureAwait(false);
         }
+
     }
 
 }

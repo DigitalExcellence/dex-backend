@@ -21,31 +21,27 @@ using Services.Base;
 
 namespace Services.Services
 {
+
     /// <summary>
-    /// The file service interface.
+    ///     The file service interface.
     /// </summary>
-    public interface IFileService : IService<File>
-    {
-
-    }
+    public interface IFileService : IService<File> { }
 
     /// <summary>
-    /// This is the file service
+    ///     This is the file service
     /// </summary>
     public class FileService : Service<File>, IFileService
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileService"/> class.
+        ///     Initializes a new instance of the <see cref="FileService" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         public FileService(IFileRepository repository) : base(repository) { }
 
         /// <summary>
-        /// 
         /// </summary>
         protected new IFileRepository Repository => (IFileRepository) base.Repository;
-
 
     }
 

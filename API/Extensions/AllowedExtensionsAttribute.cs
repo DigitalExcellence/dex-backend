@@ -22,15 +22,17 @@ using System.Linq;
 
 namespace API.Extensions
 {
+
     /// <summary>
-    /// Attribute for allowed file extensions
+    ///     Attribute for allowed file extensions
     /// </summary>
     public class AllowedExtensionsAttribute : ValidationAttribute
     {
+
         private readonly string[] extensions;
 
         /// <summary>
-        /// Constructor for allowed extensions
+        ///     Constructor for allowed extensions
         /// </summary>
         /// <param name="extensions"> array of extensions </param>
         public AllowedExtensionsAttribute(string[] extensions)
@@ -39,13 +41,14 @@ namespace API.Extensions
         }
 
         /// <summary>
-        /// Method which checks if extensions are allowed
+        ///     Method which checks if extensions are allowed
         /// </summary>
         /// <param name="value"></param>
         /// <param name="validationContext"></param>
         /// <returns></returns>
         protected override ValidationResult IsValid(
-            object value, ValidationContext validationContext)
+            object value,
+            ValidationContext validationContext)
         {
             IFormFile file = value as IFormFile;
             if(file == null)
@@ -65,21 +68,23 @@ namespace API.Extensions
         }
 
         /// <summary>
-        ///  Error message
+        ///     Error message
         /// </summary>
         /// <returns></returns>
         public string GetErrorMessage()
         {
-            return $"This file extension is not allowed!";
+            return "This file extension is not allowed!";
         }
 
         /// <summary>
-        /// Error message
+        ///     Error message
         /// </summary>
         /// <returns></returns>
         public string FileIsNullError()
         {
             return "File is null";
         }
+
     }
+
 }

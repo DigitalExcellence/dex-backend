@@ -29,16 +29,6 @@ namespace IdentityServer.Configuration
     public static class IdentityConfig
     {
 
-        public static IEnumerable<IdentityResource> GetIdentityResources()
-        {
-            return new List<IdentityResource>
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
-                new IdentityResources.Email()
-            };
-        }
-        
         public static IEnumerable<ApiResource> Apis =>
             new[]
             {
@@ -59,31 +49,41 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.UserTaskWrite))
                     }
                 },
-                new ApiResource(IdentityServerConstants.LocalApi.ScopeName), 
+                new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
             };
+
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+                   {
+                       new IdentityResources.OpenId(),
+                       new IdentityResources.Profile(),
+                       new IdentityResources.Email()
+                   };
+        }
 
         public static IEnumerable<Client> Clients(Config config)
         {
             return new[]
                    {
                        // machine to machine client (API -> Identity)
-                        new Client
-                        {
-                            ClientId = "dex-api",
-                            AllowedGrantTypes = GrantTypes.ClientCredentials,
-                            ClientSecrets =
-                            {
-                                new Secret(config.ApiAuthentication.ClientSecret.Sha256())
-                            },
-                            AllowedScopes =
-                            {
-                                IdentityServerConstants.LocalApi.ScopeName
-                            },
-                            Claims = new List<Claim>
-                                     {
-                                         new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
-                                     }
-                        }, 
+                       new Client
+                       {
+                           ClientId = "dex-api",
+                           AllowedGrantTypes = GrantTypes.ClientCredentials,
+                           ClientSecrets =
+                           {
+                               new Secret(config.ApiAuthentication.ClientSecret.Sha256())
+                           },
+                           AllowedScopes =
+                           {
+                               IdentityServerConstants.LocalApi.ScopeName
+                           },
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
+                                    }
+                       },
 
                        // machine to machine client (Identity -> API)
                        new Client
@@ -171,8 +171,8 @@ namespace IdentityServer.Configuration
                                            {
                                                IdentityServerConstants.StandardScopes.OpenId,
                                                IdentityServerConstants.StandardScopes.Profile,
-                                               "dex-api",
-                                           },
+                                               "dex-api"
+                                           }
                        },
                        new Client
                        {
@@ -185,17 +185,14 @@ namespace IdentityServer.Configuration
                            },
                            AllowedScopes =
                            {
-                                "dex-api"
+                               "dex-api"
                            },
                            Claims = new List<Claim>
                                     {
                                         new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
                                     }
-
                        }
                    };
-
-
         }
 
     }

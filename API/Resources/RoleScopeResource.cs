@@ -17,17 +17,21 @@
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// RoleScopeResource
+    ///     RoleScopeResource
     /// </summary>
     public class RoleScopeResource
     {
+
         /// <summary>
-        /// Gets or sets the scope.
+        ///     Gets or sets the scope.
         /// </summary>
         /// <value>
-        /// The scope.
+        ///     The scope.
         /// </value>
         public string Scope { get; set; }
+
     }
+
 }

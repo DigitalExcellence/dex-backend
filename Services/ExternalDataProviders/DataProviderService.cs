@@ -25,13 +25,13 @@ namespace Services.ExternalDataProviders
 {
 
     /// <summary>
-    /// The interface of the data provider service.
+    ///     The interface of the data provider service.
     /// </summary>
     public interface IDataProviderService
     {
 
         /// <summary>
-        /// This method is responsible for retrieving all projects from a data source.
+        ///     This method is responsible for retrieving all projects from a data source.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
@@ -40,7 +40,7 @@ namespace Services.ExternalDataProviders
         Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth);
 
         /// <summary>
-        /// This method is responsible for retrieving a project by id.
+        ///     This method is responsible for retrieving a project by id.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
@@ -50,14 +50,14 @@ namespace Services.ExternalDataProviders
         Task<Project> GetProjectById(string dataSourceGuid, string token, int id, bool needsAuth);
 
         /// <summary>
-        /// This method validates whether a data source with the specified guid exists.
+        ///     This method validates whether a data source with the specified guid exists.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that will get checked.</param>
         /// <returns>This method return whether the data source exists or does not exists.</returns>
         bool IsExistingDataSourceGuid(string dataSourceGuid);
 
         /// <summary>
-        /// This method is responsible for retrieving a project by uri.
+        ///     This method is responsible for retrieving a project by uri.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
@@ -65,14 +65,14 @@ namespace Services.ExternalDataProviders
         Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri);
 
         /// <summary>
-        /// This method is responsible for retrieving the oauth url from the specified data source.
+        ///     This method is responsible for retrieving the oauth url from the specified data source.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <returns>This method returns the oauth url from the specified data source.</returns>
         Task<string> GetOauthUrl(string dataSourceGuid);
 
         /// <summary>
-        /// This method is responsible for returning the Oauth url from the specified  data source.
+        ///     This method is responsible for returning the Oauth url from the specified  data source.
         /// </summary>
         /// <param name="code">The code which is used to retrieve Oauth tokens from the external data source.</param>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
@@ -80,21 +80,24 @@ namespace Services.ExternalDataProviders
         Task<OauthTokens> GetTokens(string code, string dataSourceGuid);
 
         /// <summary>
-        /// This method is responsible for returning the data sources.
+        ///     This method is responsible for returning the data sources.
         /// </summary>
-        /// <param name="needsAuth">The needsAuth parameter specifies whether the returned data sources should follow a specific auth flow.</param>
+        /// <param name="needsAuth">
+        ///     The needsAuth parameter specifies whether the returned data sources should follow a specific
+        ///     auth flow.
+        /// </param>
         /// <returns>This method returns a collection of data source adaptees.</returns>
         Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth);
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by guid.
+        ///     This method is responsible for retrieving a data source by guid.
         /// </summary>
         /// <param name="guid">The data source guid that specifies which data source should get retrieved.</param>
         /// <returns>This method returns the data source with the specified guid.</returns>
         Task<IDataSourceAdaptee> RetrieveDataSourceByGuid(string guid);
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by name.
+        ///     This method is responsible for retrieving a data source by name.
         /// </summary>
         /// <param name="name">The name of the data source that specified which data source should get retrieved.</param>
         /// <returns>This method returns the data source with the specified name.</returns>
@@ -103,12 +106,13 @@ namespace Services.ExternalDataProviders
     }
 
     /// <summary>
-    /// The data provider service which communicates with the correct data source. This service
-    /// acts as the adapter in the adapter pattern.
+    ///     The data provider service which communicates with the correct data source. This service
+    ///     acts as the adapter in the adapter pattern.
     /// </summary>
     /// <seealso cref="IDataProviderService" />
     public class DataProviderService : IDataProviderService
     {
+
         private readonly IDataProviderLoader dataProviderLoader;
         private IDataProviderAdapter dataProviderAdapter;
 
@@ -118,7 +122,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all projects from a data source.
+        ///     This method is responsible for retrieving all projects from a data source.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
@@ -132,7 +136,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a project by id.
+        ///     This method is responsible for retrieving a project by id.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
@@ -147,7 +151,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method validates whether a data source with the specified guid exists.
+        ///     This method validates whether a data source with the specified guid exists.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that will get checked.</param>
         /// <returns>This method return whether the data source exists or does not exists.</returns>
@@ -157,7 +161,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a project by uri.
+        ///     This method is responsible for retrieving a project by uri.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
@@ -168,8 +172,7 @@ namespace Services.ExternalDataProviders
             dataProviderAdapter = new DataProviderAdapter(adaptee);
 
             sourceUri = sourceUri.Replace("%2F", "/");
-            if(sourceUri[^1] == '/')
-                sourceUri = sourceUri.Remove(sourceUri.Length - 1);
+            if(sourceUri[^1] == '/') sourceUri = sourceUri.Remove(sourceUri.Length - 1);
             Uri serializedUrl;
 
             try
@@ -184,7 +187,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving the oauth url from the specified data source.
+        ///     This method is responsible for retrieving the oauth url from the specified data source.
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <returns>This method returns the oauth url from the specified data source.</returns>
@@ -196,7 +199,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for returning the Oauth url from the specified  data source.
+        ///     This method is responsible for returning the Oauth url from the specified  data source.
         /// </summary>
         /// <param name="code">The code which is used to retrieve Oauth tokens from the external data source.</param>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
@@ -206,30 +209,31 @@ namespace Services.ExternalDataProviders
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
             return await dataProviderAdapter.GetTokens(code);
-
         }
 
         /// <summary>
-        /// This method is responsible for returning the data sources.
+        ///     This method is responsible for returning the data sources.
         /// </summary>
-        /// <param name="needsAuth">The needsAuth parameter specifies whether the returned data sources should follow a specific auth flow.</param>
+        /// <param name="needsAuth">
+        ///     The needsAuth parameter specifies whether the returned data sources should follow a specific
+        ///     auth flow.
+        /// </param>
         /// <returns>This method returns a collection of data source adaptees.</returns>
         public async Task<IEnumerable<IDataSourceAdaptee>> RetrieveDataSources(bool? needsAuth)
         {
-            List<IDataSourceAdaptee> sources =  await dataProviderLoader.GetAllDataSources();
+            List<IDataSourceAdaptee> sources = await dataProviderLoader.GetAllDataSources();
 
             if(needsAuth == null) return sources;
 
             sources = FilterAuthPages(sources, needsAuth.Value);
 
-            if(needsAuth.Value)
-                return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
+            if(needsAuth.Value) return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
 
             return sources.Where(s => s is IPublicDataSourceAdaptee);
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by guid.
+        ///     This method is responsible for retrieving a data source by guid.
         /// </summary>
         /// <param name="guid">The data source guid that specifies which data source should get retrieved.</param>
         /// <returns>This method returns the data source with the specified guid.</returns>
@@ -240,7 +244,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by name.
+        ///     This method is responsible for retrieving a data source by name.
         /// </summary>
         /// <param name="name">The name of the data source that specified which data source should get retrieved.</param>
         /// <returns>This method returns the data source with the specified name.</returns>

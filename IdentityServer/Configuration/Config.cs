@@ -16,7 +16,6 @@
 */
 
 using NetEscapades.Configuration.Validation;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Configuration
@@ -52,10 +51,10 @@ namespace Configuration
         public SwaggerConfig Swagger { get; set; }
 
         /// <summary>
-        /// Gets or sets the fhict oidc.
+        ///     Gets or sets the fhict oidc.
         /// </summary>
         /// <value>
-        /// The ffhict oidc.
+        ///     The ffhict oidc.
         /// </value>
         public FhictOIDConfig FfhictOIDC { get; set; }
 
@@ -117,6 +116,7 @@ namespace Configuration
             ///     The public origin.
             /// </value>
             public string PublicOrigin { get; set; }
+
         }
 
         /// <summary>
@@ -151,32 +151,39 @@ namespace Configuration
             /// </value>
             [Required]
             public string ClientSecret { get; set; }
+
         }
 
         /// <summary>
         /// </summary>
         public class FrontendConfig
         {
+
             /// <summary>
             ///     Gets or sets the redirect uri of the frontend.
             /// </summary>
             public string RedirectUriFrontend { get; set; }
+
             /// <summary>
             ///     Gets or sets the refresh uri of the frontend.
             /// </summary>
             public string RefreshUriFrontend { get; set; }
+
             /// <summary>
             ///     Gets or sets the redirect uri for Postman.
             /// </summary>
             public string RedirectUriPostman { get; set; }
+
             /// <summary>
             ///     Gets or sets the post logouts uri of the Frontend.
             /// </summary>
             public string PostLogoutUriFrontend { get; set; }
+
             /// <summary>
             ///     Gets or sets the client identifier.
             /// </summary>
             public string ClientId { get; set; }
+
             /// <summary>
             ///     Gets or sets the client secret.
             /// </summary>
@@ -185,79 +192,90 @@ namespace Configuration
         }
 
         /// <summary>
-        /// Contains the swagger configuration.
+        ///     Contains the swagger configuration.
         /// </summary>
         public class SwaggerConfig
         {
+
             /// <summary>
-            /// Gets or sets the redirect uris swagger.
+            ///     Gets or sets the redirect uris swagger.
             /// </summary>
             /// <value>
-            /// The redirect uris swagger.
+            ///     The redirect uris swagger.
             /// </value>
             public string RedirectUrisSwagger { get; set; }
 
             /// <summary>
-            /// Gets or sets the post logout uris swagger.
+            ///     Gets or sets the post logout uris swagger.
             /// </summary>
             /// <value>
-            /// The post logout uris swagger.
+            ///     The post logout uris swagger.
             /// </value>
             public string PostLogoutUrisSwagger { get; set; }
+
         }
 
 
         /// <summary>
-        /// Contains the Fontys SSO configuration.
+        ///     Contains the Fontys SSO configuration.
         /// </summary>
         public class FhictOIDConfig
         {
+
             /// <summary>
-            /// Gets or sets the fhict identity URL.
+            ///     Gets or sets the fhict identity URL.
             /// </summary>
             /// <value>
-            /// The fhict identity URL.
+            ///     The fhict identity URL.
             /// </value>
-            [Required, Url]
+            [Required]
+            [Url]
             public string Authority { get; set; }
+
             /// <summary>
-            /// Gets or sets the fhict client identifier.
+            ///     Gets or sets the fhict client identifier.
             /// </summary>
             /// <value>
-            /// The fhict client identifier.
+            ///     The fhict client identifier.
             /// </value>
             [Required]
             public string ClientId { get; set; }
+
             /// <summary>
-            /// Gets or sets the fhict client secret.
+            ///     Gets or sets the fhict client secret.
             /// </summary>
             /// <value>
-            /// The fhict client secret.
+            ///     The fhict client secret.
             /// </value>
             [Required]
             public string ClientSecret { get; set; }
+
             /// <summary>
-            /// Gets or sets the fhict scopes.
+            ///     Gets or sets the fhict scopes.
             /// </summary>
             /// <value>
-            /// The fhict scopes.
+            ///     The fhict scopes.
             /// </value>
             [Required]
             public string Scopes { get; set; }
+
             /// <summary>
-            /// Gets or sets the fhict redirect URI.
+            ///     Gets or sets the fhict redirect URI.
             /// </summary>
             /// <value>
-            /// The fhict redirect URI.
+            ///     The fhict redirect URI.
             /// </value>
-            [Required, Url]
+            [Required]
+            [Url]
             public string RedirectUri { get; set; }
 
         }
+
     }
 
     public class JobSchedulerConfig
     {
+
         /// <summary>
         ///     Gets or sets the job scheduler identifier.
         /// </summary>
@@ -275,6 +293,7 @@ namespace Configuration
         /// </value>
         [Required]
         public string ClientSecret { get; set; }
+
     }
 
     public class ApiAuthentication

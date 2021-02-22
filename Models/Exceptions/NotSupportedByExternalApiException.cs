@@ -19,15 +19,17 @@ using System;
 
 namespace Models.Exceptions
 {
+
     /// <summary>
-    /// This exception will get thrown if the functionality does not get supported
-    /// by the external API.
+    ///     This exception will get thrown if the functionality does not get supported
+    ///     by the external API.
     /// </summary>
     [Serializable]
     public class NotSupportedByExternalApiException : Exception
     {
+
         /// <summary>
-        /// The constructor of the class to generate the exception with a specified message.
+        ///     The constructor of the class to generate the exception with a specified message.
         /// </summary>
         /// <param name="failedDataSource">The name of the data source which does not support the functionality.</param>
         /// <param name="methodName">The name of the method that is not supported by the external API.</param>
@@ -35,10 +37,11 @@ namespace Models.Exceptions
             : base($"{failedDataSource} does not support the {methodName} functionality") { }
 
         /// <summary>
-        /// The constructor of the class to generate the exception with a specified message and inner exception.
+        ///     The constructor of the class to generate the exception with a specified message and inner exception.
         /// </summary>
         /// <param name="failedDataSource">The message of the thrown exception.</param>
-        /// /// <param name="methodName">The name of the method that is not supported by the external API.</param>
+        /// ///
+        /// <param name="methodName">The name of the method that is not supported by the external API.</param>
         /// <param name="inner">The inner exception of the thrown exception.</param>
         public NotSupportedByExternalApiException(string failedDataSource, string methodName, Exception inner)
             : base($"{failedDataSource} does not support the {methodName} functionality", inner) { }

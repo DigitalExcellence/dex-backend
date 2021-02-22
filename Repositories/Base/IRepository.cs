@@ -27,6 +27,7 @@ namespace Repositories.Base
     /// <typeparam name="TEntity"></typeparam>
     public interface IRepository<TEntity> where TEntity : class
     {
+
         /// <summary>
         ///     This is the interface method which find an entity by identifier asynchronous
         /// </summary>
@@ -45,6 +46,7 @@ namespace Repositories.Base
         /// </summary>
         /// <param name="entities"></param>
         void AddRange(IEnumerable<TEntity> entities);
+
         Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         /// <summary>

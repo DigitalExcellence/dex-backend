@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 
 namespace Repositories.Tests.Base
 {
+
     /// <summary>
-    /// Base test class which should be inherited from when creating unittests for the repositories.
-    /// By inheriting, all the default tests are included in the new test class.
-    /// YOU SHOULD OVERRIDE THE DEFAULT TEST TO ADD THE [Test] attribute.
-    /// If you do not override the tests and add the [Test] attribute, the default tests will not be triggered.
+    ///     Base test class which should be inherited from when creating unittests for the repositories.
+    ///     By inheriting, all the default tests are included in the new test class.
+    ///     YOU SHOULD OVERRIDE THE DEFAULT TEST TO ADD THE [Test] attribute.
+    ///     If you do not override the tests and add the [Test] attribute, the default tests will not be triggered.
     /// </summary>
     /// <typeparam name="TDomain">Modelclass which is used to test</typeparam>
     /// <typeparam name="TRepository">Repository which should be tested</typeparam>
@@ -23,27 +24,31 @@ namespace Repositories.Tests.Base
         where TDomain : class
         where TRepository : class, IRepository<TDomain>
     {
+
         protected ApplicationDbContext DbContext;
         protected TRepository Repository;
 
         /// <summary>
-        /// Initialize runs before every test
-        /// Initialize the repository with reflection
+        ///     Initialize runs before every test
+        ///     Initialize the repository with reflection
         /// </summary>
         [SetUp]
         public virtual void Initialize()
         {
-            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
+                                                 .UseInMemoryDatabase(Guid.NewGuid()
+                                                                          .ToString())
+                                                 .Options);
             Type repositoryType = typeof(TRepository);
-            ConstructorInfo repositoryCtor = repositoryType.GetConstructor(new[] { typeof(ApplicationDbContext) });
-            Repository = (TRepository)repositoryCtor.Invoke(new object[] { DbContext });
+            ConstructorInfo repositoryCtor = repositoryType.GetConstructor(new[] {typeof(ApplicationDbContext)});
+            Repository = (TRepository) repositoryCtor.Invoke(new object[] {DbContext});
         }
 
         /// <summary>
-        /// Add the given entity to the database
-        /// EF Core will give the entity automatically an id
-        /// Check which id the entity has and use this id to retrieve it from the database again
-        /// Check if all the properties of the retrieved entity match to the properties of the original entity
+        ///     Add the given entity to the database
+        ///     EF Core will give the entity automatically an id
+        ///     Check which id the entity has and use this id to retrieve it from the database again
+        ///     Check if all the properties of the retrieved entity match to the properties of the original entity
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -59,23 +64,22 @@ namespace Repositories.Tests.Base
             {
                 throw new Exception("Id property does not exist");
             }
-            else
-            {
-                id = (int)property.GetValue(entity);
-            }
+            id = (int) property.GetValue(entity);
 
             TDomain retrieved = await Repository.FindAsync(id);
 
-            foreach (PropertyInfo prop in type.GetProperties())
+            foreach(PropertyInfo prop in type.GetProperties())
             {
-                prop.GetValue(entity).Should().BeEquivalentTo(prop.GetValue(retrieved));
+                prop.GetValue(entity)
+                    .Should()
+                    .BeEquivalentTo(prop.GetValue(retrieved));
             }
         }
 
         /// <summary>
-        /// Add the given entity to the database
-        /// Try to retrieve an entity from the database with a key that doesn't exist
-        /// Check if the error is handled correctly by returning null
+        ///     Add the given entity to the database
+        ///     Try to retrieve an entity from the database with a key that doesn't exist
+        ///     Check if the error is handled correctly by returning null
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -88,8 +92,8 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        /// Add the given entity to the database
-        /// Check if the return type is not null
+        ///     Add the given entity to the database
+        ///     Check if the return type is not null
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -98,21 +102,22 @@ namespace Repositories.Tests.Base
             Repository.Add(entity);
             await DbContext.SaveChangesAsync();
 
-            PropertyInfo property = entity.GetType().GetProperty("Id");
+            PropertyInfo property = entity.GetType()
+                                          .GetProperty("Id");
             int id;
             if(property == null)
             {
                 throw new Exception("Id property does not exist");
-            } else
-            {
-                id = (int) property.GetValue(entity);
             }
+            id = (int) property.GetValue(entity);
 
-            Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
+            Repository.Invoking(async r => await r.FindAsync(id))
+                      .Should()
+                      .NotBeNull();
         }
 
         /// <summary>
-        /// Check if the error is handled correctly when trying to add null to the database
+        ///     Check if the error is handled correctly when trying to add null to the database
         /// </summary>
         public virtual void AddTest_BadFlow_Null()
         {
@@ -121,13 +126,12 @@ namespace Repositories.Tests.Base
                 Repository.Add(null);
                 await DbContext.SaveChangesAsync();
             });
-
         }
 
         /// <summary>
-        /// Add a range of objects to the database
-        /// Retrieve the items from the database again by their id
-        /// and check if they are not null
+        ///     Add a range of objects to the database
+        ///     Retrieve the items from the database again by their id
+        ///     and check if they are not null
         /// </summary>
         /// <param name="entities">The entitis which are used as data to test</param>
         /// <returns></returns>
@@ -138,33 +142,35 @@ namespace Repositories.Tests.Base
             Repository.AddRange(entities);
             await DbContext.SaveChangesAsync();
 
-            foreach (TDomain entity in entities)
+            foreach(TDomain entity in entities)
             {
                 PropertyInfo property = type.GetProperty("Id");
                 int id;
                 if(property == null)
                 {
                     throw new Exception("Id property does not exist");
-                } else
-                {
-                    id = (int) property.GetValue(entity);
                 }
-                Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
+                id = (int) property.GetValue(entity);
+                Repository.Invoking(async r => await r.FindAsync(id))
+                          .Should()
+                          .NotBeNull();
             }
         }
 
         /// <summary>
-        /// Check if the error is handled correctly when adding an empty list to the database
+        ///     Check if the error is handled correctly when adding an empty list to the database
         /// </summary>
         public virtual void AddRangeTest_BadFlow_EmptyList()
         {
             List<TDomain> entities = new List<TDomain>();
 
-            Repository.Invoking(r => r.AddRange(entities)).Should().NotThrow();
+            Repository.Invoking(r => r.AddRange(entities))
+                      .Should()
+                      .NotThrow();
         }
 
         /// <summary>
-        /// Check if the error is handled correctly when adding a null list to the database
+        ///     Check if the error is handled correctly when adding a null list to the database
         /// </summary>
         public virtual void AddRangeTest_BadFlow_Null()
         {
@@ -172,10 +178,10 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        /// Add the first entity to the database
-        /// Update the entity in the database with the second entity
-        /// Retrieve the entity in the database and check if the entity is not equal to the first entity
-        /// Also check if the database entity is equal to the second entity
+        ///     Add the first entity to the database
+        ///     Update the entity in the database with the second entity
+        ///     Retrieve the entity in the database and check if the entity is not equal to the first entity
+        ///     Also check if the database entity is equal to the second entity
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <param name="updateEntity">The entity which is used to update the data to test</param>
@@ -192,10 +198,8 @@ namespace Repositories.Tests.Base
             if(property == null)
             {
                 throw new Exception("Id property does not exist");
-            } else
-            {
-                id = (int) property.GetValue(entity);
             }
+            id = (int) property.GetValue(entity);
 
             Repository.Update(entity);
             await DbContext.SaveChangesAsync();
@@ -204,8 +208,8 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        /// Try to update an entity in the database which does not exist
-        /// and check how the error is handled
+        ///     Try to update an entity in the database which does not exist
+        ///     and check how the error is handled
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <param name="updateEntity">The entity which is used to update the data to test</param>
@@ -220,10 +224,8 @@ namespace Repositories.Tests.Base
             if(property == null)
             {
                 throw new Exception("Id property does not exist");
-            } else
-            {
-                property.SetValue(updateEntity, -1);
             }
+            property.SetValue(updateEntity, -1);
 
             Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
             {
@@ -233,8 +235,8 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        /// Try to update the entity in the database with null
-        /// and check how the error is handled
+        ///     Try to update the entity in the database with null
+        ///     and check how the error is handled
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -251,7 +253,7 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        /// Add the given entity to the database and try to remove it again with the id it got from EF Core.
+        ///     Add the given entity to the database and try to remove it again with the id it got from EF Core.
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -266,10 +268,8 @@ namespace Repositories.Tests.Base
             if(property == null)
             {
                 throw new Exception("Id property does not exist");
-            } else
-            {
-                id = (int) property.GetValue(entity);
             }
+            id = (int) property.GetValue(entity);
             await Repository.RemoveAsync(id);
             await DbContext.SaveChangesAsync();
 
@@ -277,8 +277,8 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        /// Try to remove an non existing entity from the database
-        /// and check how the error is handled
+        ///     Try to remove an non existing entity from the database
+        ///     and check how the error is handled
         /// </summary>
         /// <param name="entity">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -291,8 +291,8 @@ namespace Repositories.Tests.Base
         }
 
         /// <summary>
-        /// Add the given list to the database and retrieve them again
-        /// Check if the retrieved list is the same amount as the given list
+        ///     Add the given list to the database and retrieve them again
+        ///     Check if the retrieved list is the same amount as the given list
         /// </summary>
         /// <param name="entities">The entity which is used as data to test</param>
         /// <returns></returns>
@@ -302,20 +302,22 @@ namespace Repositories.Tests.Base
             await DbContext.AddRangeAsync(entities);
             await DbContext.SaveChangesAsync();
 
-            List<TDomain> retrievedEntities = (List<TDomain>)await Repository.GetAll();
+            List<TDomain> retrievedEntities = (List<TDomain>) await Repository.GetAll();
             Assert.AreEqual(amountToTest, retrievedEntities.Count);
         }
 
         /// <summary>
-        /// Try to retrieve a list from an empty database and check how the error is handled
+        ///     Try to retrieve a list from an empty database and check how the error is handled
         /// </summary>
         /// <returns></returns>
         public virtual async Task GetAllAsyncTest_Badflow_Empty()
         {
             // No seeding needed.
 
-            List<TDomain> retrievedEntities = (List<TDomain>)await Repository.GetAll();
+            List<TDomain> retrievedEntities = (List<TDomain>) await Repository.GetAll();
             Assert.AreEqual(0, retrievedEntities.Count);
         }
+
     }
+
 }

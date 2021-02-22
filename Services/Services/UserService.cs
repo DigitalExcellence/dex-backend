@@ -24,11 +24,13 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
+
     /// <summary>
     ///     This is the interface of the user service
     /// </summary>
     public interface IUserService : IService<User>
     {
+
         /// <summary>
         ///     This is the interface method which gets a user by identifier asynchronous
         /// </summary>
@@ -79,7 +81,9 @@ namespace Services.Services
         /// <param name="role"></param>
         /// <returns>boolean</returns>
         bool UserWithRoleExists(Role role);
+
         List<User> GetAllExpectedGraduatingUsers(int amountOfMonths);
+
     }
 
     /// <summary>
@@ -87,6 +91,7 @@ namespace Services.Services
     /// </summary>
     public class UserService : Service<User>, IUserService
     {
+
         /// <summary>
         ///     This is the constructor of the user service
         /// </summary>
@@ -105,7 +110,8 @@ namespace Services.Services
         /// <returns></returns>
         public async Task<User> GetUserAsync(int userId)
         {
-            return await Repository.GetUserAsync(userId).ConfigureAwait(false);
+            return await Repository.GetUserAsync(userId)
+                                   .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -115,7 +121,8 @@ namespace Services.Services
         /// <returns></returns>
         public async Task<User> GetUserByIdentityIdAsync(string identityId)
         {
-            return await Repository.GetUserByIdentityIdAsync(identityId).ConfigureAwait(false);
+            return await Repository.GetUserByIdentityIdAsync(identityId)
+                                   .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -125,7 +132,8 @@ namespace Services.Services
         /// <returns>boolean</returns>
         public async Task<bool> RemoveUserAsync(int userId)
         {
-            return await Repository.RemoveUserAsync(userId).ConfigureAwait(false);
+            return await Repository.RemoveUserAsync(userId)
+                                   .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -174,8 +182,11 @@ namespace Services.Services
 
         public List<User> GetAllExpectedGraduatingUsers(int amountOfMonths)
         {
-            List<User> users = Repository.GetAllExpectedGraduatingUsers(amountOfMonths).Result;
+            List<User> users = Repository.GetAllExpectedGraduatingUsers(amountOfMonths)
+                                         .Result;
             return users;
-        } 
+        }
+
     }
+
 }

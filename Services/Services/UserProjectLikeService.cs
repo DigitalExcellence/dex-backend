@@ -27,6 +27,7 @@ namespace Services.Services
     /// </summary>
     public interface IUserProjectLikeService : IService<ProjectLike>
     {
+
         /// <summary>
         ///     This is the interface method which checks if the user already like a project
         /// </summary>
@@ -34,6 +35,7 @@ namespace Services.Services
         /// <param name="projectId"></param>
         /// <returns>Boolean</returns>
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
+
     }
 
     /// <summary>
@@ -48,8 +50,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="repository"></param>
         public UserProjectLikeService(IUserProjectLikeRepository repository) :
-            base(repository)
-        { }
+            base(repository) { }
 
         /// <summary>
         ///     Gets the repository

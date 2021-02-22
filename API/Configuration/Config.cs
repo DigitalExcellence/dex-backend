@@ -21,12 +21,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Configuration
 {
+
     /// <summary>
-    /// Config class
+    ///     Config class
     /// </summary>
     /// <seealso cref="NetEscapades.Configuration.Validation.IValidatable" />
     public class Config : IValidatable
     {
+
         /// <summary>
         ///     Gets or sets the original configuration.
         /// </summary>
@@ -52,20 +54,21 @@ namespace API.Configuration
         public IdentityServerConfig IdentityServer { get; set; }
 
         /// <summary>
-        /// Gets or sets the swagger configuration.
+        ///     Gets or sets the swagger configuration.
         /// </summary>
         /// <value>
-        /// The swagger.
+        ///     The swagger.
         /// </value>
         public SwaggerConfig Swagger { get; set; }
 
         /// <summary>
-        /// Gets or sets the RabbitMQ configuration.
+        ///     Gets or sets the RabbitMQ configuration.
         /// </summary>
         /// <value>
-        /// The RabbitMQ.
+        ///     The RabbitMQ.
         /// </value>
         public RabbitMQConfig RabbitMQ { get; set; }
+
         /// <summary>
         ///     Validates this instance.
         /// </summary>
@@ -76,13 +79,15 @@ namespace API.Configuration
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
             Validator.ValidateObject(RabbitMQ, new ValidationContext(RabbitMQ), true);
         }
+
     }
 
     /// <summary>
-    /// Configuration settings for the frontend.
+    ///     Configuration settings for the frontend.
     /// </summary>
     public class FrontendConfig
     {
+
         /// <summary>
         ///     Gets or sets the front end.
         /// </summary>
@@ -110,13 +115,15 @@ namespace API.Configuration
         /// </value>
         [Required]
         public string ClientSecret { get; set; }
+
     }
 
     /// <summary>
-    /// Contains the identity server configuration.
+    ///     Contains the identity server configuration.
     /// </summary>
     public class IdentityServerConfig
     {
+
         /// <summary>
         ///     Gets or sets the identity URL.
         /// </summary>
@@ -126,9 +133,10 @@ namespace API.Configuration
         [Required]
         [Url]
         public string IdentityUrl { get; set; }
+
         /// <summary>
         ///     Gets or sets the Development identity URL.
-        /// This is used mostly to fix docker environments.
+        ///     This is used mostly to fix docker environments.
         /// </summary>
         /// <value>
         ///     The identity URL.
@@ -145,60 +153,66 @@ namespace API.Configuration
         public string ClientId { get; set; }
 
         /// <summary>
-        /// Gets or sets the client secret
+        ///     Gets or sets the client secret
         /// </summary>
         /// <value>
         ///     The client secret
         /// </value>
         public string ClientSecret { get; set; }
+
     }
 
 
     /// <summary>
-    /// Contains the swagger configuration.
+    ///     Contains the swagger configuration.
     /// </summary>
     public class SwaggerConfig
     {
+
         /// <summary>
-        /// Gets or sets the client identifier.
+        ///     Gets or sets the client identifier.
         /// </summary>
         /// <value>
-        /// The client identifier.
+        ///     The client identifier.
         /// </value>
         [Required]
         public string ClientId { get; set; }
+
     }
 
     /// <summary>
-    /// Contains the RabbitMQConfig configuration.
+    ///     Contains the RabbitMQConfig configuration.
     /// </summary>
     public class RabbitMQConfig
     {
+
         /// <summary>
-        /// Gets or sets the hostname.
+        ///     Gets or sets the hostname.
         /// </summary>
         /// <value>
-        /// The hostname.
+        ///     The hostname.
         /// </value>
         [Required]
         public string Hostname { get; set; }
 
         /// <summary>
-        /// Gets or sets the username.
+        ///     Gets or sets the username.
         /// </summary>
         /// <value>
-        /// The username.
+        ///     The username.
         /// </value>
         [Required]
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
+        ///     Gets or sets the password.
         /// </summary>
         /// <value>
-        /// The password.
+        ///     The password.
         /// </value>
         [Required]
         public string Password { get; set; }
+
     }
+
 }

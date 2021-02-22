@@ -1,10 +1,24 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using MessageBrokerPublisher.Services;
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MessageBrokerPublisher
 {
@@ -14,12 +28,14 @@ namespace MessageBrokerPublisher
     ///
     public interface ITaskPublisher
     {
+
         /// <summary>
         /// Method deletes the file from the file server
         /// </summary>
         /// <param name="payload"></param>
         /// <param name="subject"></param>
         void RegisterTask(string payload, Subject subject);
+
     }
 
     /// <summary>
@@ -45,7 +61,7 @@ namespace MessageBrokerPublisher
             connection = connectionFactory.CreateConnection();
             
         }
-        
+
 
         /// <summary>
         /// Registers a specified message to a specified queue on the messagebroker.
@@ -56,14 +72,15 @@ namespace MessageBrokerPublisher
         {
             string subjectString = subject.ToString();
             IModel channel = connection.CreateModel();
-            channel.QueueDeclare(queue: subjectString, durable: true, exclusive: false, autoDelete: false, arguments: null);
-            channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+            channel.QueueDeclare(subjectString, true, false, false, null);
+            channel.BasicQos(0, 1, false);
 
             byte[] body = Encoding.UTF8.GetBytes(payload);
             IBasicProperties properties = channel.CreateBasicProperties();
             properties.Persistent = true;
-            channel.BasicPublish(exchange: "", routingKey: subjectString, false, basicProperties: properties, body: body);
+            channel.BasicPublish("", subjectString, false, properties, body);
             Console.WriteLine("Task published");
         }
+
     }
 }

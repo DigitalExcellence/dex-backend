@@ -19,35 +19,38 @@ using System.Collections.Generic;
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// The view model of a data source.
+    ///     The view model of a data source.
     /// </summary>
     public class DataSourceResource
     {
+
         /// <summary>
-        /// Gets or Set the Title of the data source.
+        ///     Gets or Set the Title of the data source.
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the Description of the data source.
+        ///     Gets or sets the Description of the data source.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the visibility of the data source.
+        ///     Gets or sets the visibility of the data source.
         /// </summary>
         public bool IsVisible { get; set; }
 
         /// <summary>
-        /// Gets or sets the icon id of the data source.
+        ///     Gets or sets the icon id of the data source.
         /// </summary>
         public int IconId { get; set; }
 
         /// <summary>
-        /// Gets or sets the wizard page resources for the data source.
+        ///     Gets or sets the wizard page resources for the data source.
         /// </summary>
         public IEnumerable<DataSourceWizardPageResource> WizardPageResources { get; set; }
+
     }
 
 }

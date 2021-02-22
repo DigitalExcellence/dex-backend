@@ -22,11 +22,13 @@ using System.Linq;
 
 namespace Repositories
 {
+
     /// <summary>
     ///     This is the interface for the user (follows) user repository
     /// </summary>
     public interface IUserUserRepository : IRepository<UserUser>
     {
+
         /// <summary>
         ///     This interface method checks if the user is already followed
         /// </summary>
@@ -34,6 +36,7 @@ namespace Repositories
         /// <param name="followedUserId"></param>
         /// <returns>boolean</returns>
         bool CheckIfUserFollows(int userId, int followedUserId);
+
     }
 
     /// <summary>
@@ -41,6 +44,7 @@ namespace Repositories
     /// </summary>
     public class UserUserRepository : Repository<UserUser>, IUserUserRepository
     {
+
         /// <summary>
         ///     This the user (follows) user repository constructor
         /// </summary>
@@ -55,11 +59,10 @@ namespace Repositories
         {
             UserUser userUnfollow = GetDbSet
                     <UserUser>()
-                .SingleOrDefault(s => s.User.Id == userUser.User.Id
-                                   && s.FollowedUser.Id == userUser.FollowedUser.Id);
+                .SingleOrDefault(s => s.User.Id == userUser.User.Id && s.FollowedUser.Id == userUser.FollowedUser.Id);
 
             GetDbSet<UserUser>()
-            .Remove(userUnfollow);
+                .Remove(userUnfollow);
         }
 
         /// <summary>
@@ -72,8 +75,7 @@ namespace Repositories
         {
             UserUser userUser = GetDbSet
                     <UserUser>()
-                .SingleOrDefault(s => s.User.Id == userId
-                                   && s.FollowedUser.Id == followedUserId);
+                .SingleOrDefault(s => s.User.Id == userId && s.FollowedUser.Id == followedUserId);
 
             if(userUser != null)
             {
@@ -81,5 +83,7 @@ namespace Repositories
             }
             return false;
         }
+
     }
+
 }

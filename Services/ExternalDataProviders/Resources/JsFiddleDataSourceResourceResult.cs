@@ -47,8 +47,6 @@ namespace Services.ExternalDataProviders.Resources
         [JsonProperty("created")]
         public string Created { get; set; }
 
-
     }
-
 
 }

@@ -31,6 +31,7 @@ namespace Repositories.Base
     /// <typeparam name="TEntity"></typeparam>
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
+
         /// <summary>
         ///     This is the protected constructor of the abstract base class
         /// </summary>
@@ -57,47 +58,8 @@ namespace Repositories.Base
         /// <returns>Entity</returns>
         public virtual async Task<TEntity> FindAsync(int id)
         {
-            return await DbSet.FindAsync(id).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        ///     This method sets the created date
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>Entity</returns>
-        public virtual TEntity UpdateCreatedField(TEntity entity)
-        {
-            if(entity == null)
-            {
-                return entity;
-
-            }
-            PropertyInfo createdProperty = entity.GetType().GetProperty("Created", BindingFlags.Public | BindingFlags.Instance);
-            if(createdProperty != null && createdProperty.CanWrite)
-            {
-                createdProperty.SetValue(entity, DateTime.Now, null);
-            }
-            return entity;
-        }
-
-        /// <summary>
-        ///     This method sets / updates the datetime of the updated field
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>Entity</returns>
-        public virtual TEntity UpdateUpdatedField(TEntity entity)
-        {
-            if(entity == null)
-            {
-                return entity;
-
-            }
-            PropertyInfo updatedProperty = entity.GetType().GetProperty("Updated", BindingFlags.Public | BindingFlags.Instance);
-            if(updatedProperty != null && updatedProperty.CanWrite)
-            {
-                updatedProperty.SetValue(entity, DateTime.Now, null);
-            }
-            return entity;
+            return await DbSet.FindAsync(id)
+                              .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -122,7 +84,8 @@ namespace Repositories.Base
             entity = UpdateCreatedField(entity);
             entity = UpdateUpdatedField(entity);
 
-            await DbSet.AddAsync(entity).ConfigureAwait(false);
+            await DbSet.AddAsync(entity)
+                       .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -153,7 +116,8 @@ namespace Repositories.Base
                 entityList[i] = UpdateCreatedField(entityList[i]);
                 entityList[i] = UpdateUpdatedField(entityList[i]);
             }
-            await DbSet.AddRangeAsync(entityList).ConfigureAwait(false);
+            await DbSet.AddRangeAsync(entityList)
+                       .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -175,7 +139,8 @@ namespace Repositories.Base
         /// <returns></returns>
         public virtual async Task RemoveAsync(int id)
         {
-            TEntity entity = await FindAsync(id).ConfigureAwait(false);
+            TEntity entity = await FindAsync(id)
+                                 .ConfigureAwait(false);
             if(entity == null)
             {
                 throw new KeyNotFoundException($"Id: {id} not found");
@@ -230,7 +195,8 @@ namespace Repositories.Base
             List<TEntity> entities = new List<TEntity>();
             foreach(int id in ids)
             {
-                TEntity entity = await FindAsync(id).ConfigureAwait(false);
+                TEntity entity = await FindAsync(id)
+                                     .ConfigureAwait(false);
                 if(entity == null)
                 {
                     throw new KeyNotFoundException($"Id: {id} not found");
@@ -247,7 +213,8 @@ namespace Repositories.Base
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            return await DbSet.ToListAsync().ConfigureAwait(false);
+            return await DbSet.ToListAsync()
+                              .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -259,6 +226,48 @@ namespace Repositories.Base
         }
 
         /// <summary>
+        ///     This method sets the created date
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Entity</returns>
+        public virtual TEntity UpdateCreatedField(TEntity entity)
+        {
+            if(entity == null)
+            {
+                return entity;
+            }
+            PropertyInfo createdProperty = entity.GetType()
+                                                 .GetProperty("Created", BindingFlags.Public | BindingFlags.Instance);
+            if(createdProperty != null &&
+               createdProperty.CanWrite)
+            {
+                createdProperty.SetValue(entity, DateTime.Now, null);
+            }
+            return entity;
+        }
+
+        /// <summary>
+        ///     This method sets / updates the datetime of the updated field
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Entity</returns>
+        public virtual TEntity UpdateUpdatedField(TEntity entity)
+        {
+            if(entity == null)
+            {
+                return entity;
+            }
+            PropertyInfo updatedProperty = entity.GetType()
+                                                 .GetProperty("Updated", BindingFlags.Public | BindingFlags.Instance);
+            if(updatedProperty != null &&
+               updatedProperty.CanWrite)
+            {
+                updatedProperty.SetValue(entity, DateTime.Now, null);
+            }
+            return entity;
+        }
+
+        /// <summary>
         ///     This method gets the database set
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -267,5 +276,7 @@ namespace Repositories.Base
         {
             return DbContext.Set<T>();
         }
+
     }
+
 }

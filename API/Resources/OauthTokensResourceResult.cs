@@ -17,28 +17,30 @@
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// The resource result of the Oauth tokens.
+    ///     The resource result of the Oauth tokens.
     /// </summary>
     public class OauthTokensResourceResult
     {
+
         /// <summary>
-        /// Gets or sets the access token property.
+        ///     Gets or sets the access token property.
         /// </summary>
         public string AccessToken { get; set; }
 
         /// <summary>
-        /// Gets or sets the token type property.
+        ///     Gets or sets the token type property.
         /// </summary>
         public string TokenType { get; set; }
 
         /// <summary>
-        /// Gets or sets the expire in property.
+        ///     Gets or sets the expire in property.
         /// </summary>
         public string ExpiresIn { get; set; }
 
         /// <summary>
-        /// Gets or sets the refresh token property
+        ///     Gets or sets the refresh token property
         /// </summary>
         public string RefreshToken { get; set; }
 

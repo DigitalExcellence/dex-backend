@@ -25,18 +25,19 @@ namespace Services.Services
 {
 
     /// <summary>
-    /// This is the interface for the call to action option service
+    ///     This is the interface for the call to action option service
     /// </summary>
     public interface ICallToActionOptionService : IService<CallToActionOption>
     {
+
         /// <summary>
-        /// This method gets all the call to action options with the specified type asynchronous.
+        ///     This method gets all the call to action options with the specified type asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName);
 
         /// <summary>
-        /// This method gets all the call to action options with the specified value asynchronous.
+        ///     This method gets all the call to action options with the specified value asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified value id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value);
@@ -48,8 +49,9 @@ namespace Services.Services
     /// </summary>
     public class CallToActionOptionService : Service<CallToActionOption>, ICallToActionOptionService
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmbedService"/> class.
+        ///     Initializes a new instance of the <see cref="EmbedService" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         public CallToActionOptionService(ICallToActionOptionRepository repository) : base(repository) { }

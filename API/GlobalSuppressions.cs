@@ -5,4 +5,10 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "The exception builder is allowed to catch every exception because every exception should be logged and the api should be stopped.", Scope = "member", Target = "~M:API.Program.Main(System.String[])~System.Int32")]
+[assembly:
+    SuppressMessage("Design",
+                    "CA1031:Do not catch general exception types",
+                    Justification =
+                        "The exception builder is allowed to catch every exception because every exception should be logged and the api should be stopped.",
+                    Scope = "member",
+                    Target = "~M:API.Program.Main(System.String[])~System.Int32")]

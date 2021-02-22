@@ -19,18 +19,21 @@ using System;
 
 namespace Models.Exceptions
 {
+
     /// <summary>
-    /// File already exists exception
+    ///     File already exists exception
     /// </summary>
     [Serializable]
     public class FileExistException : Exception
     {
+
         /// <summary>
-        /// File already exist constructor
+        ///     File already exist constructor
         /// </summary>
         /// <param name="name"></param>
         public FileExistException(string name)
-            : base($"File {name} already exists")
-        { }
+            : base($"File {name} already exists") { }
+
     }
+
 }

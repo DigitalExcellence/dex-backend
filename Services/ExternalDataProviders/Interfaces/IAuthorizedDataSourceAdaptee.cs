@@ -23,37 +23,38 @@ namespace Services.ExternalDataProviders
 {
 
     /// <summary>
-    /// The interface for a data source adaptee that supports the auth flow.
+    ///     The interface for a data source adaptee that supports the auth flow.
     /// </summary>
     public interface IAuthorizedDataSourceAdaptee : IDataSourceAdaptee
     {
 
         /// <summary>
-        /// Gets or sets a value for the OauthUrl property from the data source adaptee.
+        ///     Gets or sets a value for the OauthUrl property from the data source adaptee.
         /// </summary>
         string OauthUrl { get; }
 
         /// <summary>
-        /// Gets or sets a value for the RedirectUrl property from the data source adaptee.
+        ///     Gets or sets a value for the RedirectUrl property from the data source adaptee.
         /// </summary>
         string RedirectUri { get; }
 
         /// <summary>
-        /// This method is responsible for retrieving Oauth tokens from the external data source adaptee API.
+        ///     This method is responsible for retrieving Oauth tokens from the external data source adaptee API.
         /// </summary>
         /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
         /// <returns>This method returns the Oauth tokens.</returns>
         Task<OauthTokens> GetTokens(string code);
 
         /// <summary>
-        /// This method is responsible for retrieving all projects from the user, via the access token, from the Github API.
+        ///     This method is responsible for retrieving all projects from the user, via the access token, from the Github API.
         /// </summary>
         /// <param name="accessToken">The access token which will be used to retrieve all projects from the user.</param>
         /// <returns>This method returns a collection of projects from the user.</returns>
         Task<IEnumerable<Project>> GetAllProjects(string accessToken);
 
         /// <summary>
-        /// This method is responsible for retrieving a project from the user, via the access token, by id from the external data source adaptee API.
+        ///     This method is responsible for retrieving a project from the user, via the access token, by id from the external
+        ///     data source adaptee API.
         /// </summary>
         /// <param name="accessToken">The access token which will be used to retrieve the correct project from the user.</param>
         /// <param name="projectId">The identifier of the project that will be used to search the correct project.</param>

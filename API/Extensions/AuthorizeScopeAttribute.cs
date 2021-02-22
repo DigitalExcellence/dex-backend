@@ -27,31 +27,35 @@ using System.Security.Claims;
 
 namespace API.Extensions
 {
+
     /// <summary>
     ///     Easily grab scopes
     /// </summary>
     public class AuthorizeScopeAttribute : TypeFilterAttribute
     {
+
         /// <summary>
-        /// Currently deprecated
-        /// Initializes a new instance of the <see cref="AuthorizeScopeAttribute"/> class.
+        ///     Currently deprecated
+        ///     Initializes a new instance of the <see cref="AuthorizeScopeAttribute" /> class.
         /// </summary>
         /// <param name="claimValue">The claim value.</param>
         public AuthorizeScopeAttribute(string claimValue) : base(typeof(AuthorizeScopeFilter))
         {
-            Arguments = new object[] { new Claim("scope", claimValue) };
+            Arguments = new object[] {new Claim("scope", claimValue)};
         }
+
     }
 
     /// <summary>
-    /// Deprecated attribute filter.
+    ///     Deprecated attribute filter.
     /// </summary>
     public class AuthorizeScopeFilter : IAuthorizationFilter
     {
+
         private readonly Claim claim;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthorizeScopeFilter"/> class.
+        ///     Initializes a new instance of the <see cref="AuthorizeScopeFilter" /> class.
         /// </summary>
         /// <param name="claim">The claim.</param>
         public AuthorizeScopeFilter(Claim claim)
@@ -60,17 +64,21 @@ namespace API.Extensions
         }
 
         /// <summary>
-        /// Called early in the filter pipeline to confirm request is authorized.
+        ///     Called early in the filter pipeline to confirm request is authorized.
         /// </summary>
-        /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext" />The current context.</param>
+        /// <param name="context">
+        ///     The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext" />The current
+        ///     context.
+        /// </param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            UserService userService = context.HttpContext.RequestServices.GetService(typeof(UserService)) as UserService;
+            UserService userService =
+                context.HttpContext.RequestServices.GetService(typeof(UserService)) as UserService;
             bool hasClaim = context.HttpContext.User.Claims.Any(c => c.Type == claim.Type && c.Value == claim.Value);
 
             //Get all scopes from the user
             IEnumerable<Claim> scopes =
-            context.HttpContext.User.FindAll("scope");
+                context.HttpContext.User.FindAll("scope");
             bool hasIdentityClaim = false;
 
             foreach(Claim scope in scopes)
@@ -109,5 +117,7 @@ namespace API.Extensions
                 context.Result = new ForbidResult();
             }
         }
+
     }
+
 }

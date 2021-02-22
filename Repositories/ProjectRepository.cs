@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     /// <summary>
     ///     This is the interface of the project repository
     /// </summary>
@@ -35,7 +36,7 @@ namespace Repositories
     {
 
         /// <summary>
-        /// This interface method gets all projects including their owner and collaborators
+        ///     This interface method gets all projects including their owner and collaborators
         /// </summary>
         /// <param name="skip"></param>
         /// <param name="take"></param>
@@ -52,14 +53,14 @@ namespace Repositories
         );
 
         /// <summary>
-        /// This interface method counts the amount of projects matching the filters.
+        ///     This interface method counts the amount of projects matching the filters.
         /// </summary>
         /// <param name="highlighted"></param>
         /// <returns>number of projects found</returns>
         Task<int> CountAsync(bool? highlighted = null);
 
         /// <summary>
-        /// This interface method searches the database for projects matching the search query and parameters.
+        ///     This interface method searches the database for projects matching the search query and parameters.
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
@@ -78,7 +79,7 @@ namespace Repositories
         );
 
         /// <summary>
-        /// This interface method counts the amount of projects matching the filters and the search query.
+        ///     This interface method counts the amount of projects matching the filters and the search query.
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
@@ -86,12 +87,12 @@ namespace Repositories
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
         /// <summary>
-        /// This method will retrieve a project with user and collaborators async. Project will be redacted if user
-        /// has that setting configured.
+        ///     This method will retrieve a project with user and collaborators async. Project will be redacted if user
+        ///     has that setting configured.
         /// </summary>
         /// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
-        /// This method returns possibly redacted Project object with user and collaborators.
+        ///     This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
@@ -110,11 +111,11 @@ namespace Repositories
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// This method finds the project async by project the specified id.
+        ///     This method finds the project async by project the specified id.
         /// </summary>
         /// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
-        /// This method returns a project with the specified id with possibly redacted email.
+        ///     This method returns a project with the specified id with possibly redacted email.
         /// </returns>
         public override async Task<Project> FindAsync(int id)
         {
@@ -129,14 +130,16 @@ namespace Repositories
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
-                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>()
+                                      .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
             }
 
             return RedactUser(project);
         }
 
         /// <summary>
-        /// This method gets all the projects in the database.
+        ///     This method gets all the projects in the database.
         /// </summary>
         /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
         /// <param name="take">The take parameter represents the number of projects to return.</param>
@@ -165,13 +168,15 @@ namespace Repositories
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
                 project.User = RedactUser(project.User);
-                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>()
+                                      .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
             }
             return await queryableProjects.ToListAsync();
         }
 
         /// <summary>
-        /// This method counts the amount of projects matching the filters.
+        ///     This method counts the amount of projects matching the filters.
         /// </summary>
         /// <param name="highlighted">The highlighted parameter represents whether to filter highlighted projects.</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
@@ -182,7 +187,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method searches the database for projects matching the search query and parameters.
+        ///     This method searches the database for projects matching the search query and parameters.
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
@@ -208,7 +213,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method counts the amount of projects matching the filters and the search query.
+        ///     This method counts the amount of projects matching the filters and the search query.
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
@@ -220,12 +225,12 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method will retrieve a project with user and collaborators async. Project will be redacted if user
-        /// has that setting configured.
+        ///     This method will retrieve a project with user and collaborators async. Project will be redacted if user
+        ///     has that setting configured.
         /// </summary>
         /// <param name="id">The unique identifier which is used for searching the correct project.</param>
         /// <returns>
-        /// This method returns possibly redacted Project object with user and collaborators.
+        ///     This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
         public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
@@ -240,14 +245,16 @@ namespace Repositories
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
-                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>()
+                                      .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
             }
 
             return RedactUser(project);
         }
 
         /// <summary>
-        /// This method updates the specified entity excluding the user object.
+        ///     This method updates the specified entity excluding the user object.
         /// </summary>
         /// <param name="entity">The entity parameter represents the updated project object.</param>
         public override void Update(Project entity)
@@ -275,11 +282,11 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method redacts user email from the Project if isPublic setting is set to false.
+        ///     This method redacts user email from the Project if isPublic setting is set to false.
         /// </summary>
         /// <param name="project">The project parameter represents the project object that will be used.</param>
         /// <returns>
-        /// This method returns the project with possibly redacted email depending on setting.
+        ///     This method returns the project with possibly redacted email depending on setting.
         /// </returns>
         private Project RedactUser(Project project)
         {
@@ -293,11 +300,11 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method redacts the user email from the User if isPublic setting is set to false.
+        ///     This method redacts the user email from the User if isPublic setting is set to false.
         /// </summary>
         /// <param name="user">The user parameter represents the user object that will be used.</param>
         /// <returns>
-        /// This method returns the user with possibly redacted email depending on setting.
+        ///     This method returns the user with possibly redacted email depending on setting.
         /// </returns>
         private User RedactUser(User user)
         {
@@ -310,12 +317,12 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method redacts the user email from the Projects in the list. The email will only be
-        /// redacted if isPublic setting is set to false.
+        ///     This method redacts the user email from the Projects in the list. The email will only be
+        ///     redacted if isPublic setting is set to false.
         /// </summary>
         /// <param name="projects">The projects parameter represents the project objects that will be used.</param>
         /// <returns>
-        /// This method returns a list of Projects with possibly redacted email depending on setting.
+        ///     This method returns a list of Projects with possibly redacted email depending on setting.
         /// </returns>
         private List<Project> RedactUser(List<Project> projects)
         {
@@ -327,7 +334,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method applies query parameters and find project based on these filters.
+        ///     This method applies query parameters and find project based on these filters.
         /// </summary>
         /// <param name="queryable">The linq queryable parameter represents the IQueryable object.</param>
         /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
@@ -336,7 +343,7 @@ namespace Repositories
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <returns>
-        /// This method returns a IQueryable Projects collection based on the given filters.
+        ///     This method returns a IQueryable Projects collection based on the given filters.
         /// </returns>
         private IQueryable<Project> ApplyFilters(
             IQueryable<Project> queryable,
@@ -377,13 +384,13 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method checks if any of the searchable fields of the project passed contains the provided query.
+        ///     This method checks if any of the searchable fields of the project passed contains the provided query.
         /// </summary>
         /// <param name="project">The project parameter represents a Project to search in.</param>
         /// <param name="query">The query parameter represents the query to search in the project's searchable fields.</param>
         /// <returns>
-        /// This method returns a boolean representing whether or not the passed query was found in the
-        /// searchable fields of the provided project.
+        ///     This method returns a boolean representing whether or not the passed query was found in the
+        ///     searchable fields of the provided project.
         /// </returns>
         private static bool ProjectContainsQuery(Project project, string query)
         {
@@ -401,32 +408,34 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method gets the project queryable which contains the provided query.
+        ///     This method gets the project queryable which contains the provided query.
         /// </summary>
         /// <param name="query">The query parameter is a string to search in the project's fields.</param>
         /// <returns>This method returns the filtered IQueryable including the project user.</returns>
         private async Task<IQueryable<Project>> GetProjectQueryable(string query)
         {
             IQueryable<Project> projectsToReturn = DbSet
-                   .Include(p => p.User)
-                   .Include(i => i.ProjectIcon)
-                   .Include(p => p.CallToAction)
-                   .Include(l => l.Likes)
-                   .Where(p =>
-                              p.Name.Contains(query) ||
-                              p.Description.Contains(query) ||
-                              p.ShortDescription.Contains(query) ||
-                              p.Uri.Contains(query) ||
-                              p.Id.ToString()
-                               .Equals(query) ||
-                              p.User.Name.Contains(query));
+                                                   .Include(p => p.User)
+                                                   .Include(i => i.ProjectIcon)
+                                                   .Include(p => p.CallToAction)
+                                                   .Include(l => l.Likes)
+                                                   .Where(p =>
+                                                              p.Name.Contains(query) ||
+                                                              p.Description.Contains(query) ||
+                                                              p.ShortDescription.Contains(query) ||
+                                                              p.Uri.Contains(query) ||
+                                                              p.Id.ToString()
+                                                               .Equals(query) ||
+                                                              p.User.Name.Contains(query));
 
             foreach(Project project in projectsToReturn)
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
-                project.Likes = await GetDbSet<ProjectLike>().Where(p => p.LikedProject.Id == project.Id).ToListAsync();
+                project.Likes = await GetDbSet<ProjectLike>()
+                                      .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
             }
             return projectsToReturn;
         }
