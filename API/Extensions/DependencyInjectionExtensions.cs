@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
+using Services.ExternalDataProviders;
 using Services.Services;
 using Services.Sources;
 
@@ -79,12 +80,34 @@ namespace API.Extensions
             services.AddScoped<IInstitutionRepository, InstitutionRepository>();
 
             services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
+            services.AddScoped(typeof(IIndexOrderHelper<>), typeof(IndexOrderHelper<>));
 
             services.AddScoped<IUserProjectService, UserProjectService>();
             services.AddScoped<IUserProjectRepository, UserProjectRepository>();
 
             services.AddScoped<IUserUserService, UserUserService>();
             services.AddScoped<IUserUserRepository, UserUserRepository>();
+
+            services.AddScoped<IDataProviderService, DataProviderService>();
+
+            services.AddScoped<IDataSourceModelService, DataSourceModelService>();
+            services.AddScoped<IDataSourceModelRepository, DataSourceModelRepository>();
+
+            services.AddScoped<IDataProviderLoader, DataProviderLoader>();
+
+            services.AddScoped<IWizardPageService, WizardPageService>();
+            services.AddScoped<IWizardPageRepository, WizardPageRepository>();
+
+            services.AddExternalDataSources();
+
+            return services;
+        }
+
+        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
+        {
+            services.AddScoped<GithubDataSourceAdaptee>();
+            services.AddScoped<GitlabDataSourceAdaptee>();
+            services.AddScoped<JsFiddleDataSourceAdaptee>();
 
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
@@ -93,6 +116,7 @@ namespace API.Extensions
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
 
             services.AddScoped<ITaskPublisher, TaskPublisher>();
+            
             return services;
         }
     }

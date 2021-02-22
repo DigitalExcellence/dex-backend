@@ -141,6 +141,22 @@ namespace Repositories.Base
         }
 
         /// <summary>
+        ///     This method adds a range of entities in the database.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            List<TEntity> entityList = entities.ToList();
+            for(int i = 0; i < entityList.Count; i++)
+            {
+                entityList[i] = UpdateCreatedField(entityList[i]);
+                entityList[i] = UpdateUpdatedField(entityList[i]);
+            }
+            await DbSet.AddRangeAsync(entityList).ConfigureAwait(false);
+        }
+
+        /// <summary>
         ///     This method updates an entity which is already in the database.
         /// </summary>
         /// <param name="entity"></param>
@@ -182,6 +198,47 @@ namespace Repositories.Base
             }
 
             DbSet.Remove(entity);
+        }
+
+        /// <summary>
+        ///     This method remove a range of entities from the database.
+        /// </summary>
+        /// <param name="entities"></param>
+        public virtual void RemoveRange(IEnumerable<TEntity> entities)
+        {
+            foreach(TEntity e in entities)
+            {
+                if(DbContext.Entry(e)
+                            .State ==
+                   EntityState.Detached)
+                {
+                    DbSet.Attach(e);
+                }
+            }
+
+            DbSet.RemoveRange(entities);
+        }
+
+        /// <summary>
+        ///     This method remove an entity from the database asynchronous.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        public virtual async Task RemoveRangeAsync(IEnumerable<int> ids)
+        {
+            List<TEntity> entities = new List<TEntity>();
+            foreach(int id in ids)
+            {
+                TEntity entity = await FindAsync(id).ConfigureAwait(false);
+                if(entity == null)
+                {
+                    throw new KeyNotFoundException($"Id: {id} not found");
+                }
+                entities.Add(entity);
+            }
+
+            RemoveRange(entities);
         }
 
         /// <summary>
