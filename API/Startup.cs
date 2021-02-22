@@ -446,17 +446,20 @@ namespace API
                     context.Institution.Add(Seed.SeedInstitution());
                     context.SaveChanges();
                 }
+
                 if(!context.User.Any())
                 {
+                    // seed admin
+                    context.User.Add(Seed.SeedAdminUser(roles));
+                    context.SaveChanges();
+
+                    //Seed random users
+                    context.User.Add(Seed.SeedPrUser(roles));
                     context.User.AddRange(Seed.SeedUsers(roles));
+                    context.User.Add(Seed.SeedDataOfficerUser(roles));
                     context.SaveChanges();
                 }
 
-            }
-
-
-            if(!env.IsProduction())
-            {
                 if(!context.Project.Any())
                 {
                     //Seed projects
