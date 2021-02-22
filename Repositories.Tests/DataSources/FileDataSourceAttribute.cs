@@ -6,19 +6,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Repositories.Tests.DataSources
 {
+
     /// <summary>
-    /// Attribute to generate projects
+    ///     Attribute to generate projects
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public class FileDataSourceAttribute : Attribute, IParameterDataSource
 
     {
+
+        private readonly int amountToGenerate;
         private readonly IFakeDataGenerator<File> fakeDataGenerator;
-        private readonly int amountToGenerate = 0;
 
         public FileDataSourceAttribute()
         {
@@ -26,8 +27,8 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Initializes fileDataSourceAttribute
-        /// and setting the amount of files to be generated
+        ///     Initializes fileDataSourceAttribute
+        ///     and setting the amount of files to be generated
         /// </summary>
         public FileDataSourceAttribute(int amount) : this()
         {
@@ -35,7 +36,7 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Generate the data and return it
+        ///     Generate the data and return it
         /// </summary>
         /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance</param>
         /// <returns>The generated data</returns>
@@ -43,11 +44,13 @@ namespace Repositories.Tests.DataSources
         {
             if(amountToGenerate <= 1)
             {
-                return new[] { fakeDataGenerator.Generate() };
+                return new[] {fakeDataGenerator.Generate()};
             }
-            List<File> files = fakeDataGenerator.GenerateRange(amountToGenerate).ToList();
-            return new[] { files };
+            List<File> files = fakeDataGenerator.GenerateRange(amountToGenerate)
+                                                .ToList();
+            return new[] {files};
         }
+
     }
 
 }

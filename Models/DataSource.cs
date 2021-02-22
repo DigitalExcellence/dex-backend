@@ -24,32 +24,32 @@ namespace Models
     {
 
         /// <summary>
-        /// Gets or sets the Id of the data source.
+        ///     Gets or sets the Id of the data source.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the Guid of the data source that gets used in the front-end.
+        ///     Gets or sets the Guid of the data source that gets used in the front-end.
         /// </summary>
         public string Guid { get; set; }
 
         /// <summary>
-        /// Gets or sets the Title of the data source.
+        ///     Gets or sets the Title of the data source.
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the Description of the data source.
+        ///     Gets or sets the Description of the data source.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the Icon of the data source.
+        ///     Gets or sets the Icon of the data source.
         /// </summary>
         public File Icon { get; set; }
 
         /// <summary>
-        /// Gets or sets the visibility of the data source.
+        ///     Gets or sets the visibility of the data source.
         /// </summary>
         public bool IsVisible { get; set; }
 

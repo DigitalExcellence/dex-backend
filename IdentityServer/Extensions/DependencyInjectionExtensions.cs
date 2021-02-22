@@ -19,7 +19,6 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
-using Services.ExternalDataProviders;
 using Services.Services;
 
 namespace IdentityServer

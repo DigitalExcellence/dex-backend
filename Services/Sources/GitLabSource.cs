@@ -31,34 +31,42 @@ namespace Services.Sources
     /// </summary>
     public interface IGitLabSource : ISource
     {
+
         /// <summary>
-        /// Fetches the repo.
+        ///     Fetches the repo.
         /// </summary>
         /// <param name="sourceUri">The source URI.</param>
         /// <returns>Returns the gitlabresourceresult.</returns>
         GitLabResourceResult FetchRepo(Uri sourceUri);
 
         /// <summary>
-        /// Fetches the readme.
+        ///     Fetches the readme.
         /// </summary>
         /// <param name="readmeUrl">The readme URL.</param>
         /// <returns>the readme content.</returns>
         string FetchReadme(string readmeUrl);
+
     }
 
     /// <summary>
-    /// GitlabSource
+    ///     GitlabSource
     /// </summary>
     /// <seealso cref="ISource" />
     public class GitLabSource : IGitLabSource
     {
+
         /// <summary>
-        /// The rest client
+        ///     The gitlab API URL
+        /// </summary>
+        private readonly string gitlabApiUri = "/api/v4/projects/";
+
+        /// <summary>
+        ///     The rest client
         /// </summary>
         private readonly IRestClientFactory restClientFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GitLabSource"/> class.
+        ///     Initializes a new instance of the <see cref="GitLabSource" /> class.
         /// </summary>
         /// <param name="restClientFactory"></param>
         public GitLabSource(IRestClientFactory restClientFactory)
@@ -67,12 +75,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// The gitlab API URL
-        /// </summary>
-        private readonly string gitlabApiUri = "/api/v4/projects/";
-
-        /// <summary>
-        /// Gets the source.
+        ///     Gets the source.
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <exception cref="NotImplementedException"></exception>
@@ -82,7 +85,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// Gets the project information.
+        ///     Gets the project information.
         /// </summary>
         /// <param name="sourceUri">The source URI.</param>
         /// <returns>the project object filled with information retrieved online.</returns>
@@ -94,12 +97,13 @@ namespace Services.Sources
                 Uri.TryCreate(sourceUri.AbsoluteUri, UriKind.Absolute, out sourceUri);
             } catch(InvalidOperationException)
             {
-                Uri.TryCreate("https://" + sourceUri.ToString(), UriKind.Absolute, out sourceUri);
+                Uri.TryCreate("https://" + sourceUri, UriKind.Absolute, out sourceUri);
             }
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
-            
+
             // Get the project path without the prefix slash.
-            string projectPath = sourceUri.AbsoluteUri.Replace(domain, "").Substring(1);
+            string projectPath = sourceUri.AbsoluteUri.Replace(domain, "")
+                                          .Substring(1);
             Uri serializedUrl = new Uri(domain + gitlabApiUri + projectPath.Replace("/", "%2F"));
 
             Project project = new Project();
@@ -133,7 +137,7 @@ namespace Services.Sources
                 Uri.TryCreate(sourceUri.AbsoluteUri, UriKind.Absolute, out sourceUri);
             } catch(InvalidOperationException)
             {
-                Uri.TryCreate("https://" + sourceUri.ToString(), UriKind.Absolute, out sourceUri);
+                Uri.TryCreate("https://" + sourceUri, UriKind.Absolute, out sourceUri);
             }
             /*
              * This regex matches the following url schemas:
@@ -152,7 +156,10 @@ namespace Services.Sources
              * 1.2.3.4/group/project
              * 1.2.3.4:123/group/project
             */
-            bool domainMatch = new Regex(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)(:\d+)?\/.+\/.+", RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(sourceUri.AbsoluteUri).Success;
+            bool domainMatch =
+                new Regex(@"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)(:\d+)?\/.+\/.+",
+                          RegexOptions.Compiled | RegexOptions.IgnoreCase).Match(sourceUri.AbsoluteUri)
+                                                                          .Success;
 
             if(!domainMatch) return false;
 
@@ -164,7 +171,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// Searches the specified search term.
+        ///     Searches the specified search term.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <exception cref="NotImplementedException"></exception>
@@ -174,7 +181,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// Fetches the repo.
+        ///     Fetches the repo.
         /// </summary>
         /// <param name="sourceUri">The source URI.</param>
         /// <returns>Returns the gitlabresourceresult.</returns>
@@ -183,7 +190,8 @@ namespace Services.Sources
             IRestClient client = restClientFactory.Create(sourceUri);
             RestRequest request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);
-            if(response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(response.Content))
+            if(response.StatusCode != HttpStatusCode.OK ||
+               string.IsNullOrEmpty(response.Content))
             {
                 return null;
             }
@@ -191,7 +199,7 @@ namespace Services.Sources
         }
 
         /// <summary>
-        /// Fetches the readme.
+        ///     Fetches the readme.
         /// </summary>
         /// <param name="readmeUrl">The readme URL.</param>
         /// <returns>the readme content.</returns>
@@ -204,5 +212,7 @@ namespace Services.Sources
             IRestResponse response = client.Execute(request);
             return response.Content;
         }
+
     }
+
 }

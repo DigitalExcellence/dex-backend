@@ -29,7 +29,7 @@ namespace Services.Services
     {
 
         /// <summary>
-        /// This method validates whether all the specified wizard page ids exists.
+        ///     This method validates whether all the specified wizard page ids exists.
         /// </summary>
         /// <param name="wizardPageIds">A collection of wizard page ids that get validated on their existence.</param>
         /// <returns>This method returns true if all the wizard pages exist, otherwise it will return false.</returns>
@@ -45,7 +45,7 @@ namespace Services.Services
         protected new IWizardPageRepository Repository => (IWizardPageRepository) base.Repository;
 
         /// <summary>
-        /// This method validates whether all the specified wizard page ids exists.
+        ///     This method validates whether all the specified wizard page ids exists.
         /// </summary>
         /// <param name="wizardPageIds">A collection of wizard page ids that get validated on their existence.</param>
         /// <returns>This method returns true if all the wizard pages exist, otherwise it will return false.</returns>

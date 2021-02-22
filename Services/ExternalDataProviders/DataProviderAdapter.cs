@@ -24,13 +24,13 @@ namespace Services.ExternalDataProviders
 {
 
     /// <summary>
-    /// The interface of the data provider adapter.
+    ///     The interface of the data provider adapter.
     /// </summary>
     public interface IDataProviderAdapter
     {
 
         /// <summary>
-        /// This method is responsible for retrieving all projects.
+        ///     This method is responsible for retrieving all projects.
         /// </summary>
         /// <param name="token">The token parameters is used for finding all projects. This can be Oauth tokens, or the username.</param>
         /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
@@ -38,7 +38,7 @@ namespace Services.ExternalDataProviders
         Task<IEnumerable<Project>> GetAllProjects(string token, bool needsAuth);
 
         /// <summary>
-        /// This method is responsible for retrieving a project by guid.
+        ///     This method is responsible for retrieving a project by guid.
         /// </summary>
         /// <param name="token">The token parameters is used for finding all projects. This can be Oauth tokens, or the username.</param>
         /// <param name="id">The identifier which is used for searching an individual project.</param>
@@ -47,20 +47,20 @@ namespace Services.ExternalDataProviders
         Task<Project> GetProjectByGuid(string token, string id, bool needsAuth);
 
         /// <summary>
-        /// This method is responsible for retrieving a project by uri.
+        ///     This method is responsible for retrieving a project by uri.
         /// </summary>
         /// <param name="sourceUri">The uri which is used for searching an individual project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
         Task<Project> GetProjectByUri(Uri sourceUri);
 
         /// <summary>
-        /// This method is responsible for return the Oauth url of the data source.
+        ///     This method is responsible for return the Oauth url of the data source.
         /// </summary>
         /// <returns>This method returns a string containing the Oauth url.</returns>
         string GetOauthUrl();
 
         /// <summary>
-        /// This method is responsible for returning Oauth tokens from the specified code.
+        ///     This method is responsible for returning Oauth tokens from the specified code.
         /// </summary>
         /// <param name="code">The code which is used to retrieve Oauth tokens from the external data source.</param>
         /// <returns>This method returns the Oauth tokens from the external data source.</returns>
@@ -79,7 +79,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all projects.
+        ///     This method is responsible for retrieving all projects.
         /// </summary>
         /// <param name="token">The token parameters is used for finding all projects. This can be Oauth tokens, or the username.</param>
         /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
@@ -95,7 +95,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a project by guid.
+        ///     This method is responsible for retrieving a project by guid.
         /// </summary>
         /// <param name="token">The token parameters is used for finding all projects. This can be Oauth tokens, or the username.</param>
         /// <param name="id">The identifier which is used for searching an individual project.</param>
@@ -107,17 +107,17 @@ namespace Services.ExternalDataProviders
             {
                 IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
                 if(publicDataSource == null)
-                    throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
+                    throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
                 return await publicDataSource.GetPublicProjectById(id);
             }
             IAuthorizedDataSourceAdaptee authorizedDataSource = adaptee as IAuthorizedDataSourceAdaptee;
             if(authorizedDataSource == null)
-                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
+                throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
             return await authorizedDataSource.GetProjectById(token, id);
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a project by uri.
+        ///     This method is responsible for retrieving a project by uri.
         /// </summary>
         /// <param name="sourceUri">The uri which is used for searching an individual project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
@@ -125,13 +125,13 @@ namespace Services.ExternalDataProviders
         {
             IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
             if(publicDataSource == null)
-                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
+                throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
             return await publicDataSource.GetPublicProjectFromUri(sourceUri);
         }
 
 
         /// <summary>
-        /// This method is responsible for return the Oauth url of the data source.
+        ///     This method is responsible for return the Oauth url of the data source.
         /// </summary>
         /// <returns>This method returns a string containing the Oauth url.</returns>
         public string GetOauthUrl()
@@ -141,7 +141,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for returning Oauth tokens from the specified code.
+        ///     This method is responsible for returning Oauth tokens from the specified code.
         /// </summary>
         /// <param name="code">The code which is used to retrieve Oauth tokens from the external data source.</param>
         /// <returns>This method returns the Oauth tokens from the external data source.</returns>
@@ -149,7 +149,7 @@ namespace Services.ExternalDataProviders
         {
             IAuthorizedDataSourceAdaptee dataProvider = adaptee as IAuthorizedDataSourceAdaptee;
             if(dataProvider == null)
-                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
+                throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
             return await dataProvider.GetTokens(code);
         }
 
@@ -157,7 +157,7 @@ namespace Services.ExternalDataProviders
         {
             IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee = adaptee as IAuthorizedDataSourceAdaptee;
             if(authorizedDataSourceAdaptee == null)
-                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
+                throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
             IEnumerable<Project> projects = await authorizedDataSourceAdaptee.GetAllProjects(accessToken);
             return projects;
         }
@@ -166,7 +166,7 @@ namespace Services.ExternalDataProviders
         {
             IPublicDataSourceAdaptee publicDataSourceAdaptee = adaptee as IPublicDataSourceAdaptee;
             if(publicDataSourceAdaptee == null)
-                throw new NotSupportedException($"Can not cast specified adaptee to authorized adaptee.");
+                throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
             IEnumerable<Project> projects = await publicDataSourceAdaptee.GetAllPublicProjects(username);
             return projects;
         }

@@ -60,7 +60,7 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Indexes the specified return URL.
+        ///     Indexes the specified return URL.
         /// </summary>
         /// <param name="returnUrl">The return URL.</param>
         /// <returns>The index view.</returns>
@@ -154,10 +154,10 @@ namespace IdentityServer
 
                     // emit event
                     await events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(),
-                                                                     request.ClientId,
-                                                                     request.ScopesRequested,
-                                                                     grantedConsent.ScopesConsented,
-                                                                     grantedConsent.RememberConsent));
+                                                                    request.ClientId,
+                                                                    request.ScopesRequested,
+                                                                    grantedConsent.ScopesConsented,
+                                                                    grantedConsent.RememberConsent));
                 } else
                 {
                     result.ValidationError = ConsentOptions.MustChooseOneErrorMessage;
@@ -200,7 +200,7 @@ namespace IdentityServer
                         return CreateConsentViewModel(model, returnUrl, request, client, resources);
                     }
                     logger.LogError("No scopes matching: {0}",
-                                     request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
+                                    request.ScopesRequested.Aggregate((x, y) => x + ", " + y));
                 } else
                 {
                     logger.LogError("Invalid client id: {0}", request.ClientId);
@@ -250,8 +250,8 @@ namespace IdentityServer
                                                             {
                                                                 GetOfflineAccessScope(
                                                                     vm.ScopesConsented.Contains(
-                                                                        IdentityServerConstants
-                                                                            .StandardScopes.OfflineAccess) ||
+                                                                        IdentityServerConstants.StandardScopes
+                                                                            .OfflineAccess) ||
                                                                     model == null)
                                                             });
             }

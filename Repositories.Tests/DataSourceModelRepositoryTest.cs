@@ -29,16 +29,16 @@ namespace Repositories.Tests
 {
 
     /// <summary>
-    /// The CallToActionOptionRepositoryTest class will test the methods in the CallToActionOptionRepository.
+    ///     The CallToActionOptionRepositoryTest class will test the methods in the CallToActionOptionRepository.
     /// </summary>
-    /// <seealso cref="RepositoryTest{DataSource, DataSourceModelRepository}"/>
+    /// <seealso cref="RepositoryTest{TDomain,TRepository}" />
     public class DataSourceModelRepositoryTest : RepositoryTest<DataSource, DataSourceModelRepository>
     {
 
         protected new IDataSourceModelRepository Repository => base.Repository;
 
         [Test]
-        public async Task GetDataSourceByGuid_GoodFlow([DataSourceModelDataSource(100)]List<DataSource> dataSources)
+        public async Task GetDataSourceByGuid_GoodFlow([DataSourceModelDataSource(100)] List<DataSource> dataSources)
         {
             // Arrange
             Random rnd = new Random();

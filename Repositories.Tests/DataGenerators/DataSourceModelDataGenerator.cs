@@ -22,21 +22,25 @@ using System;
 
 namespace Repositories.Tests.DataGenerators
 {
+
     /// <summary>
-    /// This fake data generator is capable of generating data sources.
+    ///     This fake data generator is capable of generating data sources.
     /// </summary>
     public class DataSourceModelDataGenerator : FakeDataGenerator<DataSource>
     {
+
         /// <summary>
-        /// Initializes the data source model data generator and defines dataGenerator options.
+        ///     Initializes the data source model data generator and defines dataGenerator options.
         /// </summary>
         public DataSourceModelDataGenerator()
         {
             Faker = new Faker<DataSource>()
-                .RuleFor(d => d.Title, f => f.Name.FirstName())
-                .RuleFor(d => d.Guid, f => Guid.NewGuid().ToString())
-                .RuleFor(d => d.IsVisible, f => f.Random.Bool())
-                .RuleFor(d => d.Description, f => f.Name.JobDescriptor());
+                    .RuleFor(d => d.Title, f => f.Name.FirstName())
+                    .RuleFor(d => d.Guid,
+                             f => Guid.NewGuid()
+                                      .ToString())
+                    .RuleFor(d => d.IsVisible, f => f.Random.Bool())
+                    .RuleFor(d => d.Description, f => f.Name.JobDescriptor());
         }
 
     }

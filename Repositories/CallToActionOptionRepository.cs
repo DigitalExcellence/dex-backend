@@ -30,14 +30,15 @@ namespace Repositories
     /// </summary>
     public interface ICallToActionOptionRepository : IRepository<CallToActionOption>
     {
+
         /// <summary>
-        /// This method gets all the call to action options with the specified type asynchronous.
+        ///     This method gets all the call to action options with the specified type asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName);
 
         /// <summary>
-        /// This method gets all the call to action options with the specified value asynchronous.
+        ///     This method gets all the call to action options with the specified value asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified value id.</returns>
         Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value);
@@ -57,7 +58,7 @@ namespace Repositories
         public CallToActionOptionRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// This method gets all the call to action options with the specified type asynchronous.
+        ///     This method gets all the call to action options with the specified type asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified type id.</returns>
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionsFromTypeAsync(string typeName)
@@ -68,7 +69,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// This method gets all the call to action options with the specified value asynchronous.
+        ///     This method gets all the call to action options with the specified value asynchronous.
         /// </summary>
         /// <returns>This method returns a list of call to action options with the specified value id.</returns>
         public async Task<IEnumerable<CallToActionOption>> GetCallToActionOptionFromValueAsync(string value)

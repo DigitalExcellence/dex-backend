@@ -15,37 +15,26 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
+using Moq;
 using NUnit.Framework;
 using Services.Services;
 using Services.Sources;
 using System;
-using Models;
-using Moq;
 
 namespace Services.Tests
 {
+
     /// <summary>
-    /// The source manager service test.
-    /// PLEASE UPDATE WHEN NEW SOURCES ARE ADDED.
+    ///     The source manager service test.
+    ///     PLEASE UPDATE WHEN NEW SOURCES ARE ADDED.
     /// </summary>
     [TestFixture]
     public class SourceManagerServiceTest
     {
-        /// <summary>
-        /// The source manager service
-        /// </summary>
-        private ISourceManagerService sourceManagerService;
-        /// <summary>
-        /// The git lab mock
-        /// </summary>
-        private Mock<IGitLabSource> gitLabMock;
-        /// <summary>
-        /// The git hub mock
-        /// </summary>
-        private Mock<IGitHubSource> gitHubMock;
 
         /// <summary>
-        /// Initializes the source before every test run.
+        ///     Initializes the source before every test run.
         /// </summary>
         [SetUp]
         public void Initialize()
@@ -54,11 +43,26 @@ namespace Services.Tests
             gitLabMock = new Mock<IGitLabSource>();
             gitHubMock = new Mock<IGitHubSource>();
 
-            sourceManagerService = new SourceManagerService(gitLabMock.Object,gitHubMock.Object);
+            sourceManagerService = new SourceManagerService(gitLabMock.Object, gitHubMock.Object);
         }
 
         /// <summary>
-        /// Checks if the uri matches the source. the source project is returned.
+        ///     The source manager service
+        /// </summary>
+        private ISourceManagerService sourceManagerService;
+
+        /// <summary>
+        ///     The git lab mock
+        /// </summary>
+        private Mock<IGitLabSource> gitLabMock;
+
+        /// <summary>
+        ///     The git hub mock
+        /// </summary>
+        private Mock<IGitHubSource> gitHubMock;
+
+        /// <summary>
+        ///     Checks if the uri matches the source. the source project is returned.
         /// </summary>
         [Test]
         public void FetchProject_goodflow_matches_gitlab()
@@ -76,11 +80,11 @@ namespace Services.Tests
 
             Project projectresult = sourceManagerService.FetchProject(new Uri("http://example.com"));
 
-            Assert.AreEqual(project,projectresult);
+            Assert.AreEqual(project, projectresult);
         }
 
         /// <summary>
-        /// Checks if null is returned when no projects match.
+        ///     Checks if null is returned when no projects match.
         /// </summary>
         [Test]
         public void FetchProject_badflow_no_uri_matches()
@@ -95,4 +99,5 @@ namespace Services.Tests
         }
 
     }
+
 }

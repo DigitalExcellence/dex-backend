@@ -17,19 +17,20 @@
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// The view model of a wizard page.
+    ///     The view model of a wizard page.
     /// </summary>
     public class WizardPageResource
     {
 
         /// <summary>
-        /// Gets or sets a value for the Name property.
+        ///     Gets or sets a value for the Name property.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Description property.
+        ///     Gets or sets a value for the Description property.
         /// </summary>
         public string Description { get; set; }
 

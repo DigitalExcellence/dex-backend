@@ -21,8 +21,9 @@ using Models;
 
 namespace Data
 {
+
     /// <summary>
-    /// ApplicationDatabaseContext
+    ///     ApplicationDatabaseContext
     /// </summary>
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class ApplicationDbContext : DbContext
@@ -31,141 +32,143 @@ namespace Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         /// <summary>
-        /// Gets or sets the user.
+        ///     Gets or sets the user.
         /// </summary>
         /// <value>
-        /// The user.
+        ///     The user.
         /// </value>
         public DbSet<User> User { get; set; }
 
         /// <summary>
-        /// Gets or sets the Call to Action.
+        ///     Gets or sets the Call to Action.
         /// </summary>
         /// <value>
-        /// The call to action.
+        ///     The call to action.
         /// </value>
         public DbSet<CallToAction> CallToAction { get; set; }
 
         /// <summary>
-        /// Gets or sets the project.
+        ///     Gets or sets the project.
         /// </summary>
         /// <value>
-        /// The project.
+        ///     The project.
         /// </value>
         public DbSet<File> File { get; set; }
 
         /// <summary>
-        /// Gets or sets the Call To Action options.
+        ///     Gets or sets the Call To Action options.
         /// </summary>
         /// <value>
-        /// The call to action options.
+        ///     The call to action options.
         /// </value>
         public DbSet<Project> Project { get; set; }
 
         /// <summary>
-        /// Gets or sets the collaborators.
+        ///     Gets or sets the collaborators.
         /// </summary>
         /// <value>
-        /// The collaborators.
+        ///     The collaborators.
         /// </value>
         public DbSet<Collaborator> Collaborators { get; set; }
 
         /// <summary>
-        /// Gets or sets the highlight.
+        ///     Gets or sets the highlight.
         /// </summary>
         /// <value>
-        /// The highlight.
+        ///     The highlight.
         /// </value>
         public DbSet<Highlight> Highlight { get; set; }
 
         /// <summary>
-        /// Gets or sets the embedded project.
+        ///     Gets or sets the embedded project.
         /// </summary>
         /// <value>
-        /// The embedded project.
+        ///     The embedded project.
         /// </value>
         public DbSet<EmbeddedProject> EmbeddedProject { get; set; }
 
         /// <summary>
-        /// Gets or sets the role.
+        ///     Gets or sets the role.
         /// </summary>
         /// <value>
-        /// The role.
+        ///     The role.
         /// </value>
         public DbSet<Role> Role { get; set; }
 
         /// <summary>
-        /// Gets or sets the institution.
+        ///     Gets or sets the institution.
         /// </summary>
         /// <value>
-        /// The institution.
+        ///     The institution.
         /// </value>
         public DbSet<Institution> Institution { get; set; }
 
         /// <summary>
-        /// Gets or sets the projects liked by users.
+        ///     Gets or sets the projects liked by users.
         /// </summary>
         /// <value>
-        /// The like by the user.
+        ///     The like by the user.
         /// </value>
         public DbSet<ProjectLike> ProjectLike { get; set; }
 
         /// <summary>
-        /// Gets or sets the data source.
+        ///     Gets or sets the data source.
         /// </summary>
         /// <value>
-        /// The data source.
+        ///     The data source.
         /// </value>
         public DbSet<DataSource> DataSource { get; set; }
 
         /// <summary>
-        /// Gets or sets the call to action option.
+        ///     Gets or sets the call to action option.
         /// </summary>
         /// <value>
-        /// The call to action option.
+        ///     The call to action option.
         /// </value>
         public DbSet<CallToActionOption> CallToActionOption { get; set; }
 
         /// <summary>
-        /// Gets or sets the user following the project.
+        ///     Gets or sets the user following the project.
         /// </summary>
         /// <value>
-        /// The user following the project.
+        ///     The user following the project.
         /// </value>
         public DbSet<UserProject> UserProject { get; set; }
 
         /// <summary>
-        /// Gets or sets user following the user.
+        ///     Gets or sets user following the user.
         /// </summary>
         /// <value>
-        /// The user following the user.
+        ///     The user following the user.
         /// </value>
         public DbSet<UserUser> UserUser { get; set; }
 
         /// <summary>
-        /// Gets or sets the Call to Action
+        ///     Gets or sets the Call to Action
         /// </summary>
-        /// /// <value>
-        /// The call to action.
+        /// ///
+        /// <value>
+        ///     The call to action.
         /// </value>
         public DbSet<UserTask> UserTask { get; set; }
 
         /// <summary>
-        /// Gets or sets the RoleScope
+        ///     Gets or sets the RoleScope
         /// </summary>
-        /// /// <value>
-        /// The role scope.
+        /// ///
+        /// <value>
+        ///     The role scope.
         /// </value>
         public DbSet<RoleScope> RoleScope { get; set; }
 
         /// <summary>
-        /// Gets or sets the wizard page.
+        ///     Gets or sets the wizard page.
         /// </summary>
         public DbSet<WizardPage> WizardPage { get; set; }
 
         /// <summary>
-        /// Gets or sets the DataSourceWizardPage which represents the link between a
-        /// data source and a wizard page.
+        ///     Gets or sets the DataSourceWizardPage which represents the link between a
+        ///     data source and a wizard page.
         /// </summary>
         public DbSet<DataSourceWizardPage> DataSourceWizardPage { get; set; }
 
@@ -176,6 +179,7 @@ namespace Data
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
             modelBuilder.ApplyConfiguration(new DataSourceWizardPageConfiguration());
         }
+
     }
 
 }

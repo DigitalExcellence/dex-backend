@@ -47,12 +47,12 @@ namespace API.Resources
         public string ProfileUrl { get; set; }
 
         /// <summary>
-        /// This gets or sets the Institution Id.
+        ///     This gets or sets the Institution Id.
         /// </summary>
         public int? InstitutionId { get; set; }
 
         /// <summary>
-        /// This gets or sets the Expected Graduation DateTime.
+        ///     This gets or sets the Expected Graduation DateTime.
         /// </summary>
         public DateTime? ExpectedGraduationDateTime { get; set; }
 

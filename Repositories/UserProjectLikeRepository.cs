@@ -45,13 +45,13 @@ namespace Repositories
     public class UserProjectLikeRepository : Repository<ProjectLike>,
                                              IUserProjectLikeRepository
     {
+
         /// <summary>
         ///     This is the project like repository constructor
         /// </summary>
         /// <param name="dbContext"></param>
         public UserProjectLikeRepository(DbContext dbContext) :
-            base(dbContext)
-        { }
+            base(dbContext) { }
 
         /// <summary>
         ///     This method removes the project like
@@ -89,6 +89,7 @@ namespace Repositories
             }
             return false;
         }
+
     }
 
 }

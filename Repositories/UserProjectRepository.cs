@@ -22,11 +22,13 @@ using System.Linq;
 
 namespace Repositories
 {
+
     /// <summary>
     ///     This is the user (follows) project repository
     /// </summary>
     public interface IUserProjectRepository : IRepository<UserProject>
     {
+
         /// <summary>
         ///     This interface method checks if the user already follows the project
         /// </summary>
@@ -34,6 +36,7 @@ namespace Repositories
         /// <param name="projectId"></param>
         /// <returns>boolean</returns>
         bool CheckIfUserFollows(int userId, int projectId);
+
     }
 
     /// <summary>
@@ -41,6 +44,7 @@ namespace Repositories
     /// </summary>
     public class UserProjectRepository : Repository<UserProject>, IUserProjectRepository
     {
+
         /// <summary>
         ///     This is the user (follows) project constructor
         /// </summary>
@@ -55,11 +59,10 @@ namespace Repositories
         {
             UserProject projectToRemove = GetDbSet
                     <UserProject>()
-                .SingleOrDefault(s => s.UserId == userProject.User.Id
-                                   && s.Project.Id == userProject.Project.Id);
+                .SingleOrDefault(s => s.UserId == userProject.User.Id && s.Project.Id == userProject.Project.Id);
 
             GetDbSet<UserProject>()
-            .Remove(projectToRemove);
+                .Remove(projectToRemove);
         }
 
         /// <summary>
@@ -72,8 +75,7 @@ namespace Repositories
         {
             UserProject userProject = GetDbSet
                     <UserProject>()
-                .SingleOrDefault(s => s.UserId == userId
-                                   && s.Project.Id == projectId);
+                .SingleOrDefault(s => s.UserId == userId && s.Project.Id == projectId);
 
             if(userProject != null)
             {
@@ -81,5 +83,7 @@ namespace Repositories
             }
             return false;
         }
+
     }
+
 }

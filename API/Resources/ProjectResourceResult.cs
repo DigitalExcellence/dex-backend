@@ -20,11 +20,13 @@ using System.Collections.Generic;
 
 namespace API.Resources
 {
+
     /// <summary>
     ///     The view model result of project.
     /// </summary>
     public class ProjectResourceResult
     {
+
         /// <summary>
         ///     Get or Set Id of a Project Resource Result
         /// </summary>
@@ -74,22 +76,27 @@ namespace API.Resources
         ///     This gets or sets the Updated time of the project.
         /// </summary>
         public DateTime Updated { get; set; }
+
         /// <summary>
-        /// This gets or set the file of the project.
+        ///     This gets or set the file of the project.
         /// </summary>
         public FileResourceResult ProjectIcon { get; set; }
+
         /// <summary>
-        /// This gets or sets the call to action.
+        ///     This gets or sets the call to action.
         /// </summary>
         public CallToActionResourceResult CallToAction { get; set; }
+
         /// <summary>
-        /// This gets or sets the likes of the project.
+        ///     This gets or sets the likes of the project.
         /// </summary>
         public List<ProjectLikesResourceResult> Likes { get; set; }
 
         /// <summary>
-        /// Sets or gets if project is visible to institute members only or not
+        ///     Sets or gets if project is visible to institute members only or not
         /// </summary>
         public bool InstitutePrivate { get; set; }
+
     }
+
 }

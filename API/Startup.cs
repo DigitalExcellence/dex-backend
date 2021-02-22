@@ -27,8 +27,6 @@ using Hellang.Middleware.ProblemDetails;
 using IdentityModel.Client;
 using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +38,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
+using Newtonsoft.Json;
 using Polly;
 using Serilog;
 using Services.Services;
@@ -61,7 +60,7 @@ namespace API
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Startup"/> class.
+        ///     Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment">The environment.</param>
@@ -84,7 +83,7 @@ namespace API
         public IWebHostEnvironment Environment { get; }
 
         /// <summary>
-        /// Configures the services.
+        ///     Configures the services.
         /// </summary>
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
@@ -95,7 +94,10 @@ namespace API
                 o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
-            services.AddScoped<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname, Config.RabbitMQ.Username, Config.RabbitMQ.Password));
+            services.AddScoped<IRabbitMQConnectionFactory>(
+                c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname,
+                                                   Config.RabbitMQ.Username,
+                                                   Config.RabbitMQ.Password));
             services.AddAutoMapper();
 
             services.UseConfigurationValidation();
@@ -116,9 +118,8 @@ namespace API
 
             services.AddAuthorization(o =>
             {
-
                 o.AddPolicy(nameof(Defaults.Roles.BackendApplication),
-                    policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
+                            policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
 
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
                             policy => policy.Requirements.Add(
@@ -150,41 +151,50 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionEmbedWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionEmbedWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionEmbedWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionProjectWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionProjectWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionProjectWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserRead),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserRead))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.DataSourceWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.DataSourceWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.DataSourceWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
-
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
             });
 
             services.AddCors();
             services.AddControllersWithViews()
                     .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
                     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
-                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                                                      ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(o =>
             {
@@ -197,10 +207,10 @@ namespace API
                                  Description =
                                      "Dex API Swagger surface. DeX provides a platform for students, teachers and employees to share and work on projects and ideas. Find, create, share and work on projects and ideas on DeX",
                                  License = new OpenApiLicense
-                                 {
-                                     Name = "GNU Lesser General Public License v3.0",
-                                     Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
-                                 }
+                                           {
+                                               Name = "GNU Lesser General Public License v3.0",
+                                               Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
+                                           }
                              });
                 o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
 
@@ -209,16 +219,16 @@ namespace API
                                         {
                                             Type = SecuritySchemeType.OAuth2,
                                             Flows = new OpenApiOAuthFlows
-                                            {
-                                                Implicit = new OpenApiOAuthFlow
-                                                {
-                                                    AuthorizationUrl = GetAuthorizationUrl(),
-                                                    Scopes = new Dictionary<string, string>
+                                                    {
+                                                        Implicit = new OpenApiOAuthFlow
+                                                                   {
+                                                                       AuthorizationUrl = GetAuthorizationUrl(),
+                                                                       Scopes = new Dictionary<string, string>
                                                                            {
-                                                                               {"dex-api", "Resource scope"},
+                                                                               {"dex-api", "Resource scope"}
                                                                            }
-                                                }
-                                            }
+                                                                   }
+                                                    }
                                         });
                 o.AddSecurityRequirement(new OpenApiSecurityRequirement
                                          {
@@ -234,8 +244,6 @@ namespace API
                                                  new[] {""}
                                              }
                                          });
-
-
             });
 
             services.AddAccessTokenManagement(options =>
@@ -247,18 +255,19 @@ namespace API
                                                        ClientId = Config.IdentityServer.ClientId,
                                                        ClientSecret = Config.IdentityServer.ClientSecret
                                                    });
-
-                    }).ConfigureBackchannelHttpClient()
+                    })
+                    .ConfigureBackchannelHttpClient()
                     .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(new[]
                                                      {
-                                                         TimeSpan.FromSeconds(1),
-                                                         TimeSpan.FromSeconds(2),
+                                                         TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2),
                                                          TimeSpan.FromSeconds(3)
                                                      }));
-            services.AddClientAccessTokenClient("identityclient", configureClient: client =>
-            {
-                client.BaseAddress = new Uri(string.Concat(Config.IdentityServer.IdentityUrl + "/"));
-            });
+            services.AddClientAccessTokenClient("identityclient",
+                                                configureClient: client =>
+                                                {
+                                                    client.BaseAddress =
+                                                        new Uri(string.Concat(Config.IdentityServer.IdentityUrl + "/"));
+                                                });
 
             // Add application services.
             services.AddSingleton(Config);
@@ -288,14 +297,14 @@ namespace API
             } else if(env.IsProduction())
             {
                 app.UseExceptionHandler(new ExceptionHandlerOptions
-                {
-                    ExceptionHandler = context =>
-                    {
-                        context.Response.ContentType = "text/HTML";
-                        context.Response.Redirect("/Error.html");
-                        return Task.CompletedTask;
-                    }
-                });
+                                        {
+                                            ExceptionHandler = context =>
+                                            {
+                                                context.Response.ContentType = "text/HTML";
+                                                context.Response.Redirect("/Error.html");
+                                                return Task.CompletedTask;
+                                            }
+                                        });
             } else
             {
                 app.UseExceptionHandler();
@@ -304,12 +313,12 @@ namespace API
             app.UseProblemDetails();
 
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "Uploads", "Images")),
-                RequestPath = "/Uploads/Images"
-            });
+            app.UseStaticFiles(new StaticFileOptions
+                               {
+                                   FileProvider = new PhysicalFileProvider(
+                                       Path.Combine(env.ContentRootPath, "Uploads", "Images")),
+                                   RequestPath = "/Uploads/Images"
+                               });
 
             app.UseRouting();
             app.UseCors(c =>
@@ -358,23 +367,23 @@ namespace API
                                     {
                                         // Then it probably belongs swagger so we set the username as developer.
                                         User newUser = new User
-                                        {
-                                            Name = "Developer",
-                                            Email = "Developer@DEX.com",
-                                            IdentityId = identityId,
-                                            Role = registeredUserRole,
-                                            InstitutionId = 1
-                                        };
+                                                       {
+                                                           Name = "Developer",
+                                                           Email = "Developer@DEX.com",
+                                                           IdentityId = identityId,
+                                                           Role = registeredUserRole,
+                                                           InstitutionId = 1
+                                                       };
                                         userService.Add(newUser);
                                     } else
                                     {
                                         User newUser = new User
-                                        {
-                                            Name = userInformation.Name,
-                                            Email = userInformation.Email,
-                                            IdentityId = userInformation.IdentityId,
-                                            Role = registeredUserRole,
-                                        };
+                                                       {
+                                                           Name = userInformation.Name,
+                                                           Email = userInformation.Email,
+                                                           IdentityId = userInformation.IdentityId,
+                                                           Role = registeredUserRole
+                                                       };
                                         Institution institution =
                                             await institutionService.GetInstitutionByInstitutionIdentityId(
                                                 userInformation.IdentityInstitutionId);
@@ -393,10 +402,10 @@ namespace API
                                 {
                                     if(userInformation != null)
                                     {
-                                        Institution institution = await institutionService.GetInstitutionByInstitutionIdentityId(
-                                                                      userInformation.IdentityInstitutionId);
-                                        if(institution != null)
-                                            user.InstitutionId = institution.Id;
+                                        Institution institution =
+                                            await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                userInformation.IdentityInstitutionId);
+                                        if(institution != null) user.InstitutionId = institution.Id;
 
                                         userService.Update(user);
                                         await dbContext.SaveChangesAsync()
@@ -422,7 +431,7 @@ namespace API
         }
 
         /// <summary>
-        /// Updates the database.
+        ///     Updates the database.
         /// </summary>
         /// <param name="app">The application.</param>
         /// <param name="env">The env.</param>
@@ -483,11 +492,13 @@ namespace API
 
                 // TODO seed embedded projects
             }
+
             // Seed call to action options
             List<CallToActionOption> options = Seed.SeedCallToActionOptions();
             foreach(CallToActionOption callToActionOption in options)
             {
-                if(!context.CallToActionOption.Any(s => s.Type == callToActionOption.Type && s.Value == callToActionOption.Value))
+                if(!context.CallToActionOption.Any(s => s.Type == callToActionOption.Type &&
+                                                        s.Value == callToActionOption.Value))
                 {
                     context.CallToActionOption.Add(callToActionOption);
                     context.SaveChanges();

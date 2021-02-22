@@ -21,11 +21,13 @@ using Services.Base;
 
 namespace Services.Services
 {
+
     /// <summary>
     ///     This is the user (follow) user service
     /// </summary>
     public interface IUserUserService : IService<UserUser>
     {
+
         /// <summary>
         ///     This is the interface method which checks if the user already follows a certain user
         /// </summary>
@@ -33,6 +35,7 @@ namespace Services.Services
         /// <param name="follwedUserId"></param>
         /// <returns>boolean</returns>
         bool CheckIfUserFollows(int userId, int follwedUserId);
+
     }
 
     /// <summary>
@@ -40,6 +43,7 @@ namespace Services.Services
     /// </summary>
     public class UserUserService : Service<UserUser>, IUserUserService
     {
+
         /// <summary>
         ///     This is the user (follows) user service constructor
         /// </summary>
@@ -66,5 +70,7 @@ namespace Services.Services
             }
             return false;
         }
+
     }
+
 }

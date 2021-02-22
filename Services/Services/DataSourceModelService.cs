@@ -17,30 +17,28 @@
 
 using Models;
 using Repositories;
-using Repositories.Base;
 using Services.Base;
-using System;
 using System.Threading.Tasks;
 
 namespace Services.Services
 {
 
     /// <summary>
-    /// The Data Source Model interface
+    ///     The Data Source Model interface
     /// </summary>
-    /// <seealso cref="IService{DataSource}" />
+    /// <seealso cref="IService{TEntity}" />
     public interface IDataSourceModelService : IService<DataSource>
     {
 
         /// <summary>
-        /// This method finds the data source by the specified guid.
+        ///     This method finds the data source by the specified guid.
         /// </summary>
         /// <param name="guid">The guid which will be used to find the correct data source.</param>
         /// <returns>This method returns the data source with the specified guid.</returns>
         Task<DataSource> GetDataSourceByGuid(string guid);
 
         /// <summary>
-        /// This method finds the data source by the specified name.
+        ///     This method finds the data source by the specified name.
         /// </summary>
         /// <param name="name">The name which will be used to find the correct data source.</param>
         /// <returns>This method returns the data source with the specified name.</returns>
@@ -49,7 +47,7 @@ namespace Services.Services
     }
 
     /// <summary>
-    /// The Data Source Model service
+    ///     The Data Source Model service
     /// </summary>
     /// <seealso cref="Service{DataSource}" />
     /// <seealso cref="IDataSourceModelService" />
@@ -57,7 +55,7 @@ namespace Services.Services
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataSourceModelService"/> class.
+        ///     Initializes a new instance of the <see cref="DataSourceModelService" /> class.
         /// </summary>
         /// <param name="repository">The repository that will be used to communicate with the repository layer.</param>
         public DataSourceModelService(IDataSourceModelRepository repository) : base(repository) { }
@@ -65,7 +63,7 @@ namespace Services.Services
         protected new IDataSourceModelRepository Repository => (IDataSourceModelRepository) base.Repository;
 
         /// <summary>
-        /// This method finds the data source by the specified guid.
+        ///     This method finds the data source by the specified guid.
         /// </summary>
         /// <param name="guid">The guid which will be used to find the correct data source.</param>
         /// <returns>This method returns the data source with the specified guid.</returns>
@@ -75,7 +73,7 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// This method finds the data source by the specified name.
+        ///     This method finds the data source by the specified name.
         /// </summary>
         /// <param name="name">The name which will be used to find the correct data source.</param>
         /// <returns>This method returns the data source with the specified name.</returns>

@@ -29,11 +29,13 @@ using Services.Sources;
 
 namespace API.Extensions
 {
+
     /// <summary>
     ///     DependencyInjectionExtensions
     /// </summary>
     public static class DependencyInjectionExtensions
     {
+
         /// <summary>
         ///     Adds all the services and repositories.
         /// </summary>
@@ -116,8 +118,10 @@ namespace API.Extensions
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
 
             services.AddScoped<ITaskPublisher, TaskPublisher>();
-            
+
             return services;
         }
+
     }
+
 }

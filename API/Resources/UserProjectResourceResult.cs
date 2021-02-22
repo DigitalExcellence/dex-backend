@@ -17,31 +17,38 @@
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// Object to return to frontend with the UserProject
+    ///     Object to return to frontend with the UserProject
     /// </summary>
     public class UserProjectResourceResult
     {
+
         /// <summary>
-        /// gets or sets Id of the followed project
+        ///     gets or sets Id of the followed project
         /// </summary>
         public int Id { get; set; }
+
         /// <summary>
-        /// Set or get Project
+        ///     Set or get Project
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
-        /// set or get User
+        ///     set or get User
         /// </summary>
         public string ShortDescription { get; set; }
+
         /// <summary>
-        /// set or get userId
+        ///     set or get userId
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Uri project
+        ///     Uri project
         /// </summary>
         public string Uri { get; set; }
+
     }
+
 }

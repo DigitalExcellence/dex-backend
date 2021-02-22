@@ -32,24 +32,27 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related to the data sources, for example retrieving and updating.
+    ///     This class is responsible for handling HTTP requests that are related to the data sources, for example retrieving
+    ///     and updating.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class DataSourceController : ControllerBase
     {
 
-        private readonly IMapper mapper;
+        private readonly IDataProviderService dataProviderService;
         private readonly IDataSourceModelService dataSourceModelService;
         private readonly IFileService fileService;
         private readonly IFileUploader fileUploader;
-        private readonly IDataProviderService dataProviderService;
         private readonly IIndexOrderHelper<int> indexOrderHelper;
+
+        private readonly IMapper mapper;
         private readonly IWizardPageService wizardPageService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataSourceController"/> class.
+        ///     Initializes a new instance of the <see cref="DataSourceController" /> class.
         /// </summary>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="dataSourceModelService">The data source model service which is used to communicate with the logic layer.</param>
@@ -77,7 +80,7 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// This method is responsible for retrieving data sources.
+        ///     This method is responsible for retrieving data sources.
         /// </summary>
         /// <param name="needsAuth">This parameter specifies whether the data sources should need authentication.</param>
         /// <returns>This method returns a collection of data sources.</returns>
@@ -94,14 +97,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by guid.
+        ///     This method is responsible for retrieving a data source by guid.
         /// </summary>
         /// <param name="guid">The guid is used for searching the data source with this specified guid.</param>
         /// <returns>This method returns a data source with the specified guid.</returns>
         /// <response code="200">This endpoint returns the found data source with the specified guid.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source with the specified
-        /// guid could be found.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no data source with the specified
+        ///     guid could be found.
+        /// </response>
         [HttpGet("guid")]
         [Authorize]
         [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
@@ -112,11 +117,11 @@ namespace API.Controllers
             if(!Guid.TryParse(guid, out Guid _))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Specified guid is not valid.",
-                    Detail = "The specified guid is not a real or valid guid.",
-                    Instance = "64052C41-FB93-4733-918F-056C765044AE"
-                };
+                                         {
+                                             Title = "Specified guid is not valid.",
+                                             Detail = "The specified guid is not a real or valid guid.",
+                                             Instance = "64052C41-FB93-4733-918F-056C765044AE"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -125,11 +130,11 @@ namespace API.Controllers
             if(dataSource == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "No data source with the specified guid found.",
-                    Detail = "The database does not contain an institution with that guid.",
-                    Instance = "3B2C12E3-CDE0-4853-A687-C1024E096479"
-                };
+                                         {
+                                             Title = "No data source with the specified guid found.",
+                                             Detail = "The database does not contain an institution with that guid.",
+                                             Instance = "3B2C12E3-CDE0-4853-A687-C1024E096479"
+                                         };
                 return NotFound(problem);
             }
 
@@ -139,16 +144,20 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for updating the data source in the database.
+        ///     This method is responsible for updating the data source in the database.
         /// </summary>
         /// <param name="guid">The guid parameter is used for searching the data source that should get updated.</param>
-        /// <param name="dataSourceResource">The data source resource contains the new data that gets used
-        /// for updating the specified data source.</param>
+        /// <param name="dataSourceResource">
+        ///     The data source resource contains the new data that gets used
+        ///     for updating the specified data source.
+        /// </param>
         /// <returns>This method returns the updated data source resource result.</returns>
         /// <response code="200">This endpoint returns the updated data source.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no data source is found with the specified data source guid
-        /// or whenever no file is found with the specified id.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no data source is found with the specified data source guid
+        ///     or whenever no file is found with the specified id.
+        /// </response>
         [HttpPut("{guid}")]
         [Authorize(Policy = nameof(Defaults.Scopes.DataSourceWrite))]
         [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
@@ -159,11 +168,11 @@ namespace API.Controllers
             if(!Guid.TryParse(guid, out Guid _))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Specified guid is not valid.",
-                    Detail = "The specified guid is not a real or valid guid.",
-                    Instance = "F472CEEC-BBC7-41A7-87C9-24B669DB9D80"
-                };
+                                         {
+                                             Title = "Specified guid is not valid.",
+                                             Detail = "The specified guid is not a real or valid guid.",
+                                             Instance = "F472CEEC-BBC7-41A7-87C9-24B669DB9D80"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -172,26 +181,27 @@ namespace API.Controllers
             if(dataSourceModel == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed retrieving the data source.",
-                    Detail = "The database does not contain an institution with that guid.",
-                    Instance = "031FE0E3-D8CF-4DEC-81D5-E89B33BED8D0"
-                };
+                                         {
+                                             Title = "Failed retrieving the data source.",
+                                             Detail = "The database does not contain an institution with that guid.",
+                                             Instance = "031FE0E3-D8CF-4DEC-81D5-E89B33BED8D0"
+                                         };
                 return NotFound(problem);
             }
 
             DataSource dataSourceWithSpecifiedName =
                 await dataSourceModelService.GetDataSourceByName(dataSourceResource.Title);
 
-            if(dataSourceWithSpecifiedName != null && dataSourceWithSpecifiedName.Guid != guid)
+            if(dataSourceWithSpecifiedName != null &&
+               dataSourceWithSpecifiedName.Guid != guid)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Specified name of the data source already exists",
-                    Detail =
-                        "Another data source already has the specified name, no doubles are allowed",
-                    Instance = "804F134C-E679-4AF5-B602-18433F26019A"
-                };
+                                         {
+                                             Title = "Specified name of the data source already exists",
+                                             Detail =
+                                                 "Another data source already has the specified name, no doubles are allowed",
+                                             Instance = "804F134C-E679-4AF5-B602-18433F26019A"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -202,7 +212,7 @@ namespace API.Controllers
                                          {
                                              Title = "Not all specified wizard pages could be found.",
                                              Detail = "One or more specified wizard page ids don't exist",
-                                             Instance ="EF1490B0-DB22-4A0D-B6D1-D6E89192381E"
+                                             Instance = "EF1490B0-DB22-4A0D-B6D1-D6E89192381E"
                                          };
                 return NotFound(problem);
             }
@@ -224,32 +234,41 @@ namespace API.Controllers
                 } else
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "File was not found.",
-                        Detail = "The specified file was not found while updating project.",
-                        Instance = "7A6BF2DE-A0BC-4C84-8CC4-89EC0C706EAB"
-                    };
+                                             {
+                                                 Title = "File was not found.",
+                                                 Detail = "The specified file was not found while updating project.",
+                                                 Instance = "7A6BF2DE-A0BC-4C84-8CC4-89EC0C706EAB"
+                                             };
                     return NotFound(problem);
                 }
             }
 
-            int[] wizardPageOrderIndexesAuthFlow = dataSourceResource.WizardPageResources?.Where(p => p.AuthFlow).Select(p => p.OrderIndex).ToArray();
-            int[] wizardPageOrderIndexesPublicFlow = dataSourceResource.WizardPageResources?.Where(p => !p.AuthFlow).Select(p => p.OrderIndex).ToArray();
+            int[] wizardPageOrderIndexesAuthFlow = dataSourceResource.WizardPageResources?.Where(p => p.AuthFlow)
+                                                                     .Select(p => p.OrderIndex)
+                                                                     .ToArray();
+            int[] wizardPageOrderIndexesPublicFlow = dataSourceResource.WizardPageResources?.Where(p => !p.AuthFlow)
+                                                                       .Select(p => p.OrderIndex)
+                                                                       .ToArray();
 
             bool authFlowIsValid = wizardPageOrderIndexesAuthFlow?.Length == 0 ||
-                                   indexOrderHelper.ValidateAscendingConsecutiveOrder(wizardPageOrderIndexesAuthFlow, 1);
+                                   indexOrderHelper.ValidateAscendingConsecutiveOrder(wizardPageOrderIndexesAuthFlow,
+                                       1);
 
             bool publicFlowIsValid = wizardPageOrderIndexesPublicFlow?.Length == 0 ||
-                                     indexOrderHelper.ValidateAscendingConsecutiveOrder(wizardPageOrderIndexesPublicFlow, 1);
+                                     indexOrderHelper.ValidateAscendingConsecutiveOrder(
+                                         wizardPageOrderIndexesPublicFlow,
+                                         1);
 
-            if(!authFlowIsValid || !publicFlowIsValid)
+            if(!authFlowIsValid ||
+               !publicFlowIsValid)
             {
                 ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "The order from the wizard page indexes is invalid.",
-                        Detail = "The order indexes from the wizard pages should start at 1, be consecutive and have no doubles.",
-                        Instance = "A5F70346-8044-42AC-8BFD-76FCD108ABBE"
-                    };
+                                         {
+                                             Title = "The order from the wizard page indexes is invalid.",
+                                             Detail =
+                                                 "The order indexes from the wizard pages should start at 1, be consecutive and have no doubles.",
+                                             Instance = "A5F70346-8044-42AC-8BFD-76FCD108ABBE"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -262,5 +281,7 @@ namespace API.Controllers
             DataSourceResourceResult model = mapper.Map<DataSource, DataSourceResourceResult>(updatedDataSourceModel);
             return Ok(model);
         }
+
     }
+
 }

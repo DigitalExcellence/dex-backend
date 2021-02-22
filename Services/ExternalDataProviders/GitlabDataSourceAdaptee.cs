@@ -33,26 +33,27 @@ namespace Services.ExternalDataProviders
 {
 
     /// <summary>
-    /// This class is responsible for communicating with the external Gitlab API.
+    ///     This class is responsible for communicating with the external Gitlab API.
     /// </summary>
     public class GitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IAuthorizedDataSourceAdaptee
     {
 
+        private readonly string clientId;
+
+        private readonly string clientSecret;
+
         /// <summary>
-        /// A factory that will generate a rest client to make API requests.
+        ///     Mapper object from auto mapper that will automatically maps one object to another.
+        /// </summary>
+        private readonly IMapper mapper;
+
+        /// <summary>
+        ///     A factory that will generate a rest client to make API requests.
         /// </summary>
         private readonly IRestClientFactory restClientFactory;
 
         /// <summary>
-        /// Mapper object from auto mapper that will automatically maps one object to another.
-        /// </summary>
-        private readonly IMapper mapper;
-
-        private readonly string clientSecret;
-        private readonly string clientId;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GitlabDataSourceAdaptee" /> class./>
+        ///     Initializes a new instance of the <see cref="GitlabDataSourceAdaptee" /> class./>
         /// </summary>
         /// <param name="configuration">The configuration which is used to retrieve keys from the configuration file.</param>
         /// <param name="restClientFactory">The rest client factory which is used to create rest clients.</param>
@@ -80,156 +81,17 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// Gets the value for the guid from the Gitlab data source adaptee.
-        /// </summary>
-        public string Guid => "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
-
-        /// <summary>
-        /// Gets or sets a value for the Title property from the Gitlab data source adaptee.
-        /// </summary>
-        public string Title { get; set; } = "Gitlab";
-
-        /// <summary>
-        /// Gets the value for the Base Url from the Gitlab data source adaptee.
-        /// </summary>
-        public string BaseUrl { get; set; } = "https://gitlab.com/api/v4/";
-
-        /// <summary>
-        /// Gets or sets a value for the IsVisible property from the Gitlab data source adaptee.
-        /// </summary>
-        public bool IsVisible { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the Icon property from the Gitlab data source adaptee.
-        /// </summary>
-        public File Icon { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the Description property from the Gitlab data source adaptee.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the DataSourceWizardPages property from the Gitlab data source adaptee.
-        /// </summary>
-        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the OauthUrl property from the Gitlab data source adaptee.
+        ///     Gets or sets a value for the OauthUrl property from the Gitlab data source adaptee.
         /// </summary>
         public string OauthUrl { get; }
 
         /// <summary>
-        /// Gets or sets a value for the RedirectUri property from the Gitlab data source adaptee.
+        ///     Gets or sets a value for the RedirectUri property from the Gitlab data source adaptee.
         /// </summary>
-        public string RedirectUri { get;}
+        public string RedirectUri { get; }
 
         /// <summary>
-        /// This method is responsible for retrieving all public projects from a user, via the username, from the Gitlab API.
-        /// </summary>
-        /// <param name="username">The username which will be used to search to retrieve all public projects from the user.</param>
-        /// <returns>This method returns a collections of public projects from the user</returns>
-        public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
-        {
-            GitlabDataSourceResourceResult[] resourceResults =
-                (await FetchAllPublicGitlabRepositories(username)).ToArray();
-            if(!resourceResults.Any()) return null;
-            return mapper.Map<IEnumerable<GitlabDataSourceResourceResult>, IEnumerable<Project>>(resourceResults);
-        }
-
-        /// <summary>
-        /// This method is responsible for retrieving the content from all the public Gitlab projects from a user.
-        /// </summary>
-        /// <param name="username">The username which is used to retrieve the correct collection of projects from the specified user.</param>
-        /// <returns>This method returns a collection of Gitlab data source resource results from the specified user.</returns>
-        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
-        private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(
-            string username)
-        {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
-            IRestRequest request = new RestRequest($"users/{username}/projects");
-            IRestResponse response = await client.ExecuteAsync(request);
-
-            if(string.IsNullOrEmpty(response.Content)) return null;
-            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
-
-            IEnumerable<GitlabDataSourceResourceResult> resourceResults =
-                JsonConvert.DeserializeObject<IEnumerable<GitlabDataSourceResourceResult>>(response.Content);
-            return resourceResults;
-        }
-
-        /// <summary>
-        /// This method is responsible for retrieving a public project from a uri, from the Gitlab API.
-        /// </summary>
-        /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
-        /// <returns>This method returns a public project from the specified source uri.</returns>
-        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
-        {
-            GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri);
-            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
-            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
-            return project;
-        }
-
-        /// <summary>
-        /// This method is responsible for retrieving the content from a public Gitlab project by uri.
-        /// </summary>
-        /// <param name="sourceUri">The  source uri which is used to retrieve the correct project.</param>
-        /// <returns>This method returns a Gitlab data source resource result from the specified source uri.</returns>
-        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
-        private async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
-        {
-            string domain = sourceUri.GetLeftPart(UriPartial.Authority);
-
-            string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
-                                          .Substring(1).Replace("/", "%2F");
-            Uri serializedUri = new Uri(BaseUrl + "projects/" + projectPath);
-
-            IRestClient client = restClientFactory.Create(serializedUri);
-            RestRequest request = new RestRequest(Method.GET);
-            IRestResponse response = await client.ExecuteAsync(request);
-
-            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
-            if(string.IsNullOrEmpty(response.Content)) return null;
-
-            return JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
-        }
-
-        /// <summary>
-        /// This method is responsible for retrieving a public project from the user, by id from the Gitlab API.
-        /// </summary>
-        /// <param name="identifier">The identifier which will be used to retrieve the correct project.</param>
-        /// <returns>This method returns a public project with the specified identifier.</returns>
-        public async Task<Project> GetPublicProjectById(string identifier)
-        {
-            GitlabDataSourceResourceResult resourceResult = await FetchPublicGitlabRepositoryById(identifier);
-            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
-            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
-            return project;
-        }
-
-        /// <summary>
-        /// This method is responsible for retrieving the content from a public Gitlab project by id.
-        /// </summary>
-        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
-        /// <returns>This method returns a Gitlab data source resource result with the specified identifier.</returns>
-        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
-        private async Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier)
-        {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
-            RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
-            IRestResponse response = await client.ExecuteAsync(request);
-
-            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
-            if(string.IsNullOrEmpty(response.ContentType)) return null;
-
-            GitlabDataSourceResourceResult resourceResult =
-                JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
-            return resourceResult;
-        }
-
-        /// <summary>
-        /// This method is responsible for retrieving Oauth tokens from the Gitlab API.
+        ///     This method is responsible for retrieving Oauth tokens from the Gitlab API.
         /// </summary>
         /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
         /// <returns>This method returns the Oauth tokens.</returns>
@@ -253,7 +115,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all projects from a user.
+        ///     This method is responsible for retrieving all projects from a user.
         /// </summary>
         /// <param name="accessToken">The access token which is used to authenticate and retrieve private projects.</param>
         /// <returns>This method returns all the projects from a user.</returns>
@@ -268,13 +130,184 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all the gitlab project contents.
+        ///     This method is responsible for retrieving a project from the user, via the access token, by id from the Gitlab API.
+        /// </summary>
+        /// <param name="accessToken">The access token which will be used to retrieve the correct project from the user.</param>
+        /// <param name="projectId">The identifier of the project that will be used to search the correct project.</param>
+        /// <returns>This method returns a project with this specified identifier.</returns>
+        public async Task<Project> GetProjectById(string accessToken, string projectId)
+        {
+            GitlabDataSourceResourceResult resourceResult = await FetchGitlabRepositoryById(projectId, accessToken);
+            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            return project;
+        }
+
+        /// <summary>
+        ///     Gets the value for the guid from the Gitlab data source adaptee.
+        /// </summary>
+        public string Guid => "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
+
+        /// <summary>
+        ///     Gets or sets a value for the Title property from the Gitlab data source adaptee.
+        /// </summary>
+        public string Title { get; set; } = "Gitlab";
+
+        /// <summary>
+        ///     Gets the value for the Base Url from the Gitlab data source adaptee.
+        /// </summary>
+        public string BaseUrl { get; set; } = "https://gitlab.com/api/v4/";
+
+        /// <summary>
+        ///     Gets or sets a value for the IsVisible property from the Gitlab data source adaptee.
+        /// </summary>
+        public bool IsVisible { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Icon property from the Gitlab data source adaptee.
+        /// </summary>
+        public File Icon { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Description property from the Gitlab data source adaptee.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the DataSourceWizardPages property from the Gitlab data source adaptee.
+        /// </summary>
+        public IList<DataSourceWizardPage> DataSourceWizardPages { get; set; }
+
+        /// <summary>
+        ///     This method is responsible for retrieving all public projects from a user, via the username, from the Gitlab API.
+        /// </summary>
+        /// <param name="username">The username which will be used to search to retrieve all public projects from the user.</param>
+        /// <returns>This method returns a collections of public projects from the user</returns>
+        public async Task<IEnumerable<Project>> GetAllPublicProjects(string username)
+        {
+            GitlabDataSourceResourceResult[] resourceResults =
+                (await FetchAllPublicGitlabRepositories(username)).ToArray();
+            if(!resourceResults.Any()) return null;
+            return mapper.Map<IEnumerable<GitlabDataSourceResourceResult>, IEnumerable<Project>>(resourceResults);
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving a public project from a uri, from the Gitlab API.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
+        /// <returns>This method returns a public project from the specified source uri.</returns>
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
+        {
+            GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri);
+            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            return project;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving a public project from the user, by id from the Gitlab API.
+        /// </summary>
+        /// <param name="identifier">The identifier which will be used to retrieve the correct project.</param>
+        /// <returns>This method returns a public project with the specified identifier.</returns>
+        public async Task<Project> GetPublicProjectById(string identifier)
+        {
+            GitlabDataSourceResourceResult resourceResult = await FetchPublicGitlabRepositoryById(identifier);
+            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
+            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            return project;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from all the public Gitlab projects from a user.
+        /// </summary>
+        /// <param name="username">
+        ///     The username which is used to retrieve the correct collection of projects from the specified
+        ///     user.
+        /// </param>
+        /// <returns>This method returns a collection of Gitlab data source resource results from the specified user.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(
+            string username)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"users/{username}/projects");
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+
+            IEnumerable<GitlabDataSourceResourceResult> resourceResults =
+                JsonConvert.DeserializeObject<IEnumerable<GitlabDataSourceResourceResult>>(response.Content);
+            return resourceResults;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public Gitlab project by uri.
+        /// </summary>
+        /// <param name="sourceUri">The  source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a Gitlab data source resource result from the specified source uri.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        private async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        {
+            string domain = sourceUri.GetLeftPart(UriPartial.Authority);
+
+            string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
+                                          .Substring(1)
+                                          .Replace("/", "%2F");
+            Uri serializedUri = new Uri(BaseUrl + "projects/" + projectPath);
+
+            IRestClient client = restClientFactory.Create(serializedUri);
+            RestRequest request = new RestRequest(Method.GET);
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
+
+            return JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public Gitlab project by id.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a Gitlab data source resource result with the specified identifier.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        private async Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.ContentType)) return null;
+
+            GitlabDataSourceResourceResult resourceResult =
+                JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
+            return resourceResult;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving all the gitlab project contents.
         /// </summary>
         /// <param name="accessToken">The access token which is used to authenticate.</param>
         /// <param name="username">The username which is used to retrieve the correct collection of projects.</param>
         /// <returns>This method returns a collection of Gitlab data source resource results.</returns>
-        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
-        private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllGitlabRepositories(string accessToken, string username)
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllGitlabRepositories(
+            string accessToken,
+            string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"users/{username}/projects");
@@ -290,26 +323,17 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a project from the user, via the access token, by id from the Gitlab API.
-        /// </summary>
-        /// <param name="accessToken">The access token which will be used to retrieve the correct project from the user.</param>
-        /// <param name="projectId">The identifier of the project that will be used to search the correct project.</param>
-        /// <returns>This method returns a project with this specified identifier.</returns>
-        public async Task<Project> GetProjectById(string accessToken, string projectId)
-        {
-            GitlabDataSourceResourceResult resourceResult = await FetchGitlabRepositoryById(projectId, accessToken);
-            Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
-            project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
-            return project;
-        }
-
-        /// <summary>
-        /// This method is responsible for retrieving the content from a public Gitlab project by id.
+        ///     This method is responsible for retrieving the content from a public Gitlab project by id.
         /// </summary>
         /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
         /// <returns>This method returns a Gitlab data source resource result with the specified identifier.</returns>
-        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
-        private async Task<GitlabDataSourceResourceResult> FetchGitlabRepositoryById(string identifier, string accessToken)
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        private async Task<GitlabDataSourceResourceResult> FetchGitlabRepositoryById(
+            string identifier,
+            string accessToken)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
@@ -325,11 +349,14 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a user from the specified access token.
+        ///     This method is responsible for retrieving a user from the specified access token.
         /// </summary>
         /// <param name="accessToken">The access token parameter which is used to retrieve the correct user.</param>
         /// <returns>This method returns the user from the access token.</returns>
-        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         private async Task<GitlabDataSourceUserResourceResult> FetchUserFromAccessToken(string accessToken)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
@@ -346,11 +373,14 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving the readme from a repository.
+        ///     This method is responsible for retrieving the readme from a repository.
         /// </summary>
         /// <param name="readmeUri">This parameter represents the the uri of the readme file that should get retrieved.</param>
         /// <returns>This method returns the content of the readme.</returns>
-        /// <exception cref="ExternalException">This method could throw an external exception whenever the status code is not successful.</exception>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         private async Task<string> FetchReadme(string readmeUri)
         {
             readmeUri = readmeUri.Replace("blob", "raw");

@@ -15,14 +15,10 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Ganss.XSS;
 using Models;
 using Repositories;
 using Services.Base;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Services.Services
@@ -30,23 +26,25 @@ namespace Services.Services
 
     public interface IUserTaskService : IService<UserTask>
     {
+
         public Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths);
-        
+
         public Task<List<UserTask>> GetUserTasksForUser(int userId);
 
     }
 
     public class UserTaskService : Service<UserTask>, IUserTaskService
     {
+
         private readonly IUserService userService;
-        protected new IUserTaskRepository Repository => (IUserTaskRepository) base.Repository;
 
         public UserTaskService(IUserTaskRepository repository, IUserService userService) : base(repository)
         {
-           this.userService = userService;
+            this.userService = userService;
         }
 
-        
+        protected new IUserTaskRepository Repository => (IUserTaskRepository) base.Repository;
+
 
         public async Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths)
         {
@@ -56,12 +54,13 @@ namespace Services.Services
 
             foreach(User u in users)
             {
-               bool doesExist = false;
+                bool doesExist = false;
                 foreach(UserTask userTask in allUserTasks)
                 {
                     if(u.Id == userTask.User.Id)
                     {
-                        if(userTask.Status == UserTaskStatus.Open && userTask.Type == UserTaskType.GraduationReminder)
+                        if(userTask.Status == UserTaskStatus.Open &&
+                           userTask.Type == UserTaskType.GraduationReminder)
                         {
                             userTasks.Add(userTask);
                             doesExist = true;
@@ -93,5 +92,7 @@ namespace Services.Services
         {
             return await Repository.GetUserTasksForUser(userId);
         }
+
     }
+
 }

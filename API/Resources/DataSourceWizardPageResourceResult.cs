@@ -19,18 +19,18 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// The view model of a wizard page from a data source.
+    ///     The view model of a wizard page from a data source.
     /// </summary>
     public class DataSourceWizardPageResourceResult : WizardPageResourceResult
     {
 
         /// <summary>
-        /// Gets or sets a value for the AuthFlow property.
+        ///     Gets or sets a value for the AuthFlow property.
         /// </summary>
         public bool AuthFlow { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the OrderIndex property.
+        ///     Gets or sets a value for the OrderIndex property.
         /// </summary>
         public int OrderIndex { get; set; }
 

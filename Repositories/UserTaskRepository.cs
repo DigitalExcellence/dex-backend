@@ -18,13 +18,13 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     public interface IUserTaskRepository : IRepository<UserTask>
     {
 
@@ -42,9 +42,9 @@ namespace Repositories
         {
             return await GetDbSet<UserTask>()
                          .Where(u => u.User.Id == userId)
-                       .ToListAsync();
-
+                         .ToListAsync();
         }
 
     }
+
 }

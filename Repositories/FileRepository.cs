@@ -21,18 +21,16 @@ using Repositories.Base;
 
 namespace Repositories
 {
+
     /// <summary>
-    /// IFileRepository
+    ///     IFileRepository
     /// </summary>
-    /// /// <seealso cref="File" />
-    public interface IFileRepository : IRepository<File>
-    {
-
-
-    }
+    /// ///
+    /// <seealso cref="File" />
+    public interface IFileRepository : IRepository<File> { }
 
     /// <summary>
-    /// FileRepository
+    ///     FileRepository
     /// </summary>
     /// <seealso cref="File" />
     /// <seealso cref="IFileRepository" />
@@ -40,10 +38,11 @@ namespace Repositories
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileRepository"/> class.
+        ///     Initializes a new instance of the <see cref="FileRepository" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public FileRepository(DbContext dbContext) : base(dbContext) { }
 
     }
+
 }

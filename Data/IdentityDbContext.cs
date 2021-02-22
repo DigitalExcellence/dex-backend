@@ -15,20 +15,19 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
-using Data.Configurations;
-using Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Data
 {
+
     /// <summary>
-    /// ApplicationDatabaseContext
+    ///     ApplicationDatabaseContext
     /// </summary>
     /// <seealso cref="DbContext" />
     public class IdentityDbContext : DbContext
     {
+
         /// <summary>
         ///     The identityDBContext constructor
         /// </summary>
@@ -36,10 +35,10 @@ namespace Data
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options) : base(options) { }
 
         /// <summary>
-        /// Gets or sets the user.
+        ///     Gets or sets the user.
         /// </summary>
         /// <value>
-        /// The user.
+        ///     The user.
         /// </value>
         public DbSet<IdentityUser> IdentityUser { get; set; }
 

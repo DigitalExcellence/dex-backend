@@ -30,26 +30,26 @@ namespace Services.ExternalDataProviders
 {
 
     /// <summary>
-    /// The interface of the data provider loader.
+    ///     The interface of the data provider loader.
     /// </summary>
     public interface IDataProviderLoader
     {
 
         /// <summary>
-        /// This method is responsible for retrieving all the data sources.
+        ///     This method is responsible for retrieving all the data sources.
         /// </summary>
         /// <returns>This method returns a collection of data sources.</returns>
         Task<List<IDataSourceAdaptee>> GetAllDataSources();
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by the specified guid.
+        ///     This method is responsible for retrieving a data source by the specified guid.
         /// </summary>
         /// <param name="guid">This guid will get used for searching the correct data source.</param>
         /// <returns>This method returns a data source with the specified guid.</returns>
         Task<IDataSourceAdaptee> GetDataSourceByGuid(string guid);
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by the specified name.
+        ///     This method is responsible for retrieving a data source by the specified name.
         /// </summary>
         /// <param name="name">This name will get used for searching the correct data source.</param>
         /// <returns>This method returns a data source with the specified guid.</returns>
@@ -58,19 +58,26 @@ namespace Services.ExternalDataProviders
     }
 
     /// <summary>
-    /// The implementation of the data provider loader.
+    ///     The implementation of the data provider loader.
     /// </summary>
     public class DataProviderLoader : IDataProviderLoader
     {
-        private readonly IServiceScopeFactory serviceScopeFactory;
+
         private readonly IDataSourceModelRepository dataSourceModelRepository;
         private readonly IMapper mapper;
+        private readonly IServiceScopeFactory serviceScopeFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataProviderLoader"/> class.
+        ///     Initializes a new instance of the <see cref="DataProviderLoader" /> class.
         /// </summary>
-        /// <param name="serviceScopeFactory">The service scope factory which is used for creating objects from a class dynamically.</param>
-        /// <param name="dataSourceModelRepository">The data source model repository which is used for communicating with the repository layer.</param>
+        /// <param name="serviceScopeFactory">
+        ///     The service scope factory which is used for creating objects from a class
+        ///     dynamically.
+        /// </param>
+        /// <param name="dataSourceModelRepository">
+        ///     The data source model repository which is used for communicating with the
+        ///     repository layer.
+        /// </param>
         /// <param name="mapper">The mapper which is used to convert the adaptees to data source models.</param>
         public DataProviderLoader(
             IServiceScopeFactory serviceScopeFactory,
@@ -83,7 +90,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all the data sources.
+        ///     This method is responsible for retrieving all the data sources.
         /// </summary>
         /// <returns>This method returns a collection of data sources.</returns>
         public async Task<List<IDataSourceAdaptee>> GetAllDataSources()
@@ -95,7 +102,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by the specified guid.
+        ///     This method is responsible for retrieving a data source by the specified guid.
         /// </summary>
         /// <param name="guid">This guid will get used for searching the correct data source.</param>
         /// <returns>This method returns a data source with the specified guid.</returns>
@@ -106,7 +113,7 @@ namespace Services.ExternalDataProviders
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a data source by the specified name.
+        ///     This method is responsible for retrieving a data source by the specified name.
         /// </summary>
         /// <param name="name">This name will get used for searching the correct data source.</param>
         /// <returns>This method returns a data source with the specified guid.</returns>
@@ -126,7 +133,9 @@ namespace Services.ExternalDataProviders
                 source.Description = sourceModel.Description;
                 source.IsVisible = sourceModel.IsVisible;
                 source.Icon = sourceModel.Icon;
-                source.DataSourceWizardPages = sourceModel.DataSourceWizardPages.OrderBy(page => page.AuthFlow).ThenBy(page => page.OrderIndex).ToList();
+                source.DataSourceWizardPages = sourceModel.DataSourceWizardPages.OrderBy(page => page.AuthFlow)
+                                                          .ThenBy(page => page.OrderIndex)
+                                                          .ToList();
             }
 
             return sources;
@@ -146,8 +155,7 @@ namespace Services.ExternalDataProviders
                 {
                     if(type.GetInterface("IDataSourceAdaptee") != typeof(IDataSourceAdaptee)) continue;
                     object dataSourceAdaptee = scope.ServiceProvider.GetService(type);
-                    if(dataSourceAdaptee != null)
-                        dataSources.Add(dataSourceAdaptee as IDataSourceAdaptee);
+                    if(dataSourceAdaptee != null) dataSources.Add(dataSourceAdaptee as IDataSourceAdaptee);
                 }
             }
 
@@ -168,7 +176,8 @@ namespace Services.ExternalDataProviders
             // For every model in the database, check if an adaptee is found. Whenever
             // no adaptee is found, this should get removed from the database.
             List<DataSource> modelsWithoutAdaptee =
-                sourceModels.Where(m => sources.SingleOrDefault(s => s.Guid == m.Guid) == null).ToList();
+                sourceModels.Where(m => sources.SingleOrDefault(s => s.Guid == m.Guid) == null)
+                            .ToList();
             modelsWithoutAdaptee.ForEach(async m => await dataSourceModelRepository.RemoveAsync(m.Id));
 
             dataSourceModelRepository.Save();

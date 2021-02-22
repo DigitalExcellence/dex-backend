@@ -17,26 +17,30 @@
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// The view model for the wizard page in the data source. This model differs from the wizard page resource model
-    /// by having the order index and auth flow property and the wizard page id refers to the model of the wizard page resource model.
+    ///     The view model for the wizard page in the data source. This model differs from the wizard page resource model
+    ///     by having the order index and auth flow property and the wizard page id refers to the model of the wizard page
+    ///     resource model.
     /// </summary>
     public class DataSourceWizardPageResource
     {
+
         /// <summary>
-        /// Gets or sets the wizard page id. This references a wizard page model.
+        ///     Gets or sets the wizard page id. This references a wizard page model.
         /// </summary>
         public int WizardPageId { get; set; }
 
         /// <summary>
-        /// Gets or sets the order index of the wizard page in this data source.
+        ///     Gets or sets the order index of the wizard page in this data source.
         /// </summary>
         public int OrderIndex { get; set; }
 
         /// <summary>
-        /// Gets or sets the auth flow of the wizard page in this data source.
+        ///     Gets or sets the auth flow of the wizard page in this data source.
         /// </summary>
         public bool AuthFlow { get; set; }
 
     }
+
 }

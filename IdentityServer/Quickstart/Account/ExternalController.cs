@@ -42,16 +42,18 @@ using System.Threading.Tasks;
 
 namespace IdentityServer
 {
+
     [SecurityHeaders]
     [AllowAnonymous]
     public class ExternalController : Controller
     {
+
         private readonly IClientStore clientStore;
+        private readonly Config config;
         private readonly IEventService events;
+        private readonly IIdentityUserService identityUserService;
         private readonly IIdentityServerInteractionService interaction;
         private readonly ILogger<ExternalController> logger;
-        private readonly Config config;
-        private readonly IIdentityUserService identityUserService;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
@@ -84,16 +86,17 @@ namespace IdentityServer
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
             }
+
             // start challenge and roundtrip the return URL and scheme
             AuthenticationProperties props = new AuthenticationProperties
-            {
-                RedirectUri = Url.Action(nameof(Callback)),
-                Items =
+                                             {
+                                                 RedirectUri = Url.Action(nameof(Callback)),
+                                                 Items =
                                                  {
                                                      {"returnUrl", returnUrl},
                                                      {"scheme", provider}
                                                  }
-            };
+                                             };
 
             HttpContext.Response.Cookies.Append("returnUrl", returnUrl);
 
@@ -101,16 +104,17 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// The callback endpoint for the fontys single sign on.
+        ///     The callback endpoint for the fontys single sign on.
         /// </summary>
         /// <param name="code">The authorization code.</param>
         /// <param name="state">The authorization state.</param>
         /// <param name="session_state">State of the session.</param>
         /// <returns>Redirection to the callback url.</returns>
         /// <exception cref="Exception">
-        /// The FHICT didn't return a correct response. Is the FHICT server accessible? - new Exception("Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException)
-        /// or
-        /// Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage
+        ///     The FHICT didn't return a correct response. Is the FHICT server accessible? - new Exception("Content:\n" +
+        ///     response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException)
+        ///     or
+        ///     Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage
         /// </exception>
         [HttpPost("/external/callback/fhict")]
         public async Task<IActionResult> Callback(string code, string state, string session_state)
@@ -140,23 +144,29 @@ namespace IdentityServer
 
             if(string.IsNullOrWhiteSpace(fhictToken.AccessToken))
             {
-                throw new Exception("The FHICT didn't return a correct response. Is the FHICT server accessible?", new Exception("Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage, response.ErrorException));
+                throw new Exception("The FHICT didn't return a correct response. Is the FHICT server accessible?",
+                                    new Exception(
+                                        "Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage,
+                                        response.ErrorException));
             }
 
             JwtSecurityToken jwt = new JwtSecurityToken(fhictToken.AccessToken);
-            string idp = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("idp")).Value;
-            string iss = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("iss")).Value;
+            string idp = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("idp"))
+                                     .Value;
+            string iss = (string) jwt.Payload.FirstOrDefault(c => c.Key.Equals("iss"))
+                                     .Value;
 
             ExternalResult result = new ExternalResult
-            {
-                Schema = iss,
-                Claims = jwt.Claims,
-                ReturnUrl = returnUrl,
-                IdToken = fhictToken.IdToken
-            };
+                                    {
+                                        Schema = iss,
+                                        Claims = jwt.Claims,
+                                        ReturnUrl = returnUrl,
+                                        IdToken = fhictToken.IdToken
+                                    };
 
             // lookup our user and external provider info
-            (IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims) = await FindUserFromExternalProvider(result);
+            (IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims) =
+                await FindUserFromExternalProvider(result);
 
             if(user == null)
             {
@@ -166,23 +176,24 @@ namespace IdentityServer
                 RestRequest informationRequest = new RestRequest(Method.GET);
                 informationRequest.AddHeader("Authorization", $"Bearer {fhictToken.AccessToken}");
                 IRestResponse informationResponse = informationClient.Execute(informationRequest);
-                ExternalUserInfo userinfo = JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
+                ExternalUserInfo userinfo =
+                    JsonConvert.DeserializeObject<ExternalUserInfo>(informationResponse.Content);
 
                 List<Claim> claimsList = claims.ToList();
                 claimsList.Add(new Claim("email", userinfo.PreferredUsername));
                 claimsList.Add(new Claim("idp", idp));
                 claimsList.Add(new Claim("name", userinfo.Name));
-                IdentityUser toInsertuser = new IdentityUser()
-                {
-                    ProviderId = provider,
-                    ExternalSubjectId = providerUserId,
-                    Email = userinfo.Email,
-                    Firstname = userinfo.GivenName,
-                    Lastname = userinfo.FamilyName,
-                    Name = userinfo.Name,
-                    Username = userinfo.PreferredUsername,
-                    ExternalProfileUrl = userinfo.Profile
-                };
+                IdentityUser toInsertuser = new IdentityUser
+                                            {
+                                                ProviderId = provider,
+                                                ExternalSubjectId = providerUserId,
+                                                Email = userinfo.Email,
+                                                Firstname = userinfo.GivenName,
+                                                Lastname = userinfo.FamilyName,
+                                                Name = userinfo.Name,
+                                                Username = userinfo.PreferredUsername,
+                                                ExternalProfileUrl = userinfo.Profile
+                                            };
 
                 // simply auto-provisions new external user
                 user = await identityUserService.AutoProvisionUser(toInsertuser);
@@ -197,28 +208,33 @@ namespace IdentityServer
 
             // issue authentication cookie for user
             IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
-            {
-                DisplayName = user.Name,
-                IdentityProvider = provider,
-                AdditionalClaims = additionalLocalClaims
-            };
+                                        {
+                                            DisplayName = user.Name,
+                                            IdentityProvider = provider,
+                                            AdditionalClaims = additionalLocalClaims
+                                        };
 
-            await HttpContext.SignInAsync(isuser, localSignInProps).ConfigureAwait(false);
+            await HttpContext.SignInAsync(isuser, localSignInProps)
+                             .ConfigureAwait(false);
 
             // delete temporary cookie used during external authentication
-            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme)
+                             .ConfigureAwait(false);
 
             // check if external login is in the context of an OIDC request
-            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
+            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl)
+                                                            .ConfigureAwait(false);
             await events.RaiseAsync(new UserLoginSuccessEvent(provider,
-                                                               providerUserId,
-                                                               user.SubjectId,
-                                                               user.Username,
-                                                               true,
-                                                               context?.ClientId)).ConfigureAwait(false);
+                                                              providerUserId,
+                                                              user.SubjectId,
+                                                              user.Username,
+                                                              true,
+                                                              context?.ClientId))
+                        .ConfigureAwait(false);
             if(context != null)
             {
-                if(await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
+                if(await clientStore.IsPkceClientAsync(context.ClientId)
+                                    .ConfigureAwait(false))
                 {
                     // if the client is PKCE then we assume it's native, so this change in how to
                     // return the response is for better UX for the end user.
@@ -230,7 +246,7 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Default callback function.
+        ///     Default callback function.
         /// </summary>
         /// <returns>Redirection to the callback url.</returns>
         /// <exception cref="Exception">External authentication error</exception>
@@ -239,7 +255,8 @@ namespace IdentityServer
         {
             // read external identity from the temporary cookie
             AuthenticateResult result =
-                await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+                await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme)
+                                 .ConfigureAwait(false);
             if(result?.Succeeded != true)
             {
                 throw new Exception("External authentication error");
@@ -272,32 +289,37 @@ namespace IdentityServer
 
             // issue authentication cookie for user
             IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
-            {
-                DisplayName = user.Username,
-                IdentityProvider = provider,
-                AdditionalClaims = additionalLocalClaims
-            };
+                                        {
+                                            DisplayName = user.Username,
+                                            IdentityProvider = provider,
+                                            AdditionalClaims = additionalLocalClaims
+                                        };
 
-            await HttpContext.SignInAsync(isuser, localSignInProps).ConfigureAwait(false);
+            await HttpContext.SignInAsync(isuser, localSignInProps)
+                             .ConfigureAwait(false);
 
             // delete temporary cookie used during external authentication
-            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme).ConfigureAwait(false);
+            await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme)
+                             .ConfigureAwait(false);
 
             // retrieve return URL
             string returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
             // check if external login is in the context of an OIDC request
-            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl).ConfigureAwait(false);
+            AuthorizationRequest context = await interaction.GetAuthorizationContextAsync(returnUrl)
+                                                            .ConfigureAwait(false);
             await events.RaiseAsync(new UserLoginSuccessEvent(provider,
-                                                               providerUserId,
-                                                               user.SubjectId,
-                                                               user.Username,
-                                                               true,
-                                                               context?.ClientId)).ConfigureAwait(false);
+                                                              providerUserId,
+                                                              user.SubjectId,
+                                                              user.Username,
+                                                              true,
+                                                              context?.ClientId))
+                        .ConfigureAwait(false);
 
             if(context != null)
             {
-                if(await clientStore.IsPkceClientAsync(context.ClientId).ConfigureAwait(false))
+                if(await clientStore.IsPkceClientAsync(context.ClientId)
+                                    .ConfigureAwait(false))
                 {
                     // if the client is PKCE then we assume it's native, so this change in how to
                     // return the response is for better UX for the end user.
@@ -309,12 +331,13 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Finds the user from external provider.
+        ///     Finds the user from external provider.
         /// </summary>
         /// <param name="result">The ExternalResult information.</param>
         /// <returns>The user from the identity server, the external provider uri, The external user id, the claims</returns>
         /// <exception cref="System.Exception">Unknown userid</exception>
-        private async Task<(IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims)> FindUserFromExternalProvider(ExternalResult result)
+        private async Task<(IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims)>
+            FindUserFromExternalProvider(ExternalResult result)
         {
             // try to determine the unique id of the external user (issued by the provider)
             // the most common claim type for that are the sub claim and the NameIdentifier
@@ -337,7 +360,7 @@ namespace IdentityServer
         }
 
         /// <summary>
-        /// Processes the login callback for oidc.
+        ///     Processes the login callback for oidc.
         /// </summary>
         /// <param name="externalResult">The result model got from the external identity server.</param>
         /// <param name="localClaims">The extra claims our identity server can add.</param>
@@ -368,5 +391,7 @@ namespace IdentityServer
                                              });
             }
         }
+
     }
+
 }

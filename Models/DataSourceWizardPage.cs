@@ -17,39 +17,40 @@
 
 namespace Models
 {
+
     /// <summary>
-    /// This class works as the link between the data source and the wizard page.
+    ///     This class works as the link between the data source and the wizard page.
     /// </summary>
     public class DataSourceWizardPage
     {
 
         /// <summary>
-        /// Gets or sets a value for the DataSource property.
+        ///     Gets or sets a value for the DataSource property.
         /// </summary>
         public DataSource DataSource { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the DataSourceId property.
+        ///     Gets or sets a value for the DataSourceId property.
         /// </summary>
         public int DataSourceId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the WizardPage property.
+        ///     Gets or sets a value for the WizardPage property.
         /// </summary>
         public WizardPage WizardPage { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the WizardPageId property.
+        ///     Gets or sets a value for the WizardPageId property.
         /// </summary>
         public int WizardPageId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the AuthFlow property.
+        ///     Gets or sets a value for the AuthFlow property.
         /// </summary>
         public bool AuthFlow { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the OrderIndex property.
+        ///     Gets or sets a value for the OrderIndex property.
         /// </summary>
         public int OrderIndex { get; set; }
 

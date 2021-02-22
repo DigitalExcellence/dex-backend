@@ -115,12 +115,10 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllProjects(
             [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
-
-
             ProblemDetails problem = new ProblemDetails
-            {
-                Title = "Invalid search request."
-            };
+                                     {
+                                         Title = "Invalid search request."
+                                     };
             if(projectFilterParamsResource.Page != null &&
                projectFilterParamsResource.Page < 1)
             {
@@ -158,7 +156,7 @@ namespace API.Controllers
             if(HttpContext.User.CheckIfUserIsAuthenticated())
             {
                 User currentUser = await HttpContext.GetContextUser(userService)
-                                            .ConfigureAwait(false);
+                                                    .ConfigureAwait(false);
 
                 foreach(Project project in projects)
                 {
@@ -166,7 +164,8 @@ namespace API.Controllers
                     {
                         filteredProjects.Add(project);
                     }
-                    if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
+                    if(project.InstitutePrivate &&
+                       currentUser.InstitutionId == project.User.InstitutionId)
                     {
                         filteredProjects.Add(project);
                     }
@@ -186,13 +185,16 @@ namespace API.Controllers
             IEnumerable<ProjectResultResource> results =
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(filteredProjects);
             ProjectResultsResource resultsResource = new ProjectResultsResource
-            {
-                Results = results.ToArray(),
-                Count = results.Count(),
-                TotalCount = await projectService.ProjectsCount(projectFilterParams),
-                Page = projectFilterParams.Page,
-                TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams)
-            };
+                                                     {
+                                                         Results = results.ToArray(),
+                                                         Count = results.Count(),
+                                                         TotalCount =
+                                                             await projectService.ProjectsCount(projectFilterParams),
+                                                         Page = projectFilterParams.Page,
+                                                         TotalPages =
+                                                             await projectService.GetProjectsTotalPages(
+                                                                 projectFilterParams)
+                                                     };
 
             return Ok(resultsResource);
         }
@@ -213,16 +215,15 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
         {
-
-
             if(projectId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting project.",
-                    Detail = "The Id is smaller then 0 and therefore it could never be a valid project id.",
-                    Instance = "D590A4FE-FDBA-4AE5-B184-BC7395C45D4E"
-                };
+                                         {
+                                             Title = "Failed getting project.",
+                                             Detail =
+                                                 "The Id is smaller then 0 and therefore it could never be a valid project id.",
+                                             Instance = "D590A4FE-FDBA-4AE5-B184-BC7395C45D4E"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -231,20 +232,21 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting project.",
-                    Detail = "The project could not be found in the database.",
-                    Instance = "38516C41-4BFB-47BE-A759-1206BE6D2D13"
-                };
+                                         {
+                                             Title = "Failed getting project.",
+                                             Detail = "The project could not be found in the database.",
+                                             Instance = "38516C41-4BFB-47BE-A759-1206BE6D2D13"
+                                         };
                 return NotFound(problem);
             }
 
             if(HttpContext.User.CheckIfUserIsAuthenticated())
             {
                 User currentUser = await HttpContext.GetContextUser(userService)
-                                            .ConfigureAwait(false);
+                                                    .ConfigureAwait(false);
 
-                if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
+                if(project.InstitutePrivate &&
+                   currentUser.InstitutionId == project.User.InstitutionId)
                 {
                     return Ok(mapper.Map<Project, ProjectResourceResult>(project));
                 }
@@ -282,11 +284,11 @@ namespace API.Controllers
             if(projectResource == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to create a new project.",
-                    Detail = "The specified project resource was null.",
-                    Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
-                };
+                                         {
+                                             Title = "Failed to create a new project.",
+                                             Detail = "The specified project resource was null.",
+                                             Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -298,11 +300,12 @@ namespace API.Controllers
                 if(!callToActionOptions.Any())
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Call to action value was not found.",
-                        Detail = "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                    };
+                                             {
+                                                 Title = "Call to action value was not found.",
+                                                 Detail =
+                                                     "The specified call to action value was not found while creating the project.",
+                                                 Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                                             };
                     return BadRequest(problem);
                 }
             }
@@ -314,11 +317,11 @@ namespace API.Controllers
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "File was not found.",
-                    Detail = "The specified file was not found while creating project.",
-                    Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
-                };
+                                         {
+                                             Title = "File was not found.",
+                                             Detail = "The specified file was not found while creating project.",
+                                             Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -337,11 +340,11 @@ namespace API.Controllers
 
 
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to save new project.",
-                    Detail = "There was a problem while saving the project to the database.",
-                    Instance = "9FEEF001-F91F-44E9-8090-6106703AB033"
-                };
+                                         {
+                                             Title = "Failed to save new project.",
+                                             Detail = "There was a problem while saving the project to the database.",
+                                             Instance = "9FEEF001-F91F-44E9-8090-6106703AB033"
+                                         };
                 return BadRequest(problem);
             }
         }
@@ -367,11 +370,11 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to update project.",
-                    Detail = "The specified project could not be found in the database.",
-                    Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
-                };
+                                         {
+                                             Title = "Failed to update project.",
+                                             Detail = "The specified project could not be found in the database.",
+                                             Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
+                                         };
                 return NotFound(problem);
             }
 
@@ -382,11 +385,11 @@ namespace API.Controllers
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to edit the project.",
-                    Detail = "The user is not allowed to edit the project.",
-                    Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
-                };
+                                         {
+                                             Title = "Failed to edit the project.",
+                                             Detail = "The user is not allowed to edit the project.",
+                                             Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
+                                         };
                 return Unauthorized(problem);
             }
 
@@ -398,11 +401,12 @@ namespace API.Controllers
                 if(!callToActionOptions.Any())
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Call to action value was not found.",
-                        Detail = "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                    };
+                                             {
+                                                 Title = "Call to action value was not found.",
+                                                 Detail =
+                                                     "The specified call to action value was not found while creating the project.",
+                                                 Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                                             };
                     return BadRequest(problem);
                 }
             }
@@ -411,13 +415,16 @@ namespace API.Controllers
             File file = null;
             if(projectResource.FileId != 0)
             {
-                if(project.ProjectIconId != 0 && project.ProjectIconId != null)
+                if(project.ProjectIconId != 0 &&
+                   project.ProjectIconId != null)
                 {
                     if(project.ProjectIconId != projectResource.FileId)
                     {
                         File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+
                         // Remove the file from the filesystem
                         fileUploader.DeleteFileFromDirectory(fileToDelete);
+
                         // Remove file from DB
                         await fileService.RemoveAsync(project.ProjectIconId.Value);
 
@@ -435,11 +442,11 @@ namespace API.Controllers
                 } else
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "File was not found.",
-                        Detail = "The specified file was not found while updating project.",
-                        Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
-                    };
+                                             {
+                                                 Title = "File was not found.",
+                                                 Detail = "The specified file was not found while updating project.",
+                                                 Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                                             };
                     return BadRequest(problem);
                 }
             }
@@ -471,11 +478,11 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to delete the project.",
-                    Detail = "The project could not be found in the database.",
-                    Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
-                };
+                                         {
+                                             Title = "Failed to delete the project.",
+                                             Detail = "The project could not be found in the database.",
+                                             Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
+                                         };
                 return NotFound(problem);
             }
 
@@ -489,11 +496,11 @@ namespace API.Controllers
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to delete the project.",
-                    Detail = "The user is not allowed to delete the project.",
-                    Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
-                };
+                                         {
+                                             Title = "Failed to delete the project.",
+                                             Detail = "The user is not allowed to delete the project.",
+                                             Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
+                                         };
                 return Unauthorized(problem);
             }
 
@@ -513,11 +520,11 @@ namespace API.Controllers
                 } catch(FileNotFoundException)
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "File could not be deleted because the path does not exist.",
-                        Detail = "File could not be found.",
-                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
-                    };
+                                             {
+                                                 Title = "File could not be deleted because the path does not exist.",
+                                                 Detail = "File could not be found.",
+                                                 Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
+                                             };
 
                     return NotFound(problem);
                 }
@@ -548,22 +555,22 @@ namespace API.Controllers
             if(await userService.FindAsync(user.Id) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                                         };
                 return NotFound(problem);
             }
 
             if(userProjectService.CheckIfUserFollows(user.Id, projectId))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "User already follows this project",
-                    Detail = "You are already following this project.",
-                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
-                };
+                                         {
+                                             Title = "User already follows this project",
+                                             Detail = "You are already following this project.",
+                                             Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
+                                         };
                 return Conflict(problem);
             }
 
@@ -572,11 +579,11 @@ namespace API.Controllers
             if(await projectService.FindAsync(projectId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the project.",
-                    Detail = "The database does not contain a project with this project id.",
-                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
-                };
+                                         {
+                                             Title = "Failed getting the project.",
+                                             Detail = "The database does not contain a project with this project id.",
+                                             Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                                         };
                 return NotFound(problem);
             }
             UserProject userProject = new UserProject(project, user);
@@ -604,22 +611,22 @@ namespace API.Controllers
             if(await userService.FindAsync(user.Id) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                                         };
                 return NotFound(problem);
             }
 
             if(userProjectService.CheckIfUserFollows(user.Id, projectId) == false)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "User is not following this project",
-                    Detail = "You are not following this project.",
-                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
-                };
+                                         {
+                                             Title = "User is not following this project",
+                                             Detail = "You are not following this project.",
+                                             Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
+                                         };
                 return Conflict(problem);
             }
 
@@ -628,11 +635,11 @@ namespace API.Controllers
             if(await projectService.FindAsync(projectId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the project.",
-                    Detail = "The database does not contain a project with this project id.",
-                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
-                };
+                                         {
+                                             Title = "Failed getting the project.",
+                                             Detail = "The database does not contain a project with this project id.",
+                                             Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                                         };
                 return NotFound(problem);
             }
             UserProject userProject = new UserProject(project, user);
@@ -665,22 +672,23 @@ namespace API.Controllers
             if(currentUser == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed to getting the user account.",
-                    Detail = "The database does not contain a user with the provided user id.",
-                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
-                };
+                                                {
+                                                    Title = "Failed to getting the user account.",
+                                                    Detail =
+                                                        "The database does not contain a user with the provided user id.",
+                                                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                                                };
                 return NotFound(problemDetails);
             }
 
             if(userProjectLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectId))
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "User already liked this project",
-                    Detail = "You already liked this project.",
-                    Instance = "5B0104E2-C864-4ADB-9321-32CD352DC124"
-                };
+                                                {
+                                                    Title = "User already liked this project",
+                                                    Detail = "You already liked this project.",
+                                                    Instance = "5B0104E2-C864-4ADB-9321-32CD352DC124"
+                                                };
                 return Conflict(problemDetails);
             }
 
@@ -689,11 +697,12 @@ namespace API.Controllers
             if(projectToLike == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed to getting the project.",
-                    Detail = "The database does not contain a project with the provided project id.",
-                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
-                };
+                                                {
+                                                    Title = "Failed to getting the project.",
+                                                    Detail =
+                                                        "The database does not contain a project with the provided project id.",
+                                                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                                                };
                 return NotFound(problemDetails);
             }
 
@@ -710,11 +719,11 @@ namespace API.Controllers
                 Log.Logger.Error(e, "Database exception!");
 
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Could not create the liked project details.",
-                    Detail = "The database failed to save the liked project.",
-                    Instance = "F941879E-6C25-4A35-A962-8E86382E1849"
-                };
+                                                {
+                                                    Title = "Could not create the liked project details.",
+                                                    Detail = "The database failed to save the liked project.",
+                                                    Instance = "F941879E-6C25-4A35-A962-8E86382E1849"
+                                                };
                 return BadRequest(problemDetails);
             }
         }
@@ -741,22 +750,23 @@ namespace API.Controllers
             if(currentUser == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed to getting the user account.",
-                    Detail = "The database does not contain a user with the provided user id.",
-                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
-                };
+                                                {
+                                                    Title = "Failed to getting the user account.",
+                                                    Detail =
+                                                        "The database does not contain a user with the provided user id.",
+                                                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                                                };
                 return NotFound(problemDetails);
             }
 
             if(!userProjectLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectId))
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "User didn't like this project.",
-                    Detail = "You did not like this project at the moment.",
-                    Instance = "03590F81-C06D-4707-A646-B9B7F79B8A15"
-                };
+                                                {
+                                                    Title = "User didn't like this project.",
+                                                    Detail = "You did not like this project at the moment.",
+                                                    Instance = "03590F81-C06D-4707-A646-B9B7F79B8A15"
+                                                };
                 return Conflict(problemDetails);
             }
 
@@ -766,11 +776,12 @@ namespace API.Controllers
             if(projectToLike == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed to getting the project.",
-                    Detail = "The database does not contain a project with the provided project id.",
-                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
-                };
+                                                {
+                                                    Title = "Failed to getting the project.",
+                                                    Detail =
+                                                        "The database does not contain a project with the provided project id.",
+                                                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                                                };
                 return NotFound(problemDetails);
             }
 

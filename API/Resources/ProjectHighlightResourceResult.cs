@@ -17,9 +17,10 @@
 
 namespace API.Resources
 {
+
     /// <summary>
     ///     The view model result for a project that is returned when requesting highlights
-    /// Only information that the highlight needs is returned
+    ///     Only information that the highlight needs is returned
     /// </summary>
     public class ProjectHighlightResourceResult
     {
@@ -35,8 +36,10 @@ namespace API.Resources
         public string ShortDescription { get; set; }
 
         /// <summary>
-        /// This gets or set the file of the project
+        ///     This gets or set the file of the project
         /// </summary>
         public FileResourceResult ProjectIcon { get; set; }
+
     }
+
 }

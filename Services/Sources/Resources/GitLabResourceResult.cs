@@ -19,48 +19,51 @@ namespace Services.Sources.Resources
 {
 
     /// <summary>
-    /// Viewmodel for gitlab
+    ///     Viewmodel for gitlab
     /// </summary>
     public class GitLabResourceResult
     {
+
         /// <summary>
-        /// Gets or sets the identifier.
+        ///     Gets or sets the identifier.
         /// </summary>
         /// <value>
-        /// The identifier.
+        ///     The identifier.
         /// </value>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         /// <value>
-        /// The name.
+        ///     The name.
         /// </value>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         /// <value>
-        /// The description.
+        ///     The description.
         /// </value>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the readme URL.
+        ///     Gets or sets the readme URL.
         /// </summary>
         /// <value>
-        /// The readme URL.
+        ///     The readme URL.
         /// </value>
         public string ReadmeUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the web URL.
+        ///     Gets or sets the web URL.
         /// </summary>
         /// <value>
-        /// The web URL.
+        ///     The web URL.
         /// </value>
         public string WebUrl { get; set; }
+
     }
+
 }

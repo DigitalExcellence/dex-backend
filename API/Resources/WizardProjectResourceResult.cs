@@ -19,8 +19,9 @@ using System.Collections.Generic;
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// The view model of the project resource results from the wizard
+    ///     The view model of the project resource results from the wizard
     /// </summary>
     public class WizardProjectResourceResult
     {
@@ -56,7 +57,7 @@ namespace API.Resources
         public ICollection<CollaboratorResourceResult> Collaborators { get; set; }
 
         /// <summary>
-        /// This gets or set the file of the project
+        ///     This gets or set the file of the project
         /// </summary>
         public FileResourceResult ProjectIcon { get; set; }
 
