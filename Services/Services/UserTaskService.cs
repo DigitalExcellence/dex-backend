@@ -49,7 +49,7 @@ namespace Services.Services
         public async Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths)
         {
             List<User> users = userService.GetAllExpectedGraduatingUsers(withinAmountOfMonths);
-            IEnumerable<UserTask> allUserTasks = await Repository.GetAll();
+            IEnumerable<UserTask> allUserTasks = await Repository.GetAllUserTasks();
             List<UserTask> userTasks = new List<UserTask>();
 
             foreach(User u in users)

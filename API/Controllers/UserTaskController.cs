@@ -203,7 +203,7 @@ namespace API.Controllers
                                                          Request.Headers.FirstOrDefault(h => h.Key == "email")
                                                                 .Value.FirstOrDefault());
             identityHttpClient.DefaultRequestHeaders.Add("subjectId", user.IdentityId);
-            HttpResponseMessage resp = await identityHttpClient.PutAsync("ExternalAccount", new StringContent("test"));
+            HttpResponseMessage resp = await identityHttpClient.PutAsync("ExternalAccount", new StringContent(""));
 
             if(!resp.IsSuccessStatusCode)
             {

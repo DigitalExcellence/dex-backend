@@ -18,6 +18,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,8 @@ namespace Repositories
     {
 
         public Task<List<UserTask>> GetUserTasksForUser(int userId);
+
+        Task<IEnumerable<UserTask>> GetAllUserTasks();
 
     }
 
@@ -42,6 +45,13 @@ namespace Repositories
         {
             return await GetDbSet<UserTask>()
                          .Where(u => u.User.Id == userId)
+                         .ToListAsync();
+        }
+
+        public async Task<IEnumerable<UserTask>> GetAllUserTasks()
+        {
+            return await GetDbSet<UserTask>()
+                         .Include(u => u.User)
                          .ToListAsync();
         }
 
