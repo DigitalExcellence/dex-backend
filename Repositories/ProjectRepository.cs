@@ -44,7 +44,7 @@ namespace Repositories
         /// <param name="orderByAsc"></param>
         /// <param name="highlighted"></param>
         /// <returns>List of projects</returns>
-        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
@@ -94,7 +94,7 @@ namespace Repositories
         /// <returns>
         ///     This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
     }
 
@@ -147,7 +147,7 @@ namespace Repositories
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <returns>This method returns a list of projects filtered by the specified parameters.</returns>
-        public virtual async Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
+        public virtual async Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
@@ -171,6 +171,11 @@ namespace Repositories
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
+
+                project.LinkedInstitutions = await GetDbSet<ProjectInstitution>()
+                                                 .Include(p => p.Institution)
+                                                 .Where(p => p.ProjectId == project.Id)
+                                                 .ToListAsync();
             }
             return await queryableProjects.ToListAsync();
         }
@@ -232,7 +237,7 @@ namespace Repositories
         /// <returns>
         ///     This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
-        public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public async Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id)
         {
             Project project = await GetDbSet<Project>()
                                     .Include(p => p.User)
@@ -248,6 +253,11 @@ namespace Repositories
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
+
+                project.LinkedInstitutions = await GetDbSet<ProjectInstitution>()
+                                                    .Include(p => p.Institution)
+                                                    .Where(p => p.ProjectId == project.Id)
+                                                    .ToListAsync();
             }
 
             return RedactUser(project);

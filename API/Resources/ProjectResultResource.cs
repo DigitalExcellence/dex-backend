@@ -48,6 +48,11 @@ namespace API.Resources
         public IEnumerable<CollaboratorResourceResult> Collaborators { get; set; }
 
         /// <summary>
+        ///     This gets or sets the linkedInstitutions
+        /// </summary>
+        public ICollection<ProjectInstitutionResourceResult> LinkedInstitutions { get; set; }
+
+        /// <summary>
         ///     Get or Set the created date from the project
         /// </summary>
         public DateTime Created { get; set; }

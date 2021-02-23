@@ -452,7 +452,7 @@ namespace API
                 if(!context.Institution.Any())
                 {
                     // Seed institutions
-                    context.Institution.Add(Seed.SeedInstitution());
+                    context.Institution.AddRange(Seed.SeedInstitutions());
                     context.SaveChanges();
                 }
 
@@ -473,7 +473,9 @@ namespace API
                 {
                     //Seed projects
                     List<User> users = context.User.ToList();
-                    context.Project.AddRange(Seed.SeedProjects(users));
+                    //Seed projectInstitutions
+                    List<Institution> institutions = context.Institution.ToList();
+                    context.Project.AddRange(Seed.SeedProjects(users, institutions));
                     context.SaveChanges();
                 }
                 if(!context.Collaborators.Any())

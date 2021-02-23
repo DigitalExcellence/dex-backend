@@ -15,34 +15,14 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
-
 namespace Models
 {
-
-    public class Institution
+    public class ProjectInstitution
     {
-
-        /// <summary>
-        ///     Gets or sets a the id of the institution.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value for the name of the institution.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value for the description of the institution.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value for the identity id of this institution.
-        /// </summary>
-        public string IdentityId { get; set; }
-
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
+        public int InstitutionId { get; set; }
+        public Institution Institution { get; set; }
+        
     }
-
 }

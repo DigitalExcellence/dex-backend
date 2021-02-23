@@ -20,6 +20,7 @@ using Models;
 using Models.Defaults;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Data.Helpers
 {
@@ -41,9 +42,9 @@ namespace Data.Helpers
             for(int i = 1; i < 5; i++)
             {
                 RoleScope roleScope = new RoleScope("ProjectWrite", i)
-                                      {
-                                          RoleId = i
-                                      };
+                {
+                    RoleId = i
+                };
                 roleScopes.Add(roleScope);
             }
 
@@ -61,9 +62,9 @@ namespace Data.Helpers
         public static Role SeedAlumniRole()
         {
             Role alumniRole = new Role
-                              {
-                                  Name = Defaults.Roles.Alumni
-                              };
+            {
+                Name = Defaults.Roles.Alumni
+            };
 
             return alumniRole;
         }
@@ -99,20 +100,20 @@ namespace Data.Helpers
         {
             List<Role> roles = new List<Role>();
             Role registeredUserRole = new Role
-                                      {
-                                          Name = nameof(Defaults.Roles.RegisteredUser),
+            {
+                Name = nameof(Defaults.Roles.RegisteredUser),
 
-                                          Scopes = new List<RoleScope>
+                Scopes = new List<RoleScope>
                                                    {
                                                        new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                                    }
-                                      };
+            };
             roles.Add(registeredUserRole);
 
             Role prRole = new Role
-                          {
-                              Name = nameof(Defaults.Roles.PrUser),
-                              Scopes = new List<RoleScope>
+            {
+                Name = nameof(Defaults.Roles.PrUser),
+                Scopes = new List<RoleScope>
                                        {
                                            new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
                                            new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
@@ -120,13 +121,13 @@ namespace Data.Helpers
                                            new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                                            new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                        }
-                          };
+            };
             roles.Add(prRole);
 
             Role dataOfficerRole = new Role
-                                   {
-                                       Name = nameof(Defaults.Roles.DataOfficer),
-                                       Scopes = new List<RoleScope>
+            {
+                Name = nameof(Defaults.Roles.DataOfficer),
+                Scopes = new List<RoleScope>
                                                 {
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserRead)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
@@ -134,13 +135,13 @@ namespace Data.Helpers
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                                 }
-                                   };
+            };
             roles.Add(dataOfficerRole);
 
             Role administratorRole = new Role
-                                     {
-                                         Name = nameof(Defaults.Roles.Administrator),
-                                         Scopes = new List<RoleScope>
+            {
+                Name = nameof(Defaults.Roles.Administrator),
+                Scopes = new List<RoleScope>
                                                   {
                                                       new RoleScope(nameof(Defaults.Scopes.AdminProjectWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.UserWrite)),
@@ -158,14 +159,14 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.DataSourceWrite))
                                                   }
-                                     };
+            };
             roles.Add(administratorRole);
 
             Role alumniRole = new Role
-                              {
-                                  Name = nameof(Defaults.Roles.Alumni),
-                                  Scopes = new List<RoleScope>()
-                              };
+            {
+                Name = nameof(Defaults.Roles.Alumni),
+                Scopes = new List<RoleScope>()
+            };
             roles.Add(alumniRole);
 
             return roles;
@@ -181,12 +182,12 @@ namespace Data.Helpers
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
 
             User user = new User
-                        {
-                            Role = adminRole,
-                            IdentityId = "88421113",
-                            Email = "Administrator@dex.software",
-                            Name = "Administrator bob"
-                        };
+            {
+                Role = adminRole,
+                IdentityId = "88421113",
+                Email = "Administrator@dex.software",
+                Name = "Administrator bob"
+            };
 
             return user;
         }
@@ -198,12 +199,37 @@ namespace Data.Helpers
         public static Institution SeedInstitution()
         {
             Institution institution = new Institution
-                                      {
-                                          Name = "Fontys",
-                                          Description = "Description for Fontys",
-                                          IdentityId = "https://identity.fhict.nl"
-                                      };
+            {
+                Name = "Fontys",
+                Description = "Description for Fontys",
+                IdentityId = "https://identity.fhict.nl"
+            };
             return institution;
+        }
+
+        public static List<Institution> SeedInstitutions()
+        {
+            return new List<Institution>
+            {
+                new Institution
+                {
+                    Name = "Fontys",
+                    Description = "Description for Fontys",
+                    IdentityId = "https://identity.fhict.nl"
+                },
+                new Institution()
+                {
+                    Name = "Fontys2",
+                    Description = "Description for Fontys2",
+                    IdentityId = "https://identity.fhict.nl"
+                },
+                new Institution()
+                {
+                    Name = "Fontys3",
+                    Description = "Description for Fontys3",
+                    IdentityId = "https://identity.fhict.nl"
+                }
+            };
         }
 
         /// <summary>
@@ -215,12 +241,12 @@ namespace Data.Helpers
         {
             Role prRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
             User user = new User
-                        {
-                            IdentityId = "985632147",
-                            Email = "Pr@dex.software",
-                            Name = "Pr jerry",
-                            Role = prRole
-                        };
+            {
+                IdentityId = "985632147",
+                Email = "Pr@dex.software",
+                Name = "Pr jerry",
+                Role = prRole
+            };
 
             return user;
         }
@@ -234,13 +260,13 @@ namespace Data.Helpers
         {
             Role dataOfficerRole = roles.Find(role => role.Name == nameof(Defaults.Roles.DataOfficer));
             User user = new User
-                        {
-                            IdentityId = "954654861",
-                            Email = "dataofficer@dex.software",
-                            Name = "data officer Sam",
-                            Role = dataOfficerRole,
-                            InstitutionId = 1
-                        };
+            {
+                IdentityId = "954654861",
+                Email = "dataofficer@dex.software",
+                Name = "data officer Sam",
+                Role = dataOfficerRole,
+                InstitutionId = 1
+            };
 
             return user;
         }
@@ -249,12 +275,12 @@ namespace Data.Helpers
         {
             Role alumniRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Alumni));
             User user = new User
-                        {
-                            IdentityId = "123456789",
-                            Email = "Alumni@dex.software",
-                            Name = "Alumni test",
-                            Role = alumniRole
-                        };
+            {
+                IdentityId = "123456789",
+                Email = "Alumni@dex.software",
+                Name = "Alumni test",
+                Role = alumniRole
+            };
 
             return user;
         }
@@ -262,7 +288,7 @@ namespace Data.Helpers
         /// <summary>
         ///     Seed random projects into the database using fake date from Bogus
         /// </summary>
-        public static List<Project> SeedProjects(List<User> users)
+        public static List<Project> SeedProjects(List<User> users, List<Institution> institutions)
         {
             if(users.Count < 1) return null;
             List<Project> projects = new List<Project>();
@@ -272,6 +298,11 @@ namespace Data.Helpers
                 User user = users[r.Next(0, users.Count - 1)];
                 Faker<Project> projectToFake = new Faker<Project>()
                                                .RuleFor(s => s.UserId, user.Id)
+                                               .RuleFor(s => s.LinkedInstitutions,
+                                               f => institutions
+                                                    .Select(i => new ProjectInstitution { InstitutionId = i.Id })
+                                                    .ToList()
+                                                    )
                                                .RuleFor(s => s.Uri, f => f.Internet.Url())
                                                .RuleFor(s => s.Name, f => f.Commerce.ProductName())
                                                .RuleFor(s => s.Description, f => f.Lorem.Sentences(10))
@@ -280,6 +311,9 @@ namespace Data.Helpers
 
                 project.Created = DateTime.Now.AddDays(-2);
                 project.Updated = DateTime.Now;
+
+                project.LinkedInstitutions.ForEach(pi => pi.ProjectId = project.Id);
+
                 projects.Add(project);
             }
 

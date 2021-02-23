@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Models
 {
@@ -28,6 +29,7 @@ namespace Models
         public Project()
         {
             Collaborators = new List<Collaborator>();
+            LinkedInstitutions = new List<ProjectInstitution>();
         }
 
         public int Id { get; set; }
@@ -47,6 +49,8 @@ namespace Models
 
         public List<Collaborator> Collaborators { get; set; }
 
+        public List<ProjectInstitution> LinkedInstitutions { get; set; }
+
         [Required]
         public string Uri { get; set; }
 
@@ -65,6 +69,28 @@ namespace Models
         public List<ProjectLike> Likes { get; set; }
 
         public bool InstitutePrivate { get; set; }
+
+        /// <summary>
+        /// Checks if the user can access the project based on
+        /// if the insitution is private, if the user is part of an institution linked to this project
+        /// or if the user is the one who created the project
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool CanAccess(User user)
+        {
+            if(InstitutePrivate == false)
+            {
+                return true;
+            }
+
+            if(User.Id == user.Id || LinkedInstitutions.Any(li => li.InstitutionId == user.InstitutionId))
+            {
+                return true;
+            }
+
+            return false;
+        }
 
     }
 

@@ -15,34 +15,17 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models;
 
-namespace Models
+namespace Data.Configurations
 {
-
-    public class Institution
+    class ProjectInstitutionConfiguration : IEntityTypeConfiguration<ProjectInstitution>
     {
-
-        /// <summary>
-        ///     Gets or sets a the id of the institution.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value for the name of the institution.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value for the description of the institution.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value for the identity id of this institution.
-        /// </summary>
-        public string IdentityId { get; set; }
-
+        public void Configure(EntityTypeBuilder<ProjectInstitution> builder)
+        {
+            builder.HasKey(pi => new { pi.ProjectId, pi.InstitutionId });
+        }
     }
-
 }

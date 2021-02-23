@@ -38,14 +38,14 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams);
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams);
 
         /// <summary>
         ///     Gets a project including owner and collaborators
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Project entity</returns>
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
         /// <summary>
         ///     Get the number of projects
@@ -109,7 +109,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        public Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams)
+        public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams)
         {
             if(!projectFilterParams.AmountOnPage.HasValue ||
                projectFilterParams.AmountOnPage <= 0)
@@ -138,7 +138,7 @@ namespace Services.Services
             }
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
-            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip,
+            return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(skip,
                                                                    take,
                                                                    orderBy,
                                                                    orderByDirection,
@@ -174,9 +174,9 @@ namespace Services.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns>A project entity</returns>
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id)
         {
-            return Repository.FindWithUserAndCollaboratorsAsync(id);
+            return Repository.FindWithUserCollaboratorsAndInstitutionsAsync(id);
         }
 
     }
