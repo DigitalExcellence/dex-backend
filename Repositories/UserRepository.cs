@@ -108,7 +108,7 @@ namespace Repositories
                          .Include(f => f.UserProject)
                          .SingleOrDefaultAsync();
         }
-        /// <summary>
+        /// <summary> test
         /// Gets the user by identity identifier asynchronous.
         /// </summary>
         /// <param name="identityId">The identity identifier.</param>
