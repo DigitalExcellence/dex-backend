@@ -137,7 +137,7 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
-
+                                
                 o.AddPolicy(nameof(Defaults.Scopes.UserRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
@@ -491,6 +491,14 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
+                if(!context.ProjectLike.Any())
+                {
+                    List<Project> projects = context.Project.ToList();
+                    context.ProjectLike.AddRange(Seed.SeedProjectLikes(projects));
+                    context.SaveChanges();
+                }
+
+
 
                 // TODO seed embedded projects
             }

@@ -15,10 +15,24 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Models
 {
     public class ProjectInstitution
     {
+        public ProjectInstitution()
+        {
+
+        }
+
+        public ProjectInstitution(int projectId, int institutionId)
+        {
+            this.ProjectId = projectId;
+            this.InstitutionId = institutionId;
+        }
+
+        public int Id { get; set; }
         public int ProjectId { get; set; }
         public Project Project { get; set; }
         public int InstitutionId { get; set; }

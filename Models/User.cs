@@ -99,6 +99,10 @@ namespace Models
         /// </summary>
         public List<UserTask> UserTasks { get; set; }
 
+        public bool IsDataOfficerForInstitution(int institutionId)
+        {
+            return InstitutionId == institutionId && Role.Name == Defaults.Defaults.Roles.DataOfficer;
+        }
     }
 
 }

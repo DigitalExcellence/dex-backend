@@ -84,12 +84,17 @@ namespace Models
                 return true;
             }
 
-            if(User.Id == user.Id || LinkedInstitutions.Any(li => li.InstitutionId == user.InstitutionId))
+            if(User.Id == user.Id || User.InstitutionId == user.InstitutionId || LinkedInstitutions.Any(li => li.InstitutionId == user.InstitutionId))
             {
                 return true;
             }
 
             return false;
+        }
+
+        public bool IsCreator(int userId)
+        {
+            return this.UserId == userId;
         }
 
     }

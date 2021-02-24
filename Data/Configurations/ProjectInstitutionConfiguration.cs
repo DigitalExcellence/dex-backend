@@ -21,11 +21,11 @@ using Models;
 
 namespace Data.Configurations
 {
-    class ProjectInstitutionConfiguration : IEntityTypeConfiguration<ProjectInstitution>
+    public class ProjectInstitutionConfiguration : IEntityTypeConfiguration<ProjectInstitution>
     {
         public void Configure(EntityTypeBuilder<ProjectInstitution> builder)
         {
-            builder.HasKey(pi => new { pi.ProjectId, pi.InstitutionId });
+            builder.HasKey(pi => pi.Id);
         }
     }
 }

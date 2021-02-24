@@ -232,6 +232,14 @@ namespace Data.Helpers
             };
         }
 
+        public static IEnumerable<ProjectLike> SeedProjectLikes(List<Project> projects)
+        {
+            foreach(Project project in projects)
+            {
+                yield return new ProjectLike { Date = DateTime.Now, LikedProject = project, UserId = 1 };
+            }
+        }
+
         /// <summary>
         ///     Seeds the pr user.
         /// </summary>
@@ -293,7 +301,7 @@ namespace Data.Helpers
             if(users.Count < 1) return null;
             List<Project> projects = new List<Project>();
             Random r = new Random();
-            for(int i = 0; i < 30; i++)
+            for(int i = 0; i < 100; i++)
             {
                 User user = users[r.Next(0, users.Count - 1)];
                 Faker<Project> projectToFake = new Faker<Project>()
@@ -334,11 +342,28 @@ namespace Data.Helpers
 
                 Collaborator collaborator = collaboratorToFake.Generate();
                 Collaborator collaborator2 = collaboratorToFake.Generate();
+                Collaborator collaborator3 = collaboratorToFake.Generate();
+                Collaborator collaborator4 = collaboratorToFake.Generate();
+                Collaborator collaborator5 = collaboratorToFake.Generate();
+                Collaborator collaborator6 = collaboratorToFake.Generate();
+                Collaborator collaborator7 = collaboratorToFake.Generate();
                 collaborator.ProjectId = project.Id;
                 collaborator2.ProjectId = project.Id;
+                collaborator3.ProjectId = project.Id;
+                collaborator4.ProjectId = project.Id;
+                collaborator5.ProjectId = project.Id;
+                collaborator6.ProjectId = project.Id;
+                collaborator7.ProjectId = project.Id;
+
 
                 collaborators.Add(collaborator);
                 collaborators.Add(collaborator2);
+                collaborators.Add(collaborator3);
+                collaborators.Add(collaborator4);
+                collaborators.Add(collaborator5);
+                collaborators.Add(collaborator6);
+                collaborators.Add(collaborator7);
+
             }
             return collaborators;
         }

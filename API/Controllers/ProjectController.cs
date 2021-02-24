@@ -56,8 +56,7 @@ namespace API.Controllers
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
-        private readonly IProjectInstitutionLinkingService projectInstitutionLinkingService;
-
+        private readonly IProjectInstitutionService projectInstitutionService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -79,6 +78,7 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
+        /// <param name="projectInstitutionService"></param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -88,7 +88,7 @@ namespace API.Controllers
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
                                  ICallToActionOptionService callToActionOptionService,
-                                 IProjectInstitutionLinkingService projectInstitutionLinkingService)
+                                 IProjectInstitutionService projectInstitutionService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -99,7 +99,7 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
-            this.projectInstitutionLinkingService = projectInstitutionLinkingService;
+            this.projectInstitutionService = projectInstitutionService;
         }
 
         /// <summary>
@@ -322,13 +322,6 @@ namespace API.Controllers
             project.ProjectIcon = file;
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
-
-            //Automatically add institute of user if he or she belongs to an institute
-            if(project.User.InstitutionId.HasValue)
-            {
-                project.LinkedInstitutions.Add(
-                    new ProjectInstitution { InstitutionId = project.User.InstitutionId.Value, ProjectId = project.Id });
-            }
 
             try
             {
@@ -793,38 +786,206 @@ namespace API.Controllers
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
         }
 
-        [HttpPost("linkedinstitution/{projectId}/{institutionId}")]
-        public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
+
+
+        [HttpPut("instituteprivate/{projectId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> UpdatePrivateStatusOfProject(int projectId, [FromBody] bool institutePrivate)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
                                               .ConfigureAwait(false);
-            
+
             if(currentUser == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
                 {
                     Title = "Failed to getting the user account.",
-                    Detail =
-                                                        "The database does not contain a user with the provided user id.",
-                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                    Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
                 };
                 return NotFound(problemDetails);
             }
 
-            if(currentUser.InstitutionId != institutionId)
+#if !DEBUG
+    if(currentUser.InstitutionId == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
                 {
-                    Title = "User is not allowed to link the institution to the project.",
-                    Detail =
-                                                      "The user is not part of the given institution.",
-                    Instance = "???"
+                    Title = "Failed in setting the status of project.",
+                    Detail = "The user who send the request is not bound to an institution and can therefore not make the project institution private.",
+                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
                 };
-                return Unauthorized(problemDetails);
+                return NotFound(problemDetails);
+            }
+#endif
+
+            Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(projectId)
+                                                    .ConfigureAwait(false);
+            int projectInstitutionId = project.User.InstitutionId.GetValueOrDefault();
+
+            //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
+            //Then this user is not authorized to link the institution to the project
+            if(!project.IsCreator(currentUser.Id) &&
+                !currentUser.IsDataOfficerForInstitution(projectInstitutionId))
+            {
+                ProblemDetails problemDetail = new ProblemDetails
+                {
+                    Title = "User is not allowed to link institution.",
+                    Detail = "The user is neither the creator of the project or the dataofficer for the institution send in the request.",
+                    Instance = "85C7C299-9967-4FAE-AF78-366AC08C8AB1"
+                };
+                return Unauthorized(problemDetail);
             }
 
+            if(institutePrivate &&
+                !projectInstitutionService.InstitutionIsLinkedToProject(projectId, projectInstitutionId) &&
+                projectInstitutionId != default)
+            {
+                ProjectInstitution projectInstitution = new ProjectInstitution(projectId, projectInstitutionId);
+                await projectInstitutionService.AddAsync(projectInstitution).ConfigureAwait(false);
+            }
+
+            project.InstitutePrivate = institutePrivate;
+            projectService.Update(project);
+
+            projectInstitutionService.Save();
+            projectService.Save();
+            return Ok();
         }
 
+        //[HttpDelete("linkedinstitution/{projectId}")]
+        //[Authorize]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status409Conflict)]
+        //public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId)
+        //{
+        //    User currentUser = await HttpContext.GetContextUser(userService)
+        //                                      .ConfigureAwait(false);
+
+        //    if(currentUser == null)
+        //    {
+        //        ProblemDetails problemDetails = new ProblemDetails
+        //        {
+        //            Title = "Failed to getting the user account.",
+        //            Detail = "The database does not contain a user with the provided user id.",
+        //            Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+        //        };
+        //        return NotFound(problemDetails);
+        //    }
+
+        //    Project project = await projectService.FindAsync(projectId)
+        //                                            .ConfigureAwait(false);
+        //    int projectInstitutionId = project.User.InstitutionId.GetValueOrDefault();
+
+        //    //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
+        //    //Then this user is not authorized to link the institution to the project
+        //    if(!project.IsCreator(currentUser.Id) &&
+        //        !currentUser.IsDataOfficerForInstitution(projectInstitutionId))
+        //    {
+        //        ProblemDetails problemDetail = new ProblemDetails
+        //        {
+        //            Title = "User is not allowed to unlink institution.",
+        //            Detail = "The user is neither the creator of the project or the dataofficer for the institution send in the request.",
+        //            Instance = "85C7C299-9967-4FAE-AF78-366AC08C8AB1"
+        //        };
+        //        return Unauthorized(problemDetail);
+        //    }
+
+        //    if(!projectInstitutionService.InstitutionIsLinkedToProject(projectId, projectInstitutionId))
+        //    {
+        //        ProblemDetails problemDetails = new ProblemDetails
+        //        {
+        //            Title = "Institution is not yet linked to project.",
+        //            Detail = "The institution cannot be unlinked to the project because the institution is not yet part of the project.",
+        //            Instance = "0864DF7A-79FA-4EA3-878C-0D5357C93C44"
+        //        };
+        //        return Conflict(problemDetails);
+        //    }
+
+        //    var projectInstitutions = projectInstitutionService.FindByInstitutionsIdAndProjectId(projectId, projectInstitutionId);
+        //    projectInstitutionService.RemoveRange(projectInstitutions);
+        //    projectInstitutionService.Save();
+
+        //    return Ok();
+        //}
+
+        [HttpPost("linkedinstitution/{projectId}/{institutionId}")]
+        [Authorize(Roles = Defaults.Roles.Administrator)]
+        public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Institution is already linked to project.",
+                    Detail = "The institution cannot be linked to the project because the institution is already part of the project.",
+                    Instance = "A6d03AC7-A40f-4E34-8E21-F59b80C7A207"
+                };
+                return Conflict(problemDetails);
+            }
+
+            ProjectInstitution projectInstitution = new ProjectInstitution(projectId, institutionId);
+            await projectInstitutionService.AddAsync(projectInstitution);
+            projectInstitutionService.Save();
+
+            return Ok();
+        }
+
+        [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
+        [Authorize(Roles = Defaults.Roles.Administrator)]
+        public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId, int institutionId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "???"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Institution is not yet linked to the project.",
+                    Detail = "The institution cannot be unlinked from the project, because it is not linked to the project in the first place.",
+                    Instance = "???"
+                };
+                return Conflict(problemDetails);
+            }
+
+            ProjectInstitution projectInstitution = new ProjectInstitution(projectId, institutionId);
+            projectInstitutionService.Remove(projectInstitution);
+            projectInstitutionService.Save();
+
+            return Ok();
+        }
     }
 
 }
