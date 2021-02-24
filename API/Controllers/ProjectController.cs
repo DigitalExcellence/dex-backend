@@ -53,6 +53,8 @@ namespace API.Controllers
         private readonly IFileUploader fileUploader;
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
+        private readonly IProjectTagService projectTagService;
+        private readonly ITagService tagService;
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
@@ -78,6 +80,8 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
+        /// <param name="tagService">The tag service is used to work with tags</param>
+        /// <param name="projectTagService">The project tag service is used to connect projects and tags</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -86,7 +90,9 @@ namespace API.Controllers
                                  IAuthorizationHelper authorizationHelper,
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
-                                 ICallToActionOptionService callToActionOptionService)
+                                 ICallToActionOptionService callToActionOptionService,
+                                 ITagService tagService,
+                                 IProjectTagService projectTagService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -97,6 +103,8 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
+            this.tagService = tagService;
+            this.projectTagService = projectTagService;
         }
 
         /// <summary>
@@ -790,6 +798,73 @@ namespace API.Controllers
 
             userProjectLikeService.Save();
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
+        }
+
+        /// <summary>
+        ///     Tag a project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="tagId"></param>
+        /// <returns></returns>
+        [HttpPost("tag/{projectId}/{tagId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> ProjectAddTag(int projectId, int tagId)
+        {
+            Project project = await projectService.FindAsync(projectId)
+                                                  .ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to tag the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "somethinghere"
+                };
+                return NotFound(problem);
+            }
+
+            Tag tag = await tagService.FindAsync(tagId)
+                                      .ConfigureAwait(false);
+
+            if(tag == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to tag the project.",
+                    Detail = "The tag could not be found in the database.",
+                    Instance = "somethinghere"
+                };
+                return NotFound(problem);
+            }
+
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
+                                                                     project.UserId);
+
+            if(!(project.UserId == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to tag the project.",
+                    Detail = "The user is not allowed to modify the project.",
+                    Instance = "somethinghere"
+                };
+                return Unauthorized(problem);
+            }
+
+            ProjectTag projectTag = new ProjectTag(project, tag);
+            await projectTagService.AddAsync(projectTag)
+                                   .ConfigureAwait(false);
+
+            projectTagService.Save();
+
+            return Ok(mapper.Map<ProjectTag, ProjectTagResourceResult>(projectTag));
         }
 
     }

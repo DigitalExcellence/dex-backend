@@ -28,6 +28,7 @@ namespace Models
         public Project()
         {
             Collaborators = new List<Collaborator>();
+            Tags = new List<ProjectTag>();
         }
 
         public int Id { get; set; }
@@ -65,6 +66,9 @@ namespace Models
         public List<ProjectLike> Likes { get; set; }
 
         public bool InstitutePrivate { get; set; }
+
+        public List<ProjectTag> Tags { get; set; }
+
 
     }
 

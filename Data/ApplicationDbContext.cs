@@ -96,6 +96,14 @@ namespace Data
         public DbSet<Role> Role { get; set; }
 
         /// <summary>
+        ///     Gets or sets the tag.
+        /// </summary>
+        /// <value>
+        ///     The tag.
+        /// </value>
+        public DbSet<Tag> Tag { get; set; }
+
+        /// <summary>
         ///     Gets or sets the institution.
         /// </summary>
         /// <value>

@@ -147,6 +147,8 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.UserRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.RoleRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.TagRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.TagWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
@@ -169,6 +171,32 @@ namespace Data.Helpers
             roles.Add(alumniRole);
 
             return roles;
+        }
+
+        public static List<Tag> SeedTags()
+        {
+            List<Tag> tags = new List<Tag>();
+
+            tags.AddRange(new[]{
+                new Tag
+                {
+                    Name = "Some Tag 1"
+                },
+                new Tag
+                {
+                    Name = "Some Tag 2"
+                },
+                new Tag
+                {
+                    Name = "Some Tag 3"
+                },
+                new Tag
+                {
+                    Name = "Some Tag 4"
+                }
+            });
+
+            return tags;
         }
 
         /// <summary>

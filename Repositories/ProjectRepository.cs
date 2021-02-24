@@ -133,6 +133,9 @@ namespace Repositories
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
+                project.Tags = await GetDbSet<ProjectTag>()
+                                      .Where(p => p.Project.Id == project.Id)
+                                      .ToListAsync();
             }
 
             return RedactUser(project);
@@ -170,6 +173,9 @@ namespace Repositories
                 project.User = RedactUser(project.User);
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Tags = await GetDbSet<ProjectTag>()
+                                      .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
             return await queryableProjects.ToListAsync();
@@ -247,6 +253,9 @@ namespace Repositories
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Tags = await GetDbSet<ProjectTag>()
+                                      .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
 
@@ -419,6 +428,7 @@ namespace Repositories
                                                    .Include(i => i.ProjectIcon)
                                                    .Include(p => p.CallToAction)
                                                    .Include(l => l.Likes)
+                                                   .Include(p => p.Tags)
                                                    .Where(p =>
                                                               p.Name.Contains(query) ||
                                                               p.Description.Contains(query) ||
@@ -435,6 +445,9 @@ namespace Repositories
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Tags = await GetDbSet<ProjectTag>()
+                                      .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
             return projectsToReturn;
