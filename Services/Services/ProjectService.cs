@@ -61,6 +61,8 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        Task<bool> ProjectExistsAsync(int id);
+
     }
 
     /// <summary>
@@ -179,6 +181,10 @@ namespace Services.Services
             return Repository.FindWithUserCollaboratorsAndInstitutionsAsync(id);
         }
 
+        public async Task<bool> ProjectExistsAsync(int id)
+        {
+            return await Repository.ProjectExistsAsync(id);
+        }
     }
 
 }

@@ -47,6 +47,9 @@ namespace Services.Services
         /// <returns></returns>
         public bool InstitutionIsLinkedToProject(int projectId, int institutionId)
         {
+            if(institutionId == default)
+                return false;
+
             return Repository.InstitutionIsLinkedToProject(projectId, institutionId);
         }
     }

@@ -57,6 +57,7 @@ namespace API.Controllers
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
         private readonly IProjectInstitutionService projectInstitutionService;
+        private readonly IInstitutionService institutionService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -78,7 +79,8 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
-        /// <param name="projectInstitutionService"></param>
+        /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
+        /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -88,7 +90,8 @@ namespace API.Controllers
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
                                  ICallToActionOptionService callToActionOptionService,
-                                 IProjectInstitutionService projectInstitutionService)
+                                 IProjectInstitutionService projectInstitutionService,
+                                 IInstitutionService institutionService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -100,6 +103,7 @@ namespace API.Controllers
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
             this.projectInstitutionService = projectInstitutionService;
+            this.institutionService = institutionService;
         }
 
         /// <summary>
@@ -788,13 +792,20 @@ namespace API.Controllers
 
 
 
+        /// <summary>
+        /// Updates the institutionprivate property of a project to the given value in the body
+        /// and adds the institution of the creator to the project if the institution isn't yet linked
+        /// to the project and institutePrivate is true.
+        /// </summary>
+        /// <param name="projectId">The project identifier</param>
+        /// <param name="institutePrivate">The new value for InstitutePrivate in the given project</param>
+        /// <returns>The updated project</returns>
         [HttpPut("instituteprivate/{projectId}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> UpdatePrivateStatusOfProject(int projectId, [FromBody] bool institutePrivate)
+        [ProducesResponseType(typeof(ProjectResultResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> UpdateProjectPrivateStatus(int projectId, [FromBody] bool institutePrivate)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
                                               .ConfigureAwait(false);
@@ -810,51 +821,55 @@ namespace API.Controllers
                 return NotFound(problemDetails);
             }
 
-#if !DEBUG
-    if(currentUser.InstitutionId == null)
+            if(currentUser.InstitutionId == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
                 {
-                    Title = "Failed in setting the status of project.",
-                    Detail = "The user who send the request is not bound to an institution and can therefore not make the project institution private.",
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The user who send the request is not bound to an institution and can therefore not make the project private.",
                     Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
                 };
                 return NotFound(problemDetails);
             }
-#endif
 
             Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(projectId)
                                                     .ConfigureAwait(false);
-            int projectInstitutionId = project.User.InstitutionId.GetValueOrDefault();
+
+            if(project == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                };
+                return NotFound(problemDetails);
+            }
+
+            int projectCreatorInstitutionId = project.User.InstitutionId.GetValueOrDefault();
 
             //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
             //Then this user is not authorized to link the institution to the project
             if(!project.IsCreator(currentUser.Id) &&
-                !currentUser.IsDataOfficerForInstitution(projectInstitutionId))
+                !currentUser.IsDataOfficerForInstitution(projectCreatorInstitutionId))
             {
-                ProblemDetails problemDetail = new ProblemDetails
-                {
-                    Title = "User is not allowed to link institution.",
-                    Detail = "The user is neither the creator of the project or the dataofficer for the institution send in the request.",
-                    Instance = "85C7C299-9967-4FAE-AF78-366AC08C8AB1"
-                };
-                return Unauthorized(problemDetail);
+                return Forbid();
             }
 
+            //Link institution of the creator of the project to project if the institution isn't linked to the project yet
             if(institutePrivate &&
-                !projectInstitutionService.InstitutionIsLinkedToProject(projectId, projectInstitutionId) &&
-                projectInstitutionId != default)
+                !projectInstitutionService.InstitutionIsLinkedToProject(projectId, projectCreatorInstitutionId))
             {
-                ProjectInstitution projectInstitution = new ProjectInstitution(projectId, projectInstitutionId);
+                ProjectInstitution projectInstitution = new ProjectInstitution(projectId, projectCreatorInstitutionId);
                 await projectInstitutionService.AddAsync(projectInstitution).ConfigureAwait(false);
             }
 
             project.InstitutePrivate = institutePrivate;
             projectService.Update(project);
 
-            projectInstitutionService.Save();
             projectService.Save();
-            return Ok();
+
+            return Ok(mapper.Map<Project, ProjectResultResource>(project));
         }
 
         //[HttpDelete("linkedinstitution/{projectId}")]
@@ -915,8 +930,16 @@ namespace API.Controllers
         //    return Ok();
         //}
 
+        /// <summary>
+        /// Links given project and institution. This function is admin only!
+        /// </summary>
+        /// <param name="projectId">The project identifier</param>
+        /// <param name="institutionId">The institution identifier</param>
+        /// <returns>The created ProjectInstitution</returns>
         [HttpPost("linkedinstitution/{projectId}/{institutionId}")]
-        [Authorize(Roles = Defaults.Roles.Administrator)]
+        [Authorize]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -926,8 +949,35 @@ namespace API.Controllers
             {
                 ProblemDetails problemDetails = new ProblemDetails
                 {
-                    Title = "Failed to getting the user account.",
+                    Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if (currentUser.Role.Name != Defaults.Roles.Administrator)
+            {
+                return Forbid();
+            }
+
+            if(!await projectService.ProjectExistsAsync(projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await institutionService.InstitutionExistsAsync(institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed getting the institution.",
+                    Detail = "The institution send in the request could not be found in the database.",
                     Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
                 };
                 return NotFound(problemDetails);
@@ -948,11 +998,20 @@ namespace API.Controllers
             await projectInstitutionService.AddAsync(projectInstitution);
             projectInstitutionService.Save();
 
-            return Ok();
+            //TODO: Return result here
+            return Created(nameof(LinkInstitutionToProjectAsync), projectInstitution);
         }
 
+        /// <summary>
+        /// Links given project and institution. This function is admin only!
+        /// </summary>
+        /// <param name="projectId">The project identifier</param>
+        /// <param name="institutionId">The institution identifier</param>
+        /// <returns></returns>
         [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
-        [Authorize(Roles = Defaults.Roles.Administrator)]
+        [Authorize]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId, int institutionId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -965,6 +1024,33 @@ namespace API.Controllers
                     Title = "Failed to getting the user account.",
                     Detail = "The database does not contain a user with the provided user id.",
                     Instance = "???"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(currentUser.Role.Name != Defaults.Roles.Administrator)
+            {
+                return Forbid();
+            }
+
+            if (!await projectService.ProjectExistsAsync(projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await institutionService.InstitutionExistsAsync(institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed getting the institution.",
+                    Detail = "The institution send in the request could not be found in the database.",
+                    Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
                 };
                 return NotFound(problemDetails);
             }

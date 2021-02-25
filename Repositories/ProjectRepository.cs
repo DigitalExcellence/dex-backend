@@ -96,6 +96,8 @@ namespace Repositories
         /// </returns>
         Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
+        Task<bool> ProjectExistsAsync(int id);
+
     }
 
     /// <summary>
@@ -450,6 +452,10 @@ namespace Repositories
             return projectsToReturn;
         }
 
+        public Task<bool> ProjectExistsAsync(int id)
+        {
+            return GetDbSet<Project>().AnyAsync(i => i.Id == id);
+        }
     }
 
 }

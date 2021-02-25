@@ -101,7 +101,7 @@ namespace Models
 
         public bool IsDataOfficerForInstitution(int institutionId)
         {
-            return InstitutionId == institutionId && Role.Name == Defaults.Defaults.Roles.DataOfficer;
+            return InstitutionId != null && InstitutionId.Value == institutionId && Role.Name == Defaults.Defaults.Roles.DataOfficer;
         }
     }
 
