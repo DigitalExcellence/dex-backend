@@ -187,7 +187,7 @@ namespace Services.Services
 
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {
-            return Repository.FindUserProjects(userId);
+            return Repository.GetUserProjects(userId);
         }
     }
 
