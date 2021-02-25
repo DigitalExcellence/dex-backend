@@ -28,17 +28,18 @@ namespace Repositories.Tests.DataSources
 {
 
     /// <summary>
-    /// This class is an attribute used for generating call to action options.
+    ///     This class is an attribute used for generating call to action options.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public class CallToActionOptionDataSourceAttribute : Attribute, IParameterDataSource
     {
 
+        private readonly int amountToGenerate;
+
         private readonly IFakeDataGenerator<CallToActionOption> fakeDataGenerator;
-        private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// This method initialized the CallToActionOptionDataSourceAttribute class.
+        ///     This method initialized the CallToActionOptionDataSourceAttribute class.
         /// </summary>
         public CallToActionOptionDataSourceAttribute()
         {
@@ -52,7 +53,7 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// This method generates the data and returns it.
+        ///     This method generates the data and returns it.
         /// </summary>
         /// <param name="parameter">Extra parameter given in the attribute, not in use but required due to inheritance.</param>
         /// <returns>This method returns the generated data.</returns>
@@ -60,7 +61,7 @@ namespace Repositories.Tests.DataSources
         {
             if(amountToGenerate <= 1)
             {
-                return new[] { fakeDataGenerator.Generate() };
+                return new[] {fakeDataGenerator.Generate()};
             }
 
             List<CallToActionOption> options = fakeDataGenerator.GenerateRange(amountToGenerate)

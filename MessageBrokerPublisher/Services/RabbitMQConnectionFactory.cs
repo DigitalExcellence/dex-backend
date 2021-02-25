@@ -1,7 +1,21 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MessageBrokerPublisher.Services
 {
@@ -12,6 +26,7 @@ namespace MessageBrokerPublisher.Services
 
     public interface IRabbitMQConnectionFactory
     {
+
         ///<summary>
         /// Method returns a connection
         /// </summary>
@@ -24,21 +39,28 @@ namespace MessageBrokerPublisher.Services
     /// </summary>
     public class RabbitMQConnectionFactory : IRabbitMQConnectionFactory
     {
-        private readonly string hostName = Environment.GetEnvironmentVariable("App__RabbitMQ__Hostname");
-        private readonly string user = Environment.GetEnvironmentVariable("App__RabbitMQ__Username");
-        private readonly string password = Environment.GetEnvironmentVariable("App__RabbitMQ__Password");
+
+        private readonly string hostName;
+        private readonly string password;
+        private readonly string user;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RabbitMQConnectionFactory"/> class.
         /// </summary>
-        public RabbitMQConnectionFactory()
+        public RabbitMQConnectionFactory(string hostName, string user, string password)
         {
-            if(string.IsNullOrEmpty(hostName))
-            {
-                hostName = "localhost";
-                user = "guest";
-                password = "guest";
-            }
+            this.hostName = hostName;
+            this.user = user;
+            this.password = password;
+        }
+
+        /// <summary>
+        /// Creates a new RabbitMQ Connection and returns it.
+        /// </summary>
+        public IConnection CreateConnection()
+        {
+            ConnectionFactory connectionFactory = CreateConnectionFactory();
+            return connectionFactory.CreateConnection();
         }
 
 
@@ -53,14 +75,6 @@ namespace MessageBrokerPublisher.Services
                 Password = password,
                 HostName = hostName
             };
-        }
-        /// <summary>
-        /// Creates a new RabbitMQ Connection and returns it.
-        /// </summary>
-        public IConnection CreateConnection()
-        {
-            ConnectionFactory connectionFactory = CreateConnectionFactory();
-            return connectionFactory.CreateConnection();
         }
 
     }

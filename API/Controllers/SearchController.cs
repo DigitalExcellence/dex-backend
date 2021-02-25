@@ -27,20 +27,22 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the search requests.
+    ///     This class is responsible for handling HTTP requests that are related
+    ///     to the search requests.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SearchController : ControllerBase
     {
+
         private readonly IMapper mapper;
 
         private readonly ISearchService searchService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SearchController"/> class.
+        ///     Initializes a new instance of the <see cref="SearchController" /> class.
         /// </summary>
         /// <param name="searchService">The search service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resource to the model to the resource result.</param>
@@ -51,7 +53,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for searching and retrieving projects.
+        ///     This method is responsible for searching and retrieving projects.
         /// </summary>
         /// <param name="query">The search query which is used to search for a project.</param>
         /// <param name="projectFilterParamsResource">The parameters to filter which is ued to sort and paginate the projects.</param>
@@ -62,12 +64,13 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> SearchInternalProjects(string query,
-                                                                [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
+                                                                [FromQuery]
+                                                                ProjectFilterParamsResource projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
-            {
-                Title = "Invalid search request."
-            };
+                                     {
+                                         Title = "Invalid search request."
+                                     };
             if(string.IsNullOrEmpty(query))
             {
                 problem.Detail = "The Query parameter cannot be empty.";
@@ -99,23 +102,31 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            ProjectFilterParams projectFilterParams = mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+            ProjectFilterParams projectFilterParams =
+                mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
             IEnumerable<Project> projects = await searchService.SearchInternalProjects(query, projectFilterParams);
             IEnumerable<ProjectResultResource> searchResults =
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
 
-            ProjectResultsResource searchResultsResource = new ProjectResultsResource()
-            {
-                Results = searchResults.ToArray(),
-                Query = query,
-                Count = searchResults.Count(),
-                TotalCount = await searchService.SearchInternalProjectsCount(query, projectFilterParams),
-                Page = projectFilterParams.Page,
-                TotalPages =
-                await searchService.SearchInternalProjectsTotalPages(query, projectFilterParams)
-            };
+            ProjectResultsResource searchResultsResource = new ProjectResultsResource
+                                                           {
+                                                               Results = searchResults.ToArray(),
+                                                               Query = query,
+                                                               Count = searchResults.Count(),
+                                                               TotalCount =
+                                                                   await searchService.SearchInternalProjectsCount(
+                                                                       query,
+                                                                       projectFilterParams),
+                                                               Page = projectFilterParams.Page,
+                                                               TotalPages =
+                                                                   await searchService.SearchInternalProjectsTotalPages(
+                                                                       query,
+                                                                       projectFilterParams)
+                                                           };
 
             return Ok(searchResultsResource);
         }
+
     }
+
 }

@@ -21,7 +21,7 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// This resource contains all the query parameters used to filter, sort and paginate projects
+    ///     This resource contains all the query parameters used to filter, sort and paginate projects
     /// </summary>
     public class ProjectFilterParamsResource
     {
@@ -53,11 +53,11 @@ namespace API.Resources
         public string SortDirection { get; set; }
 
         /// <summary>
-        /// This property filter the projects on the highlighted state
-        /// Possible value:
-        ///  - null (Return all results)
-        ///  - true (Only return highlighted results)
-        ///  - false (Only return not highlighted results)
+        ///     This property filter the projects on the highlighted state
+        ///     Possible value:
+        ///     - null (Return all results)
+        ///     - true (Only return highlighted results)
+        ///     - false (Only return not highlighted results)
         /// </summary>
         [FromQuery(Name = "highlighted")]
         public bool? Highlighted { get; set; }

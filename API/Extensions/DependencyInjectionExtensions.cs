@@ -19,21 +19,23 @@ using API.Common;
 using API.HelperClasses;
 using Data;
 using MessageBrokerPublisher;
-using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
+using Services.ExternalDataProviders;
 using Services.Services;
 using Services.Sources;
 
 namespace API.Extensions
 {
+
     /// <summary>
     ///     DependencyInjectionExtensions
     /// </summary>
     public static class DependencyInjectionExtensions
     {
+
         /// <summary>
         ///     Adds all the services and repositories.
         /// </summary>
@@ -65,6 +67,9 @@ namespace API.Extensions
 
             services.AddScoped<IFileUploader, FileUploader>();
 
+            services.AddScoped<IUserTaskService, UserTaskService>();
+            services.AddScoped<IUserTaskRepository, UserTaskRepository>();
+
             services.AddScoped<IAuthorizationHandler, ScopeRequirementHandler>();
 
             services.AddScoped<IRestClientFactory, RestClientFactory>();
@@ -77,6 +82,7 @@ namespace API.Extensions
             services.AddScoped<IInstitutionRepository, InstitutionRepository>();
 
             services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
+            services.AddScoped(typeof(IIndexOrderHelper<>), typeof(IndexOrderHelper<>));
 
             services.AddScoped<IUserProjectService, UserProjectService>();
             services.AddScoped<IUserProjectRepository, UserProjectRepository>();
@@ -84,15 +90,38 @@ namespace API.Extensions
             services.AddScoped<IUserUserService, UserUserService>();
             services.AddScoped<IUserUserRepository, UserUserRepository>();
 
+            services.AddScoped<IDataProviderService, DataProviderService>();
+
+            services.AddScoped<IDataSourceModelService, DataSourceModelService>();
+            services.AddScoped<IDataSourceModelRepository, DataSourceModelRepository>();
+
+            services.AddScoped<IDataProviderLoader, DataProviderLoader>();
+
+            services.AddScoped<IWizardPageService, WizardPageService>();
+            services.AddScoped<IWizardPageRepository, WizardPageRepository>();
+
+            services.AddExternalDataSources();
+
+            return services;
+        }
+
+        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
+        {
+            services.AddScoped<GithubDataSourceAdaptee>();
+            services.AddScoped<GitlabDataSourceAdaptee>();
+            services.AddScoped<JsFiddleDataSourceAdaptee>();
+
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
 
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
-                        
-            services.AddScoped<INotificationSender, NotificationSender>();
-            services.AddScoped<IRabbitMQConnectionFactory, RabbitMQConnectionFactory>();
+
+            services.AddScoped<ITaskPublisher, TaskPublisher>();
+
             return services;
         }
+
     }
+
 }

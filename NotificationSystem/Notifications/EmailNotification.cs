@@ -1,16 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using NotificationSystem.Contracts;
 
 namespace NotificationSystem.Notifications
 {
+
     public class EmailNotification : INotification
     {
-        public string RecipientEmail { get; set; }
-        public string TextContent { get; set; }
-        public string HtmlContent { get; set; }
-        public string Subject { get; }
 
         public EmailNotification(string recipientEmail, string textContent, string htmlContent = null)
         {
@@ -19,5 +30,15 @@ namespace NotificationSystem.Notifications
             HtmlContent = htmlContent;
             Subject = "EMAIL";
         }
+
+        public string RecipientEmail { get; set; }
+
+        public string TextContent { get; set; }
+
+        public string HtmlContent { get; set; }
+
+        public string Subject { get; }
+
     }
+
 }

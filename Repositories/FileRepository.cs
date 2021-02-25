@@ -18,36 +18,31 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace Repositories
 {
-    /// <summary>
-    /// IFileRepository
-    /// </summary>
-    /// /// <seealso cref="Repositories.Base.IRepository{Models.File}" />
-    public interface IFileRepository : IRepository<File>
-    {
-
-
-    }
 
     /// <summary>
-    /// FileRepository
+    ///     IFileRepository
     /// </summary>
-    /// <seealso cref="Repositories.Base.Repository{Models.File}" />
-    /// <seealso cref="Repositories.IFileRepository" />
+    /// ///
+    /// <seealso cref="File" />
+    public interface IFileRepository : IRepository<File> { }
+
+    /// <summary>
+    ///     FileRepository
+    /// </summary>
+    /// <seealso cref="File" />
+    /// <seealso cref="IFileRepository" />
     public class FileRepository : Repository<File>, IFileRepository
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileRepository"/> class.
+        ///     Initializes a new instance of the <see cref="FileRepository" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public FileRepository(DbContext dbContext) : base(dbContext) { }
 
     }
+
 }

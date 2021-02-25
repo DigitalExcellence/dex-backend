@@ -19,25 +19,26 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// The viewmodel of a Institution model
+    ///     The viewmodel of a Institution model
     /// </summary>
     public class InstitutionResource
     {
-        
+
         /// <summary>
-        /// Gets or sets a value for the name of the institution.
+        ///     Gets or sets a value for the name of the institution.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the description of the institution.
+        ///     Gets or sets a value for the description of the institution.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the identity id for the institution.
+        ///     Gets or sets a value for the identity id for the institution.
         /// </summary>
         public string IdentityId { get; set; }
+
     }
 
 }

@@ -1,11 +1,29 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
+
+    /// <summary>
+    ///     This class helps to validate a (hashed) password
+    /// </summary>
     public static class LoginHelper
     {
 
@@ -14,7 +32,7 @@ namespace Services.Services
         private const int HashIterations = 100000;
 
         /// <summary>
-        /// Get the hash of the password
+        ///     Get the hash of the password
         /// </summary>
         /// <param name="password">string password</param>
         /// <returns>Hash secured password</returns>
@@ -29,7 +47,7 @@ namespace Services.Services
             byte[] hash = pbkdf2.GetBytes(HashSize);
 
             // 3.-Combine the salt and password bytes for later use
-            byte[] hashBytes = new byte[SaltSize+HashSize];
+            byte[] hashBytes = new byte[SaltSize + HashSize];
             Array.Copy(salt, 0, hashBytes, 0, SaltSize);
             Array.Copy(hash, 0, hashBytes, SaltSize, HashSize);
 
@@ -38,7 +56,7 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Check if the password is valid
+        ///     Check if the password is valid
         /// </summary>
         /// <param name="password">Entered by user</param>
         /// <param name="hashPass">Stored password</param>
@@ -47,12 +65,15 @@ namespace Services.Services
         {
             // Extract the bytes
             byte[] hashBytes = Convert.FromBase64String(hashPass);
+
             // Get the salt
             byte[] salt = new byte[SaltSize];
             Array.Copy(hashBytes, 0, salt, 0, SaltSize);
+
             // Compute the hash on the password the user entered
             Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, salt, HashIterations);
             byte[] hash = pbkdf2.GetBytes(HashSize);
+
             // compare the results
             for(int i = 0; i < HashSize; i++)
             {
@@ -64,5 +85,7 @@ namespace Services.Services
 
             return true;
         }
+
     }
+
 }

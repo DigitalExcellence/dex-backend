@@ -15,16 +15,17 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
 using System.Collections.Generic;
 
 namespace API.Resources
 {
+
     /// <summary>
     ///     The view model of a project
     /// </summary>
     public class ProjectResource
     {
+
         /// <summary>
         ///     This gets or sets the Title
         /// </summary>
@@ -51,13 +52,20 @@ namespace API.Resources
         public ICollection<CollaboratorResource> Collaborators { get; set; }
 
         /// <summary>
-        /// This gets or sets the file id
+        ///     This gets or sets the file id
         /// </summary>
         public int FileId { get; set; }
 
         /// <summary>
-        /// This gets or sets the call to action
+        ///     This gets or sets the call to action
         /// </summary>
         public CallToActionResource CallToAction { get; set; }
+
+        /// <summary>
+        ///     Sets or gets if project is visible to institute members only or not
+        /// </summary>
+        public bool InstitutePrivate { get; set; }
+
     }
+
 }

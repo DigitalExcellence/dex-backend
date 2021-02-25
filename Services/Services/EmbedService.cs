@@ -25,47 +25,58 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the interface for the embed service
+    /// </summary>
     public interface IEmbedService : IService<EmbeddedProject>
     {
+
         /// <summary>
-        /// Finds the asynchronous.
+        ///     Finds the asynchronous.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>The found embeddedProject.</returns>
         Task<EmbeddedProject> FindAsync(Guid guid);
+
         /// <summary>
-        /// Gets the embedded projects asynchronous.
+        ///     Gets the embedded projects asynchronous.
         /// </summary>
         /// <returns>A list of all the embeddedProjects.</returns>
         Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync();
+
         /// <summary>
-        /// Determines whether [is non existing unique identifier] [the specified unique identifier].
+        ///     Determines whether [is non existing unique identifier] [the specified unique identifier].
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>true if there are no embedded projects with the given guid.</returns>
         Task<bool> IsNonExistingGuidAsync(Guid guid);
+
     }
+
     /// <summary>
-    /// EmbedService
+    ///     EmbedService
     /// </summary>
-    /// <seealso cref="Services.Base.Service{Models.EmbeddedProject}" />
-    /// <seealso cref="Services.Services.IEmbedService" />
+    /// <seealso cref="EmbeddedProject" />
+    /// <seealso cref="IEmbedService" />
     public class EmbedService : Service<EmbeddedProject>, IEmbedService
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmbedService"/> class.
+        ///     Initializes a new instance of the <see cref="EmbedService" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         public EmbedService(IEmbedRepository repository) : base(repository) { }
+
         /// <summary>
-        /// Gets the repository.
+        ///     Gets the repository.
         /// </summary>
         /// <value>
-        /// The repository.
+        ///     The repository.
         /// </value>
         protected new IEmbedRepository Repository => (IEmbedRepository) base.Repository;
+
         /// <summary>
-        /// Finds the asynchronous.
+        ///     Finds the asynchronous.
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>The found embeddedProject.</returns>
@@ -73,16 +84,18 @@ namespace Services.Services
         {
             return await Repository.GetEmbeddedProjectAsync(guid);
         }
+
         /// <summary>
-        /// Gets the embedded projects asynchronous.
+        ///     Gets the embedded projects asynchronous.
         /// </summary>
         /// <returns>A list of all embeddedProjects.</returns>
         public async Task<IEnumerable<EmbeddedProject>> GetEmbeddedProjectsAsync()
         {
             return await Repository.GetEmbeddedProjectsAsync();
         }
+
         /// <summary>
-        /// Determines whether [is non existing unique identifier] [the specified unique identifier].
+        ///     Determines whether [is non existing unique identifier] [the specified unique identifier].
         /// </summary>
         /// <param name="guid">The unique identifier.</param>
         /// <returns>true if there are no embedded projects with the given guid.</returns>
@@ -90,6 +103,7 @@ namespace Services.Services
         {
             return await Repository.IsNonExistingGuidAsync(guid);
         }
+
     }
 
 }
