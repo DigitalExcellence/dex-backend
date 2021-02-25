@@ -28,7 +28,7 @@ Graduation system for users whose FHICT account becomes unavailable. [#287](http
 
 
 ### Fixed
-
+- Fixed inefficient use of entity framework for the fetching-all-projects endpoint.
 
 ### Security
 
