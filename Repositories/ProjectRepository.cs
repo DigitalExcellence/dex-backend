@@ -169,7 +169,7 @@ namespace Repositories
             List<Project> projectResults = await queryableProjects.ToListAsync();
 
             //Redact the user after fetching the collection from the project (no separate query needs to be executed)
-            projectResults.ForEach( project => RedactUser( project.User ) );
+            projectResults.ForEach( project => project.User = RedactUser( project.User ) );
 
             return projectResults;
         }
