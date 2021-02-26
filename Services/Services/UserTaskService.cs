@@ -23,29 +23,55 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-
+    /// <summary>
+    ///     This is the interface of the user task service
+    /// </summary>
     public interface IUserTaskService : IService<UserTask>
     {
-
+        /// <summary>
+        ///     This is the interface method which gets all user tasks of type: graduating with status: open
+        /// </summary>
+        /// <param name="withinAmountOfMonths"></param>
+        /// <returns>List of user task</returns>
         public Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths);
 
+        /// <summary>
+        ///     This is the interface method which gets all user tasks for a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>List of user tasks</returns>
         public Task<List<UserTask>> GetUserTasksForUser(int userId);
 
     }
 
+    /// <summary>
+    ///     This is the user task service
+    /// </summary>
     public class UserTaskService : Service<UserTask>, IUserTaskService
     {
 
         private readonly IUserService userService;
 
+        /// <summary>
+        ///     This is the constructor of the user task service
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="userService"></param>
         public UserTaskService(IUserTaskRepository repository, IUserService userService) : base(repository)
         {
             this.userService = userService;
         }
 
+        /// <summary>
+        ///     This is the user task repository
+        /// </summary>
         protected new IUserTaskRepository Repository => (IUserTaskRepository) base.Repository;
 
-
+        /// <summary>
+        ///     This is the method which gets all user tasks of type: graduating with status: open
+        /// </summary>
+        /// <param name="withinAmountOfMonths"></param>
+        /// <returns>List of user task</returns>
         public async Task<List<UserTask>> GetAllOpenGraduateUserTasks(int withinAmountOfMonths)
         {
             List<User> users = userService.GetAllExpectedGraduatingUsers(withinAmountOfMonths);
@@ -88,6 +114,11 @@ namespace Services.Services
             return userTasks;
         }
 
+        /// <summary>
+        ///     This is the method which gets all user tasks for a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>List of user tasks</returns>
         public async Task<List<UserTask>> GetUserTasksForUser(int userId)
         {
             return await Repository.GetUserTasksForUser(userId);
