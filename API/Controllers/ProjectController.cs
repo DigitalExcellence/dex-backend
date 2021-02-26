@@ -821,37 +821,39 @@ namespace API.Controllers
                 return NotFound(problemDetails);
             }
 
-            if(currentUser.InstitutionId == null)
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed setting the status of the project.",
-                    Detail = "The user who send the request is not bound to an institution and can therefore not make the project private.",
-                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
-                };
-                return NotFound(problemDetails);
-            }
-
             Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(projectId)
-                                                    .ConfigureAwait(false);
+                                                  .ConfigureAwait(false);
 
             if(project == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed setting the status of the project.",
-                    Detail = "The project send in the request could not be found in the database.",
-                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
-                };
+                                                {
+                                                    Title = "Failed setting the status of the project.",
+                                                    Detail = "The project send in the request could not be found in the database.",
+                                                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                                                };
                 return NotFound(problemDetails);
             }
 
             int projectCreatorInstitutionId = project.User.InstitutionId.GetValueOrDefault();
 
+            if(projectCreatorInstitutionId == default)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The creator of the project send in the request is not bound to an institution and can therefore not make the project private.",
+                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                };
+                return NotFound(problemDetails);
+            }
+
+
             //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
             //Then this user is not authorized to link the institution to the project
             if(!project.IsCreator(currentUser.Id) &&
-                !currentUser.IsDataOfficerForInstitution(projectCreatorInstitutionId))
+                !currentUser.IsDataOfficerForInstitution(projectCreatorInstitutionId) &&
+                currentUser.Role.Name != Defaults.Roles.Administrator)
             {
                 return Forbid();
             }
@@ -869,66 +871,8 @@ namespace API.Controllers
 
             projectService.Save();
 
-            return Ok(mapper.Map<Project, ProjectResultResource>(project));
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
-
-        //[HttpDelete("linkedinstitution/{projectId}")]
-        //[Authorize]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status409Conflict)]
-        //public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId)
-        //{
-        //    User currentUser = await HttpContext.GetContextUser(userService)
-        //                                      .ConfigureAwait(false);
-
-        //    if(currentUser == null)
-        //    {
-        //        ProblemDetails problemDetails = new ProblemDetails
-        //        {
-        //            Title = "Failed to getting the user account.",
-        //            Detail = "The database does not contain a user with the provided user id.",
-        //            Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
-        //        };
-        //        return NotFound(problemDetails);
-        //    }
-
-        //    Project project = await projectService.FindAsync(projectId)
-        //                                            .ConfigureAwait(false);
-        //    int projectInstitutionId = project.User.InstitutionId.GetValueOrDefault();
-
-        //    //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
-        //    //Then this user is not authorized to link the institution to the project
-        //    if(!project.IsCreator(currentUser.Id) &&
-        //        !currentUser.IsDataOfficerForInstitution(projectInstitutionId))
-        //    {
-        //        ProblemDetails problemDetail = new ProblemDetails
-        //        {
-        //            Title = "User is not allowed to unlink institution.",
-        //            Detail = "The user is neither the creator of the project or the dataofficer for the institution send in the request.",
-        //            Instance = "85C7C299-9967-4FAE-AF78-366AC08C8AB1"
-        //        };
-        //        return Unauthorized(problemDetail);
-        //    }
-
-        //    if(!projectInstitutionService.InstitutionIsLinkedToProject(projectId, projectInstitutionId))
-        //    {
-        //        ProblemDetails problemDetails = new ProblemDetails
-        //        {
-        //            Title = "Institution is not yet linked to project.",
-        //            Detail = "The institution cannot be unlinked to the project because the institution is not yet part of the project.",
-        //            Instance = "0864DF7A-79FA-4EA3-878C-0D5357C93C44"
-        //        };
-        //        return Conflict(problemDetails);
-        //    }
-
-        //    var projectInstitutions = projectInstitutionService.FindByInstitutionsIdAndProjectId(projectId, projectInstitutionId);
-        //    projectInstitutionService.RemoveRange(projectInstitutions);
-        //    projectInstitutionService.Save();
-
-        //    return Ok();
-        //}
 
         /// <summary>
         /// Links given project and institution. This function is admin only!
@@ -998,8 +942,11 @@ namespace API.Controllers
             await projectInstitutionService.AddAsync(projectInstitution);
             projectInstitutionService.Save();
 
-            //TODO: Return result here
-            return Created(nameof(LinkInstitutionToProjectAsync), projectInstitution);
+            //Maybe a bit wasteful to get the entire project and institution but its fast enough for now.
+            projectInstitution.Project = await projectService.FindAsync(projectId);
+            projectInstitution.Institution = await institutionService.FindAsync(institutionId);
+
+            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionResourceResult>(projectInstitution));
         }
 
         /// <summary>
@@ -1066,8 +1013,7 @@ namespace API.Controllers
                 return Conflict(problemDetails);
             }
 
-            ProjectInstitution projectInstitution = new ProjectInstitution(projectId, institutionId);
-            projectInstitutionService.Remove(projectInstitution);
+            projectInstitutionService.RemoveByProjectIdAndInstitutionId(projectId, institutionId);
             projectInstitutionService.Save();
 
             return Ok();

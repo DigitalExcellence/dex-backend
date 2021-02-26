@@ -177,7 +177,7 @@ namespace Data.Helpers
         /// </summary>
         /// <param name="roles">The roles.</param>
         /// <returns>Returns the admin user that will be seeded.</returns>
-        public static User SeedAdminUser(List<Role> roles)
+        public static User SeedAdminUser(List<Role> roles, Institution institution)
         {
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
 
@@ -186,7 +186,8 @@ namespace Data.Helpers
                 Role = adminRole,
                 IdentityId = "88421113",
                 Email = "Administrator@dex.software",
-                Name = "Administrator bob"
+                Name = "Administrator bob",
+                InstitutionId = institution.Id
             };
 
             return user;
@@ -301,7 +302,7 @@ namespace Data.Helpers
             if(users.Count < 1) return null;
             List<Project> projects = new List<Project>();
             Random r = new Random();
-            for(int i = 0; i < 100; i++)
+            for(int i = 0; i < 30; i++)
             {
                 User user = users[r.Next(0, users.Count - 1)];
                 Faker<Project> projectToFake = new Faker<Project>()

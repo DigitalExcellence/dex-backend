@@ -20,6 +20,9 @@ namespace Repositories
 
         ProjectInstitution FindByInstitutionIdAndProjectId(int projectId, int institutionId);
         IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId);
+
+        void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId);
+
     }
 
     public class ProjectInstitutionRepository : Repository<ProjectInstitution>, IProjectInstitutionRepository
@@ -36,6 +39,16 @@ namespace Repositories
         public IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId)
         {
             return GetDbSet<ProjectInstitution>().Where(pi => pi.ProjectId == projectId && pi.InstitutionId == institutionId);
+        }
+
+        public void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId)
+        {
+            ProjectInstitution projectInstitution = GetDbSet<ProjectInstitution>()
+                .FirstOrDefault(p => p.ProjectId == projectId && p.InstitutionId == institutionId);
+
+            if(projectInstitution != null)
+                GetDbSet<ProjectInstitution>()
+                    .Remove(projectInstitution);
         }
 
         /// <summary>

@@ -19,6 +19,9 @@ namespace Services.Services
         bool InstitutionIsLinkedToProject(int projectId, int institutionId);
         ProjectInstitution FindByInstitutionIdAndProjectId(int projectId, int institutionId);
         IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId);
+
+        void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId);
+
     }
 
     public class ProjectInstitutionService : Service<ProjectInstitution>, IProjectInstitutionService
@@ -37,6 +40,11 @@ namespace Services.Services
         public IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId)
         {
             return Repository.FindByInstitutionsIdAndProjectId(projectId, institutionId);
+        }
+
+        public void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId)
+        {
+            Repository.RemoveByProjectIdAndInstitutionId(projectId, institutionId);
         }
 
         /// <summary>

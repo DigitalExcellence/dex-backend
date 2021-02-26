@@ -137,7 +137,7 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
-                                
+
                 o.AddPolicy(nameof(Defaults.Scopes.UserRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.UserRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.UserWrite),
@@ -441,6 +441,7 @@ namespace API
                                                   .GetRequiredService<IServiceScopeFactory>()
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+            context.Database.EnsureDeleted();
             context.Database.Migrate();
 
             // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
@@ -458,8 +459,9 @@ namespace API
 
                 if(!context.User.Any())
                 {
+                    List<Institution> institutions = context.Institution.ToList();
                     // seed admin
-                    context.User.Add(Seed.SeedAdminUser(roles));
+                    context.User.Add(Seed.SeedAdminUser(roles, institutions.FirstOrDefault()));
                     context.SaveChanges();
 
                     //Seed random users
