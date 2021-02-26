@@ -899,7 +899,7 @@ namespace API.Controllers
         /// 401 if user not authorized
         /// 409 if project not tagged
         /// </returns>
-        [HttpPost("untag/{projectId}/{tagId}")]
+        [HttpDelete("tag/{projectId}/{tagId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
