@@ -67,7 +67,6 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the specified tag id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag id.</response>
         [HttpGet("{tagId}")]
-
         [Authorize(Policy = nameof(Scopes.TagRead))]
         [ProducesResponseType(typeof(TagResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]

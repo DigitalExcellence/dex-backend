@@ -587,14 +587,16 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
 									"eval(pm.environment.get(\"commonTests\"))();\r",
 									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Response must be valid and have a json body\", function () {\r",
-									"    pm.response.to.be.ok;\r",
+									"    pm.response.to.be.success;\r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
 									"});\r",
@@ -616,7 +618,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": {{tagName}}\r\n}",
+							"raw": "{\r\n    \"name\": \"{{tagName}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1122,14 +1124,16 @@
 											"listen": "test",
 											"script": {
 												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
 													"eval(pm.environment.get(\"commonTests\"))();\r",
 													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
 													"});\r",
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.success;\r",
 													"    pm.response.to.be.withBody;\r",
 													"    pm.response.to.be.json;\r",
 													"});\r",
@@ -1151,7 +1155,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": {{tagName}}\r\n}",
+											"raw": "{\r\n    \"name\": \"{{tagName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1185,8 +1189,8 @@
 													"var foundAt;",
 													"",
 													"function findTag(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.results.length; i++) {",
-													"        if (jsonData.results[i].name == name) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].name == name) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -1211,7 +1215,7 @@
 													"});",
 													"",
 													"pm.test(\"Tag Name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.results[foundAt].name).to.eql(tagName);",
+													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1302,7 +1306,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var projectName = pm.environment.get(\"tagNameUpdated\");",
+													"var tagName = pm.environment.get(\"tagNameUpdated\");",
 													"pm.environment.set(\"tagName\", tagName);",
 													"",
 													"var jsonData = pm.response.json();",
@@ -5768,41 +5772,21 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
-													"",
 													"var jsonData = pm.response.json();",
-													"",
-													"var foundAt;",
-													"",
-													"function findTag(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.results.length; i++) {",
-													"        if (jsonData.results[i].name == name) {",
-													"            return i;",
-													"        }",
-													"    }",
-													"    return -1;",
-													"}",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.unauthorized;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"TagTagliatelle met: \" + tagName + \" is in list\", function () {",
-													"    foundAt = findTag(jsonData, tagName);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
-													"});",
-													"",
-													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.results[foundAt].name).to.eql(tagName);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -5834,25 +5818,21 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
-													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.unauthorized;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matches: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -6539,8 +6519,18 @@
 										}
 									],
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "POST",
-										"header": [],
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
 										"url": {
 											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
 											"host": [
@@ -6577,6 +6567,9 @@
 										}
 									],
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -9277,12 +9270,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});",
@@ -9294,9 +9287,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "POST",
 										"header": [
 											{
@@ -9341,8 +9331,8 @@
 													"var foundAt;",
 													"",
 													"function findTag(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.results.length; i++) {",
-													"        if (jsonData.results[i].name == name) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].name == name) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -9367,7 +9357,7 @@
 													"});",
 													"",
 													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.results[foundAt].name).to.eql(tagName);",
+													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -9375,9 +9365,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -9406,7 +9393,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var tagName = pm.environment.get(\"tagNameInitial\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -9431,9 +9418,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -9443,14 +9427,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -9465,12 +9449,12 @@
 												"exec": [
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});"
@@ -9480,9 +9464,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "PUT",
 										"header": [
 											{
@@ -9501,14 +9482,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -9525,12 +9506,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
 													"});"
@@ -9549,23 +9530,20 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
 									"response": []
 								}
 							],
-							"auth": {
-								"type": "noauth"
-							},
 							"event": [
 								{
 									"listen": "prerequest",
@@ -14384,12 +14362,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});",
@@ -14401,9 +14379,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "POST",
 										"header": [
 											{
@@ -14448,8 +14423,8 @@
 													"var foundAt;",
 													"",
 													"function findTag(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.results.length; i++) {",
-													"        if (jsonData.results[i].name == name) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].name == name) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -14474,7 +14449,7 @@
 													"});",
 													"",
 													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.results[foundAt].name).to.eql(tagName);",
+													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -14482,9 +14457,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -14513,7 +14485,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var tagName = pm.environment.get(\"tagNameInitial\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -14538,9 +14510,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -14550,14 +14519,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -14572,12 +14541,12 @@
 												"exec": [
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});"
@@ -14587,9 +14556,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "PUT",
 										"header": [
 											{
@@ -14608,14 +14574,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -14632,12 +14598,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
 													"});"
@@ -14656,23 +14622,20 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
 									"response": []
 								}
 							],
-							"auth": {
-								"type": "noauth"
-							},
 							"event": [
 								{
 									"listen": "prerequest",
@@ -18659,12 +18622,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});",
@@ -18676,9 +18639,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "POST",
 										"header": [
 											{
@@ -18723,8 +18683,8 @@
 													"var foundAt;",
 													"",
 													"function findTag(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.results.length; i++) {",
-													"        if (jsonData.results[i].name == name) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].name == name) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -18749,7 +18709,7 @@
 													"});",
 													"",
 													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.results[foundAt].name).to.eql(tagName);",
+													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -18757,9 +18717,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -18788,7 +18745,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var tagName = pm.environment.get(\"tagNameInitial\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -18813,9 +18770,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -18825,14 +18779,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -18847,12 +18801,12 @@
 												"exec": [
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});"
@@ -18862,9 +18816,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "PUT",
 										"header": [
 											{
@@ -18883,14 +18834,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -18907,12 +18858,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
 													"});"
@@ -18931,23 +18882,20 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
 									"response": []
 								}
 							],
-							"auth": {
-								"type": "noauth"
-							},
 							"event": [
 								{
 									"listen": "prerequest",
@@ -23300,12 +23248,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});",
@@ -23317,9 +23265,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "POST",
 										"header": [
 											{
@@ -23364,8 +23309,8 @@
 													"var foundAt;",
 													"",
 													"function findTag(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.results.length; i++) {",
-													"        if (jsonData.results[i].name == name) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].name == name) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -23390,7 +23335,7 @@
 													"});",
 													"",
 													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.results[foundAt].name).to.eql(tagName);",
+													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -23398,9 +23343,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -23429,7 +23371,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var tagName = pm.environment.get(\"tagNameInitial\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -23454,9 +23396,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [
 											{
@@ -23466,14 +23405,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -23488,12 +23427,12 @@
 												"exec": [
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
+													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
 													"});"
@@ -23503,9 +23442,6 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "PUT",
 										"header": [
 											{
@@ -23524,14 +23460,14 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
@@ -23548,12 +23484,12 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
 													"});"
@@ -23572,23 +23508,20 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Tag",
-												"{{tagId}}"
+												"{{tagIdToBeTagged}}"
 											]
 										}
 									},
 									"response": []
 								}
 							],
-							"auth": {
-								"type": "noauth"
-							},
 							"event": [
 								{
 									"listen": "prerequest",

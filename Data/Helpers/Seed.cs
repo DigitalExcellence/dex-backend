@@ -104,9 +104,10 @@ namespace Data.Helpers
 
                                           Scopes = new List<RoleScope>
                                                    {
-                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
+                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                                                       new RoleScope(nameof(Defaults.Scopes.TagRead))
                                                    }
-                                      };
+            };
             roles.Add(registeredUserRole);
 
             Role prRole = new Role
@@ -118,7 +119,8 @@ namespace Data.Helpers
                                            new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
                                            new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                                            new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
-                                           new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
+                                           new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                                           new RoleScope(nameof(Defaults.Scopes.TagRead))
                                        }
                           };
             roles.Add(prRole);
@@ -132,6 +134,7 @@ namespace Data.Helpers
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
+                                                    new RoleScope(nameof(Defaults.Scopes.TagRead)),
                                                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                                 }
                                    };
@@ -166,7 +169,10 @@ namespace Data.Helpers
             Role alumniRole = new Role
                               {
                                   Name = nameof(Defaults.Roles.Alumni),
-                                  Scopes = new List<RoleScope>()
+                                  Scopes = new List<RoleScope>
+                                  {
+                                      new RoleScope(nameof(Defaults.Scopes.TagRead))
+                                  }
                               };
             roles.Add(alumniRole);
 
