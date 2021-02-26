@@ -12,12 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-<<<<<<< HEAD
-Graduation system for users whose FHICT account becomes unavailable. [#287](https://github.com/DigitalExcellence/dex-backend/issues/287)
-=======
+- Graduation system for users whose FHICT account becomes unavailable. [#287](https://github.com/DigitalExcellence/dex-backend/issues/287)
 - Added wizard to automatically import project with a public and an oauth flow - [326](https://github.com/DigitalExcellence/dex-backend/issues/326)
 
->>>>>>> feature/wizzard
 ### Changed
 
 
@@ -28,7 +25,7 @@ Graduation system for users whose FHICT account becomes unavailable. [#287](http
 
 
 ### Fixed
-
+- Fixed inefficient use of entity framework for the fetching-all-projects endpoint. [376](https://github.com/DigitalExcellence/dex-backend/issues/376)
 
 ### Security
 
