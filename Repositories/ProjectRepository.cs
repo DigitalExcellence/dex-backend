@@ -134,6 +134,7 @@ namespace Repositories
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
                 project.Tags = await GetDbSet<ProjectTag>()
+                                      .Include(p => p.Tag)
                                       .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
@@ -175,6 +176,7 @@ namespace Repositories
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
                 project.Tags = await GetDbSet<ProjectTag>()
+                                      .Include(p => p.Tag)
                                       .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
@@ -255,6 +257,7 @@ namespace Repositories
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
                 project.Tags = await GetDbSet<ProjectTag>()
+                                      .Include(p => p.Tag)
                                       .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
@@ -447,6 +450,7 @@ namespace Repositories
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
                 project.Tags = await GetDbSet<ProjectTag>()
+                                      .Include(p => p.Tag)
                                       .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }

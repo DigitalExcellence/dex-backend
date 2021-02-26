@@ -18,6 +18,7 @@
 using Models;
 using Repositories;
 using Services.Base;
+using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -27,7 +28,8 @@ namespace Services.Services
     /// </summary>
     public interface IProjectTagService : IService<ProjectTag>
     {
-
+        Task<ProjectTag> GetProjectTag(int projectId, int tagId);
+        Task<ProjectTag> GetProjectTag(int tagId);
     }
 
     /// <summary>
@@ -49,6 +51,16 @@ namespace Services.Services
         /// </summary>
         private new IProjectTagRepository Repository =>
             (IProjectTagRepository) base.Repository;
+
+        public Task<ProjectTag> GetProjectTag(int projectId, int tagId)
+        {
+            return Repository.GetProjectTag(projectId, tagId);
+        }
+
+        public Task<ProjectTag> GetProjectTag(int tagId)
+        {
+            return Repository.GetProjectTag(tagId);
+        }
 
     }
 

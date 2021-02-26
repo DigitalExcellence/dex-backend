@@ -77,6 +77,11 @@ namespace API.Resources
         /// </summary>
         public List<ProjectLikesResourceResult> Likes { get; set; }
 
+        /// <summary>
+        ///     This gets or sets the tags of the project.
+        /// </summary>
+        public List<ProjectTagResourceResult> Tags { get; set; }
+
     }
 
 }

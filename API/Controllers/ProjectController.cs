@@ -178,7 +178,8 @@ namespace API.Controllers
                         filteredProjects.Add(project);
                     }
                 }
-            } else
+            }
+            else
             {
                 foreach(Project project in projects)
                 {
@@ -805,10 +806,16 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="tagId"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// 200 if OK
+        /// 404 if project or tag not found
+        /// 401 if user not authorized
+        /// 409 if project already tagged
+        /// </returns>
         [HttpPost("tag/{projectId}/{tagId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> ProjectAddTag(int projectId, int tagId)
@@ -821,7 +828,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to tag the project.",
                     Detail = "The project could not be found in the database.",
-                    Instance = "somethinghere"
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A292"
                 };
                 return NotFound(problem);
             }
@@ -835,7 +842,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to tag the project.",
                     Detail = "The tag could not be found in the database.",
-                    Instance = "somethinghere"
+                    Instance = "93C6B5BD-EC14-482A-9907-001C888F3D3F"
                 };
                 return NotFound(problem);
             }
@@ -853,10 +860,24 @@ namespace API.Controllers
                 {
                     Title = "Failed to tag the project.",
                     Detail = "The user is not allowed to modify the project.",
-                    Instance = "somethinghere"
+                    Instance = "1243016C-081F-441C-A388-3D56B0998D2E"
                 };
                 return Unauthorized(problem);
             }
+
+            ProjectTag alreadyTagged = await projectTagService.GetProjectTag(projectId, tagId);
+
+            if(alreadyTagged != null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to tag the project.",
+                    Detail = "Project has already been tagged with this tag.",
+                    Instance = "4986CBC6-FB6D-4255-ACE8-833E92B25FBD"
+                };
+                return Conflict(problem);
+            }
+
 
             ProjectTag projectTag = new ProjectTag(project, tag);
             await projectTagService.AddAsync(projectTag)
@@ -865,6 +886,91 @@ namespace API.Controllers
             projectTagService.Save();
 
             return Ok(mapper.Map<ProjectTag, ProjectTagResourceResult>(projectTag));
+        }
+
+        /// <summary>
+        ///     Remove a tag from a project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="tagId"></param>
+        /// <returns>
+        /// 200 if OK
+        /// 404 if project or tag not found
+        /// 401 if user not authorized
+        /// 409 if project not tagged
+        /// </returns>
+        [HttpPost("untag/{projectId}/{tagId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> ProjectRemoveTag(int projectId, int tagId)
+        {
+            Project project = await projectService.FindAsync(projectId)
+                                                  .ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the tag from the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "2CC94251-9103-4AAC-B461-F99939E78AD0"
+                };
+                return NotFound(problem);
+            }
+
+            Tag tag = await tagService.FindAsync(tagId)
+                                      .ConfigureAwait(false);
+
+            if(tag == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the tag from the project.",
+                    Detail = "The tag could not be found in the database.",
+                    Instance = "3E41B5DC-F78B-429B-89AB-1A98A6F65FDC"
+                };
+                return NotFound(problem);
+            }
+
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
+                                                                     project.UserId);
+
+            if(!(project.UserId == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the tag from the project.",
+                    Detail = "The user is not allowed to modify the project.",
+                    Instance = "4D1878C1-1606-4224-841A-73F30AE4F930"
+                };
+                return Unauthorized(problem);
+            }
+
+            ProjectTag alreadyTagged = await projectTagService.GetProjectTag(projectId, tagId);
+
+            if(alreadyTagged == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the tag from the project.",
+                    Detail = "Project has not been tagged with this tag.",
+                    Instance = "5EABA4F3-47E6-45A7-8522-E87268716912"
+                };
+                return Conflict(problem);
+            }
+
+            await projectTagService.RemoveAsync(alreadyTagged.Id)
+                             .ConfigureAwait(false);
+
+            projectTagService.Save();
+
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
     }

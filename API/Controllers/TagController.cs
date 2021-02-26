@@ -25,17 +25,20 @@ namespace API.Controllers
 
         private readonly IMapper mapper;
         private readonly ITagService tagService;
+        private readonly IProjectTagService projectTagService;
         private readonly IUserService userService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="TagController" /> class
         /// </summary>
         /// <param name="tagService">The tag service which is used to communicate with the logic layer.</param>
+        /// <param name="projectTagService">The projecttag service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the model to the resource result.</param>
-        public TagController(ITagService tagService, IUserService userService, IMapper mapper)
+        public TagController(ITagService tagService, IProjectTagService projectTagService, IUserService userService, IMapper mapper)
         {
             this.tagService = tagService;
+            this.projectTagService = projectTagService;
             this.userService = userService;
             this.mapper = mapper;
         }
@@ -110,7 +113,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Scopes.TagWrite))]
         [ProducesResponseType(typeof(TagResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateRoleAsync([FromBody] TagResource tagResource)
+        public async Task<IActionResult> CreateTagAsync([FromBody] TagResource tagResource)
         {
             if(tagResource == null)
             {
@@ -129,7 +132,7 @@ namespace API.Controllers
                 await tagService.AddAsync(tag)
                                  .ConfigureAwait(false);
                 tagService.Save();
-                return Created(nameof(CreateRoleAsync), mapper.Map<Tag, TagResourceResult>(tag));
+                return Created(nameof(CreateTagAsync), mapper.Map<Tag, TagResourceResult>(tag));
             }
             catch(DbUpdateException e)
             {
@@ -159,7 +162,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> UpdateRole(int tagId, TagResource tagResource)
+        public async Task<IActionResult> UpdateTag(int tagId, TagResource tagResource)
         {
             Tag currentTag = await tagService.FindAsync(tagId)
                                                 .ConfigureAwait(false);
@@ -203,15 +206,32 @@ namespace API.Controllers
                                          {
                                              Title = "Failed to delete the tag.",
                                              Detail = "The tag could not be found in the database.",
-                                             Instance = "CBC4C09D-DFEA-44D8-A310-2CE149BAD498"
-                                         };
+                                             Instance = "A0853DE4-C881-4597-A5A7-42F6761CECE0"
+                };
                 return NotFound(problem);
+            }
+
+            ProjectTag projectTag = await projectTagService.GetProjectTag(tagId);
+
+            if(projectTag != null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to delete the tag.",
+                    Detail = "The tag is still connected to a project.",
+                    Instance = "4AA5102B-3A6F-4144-BF01-0EC32B4E69A8"
+                };
+                return Unauthorized(problem);
             }
 
             await tagService.RemoveAsync(tag.Id)
                              .ConfigureAwait(false);
             tagService.Save();
-            return Ok();
+
+            List<Tag> tags = await tagService.GetAllAsync()
+                                                .ConfigureAwait(false);
+
+            return Ok(mapper.Map<IEnumerable<Tag>, IEnumerable<TagResourceResult>>(tags));
         }
     }
 

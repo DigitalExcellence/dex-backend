@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repositories
 {
@@ -28,7 +29,8 @@ namespace Repositories
     /// </summary>
     public interface IProjectTagRepository : IRepository<ProjectTag>
     {
-
+        Task<ProjectTag> GetProjectTag(int projectId, int tagId);
+        Task<ProjectTag> GetProjectTag(int tagId);
     }
 
     /// <summary>
@@ -45,5 +47,16 @@ namespace Repositories
         public ProjectTagRepository(DbContext dbContext) :
             base(dbContext) { }
 
+        public Task<ProjectTag> GetProjectTag(int projectId, int tagId)
+        {
+            return DbSet.Where(p => p.Tag.Id == tagId && p.Project.Id == projectId)
+                        .FirstOrDefaultAsync();
+        }
+
+        public Task<ProjectTag> GetProjectTag(int tagId)
+        {
+            return DbSet.Where(p => p.Tag.Id == tagId)
+                        .FirstOrDefaultAsync();
+        }
     }
 }
