@@ -115,6 +115,7 @@ services:
         - Config__RabbitMQ__Password=test
     networks:
         rabbitmq-network:
+        mssql-network:
 
 networks:
   mssql-network:
