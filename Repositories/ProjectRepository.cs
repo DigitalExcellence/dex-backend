@@ -158,21 +158,20 @@ namespace Repositories
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
                                                     .Include(u => u.User)
                                                     .Include(p => p.ProjectIcon)
-                                                    .Include(p => p.CallToAction);
+                                                    .Include(p => p.CallToAction)
+                                                    .Include( p => p.Collaborators )
+                                                    .Include( p => p.User )
+                                                    .Include( p => p.Likes );
+
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
 
+            //Execute the IQueryable to get a collection of results
+            List<Project> projectResults = await queryableProjects.ToListAsync();
 
-            foreach(Project project in queryableProjects)
-            {
-                project.Collaborators = await GetDbSet<Collaborator>()
-                                              .Where(p => p.ProjectId == project.Id)
-                                              .ToListAsync();
-                project.User = RedactUser(project.User);
-                project.Likes = await GetDbSet<ProjectLike>()
-                                      .Where(p => p.LikedProject.Id == project.Id)
-                                      .ToListAsync();
-            }
-            return await queryableProjects.ToListAsync();
+            //Redact the user after fetching the collection from the project (no separate query needs to be executed)
+            projectResults.ForEach( project => project.User = RedactUser( project.User ) );
+
+            return projectResults;
         }
 
         /// <summary>
