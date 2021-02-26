@@ -18,6 +18,8 @@ Graduation system for users whose FHICT account becomes unavailable. [#287](http
 - Added wizard to automatically import project with a public and an oauth flow - [326](https://github.com/DigitalExcellence/dex-backend/issues/326)
 
 >>>>>>> feature/wizzard
+- Added tags
+
 ### Changed
 
 
