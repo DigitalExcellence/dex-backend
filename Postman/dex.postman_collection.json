@@ -8842,7 +8842,7 @@
 									"response": []
 								},
 								{
-									"name": "UserProject-DeleteProject-Other-Registered Copy",
+									"name": "UserProject-DeleteProject-Other-Registered",
 									"event": [
 										{
 											"listen": "test",
