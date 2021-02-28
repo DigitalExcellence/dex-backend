@@ -300,13 +300,6 @@ namespace Repositories
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
 
-            foreach(Project project in projects)
-            {
-                project.Collaborators = await GetDbSet<Collaborator>()
-                                              .Where(p => p.ProjectId == project.Id)
-                                              .ToListAsync();
-            }
-
             return projects;
         }
 
