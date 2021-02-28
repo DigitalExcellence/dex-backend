@@ -40,6 +40,7 @@ Graduation system for users whose FHICT account becomes unavailable. [#287](http
 ### Added
 
 - Added ability to make projects private to a specific institution - [#310](https://github.com/DigitalExcellence/dex-backend/issues/310)
+- Added ability to retreive all user projects - [#313](https://github.com/DigitalExcellence/dex-backend/issues/313)
 
 ### Changed
 
