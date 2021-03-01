@@ -184,12 +184,12 @@ namespace API.Controllers
         /// <param name="tagId">The tag identifier which is used for searching the tag.</param>
         /// <returns>This method returns status code 200.</returns>
         /// <response code="200">This endpoint returns status code 200. Tag is deleted.</response>
-        /// <response code="401">The 401 Unauthorized status code is returned when the tag is still connected to a project.</response>
         /// <response code="404">The 404 Not Found status code is returned when the tag with the specified id could not be found.</response>
+        /// <response code="409">The 409 Conflict status code is returned when the tag is still connected to a project.</response>
         [HttpDelete("{tagId}")]
         [Authorize(Policy = nameof(Scopes.TagWrite))]
         [ProducesResponseType(typeof(TagResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Conflict)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteTag(int tagId)
         {
@@ -216,7 +216,7 @@ namespace API.Controllers
                     Detail = "The tag is still connected to a project.",
                     Instance = "4AA5102B-3A6F-4144-BF01-0EC32B4E69A8"
                 };
-                return Unauthorized(problem);
+                return Conflict(problem);
             }
 
             await tagService.RemoveAsync(tag.Id)
