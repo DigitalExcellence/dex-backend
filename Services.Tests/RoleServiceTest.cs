@@ -30,10 +30,10 @@ namespace Services.Tests
 {
 
     [TestFixture]
-    public class TagServiceTest : ServiceTest<Tag, TagService, ITagRepository>
+    public class RoleServiceTest : ServiceTest<Role, RoleService, IRoleRepository>
     {
 
-        protected new ITagService Service => base.Service;
+        protected new IRoleService Service => base.Service;
 
         /// <summary>
         ///     Test whether the repository method is called and no changes have been applied to the object
@@ -41,53 +41,125 @@ namespace Services.Tests
         /// <param name="roles">A set of 10 roles.</param>
         /// <returns></returns>
         [Test]
-        public async Task GetAllAsync([TagDataSource(10)] List<Tag> tags)
+        public async Task GetAllAsync([RoleDataSource(10)] List<Role> roles)
         {
             RepositoryMock.Setup(repository => repository.GetAllAsync())
-                          .Returns(Task.FromResult(tags));
+                          .Returns(Task.FromResult(roles));
 
-            List<Tag> retrievedTags = await Service.GetAllAsync();
+            List<Role> retrievedRoles = await Service.GetAllAsync();
 
             Assert.DoesNotThrow(() => { RepositoryMock.Verify(repository => repository.GetAllAsync(), Times.Once); });
 
-            Assert.AreEqual(tags, retrievedTags);
-            Assert.AreEqual(10, retrievedTags.Count);
+            Assert.AreEqual(roles, retrievedRoles);
+            Assert.AreEqual(10, retrievedRoles.Count);
         }
 
+        /// <summary>
+        ///     Tests if the get valid scopes returns the list of valid scopes as seen in defaults.Scopes.
+        ///     Please update when adding scopes.
+        /// </summary>
+        [Test]
+        public void GetValidScopes()
+        {
+            List<string> currentScopes = new List<string>
+                                         {
+                                             "ProjectRead",
+                                             "ProjectWrite",
+                                             "UserRead",
+                                             "UserWrite",
+                                             "TagRead",
+                                             "TagWrite",
+                                             "HighlightRead",
+                                             "HighlightWrite",
+                                             "RoleRead",
+                                             "RoleWrite",
+                                             "EmbedWrite",
+                                             "EmbedRead",
+                                             "InstitutionUserRead",
+                                             "InstitutionUserWrite",
+                                             "InstitutionProjectWrite",
+                                             "InstitutionEmbedWrite",
+                                             "InstitutionRead",
+                                             "InstitutionWrite",
+                                             "DataSourceWrite",
+                                             "FileWrite",
+                                             "CallToActionOptionWrite",
+                                             "UserTaskWrite",
+                                             "AdminProjectWrite"
+                                         };
+            List<string> retrievedScopes = Service.GetValidScopes();
 
+            retrievedScopes.Should()
+                           .BeEquivalentTo(currentScopes);
+        }
 
+        /// <summary>
+        ///     Tests if isValidScope returns true on an existing scope.
+        /// </summary>
+        [Test]
+        public void IsValidScope_true()
+        {
+            List<string> currentScopes = new List<string>
+                                         {
+                                             "ProjectRead",
+                                             "AdminProjectWrite",
+                                             "UserRead",
+                                             "UserWrite",
+                                             "HighlightRead",
+                                             "HighlightWrite",
+                                             "RoleRead",
+                                             "RoleWrite",
+                                             "EmbedWrite",
+                                             "EmbedRead",
+                                             "FileWrite"
+                                         };
+            bool isValidScope = Service.IsValidScope("RoleRead");
+
+            Assert.IsTrue(isValidScope);
+        }
+
+        /// <summary>
+        ///     Tests if isValidScope returns false on a non existing scope.
+        /// </summary>
+        [Test]
+        public void IsValidScope_false()
+        {
+            bool isValidScope = Service.IsValidScope("role:read");
+
+            Assert.IsFalse(isValidScope);
+        }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddRangeTest_GoodFlow([TagDataSource(10)] IEnumerable<Tag> entities)
+        public override void AddRangeTest_GoodFlow([RoleDataSource(10)] IEnumerable<Role> entities)
         {
             base.AddRangeTest_GoodFlow(entities);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddTest_GoodFlow([TagDataSource] Tag entity)
+        public override void AddTest_GoodFlow([RoleDataSource] Role entity)
         {
             base.AddTest_GoodFlow(entity);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task FindAsyncTest_GoodFlow([TagDataSource] Tag entity)
+        public override Task FindAsyncTest_GoodFlow([RoleDataSource] Role entity)
         {
             return base.FindAsyncTest_GoodFlow(entity);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task GetAll([TagDataSource(10)] List<Tag> entities)
+        public override Task GetAll([RoleDataSource(10)] List<Role> entities)
         {
             return base.GetAll(entities);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Remove([TagDataSource] Tag entity)
+        public override void Remove([RoleDataSource] Role entity)
         {
             base.Remove(entity);
         }
@@ -108,7 +180,7 @@ namespace Services.Tests
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Update([TagDataSource] Tag entity)
+        public override void Update([RoleDataSource] Role entity)
         {
             base.Update(entity);
         }
