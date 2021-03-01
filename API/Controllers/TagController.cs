@@ -77,7 +77,7 @@ namespace API.Controllers
                                              Title = "Failed getting tag.",
                                              Detail =
                                                  "The Id is smaller then 0 and therefore it could never be a valid tag id.",
-                                             Instance = "5024ADDA-6DE2-4B49-896A-526E8EC4313D"
+                                             Instance = "758F4B36-A047-42D4-9F9E-B09BF8106F85"
                                          };
                 return BadRequest(problem);
             }
@@ -90,8 +90,8 @@ namespace API.Controllers
                                          {
                                              Title = "Failed getting tag.",
                                              Detail = "The tag could not be found in the database.",
-                                             Instance = "1739EFA6-3F31-4C88-B596-74DA403AC51B"
-                                         };
+                                             Instance = "872DEE7C-D1C8-4161-B8BA-B577EAA5A1C9"
+                };
                 return NotFound(problem);
             }
 
