@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+
 using Data;
 using MessageBrokerPublisher;
 using Microsoft.EntityFrameworkCore;
@@ -116,7 +117,7 @@ namespace Repositories
     /// </summary>
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
-        private readonly ITaskPublisher TaskPublisher;
+        private readonly ITaskPublisher taskPublisher;
         private readonly RestClient elasticSearchContext;
         private readonly Queries queries;
 
@@ -127,8 +128,8 @@ namespace Repositories
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
 
-        public ProjectRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, ITaskPublisher TaskPublisher, Queries queries) : base(dbContext) {
-            this.TaskPublisher = TaskPublisher;
+        public ProjectRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, ITaskPublisher taskPublisher, Queries queries) : base(dbContext) {
+            this.taskPublisher = taskPublisher;
             this.elasticSearchContext = elasticSearchContext.CreateRestClientForElasticRequests();
             this.queries = queries;
         }
@@ -304,7 +305,7 @@ namespace Repositories
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
             
 
         }
@@ -331,7 +332,7 @@ namespace Repositories
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
         }
 
         public override void AddRange(IEnumerable<Project> entities)
@@ -348,7 +349,7 @@ namespace Repositories
                 SetLikes(x);
                 ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
                 ProjectConverter.ProjectToESProjectDTO(x, projectToSync);
-                TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync),
+                taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync),
                     Subject.ELASTIC_CREATE_OR_UPDATE);
             });
             
@@ -366,7 +367,7 @@ namespace Repositories
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
             return base.AddAsync(entity);
         }
 
@@ -380,7 +381,7 @@ namespace Repositories
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
         }
 
         /// <summary>
@@ -396,7 +397,7 @@ namespace Repositories
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
             return base.RemoveAsync(id);
         }
 
@@ -619,7 +620,7 @@ namespace Repositories
             foreach(ESProjectFormatDTO project in projectsToExportDTOs)
             {
                 // Registers an Elastic formatted project at the message broker to be inserted into Elastic DB.
-                TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(project), Subject.ELASTIC_CREATE_OR_UPDATE);
+                taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(project), Subject.ELASTIC_CREATE_OR_UPDATE);
             }
         }
 
@@ -628,7 +629,7 @@ namespace Repositories
             Project projectToSync = await FindAsync(project.Id);
             ESProjectFormatDTO eSProjectDTO = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(projectToSync, eSProjectDTO);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
                      
             
         }

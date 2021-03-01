@@ -46,7 +46,7 @@ namespace Repositories
     public class UserProjectLikeRepository : Repository<ProjectLike>,
                                              IUserProjectLikeRepository
     {
-        private ITaskPublisher TaskPublisher;
+        private ITaskPublisher taskPublisher;
 
         /// <summary>
         ///     This is the project like repository constructor
@@ -54,7 +54,7 @@ namespace Repositories
         /// <param name="dbContext"></param>
        public UserProjectLikeRepository(DbContext dbContext, ITaskPublisher TaskPublisher) :
             base(dbContext) {
-            this.TaskPublisher = TaskPublisher;
+            this.taskPublisher = TaskPublisher;
         }
 
         public override void Add(ProjectLike projectLike)

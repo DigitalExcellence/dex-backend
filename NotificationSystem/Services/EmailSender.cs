@@ -32,10 +32,7 @@ namespace NotificationSystem.Services
         private readonly bool sandboxMode;
         private EmailNotification notification;
         private Response response;
-
-        public EmailNotification Notification { get => notification; set => notification = value; }
         
-
         public EmailSender(ISendGridClient sendGridClient,  string emailFrom, bool sandboxMode = false)
         {
             client = sendGridClient;

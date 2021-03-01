@@ -28,9 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_MessageBrokerPublisher",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\10_MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSynchronizer", "ElasticSynchronizer\ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSynchronizer", "ElasticSynchronizer\ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "11_NotificationSystem", "NotificationSystem\11_NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "12_NotificationSystem.Tests", "NotificationSystem.Tests\12_NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
@@ -79,14 +78,14 @@ Global
 		{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0F1BB66-1749-47B7-940F-2EA6D004F33B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0F1BB66-1749-47B7-940F-2EA6D004F33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0F1BB66-1749-47B7-940F-2EA6D004F33B}.Release|Any CPU.ActiveCfg = Release|Any CPU

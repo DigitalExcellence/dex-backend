@@ -44,7 +44,6 @@ namespace Repositories.Tests
         protected Mock<ITaskPublisher> TaskPublisher;
         protected Mock<Queries> Queries;
 
-        protected new IProjectRepository Repository => base.Repository;
 
         /// <summary>
         /// Initialize runs before every test

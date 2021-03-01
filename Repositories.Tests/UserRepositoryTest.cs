@@ -48,8 +48,6 @@ namespace Repositories.Tests
             ElasticSearchContext.Verify();
         }
 
-        protected new IUserRepository Repository => base.Repository;
-
         /// <summary>
         ///     User is retrieved correctly
         /// </summary>
