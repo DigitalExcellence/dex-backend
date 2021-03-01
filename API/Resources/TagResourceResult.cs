@@ -32,7 +32,7 @@ namespace API.Resources
         public int Id { get; set; }
 
         /// <summary>
-        ///     Get or Set the Id of a Tag
+        ///     Get or Set the Name of a Tag
         /// </summary>
         public string Name { get; set; }
 
