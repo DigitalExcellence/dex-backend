@@ -24,9 +24,16 @@ namespace API.Resources
     public class ProjectTagResourceResult
     {
 
-        public int Id;
+        /// <summary>
+        ///     Gets or sets the Id of the project tag.
+        /// </summary>
+        public int Id { get; set; }
 
-        public string Name;
+        /// <summary>
+        ///     Gets or sets the Name of the project tag.
+        /// </summary>
+        public string Name { get; set; }
+
     }
 
 }
