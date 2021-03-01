@@ -26,20 +26,17 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly ITagService tagService;
         private readonly IProjectTagService projectTagService;
-        private readonly IUserService userService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="TagController" /> class
         /// </summary>
         /// <param name="tagService">The tag service which is used to communicate with the logic layer.</param>
         /// <param name="projectTagService">The projecttag service which is used to communicate with the logic layer.</param>
-        /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the model to the resource result.</param>
-        public TagController(ITagService tagService, IProjectTagService projectTagService, IUserService userService, IMapper mapper)
+        public TagController(ITagService tagService, IProjectTagService projectTagService, IMapper mapper)
         {
             this.tagService = tagService;
             this.projectTagService = projectTagService;
-            this.userService = userService;
             this.mapper = mapper;
         }
 
