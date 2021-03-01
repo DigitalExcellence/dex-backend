@@ -16,6 +16,7 @@
 */
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Resources
 {
@@ -32,6 +33,7 @@ namespace API.Resources
         /// <value>
         ///     The name.
         /// </value>
+        [Required]
         public string Name { get; set; }
 
     }
