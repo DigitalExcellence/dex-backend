@@ -31,7 +31,7 @@ namespace API.Controllers
         ///     Initializes a new instance of the <see cref="TagController" /> class
         /// </summary>
         /// <param name="tagService">The tag service which is used to communicate with the logic layer.</param>
-        /// <param name="projectTagService">The projecttag service which is used to communicate with the logic layer.</param>
+        /// <param name="projectTagService">The project tag service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the model to the resource result.</param>
         public TagController(ITagService tagService, IProjectTagService projectTagService, IMapper mapper)
         {
@@ -188,8 +188,8 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the tag with the specified id could not be found.</response>
         [HttpDelete("{tagId}")]
         [Authorize(Policy = nameof(Scopes.TagWrite))]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(TagResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteTag(int tagId)
         {
