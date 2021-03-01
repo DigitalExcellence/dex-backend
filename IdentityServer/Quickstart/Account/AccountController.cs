@@ -16,20 +16,16 @@
 */
 
 using IdentityModel;
-using IdentityServer.Quickstart;
 using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Models;
 using Services.Services;
 using System;
@@ -52,11 +48,12 @@ namespace IdentityServer
     [AllowAnonymous]
     public class AccountController : Controller
     {
+
         private readonly IClientStore clientStore;
         private readonly IEventService events;
+        private readonly IIdentityUserService identityUserService;
         private readonly IIdentityServerInteractionService interaction;
         private readonly IAuthenticationSchemeProvider schemeProvider;
-        private readonly IIdentityUserService identityUserService;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -100,7 +97,8 @@ namespace IdentityServer
             }
             int idx = vm.ReturnUrl.IndexOf('?');
             string query = idx >= 0 ? vm.ReturnUrl.Substring(idx) : "";
-            string providerSchema = HttpUtility.ParseQueryString(query).Get("provider");
+            string providerSchema = HttpUtility.ParseQueryString(query)
+                                               .Get("provider");
 
             if(vm.VisibleExternalProviders.FirstOrDefault(i => i.AuthenticationScheme == providerSchema) != null)
             {
@@ -156,12 +154,11 @@ namespace IdentityServer
                 // validate username/password against in-memory store
                 if(await identityUserService.ValidateCredentialsAsync(model.Username, model.Password))
                 {
-
                     IdentityUser user = await identityUserService.FindByUsername(model.Username);
                     await events.RaiseAsync(new UserLoginSuccessEvent(user.Username,
-                                                                       user.SubjectId,
-                                                                       user.Username,
-                                                                       clientId: context?.ClientId));
+                                                                      user.SubjectId,
+                                                                      user.Username,
+                                                                      clientId: context?.ClientId));
 
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.
@@ -175,7 +172,7 @@ namespace IdentityServer
                                     ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
                                 };
                     }
-                    
+
                     // issue authentication cookie with subject ID and username
                     IdentityServerUser isuser = new IdentityServerUser(user.SubjectId)
                                                 {

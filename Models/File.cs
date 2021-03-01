@@ -20,8 +20,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
+
     public class File
     {
+
         public File() { }
 
         public File(string path, string name, User uploader, DateTime uploadDateTime)
@@ -33,12 +35,17 @@ namespace Models
         }
 
         public int Id { get; set; }
+
         [Required]
         public string Path { get; set; }
+
         public DateTime UploadDateTime { get; set; }
+
         public string Name { get; set; }
+
         [Required]
         public User Uploader { get; set; }
 
     }
+
 }

@@ -4,9 +4,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Version>1.0.1-beta</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
@@ -14,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MessageBrokerPublisher\MessageBrokerPublisher.csproj" />
+    <ProjectReference Include="..\Repositories.Tests\05_Repositories.Tests.csproj" />
+    <ProjectReference Include="..\Repositories\04_Repositories.csproj" />
+    <ProjectReference Include="..\Services\02_Services.csproj" />
   </ItemGroup>
 
 </Project>

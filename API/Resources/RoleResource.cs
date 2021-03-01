@@ -15,30 +15,33 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
 using System.Collections.Generic;
-using Models;
 
 namespace API.Resources
 {
+
     /// <summary>
     ///     The view model of a role
     /// </summary>
     public class RoleResource
     {
+
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         /// <value>
-        /// The name.
+        ///     The name.
         /// </value>
         public string Name { get; set; }
+
         /// <summary>
-        /// Gets or sets the scopes.
+        ///     Gets or sets the scopes.
         /// </summary>
         /// <value>
-        /// The scopes.
+        ///     The scopes.
         /// </value>
         public List<RoleScopeResource> Scopes { get; set; }
+
     }
+
 }

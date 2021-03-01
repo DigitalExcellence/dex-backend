@@ -26,18 +26,20 @@ using System.Linq;
 
 namespace Repositories.Tests.DataSources
 {
+
     /// <summary>
-    /// This class is an attribute used for generating institutions.
+    ///     This class is an attribute used for generating institutions.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public class InstitutionDataSourceAttribute : Attribute, IParameterDataSource
     {
 
+        private readonly int amountToGenerate;
+
         private readonly IFakeDataGenerator<Institution> fakeDataGenerator;
-        private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// Initializes InstitutionDataSourceAttribute
+        ///     Initializes InstitutionDataSourceAttribute
         /// </summary>
         public InstitutionDataSourceAttribute()
         {
@@ -51,7 +53,7 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// This method generates the data and returns it;
+        ///     This method generates the data and returns it;
         /// </summary>
         /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance.</param>
         /// <returns>This method returns the generated data.</returns>
@@ -59,10 +61,11 @@ namespace Repositories.Tests.DataSources
         {
             if(amountToGenerate <= 1)
             {
-                return new[] { fakeDataGenerator.Generate() };
+                return new[] {fakeDataGenerator.Generate()};
             }
-            List<Institution> projects = fakeDataGenerator.GenerateRange(amountToGenerate).ToList();
-            return new[] { projects };
+            List<Institution> projects = fakeDataGenerator.GenerateRange(amountToGenerate)
+                                                          .ToList();
+            return new[] {projects};
         }
 
     }

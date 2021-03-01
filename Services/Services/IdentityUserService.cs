@@ -1,23 +1,39 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using Models;
 using Repositories;
 using Services.Base;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Services
 {
+
     /// <summary>
-    /// The IdentityUser service.
+    ///     The IdentityUser service.
     /// </summary>
-    /// <seealso cref="Services.Base.IService{Models.IdentityUser}" />
+    /// <seealso cref="IdentityUser" />
     public interface IIdentityUserService : IService<IdentityUser>
     {
+
         /// <summary>
-        /// Validates the users credentials..
+        ///     Validates the users credentials..
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
@@ -25,14 +41,14 @@ namespace Services.Services
         Task<bool> ValidateCredentialsAsync(string username, string password);
 
         /// <summary>
-        /// Gets the IdentityUser by its username.
+        ///     Gets the IdentityUser by its username.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns>The retrieved IdentityUser</returns>
         Task<IdentityUser> FindByUsername(string username);
 
         /// <summary>
-        /// Gets the IdentityUser by its external provider data.
+        ///     Gets the IdentityUser by its external provider data.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
@@ -40,7 +56,7 @@ namespace Services.Services
         Task<IdentityUser> FindByExternalProvider(string provider, string providerUserId);
 
         /// <summary>
-        /// Creates a new IdentityUser from claims.
+        ///     Creates a new IdentityUser from claims.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
@@ -49,40 +65,49 @@ namespace Services.Services
         Task<IdentityUser> AutoProvisionUser(string provider, string providerUserId, List<Claim> claimsList);
 
         /// <summary>
-        /// Creates a new IdentityUser from claims.
+        ///     Creates a new IdentityUser from claims.
         /// </summary>
         /// <param name="user">The user object.</param>
         /// <returns>The retrieved IdentityUser</returns>
         Task<IdentityUser> AutoProvisionUser(IdentityUser user);
 
         /// <summary>
-        /// Gets the IdentityUser with the specified subjectIdentifier.
+        ///     Gets the IdentityUser with the specified subjectIdentifier.
         /// </summary>
         /// <param name="subjectId">The subject identifier.</param>
         /// <returns>The retrieved IdentityUser</returns>
         Task<IdentityUser> FindAsync(string subjectId);
 
+        Task<IdentityUser> FindBySubjectId(string subjectId);
+
     }
 
     /// <summary>
-    /// The IdentityUser Service.
+    ///     The IdentityUser Service.
     /// </summary>
-    /// <seealso cref="Services.Base.Service{Models.IdentityUser}" />
-    /// <seealso cref="Services.Services.IIdentityUserService" />
+    /// <seealso cref="IdentityUser" />
+    /// <seealso cref="IIdentityUserService" />
     public class IdentityUserService : Service<IdentityUser>, IIdentityUserService
     {
 
+        /// <summary>
+        ///     This is the constructor of the identity user service
+        /// </summary>
+        /// <param name="repository"></param>
         public IdentityUserService(IIdentityUserRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IIdentityUserRepository Repository => (IIdentityUserRepository) base.Repository;
 
         /// <summary>
-        /// Validates the users credentials.
+        ///     Validates the users credentials.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
         /// <returns>
-        /// true if the credentials are valid.
+        ///     true if the credentials are valid.
         /// </returns>
         public async Task<bool> ValidateCredentialsAsync(string username, string password)
         {
@@ -95,11 +120,11 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Gets the IdentityUser by its username.
+        ///     Gets the IdentityUser by its username.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
         public async Task<IdentityUser> FindByUsername(string username)
         {
@@ -107,12 +132,12 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Gets the IdentityUser by its external provider data.
+        ///     Gets the IdentityUser by its external provider data.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
         public async Task<IdentityUser> FindByExternalProvider(string provider, string providerUserId)
         {
@@ -120,25 +145,27 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Creates a new IdentityUser from claims.
+        ///     Creates a new IdentityUser from claims.
         /// </summary>
         /// <param name="provider">The provider identifier.</param>
         /// <param name="providerUserId">The users unique identifier with that provider.</param>
         /// <param name="claimsList">The claims list.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
-        public async Task<IdentityUser> AutoProvisionUser(string provider, string providerUserId, List<Claim> claimsList)
+        public async Task<IdentityUser> AutoProvisionUser(string provider,
+                                                          string providerUserId,
+                                                          List<Claim> claimsList)
         {
             return await Repository.AutoProvisionUser(provider, providerUserId, claimsList);
         }
 
         /// <summary>
-        /// Creates a new IdentityUser from claims.
+        ///     Creates a new IdentityUser from claims.
         /// </summary>
         /// <param name="user">The user object.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
         public async Task<IdentityUser> AutoProvisionUser(IdentityUser user)
         {
@@ -148,15 +175,22 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Gets the IdentityUser with the specified subjectIdentifier.
+        ///     Gets the IdentityUser with the specified subjectIdentifier.
         /// </summary>
         /// <param name="subjectId">The subject identifier.</param>
         /// <returns>
-        /// The retrieved IdentityUser
+        ///     The retrieved IdentityUser
         /// </returns>
         public Task<IdentityUser> FindAsync(string subjectId)
         {
             return Repository.FindAsync(subjectId);
         }
+
+        public async Task<IdentityUser> FindBySubjectId(string subjectId)
+        {
+            return await Repository.FindBySubjectId(subjectId);
+        }
+
     }
+
 }

@@ -55,10 +55,19 @@ services:
       - App__Frontend__ClientId=${STAGING_API_FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${STAGING_API_FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=https://identity.staging.dex.software
+      - App__IdentityServer__ClientId=${API_CLIENT_ID}
+      - App__IdentityServer__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - SENTRY_DSN=https://c4cad5ec89d74853a66347a7b19c213b@o395685.ingest.sentry.io/5247967
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__DataSources__Github__ClientId=${App__DataSources__Github__ClientId}
+      - App__DataSources__Github__ClientSecret=${App__DataSources__Github__ClientSecret}
+      - App__DataSources__Github__RedirectUri=${App__DataSources__Github__RedirectUri}
+      - App__DataSources__Gitlab__ClientId=${App__DataSources__Gitlab__ClientId}
+      - App__DataSources__Gitlab__ClientSecret=${App__DataSources__Gitlab__ClientSecret}
+      - App__DataSources__Gitlab__RedirectUri=${App__DataSources__Gitlab__RedirectUri}
+      
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=http"
@@ -92,6 +101,8 @@ services:
       - App__Api__DeXApiUrl=https://api.staging.dex.software
       - App__Api__ClientId=${API_CLIENT_ID}
       - App__Api__ClientSecret=${API_CLIENT_SECRET}
+      - App__ApiAuthentication__ClientId=${API_CLIENT_ID}
+      - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - App__Frontend__RedirectUriFrontend=https://staging.dex.software/auth-callback
       - App__Frontend__RedirectUriPostman=https://www.postman.com/oauth2/callback
       - App__Frontend__RefreshUriFrontend=https://staging.dex.software/silent-refresh.html
@@ -103,9 +114,13 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.staging.dex.software/external/callback/fhict
+      - App__JobScheduler__ClientId={$JOBSCHEDULER_CLIENT_ID}
+      - App__JobScheduler__ClientSecret={$JOBSCHEDULER_CLIENT_SECRET}
       - Cert_File=/app/identity.staging.dex.software_pfx.pfx
       - Cert_Thumb=${CERT_THUMB}
       - Cert_Password=${CERT_PASSWORD}
+      - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
+      - App__JobScheduler__ClientSecet=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
       - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
     labels:
       - "traefik.enable=true"
@@ -140,6 +155,21 @@ services:
     tty: true
     networks:
       rabbitmq-network:
+
+  jobscheduler:
+    image: digitalexcellence/jobscheduler:latest
+    container_name: jobscheduler
+    restart: on-failure
+    environment:
+        - Config__IdentityServerConfig__IdentityUrl=https://identity.staging.dex.software
+        - Config__IdentityServerConfig__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
+        - Config__IdentityServerConfig__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
+        - Config__ApiConfig__ApiUrl=https://api.staging.dex.software
+        - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+        - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
+        - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
+    networks:
+        rabbitmq-network:
 
   frontend:
     image: digitalexcellence/stagingfrontend

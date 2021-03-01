@@ -17,7 +17,6 @@
 
 using Models;
 using Repositories;
-using Repositories.Base;
 using Services.Base;
 using System;
 using System.Threading.Tasks;
@@ -25,23 +24,44 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the project like service interface
+    /// </summary>
     public interface IUserProjectLikeService : IService<ProjectLike>
     {
+
+        /// <summary>
+        ///     This is the interface method which checks if the user already like a project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns>Boolean</returns>
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
+        
         Task SyncProjectToES(Project project);
     }
 
+    /// <summary>
+    ///     This is the project like service
+    /// </summary>
     public class UserProjectLikeService : Service<ProjectLike>,
                                           IUserProjectLikeService
     {
         private readonly IProjectRepository projectRepository;
 
+        /// <summary>
+        ///     This is the project like constructor
+        /// </summary>
+        /// <param name="repository"></param>
         public UserProjectLikeService(IUserProjectLikeRepository repository, IProjectRepository projectRepository) :
             base(repository)
         {
             this.projectRepository = projectRepository;
         }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         private new IUserProjectLikeRepository Repository =>
             (IUserProjectLikeRepository) base.Repository;
 
@@ -60,6 +80,13 @@ namespace Services.Services
         {
              await projectRepository.SyncProjectToES(project);
         }
+
+        /// <summary>
+        ///     This is the method which checks if the user already like a project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         bool IUserProjectLikeService.CheckIfUserAlreadyLiked(int userId, int projectId)
         {
             if(Repository.CheckIfUserAlreadyLiked(userId, projectId))

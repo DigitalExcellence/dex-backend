@@ -23,14 +23,14 @@ namespace API.HelperClasses
     /// </summary>
     public class EmailSender : IEmailSender
     {
-        private ITaskPublisher TaskPublisher;
+        private readonly ITaskPublisher taskPublisher;
 
         /// <summary>
         ///  Constructor to instantiate the email sender
         /// </summary>
-        public EmailSender(ITaskPublisher TaskPublisher)
+        public EmailSender(ITaskPublisher taskPublisher)
         {
-            this.TaskPublisher = TaskPublisher;
+            this.taskPublisher = taskPublisher;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace API.HelperClasses
         public void Send(string recipient, string textContent, string htmlContent = null)
         {
             EmailNotificationRegister emailNotification = new EmailNotificationRegister(recipient, textContent, htmlContent);
-            TaskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(emailNotification), Subject.EMAIL);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(emailNotification), Subject.EMAIL);
         }
     }
 }

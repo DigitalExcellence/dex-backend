@@ -27,13 +27,15 @@ using System.Net;
 
 namespace Services.Tests
 {
+
     [TestFixture]
     public class GitLabSourceTest : SourceTest<GitLabSource>
     {
+
         protected new GitLabSource Source => base.Source;
 
         /// <summary>
-        /// Test if the projecturimatches function matches all the different urls and with corect metadata.
+        ///     Test if the projecturimatches function matches all the different urls and with corect metadata.
         /// </summary>
         /// <returns></returns>
         [Test]
@@ -41,11 +43,8 @@ namespace Services.Tests
         {
             string response =
                 "<meta content=\"object\" property=\"og:type\">\r\n<meta content=\"GitLab\" property=\"og:site_name\">\r\n<meta content=\"Hari Sekhon / DevOps-Bash-tools\" property=\"og:title\">\r\n";
-            RestClientFactoryMock.Setup(
-                                     restClientFactory => restClientFactory.Create(It.IsAny<Uri>()))
-                                 .Returns(
-                                     MockRestClient(HttpStatusCode.OK, response)
-                                 );
+            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(It.IsAny<Uri>()))
+                                 .Returns(MockRestClient(HttpStatusCode.OK, response));
 
             Uri requestUri = new Uri("http://domain.com/group/project");
             Assert.IsTrue(Source.ProjectURIMatches(requestUri));
@@ -91,18 +90,15 @@ namespace Services.Tests
         }
 
         /// <summary>
-        ///  Tests if the project url is for gitlab with valid urls but the page does not contain the right metadata.
+        ///     Tests if the project url is for gitlab with valid urls but the page does not contain the right metadata.
         /// </summary>
         [Test]
         public void ProjectURIMatches_urlvalid_but_metadata_false()
         {
             string response =
                 "<meta content=\"object\" property=\"og:type\">\r\n<meta content=\"GitHub\" property=\"og:site_name\">\r\n<meta content=\"Hari Sekhon / DevOps-Bash-tools\" property=\"og:title\">\r\n";
-            RestClientFactoryMock.Setup(
-                                     restClientFactory => restClientFactory.Create(It.IsAny<Uri>()))
-                                 .Returns(
-                                     MockRestClient(HttpStatusCode.OK, response)
-                                 );
+            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(It.IsAny<Uri>()))
+                                 .Returns(MockRestClient(HttpStatusCode.OK, response));
             Uri requestUri = new Uri("http://domain.com/group/project");
             Assert.IsFalse(Source.ProjectURIMatches(requestUri));
 
@@ -147,7 +143,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Tests if the project url is for gitlab with invalid urls.
+        ///     Tests if the project url is for gitlab with invalid urls.
         /// </summary>
         [Test]
         public void ProjectURIMatches_url_invalid()
@@ -167,8 +163,8 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Tests if the search feature is still not implemented.
-        /// when it is please update the unit tests.
+        ///     Tests if the search feature is still not implemented.
+        ///     when it is please update the unit tests.
         /// </summary>
         [Test]
         public void Search_notImplementedFlow()
@@ -177,8 +173,8 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Tests if the get source feature is still not implemented.
-        /// when it is please update the unit tests.
+        ///     Tests if the get source feature is still not implemented.
+        ///     when it is please update the unit tests.
         /// </summary>
         [Test]
         public void GetSource_notImplementedFlow()
@@ -187,17 +183,17 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Fetches the repository information from the api.
+        ///     Fetches the repository information from the api.
         /// </summary>
         [Test]
         public void FetchRepo_goodflow()
         {
             GitLabResourceResult resource = new GitLabResourceResult
-            {
-                name = "repo name",
-                readme_url = "readme url",
-                web_url = "repo url"
-            };
+                                            {
+                                                Name = "repo name",
+                                                ReadmeUrl = "readme url",
+                                                WebUrl = "repo url"
+                                            };
 
             string response = JsonConvert.SerializeObject(resource);
             RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(It.IsAny<Uri>()))
@@ -209,7 +205,8 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Fetches the repository information from the api. but something happend and it returned badrequest with content null.
+        ///     Fetches the repository information from the api. but something happend and it returned badrequest with content
+        ///     null.
         /// </summary>
         [Test]
         public void FetchRepo_badflow()
@@ -222,7 +219,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Tries to fetch the readme content.
+        ///     Tries to fetch the readme content.
         /// </summary>
         [Test]
         public void FetchReadme_goodflow()
@@ -232,11 +229,11 @@ namespace Services.Tests
                                  .Returns(MockRestClient(HttpStatusCode.OK, readmeContent));
 
             string readme = Source.FetchReadme("http://example.com");
-            Assert.AreEqual(readmeContent,readme);
+            Assert.AreEqual(readmeContent, readme);
         }
 
         /// <summary>
-        /// Tries to fetch the readme which returns a bad request.
+        ///     Tries to fetch the readme which returns a bad request.
         /// </summary>
         [Test]
         public void FetchReadme_badflow()
@@ -249,8 +246,8 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Tests the get project information flow best case scenario.
-        /// Expects the project values to be the same as the gitlabresourceresult model.
+        ///     Tests the get project information flow best case scenario.
+        ///     Expects the project values to be the same as the gitlabresourceresult model.
         /// </summary>
         [Test]
         public void GetProjectInformation_goodflow()
@@ -258,46 +255,55 @@ namespace Services.Tests
             // Prepare
             Uri projectUri = new Uri("http://example.com/group/project");
             GitLabResourceResult gitLabResourceResult = new GitLabResourceResult();
-            gitLabResourceResult.name = "repo name";
-            gitLabResourceResult.description = "repo description";
-            gitLabResourceResult.web_url = "web url";
-            gitLabResourceResult.readme_url = "http://example.com/readme";
+            gitLabResourceResult.Name = "repo name";
+            gitLabResourceResult.Description = "repo description";
+            gitLabResourceResult.WebUrl = "web url";
+            gitLabResourceResult.ReadmeUrl = "http://example.com/readme";
             string data = JsonConvert.SerializeObject(gitLabResourceResult);
             string readmeContent = "This is a readme";
 
 
-            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri("http://example.com/api/v4/projects/group%2Fproject")))
+            RestClientFactoryMock.Setup(restClientFactory =>
+                                            restClientFactory.Create(
+                                                new Uri("http://example.com/api/v4/projects/group%2Fproject")))
                                  .Returns(MockRestClient(HttpStatusCode.OK, data));
-            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri(gitLabResourceResult.readme_url)))
+            RestClientFactoryMock.Setup(restClientFactory =>
+                                            restClientFactory.Create(new Uri(gitLabResourceResult.ReadmeUrl)))
                                  .Returns(MockRestClient(HttpStatusCode.OK, readmeContent));
+
             // Ask
             Project project = Source.GetProjectInformation(projectUri);
+
             // Assert
-            Assert.AreEqual(project.Name, gitLabResourceResult.name);
-            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.description);
-            Assert.AreEqual(project.Uri, gitLabResourceResult.web_url);
+            Assert.AreEqual(project.Name, gitLabResourceResult.Name);
+            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.Description);
+            Assert.AreEqual(project.Uri, gitLabResourceResult.WebUrl);
             Assert.AreEqual(project.Description, readmeContent);
         }
 
         /// <summary>
-        /// This test checks what happens when fetch repo(the main gather information function fails)
-        /// expects an empty project.
+        ///     This test checks what happens when fetch repo(the main gather information function fails)
+        ///     expects an empty project.
         /// </summary>
         [Test]
         public void GetProjectInformation_badflow_no_fetch_repo()
         {
             // Prepare
-            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri("http://example.com/api/v4/projects/group%2Fproject")))
+            RestClientFactoryMock.Setup(restClientFactory =>
+                                            restClientFactory.Create(
+                                                new Uri("http://example.com/api/v4/projects/group%2Fproject")))
                                  .Returns(MockRestClient(HttpStatusCode.BadRequest, null));
-             // Ask
+
+            // Ask
             Project project = Source.GetProjectInformation(new Uri("http://example.com/group/project"));
+
             // Assert
             Assert.AreEqual(JsonConvert.SerializeObject(new Project()), JsonConvert.SerializeObject(project));
         }
 
         /// <summary>
-        /// This test checks what happens when fetch readme fails
-        /// expects a filled project except for the description field..
+        ///     This test checks what happens when fetch readme fails
+        ///     expects a filled project except for the description field..
         /// </summary>
         [Test]
         public void GetProjectInformation_badflow_no_readme()
@@ -305,20 +311,26 @@ namespace Services.Tests
             // Prepare
             Uri projectUri = new Uri("http://example.com/group/project");
             GitLabResourceResult gitLabResourceResult = new GitLabResourceResult();
-            gitLabResourceResult.name = "repo name";
-            gitLabResourceResult.description = "repo description";
-            gitLabResourceResult.web_url = "web url";
+            gitLabResourceResult.Name = "repo name";
+            gitLabResourceResult.Description = "repo description";
+            gitLabResourceResult.WebUrl = "web url";
             string data = JsonConvert.SerializeObject(gitLabResourceResult);
-           
-            RestClientFactoryMock.Setup(restClientFactory => restClientFactory.Create(new Uri("http://example.com/api/v4/projects/group%2Fproject")))
+
+            RestClientFactoryMock.Setup(restClientFactory =>
+                                            restClientFactory.Create(
+                                                new Uri("http://example.com/api/v4/projects/group%2Fproject")))
                                  .Returns(MockRestClient(HttpStatusCode.OK, data));
+
             // Ask
             Project project = Source.GetProjectInformation(projectUri);
+
             // Assert
-            Assert.AreEqual(project.Name, gitLabResourceResult.name);
-            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.description);
-            Assert.AreEqual(project.Uri, gitLabResourceResult.web_url);
+            Assert.AreEqual(project.Name, gitLabResourceResult.Name);
+            Assert.AreEqual(project.ShortDescription, gitLabResourceResult.Description);
+            Assert.AreEqual(project.Uri, gitLabResourceResult.WebUrl);
             Assert.IsNull(project.Description);
         }
+
     }
+
 }

@@ -26,17 +26,19 @@ using System.Linq;
 
 namespace Repositories.Tests.DataSources
 {
+
     /// <summary>
-    /// Attribute to generate users
+    ///     Attribute to generate users
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public class UserDataSourceAttribute : Attribute, IParameterDataSource
     {
+
+        private readonly int amountToGenerate;
         private readonly IFakeDataGenerator<User> fakeDataGenerator;
-        private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// Initializes userDataSourceAttribute
+        ///     Initializes userDataSourceAttribute
         /// </summary>
         public UserDataSourceAttribute()
         {
@@ -44,8 +46,8 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Initializes userDataSourceAttribute
-        /// and setting the amount of users to be generated
+        ///     Initializes userDataSourceAttribute
+        ///     and setting the amount of users to be generated
         /// </summary>
         public UserDataSourceAttribute(int amount) : this()
         {
@@ -53,18 +55,21 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Generate the data and return it
+        ///     Generate the data and return it
         /// </summary>
         /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance</param>
         /// <returns>The generated data</returns>
         public IEnumerable GetData(IParameterInfo parameter)
         {
-            if (amountToGenerate <= 1)
+            if(amountToGenerate <= 1)
             {
-                return new[] { fakeDataGenerator.Generate() };
+                return new[] {fakeDataGenerator.Generate()};
             }
-            List<User> users = fakeDataGenerator.GenerateRange(amountToGenerate).ToList();
-            return new[] { users };
+            List<User> users = fakeDataGenerator.GenerateRange(amountToGenerate)
+                                                .ToList();
+            return new[] {users};
         }
+
     }
+
 }

@@ -27,21 +27,86 @@ using System.Threading.Tasks;
 namespace Repositories
 {
 
+    /// <summary>
+    ///     This is the highlight repository interface
+    /// </summary>
     public interface IHighlightRepository : IRepository<Highlight>
     {
 
+        /// <summary>
+        ///     This interface method gets all highlights asynchronous
+        /// </summary>
+        /// <returns>List of highlights</returns>
         Task<List<Highlight>> GetHighlightsAsync();
+
+        /// <summary>
+        ///     This interface method gets all highlights by project id asynchronous.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>List of highlights</returns>
         Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId);
 
     }
 
+    /// <summary>
+    ///     This is the highlight repository implementation
+    /// </summary>
     public class HighlightRepository : Repository<Highlight>, IHighlightRepository
     {
 
+        /// <summary>
+        ///     This is the highlight repository constructor
+        /// </summary>
+        /// <param name="dbContext"></param>
         public HighlightRepository(DbContext dbContext) : base(dbContext) { }
 
         /// <summary>
-        /// Redacts the user email property of the highlighted project.
+        ///     find highlight by id.
+        /// </summary>
+        /// <param name="id">The highlight id.</param>
+        /// <returns>the found highlight.</returns>
+        public override async Task<Highlight> FindAsync(int id)
+        {
+            Highlight project = await GetDbSet<Highlight>()
+                                      .Where(s => s.Id == id)
+                                      .Include(p => p.Project)
+                                      .Include(p => p.Project.ProjectIcon)
+                                      .SingleOrDefaultAsync();
+
+            return RedactUser(project);
+        }
+
+        /// <summary>
+        ///     Gets the highlights asynchronous.
+        /// </summary>
+        /// <returns>list of all the highlights.</returns>
+        public async Task<List<Highlight>> GetHighlightsAsync()
+        {
+            List<Highlight> highlights = await GetDbSet<Highlight>()
+                                               .Where(s => s.StartDate <= DateTime.Now || s.StartDate == null)
+                                               .Where(s => s.EndDate >= DateTime.Now || s.EndDate == null)
+                                               .Include(p => p.Project)
+                                               .Include(p => p.Project.ProjectIcon)
+                                               .ToListAsync();
+            return RedactUser(highlights);
+        }
+
+        /// <summary>
+        ///     This method gets all highlights by project id asynchronous.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns>List of highlights</returns>
+        public async Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId)
+        {
+            return await GetDbSet<Highlight>()
+                         .Where(s => s.ProjectId == projectId)
+                         .Include(p => p.Project)
+                         .Include(p => p.Project.ProjectIcon)
+                         .ToListAsync();
+        }
+
+        /// <summary>
+        ///     Redacts the user email property of the highlighted project.
         /// </summary>
         /// <param name="highlight">The highlight object.</param>
         /// <returns>redacted highlight object.</returns>
@@ -57,7 +122,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Redacts the user email property of the highlighted project.
+        ///     Redacts the user email property of the highlighted project.
         /// </summary>
         /// <param name="highlights">List of highlight objects.</param>
         /// <returns>redacted highlight objects.</returns>
@@ -70,45 +135,6 @@ namespace Repositories
             return highlights;
         }
 
-        /// <summary>
-        /// find highlight by id.
-        /// </summary>
-        /// <param name="id">The highlight id.</param>
-        /// <returns>the found highlight.</returns>
-        public override async Task<Highlight> FindAsync(int id)
-        {
-            Highlight project = await GetDbSet<Highlight>()
-                   .Where(s => s.Id == id)
-                   .Include(p => p.Project)
-                   .Include(p => p.Project.ProjectIcon)
-                   .SingleOrDefaultAsync();
-
-            return RedactUser(project);
-        }
-
-        /// <summary>
-        /// Gets the highlights asynchronous.
-        /// </summary>
-        /// <returns>list of all the highlights.</returns>
-        public async Task<List<Highlight>> GetHighlightsAsync()
-        {
-            List<Highlight> highlights = await GetDbSet<Highlight>()
-                         .Where(s => s.StartDate <= DateTime.Now || s.StartDate == null)
-                         .Where(s => s.EndDate >= DateTime.Now || s.EndDate == null)
-                         .Include(p => p.Project)
-                         .Include(p => p.Project.ProjectIcon)
-                         .ToListAsync();
-            return RedactUser(highlights);
-        }
-
-        public async Task<List<Highlight>> GetHighlightsByProjectIdAsync(int projectId)
-        {
-            return await GetDbSet<Highlight>()
-                         .Where(s => s.ProjectId == projectId)
-                         .Include(p => p.Project)
-                         .Include(p => p.Project.ProjectIcon)
-                         .ToListAsync();
-        }
     }
 
 }

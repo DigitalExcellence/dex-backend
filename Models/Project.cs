@@ -25,6 +25,7 @@ namespace Models
 
     public class Project
     {
+
         public Project()
         {
             Collaborators = new List<Collaborator>();
@@ -64,9 +65,8 @@ namespace Models
 
         [JsonIgnore]
         public List<ProjectLike> Likes { get; set; }
+
         public bool InstitutePrivate { get; set; }
-
-
 
     }
 

@@ -30,57 +30,71 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+
     /// <summary>
-    /// IUserRepository
+    ///     IUserRepository
     /// </summary>
-    /// <seealso cref="Repositories.Base.IRepository{Models.User}" />
+    /// <seealso cref="User" />
     public interface IUserRepository : IRepository<User>
     {
+
         /// <summary>
-        /// Gets the user asynchronous.
+        ///     Gets the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>The task that will get the User object.</returns>
         Task<User> GetUserAsync(int userId);
+
         /// <summary>
-        /// Gets the user by identity identifier asynchronous.
+        ///     Gets the user by identity identifier asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>The task that will return the user object with that specified external identifier.</returns>
         Task<User> GetUserByIdentityIdAsync(string userId);
 
         /// <summary>
-        /// Removes the user asynchronous.
+        ///     Removes the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>Returns if the user is removed</returns>
         Task<bool> RemoveUserAsync(int userId);
+
         /// <summary>
-        /// Users the has scope.
+        ///     Users the has scope.
         /// </summary>
         /// <param name="identityId">The identity identifier.</param>
         /// <param name="scope">The scope.</param>
         /// <returns>true if the user that has this scope.</returns>
         bool UserHasScope(string identityId, string scope);
+
         /// <summary>
-        /// Users the with role exists.
+        ///     Users the with role exists.
         /// </summary>
-        /// <param name="roleName">Name of the role.</param>
+        /// <param name="role"></param>
         /// <returns>Returns true if a user has the given role, else false.</returns>
         bool UserWithRoleExists(Role role);
+
+        /// <summary>
+        ///     Gets the expected graduating user in time range between now and entered amount of months.
+        /// </summary>
+        /// <param name="amountOfMonths"></param>
+        /// <returns></returns>
+        Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths);
+
         List<int> GetSimilarUsers(int userId);
     }
+
     /// <summary>
-    /// UserRepository
+    ///     UserRepository
     /// </summary>
-    /// <seealso cref="Repositories.Base.Repository{Models.User}" />
-    /// <seealso cref="Repositories.IUserRepository" />
+    /// <seealso cref="User" />
+    /// <seealso cref="IUserRepository" />
     public class UserRepository : Repository<User>, IUserRepository
     {
         private RestClient client;
         private Queries queries;
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserRepository"/> class.
+        ///     Initializes a new instance of the <see cref="UserRepository" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public UserRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, Queries queries) : base(dbContext) {
@@ -89,20 +103,20 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Finds the asynchronous.
+        ///     Finds the asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>Returns the user object.</returns>
         public override async Task<User> FindAsync(int userId)
         {
             return await GetDbSet<User>()
-                             .Where(s => s.Id == userId)
-                             .Include(s => s.Role)
-                             .ThenInclude(s => s.Scopes)
-                             .Include(u =>  u.Institution)
-                             .Include(f => f.UserProject)
-                             .Include(s => s.LikedProjectsByUsers)
-                             .SingleOrDefaultAsync();
+                         .Where(s => s.Id == userId)
+                         .Include(s => s.Role)
+                         .ThenInclude(s => s.Scopes)
+                         .Include(u => u.Institution)
+                         .Include(f => f.UserProject)
+                         .Include(s => s.LikedProjectsByUsers)
+                         .SingleOrDefaultAsync();
         }
 
         
@@ -141,7 +155,7 @@ namespace Repositories
 
 
         /// <summary>
-        /// Gets the user asynchronous.
+        ///     Gets the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>Returns the found user object.</returns>
@@ -156,8 +170,9 @@ namespace Repositories
                          .Include(f => f.UserProject)
                          .SingleOrDefaultAsync();
         }
+
         /// <summary>
-        /// Gets the user by identity identifier asynchronous.
+        ///     Gets the user by identity identifier asynchronous.
         /// </summary>
         /// <param name="identityId">The identity identifier.</param>
         /// <returns>Returns the found user object.</returns>
@@ -170,11 +185,12 @@ namespace Repositories
                          .Include(u => u.Institution)
                          .Include(f => f.UserProject)
                          .Include(s => s.LikedProjectsByUsers)
+                         .Include(u => u.UserTasks)
                          .SingleOrDefaultAsync();
         }
 
         /// <summary>
-        /// Removes the user asynchronous.
+        ///     Removes the user asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>if the user is removed.</returns>
@@ -195,7 +211,7 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Users the has scope.
+        ///     Users the has scope.
         /// </summary>
         /// <param name="identityId">The identity identifier.</param>
         /// <param name="scope">The scope.</param>
@@ -203,10 +219,10 @@ namespace Repositories
         public bool UserHasScope(string identityId, string scope)
         {
             User user = GetDbSet<User>()
-                             .Where(s => s.IdentityId == identityId)
-                             .Include(s => s.Role)
-                             .ThenInclude(s => s.Scopes)
-                             .SingleOrDefault();
+                        .Where(s => s.IdentityId == identityId)
+                        .Include(s => s.Role)
+                        .ThenInclude(s => s.Scopes)
+                        .SingleOrDefault();
             if(user?.Role == null)
             {
                 return false;
@@ -222,17 +238,28 @@ namespace Repositories
         }
 
         /// <summary>
-        /// Users the with role exists.
+        ///     Users the with role exists.
         /// </summary>
-        /// <param name="roleName">Name of the role.</param>
+        /// <param name="role"></param>
         /// <returns>true if a user exists with the given role.</returns>
         public bool UserWithRoleExists(Role role)
         {
             return GetDbSet<User>()
-                .Include(s => s.Role)
-                .SingleOrDefault(r => r.Role.Id == role.Id) != null;
+                   .Include(s => s.Role)
+                   .SingleOrDefault(r => r.Role.Id == role.Id) !=
+                   null;
         }
 
+        public async Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths)
+        {
+            DateTime now = DateTime.Now;
+            DateTime max = DateTime.Now.AddMonths(amountOfMonths);
+
+
+            return await GetDbSet<User>()
+                         .Where(u => u.ExpectedGraduationDate >= now && u.ExpectedGraduationDate <= max)
+                         .ToListAsync();
+        }
 
     }
 

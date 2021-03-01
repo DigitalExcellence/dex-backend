@@ -28,7 +28,10 @@ using Services.Resources;
 
 namespace Services.Services
 {
-    
+
+    /// <summary>
+    ///     This is the interface of the project service
+    /// </summary>
     public interface IProjectService : IService<Project>
     {
 
@@ -39,6 +42,11 @@ namespace Services.Services
         /// <returns>A list of all the projects</returns>
         Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams);
 
+        /// <summary>
+        ///     Gets a project including owner and collaborators
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Project entity</returns>
         Task<Project> FindWithUserAndCollaboratorsAsync(int id);
 
         /// <summary>
@@ -70,19 +78,27 @@ namespace Services.Services
 
     }
 
+    /// <summary>
+    ///     This is the project service
+    /// </summary>
     public class ProjectService : Service<Project>, IProjectService
     {
 
-
+        /// <summary>
+        ///     This is the project service constructor
+        /// </summary>
+        /// <param name="repository"></param>
         public ProjectService(IProjectRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
 
-
         /// <summary>
-        ///     Adds a project to the database.
+        ///     This is a overridden add method
         /// </summary>
-        /// <param name="entity">The project to add</param>
+        /// <param name="entity"></param>
         public override void Add(Project entity)
         {
             // Sanitize description before executing default behaviour.
@@ -92,9 +108,9 @@ namespace Services.Services
         }
 
         /// <summary>
-        ///     Updates a project.
+        ///     This is a overridden update method
         /// </summary>
-        /// <param name="entity">The project to add</param>
+        /// <param name="entity"></param>
         public override void Update(Project entity)
         {
             // Sanitize description before executing default behaviour.
@@ -104,7 +120,7 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Get a list of all the projects
+        ///     Get a list of all the projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
@@ -137,7 +153,11 @@ namespace Services.Services
             }
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
-            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip, take, orderBy, orderByDirection, projectFilterParams.Highlighted);
+            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip,
+                                                                   take,
+                                                                   orderBy,
+                                                                   orderByDirection,
+                                                                   projectFilterParams.Highlighted);
         }
 
         /// <summary>
@@ -165,10 +185,10 @@ namespace Services.Services
         }
 
         /// <summary>
-        ///     Get project by id with users and collaborators
+        ///     Gets a project with owner and collaborators asynchronous
         /// </summary>
-        /// <param name="id">The parameter is the id of the project.</param>
-        /// <returns>The project with users and collaborators</returns>
+        /// <param name="id"></param>
+        /// <returns>A project entity</returns>
         public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
         {
             return Repository.FindWithUserAndCollaboratorsAsync(id);

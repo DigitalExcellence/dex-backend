@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 
 namespace Services.Tests
 {
+
     [TestFixture]
     public class UserServiceTest : ServiceTest<User, UserService, IUserRepository>
     {
@@ -47,7 +48,7 @@ namespace Services.Tests
             Service = new UserService(UserRepositoryMock.Object, ProjectRepositoryMock.Object, ElasticConfig.Object);
         }
         /// <summary>
-        /// Test if repository method is called
+        ///     Test if repository method is called
         /// </summary>
         /// <returns></returns>
         [Test]
@@ -69,7 +70,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Test if repository method is called
+        ///     Test if repository method is called
         /// </summary>
         /// <returns> assert if removeuser does not thow exceptions.</returns>
         [Test]
@@ -87,9 +88,9 @@ namespace Services.Tests
             });
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddRangeTest_GoodFlow([UserDataSource(50)]IEnumerable<User> entities)
+        public override void AddRangeTest_GoodFlow([UserDataSource(50)] IEnumerable<User> entities)
         {
             UserRepositoryMock.Setup(
                repository => repository.AddRange(entities));
@@ -101,12 +102,9 @@ namespace Services.Tests
             });
         }
 
-        
-
-
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddTest_GoodFlow([UserDataSource]User entity)
+        public override void AddTest_GoodFlow([UserDataSource] User entity)
         {
             UserRepositoryMock.Setup(
                 repository => repository.Add(entity));
@@ -118,7 +116,7 @@ namespace Services.Tests
             });
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public override async Task FindAsyncTest_GoodFlow([UserDataSource]User entity)
         {
@@ -137,7 +135,7 @@ namespace Services.Tests
             Assert.AreEqual(entity, retrievedEntity);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public override async Task GetAll([UserDataSource(50)]List<User> entities)
         {
@@ -157,9 +155,9 @@ namespace Services.Tests
             Assert.AreEqual(amountToTest, retrievedList.Count);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Remove([UserDataSource]User entity)
+        public override void Remove([UserDataSource] User entity)
         {
             UserRepositoryMock.Setup(
                 repository => repository.Remove(entity));
@@ -171,7 +169,7 @@ namespace Services.Tests
             });
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public  async Task RemoveAsync()
         {
@@ -185,7 +183,7 @@ namespace Services.Tests
             });
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public override void Save()
         {
@@ -199,9 +197,9 @@ namespace Services.Tests
             });
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Update([UserDataSource]User entity)
+        public override void Update([UserDataSource] User entity)
         {
             UserRepositoryMock.Setup(
                 repository => repository.Update(entity));
@@ -212,5 +210,7 @@ namespace Services.Tests
                 UserRepositoryMock.Verify(repository => repository.Update(entity), Times.Once);
             });
         }
+
     }
+
 }

@@ -18,12 +18,14 @@
 using API.Configuration;
 using API.Extensions;
 using API.Filters;
+using API.HelperClasses;
 using API.InternalResources;
 using Bogus.Extensions;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
+using IdentityModel.Client;
 using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +39,8 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Models;
 using Models.Defaults;
+using Newtonsoft.Json;
+using Polly;
 using Serilog;
 using Services.Resources;
 using Services.Services;
@@ -58,7 +62,7 @@ namespace API
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Startup"/> class.
+        ///     Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment">The environment.</param>
@@ -89,7 +93,7 @@ namespace API
         public IWebHostEnvironment Environment { get; }
 
         /// <summary>
-        /// Configures the services.
+        ///     Configures the services.
         /// </summary>
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
@@ -100,6 +104,10 @@ namespace API
                 o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
+            services.AddScoped<IRabbitMQConnectionFactory>(
+                c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname,
+                                                   Config.RabbitMQ.Username,
+                                                   Config.RabbitMQ.Password));
             services.AddScoped<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname, Config.RabbitMQ.Username, Config.RabbitMQ.Password));
 
             services.AddSingleton<IElasticSearchContext>(new ElasticSearchContext(ElasticConfig.Hostname, ElasticConfig.Username, ElasticConfig.Password, ElasticConfig.IndexUrl));
@@ -121,8 +129,12 @@ namespace API
                         options.ApiSecret = Config.Frontend.ClientSecret;
                         options.EnableCaching = true;
                     });
+
             services.AddAuthorization(o =>
             {
+                o.AddPolicy(nameof(Defaults.Roles.BackendApplication),
+                            policy => policy.RequireClaim("client_role", nameof(Defaults.Roles.BackendApplication)));
+
                 o.AddPolicy(nameof(Defaults.Scopes.HighlightRead),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.HighlightRead))));
@@ -133,6 +145,9 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectRead),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.AdminProjectWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.AdminProjectWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.ProjectWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.ProjectWrite))));
@@ -150,35 +165,50 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.EmbedWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionEmbedWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionEmbedWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionEmbedWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionProjectWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionProjectWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionProjectWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserRead),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserRead))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionUserWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionUserWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionWrite))));
                 o.AddPolicy(nameof(Defaults.Scopes.InstitutionRead),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
-                
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.InstitutionRead))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.DataSourceWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.DataSourceWrite))));
+
                 o.AddPolicy(nameof(Defaults.Scopes.FileWrite),
-                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.FileWrite))));
 
                 o.AddPolicy(nameof(Defaults.Scopes.CallToActionOptionWrite),
-                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.CallToActionOptionWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
             });
 
             services.AddCors();
             services.AddControllersWithViews()
                     .AddFluentValidation(c => c.RegisterValidatorsFromAssemblyContaining<Startup>())
                     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling =
-                                                      Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                ;
+                                                      ReferenceLoopHandling.Ignore);
 
             services.AddSwaggerGen(o =>
             {
@@ -209,7 +239,7 @@ namespace API
                                                                        AuthorizationUrl = GetAuthorizationUrl(),
                                                                        Scopes = new Dictionary<string, string>
                                                                            {
-                                                                               {"dex-api", "Resource scope"},
+                                                                               {"dex-api", "Resource scope"}
                                                                            }
                                                                    }
                                                     }
@@ -230,6 +260,29 @@ namespace API
                                          });
             });
 
+            services.AddAccessTokenManagement(options =>
+                    {
+                        options.Client.Clients.Add("identityserver",
+                                                   new ClientCredentialsTokenRequest
+                                                   {
+                                                       Address = Config.IdentityServer.IdentityUrl + "/connect/token",
+                                                       ClientId = Config.IdentityServer.ClientId,
+                                                       ClientSecret = Config.IdentityServer.ClientSecret
+                                                   });
+                    })
+                    .ConfigureBackchannelHttpClient()
+                    .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(new[]
+                                                     {
+                                                         TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2),
+                                                         TimeSpan.FromSeconds(3)
+                                                     }));
+            services.AddClientAccessTokenClient("identityclient",
+                                                configureClient: client =>
+                                                {
+                                                    client.BaseAddress =
+                                                        new Uri(string.Concat(Config.IdentityServer.IdentityUrl + "/"));
+                                                });
+
             // Add application services.
             services.AddSingleton(Config);
             services.AddSingleton(ElasticConfig);
@@ -246,8 +299,8 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
-            Defaults.Path.filePath = Path.Combine(env.WebRootPath, "Images");
-            
+            Defaults.Path.FilePath = Path.Combine(env.WebRootPath, "Images");
+
 
             UpdateDatabase(app, env);
             if(env.IsDevelopment())
@@ -275,12 +328,12 @@ namespace API
             app.UseProblemDetails();
 
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
+            app.UseStaticFiles(new StaticFileOptions
                                {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "Uploads", "Images")),
-                RequestPath = "/Uploads/Images"
-            });
+                                   FileProvider = new PhysicalFileProvider(
+                                       Path.Combine(env.ContentRootPath, "Uploads", "Images")),
+                                   RequestPath = "/Uploads/Images"
+                               });
 
             app.UseRouting();
             app.UseCors(c =>
@@ -329,13 +382,13 @@ namespace API
                                     {
                                         // Then it probably belongs swagger so we set the username as developer.
                                         User newUser = new User
-                                        {
-                                            Name = "Developer",
-                                            Email = "Developer@DEX.com",
-                                            IdentityId = identityId,
-                                            Role = registeredUserRole,
-                                            InstitutionId = 1
-                                        };
+                                                       {
+                                                           Name = "Developer",
+                                                           Email = "Developer@DEX.com",
+                                                           IdentityId = identityId,
+                                                           Role = registeredUserRole,
+                                                           InstitutionId = 1
+                                                       };
                                         userService.Add(newUser);
                                     } else
                                     {
@@ -344,12 +397,12 @@ namespace API
                                                            Name = userInformation.Name,
                                                            Email = userInformation.Email,
                                                            IdentityId = userInformation.IdentityId,
-                                                           Role = registeredUserRole,
+                                                           Role = registeredUserRole
                                                        };
                                         Institution institution =
                                             await institutionService.GetInstitutionByInstitutionIdentityId(
                                                 userInformation.IdentityInstitutionId);
-                                        if( institution != null)
+                                        if(institution != null)
                                         {
                                             newUser.InstitutionId = institution.Id;
                                         }
@@ -364,11 +417,11 @@ namespace API
                                 {
                                     if(userInformation != null)
                                     {
-                                        Institution institution = await institutionService.GetInstitutionByInstitutionIdentityId(
-                                                                      userInformation.IdentityInstitutionId);
-                                        if(institution != null)
-                                            user.InstitutionId = institution.Id;
-                                        
+                                        Institution institution =
+                                            await institutionService.GetInstitutionByInstitutionIdentityId(
+                                                userInformation.IdentityInstitutionId);
+                                        if(institution != null) user.InstitutionId = institution.Id;
+
                                         userService.Update(user);
                                         await dbContext.SaveChangesAsync()
                                                        .ConfigureAwait(false);
@@ -393,7 +446,7 @@ namespace API
         }
 
         /// <summary>
-        /// Updates the database.
+        ///     Updates the database.
         /// </summary>
         /// <param name="app">The application.</param>
         /// <param name="env">The env.</param>
@@ -404,23 +457,24 @@ namespace API
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
             context.Database.Migrate();
-            if(!context.Role.Any())
-            {
-                // seed roles
-                context.AddRange(Seed.SeedRoles());
-                context.SaveChanges();
-            }
-            List<Role> roles = context.Role.ToList();
-            if(!context.User.Any())
-            {
-                // seed admin
-                context.User.Add(Seed.SeedAdminUser(roles));
-                context.SaveChanges();
 
-                if(!env.IsProduction())
+            // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
+            SeedHelper.InsertRoles(Seed.SeedRoles(), context);
+            List<Role> roles = context.Role.ToList();
+
+            if(!env.IsProduction())
+            {
+                if(!context.Institution.Any())
                 {
                     // Seed institutions
                     context.Institution.Add(Seed.SeedInstitution());
+                    context.SaveChanges();
+                }
+
+                if(!context.User.Any())
+                {
+                    // seed admin
+                    context.User.Add(Seed.SeedAdminUser(roles));
                     context.SaveChanges();
 
                     //Seed random users
@@ -429,10 +483,7 @@ namespace API
                     context.User.Add(Seed.SeedDataOfficerUser(roles));
                     context.SaveChanges();
                 }
-            }
 
-            if(!env.IsProduction())
-            {
                 if(!context.Project.Any())
                 {
                     //Seed projects
@@ -462,6 +513,18 @@ namespace API
                 }
 
                 // TODO seed embedded projects
+            }
+
+            // Seed call to action options
+            List<CallToActionOption> options = Seed.SeedCallToActionOptions();
+            foreach(CallToActionOption callToActionOption in options)
+            {
+                if(!context.CallToActionOption.Any(s => s.Type == callToActionOption.Type &&
+                                                        s.Value == callToActionOption.Value))
+                {
+                    context.CallToActionOption.Add(callToActionOption);
+                    context.SaveChanges();
+                }
             }
         }
 

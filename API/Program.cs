@@ -15,8 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using MessageBrokerPublisher;
-using MessageBrokerPublisher.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,13 +26,15 @@ using System.IO;
 
 namespace API
 {
+
     /// <summary>
     ///     Program.cs
     /// </summary>
     public static class Program
     {
+
         /// <summary>
-        /// Mains the specified arguments.
+        ///     Mains the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>The exit code of the program.</returns>
@@ -74,7 +74,7 @@ namespace API
         }
 
         /// <summary>
-        /// Creates the host builder.
+        ///     Creates the host builder.
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>The webhostbuilder instance.</returns>
@@ -95,5 +95,7 @@ namespace API
                           .UseKestrel(o => o.AddServerHeader = false)
                           .UseSerilog();
         }
+
     }
+
 }

@@ -18,15 +18,18 @@
 using API.Resources;
 using AutoMapper;
 using Models;
-using System.Collections.Generic;
+using Services.ExternalDataProviders;
+using Services.ExternalDataProviders.Resources;
 
 namespace API.Configuration
 {
+
     /// <summary>
     ///     This profiles adds every resource mapping.
     /// </summary>
     public class MappingProfile : Profile
     {
+
         /// <summary>
         ///     Create a map for every resource mapping.
         /// </summary>
@@ -55,14 +58,14 @@ namespace API.Configuration
                                             destination.LikedProject.Description))
                 .ForAllOtherMembers(member => member.Ignore());
 
-           CreateMap<UserUserResourceResult, UserUser>();
+            CreateMap<UserUserResourceResult, UserUser>();
 
-           CreateMap<UserUser, UserUserResourceResult>()
+            CreateMap<UserUser, UserUserResourceResult>()
                 .ForMember(q => q.Id, opt => opt.MapFrom(q => q.FollowedUser.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
                 .ForAllOtherMembers(o => o.Ignore());
 
-           CreateMap<UserProject, UserProjectResourceResult>()
+            CreateMap<UserProject, UserProjectResourceResult>()
                 .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
                 .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
@@ -71,9 +74,12 @@ namespace API.Configuration
                 .ForAllOtherMembers(o => o.Ignore());
 
 
-            CreateMap<User, UserResourceResult>();
+            CreateMap<User, UserResourceResult>()
+                .ForMember(q => q.UserTask, opt => opt.MapFrom(q => q.UserTasks))
+                .ForMember(q => q.ExpectedGraduationDateTime, opt => opt.MapFrom(q => q.ExpectedGraduationDate));
 
-            CreateMap<UserResource, User>();
+            CreateMap<UserResource, User>()
+                .ForMember(q => q.ExpectedGraduationDate, opt => opt.MapFrom(q => q.ExpectedGraduationDateTime));
 
             CreateMap<User, LimitedUserResourceResult>();
 
@@ -101,14 +107,54 @@ namespace API.Configuration
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
 
             CreateMap<FileResourceResult, File>();
-            CreateMap<File, FileResourceResult>().ForMember(e => e.UploaderUserId,
-                                                            opt => opt.MapFrom(e => e.Uploader.Id));
+            CreateMap<File, FileResourceResult>()
+                .ForMember(e => e.UploaderUserId,
+                           opt => opt.MapFrom(e => e.Uploader.Id));
 
             CreateMap<RoleScopeResource, RoleScope>();
             CreateMap<RoleScope, RoleScopeResource>();
 
             CreateMap<InstitutionResource, Institution>();
             CreateMap<Institution, InstitutionResourceResult>();
+
+            CreateMap<UserTask, UserTaskResourceResult>()
+                .ForMember(e => e.UserResourceResult,
+                           opt => opt.MapFrom(d => d.User))
+                .ForMember(e => e.Id, opt => opt.MapFrom(e => e.Id))
+                .ForMember(e => e.Status, opt => opt.MapFrom(e => e.Status))
+                .ForMember(e => e.Type, opt => opt.MapFrom(e => e.Type));
+            CreateMap<Project, WizardProjectResourceResult>();
+
+            CreateMap<IDataSourceAdaptee, DataSourceResourceResult>()
+                .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
+
+            CreateMap<DataSourceResource, DataSource>()
+                .ForMember(dest => dest.DataSourceWizardPages, opt => opt.MapFrom(src => src.WizardPageResources));
+            CreateMap<DataSourceWizardPageResource, DataSourceWizardPage>();
+
+            CreateMap<DataSourceWizardPage, WizardPageResourceResult>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name));
+
+            CreateMap<DataSource, DataSourceResourceResult>()
+                .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
+            CreateMap<IDataSourceAdaptee, DataSource>();
+
+            CreateMap<OauthTokens, OauthTokensResourceResult>();
+
+            CreateExternalSourceMappingProfiles();
+        }
+
+        private void CreateExternalSourceMappingProfiles()
+        {
+            CreateMap<JsFiddleDataSourceResourceResult, Project>()
+                .ForMember(d => d.Name, opt => opt.MapFrom(m => m.Title));
+
+            CreateMap<GithubDataSourceResourceResult, Project>()
+                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<GitlabDataSourceResourceResult, Project>()
+                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
 
             CreateMap<CallToActionResource, CallToAction>()
                 .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));
@@ -118,6 +164,16 @@ namespace API.Configuration
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToLower()))
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToLower()));
             CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
+
+            CreateMap<WizardPageResource, WizardPage>();
+            CreateMap<WizardPage, WizardPageResourceResult>();
+
+            CreateMap<DataSourceWizardPage, DataSourceWizardPageResourceResult>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.WizardPage.Description));
         }
+
     }
+
 }

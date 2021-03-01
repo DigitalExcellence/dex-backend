@@ -36,28 +36,34 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the users, for example creating, retrieving, updating or deleting.
+    ///     This class is responsible for handling HTTP requests that are related
+    ///     to the users, for example creating, retrieving, updating or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IMapper mapper;
-        private readonly IUserService userService;
-        private readonly IRoleService roleService;
+
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly IInstitutionService institutionService;
+        private readonly IMapper mapper;
+        private readonly IRoleService roleService;
+        private readonly IUserService userService;
         private readonly IUserUserService userUserService;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserController"/> class
+        ///     Initializes a new instance of the <see cref="UserController" /> class
         /// </summary>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="roleService">The role service which is used to communicate with the logic layer.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer.</param>
-        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        /// <param name="authorizationHelper">
+        ///     The authorization helper which is used to communicate with the authorization helper
+        ///     class.
+        /// </param>
         /// <param name="userUserService">The user user service is responsible for users that are following users.</param>
         public UserController(IUserService userService,
                               IMapper mapper,
@@ -75,7 +81,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// The method is responsible for retrieving the current user.
+        ///     The method is responsible for retrieving the current user.
         /// </summary>
         /// <returns>The current user as user resource result.</returns>
         /// <response code="200">This endpoint returns the current user.</response>
@@ -91,18 +97,18 @@ namespace API.Controllers
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed getting the user account.",
-                     Detail = "The user could not be found in the database.",
-                     Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The user could not be found in the database.",
+                                             Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
+                                         };
                 return NotFound(problem);
             }
             return Ok(mapper.Map<User, UserResourceResult>(user));
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a user account.
+        ///     This method is responsible for retrieving a user account.
         /// </summary>
         /// <param name="userId">the user identifier which is used for searching a user.</param>
         /// <returns>This method returns the user resource result.</returns>
@@ -116,23 +122,24 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUser(int userId)
         {
-            User currentUser = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                                .ConfigureAwait(false);
             bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
-                                                               nameof(Defaults.Scopes.UserRead),
-                                                               nameof(Defaults.Scopes.InstitutionUserRead),
-                                                               userId);
+                                                                     nameof(Defaults.Scopes.UserRead),
+                                                                     nameof(Defaults.Scopes.InstitutionUserRead),
+                                                                     userId);
 
-            if(!isAllowed)
-                return Forbid();
+            if(!isAllowed) return Forbid();
 
             if(userId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The user id is less then zero and therefore cannot exist in the database.",
-                    Instance = "EAF7FEA1-47E9-4CF8-8415-4D3BC843FB71",
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail =
+                                                 "The user id is less then zero and therefore cannot exist in the database.",
+                                             Instance = "EAF7FEA1-47E9-4CF8-8415-4D3BC843FB71"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -140,11 +147,11 @@ namespace API.Controllers
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The user could not be found in the database.",
-                    Instance = "140B718F-9ECD-4F68-B441-F85C1DC7DC32"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The user could not be found in the database.",
+                                             Instance = "140B718F-9ECD-4F68-B441-F85C1DC7DC32"
+                                         };
                 return NotFound(problem);
             }
 
@@ -152,13 +159,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for creating the account.
+        ///     This method is responsible for creating the account.
         /// </summary>
         /// <param name="accountResource">The account resource which is used for creating the account.</param>
         /// <returns>This method returns the created user as user resource result.</returns>
         /// <response code="200">This endpoint returns the created user.</response>
-        /// <response code="400">The 400 Bad Request status code is return when the institution id is invalid
-        /// or when saving the user to the database failed.</response>
+        /// <response code="400">
+        ///     The 400 Bad Request status code is return when the institution id is invalid
+        ///     or when saving the user to the database failed.
+        /// </response>
         /// <response code="404">The institution with the specified institution id could not be found.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
@@ -173,11 +182,11 @@ namespace API.Controllers
                 if(institutionId < 1)
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Failed getting institution.",
-                        Detail = "The id of an institution can't be smaller than 1",
-                        Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
-                    };
+                                             {
+                                                 Title = "Failed getting institution.",
+                                                 Detail = "The id of an institution can't be smaller than 1",
+                                                 Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                                             };
                     return BadRequest(problem);
                 }
 
@@ -185,11 +194,11 @@ namespace API.Controllers
                 if(foundInstitution == null)
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Failed getting institution.",
-                        Detail = "The institution could not be found in the database.",
-                        Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
-                    };
+                                             {
+                                                 Title = "Failed getting institution.",
+                                                 Detail = "The institution could not be found in the database.",
+                                                 Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                                             };
                     return NotFound(problem);
                 }
             }
@@ -211,17 +220,17 @@ namespace API.Controllers
                 Log.Logger.Error(e, "Database exception");
 
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to create user account.",
-                    Detail = "Failed saving the user account to the database.",
-                    Instance = "D8C786C1-9E6D-4D36-83F4-A55D394B5017"
-                };
+                                         {
+                                             Title = "Failed to create user account.",
+                                             Detail = "Failed saving the user account to the database.",
+                                             Instance = "D8C786C1-9E6D-4D36-83F4-A55D394B5017"
+                                         };
                 return BadRequest(problem);
             }
         }
 
         /// <summary>
-        /// This method is responsible for updating the account.
+        ///     This method is responsible for updating the account.
         /// </summary>
         /// <param name="userId">The user identifier which is used for searching the user.</param>
         /// <param name="userResource">The user resource which is used for updating the user.</param>
@@ -242,11 +251,11 @@ namespace API.Controllers
                 if(institutionId < 1)
                 {
                     ProblemDetails problem = new ProblemDetails
-                     {
-                         Title = "Failed getting institution.",
-                         Detail = "The id of an institution can't be smaller than 1",
-                         Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
-                     };
+                                             {
+                                                 Title = "Failed getting institution.",
+                                                 Detail = "The id of an institution can't be smaller than 1",
+                                                 Instance = "7C50A0D7-459D-473B-9ADE-7FC5B7EEE39E"
+                                             };
                     return BadRequest(problem);
                 }
 
@@ -254,11 +263,11 @@ namespace API.Controllers
                 if(foundInstitution == null)
                 {
                     ProblemDetails problem = new ProblemDetails
-                     {
-                         Title = "Failed getting institution.",
-                         Detail = "The institution could not be found in the database.",
-                         Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
-                     };
+                                             {
+                                                 Title = "Failed getting institution.",
+                                                 Detail = "The institution could not be found in the database.",
+                                                 Instance = "6DECDE32-BE44-43B1-9DDD-4D14AE9CE731"
+                                             };
                     return NotFound(problem);
                 }
             }
@@ -267,11 +276,11 @@ namespace API.Controllers
             if(userToUpdate == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with that user id.",
-                    Instance = "EF4DA55A-C31A-4BC4-AE30-098DEB0D3457"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with that user id.",
+                                             Instance = "EF4DA55A-C31A-4BC4-AE30-098DEB0D3457"
+                                         };
                 return NotFound(problem);
             }
 
@@ -282,18 +291,20 @@ namespace API.Controllers
             // Has institution excluded allowance if it's your own account or if the user has the right scope for the same institution.
             // In the last case, the institution has to be the same.
             bool hasInstitutionExcludedAllowance = currentUser.Id == userId ||
-                                                   await authorizationHelper.SameInstitutionAndInstitutionScope(currentUser,
-                                                                    nameof(Defaults.Scopes.InstitutionUserWrite), userToUpdate.Id);
+                                                   await authorizationHelper.SameInstitutionAndInstitutionScope(
+                                                       currentUser,
+                                                       nameof(Defaults.Scopes.InstitutionUserWrite),
+                                                       userToUpdate.Id);
 
             if(!hasFullAllowance &&
                !hasInstitutionExcludedAllowance)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to edit the user.",
-                    Detail = "The user is not allowed to edit this user.",
-                    Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
-                };
+                                         {
+                                             Title = "Failed to edit the user.",
+                                             Detail = "The user is not allowed to edit this user.",
+                                             Instance = "E28BEBC0-AE7C-49F5-BDDC-3C13972B75D0"
+                                         };
                 return Unauthorized(problem);
             }
 
@@ -307,11 +318,11 @@ namespace API.Controllers
                    userResource.InstitutionId != userToUpdate.InstitutionId)
                 {
                     ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Failed to edit the user",
-                        Detail = "The user has not enough rights to update the institution id",
-                        Instance = "DD72C521-1D06-4E11-A0E0-AAE515E7F900"
-                    };
+                                             {
+                                                 Title = "Failed to edit the user",
+                                                 Detail = "The user has not enough rights to update the institution id",
+                                                 Instance = "DD72C521-1D06-4E11-A0E0-AAE515E7F900"
+                                             };
                     return Unauthorized(problem);
                 }
             }
@@ -325,7 +336,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for deleting the current account.
+        ///     This method is responsible for deleting the current account.
         /// </summary>
         /// <returns>This method returns status code 200.</returns>
         /// <response code="200">This endpoint returns status code 200. The current account is deleted.</response>
@@ -336,16 +347,17 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteAccount()
         {
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
 
             if(await userService.FindAsync(user.Id) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                                         };
                 return NotFound(problem);
             }
 
@@ -353,10 +365,10 @@ namespace API.Controllers
             userService.Save();
             return Ok();
         }
-       
+
 
         /// <summary>
-        /// This method is responsible for deleting a user account.
+        ///     This method is responsible for deleting a user account.
         /// </summary>
         /// <returns>This method returns status code 200.</returns>
         /// <response code="200">This endpoint returns status code 200. The account with the specified id is deleted.</response>
@@ -369,31 +381,33 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteAccount(int userId)
         {
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
             bool isAllowed = await authorizationHelper.UserIsAllowed(user,
                                                                      nameof(Defaults.Scopes.UserWrite),
                                                                      nameof(Defaults.Scopes.InstitutionUserWrite),
                                                                      userId);
 
-            if(user.Id != userId && !isAllowed)
+            if(user.Id != userId &&
+               !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Failed to delete the user.",
-                     Detail = "The user is not allowed to delete this user.",
-                     Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
-                 };
+                                         {
+                                             Title = "Failed to delete the user.",
+                                             Detail = "The user is not allowed to delete this user.",
+                                             Instance = "26DA6D58-DB7B-467D-90AA-69EFBF55A83C"
+                                         };
                 return Unauthorized(problem);
             }
 
             if(await userService.FindAsync(userId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                                         };
                 return NotFound(problem);
             }
 
@@ -403,7 +417,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Follows user
+        ///     Follows user
         /// </summary>
         /// <param name="followedUserId"></param>
         /// <returns></returns>
@@ -411,27 +425,28 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> FollowUser(int followedUserId)
         {
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
 
             if(await userService.FindAsync(user.Id) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                                         };
                 return NotFound(problem);
             }
 
             if(userUserService.CheckIfUserFollows(user.Id, followedUserId))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "You are already following this user",
-                    Detail = "You are already following this user.",
-                    Instance = "6B4D9745-4A18-4516-86A3-466678A3F891"
-                };
+                                         {
+                                             Title = "You are already following this user",
+                                             Detail = "You are already following this user.",
+                                             Instance = "6B4D9745-4A18-4516-86A3-466678A3F891"
+                                         };
                 return Conflict(problem);
             }
 
@@ -440,33 +455,32 @@ namespace API.Controllers
             if(await userService.FindAsync(followedUserId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user",
-                    Detail = "Unable to find user to follow",
-                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
-                };
+                                         {
+                                             Title = "Failed getting the user",
+                                             Detail = "Unable to find user to follow",
+                                             Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                                         };
                 return NotFound(problem);
             }
             if(user.Id == followedUserId)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "You can not follow yourself",
-                    Detail = "You can not follow yourself",
-                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
-                };
+                                         {
+                                             Title = "You can not follow yourself",
+                                             Detail = "You can not follow yourself",
+                                             Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                                         };
                 return NotFound(problem);
             }
-            UserUser userUser = new UserUser(user,followedUser);
+            UserUser userUser = new UserUser(user, followedUser);
             userUserService.Add(userUser);
 
             userUserService.Save();
             return Ok(mapper.Map<UserUser, UserUserResourceResult>(userUser));
-
         }
 
         /// <summary>
-        /// Unfollow user
+        ///     Unfollow user
         /// </summary>
         /// <param name="followedUserId"></param>
         /// <returns></returns>
@@ -474,40 +488,41 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> UnfollowUser(int followedUserId)
         {
-            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
 
             if(await userService.FindAsync(user.Id) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the user account.",
-                    Detail = "The database does not contain a user with this user id.",
-                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
-                };
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                                         };
                 return NotFound(problem);
             }
 
             if(userUserService.CheckIfUserFollows(user.Id, followedUserId) == false)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "User is not following this user",
-                    Detail = "You are not following this user.",
-                    Instance = "103E6317-4546-4985-8E39-7D9FD3E14E35"
-                };
+                                         {
+                                             Title = "User is not following this user",
+                                             Detail = "You are not following this user.",
+                                             Instance = "103E6317-4546-4985-8E39-7D9FD3E14E35"
+                                         };
                 return Conflict(problem);
             }
 
-            User followedUser= await userService.FindAsync(followedUserId);
+            User followedUser = await userService.FindAsync(followedUserId);
 
             if(await userService.FindAsync(followedUserId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed getting the project.",
-                    Detail = "The database does not contain a project with this project id.",
-                    Instance = "ED4E8B26-7D7B-4F5E-BA04-983B5F114FB5"
-                };
+                                         {
+                                             Title = "Failed getting the project.",
+                                             Detail = "The database does not contain a project with this project id.",
+                                             Instance = "ED4E8B26-7D7B-4F5E-BA04-983B5F114FB5"
+                                         };
                 return NotFound(problem);
             }
             UserUser userToUnfollow = new UserUser(user, followedUser);
@@ -516,6 +531,42 @@ namespace API.Controllers
             userUserService.Save();
             return Ok();
         }
+
+
+        /// <summary>
+        ///     This method changes the expected graduation date for the user.
+        /// </summary>
+        /// <param name="userResource"></param>
+        /// <returns>This method returns status code 200.</returns>
+        /// <response code="200">This endpoint returns status code 200. The account has changed the graduation date.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user is not found.</response>
+        [HttpPut("graduationdate")]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [Authorize]
+        public async Task<IActionResult> SetUserGraduationDate([FromBody] UserResource userResource)
+        {
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "DB0A5629-4A79-48BB-870E-C02FE7C1A768"
+                                         };
+                return NotFound(problem);
+            }
+
+            user.ExpectedGraduationDate = userResource.ExpectedGraduationDateTime;
+
+            userService.Update(user);
+            userService.Save();
+
+            return Ok(mapper.Map<User, UserResourceResult>(user));
+        }
+
 
         /// <summary>
         /// Get recommended projects for the user who is logged in.
@@ -555,4 +606,5 @@ namespace API.Controllers
             
         }
     }
+
 }

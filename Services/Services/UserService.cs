@@ -35,29 +35,84 @@ using File = Models.File;
 
 namespace Services.Services
 {
+
+    /// <summary>
+    ///     This is the interface of the user service
+    /// </summary>
     public interface IUserService : IService<User>
     {
+
+        /// <summary>
+        ///     This is the interface method which gets a user by identifier asynchronous
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>User entity</returns>
         Task<User> GetUserAsync(int userId);
+
+        /// <summary>
+        ///     This is the interface method which gets the user by identity identifier asynchronous
+        /// </summary>
+        /// <param name="identityId"></param>
+        /// <returns>User entity</returns>
         Task<User> GetUserByIdentityIdAsync(string identityId);
 
+        /// <summary>
+        ///     This is the interface method which removes a user by identifier asynchronous
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>boolean</returns>
         Task<bool> RemoveUserAsync(int userId);
 
+        /// <summary>
+        ///     This is the interface method which gets the user by username
+        /// </summary>
+        /// <param name="upn"></param>
+        /// <returns>User entity</returns>
         User GetUserByUsername(string upn);
 
+        /// <summary>
+        ///     This is the interface method which checks if the user has a certain scope
+        /// </summary>
+        /// <param name="identityId"></param>
+        /// <param name="scope"></param>
+        /// <returns>boolean</returns>
         bool UserHasScope(string identityId, string scope);
 
+        /// <summary>
+        ///     This is the interface method which checks if the user has the same institution as another user
+        /// </summary>
+        /// <param name="ownUserId"></param>
+        /// <param name="requestUserId"></param>
+        /// <returns>boolean</returns>
         Task<bool> HasSameInstitution(int ownUserId, int requestUserId);
 
+        /// <summary>
+        ///     This is the interface method which checks if a user with a certain role exists
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns>boolean</returns>
         bool UserWithRoleExists(Role role);
 
         Task<List<Project>> GetRecommendedProjects(int userId, int amountOfProjects);
 
+
+        List<User> GetAllExpectedGraduatingUsers(int amountOfMonths);
+
     }
 
+    /// <summary>
+    ///     This is the user service
+    /// </summary>
     public class UserService : Service<User>, IUserService
     {
         private readonly ElasticConfig elasticConfig;
         private readonly IProjectRepository projectRepository;
+
+        /// <summary>
+        ///     This is the constructor of the user service
+        /// </summary>
+        /// <param name="repository"></param>
+
 
         public UserService(IUserRepository repository, IProjectRepository projectRepository, ElasticConfig config) : base(repository)
         {
@@ -65,33 +120,71 @@ namespace Services.Services
             this.projectRepository = projectRepository;
         }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IUserRepository Repository => (IUserRepository) base.Repository;
 
+        /// <summary>
+        ///     This is the method which gets a user by identifier asynchronous
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<User> GetUserAsync(int userId)
         {
-            return await Repository.GetUserAsync(userId).ConfigureAwait(false);
+            return await Repository.GetUserAsync(userId)
+                                   .ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     This is the method which gets the user by identity identifier asynchronous
+        /// </summary>
+        /// <param name="identityId"></param>
+        /// <returns></returns>
         public async Task<User> GetUserByIdentityIdAsync(string identityId)
         {
-            return await Repository.GetUserByIdentityIdAsync(identityId).ConfigureAwait(false);
+            return await Repository.GetUserByIdentityIdAsync(identityId)
+                                   .ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     This is the method which removes a user by identifier asynchronous
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>boolean</returns>
         public async Task<bool> RemoveUserAsync(int userId)
         {
-            return await Repository.RemoveUserAsync(userId).ConfigureAwait(false);
+            return await Repository.RemoveUserAsync(userId)
+                                   .ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     This is the method which gets the user by username
+        /// </summary>
+        /// <param name="upn"></param>
+        /// <returns>User entity</returns>
         public User GetUserByUsername(string upn)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     This is the method which checks if the user has a certain scope
+        /// </summary>
+        /// <param name="identityId"></param>
+        /// <param name="scope"></param>
+        /// <returns>boolean</returns>
         public bool UserHasScope(string identityId, string scope)
         {
             return Repository.UserHasScope(identityId, scope);
         }
 
+        /// <summary>
+        ///     This is the method which checks if the user has the same institution as another user
+        /// </summary>
+        /// <param name="ownUserId"></param>
+        /// <param name="requestUserId"></param>
+        /// <returns>boolean</returns>
         public async Task<bool> HasSameInstitution(int ownUserId, int requestUserId)
         {
             User ownUserInfo = await Repository.FindAsync(ownUserId);
@@ -99,6 +192,11 @@ namespace Services.Services
             return ownUserInfo.Institution == userRequestInfo.Institution && ownUserInfo.Institution != null;
         }
 
+        /// <summary>
+        ///     This is the method which checks if a user with a certain role exists
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns>boolean</returns>
         public bool UserWithRoleExists(Role role)
         {
             return Repository.UserWithRoleExists(role);
@@ -148,5 +246,14 @@ namespace Services.Services
 
        
 
+
+        public List<User> GetAllExpectedGraduatingUsers(int amountOfMonths)
+        {
+            List<User> users = Repository.GetAllExpectedGraduatingUsers(amountOfMonths)
+                                         .Result;
+            return users;
+        }
+
     }
+
 }
