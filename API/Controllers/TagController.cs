@@ -118,8 +118,8 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
-                                             Title = "Failed to create a new role.",
-                                             Detail = "The specified role resource was null",
+                                             Title = "Failed to create a new tag.",
+                                             Detail = "The specified tag resource was null",
                                              Instance = "ABA3B997-1B80-47FC-A72B-69BC0D8DFA93"
                                          };
                 return BadRequest(problem);
@@ -150,16 +150,14 @@ namespace API.Controllers
         /// <summary>
         ///     This method is responsible for updating the tag.
         /// </summary>
-        /// <param name="tagId">The role identifier which is used for searching the role.</param>
-        /// <param name="tagResource">The role resource which is used to update the role.</param>
-        /// <returns>This method returns the updated role resource result.</returns>
-        /// <response code="200">This endpoint returns the updated role.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when a role scope is not valid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when the role with the specified id could not be found.</response>
+        /// <param name="tagId">The tag identifier which is used for searching the tag.</param>
+        /// <param name="tagResource">The tag resource which is used to update the tag.</param>
+        /// <returns>This method returns the updated tag resource result.</returns>
+        /// <response code="200">This endpoint returns the updated tag.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the tag with the specified id could not be found.</response>
         [HttpPut("{tagId}")]
         [Authorize(Policy = nameof(Scopes.TagWrite))]
-        [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(TagResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateTag(int tagId, TagResource tagResource)
         {
@@ -189,6 +187,7 @@ namespace API.Controllers
         /// <param name="tagId">The tag identifier which is used for searching the tag.</param>
         /// <returns>This method returns status code 200.</returns>
         /// <response code="200">This endpoint returns status code 200. Tag is deleted.</response>
+        /// <response code="401">The 401 Unauthorized status code is returned when the tag is still connected to a project.</response>
         /// <response code="404">The 404 Not Found status code is returned when the tag with the specified id could not be found.</response>
         [HttpDelete("{tagId}")]
         [Authorize(Policy = nameof(Scopes.TagWrite))]
