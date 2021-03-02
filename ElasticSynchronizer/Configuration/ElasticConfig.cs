@@ -19,8 +19,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ElasticSynchronizer.Configuration
 {
+
     public class ElasticConfig
     {
+
         /// <summary>
         ///     Gets or sets the hostname.
         /// </summary>
@@ -56,6 +58,8 @@ namespace ElasticSynchronizer.Configuration
         ///     The index of the elastic document.
         /// </value>
         [Required]
-        public string IndexUrl { get; set;  }
+        public string IndexUrl { get; set; }
+
     }
+
 }

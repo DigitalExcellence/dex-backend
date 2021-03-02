@@ -22,44 +22,69 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestSharp;
 using RestSharp.Authenticators;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 using System;
 
 namespace ElasticSynchronizer
 {
+
     public class Program
     {
+
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            Log.Logger = new LoggerConfiguration()
+                         .MinimumLevel.Debug()
+                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                         .MinimumLevel.Override("System", LogEventLevel.Warning)
+                         .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+                         .Enrich.FromLogContext()
+                         .WriteTo.Console(outputTemplate:
+                                          "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                                          theme: AnsiConsoleTheme.Literate)
+                         .CreateLogger();
+
+            CreateHostBuilder(args)
+                .UseSerilog()
+                .Build()
+                .Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                       .ConfigureServices((hostContext, services) =>
+                       {
+                           string environmentName = Environment.GetEnvironmentVariable("ELASTIC_DOTNET_ENVIRONMENT");
 
+                           IConfiguration configuration = new ConfigurationBuilder()
+                                                          .AddJsonFile("appsettings.json", true, true)
+                                                          .AddJsonFile($"appsettings.{environmentName}.json",
+                                                                       true,
+                                                                       true)
+                                                          .AddEnvironmentVariables()
+                                                          .Build();
 
-            Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) =>
-                {
-                    string environmentName = Environment.GetEnvironmentVariable("ELASTIC_DOTNET_ENVIRONMENT");
+                           Config config = configuration.GetSection("App")
+                                                        .Get<Config>();
+                           UriBuilder builder = new UriBuilder("http://" + config.Elastic.Hostname + ":9200/");
+                           Uri uri = builder.Uri;
 
-                    IConfiguration configuration = new ConfigurationBuilder()
-                                                   .AddJsonFile("appsettings.json", true, true)
-                                                   .AddJsonFile($"appsettings.{environmentName}.json", true, true)
-                                                   .AddEnvironmentVariables()
-                                                   .Build();
+                           services.AddScoped(c => config);
+                           services.AddScoped(client => new RestClient(uri)
+                                                        {
+                                                            Authenticator =
+                                                                new HttpBasicAuthenticator(config.Elastic.Username,
+                                                                    config.Elastic.Password)
+                                                        });
 
-                    Config config = configuration.GetSection("App").Get<Config>();
-                    UriBuilder builder = new UriBuilder("http://" + config.Elastic.Hostname + ":9200/");
-                    Uri uri = builder.Uri;
+                           services.AddHostedService<DeleteProjectWorker>();
+                           services.AddHostedService<UpdateProjectWorker>();
+                       });
+        }
 
-                    services.AddScoped( c => config);
-                    services.AddScoped(client => new RestClient(uri)
-                    {
-                        Authenticator =
-                                 new HttpBasicAuthenticator(config.Elastic.Username, config.Elastic.Password)
-                    });
-
-                    services.AddHostedService<DeleteProjectWorker>();
-                    services.AddHostedService<UpdateProjectWorker>();
-                });
     }
+
 }

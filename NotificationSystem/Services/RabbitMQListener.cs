@@ -18,6 +18,7 @@
 using NotificationSystem.Contracts;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Serilog;
 using System;
 using System.Text;
 
@@ -74,11 +75,10 @@ namespace NotificationSystem.Services
                 notificationService.ValidatePayload();
                 notificationService.ExecuteTask();
                 channel.BasicAck(ea.DeliveryTag, false);
-                Console.WriteLine("Task executed");
+                Log.Logger.Information("Task executed");
             } catch(Exception e)
             {
-                Console.WriteLine("Task failed");
-                Console.WriteLine(e.Message);
+                Log.Logger.Error("Task failed: " + e.Message);
             }
         }
 

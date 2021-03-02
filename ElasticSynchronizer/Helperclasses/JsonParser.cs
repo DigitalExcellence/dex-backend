@@ -2,16 +2,20 @@ using ElasticSynchronizer.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ElasticSynchronizer.Helperclasses
 {
+
     public interface IJsonParser
     {
+
         ESProjectDTO JsonStringToProjectES(string body);
+
     }
+
     public class JsonParser : IJsonParser
     {
+
         public ESProjectDTO JsonStringToProjectES(string body)
         {
             JToken token = JToken.Parse(body);
@@ -23,7 +27,8 @@ namespace ElasticSynchronizer.Helperclasses
             project.Likes = token.Value<List<int>>("DescLikesription");
 
             return project;
-            
         }
+
     }
+
 }

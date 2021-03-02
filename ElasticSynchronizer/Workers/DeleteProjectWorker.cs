@@ -17,7 +17,6 @@
 
 using ElasticSynchronizer.Configuration;
 using ElasticSynchronizer.Executors;
-using ElasticSynchronizer.Helperclasses;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotificationSystem.Contracts;
@@ -30,13 +29,15 @@ using System.Threading.Tasks;
 
 namespace ElasticSynchronizer.Workers
 {
+
     public class DeleteProjectWorker : BackgroundService
     {
-        private readonly ILogger<DeleteProjectWorker> logger;
-        private readonly string subject = "ELASTIC_DELETE";
+
         private readonly Config config;
+        private readonly ILogger<DeleteProjectWorker> logger;
         private readonly RestClient restClient;
-        
+        private readonly string subject = "ELASTIC_DELETE";
+
 
         public DeleteProjectWorker(ILogger<DeleteProjectWorker> logger, Config config, RestClient restClient)
         {
@@ -47,7 +48,10 @@ namespace ElasticSynchronizer.Workers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password));
+            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(
+                new RabbitMQConnectionFactory(config.RabbitMQ.Hostname,
+                                              config.RabbitMQ.Username,
+                                              config.RabbitMQ.Password));
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
 
@@ -56,5 +60,7 @@ namespace ElasticSynchronizer.Workers
 
             listener.StartConsumer(consumer, subject);
         }
+
     }
+
 }

@@ -54,21 +54,18 @@ namespace Repositories
         /// <param name="dbContext"></param>
        public UserProjectLikeRepository(DbContext dbContext, ITaskPublisher TaskPublisher) :
             base(dbContext) {
-            this.taskPublisher = TaskPublisher;
+            taskPublisher = TaskPublisher;
         }
 
+        /// <summary>
+        ///     This is the override add method.
+        /// </summary>
+        /// <param name="projectLike"></param>
         public override void Add(ProjectLike projectLike)
         {
             DbContext.Add(projectLike);
         }
 
-
-
-        public override void Save()
-        {
-            base.Save();
-
-        }
 
         /// <summary>
         ///     This method removes the project like

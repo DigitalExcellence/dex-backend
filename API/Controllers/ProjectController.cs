@@ -120,7 +120,7 @@ namespace API.Controllers
                 return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectsToExport));
             } catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Logger.Error(e.Message);
                 return BadRequest(e.Message);
             }
 
@@ -738,12 +738,12 @@ namespace API.Controllers
             try
             {
                 ProjectLike like = new ProjectLike(projectToLike, currentUser);
-                userProjectLikeService.Add(like);
-
+                await userProjectLikeService.AddAsync(like)
+                                            .ConfigureAwait(false);
                 userProjectLikeService.Save();
 
                 // Update Elastic Database about this change.
-                await userProjectLikeService.SyncProjectToES(projectToLike);
+                userProjectLikeService.SyncProjectToES(projectToLike);
                 return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(like));
             } catch(DbUpdateException e)
             {
@@ -822,7 +822,7 @@ namespace API.Controllers
             userProjectLikeService.Save();
 
             // Update Elastic Database about this change.
-            await userProjectLikeService.SyncProjectToES(projectToLike);
+            userProjectLikeService.SyncProjectToES(projectToLike);
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
         }
 

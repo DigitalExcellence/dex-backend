@@ -17,18 +17,22 @@
 
 using ElasticSynchronizer.Configuration;
 using ElasticSynchronizer.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
+using Serilog;
 using System;
 
 namespace ElasticSynchronizer.Executors
 {
+
     public class DocumentDeleter : ICallbackService
     {
-        private ESProjectDTO eSProject;
-        private readonly RestClient restClient;
+
         private readonly Config config;
+        private readonly RestClient restClient;
+        private ESProjectDTO eSProject;
 
         public DocumentDeleter(Config config, RestClient restClient)
         {
@@ -37,7 +41,7 @@ namespace ElasticSynchronizer.Executors
         }
 
         /// <summary>
-        /// Parses the payload.
+        ///     Parses the payload.
         /// </summary>
         public void ParsePayload(string jsonBody)
         {
@@ -45,7 +49,7 @@ namespace ElasticSynchronizer.Executors
         }
 
         /// <summary>
-        /// Executes the DeleteDocument Method.
+        ///     Executes the DeleteDocument Method.
         /// </summary>
         public void ExecuteTask()
         {
@@ -53,11 +57,11 @@ namespace ElasticSynchronizer.Executors
         }
 
         /// <summary>
-        /// Validates the payload.
+        ///     Validates the payload.
         /// </summary>
         public bool ValidatePayload()
         {
-            if (eSProject.Id <= 0)
+            if(eSProject.Id <= 0)
             {
                 throw new Exception("Invalid Project Id");
             }
@@ -65,7 +69,7 @@ namespace ElasticSynchronizer.Executors
         }
 
         /// <summary>
-        /// Sends API Call to the ElasticSearch Index, requesting the deletion of given Project.
+        ///     Sends API Call to the ElasticSearch Index, requesting the deletion of given Project.
         /// </summary>
         private void DeleteDocument()
         {
@@ -73,12 +77,10 @@ namespace ElasticSynchronizer.Executors
             IRestResponse response = restClient.Execute(request);
             if(!response.IsSuccessful)
             {
-                Console.WriteLine("Failed: " + response.StatusDescription + response.StatusCode);
-                Console.WriteLine(response.Content);
+                Log.Logger.Error("Failed: " + response.StatusDescription + response.StatusCode + response.Content);
             }
         }
 
     }
+
 }
-
-

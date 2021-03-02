@@ -20,15 +20,18 @@ using ElasticSynchronizer.Models;
 using Newtonsoft.Json;
 using NotificationSystem.Contracts;
 using RestSharp;
+using Serilog;
 using System;
 
 namespace ElasticSynchronizer.Executors
 {
+
     public class DocumentUpdater : ICallbackService
     {
-        private ESProjectDTO eSProject;
-        private readonly RestClient restClient;
+
         private readonly Config config;
+        private readonly RestClient restClient;
+        private ESProjectDTO eSProject;
 
         public DocumentUpdater(Config config, RestClient restClient)
         {
@@ -37,7 +40,7 @@ namespace ElasticSynchronizer.Executors
         }
 
         /// <summary>
-        /// Parses the payload.
+        ///     Parses the payload.
         /// </summary>
         public void ParsePayload(string jsonBody)
         {
@@ -46,7 +49,7 @@ namespace ElasticSynchronizer.Executors
 
 
         /// <summary>
-        /// Executes the CreateOrUpdateDocument method.
+        ///     Executes the CreateOrUpdateDocument method.
         /// </summary>
         public void ExecuteTask()
         {
@@ -55,7 +58,7 @@ namespace ElasticSynchronizer.Executors
 
 
         /// <summary>
-        /// Validates the payload.
+        ///     Validates the payload.
         /// </summary>
         public bool ValidatePayload()
         {
@@ -67,7 +70,7 @@ namespace ElasticSynchronizer.Executors
         }
 
         /// <summary>
-        /// Sends API Call to the ElasticSearch Index, requesting the creation or update of given Project.
+        ///     Sends API Call to the ElasticSearch Index, requesting the creation or update of given Project.
         /// </summary>
         private void CreateOrUpdateDocument()
         {
@@ -76,25 +79,13 @@ namespace ElasticSynchronizer.Executors
             request.AddParameter("application/json", body, ParameterType.RequestBody);
 
             IRestResponse response = restClient.Execute(request);
-            
+
             if(!response.IsSuccessful)
             {
-                Console.WriteLine("Failed: " + response.StatusDescription + response.StatusCode);
-                Console.WriteLine(response.Content);
+                Log.Logger.Error("Failed: " + response.StatusDescription + response.StatusCode + response.Content);
             }
         }
 
-        
     }
+
 }
-
-
-
-
-
-
-
-
-
-
-

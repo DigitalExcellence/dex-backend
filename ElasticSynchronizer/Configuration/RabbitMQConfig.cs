@@ -19,8 +19,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ElasticSynchronizer.Configuration
 {
+
     public class RabbitMQConfig
     {
+
         /// <summary>
         ///     Gets or sets the hostname.
         /// </summary>
@@ -47,5 +49,7 @@ namespace ElasticSynchronizer.Configuration
         /// </value>
         [Required]
         public string Password { get; set; }
+
     }
+
 }

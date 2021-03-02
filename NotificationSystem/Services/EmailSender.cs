@@ -44,7 +44,7 @@ namespace NotificationSystem.Services
 
         public void ParsePayload(string jsonBody)
         {
-            Notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
+            notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
         }
 
         public void ExecuteTask()
@@ -55,7 +55,7 @@ namespace NotificationSystem.Services
 
         public bool ValidatePayload()
         {
-            EmailNotification emailNotification = Notification;
+            EmailNotification emailNotification = notification;
 
             if(string.IsNullOrEmpty(emailNotification.RecipientEmail) ||
                string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))

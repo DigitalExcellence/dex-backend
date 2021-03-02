@@ -45,7 +45,7 @@
         <PackageReference Include="Sentry.AspNetCore" Version="2.1.1" />
         <PackageReference Include="Sentry.Serilog" Version="2.1.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
-        <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     </ItemGroup>
 
     <ItemGroup>

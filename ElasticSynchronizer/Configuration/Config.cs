@@ -20,8 +20,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ElasticSynchronizer.Configuration
 {
+
     public class Config : IValidatable
     {
+
         /// <summary>
         ///     Gets or sets the Elastic config.
         /// </summary>
@@ -46,5 +48,7 @@ namespace ElasticSynchronizer.Configuration
             Validator.ValidateObject(RabbitMQ, new ValidationContext(RabbitMQ), true);
             Validator.ValidateObject(Elastic, new ValidationContext(Elastic), true);
         }
+
     }
+
 }

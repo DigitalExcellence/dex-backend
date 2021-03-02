@@ -17,7 +17,6 @@
 
 using ElasticSynchronizer.Configuration;
 using ElasticSynchronizer.Executors;
-using ElasticSynchronizer.Helperclasses;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NotificationSystem.Contracts;
@@ -30,12 +29,14 @@ using System.Threading.Tasks;
 
 namespace ElasticSynchronizer.Workers
 {
+
     public class UpdateProjectWorker : BackgroundService
     {
-        private readonly ILogger<UpdateProjectWorker> logger;
-        private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
+
         private readonly Config config;
+        private readonly ILogger<UpdateProjectWorker> logger;
         private readonly RestClient restClient;
+        private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
 
         public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config, RestClient restClient)
         {
@@ -46,7 +47,10 @@ namespace ElasticSynchronizer.Workers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(new RabbitMQConnectionFactory(config.RabbitMQ.Hostname, config.RabbitMQ.Username, config.RabbitMQ.Password));
+            RabbitMQSubscriber subscriber = new RabbitMQSubscriber(
+                new RabbitMQConnectionFactory(config.RabbitMQ.Hostname,
+                                              config.RabbitMQ.Username,
+                                              config.RabbitMQ.Password));
             IModel channel = subscriber.SubscribeToSubject(subject);
             RabbitMQListener listener = new RabbitMQListener(channel);
 
@@ -56,5 +60,7 @@ namespace ElasticSynchronizer.Workers
 
             listener.StartConsumer(consumer, subject);
         }
+
     }
+
 }

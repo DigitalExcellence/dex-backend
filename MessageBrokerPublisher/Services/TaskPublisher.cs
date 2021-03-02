@@ -22,15 +22,14 @@ using System.Text;
 
 namespace MessageBrokerPublisher
 {
-    ///<summary>
-    ///Interface for the TaskPublisher.
-    ///</summary>
-    ///
+    /// <summary>
+    ///     Interface for the TaskPublisher.
+    /// </summary>
     public interface ITaskPublisher
     {
 
         /// <summary>
-        /// Method deletes the file from the file server
+        ///     Method deletes the file from the file server
         /// </summary>
         /// <param name="payload"></param>
         /// <param name="subject"></param>
@@ -64,7 +63,7 @@ namespace MessageBrokerPublisher
 
 
         /// <summary>
-        /// Registers a specified message to a specified queue on the messagebroker.
+        ///     Registers a specified message to a specified queue on the messagebroker.
         /// </summary>
         /// <param name="payload">The body of the task to be published.</param>
         /// <param name="subject">The subject, which is the channel which to publish to.</param>

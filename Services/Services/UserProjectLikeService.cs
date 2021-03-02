@@ -37,7 +37,12 @@ namespace Services.Services
         /// <param name="projectId"></param>
         /// <returns>Boolean</returns>
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
-        
+
+        /// <summary>
+        ///     This is the interface method which synchronizes the project to Elastic Search
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns>Task</returns>
         Task SyncProjectToES(Project project);
     }
 
@@ -53,6 +58,7 @@ namespace Services.Services
         ///     This is the project like constructor
         /// </summary>
         /// <param name="repository"></param>
+        /// <param name="projectRepository"></param>
         public UserProjectLikeService(IUserProjectLikeRepository repository, IProjectRepository projectRepository) :
             base(repository)
         {
@@ -65,17 +71,12 @@ namespace Services.Services
         private new IUserProjectLikeRepository Repository =>
             (IUserProjectLikeRepository) base.Repository;
 
-        public override void Add(ProjectLike projectEntity)
-        {
-            Repository.Add(projectEntity);
-        }
 
-        public override void Remove(ProjectLike projectEntity)
-        {
-            Repository.Remove(projectEntity);
-            
-        }
-
+        /// <summary>
+        ///     This is the method which synchronizes the project to Elastic Search
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns>Task</returns>
         public async Task SyncProjectToES(Project project)
         {
              await projectRepository.SyncProjectToES(project);

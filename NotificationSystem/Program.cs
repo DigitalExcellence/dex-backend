@@ -22,6 +22,9 @@ using NotificationSystem.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using SendGrid;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 using System;
 
 namespace NotificationSystem
@@ -32,6 +35,16 @@ namespace NotificationSystem
 
         private static void Main()
         {
+            Log.Logger = new LoggerConfiguration()
+                         .MinimumLevel.Debug()
+                         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                         .MinimumLevel.Override("System", LogEventLevel.Warning)
+                         .Enrich.FromLogContext()
+                         .WriteTo.Console(outputTemplate:
+                                          "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                                          theme: AnsiConsoleTheme.Literate)
+                         .CreateLogger();
+
             string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             // Appsettings is renamed because of an issue where the project loaded another appsettings.json
