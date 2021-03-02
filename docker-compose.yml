@@ -123,8 +123,6 @@ services:
       discovery.type: single-node
     networks:
       mssql-network:
-    volumes:
-      elasticsearch:  
 
   notificationservice:
     container_name: notificationservice
@@ -159,6 +157,9 @@ services:
         - Config__RabbitMQ__Password=test
     networks:
         rabbitmq-network:
+
+volumes:
+  elasticsearch:  
 
 networks:
   mssql-network:
