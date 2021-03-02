@@ -91,6 +91,8 @@ namespace API.Controllers
         [HttpPost]
         [Authorize]
         [Consumes("multipart/form-data")]
+        [ControllerAttributes.AllowedExtensions(new string[] { ".jpeg", ".png", ".jpg", ".gif" })]
+        [ControllerAttributes.MaxFileSize(2097152)]
         [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UploadSingleFile([FromForm] FileResource fileResource)
@@ -98,11 +100,11 @@ namespace API.Controllers
             if(fileResource.File == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed posting file.",
-                                             Detail = "File is null.",
-                                             Instance = "ACD46F17-A239-4353-92A5-0B81AA0A96E9"
-                                         };
+                {
+                    Title = "Failed posting file.",
+                    Detail = "File is null.",
+                    Instance = "ACD46F17-A239-4353-92A5-0B81AA0A96E9"
+                };
                 return BadRequest(problem);
             }
             try
@@ -124,11 +126,11 @@ namespace API.Controllers
             } catch(FileExistException fileExistException)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = fileExistException.Message,
-                                             Detail = "Please rename filename.",
-                                             Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
-                                         };
+                {
+                    Title = fileExistException.Message,
+                    Detail = "Please rename filename.",
+                    Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
+                };
                 return BadRequest(problem);
             }
         }
@@ -149,11 +151,11 @@ namespace API.Controllers
             if(file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File could not be found.",
-                                             Detail = "File could not be found.",
-                                             Instance = "875B6402-D771-45EC-AB56-3DE0CDD446D6"
-                                         };
+                {
+                    Title = "File could not be found.",
+                    Detail = "File could not be found.",
+                    Instance = "875B6402-D771-45EC-AB56-3DE0CDD446D6"
+                };
                 return NotFound(problem);
             }
 
@@ -182,11 +184,11 @@ namespace API.Controllers
             if(file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File was not found.",
-                                             Detail = "File was not found.",
-                                             Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
-                                         };
+                {
+                    Title = "File was not found.",
+                    Detail = "File was not found.",
+                    Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
+                };
                 return NotFound(problem);
             }
 
@@ -194,11 +196,11 @@ namespace API.Controllers
             if(!(file.Uploader.Id.Equals(user.Id) || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Not authorized.",
-                                             Detail = "You do not have the required permissions to delete this file.",
-                                             Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
-                                         };
+                {
+                    Title = "Not authorized.",
+                    Detail = "You do not have the required permissions to delete this file.",
+                    Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
+                };
                 return Unauthorized(problem);
             }
 
@@ -212,11 +214,11 @@ namespace API.Controllers
             } catch(FileNotFoundException)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File could not be deleted because the path does not exist.",
-                                             Detail = "File could not be found.",
-                                             Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
-                                         };
+                {
+                    Title = "File could not be deleted because the path does not exist.",
+                    Detail = "File could not be found.",
+                    Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
+                };
 
                 return NotFound(problem);
             }
