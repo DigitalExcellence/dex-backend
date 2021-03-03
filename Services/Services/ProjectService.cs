@@ -61,6 +61,12 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        /// <summary>
+        ///     Get the users projects
+        /// </summary>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
+        /// <returns>The total number of pages for the results</returns>
+        Task<IEnumerable<Project>> GetUserProjects(int userId);
     }
 
     /// <summary>
@@ -179,6 +185,10 @@ namespace Services.Services
             return Repository.FindWithUserAndCollaboratorsAsync(id);
         }
 
+        public Task<IEnumerable<Project>> GetUserProjects(int userId)
+        {
+            return Repository.GetUserProjects(userId);
+        }
     }
 
 }
