@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added ability to make projects private to a specific institution - [#310](https://github.com/DigitalExcellence/dex-backend/issues/310)
+- Added ability to retrieve all the user's projects - [#313](https://github.com/DigitalExcellence/dex-backend/issues/313)
 
 ### Changed
 
