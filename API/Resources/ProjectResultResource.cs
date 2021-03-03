@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Models;
 using System;
 using System.Collections.Generic;
 
@@ -62,18 +61,22 @@ namespace API.Resources
         ///     Get or Set the owner of the project
         /// </summary>
         public LimitedUserResourceResult User { get; set; }
+
         /// <summary>
-        /// This gets or set the file of the project
+        ///     This gets or set the file of the project
         /// </summary>
         public FileResourceResult ProjectIcon { get; set; }
+
         /// <summary>
-        /// This gets or sets the call to action of the project.
+        ///     This gets or sets the call to action of the project.
         /// </summary>
         public CallToActionResourceResult CallToAction { get; set; }
+
         /// <summary>
-        /// This gets or sets the likes of the project.
+        ///     This gets or sets the likes of the project.
         /// </summary>
         public List<ProjectLikesResourceResult> Likes { get; set; }
+
     }
 
 }

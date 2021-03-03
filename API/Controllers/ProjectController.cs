@@ -28,7 +28,6 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -116,8 +115,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllProjects(
             [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
-            
-
             ProblemDetails problem = new ProblemDetails
                                      {
                                          Title = "Invalid search request."
@@ -156,33 +153,33 @@ namespace API.Controllers
             List<Project> filteredProjects = new List<Project>();
 
 
-                if(HttpContext.User.CheckIfUserIsAuthenticated())
-                {
-                    User currentUser = await HttpContext.GetContextUser(userService)
-                                                .ConfigureAwait(false);
+            if(HttpContext.User.CheckIfUserIsAuthenticated())
+            {
+                User currentUser = await HttpContext.GetContextUser(userService)
+                                                    .ConfigureAwait(false);
 
-                    foreach(Project project in projects)
+                foreach(Project project in projects)
+                {
+                    if(project.InstitutePrivate == false)
                     {
-                        if(project.InstitutePrivate == false)
-                        {
-                            filteredProjects.Add(project);
-                        }
-                        if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
-                        {
-                            filteredProjects.Add(project);
-                        }
+                        filteredProjects.Add(project);
+                    }
+                    if(project.InstitutePrivate &&
+                       currentUser.InstitutionId == project.User.InstitutionId)
+                    {
+                        filteredProjects.Add(project);
                     }
                 }
-                else
-                { 
-                    foreach(Project project in projects)
+            } else
+            {
+                foreach(Project project in projects)
+                {
+                    if(project.InstitutePrivate == false)
                     {
-                        if(project.InstitutePrivate == false)
-                        {
-                            filteredProjects.Add(project);
-                        }
+                        filteredProjects.Add(project);
                     }
                 }
+            }
 
 
             IEnumerable<ProjectResultResource> results =
@@ -218,8 +215,6 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
         {
-            
-            
             if(projectId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -248,9 +243,10 @@ namespace API.Controllers
             if(HttpContext.User.CheckIfUserIsAuthenticated())
             {
                 User currentUser = await HttpContext.GetContextUser(userService)
-                                            .ConfigureAwait(false);
+                                                    .ConfigureAwait(false);
 
-                if(project.InstitutePrivate && currentUser.InstitutionId == project.User.InstitutionId)
+                if(project.InstitutePrivate &&
+                   currentUser.InstitutionId == project.User.InstitutionId)
                 {
                     return Ok(mapper.Map<Project, ProjectResourceResult>(project));
                 }
@@ -258,8 +254,7 @@ namespace API.Controllers
                 {
                     return Ok(mapper.Map<Project, ProjectResourceResult>(project));
                 }
-            }
-            else
+            } else
             {
                 if(project.InstitutePrivate == false)
                 {
@@ -281,7 +276,7 @@ namespace API.Controllers
         ///     resource is not specified or failed to save project to the database.
         /// </response>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
@@ -385,7 +380,7 @@ namespace API.Controllers
 
             User user = await HttpContext.GetContextUser(userService)
                                          .ConfigureAwait(false);
-            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.AdminProjectWrite));
 
             if(!(project.UserId == user.Id || isAllowed))
             {
@@ -420,13 +415,16 @@ namespace API.Controllers
             File file = null;
             if(projectResource.FileId != 0)
             {
-                if(project.ProjectIconId != 0 && project.ProjectIconId != null)
+                if(project.ProjectIconId != 0 &&
+                   project.ProjectIconId != null)
                 {
                     if(project.ProjectIconId != projectResource.FileId)
                     {
                         File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+
                         // Remove the file from the filesystem
                         fileUploader.DeleteFileFromDirectory(fileToDelete);
+
                         // Remove file from DB
                         await fileService.RemoveAsync(project.ProjectIconId.Value);
 
@@ -491,7 +489,7 @@ namespace API.Controllers
             User user = await HttpContext.GetContextUser(userService)
                                          .ConfigureAwait(false);
             bool isAllowed = await authorizationHelper.UserIsAllowed(user,
-                                                                     nameof(Defaults.Scopes.ProjectWrite),
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
                                                                      nameof(Defaults.Scopes.InstitutionProjectWrite),
                                                                      project.UserId);
 

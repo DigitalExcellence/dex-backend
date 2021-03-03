@@ -15,46 +15,61 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Ganss.XSS;
 using Models;
 using Repositories;
 using Services.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the interface of the user (following) project service
+    /// </summary>
     public interface IUserProjectService : IService<UserProject>
     {
-        bool CheckIfUserFollows(int userId,int projectId);
+
+        /// <summary>
+        ///     This is the interface method which checks if a user already follows a project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns>boolean</returns>
+        bool CheckIfUserFollows(int userId, int projectId);
+
     }
 
+    /// <summary>
+    ///     This is the user (following) project service
+    /// </summary>
     public class UserProjectService : Service<UserProject>, IUserProjectService
     {
+
+        /// <summary>
+        ///     This is the constructor of the user project service
+        /// </summary>
+        /// <param name="repository"></param>
         public UserProjectService(IUserProjectRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IUserProjectRepository Repository => (IUserProjectRepository) base.Repository;
 
-        public override void Add(UserProject entity)
-        {
-            Repository.Add(entity);
-        }
-
-        public override void Remove(UserProject userProject)
-        {
-            Repository.Remove(userProject);
-        }
-
+        /// <summary>
+        ///     This is the method which checks if a user already follows a project
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="projectId"></param>
+        /// <returns>boolean</returns>
         bool IUserProjectService.CheckIfUserFollows(int userId, int projectId)
         {
-            if(Repository.CheckIfUserFollows(userId,projectId))
+            if(Repository.CheckIfUserFollows(userId, projectId))
             {
                 return true;
             }
             return false;
         }
+
     }
+
 }

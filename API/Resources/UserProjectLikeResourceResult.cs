@@ -1,4 +1,19 @@
-using Models;
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
 
 namespace API.Resources
 {
@@ -10,6 +25,7 @@ namespace API.Resources
     /// </summary>
     public class UserProjectLikeResourceResult
     {
+
         /// <summary>
         ///     Gets or sets the id of the project that being liked.
         /// </summary>
@@ -38,7 +54,7 @@ namespace API.Resources
         ///     Gets or sets the uri of project that being liked.
         /// </summary>
         /// <value>
-        ///    The string representation of the Project's Uri
+        ///     The string representation of the Project's Uri
         /// </value>
         public string Uri { get; set; }
 
@@ -51,4 +67,5 @@ namespace API.Resources
         public string Description { get; set; }
 
     }
+
 }

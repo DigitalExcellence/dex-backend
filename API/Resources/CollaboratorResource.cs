@@ -17,11 +17,13 @@
 
 namespace API.Resources
 {
+
     /// <summary>
     ///     The view model of a collaborator
     /// </summary>
     public class CollaboratorResource
     {
+
         /// <summary>
         ///     Get or Set the Fullname of a collaborator
         /// </summary>
@@ -31,5 +33,7 @@ namespace API.Resources
         ///     Get or Set the Role of a collaborator
         /// </summary>
         public string Role { get; set; }
+
     }
+
 }

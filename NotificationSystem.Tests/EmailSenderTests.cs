@@ -1,5 +1,23 @@
+/*
+* Digital Excellence Copyright (C) 2020 Brend Smits
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
+* by the Free Software Foundation version 3 of the License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* You can find a copy of the GNU Lesser General Public License
+* along with this program, in the LICENSE.md file in the root project directory.
+* If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+*/
+
 using Microsoft.Extensions.Configuration;
 using Moq;
+using Newtonsoft.Json;
 using NotificationSystem.Configuration;
 using NotificationSystem.Notifications;
 using NotificationSystem.Services;
@@ -14,14 +32,16 @@ using System.Threading;
 
 namespace NotificationSystem.Tests
 {
+
     public class EmailSenderTests
     {
+
         [Test]
         public void ParsePayload_ValidBody_EmailNotification()
         {
             // Arrange
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
             EmailSender emailSender = new EmailSender(null, "test");
 
             // Act
@@ -39,7 +59,7 @@ namespace NotificationSystem.Tests
             EmailSender emailSender = new EmailSender(null, "test");
 
             // Act + Assert
-            Assert.Throws<Newtonsoft.Json.JsonReaderException>(() => emailSender.ParsePayload(payload));
+            Assert.Throws<JsonReaderException>(() => emailSender.ParsePayload(payload));
         }
 
         [Test]
@@ -47,17 +67,23 @@ namespace NotificationSystem.Tests
         {
             // Arrange
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
             string emailFromString = "test@gmail.com";
             EmailAddress emailFrom = new EmailAddress(emailFromString);
             EmailAddress emailTo = new EmailAddress(notification.RecipientEmail);
             string subject = "You have a new notification on DeX";
-            SendGridMessage msg = MailHelper.CreateSingleEmail(emailFrom, emailTo,
-                subject, notification.TextContent, notification.HtmlContent);
+            SendGridMessage msg = MailHelper.CreateSingleEmail(emailFrom,
+                                                               emailTo,
+                                                               subject,
+                                                               notification.TextContent,
+                                                               notification.HtmlContent);
             Mock<ISendGridClient> sendgridMock = new Mock<ISendGridClient>();
             sendgridMock.Setup(x => x.SendEmailAsync(It.Is<SendGridMessage>(x => x.From == emailFrom &&
-                x.Personalizations.First().Tos.First() == emailTo),
-                It.IsAny<CancellationToken>())).Verifiable();
+                                                                                x.Personalizations.First()
+                                                                                    .Tos.First() ==
+                                                                                emailTo),
+                                                     It.IsAny<CancellationToken>()))
+                        .Verifiable();
 
             EmailSender emailSender = new EmailSender(sendgridMock.Object, emailFromString);
 
@@ -78,12 +104,18 @@ namespace NotificationSystem.Tests
             EmailAddress emailFrom = new EmailAddress(emailFromString);
             EmailAddress emailTo = new EmailAddress(notification.RecipientEmail);
             string subject = "You have a new notification on DeX";
-            SendGridMessage msg = MailHelper.CreateSingleEmail(emailFrom, emailTo,
-                subject, notification.TextContent, notification.HtmlContent);
+            SendGridMessage msg = MailHelper.CreateSingleEmail(emailFrom,
+                                                               emailTo,
+                                                               subject,
+                                                               notification.TextContent,
+                                                               notification.HtmlContent);
             Mock<ISendGridClient> sendgridMock = new Mock<ISendGridClient>();
             sendgridMock.Setup(x => x.SendEmailAsync(It.Is<SendGridMessage>(x => x.From == emailFrom &&
-                x.Personalizations.First().Tos.First() == emailTo),
-                It.IsAny<CancellationToken>())).Verifiable();
+                                                                                x.Personalizations.First()
+                                                                                    .Tos.First() ==
+                                                                                emailTo),
+                                                     It.IsAny<CancellationToken>()))
+                        .Verifiable();
 
             EmailSender emailSender = new EmailSender(sendgridMock.Object, emailFromString);
 
@@ -108,7 +140,7 @@ namespace NotificationSystem.Tests
         {
             // Arrange
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
             string emailFromString = "test@gmail.com";
             EmailSender emailSender = new EmailSender(null, emailFromString);
 
@@ -125,7 +157,7 @@ namespace NotificationSystem.Tests
         {
             // Arrange
             EmailNotification notification = new EmailNotification("", "plain text content");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
             string emailFromString = "test@gmail.com";
             EmailSender emailSender = new EmailSender(null, emailFromString);
 
@@ -135,7 +167,6 @@ namespace NotificationSystem.Tests
 
             // Assert
             Assert.AreEqual(false, result);
-
         }
 
         [Test]
@@ -143,7 +174,7 @@ namespace NotificationSystem.Tests
         {
             // Arrange
             EmailNotification notification = new EmailNotification("test@gmail.com", "");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
             string emailFromString = "test@gmail.com";
             EmailSender emailSender = new EmailSender(null, emailFromString);
 
@@ -155,23 +186,25 @@ namespace NotificationSystem.Tests
             Assert.AreEqual(false, result);
         }
 
-       
-         // Valid SendGrid API key should be set in NotificationSystem/appsettings.Development.json or
-         // as an environmental variable with key App__SendGrid__ApiKey for this test to pass
+
+        // Valid SendGrid API key should be set in NotificationSystem/appsettings.Development.json or
+        // as an environmental variable with key App__SendGrid__ApiKey for this test to pass
         [Test]
         public void EmailSending_WithValidApiKey_ValidEmail()
         {
             // Arrange
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
 
-            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
+            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile(jsonConfig, true, true)
-                .AddEnvironmentVariables()
-                .Build();
+                                           .AddJsonFile(jsonConfig, true, true)
+                                           .AddEnvironmentVariables()
+                                           .Build();
 
-            Config config = configuration.GetSection("App").Get<Config>();
+            Config config = configuration.GetSection("App")
+                                         .Get<Config>();
             SendGridClient sendGridClient = new SendGridClient(config.SendGrid.ApiKey);
 
             // Act
@@ -179,7 +212,9 @@ namespace NotificationSystem.Tests
             sender.ParsePayload(payload);
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.OK, sender.ExecuteTask().StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK,
+                            sender.ExecuteTask()
+                                  .StatusCode);
         }
 
         [Test]
@@ -187,15 +222,17 @@ namespace NotificationSystem.Tests
         {
             // Arrange
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
 
-            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
+            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile(jsonConfig, true, true)
-                .AddEnvironmentVariables()
-                .Build();
+                                           .AddJsonFile(jsonConfig, true, true)
+                                           .AddEnvironmentVariables()
+                                           .Build();
 
-            Config config = configuration.GetSection("App").Get<Config>();
+            Config config = configuration.GetSection("App")
+                                         .Get<Config>();
 
             SendGridClient sendGridClient = new SendGridClient("test");
 
@@ -204,7 +241,9 @@ namespace NotificationSystem.Tests
             sender.ParsePayload(payload);
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized, sender.ExecuteTask().StatusCode);
+            Assert.AreEqual(HttpStatusCode.Unauthorized,
+                            sender.ExecuteTask()
+                                  .StatusCode);
         }
 
         // Valid SendGrid API key should be set in NotificationSystem/appsettings.Development.json or
@@ -214,15 +253,17 @@ namespace NotificationSystem.Tests
         {
             // Arrange
             EmailNotification notification = new EmailNotification("example.com", "plain text content");
-            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(notification);
+            string payload = JsonConvert.SerializeObject(notification);
 
-            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
+            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile(jsonConfig, true, true)
-                .AddEnvironmentVariables()
-                .Build();
+                                           .AddJsonFile(jsonConfig, true, true)
+                                           .AddEnvironmentVariables()
+                                           .Build();
 
-            Config config = configuration.GetSection("App").Get<Config>();
+            Config config = configuration.GetSection("App")
+                                         .Get<Config>();
 
             SendGridClient sendGridClient = new SendGridClient(config.SendGrid.ApiKey);
 
@@ -231,7 +272,11 @@ namespace NotificationSystem.Tests
             sender.ParsePayload(payload);
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest, sender.ExecuteTask().StatusCode);
+            Assert.AreEqual(HttpStatusCode.BadRequest,
+                            sender.ExecuteTask()
+                                  .StatusCode);
         }
+
     }
+
 }

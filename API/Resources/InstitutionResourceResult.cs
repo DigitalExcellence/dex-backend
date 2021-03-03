@@ -19,13 +19,13 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// Resource Result of the Institution model
+    ///     Resource Result of the Institution model
     /// </summary>
     public class InstitutionResourceResult : InstitutionResource
     {
 
         /// <summary>
-        /// Gets or sets a the id of the institution.
+        ///     Gets or sets a the id of the institution.
         /// </summary>
         public int Id { get; set; }
 

@@ -37,7 +37,7 @@ namespace Models.Defaults
         public class Path
         {
 
-            public static string filePath;
+            public static string FilePath;
 
         }
 
@@ -51,6 +51,7 @@ namespace Models.Defaults
             public const string RegisteredUser = "RegisteredUser";
             public const string PrUser = "PrUser";
             public const string Administrator = "Administrator";
+            public const string Alumni = "Alumni";
             public const string DataOfficer = "DataOfficer";
 
         }
@@ -64,7 +65,7 @@ namespace Models.Defaults
             public const string ApiDataRead = Scopes.ProjectRead + " " + Scopes.UserRead;
 
             [Description("This scope category gives write access to the entire API namespace")]
-            public const string ApiDataWrite = Scopes.ProjectWrite + " " + Scopes.UserWrite;
+            public const string ApiDataWrite = Scopes.AdminProjectWrite + " " + Scopes.UserWrite;
 
         }
 
@@ -74,7 +75,7 @@ namespace Models.Defaults
             [Description("This scope gives read access to the project namespace")]
             public const string ProjectRead = "project:read";
 
-            [Description("This scope gives write access to the project namespace")]
+            [Description("This scope gives read access to the project namespace")]
             public const string ProjectWrite = "project:write";
 
             [Description("This scope gives read access to the user namespace")]
@@ -122,8 +123,17 @@ namespace Models.Defaults
             [Description("This scope gives write access to the file namespace")]
             public const string FileWrite = "file:write";
 
+            [Description("This scope gives write access to the datasource namespace")]
+            public const string DataSourceWrite = "datasource:write";
+
             [Description("This scope gives write access to the Call To Action option namespace")]
             public const string CallToActionOptionWrite = "callToAction:write";
+
+            [Description("This scope gives write access to the user task namescape.")]
+            public const string UserTaskWrite = "userTask:write";
+
+            [Description("This scope gives write access to the project namespace")]
+            public const string AdminProjectWrite = "adminproject:write";
 
         }
 

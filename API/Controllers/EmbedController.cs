@@ -33,29 +33,34 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to the embedded projects, for example creating, retrieving or deleting.
+    ///     This class is responsible for handling HTTP requests that are related
+    ///     to the embedded projects, for example creating, retrieving or deleting.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
     public class EmbedController : ControllerBase
     {
+
+        private readonly IAuthorizationHelper authorizationHelper;
         private readonly IEmbedService embedService;
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
         private readonly IUserService userService;
-        private readonly IAuthorizationHelper authorizationHelper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EmbedController"/> class
+        ///     Initializes a new instance of the <see cref="EmbedController" /> class
         /// </summary>
         /// <param name="embedService">The embed service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to the resource results.</param>
         /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
         /// <param name="userService">The user service which is used to communicate with the logic layer.</param>
-        /// <param name="authorizationHelper">The authorization helper which is used to communicate with the authorization helper class.</param>
+        /// <param name="authorizationHelper">
+        ///     The authorization helper which is used to communicate with the authorization helper
+        ///     class.
+        /// </param>
         public EmbedController(IEmbedService embedService,
                                IMapper mapper,
                                IProjectService projectService,
@@ -70,7 +75,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all embedded projects.
+        ///     This method is responsible for retrieving all embedded projects.
         /// </summary>
         /// <returns>This method returns a list of embedded projects resource result.</returns>
         /// <response code="200">This endpoint returns a list with embedded projects.</response>
@@ -79,20 +84,23 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
-            IEnumerable<EmbeddedProject> embeddedProjects= await embedService.GetEmbeddedProjectsAsync();
+            IEnumerable<EmbeddedProject> embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
 
-            return Ok(mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
+            return Ok(
+                mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
         }
 
         /// <summary>
-        /// This method is responsible for retrieving a single embedded project.
+        ///     This method is responsible for retrieving a single embedded project.
         /// </summary>
         /// <param name="guid">The unique identifier which is used for searching the embedded project.</param>
         /// <returns>This method returns the project resource result.</returns>
         /// <response code="200">This endpoint returns an embedded project with the specified guid.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the guid is not specified.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no project could be
-        /// found with the specified guid.</response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when no project could be
+        ///     found with the specified guid.
+        /// </response>
         [HttpGet("{guid}")]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -102,11 +110,11 @@ namespace API.Controllers
             if(string.IsNullOrEmpty(guid))
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "No Guid specified.",
-                     Detail = "There was no guid specified.",
-                     Instance = "DA33DBE1-55DC-4574-B65F-C7A76A7309CF"
-                 };
+                                         {
+                                             Title = "No Guid specified.",
+                                             Detail = "There was no guid specified.",
+                                             Instance = "DA33DBE1-55DC-4574-B65F-C7A76A7309CF"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -114,29 +122,30 @@ namespace API.Controllers
             try
             {
                 validGuid = new Guid(guid);
-            }
-            catch(FormatException e)
+            } catch(FormatException e)
             {
-                Log.Logger.Error(e,"Guid format error");
+                Log.Logger.Error(e, "Guid format error");
 
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "The given guid was not a valid guid.",
-                     Detail = "The format of the guid was not valid, see  https://github.com/DigitalExcellence/dex-backend/wiki/Specific-error-details for a detailed explanation.",
-                     Instance = "DA33DBE1-55DC-4574-B62F-C7B76A7309CF"
-                 };
+                                         {
+                                             Title = "The given guid was not a valid guid.",
+                                             Detail =
+                                                 "The format of the guid was not valid, see  https://github.com/DigitalExcellence/dex-backend/wiki/Specific-error-details for a detailed explanation.",
+                                             Instance = "DA33DBE1-55DC-4574-B62F-C7B76A7309CF"
+                                         };
                 return NotFound(problem);
             }
 
-            EmbeddedProject embeddedProject = await embedService.FindAsync(validGuid).ConfigureAwait(false);
+            EmbeddedProject embeddedProject = await embedService.FindAsync(validGuid)
+                                                                .ConfigureAwait(false);
             if(embeddedProject == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "No Embedded Project found.",
-                    Detail = "There is no embedded project with this GUID.",
-                    Instance = "DA33DBE1-55DC-4574-B62F-C7A76A7309CF"
-                };
+                                         {
+                                             Title = "No Embedded Project found.",
+                                             Detail = "There is no embedded project with this GUID.",
+                                             Instance = "DA33DBE1-55DC-4574-B62F-C7A76A7309CF"
+                                         };
                 return NotFound(problem);
             }
             Project project = await projectService.FindWithUserAndCollaboratorsAsync(embeddedProject.ProjectId);
@@ -144,15 +153,19 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for creating an embedded project.
+        ///     This method is responsible for creating an embedded project.
         /// </summary>
         /// <param name="embedResource">The embed resource which is used to create an embedded project</param>
         /// <returns>This method return the embedded project resource result.</returns>
         /// <response code="201">This endpoint returns the created embedded project.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the specified
-        /// resource is invalid or the project could not be saved to the database.</response>
-        /// <response code="401">The 401 Unauthorized status code is returned when the user
-        /// is not allowed to create an embed project.</response>
+        /// <response code="400">
+        ///     The 400 Bad Request status code is returned when the specified
+        ///     resource is invalid or the project could not be saved to the database.
+        /// </response>
+        /// <response code="401">
+        ///     The 401 Unauthorized status code is returned when the user
+        ///     is not allowed to create an embed project.
+        /// </response>
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(EmbeddedProjectResourceResult), (int) HttpStatusCode.Created)]
@@ -163,11 +176,11 @@ namespace API.Controllers
             if(embedResource == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "the embed resource is not valid.",
-                    Detail = "The embed resource is null.",
-                    Instance = "48C4A6DD-30AD-434F-BE98-694AA9F80140"
-                };
+                                         {
+                                             Title = "the embed resource is not valid.",
+                                             Detail = "The embed resource is null.",
+                                             Instance = "48C4A6DD-30AD-434F-BE98-694AA9F80140"
+                                         };
                 return BadRequest(problem);
             }
             EmbeddedProject embeddedProject = mapper.Map<EmbeddedProjectResource, EmbeddedProject>(embedResource);
@@ -176,11 +189,11 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Project does not exist.",
-                    Detail = "There is no project with this project ID.",
-                    Instance = "644FE34C-FC98-4BE9-8BB7-D0773409F636"
-                };
+                                         {
+                                             Title = "Project does not exist.",
+                                             Detail = "There is no project with this project ID.",
+                                             Instance = "644FE34C-FC98-4BE9-8BB7-D0773409F636"
+                                         };
                 return BadRequest(problem);
             }
 
@@ -191,11 +204,12 @@ namespace API.Controllers
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "User is not allowed to create an embed project.",
-                    Detail = "The user does not own the project and does not have enough privileges to add an embed project.",
-                    Instance = "D6E83BEC-D9FA-4C86-9FA7-7D74DE0F5B23"
-                };
+                                         {
+                                             Title = "User is not allowed to create an embed project.",
+                                             Detail =
+                                                 "The user does not own the project and does not have enough privileges to add an embed project.",
+                                             Instance = "D6E83BEC-D9FA-4C86-9FA7-7D74DE0F5B23"
+                                         };
                 return Unauthorized(problem);
             }
 
@@ -214,31 +228,36 @@ namespace API.Controllers
             {
                 embedService.Add(embeddedProject);
                 embedService.Save();
-                return Created(nameof(CreateEmbeddedProject), mapper.Map<EmbeddedProject, EmbeddedProjectResourceResult>(embeddedProject));
+                return Created(nameof(CreateEmbeddedProject),
+                               mapper.Map<EmbeddedProject, EmbeddedProjectResourceResult>(embeddedProject));
             } catch(DbUpdateException e)
             {
-                Log.Logger.Error(e,"Database exception");
+                Log.Logger.Error(e, "Database exception");
 
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Could not create the Embedded project.",
-                    Detail = "The database failed to save the embed project.",
-                    Instance = "D481A8DD-B507-4AC5-A2CB-16EBEF758097"
-                };
+                                         {
+                                             Title = "Could not create the Embedded project.",
+                                             Detail = "The database failed to save the embed project.",
+                                             Instance = "D481A8DD-B507-4AC5-A2CB-16EBEF758097"
+                                         };
                 return BadRequest(problem);
             }
         }
 
         /// <summary>
-        /// This method is responsible for deleting the embedded project.
+        ///     This method is responsible for deleting the embedded project.
         /// </summary>
         /// <param name="guid">The unique identifier which is used for searching the embedded project.</param>
         /// <returns>This method returns status code 200.</returns>
         /// <response code="200">This endpoint returns status code 200. The embedded project is deleted.</response>
-        /// <response code="401">The 401 Unauthorized status code is returned when the user
-        /// is not allowed to delete the embedded project .</response>
-        /// <response code="404">The 404 Not Found status code is returned when the embedded
-        /// project could not be found with the specified guid.</response>
+        /// <response code="401">
+        ///     The 401 Unauthorized status code is returned when the user
+        ///     is not allowed to delete the embedded project .
+        /// </response>
+        /// <response code="404">
+        ///     The 404 Not Found status code is returned when the embedded
+        ///     project could not be found with the specified guid.
+        /// </response>
         [HttpDelete("{guid}")]
         [Authorize]
         [ProducesResponseType((int) HttpStatusCode.OK)]
@@ -247,14 +266,14 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteEmbeddedProject(string guid)
         {
             EmbeddedProject embeddedProject = await embedService.FindAsync(new Guid(guid));
-            if( embeddedProject == null)
+            if(embeddedProject == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Embedded project not found.",
-                    Detail = "There was no embedded project found with this GUID.",
-                    Instance = "35730158-1DED-4767-9C70-253C7A975715"
-                };
+                                         {
+                                             Title = "Embedded project not found.",
+                                             Detail = "There was no embedded project found with this GUID.",
+                                             Instance = "35730158-1DED-4767-9C70-253C7A975715"
+                                         };
                 return NotFound(problem);
             }
 
@@ -268,11 +287,12 @@ namespace API.Controllers
             if(!(embeddedProject.User.IdentityId == identity || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "User is not allowed to delete the embedded project.",
-                    Detail = "The user does not own the project and does not have enough privileges to delete an embed project.",
-                    Instance = "35730158-1DED-4767-9C70-253C7A975715"
-                };
+                                         {
+                                             Title = "User is not allowed to delete the embedded project.",
+                                             Detail =
+                                                 "The user does not own the project and does not have enough privileges to delete an embed project.",
+                                             Instance = "35730158-1DED-4767-9C70-253C7A975715"
+                                         };
                 return Unauthorized(problem);
             }
 
@@ -280,5 +300,7 @@ namespace API.Controllers
             embedService.Save();
             return Ok();
         }
+
     }
+
 }

@@ -19,20 +19,20 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// The view model of a call to action.
+    ///     The view model of a call to action.
     /// </summary>
     public class CallToActionResource
     {
 
         /// <summary>
-        /// Gets or sets a value for the OptionValue property.
-        /// For example, this would be the Title on the call to action button.
+        ///     Gets or sets a value for the OptionValue property.
+        ///     For example, this would be the Title on the call to action button.
         /// </summary>
         public string OptionValue { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Value property.
-        /// For example, this would be the redirect url for the call to action button.
+        ///     Gets or sets a value for the Value property.
+        ///     For example, this would be the redirect url for the call to action button.
         /// </summary>
         public string Value { get; set; }
 

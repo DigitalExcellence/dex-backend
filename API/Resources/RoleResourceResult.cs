@@ -15,19 +15,20 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
-using System.Collections.Generic;
-
 namespace API.Resources
 {
+
     /// <summary>
     ///     The view model result of role
     /// </summary>
     public class RoleResourceResult : RoleResource
     {
+
         /// <summary>
         ///     Get or Set the Id of a Role
         /// </summary>
         public int Id { get; set; }
+
     }
+
 }

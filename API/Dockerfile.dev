@@ -23,4 +23,4 @@ COPY --from=build-env /app/API/bin/Debug/netcoreapp3.1 .
 COPY --from=build-env /app/API/Uploads/Images ./Uploads/Images
 COPY --from=build-env /app/dex-api.pfx .
 
-ENTRYPOINT ["dotnet", "1_API.dll", "--environment=Development"]
+ENTRYPOINT ["dotnet", "01_API.dll", "--environment=Development"]

@@ -26,17 +26,19 @@ using System.Linq;
 
 namespace Repositories.Tests.DataSources
 {
+
     /// <summary>
-    /// Attribute to generate highlights
+    ///     Attribute to generate highlights
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public class HighlightDataSourceAttribute : Attribute, IParameterDataSource
     {
+
+        private readonly int amountToGenerate;
         private readonly IFakeDataGenerator<Highlight> fakeDataGenerator;
-        private readonly int amountToGenerate = 0;
 
         /// <summary>
-        /// Initializes highlightDataSourceAttribute
+        ///     Initializes highlightDataSourceAttribute
         /// </summary>
         public HighlightDataSourceAttribute()
         {
@@ -44,8 +46,8 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Initializes highlightDataSourceAttribute
-        /// and setting the amount of highlights to be generated
+        ///     Initializes highlightDataSourceAttribute
+        ///     and setting the amount of highlights to be generated
         /// </summary>
         /// <param name="amount">Amount of highlights to be produced.</param>
         public HighlightDataSourceAttribute(int amount) : this()
@@ -54,7 +56,7 @@ namespace Repositories.Tests.DataSources
         }
 
         /// <summary>
-        /// Generate the data and return it
+        ///     Generate the data and return it
         /// </summary>
         /// <param name="parameter">Extra parameters given in the attribute, not in use but required due to inheritance</param>
         /// <returns>The generated data</returns>
@@ -62,10 +64,13 @@ namespace Repositories.Tests.DataSources
         {
             if(amountToGenerate <= 1)
             {
-                return new[] { fakeDataGenerator.Generate() };
+                return new[] {fakeDataGenerator.Generate()};
             }
-            List<Highlight> highlights = fakeDataGenerator.GenerateRange(amountToGenerate).ToList();
-            return new[] { highlights };
+            List<Highlight> highlights = fakeDataGenerator.GenerateRange(amountToGenerate)
+                                                          .ToList();
+            return new[] {highlights};
         }
+
     }
+
 }

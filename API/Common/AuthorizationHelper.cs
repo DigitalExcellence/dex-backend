@@ -21,8 +21,57 @@ using System.Threading.Tasks;
 
 namespace API.Common
 {
+
     /// <summary>
-    /// The implementation for the authorization helper.
+    ///     The interface for the authorization helper
+    /// </summary>
+    public interface IAuthorizationHelper
+    {
+
+        /// <summary>
+        ///     This method checks if a user has the correct scope to use the endpoint.
+        ///     This method checks for a normal scope and the data officer scope within the
+        ///     same institution.
+        /// </summary>
+        /// <param name="loggedInUser">The user model of the logged in user.</param>
+        /// <param name="scope">The required scope for accessing this endpoint.</param>
+        /// <param name="dataOfficerScope">
+        ///     The required scope for accessing this
+        ///     endpoint for data officers within the same institution.
+        /// </param>
+        /// <param name="propertyOfUserId">
+        ///     The id of the user owner of the property
+        ///     which the logged in user wants to access.
+        /// </param>
+        /// <returns>bool: true if the user is allowed, false if the user is not allowed.</returns>
+        public Task<bool> UserIsAllowed(User loggedInUser,
+                                        string scope,
+                                        string dataOfficerScope,
+                                        int propertyOfUserId);
+
+        /// <summary>
+        ///     This method checks if a user has the same institution, and both should not have null. It
+        ///     also checks if the user has the correct institution scope that allows changes in the
+        ///     same institution.
+        /// </summary>
+        /// <param name="loggedInUser">The user model of the logged in user.</param>
+        /// <param name="institutionScope">
+        ///     The required scope for accessing this
+        ///     endpoint for data officers within the same institution.
+        /// </param>
+        /// <param name="propertyOfUserId">
+        ///     The id of the user owner of the property
+        ///     which the logged in user wants to access.
+        /// </param>
+        /// <returns>Bool: true if the user is allowed, false if the user is not allowed.</returns>
+        Task<bool> SameInstitutionAndInstitutionScope(User loggedInUser,
+                                                      string institutionScope,
+                                                      int propertyOfUserId);
+
+    }
+
+    /// <summary>
+    ///     The implementation for the authorization helper.
     /// </summary>
     public class AuthorizationHelper : IAuthorizationHelper
     {
@@ -30,7 +79,7 @@ namespace API.Common
         private readonly IUserService userService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthorizationHelper"/> class.
+        ///     Initializes a new instance of the <see cref="AuthorizationHelper" /> class.
         /// </summary>
         /// <param name="userService">The user service for communicating with the logic layer.</param>
         public AuthorizationHelper(IUserService userService)
@@ -39,18 +88,25 @@ namespace API.Common
         }
 
         /// <summary>
-        /// This method checks if a user has the correct scope to use the endpoint.
-        /// This method checks for a normal scope and the data officer scope within the
-        /// same institution.
+        ///     This method checks if a user has the correct scope to use the endpoint.
+        ///     This method checks for a normal scope and the data officer scope within the
+        ///     same institution.
         /// </summary>
         /// <param name="loggedInUser">The user model of the logged in user.</param>
         /// <param name="scope">The required scope for accessing this endpoint.</param>
-        /// <param name="dataOfficerScope">The required scope for accessing this
-        /// endpoint for data officers within the same institution.</param>
-        /// <param name="propertyOfUserId">The id of the user owner of the property
-        /// which the logged in user wants to access.</param>
+        /// <param name="dataOfficerScope">
+        ///     The required scope for accessing this
+        ///     endpoint for data officers within the same institution.
+        /// </param>
+        /// <param name="propertyOfUserId">
+        ///     The id of the user owner of the property
+        ///     which the logged in user wants to access.
+        /// </param>
         /// <returns>bool: true if the user is allowed, false if the user is not allowed.</returns>
-        public async Task<bool> UserIsAllowed(User loggedInUser, string scope, string dataOfficerScope, int propertyOfUserId)
+        public async Task<bool> UserIsAllowed(User loggedInUser,
+                                              string scope,
+                                              string dataOfficerScope,
+                                              int propertyOfUserId)
         {
             bool hasUserWriteScope = userService.UserHasScope(loggedInUser.IdentityId, scope);
             bool hasCorrectDataOfficerRights =
@@ -60,17 +116,23 @@ namespace API.Common
         }
 
         /// <summary>
-        /// This method checks if a user has the same institution, and both should not have null. It
-        /// also checks if the user has the correct institution scope that allows changes in the
-        /// same institution.
+        ///     This method checks if a user has the same institution, and both should not have null. It
+        ///     also checks if the user has the correct institution scope that allows changes in the
+        ///     same institution.
         /// </summary>
         /// <param name="loggedInUser">The user model of the logged in user.</param>
-        /// <param name="institutionScope">The required scope for accessing this
-        /// endpoint for data officers within the same institution.</param>
-        /// <param name="propertyOfUserId">The id of the user owner of the property
-        /// which the logged in user wants to access.</param>
+        /// <param name="institutionScope">
+        ///     The required scope for accessing this
+        ///     endpoint for data officers within the same institution.
+        /// </param>
+        /// <param name="propertyOfUserId">
+        ///     The id of the user owner of the property
+        ///     which the logged in user wants to access.
+        /// </param>
         /// <returns>Bool: true if the user is allowed, false if the user is not allowed.</returns>
-        public async Task<bool> SameInstitutionAndInstitutionScope(User loggedInUser, string institutionScope, int propertyOfUserId)
+        public async Task<bool> SameInstitutionAndInstitutionScope(User loggedInUser,
+                                                                   string institutionScope,
+                                                                   int propertyOfUserId)
         {
             return userService.UserHasScope(loggedInUser.IdentityId, institutionScope) &&
                    await userService.HasSameInstitution(loggedInUser.Id, propertyOfUserId);
