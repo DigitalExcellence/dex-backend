@@ -18,6 +18,7 @@
 
 using Models;
 using NUnit.Framework.Interfaces;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataGenerators.Base;
 using System;
 using System.Collections;
@@ -48,7 +49,7 @@ namespace Repositories.Tests.DataSources
 
         /// <summary>
         ///     Initializes WizardPageDataSourceAttribute
-        ///     and setting the amount of users to be generated
+        ///     and setting the amount of wizard pages to be generated
         /// </summary>
         public WizardPageDataSource(int amount)
             : this()
