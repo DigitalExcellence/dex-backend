@@ -30,8 +30,9 @@ using System.Threading.Tasks;
 
 namespace Services.Tests
 {
+
     /// <summary>
-    /// InstitutionServiceTest
+    ///     InstitutionServiceTest
     /// </summary>
     /// <seealso cref="IInstitutionRepository" />
     [TestFixture]
@@ -39,20 +40,21 @@ namespace Services.Tests
     {
 
         /// <summary>
-        /// Gets the service.
+        ///     Gets the service.
         /// </summary>
         /// <value>
-        /// The service.
+        ///     The service.
         /// </value>
         protected new IInstitutionService Service => base.Service;
 
         /// <summary>
-        /// This method tests the GetInstitutionsAsync method in a good flow.
+        ///     This method tests the GetInstitutionsAsync method in a good flow.
         /// </summary>
         /// <param name="institutions">The institutions stored generated to mock the institutions from the repository.</param>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
-        public async Task GetInstitutionsAsync_GoodFlow([InstitutionDataSource(30)]IEnumerable<Institution> institutions)
+        public async Task GetInstitutionsAsync_GoodFlow(
+            [InstitutionDataSource(30)] IEnumerable<Institution> institutions)
         {
             // Arrange
             RepositoryMock
@@ -64,13 +66,17 @@ namespace Services.Tests
             Action act = () => RepositoryMock.Verify(repository => repository.GetInstitutionsAsync(), Times.Once);
 
             // Assert
-            act.Should().NotThrow();
-            actualInstitutions.Should().Contain(institutions);
-            actualInstitutions.Count().Should().Be(30);
+            act.Should()
+               .NotThrow();
+            actualInstitutions.Should()
+                              .Contain(institutions);
+            actualInstitutions.Count()
+                              .Should()
+                              .Be(30);
         }
 
         /// <summary>
-        /// This method tests the GetInstitutionsAsync method whenever there are no institutions stored.
+        ///     This method tests the GetInstitutionsAsync method whenever there are no institutions stored.
         /// </summary>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
@@ -86,17 +92,20 @@ namespace Services.Tests
             Action act = () => RepositoryMock.Verify(repository => repository.GetInstitutionsAsync(), Times.Once);
 
             // Assert
-            actualInstitutions.Should().BeEmpty();
-            act.Should().NotThrow();
+            actualInstitutions.Should()
+                              .BeEmpty();
+            act.Should()
+               .NotThrow();
         }
 
         /// <summary>
-        /// This method tests the GetInstitutionByInstitutionIdentityId method whenever it returns an institution.
+        ///     This method tests the GetInstitutionByInstitutionIdentityId method whenever it returns an institution.
         /// </summary>
         /// <param name="institution">The institution, generated to mock the institution found from the repository.</param>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
-        public async Task GetInstitutionByInstitutionIdentityId_ExistingIdentityId([InstitutionDataSource(1)] Institution institution)
+        public async Task GetInstitutionByInstitutionIdentityId_ExistingIdentityId(
+            [InstitutionDataSource(1)] Institution institution)
         {
             // Arrange
             RepositoryMock
@@ -105,10 +114,13 @@ namespace Services.Tests
 
             // Act
             Institution actualInstitution = await Service.GetInstitutionByInstitutionIdentityId(string.Empty);
-            Action act = () => RepositoryMock.Verify(repository => repository.GetInstitutionByInstitutionIdentityId(string.Empty), Times.Once);
+            Action act = () =>
+                RepositoryMock.Verify(repository => repository.GetInstitutionByInstitutionIdentityId(string.Empty),
+                                      Times.Once);
 
             // Assert
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
             actualInstitution.Should()
                              .Be(institution);
             actualInstitution.Should()
@@ -116,7 +128,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// This method tests the GetInstitutionByInstitutionIdentityId method whenever it can't find an institution.
+        ///     This method tests the GetInstitutionByInstitutionIdentityId method whenever it can't find an institution.
         /// </summary>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
@@ -125,15 +137,19 @@ namespace Services.Tests
             // Arrange
             RepositoryMock
                 .Setup(repository => repository.GetInstitutionByInstitutionIdentityId(It.IsAny<string>()))
-                .ReturnsAsync((Institution)null);
+                .ReturnsAsync((Institution) null);
 
             // Act
             Institution actualInstitution = await Service.GetInstitutionByInstitutionIdentityId(string.Empty);
-            Action act = () => RepositoryMock.Verify(repository => repository.GetInstitutionByInstitutionIdentityId(string.Empty), Times.Once);
+            Action act = () =>
+                RepositoryMock.Verify(repository => repository.GetInstitutionByInstitutionIdentityId(string.Empty),
+                                      Times.Once);
 
             // Assert
-            actualInstitution.Should().BeNull();
-            act.Should().NotThrow();
+            actualInstitution.Should()
+                             .BeNull();
+            act.Should()
+               .NotThrow();
         }
 
     }

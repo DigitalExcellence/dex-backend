@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MessageBrokerPublisher\MessageBrokerPublisher.csproj" />
+    <ProjectReference Include="..\MessageBrokerPublisher\09_MessageBrokerPublisher.csproj" />
   </ItemGroup>
 
 </Project>

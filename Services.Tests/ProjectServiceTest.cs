@@ -27,236 +27,296 @@ using System.Threading.Tasks;
 
 namespace Services.Tests
 {
+
     [TestFixture]
     public class ProjectServiceTest : ServiceTest<Project, ProjectService, IProjectRepository>
     {
-        protected new IProjectService Service => (IProjectService)base.Service;
+
+        protected new IProjectService Service => base.Service;
 
 
         /// <summary>
-        /// Test whether the repository method is called and no changes have been applied to the object
+        ///     Test whether the repository method is called and no changes have been applied to the object
         /// </summary>
         /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
-        public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
+        public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
-            RepositoryMock.Setup(
-                repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, null))
-                .Returns(
-                    Task.FromResult(projects)
-                );
+            RepositoryMock.Setup(repository =>
+                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                         null,
+                                         null,
+                                         project => project.Updated,
+                                         true,
+                                         null))
+                          .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
-                                                                                 {
-                                                                                     Page = null,
-                                                                                     AmountOnPage = null,
-                                                                                     Highlighted = null,
-                                                                                     SortBy = null,
-                                                                                     SortDirection = "asc"
-                                                                                 });
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+                                                  {
+                                                      Page = null,
+                                                      AmountOnPage = null,
+                                                      Highlighted = null,
+                                                      SortBy = null,
+                                                      SortDirection = "asc"
+                                                  });
 
-            Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, null), Times.Once);
+            Assert.DoesNotThrow(() =>
+            {
+                RepositoryMock.Verify(repository =>
+                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                              null,
+                                              null,
+                                              project => project.Updated,
+                                              true,
+                                              null),
+                                      Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
         }
 
         /// <summary>
-        /// Test whether the repository method is called with the orderBy created parameter and ordering ascending and no changes have been applied to the projects
+        ///     Test whether the repository method is called with the orderBy created parameter and ordering ascending and no
+        ///     changes have been applied to the projects
         /// </summary>
         /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
-        public async Task GetAllOrderedByCreatedAscendingAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
+        public async Task GetAllOrderedByCreatedAscendingAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
-            RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Created, true, null))
-                          .Returns(
-                              Task.FromResult(projects)
-                          );
+            RepositoryMock.Setup(repository =>
+                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                         null,
+                                         null,
+                                         project => project.Created,
+                                         true,
+                                         null))
+                          .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
-                                                                                 {
-                                                                                     Page = null,
-                                                                                     AmountOnPage = null,
-                                                                                     Highlighted = null,
-                                                                                     SortBy = "created",
-                                                                                     SortDirection = "asc"
-                                                                                 });
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+                                                  {
+                                                      Page = null,
+                                                      AmountOnPage = null,
+                                                      Highlighted = null,
+                                                      SortBy = "created",
+                                                      SortDirection = "asc"
+                                                  });
 
-            Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Created, true, null), Times.Once);
+            Assert.DoesNotThrow(() =>
+            {
+                RepositoryMock.Verify(repository =>
+                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                              null,
+                                              null,
+                                              project => project.Created,
+                                              true,
+                                              null),
+                                      Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
         }
 
         /// <summary>
-        /// Test whether the repository method is called with the orderBy name parameter and ordering descending and no changes have been applied to the projects
+        ///     Test whether the repository method is called with the orderBy name parameter and ordering descending and no changes
+        ///     have been applied to the projects
         /// </summary>
         /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
-        public async Task GetAllOrderedByNameDescendingAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
+        public async Task GetAllOrderedByNameDescendingAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
-            RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Name, false, null))
-                          .Returns(
-                              Task.FromResult(projects)
-                          );
+            RepositoryMock.Setup(repository =>
+                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                         null,
+                                         null,
+                                         project => project.Name,
+                                         false,
+                                         null))
+                          .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
-                                                                                 {
-                                                                                     Page = null,
-                                                                                     AmountOnPage = null,
-                                                                                     Highlighted = null,
-                                                                                     SortBy = "name",
-                                                                                     SortDirection = "desc"
-                                                                                 });
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+                                                  {
+                                                      Page = null,
+                                                      AmountOnPage = null,
+                                                      Highlighted = null,
+                                                      SortBy = "name",
+                                                      SortDirection = "desc"
+                                                  });
 
-            Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Name, false, null), Times.Once);
+            Assert.DoesNotThrow(() =>
+            {
+                RepositoryMock.Verify(repository =>
+                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                              null,
+                                              null,
+                                              project => project.Name,
+                                              false,
+                                              null),
+                                      Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
         }
 
         /// <summary>
-        /// Test whether the repository method is called with the highlighted filter and no changes have been applied to the projects
+        ///     Test whether the repository method is called with the highlighted filter and no changes have been applied to the
+        ///     projects
         /// </summary>
         /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
-        public async Task GetAllHighlightedAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
+        public async Task GetAllHighlightedAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
-            RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, true))
-                          .Returns(
-                              Task.FromResult(projects)
-                          );
+            RepositoryMock.Setup(repository =>
+                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                         null,
+                                         null,
+                                         project => project.Updated,
+                                         true,
+                                         true))
+                          .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
-                                                                                 {
-                                                                                     Page = null,
-                                                                                     AmountOnPage = null,
-                                                                                     Highlighted = true,
-                                                                                     SortBy = null,
-                                                                                     SortDirection = "asc"
-                                                                                 });
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+                                                  {
+                                                      Page = null,
+                                                      AmountOnPage = null,
+                                                      Highlighted = true,
+                                                      SortBy = null,
+                                                      SortDirection = "asc"
+                                                  });
 
-            Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, true), Times.Once);
+            Assert.DoesNotThrow(() =>
+            {
+                RepositoryMock.Verify(repository =>
+                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                              null,
+                                              null,
+                                              project => project.Updated,
+                                              true,
+                                              true),
+                                      Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
         }
 
         /// <summary>
-        /// Test whether the repository method is called with the no highlighted filter and no changes have been applied to the projects
+        ///     Test whether the repository method is called with the no highlighted filter and no changes have been applied to the
+        ///     projects
         /// </summary>
         /// <param name="projects">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
-        public async Task GetAllNoHighlightedAsync_GoodFlow([ProjectDataSource(10)]List<Project> projects)
+        public async Task GetAllNoHighlightedAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
-            RepositoryMock.Setup(
-                              repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, false))
-                          .Returns(
-                              Task.FromResult(projects)
-                          );
+            RepositoryMock.Setup(repository =>
+                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                         null,
+                                         null,
+                                         project => project.Updated,
+                                         true,
+                                         false))
+                          .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams()
-                                                                                 {
-                                                                                     Page = null,
-                                                                                     AmountOnPage = null,
-                                                                                     Highlighted = false,
-                                                                                     SortBy = null,
-                                                                                     SortDirection = "asc"
-                                                                                 });
+            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+                                                  {
+                                                      Page = null,
+                                                      AmountOnPage = null,
+                                                      Highlighted = false,
+                                                      SortBy = null,
+                                                      SortDirection = "asc"
+                                                  });
 
-            Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.GetAllWithUsersAndCollaboratorsAsync(null, null, project => project.Updated, true, false), Times.Once);
+            Assert.DoesNotThrow(() =>
+            {
+                RepositoryMock.Verify(repository =>
+                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                              null,
+                                              null,
+                                              project => project.Updated,
+                                              true,
+                                              false),
+                                      Times.Once);
             });
 
             Assert.AreEqual(projects, retrievedProjects);
         }
 
         /// <summary>
-        /// Test whether the repository method is called and no changes are applied to the object
+        ///     Test whether the repository method is called and no changes are applied to the object
         /// </summary>
         /// <param name="project">The projects which are used as data to test</param>
         /// <returns></returns>
         [Test]
-        public async Task FindWithUserAndCollaboratorsAsync([ProjectDataSource]Project project)
+        public async Task FindWithUserAndCollaboratorsAsync([ProjectDataSource] Project project)
         {
-            RepositoryMock.Setup(
-               repository => repository.FindWithUserAndCollaboratorsAsync(1))
-               .Returns(
-                   Task.FromResult(project)
-               );
+            RepositoryMock.Setup(repository => repository.FindWithUserAndCollaboratorsAsync(1))
+                          .Returns(Task.FromResult(project));
 
             Project retrievedProject = await Service.FindWithUserAndCollaboratorsAsync(1);
 
-            Assert.DoesNotThrow(() => {
-                RepositoryMock.Verify(repository => repository.FindWithUserAndCollaboratorsAsync(1), Times.Once);
+            Assert.DoesNotThrow(() =>
+            {
+                RepositoryMock.Verify(repository => repository.FindWithUserAndCollaboratorsAsync(1),
+                                      Times.Once);
             });
 
             Assert.AreEqual(project, retrievedProject);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddRangeTest_GoodFlow([ProjectDataSource(100)]IEnumerable<Project> entities)
+        public override void AddRangeTest_GoodFlow([ProjectDataSource(100)] IEnumerable<Project> entities)
         {
             base.AddRangeTest_GoodFlow(entities);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddTest_GoodFlow([ProjectDataSource]Project entity)
+        public override void AddTest_GoodFlow([ProjectDataSource] Project entity)
         {
             base.AddTest_GoodFlow(entity);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task GetAll([ProjectDataSource(100)]List<Project> entities)
+        public override Task GetAll([ProjectDataSource(100)] List<Project> entities)
         {
             return base.GetAll(entities);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Remove([ProjectDataSource]Project entity)
+        public override void Remove([ProjectDataSource] Project entity)
         {
             base.Remove(entity);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public Task RemoveAsync()
         {
             return base.RemoveAsync(1);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public override void Save()
         {
             base.Save();
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Update([ProjectDataSource]Project entity)
+        public override void Update([ProjectDataSource] Project entity)
         {
             base.Update(entity);
         }
 
         /// <summary>
-        ///  Test wheter the save method removes unsanitary strings from the description.
+        ///     Test wheter the save method removes unsanitary strings from the description.
         /// </summary>
         [Test]
         public void SaveSanitizationInvalidDescription([ProjectDataSource] Project project)
@@ -271,7 +331,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        ///  Test wheter the save method does not remove sanitary strings from the description.
+        ///     Test wheter the save method does not remove sanitary strings from the description.
         /// </summary>
         [Test]
         public void SaveSanitizationValidDescription([ProjectDataSource] Project project)
@@ -285,7 +345,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        ///  Test wheter the update method removes unsanitary strings from the description.
+        ///     Test wheter the update method removes unsanitary strings from the description.
         /// </summary>
         [Test]
         public void UpdateSanitizationInvalidDescription([ProjectDataSource] Project project)
@@ -300,7 +360,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        ///  Test wheter the update method does not remove sanitary strings from the description.
+        ///     Test wheter the update method does not remove sanitary strings from the description.
         /// </summary>
         [Test]
         public void UpdateSanitizationValidDescription([ProjectDataSource] Project project)
@@ -312,5 +372,7 @@ namespace Services.Tests
 
             Assert.AreEqual(descriptionToSanitize, project.Description);
         }
+
     }
+
 }

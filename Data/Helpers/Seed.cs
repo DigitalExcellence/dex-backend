@@ -23,11 +23,52 @@ using System.Collections.Generic;
 
 namespace Data.Helpers
 {
+
     /// <summary>
     ///     Class for helpers to seed data into the database
     /// </summary>
     public static class Seed
     {
+
+        /// <summary>
+        ///     Temporary method which is meant to update the rolescopes in staging / production after user graduation feature is
+        ///     implemented.
+        /// </summary>
+        /// <returns>List of new rolescopes.</returns>
+        public static List<RoleScope> UpdateRoleScopes()
+        {
+            List<RoleScope> roleScopes = new List<RoleScope>();
+            for(int i = 1; i < 5; i++)
+            {
+                RoleScope roleScope = new RoleScope("ProjectWrite", i)
+                                      {
+                                          RoleId = i
+                                      };
+                roleScopes.Add(roleScope);
+            }
+
+            RoleScope adminRoleScope = new RoleScope("AdminProjectWrite", 4);
+            roleScopes.Add(adminRoleScope);
+
+            return roleScopes;
+        }
+
+        /// <summary>
+        ///     Temporary method which is meant to add the alumni role in staging / production after user graduation feature is
+        ///     implemented.
+        /// </summary>
+        /// <returns>Alumni role.</returns>
+        public static Role SeedAlumniRole()
+        {
+            Role alumniRole = new Role
+                              {
+                                  Name = Defaults.Roles.Alumni
+                              };
+
+            return alumniRole;
+        }
+
+
         /// <summary>
         ///     Seed random users into the database using fake date from Bogus
         /// </summary>
@@ -49,72 +90,89 @@ namespace Data.Helpers
             }
             return users;
         }
+
         /// <summary>
-        /// Seeds the roles.
+        ///     Seeds the roles.
         /// </summary>
         /// <returns>The list of roles that will be seeded.</returns>
         public static List<Role> SeedRoles()
         {
             List<Role> roles = new List<Role>();
-            Role registeredUserRole = new Role()
-            {
-                Name = nameof(Defaults.Roles.RegisteredUser),
-                Scopes = new List<RoleScope>()
-            };
+            Role registeredUserRole = new Role
+                                      {
+                                          Name = nameof(Defaults.Roles.RegisteredUser),
+
+                                          Scopes = new List<RoleScope>
+                                                   {
+                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
+                                                   }
+                                      };
             roles.Add(registeredUserRole);
 
-            Role prRole = new Role()
-            {
-                Name = nameof(Defaults.Roles.PrUser),
-                Scopes = new List<RoleScope>()
-                {
-                    new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
-                    new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
-                    new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
-                }
-            };
+            Role prRole = new Role
+                          {
+                              Name = nameof(Defaults.Roles.PrUser),
+                              Scopes = new List<RoleScope>
+                                       {
+                                           new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
+                                           new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
+                                           new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
+                                           new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
+                                           new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
+                                       }
+                          };
             roles.Add(prRole);
 
             Role dataOfficerRole = new Role
-           {
-               Name = nameof(Defaults.Roles.DataOfficer),
-               Scopes = new List<RoleScope>
-                {
-                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserRead)),
-                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
-                }
-           };
+                                   {
+                                       Name = nameof(Defaults.Roles.DataOfficer),
+                                       Scopes = new List<RoleScope>
+                                                {
+                                                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserRead)),
+                                                    new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
+                                                    new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
+                                                    new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
+                                                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
+                                                }
+                                   };
             roles.Add(dataOfficerRole);
 
-            Role administratorRole = new Role()
-            {
-                Name = nameof(Defaults.Roles.Administrator),
-                Scopes = new List<RoleScope>
-                {
-                    new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.UserWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.UserRead)),
-                    new RoleScope(nameof(Defaults.Scopes.RoleRead)),
-                    new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
-                    new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
-                    new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.InstitutionRead)),
-                    new RoleScope(nameof(Defaults.Scopes.InstitutionWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.FileWrite)),
-                    new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite))
-                }
-            };
+            Role administratorRole = new Role
+                                     {
+                                         Name = nameof(Defaults.Roles.Administrator),
+                                         Scopes = new List<RoleScope>
+                                                  {
+                                                      new RoleScope(nameof(Defaults.Scopes.AdminProjectWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.UserWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.UserRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.RoleRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.InstitutionRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.InstitutionWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.FileWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.DataSourceWrite))
+                                                  }
+                                     };
             roles.Add(administratorRole);
+
+            Role alumniRole = new Role
+                              {
+                                  Name = nameof(Defaults.Roles.Alumni),
+                                  Scopes = new List<RoleScope>()
+                              };
+            roles.Add(alumniRole);
 
             return roles;
         }
+
         /// <summary>
-        /// Seeds the admin user.
+        ///     Seeds the admin user.
         /// </summary>
         /// <param name="roles">The roles.</param>
         /// <returns>Returns the admin user that will be seeded.</returns>
@@ -123,31 +181,33 @@ namespace Data.Helpers
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
 
             User user = new User
-            {
-                Role = adminRole,
-                IdentityId = "88421113",
-                Email = "Administrator@dex.software",
-                Name = "Administrator bob"
-            };
+                        {
+                            Role = adminRole,
+                            IdentityId = "88421113",
+                            Email = "Administrator@dex.software",
+                            Name = "Administrator bob"
+                        };
 
             return user;
         }
+
         /// <summary>
-        /// This method seeds a test institution in the database.
+        ///     This method seeds a test institution in the database.
         /// </summary>
         /// <returns>Returns the institution that will be seeded in the database.</returns>
         public static Institution SeedInstitution()
         {
             Institution institution = new Institution
-              {
-                  Name = "Fontys",
-                  Description = "Description for Fontys",
-                  IdentityId = "https://identity.fhict.nl"
-            };
+                                      {
+                                          Name = "Fontys",
+                                          Description = "Description for Fontys",
+                                          IdentityId = "https://identity.fhict.nl"
+                                      };
             return institution;
         }
+
         /// <summary>
-        /// Seeds the pr user.
+        ///     Seeds the pr user.
         /// </summary>
         /// <param name="roles">The roles.</param>
         /// <returns>Returns the PR user that will be seeded.</returns>
@@ -155,17 +215,18 @@ namespace Data.Helpers
         {
             Role prRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
             User user = new User
-            {
-                IdentityId = "985632147",
-                Email = "Pr@dex.software",
-                Name = "Pr jerry",
-                Role = prRole
-            };
+                        {
+                            IdentityId = "985632147",
+                            Email = "Pr@dex.software",
+                            Name = "Pr jerry",
+                            Role = prRole
+                        };
 
             return user;
         }
+
         /// <summary>
-        /// This method seeds the data officer user.
+        ///     This method seeds the data officer user.
         /// </summary>
         /// <param name="roles">This variable contains the roles that exist.</param>
         /// <returns>This method returns the data officer role that will be seeded.</returns>
@@ -173,13 +234,27 @@ namespace Data.Helpers
         {
             Role dataOfficerRole = roles.Find(role => role.Name == nameof(Defaults.Roles.DataOfficer));
             User user = new User
-            {
-                IdentityId = "954654861",
-                Email = "dataofficer@dex.software",
-                Name = "data officer Sam",
-                Role = dataOfficerRole,
-                InstitutionId = 1
-            };
+                        {
+                            IdentityId = "954654861",
+                            Email = "dataofficer@dex.software",
+                            Name = "data officer Sam",
+                            Role = dataOfficerRole,
+                            InstitutionId = 1
+                        };
+
+            return user;
+        }
+
+        public static User SeedAlumniUser(List<Role> roles)
+        {
+            Role alumniRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Alumni));
+            User user = new User
+                        {
+                            IdentityId = "123456789",
+                            Email = "Alumni@dex.software",
+                            Name = "Alumni test",
+                            Role = alumniRole
+                        };
 
             return user;
         }
@@ -233,8 +308,9 @@ namespace Data.Helpers
             }
             return collaborators;
         }
+
         /// <summary>
-        /// Seeds the highlights.
+        ///     Seeds the highlights.
         /// </summary>
         /// <param name="projects">The projects.</param>
         /// <returns>Returns a list of project highlights that wil be seeded.</returns>
@@ -259,44 +335,46 @@ namespace Data.Helpers
         }
 
         /// <summary>
-        /// This method seeds call to action options.
+        ///     This method seeds call to action options.
         /// </summary>
         /// <returns>Returns a list of call to actions options that can be seeded into the database.</returns>
         public static List<CallToActionOption> SeedCallToActionOptions()
         {
             return new List<CallToActionOption>
-                                                           {
-                                                               new CallToActionOption
-                                                               {
-                                                                   Type = "title",
-                                                                   Value = "Join today"
-                                                               },
-                                                               new CallToActionOption
-                                                               {
-                                                                   Type = "title",
-                                                                   Value = "Provide feedback"
-                                                               },
-                                                               new CallToActionOption
-                                                               {
-                                                                   Type = "title",
-                                                                   Value = "Apply now"
-                                                               },
-                                                               new CallToActionOption
-                                                               {
-                                                                   Type = "title",
-                                                                   Value = "Collaborate with us"
-                                                               },
-                                                               new CallToActionOption
-                                                               {
-                                                                   Type = "title",
-                                                                   Value = "More information"
-                                                               },
-                                                               new CallToActionOption
-                                                               {
-                                                                   Type = "title",
-                                                                   Value = "Get in touch"
-                                                               },
-                                                           };
+                   {
+                       new CallToActionOption
+                       {
+                           Type = "title",
+                           Value = "Join today"
+                       },
+                       new CallToActionOption
+                       {
+                           Type = "title",
+                           Value = "Provide feedback"
+                       },
+                       new CallToActionOption
+                       {
+                           Type = "title",
+                           Value = "Apply now"
+                       },
+                       new CallToActionOption
+                       {
+                           Type = "title",
+                           Value = "Collaborate with us"
+                       },
+                       new CallToActionOption
+                       {
+                           Type = "title",
+                           Value = "More information"
+                       },
+                       new CallToActionOption
+                       {
+                           Type = "title",
+                           Value = "Get in touch"
+                       }
+                   };
         }
+
     }
+
 }

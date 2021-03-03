@@ -17,10 +17,7 @@
 
 using API.Configuration;
 using API.InternalResources;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Models;
 using Models.Defaults;
 using Newtonsoft.Json;
@@ -28,27 +25,27 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using Services.Services;
 using System;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace API.Extensions
 {
+
     internal static class UsersExtensions
     {
+
         /// <summary>
-        /// Gets the identity identifier.
+        ///     Gets the identity identifier.
         /// </summary>
         /// <param name="claimsPrincipal">The claims principal.</param>
         /// <param name="actionContext">The action context.</param>
         /// <returns>The users identity id as string</returns>
         /// <exception cref="UnauthorizedAccessException">
-        /// User is not authenticated!
-        /// or
-        /// The back-end header isn't added!
+        ///     User is not authenticated!
+        ///     or
+        ///     The back-end header isn't added!
         /// </exception>
         /// <exception cref="NotSupportedException">The jwt doesn't have a sub</exception>
         public static string GetIdentityId(this ClaimsPrincipal claimsPrincipal, HttpContext actionContext)
@@ -60,11 +57,12 @@ namespace API.Extensions
                 throw new UnauthorizedAccessException("User is not authenticated!");
             }
 
-            if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication) || claimsPrincipal.HasClaim("client_role", Defaults.Roles.BackendApplication))
+            if(claimsPrincipal.IsInRole(Defaults.Roles.BackendApplication) ||
+               claimsPrincipal.HasClaim("client_role", Defaults.Roles.BackendApplication))
             {
                 string identityIdHeader = actionContext.Request.Headers.SingleOrDefault(h => h.Key == "IdentityId")
-                                                      .Value
-                                                      .FirstOrDefault();
+                                                       .Value
+                                                       .FirstOrDefault();
 
                 if(string.IsNullOrWhiteSpace(identityIdHeader))
                 {
@@ -88,7 +86,7 @@ namespace API.Extensions
         }
 
         /// <summary>
-        /// Gets the context user.
+        ///     Gets the context user.
         /// </summary>
         /// <param name="actionContext">The action context.</param>
         /// <param name="userService">The user service.</param>
@@ -101,15 +99,16 @@ namespace API.Extensions
 
 
         /// <summary>
-        /// Gets the user information synchronous.
-        /// this is triggered when a user makes a request who does not have an account already.
+        ///     Gets the user information synchronous.
+        ///     this is triggered when a user makes a request who does not have an account already.
         /// </summary>
         /// <param name="actionContext">The action context.</param>
         /// <param name="config">The configuration.</param>
         /// <returns>The user object with information retrieved from the identity server</returns>
         public static UserCreateInternalResource GetUserInformation(this HttpContext actionContext, Config config)
         {
-            string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization").FirstOrDefault();
+            string bearerToken = actionContext.Request.Headers.GetCommaSeparatedValues("Authorization")
+                                              .FirstOrDefault();
             string providerId = "";
 
             if(bearerToken != null)
@@ -118,7 +117,8 @@ namespace API.Extensions
                 JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
                 if(handler.ReadToken(token) is JwtSecurityToken tokens)
                 {
-                    providerId = tokens.Claims.FirstOrDefault(claim => claim.Type == "idp")?.Value;
+                    providerId = tokens.Claims.FirstOrDefault(claim => claim.Type == "idp")
+                                       ?.Value;
                 }
             }
 
@@ -126,6 +126,7 @@ namespace API.Extensions
             {
                 return null;
             }
+
             // Not sure maybe has to be retrieved from the originating identity server aka from the token iss.
             RestClient client = new RestClient(config.IdentityServer.IdentityUrl + "/connect/userinfo");
             RestRequest request = new RestRequest(Method.POST);
@@ -140,15 +141,20 @@ namespace API.Extensions
             }
 
             UserCreateInternalResource newUser = new UserCreateInternalResource
-            {
-                Name = (string) jsonResponse["name"],
-                Email = (string) jsonResponse["email"],
-                IdentityId = (string) jsonResponse["sub"],
-                IdentityInstitutionId = providerId
-            };
-            return newUser ;
+                                                 {
+                                                     Name = (string) jsonResponse["name"],
+                                                     Email = (string) jsonResponse["email"],
+                                                     IdentityId = (string) jsonResponse["sub"],
+                                                     IdentityInstitutionId = providerId
+                                                 };
+            return newUser;
         }
 
+        /// <summary>
+        ///     This method checks if the user is authenticated
+        /// </summary>
+        /// <param name="claimsPrincipal"></param>
+        /// <returns>boolean</returns>
         public static bool CheckIfUserIsAuthenticated(this ClaimsPrincipal claimsPrincipal)
         {
             if(claimsPrincipal.Identities.Any(i => i.IsAuthenticated))
@@ -160,4 +166,5 @@ namespace API.Extensions
         }
 
     }
+
 }
