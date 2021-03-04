@@ -50,11 +50,10 @@ namespace Services.Tests
             // Arrange
             RepositoryMock.Setup(repository => repository.GetRange(It.IsAny<IEnumerable<int>>()))
                           .ReturnsAsync(wizardPages);
+            IEnumerable<int> wizardPageIdsToValidate = wizardPages.Select(wizardPage => wizardPage.Id);
 
             // Act
-            IEnumerable<int> wizardPagesToValidate = wizardPages.Skip(6)
-                                                                .Select(wizardPage => wizardPage.Id);
-            bool wizardPagesExist = await Service.ValidateWizardPagesExist(wizardPagesToValidate);
+            bool wizardPagesExist = await Service.ValidateWizardPagesExist(wizardPageIdsToValidate);
 
             // Assert
             Action act = () =>
@@ -74,11 +73,11 @@ namespace Services.Tests
         {
             // Arrange
             RepositoryMock.Setup(repository => repository.GetRange(It.IsAny<IEnumerable<int>>()))
-                          .ReturnsAsync((IEnumerable<WizardPage>) null);
+                          .ReturnsAsync(new List<WizardPage>());
 
             // Act
-            IEnumerable<int> wizardPagesToValidate = wizardPages.Select(wizardPage => wizardPage.Id);
-            bool wizardPagesExist = await Service.ValidateWizardPagesExist(wizardPagesToValidate);
+            IEnumerable<int> wizardPageIdsToValidate = wizardPages.Select(wizardPage => wizardPage.Id);
+            bool wizardPagesExist = await Service.ValidateWizardPagesExist(wizardPageIdsToValidate);
 
             // Assert
             Action act = () =>

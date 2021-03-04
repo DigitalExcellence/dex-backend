@@ -44,6 +44,7 @@ namespace Repositories.Tests.DataGenerators
             int amountToGenerate = 5;
 
             Faker = new Faker<WizardPage>()
+                    .RuleFor(option => option.Id, faker => faker.Random.Int(1))
                     .RuleFor(option => option.Name, faker => faker.Name.FirstName())
                     .RuleFor(option => option.Description, faker => faker.Name.JobDescriptor())
                     .RuleFor(option => option.DataSourceWizardPages,
