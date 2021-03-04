@@ -4,11 +4,7 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <LangVersion>8</LangVersion>
         <Version>1.0.1-beta</Version>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <Compile Include="..\Data\Helpers\Seed.cs" Link="Seed.cs" />
-    </ItemGroup>
+    </PropertyGroup>w
 
     <ItemGroup>
         <PackageReference Include="IdentityServer4" Version="3.1.0" />
