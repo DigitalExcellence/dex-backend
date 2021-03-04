@@ -177,7 +177,7 @@ namespace Data.Helpers
         /// </summary>
         /// <param name="roles">The roles.</param>
         /// <returns>Returns the admin user that will be seeded.</returns>
-        public static User SeedAdminUser(List<Role> roles, Institution institution)
+        public static User SeedAdminUser(List<Role> roles)
         {
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
 
@@ -187,7 +187,6 @@ namespace Data.Helpers
                 IdentityId = "88421113",
                 Email = "Administrator@dex.software",
                 Name = "Administrator bob",
-                InstitutionId = institution.Id
             };
 
             return user;
@@ -297,7 +296,7 @@ namespace Data.Helpers
         /// <summary>
         ///     Seed random projects into the database using fake date from Bogus
         /// </summary>
-        public static List<Project> SeedProjects(List<User> users, List<Institution> institutions)
+        public static List<Project> SeedProjects(List<User> users)
         {
             if(users.Count < 1) return null;
             List<Project> projects = new List<Project>();
@@ -307,11 +306,6 @@ namespace Data.Helpers
                 User user = users[r.Next(0, users.Count - 1)];
                 Faker<Project> projectToFake = new Faker<Project>()
                                                .RuleFor(s => s.UserId, user.Id)
-                                               .RuleFor(s => s.LinkedInstitutions,
-                                               f => institutions
-                                                    .Select(i => new ProjectInstitution { InstitutionId = i.Id })
-                                                    .ToList()
-                                                    )
                                                .RuleFor(s => s.Uri, f => f.Internet.Url())
                                                .RuleFor(s => s.Name, f => f.Commerce.ProductName())
                                                .RuleFor(s => s.Description, f => f.Lorem.Sentences(10))
@@ -320,8 +314,6 @@ namespace Data.Helpers
 
                 project.Created = DateTime.Now.AddDays(-2);
                 project.Updated = DateTime.Now;
-
-                project.LinkedInstitutions.ForEach(pi => pi.ProjectId = project.Id);
 
                 projects.Add(project);
             }
@@ -343,28 +335,12 @@ namespace Data.Helpers
 
                 Collaborator collaborator = collaboratorToFake.Generate();
                 Collaborator collaborator2 = collaboratorToFake.Generate();
-                Collaborator collaborator3 = collaboratorToFake.Generate();
-                Collaborator collaborator4 = collaboratorToFake.Generate();
-                Collaborator collaborator5 = collaboratorToFake.Generate();
-                Collaborator collaborator6 = collaboratorToFake.Generate();
-                Collaborator collaborator7 = collaboratorToFake.Generate();
                 collaborator.ProjectId = project.Id;
                 collaborator2.ProjectId = project.Id;
-                collaborator3.ProjectId = project.Id;
-                collaborator4.ProjectId = project.Id;
-                collaborator5.ProjectId = project.Id;
-                collaborator6.ProjectId = project.Id;
-                collaborator7.ProjectId = project.Id;
 
 
                 collaborators.Add(collaborator);
                 collaborators.Add(collaborator2);
-                collaborators.Add(collaborator3);
-                collaborators.Add(collaborator4);
-                collaborators.Add(collaborator5);
-                collaborators.Add(collaborator6);
-                collaborators.Add(collaborator7);
-
             }
             return collaborators;
         }

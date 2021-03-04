@@ -441,7 +441,6 @@ namespace API
                                                   .GetRequiredService<IServiceScopeFactory>()
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-            context.Database.EnsureDeleted();
             context.Database.Migrate();
 
             // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
@@ -453,15 +452,14 @@ namespace API
                 if(!context.Institution.Any())
                 {
                     // Seed institutions
-                    context.Institution.AddRange(Seed.SeedInstitutions());
+                    context.Institution.AddRange(Seed.SeedInstitution());
                     context.SaveChanges();
                 }
 
                 if(!context.User.Any())
                 {
-                    List<Institution> institutions = context.Institution.ToList();
                     // seed admin
-                    context.User.Add(Seed.SeedAdminUser(roles, institutions.FirstOrDefault()));
+                    context.User.Add(Seed.SeedAdminUser(roles));
                     context.SaveChanges();
 
                     //Seed random users
@@ -475,9 +473,7 @@ namespace API
                 {
                     //Seed projects
                     List<User> users = context.User.ToList();
-                    //Seed projectInstitutions
-                    List<Institution> institutions = context.Institution.ToList();
-                    context.Project.AddRange(Seed.SeedProjects(users, institutions));
+                    context.Project.AddRange(Seed.SeedProjects(users));
                     context.SaveChanges();
                 }
                 if(!context.Collaborators.Any())
@@ -493,12 +489,12 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                if(!context.ProjectLike.Any())
-                {
-                    List<Project> projects = context.Project.ToList();
-                    context.ProjectLike.AddRange(Seed.SeedProjectLikes(projects));
-                    context.SaveChanges();
-                }
+                // if(!context.ProjectLike.Any())
+                // {
+                //     List<Project> projects = context.Project.ToList();
+                //     context.ProjectLike.AddRange(Seed.SeedProjectLikes(projects));
+                //     context.SaveChanges();
+                // }
 
 
 

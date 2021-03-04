@@ -835,6 +835,23 @@ namespace API.Controllers
                 return NotFound(problemDetails);
             }
 
+            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
+                                                                     project.UserId);
+
+            bool isCreatorAndHasScope =
+                project.IsCreator(currentUser.Id) &&
+                userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+
+            //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
+            //Then this user is not authorized to link the institution to the project
+            if(!(isCreatorAndHasScope ||
+                 isAllowed))
+            {
+                return Forbid();
+            }
+
             int projectCreatorInstitutionId = project.User.InstitutionId.GetValueOrDefault();
 
             if(projectCreatorInstitutionId == default)
@@ -846,16 +863,6 @@ namespace API.Controllers
                     Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
                 };
                 return NotFound(problemDetails);
-            }
-
-
-            //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
-            //Then this user is not authorized to link the institution to the project
-            if(!project.IsCreator(currentUser.Id) &&
-                !currentUser.IsDataOfficerForInstitution(projectCreatorInstitutionId) &&
-                currentUser.Role.Name != Defaults.Roles.Administrator)
-            {
-                return Forbid();
             }
 
             //Link institution of the creator of the project to project if the institution isn't linked to the project yet
@@ -881,7 +888,7 @@ namespace API.Controllers
         /// <param name="institutionId">The institution identifier</param>
         /// <returns>The created ProjectInstitution</returns>
         [HttpPost("linkedinstitution/{projectId}/{institutionId}")]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
@@ -898,11 +905,6 @@ namespace API.Controllers
                     Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
                 };
                 return NotFound(problemDetails);
-            }
-
-            if (currentUser.Role.Name != Defaults.Roles.Administrator)
-            {
-                return Forbid();
             }
 
             if(!await projectService.ProjectExistsAsync(projectId))
@@ -956,7 +958,7 @@ namespace API.Controllers
         /// <param name="institutionId">The institution identifier</param>
         /// <returns></returns>
         [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId, int institutionId)
@@ -973,11 +975,6 @@ namespace API.Controllers
                     Instance = "???"
                 };
                 return NotFound(problemDetails);
-            }
-
-            if(currentUser.Role.Name != Defaults.Roles.Administrator)
-            {
-                return Forbid();
             }
 
             if (!await projectService.ProjectExistsAsync(projectId))
