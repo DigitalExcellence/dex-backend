@@ -550,7 +550,10 @@ namespace API.Controllers
         ///     Follows a project with given projectId and gets userId
         /// </summary>
         /// <param name="projectId"></param>
-        /// <returns>200 if success 409 if user already follows project</returns>
+        /// <response code="200">Project was followed.</response>
+        /// <response code="404">Project or user could not be found.</response>
+        /// <response code="409">User already follows this project.</response>
+        /// <returns></returns>
         [HttpPost("follow/{projectId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -606,6 +609,9 @@ namespace API.Controllers
         ///     Unfollows project
         /// </summary>
         /// <param name="projectId"></param>
+        /// <response code="200">Project was unfollowed.</response>
+        /// <response code="404">Project or user could not be found.</response>
+        /// <response code="409">User does not follow this project.</response>
         /// <returns></returns>
         [HttpDelete("follow/{projectId}")]
         [Authorize]
@@ -662,11 +668,11 @@ namespace API.Controllers
         ///     Likes an individual project with the provided projectId.
         /// </summary>
         /// <param name="projectId">The project identifier.</param>
-        /// <returns>
-        ///     StatusCode 200 If success,
-        ///     StatusCode 409 If the user already liked the project,
-        ///     StatusCode 404 if the project could not be found.
-        /// </returns>
+        /// <response code="200">Project was liked.</response>
+        /// <response code="400">Database failed to like the project.</response>
+        /// <response code="404">Project could not be found.</response>
+        /// <response code="409">User already liked this project before.</response>
+        /// <returns></returns>
         [HttpPost("like/{projectId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -741,11 +747,10 @@ namespace API.Controllers
         ///     Unlikes an individual project with the provided projectId.
         /// </summary>
         /// <param name="projectId">The project identifier.</param>
-        /// <returns>
-        ///     StatusCode 200 If success,
-        ///     StatusCode 409 if the user didn't like the project already,
-        ///     StatusCode 404 if the project could not be found.
-        /// </returns>
+        /// <response code="200">Project was unliked.</response>
+        /// <response code="404">Project could not be found.</response>
+        /// <response code="409">User did not like this project before.</response>
+        /// <returns></returns>
         [HttpDelete("like/{projectId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -806,12 +811,11 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="categoryId"></param>
-        /// <returns>
-        /// 200 if OK
-        /// 404 if project or category not found
-        /// 401 if user not authorized
-        /// 409 if project already categorized
-        /// </returns>
+        /// <response code="200">Category was added to the project.</response>
+        /// <response code="401">User is not authorized to add the category to the project.</response>
+        /// <response code="404">Project or category was not found.</response>
+        /// <response code="409">Project is already categorized with the category.</response>
+        /// <returns></returns>
         [HttpPost("category/{projectId}/{categoryId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -893,12 +897,11 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="categoryId"></param>
-        /// <returns>
-        /// 200 if OK
-        /// 404 if project or category not found
-        /// 401 if user not authorized
-        /// 409 if project not categorized
-        /// </returns>
+        /// <response code="200">Category was removed from the project.</response>
+        /// <response code="401">User is not authorized to remove the category from the project.</response>
+        /// <response code="404">Project or category was not found.</response>
+        /// <response code="409">Project is not categorized with the category.</response>
+        /// <returns></returns>
         [HttpDelete("category/{projectId}/{categoryId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
