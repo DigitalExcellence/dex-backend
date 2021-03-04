@@ -15,25 +15,24 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-namespace Models
+namespace API.Resources
 {
 
-    public class ProjectTag
+    /// <summary>
+    ///     Object to return to frontend with the ProjectCategory
+    /// </summary>
+    public class ProjectCategoryResourceResult
     {
 
-        public ProjectTag(Project project, Tag tag)
-        {
-            Project = project;
-            Tag = tag;
-        }
-
-        public ProjectTag() { }
-
+        /// <summary>
+        ///     Gets or sets the Id of the project category.
+        /// </summary>
         public int Id { get; set; }
 
-        public Project Project { get; set; }
-
-        public Tag Tag { get; set; }
+        /// <summary>
+        ///     Gets or sets the Name of the project category.
+        /// </summary>
+        public string Name { get; set; }
 
     }
 

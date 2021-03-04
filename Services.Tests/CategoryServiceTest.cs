@@ -30,28 +30,28 @@ namespace Services.Tests
 {
 
     [TestFixture]
-    public class TagServiceTest : ServiceTest<Tag, TagService, ITagRepository>
+    public class CategoryServiceTest : ServiceTest<Category, CategoryService, ICategoryRepository>
     {
 
-        protected new ITagService Service => base.Service;
+        protected new ICategoryService Service => base.Service;
 
         /// <summary>
         ///     Test whether the repository method is called and no changes have been applied to the object
         /// </summary>
-        /// <param name="roles">A set of 10 roles.</param>
+        /// <param name="categories">A set of 10 categories.</param>
         /// <returns></returns>
         [Test]
-        public async Task GetAllAsync([TagDataSource(10)] List<Tag> tags)
+        public async Task GetAllAsync([CategoryDataSource(10)] List<Category> categories)
         {
             RepositoryMock.Setup(repository => repository.GetAllAsync())
-                          .Returns(Task.FromResult(tags));
+                          .Returns(Task.FromResult(categories));
 
-            List<Tag> retrievedTags = await Service.GetAllAsync();
+            List<Category> retrievedCategories = await Service.GetAllAsync();
 
             Assert.DoesNotThrow(() => { RepositoryMock.Verify(repository => repository.GetAllAsync(), Times.Once); });
 
-            Assert.AreEqual(tags, retrievedTags);
-            Assert.AreEqual(10, retrievedTags.Count);
+            Assert.AreEqual(categories, retrievedCategories);
+            Assert.AreEqual(10, retrievedCategories.Count);
         }
 
 
@@ -59,35 +59,35 @@ namespace Services.Tests
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddRangeTest_GoodFlow([TagDataSource(10)] IEnumerable<Tag> entities)
+        public override void AddRangeTest_GoodFlow([CategoryDataSource(10)] IEnumerable<Category> entities)
         {
             base.AddRangeTest_GoodFlow(entities);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddTest_GoodFlow([TagDataSource] Tag entity)
+        public override void AddTest_GoodFlow([CategoryDataSource] Category entity)
         {
             base.AddTest_GoodFlow(entity);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task FindAsyncTest_GoodFlow([TagDataSource] Tag entity)
+        public override Task FindAsyncTest_GoodFlow([CategoryDataSource] Category entity)
         {
             return base.FindAsyncTest_GoodFlow(entity);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task GetAll([TagDataSource(10)] List<Tag> entities)
+        public override Task GetAll([CategoryDataSource(10)] List<Category> entities)
         {
             return base.GetAll(entities);
         }
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Remove([TagDataSource] Tag entity)
+        public override void Remove([CategoryDataSource] Category entity)
         {
             base.Remove(entity);
         }
@@ -108,7 +108,7 @@ namespace Services.Tests
 
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Update([TagDataSource] Tag entity)
+        public override void Update([CategoryDataSource] Category entity)
         {
             base.Update(entity);
         }

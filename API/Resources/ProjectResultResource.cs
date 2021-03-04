@@ -80,7 +80,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the tags of the project.
         /// </summary>
-        public List<ProjectTagResourceResult> Tags { get; set; }
+        public List<ProjectCategoryResourceResult> Categories { get; set; }
 
     }
 

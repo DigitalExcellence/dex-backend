@@ -53,8 +53,8 @@ namespace API.Controllers
         private readonly IFileUploader fileUploader;
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
-        private readonly IProjectTagService projectTagService;
-        private readonly ITagService tagService;
+        private readonly IProjectCategoryService projectCategoryService;
+        private readonly ICategoryService categoryService;
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
@@ -80,8 +80,8 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
-        /// <param name="tagService">The tag service is used to work with tags</param>
-        /// <param name="projectTagService">The project tag service is used to connect projects and tags</param>
+        /// <param name="categoryService">The category service is used to work with categories</param>
+        /// <param name="projectCategoryService">The project category service is used to connect projects and categories</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -91,8 +91,8 @@ namespace API.Controllers
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
                                  ICallToActionOptionService callToActionOptionService,
-                                 ITagService tagService,
-                                 IProjectTagService projectTagService)
+                                 ICategoryService categoryService,
+                                 IProjectCategoryService projectCategoryService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -103,8 +103,8 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
-            this.tagService = tagService;
-            this.projectTagService = projectTagService;
+            this.categoryService = categoryService;
+            this.projectCategoryService = projectCategoryService;
         }
 
         /// <summary>
@@ -802,23 +802,23 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     Tag a project
+        ///     Categorize a project
         /// </summary>
         /// <param name="projectId"></param>
-        /// <param name="tagId"></param>
+        /// <param name="categoryId"></param>
         /// <returns>
         /// 200 if OK
-        /// 404 if project or tag not found
+        /// 404 if project or category not found
         /// 401 if user not authorized
-        /// 409 if project already tagged
+        /// 409 if project already categorized
         /// </returns>
-        [HttpPost("tag/{projectId}/{tagId}")]
+        [HttpPost("category/{projectId}/{categoryId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> ProjectAddTag(int projectId, int tagId)
+        public async Task<IActionResult> ProjectAddCategory(int projectId, int categoryId)
         {
             Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
@@ -826,22 +826,22 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to tag the project.",
+                    Title = "Failed to categorize the project.",
                     Detail = "The project could not be found in the database.",
                     Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A292"
                 };
                 return NotFound(problem);
             }
 
-            Tag tag = await tagService.FindAsync(tagId)
+            Category category = await categoryService.FindAsync(categoryId)
                                       .ConfigureAwait(false);
 
-            if(tag == null)
+            if(category == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to tag the project.",
-                    Detail = "The tag could not be found in the database.",
+                    Title = "Failed to categorize the project.",
+                    Detail = "The category could not be found in the database.",
                     Instance = "93C6B5BD-EC14-482A-9907-001C888F3D3F"
                 };
                 return NotFound(problem);
@@ -858,54 +858,54 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to tag the project.",
+                    Title = "Failed to categorize the project.",
                     Detail = "The user is not allowed to modify the project.",
                     Instance = "1243016C-081F-441C-A388-3D56B0998D2E"
                 };
                 return Unauthorized(problem);
             }
 
-            ProjectTag alreadyTagged = await projectTagService.GetProjectTag(projectId, tagId);
+            ProjectCategory alreadyCategorized = await projectCategoryService.GetProjectCategory(projectId, categoryId);
 
-            if(alreadyTagged != null)
+            if(alreadyCategorized != null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to tag the project.",
-                    Detail = "Project has already been tagged with this tag.",
+                    Title = "Failed to categorize the project.",
+                    Detail = "Project has already been categorized with this category.",
                     Instance = "4986CBC6-FB6D-4255-ACE8-833E92B25FBD"
                 };
                 return Conflict(problem);
             }
 
 
-            ProjectTag projectTag = new ProjectTag(project, tag);
-            await projectTagService.AddAsync(projectTag)
+            ProjectCategory projectCategory = new ProjectCategory(project, category);
+            await projectCategoryService.AddAsync(projectCategory)
                                    .ConfigureAwait(false);
 
-            projectTagService.Save();
+            projectCategoryService.Save();
 
-            return Ok(mapper.Map<ProjectTag, ProjectTagResourceResult>(projectTag));
+            return Ok(mapper.Map<ProjectCategory, ProjectCategoryResourceResult>(projectCategory));
         }
 
         /// <summary>
-        ///     Remove a tag from a project
+        ///     Remove a category from a project
         /// </summary>
         /// <param name="projectId"></param>
-        /// <param name="tagId"></param>
+        /// <param name="categoryId"></param>
         /// <returns>
         /// 200 if OK
-        /// 404 if project or tag not found
+        /// 404 if project or category not found
         /// 401 if user not authorized
-        /// 409 if project not tagged
+        /// 409 if project not categorized
         /// </returns>
-        [HttpDelete("tag/{projectId}/{tagId}")]
+        [HttpDelete("category/{projectId}/{categoryId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> ProjectRemoveTag(int projectId, int tagId)
+        public async Task<IActionResult> ProjectRemoveCategory(int projectId, int categoryId)
         {
             Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
@@ -913,22 +913,22 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to remove the tag from the project.",
+                    Title = "Failed to remove the category from the project.",
                     Detail = "The project could not be found in the database.",
                     Instance = "2CC94251-9103-4AAC-B461-F99939E78AD0"
                 };
                 return NotFound(problem);
             }
 
-            Tag tag = await tagService.FindAsync(tagId)
+            Category category = await categoryService.FindAsync(categoryId)
                                       .ConfigureAwait(false);
 
-            if(tag == null)
+            if(category == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to remove the tag from the project.",
-                    Detail = "The tag could not be found in the database.",
+                    Title = "Failed to remove the category from the project.",
+                    Detail = "The category could not be found in the database.",
                     Instance = "3E41B5DC-F78B-429B-89AB-1A98A6F65FDC"
                 };
                 return NotFound(problem);
@@ -945,30 +945,30 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to remove the tag from the project.",
+                    Title = "Failed to remove the category from the project.",
                     Detail = "The user is not allowed to modify the project.",
                     Instance = "4D1878C1-1606-4224-841A-73F30AE4F930"
                 };
                 return Unauthorized(problem);
             }
 
-            ProjectTag alreadyTagged = await projectTagService.GetProjectTag(projectId, tagId);
+            ProjectCategory alreadyCategorized = await projectCategoryService.GetProjectCategory(projectId, categoryId);
 
-            if(alreadyTagged == null)
+            if(alreadyCategorized == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to remove the tag from the project.",
-                    Detail = "Project has not been tagged with this tag.",
+                    Title = "Failed to remove the category from the project.",
+                    Detail = "Project has not been categorized with this category.",
                     Instance = "5EABA4F3-47E6-45A7-8522-E87268716912"
                 };
                 return Conflict(problem);
             }
 
-            await projectTagService.RemoveAsync(alreadyTagged.Id)
+            await projectCategoryService.RemoveAsync(alreadyCategorized.Id)
                              .ConfigureAwait(false);
 
-            projectTagService.Save();
+            projectCategoryService.Save();
 
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }

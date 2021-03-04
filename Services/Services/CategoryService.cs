@@ -28,41 +28,41 @@ namespace Services.Services
 {
 
     /// <summary>
-    ///     This is the interface for the tag service
+    ///     This is the interface for the category service
     /// </summary>
-    public interface ITagService : IService<Tag>
+    public interface ICategoryService : IService<Category>
     {
 
         /// <summary>
-        /// This is the interface method to get all tags ansynchronous
+        /// This is the interface method to get all categories ansynchronous
         /// </summary>
-        /// <returns>A list of tags</returns>
-        Task<List<Tag>> GetAllAsync();
+        /// <returns>A list of categories</returns>
+        Task<List<Category>> GetAllAsync();
 
     }
 
     /// <summary>
-    ///     This is the tag service
+    ///     This is the category service
     /// </summary>
-    public class TagService : Service<Tag>, ITagService
+    public class CategoryService : Service<Category>, ICategoryService
     {
 
         /// <summary>
-        ///     This is the role service constructor
+        ///     This is the category service constructor
         /// </summary>
         /// <param name="repository"></param>
-        public TagService(ITagRepository repository) : base(repository) { }
+        public CategoryService(ICategoryRepository repository) : base(repository) { }
 
         /// <summary>
         ///     Gets the repository
         /// </summary>
-        protected new ITagRepository Repository => (ITagRepository) base.Repository;
+        protected new ICategoryRepository Repository => (ICategoryRepository) base.Repository;
 
         /// <summary>
         /// Gets all asynchronous.
         /// </summary>
-        /// <returns>A list of all roles.</returns>
-        public Task<List<Tag>> GetAllAsync()
+        /// <returns>A list of all categories.</returns>
+        public Task<List<Category>> GetAllAsync()
         {
             return Repository.GetAllAsync();
         }

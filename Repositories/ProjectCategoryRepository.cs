@@ -27,35 +27,35 @@ namespace Repositories
     /// <summary>
     ///     This is the interface of the project tag repository
     /// </summary>
-    public interface IProjectTagRepository : IRepository<ProjectTag>
+    public interface IProjectCategoryRepository : IRepository<ProjectCategory>
     {
-        Task<ProjectTag> GetProjectTag(int projectId, int tagId);
-        Task<ProjectTag> GetProjectTag(int tagId);
+        Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId);
+        Task<ProjectCategory> GetProjectCategory(int categoryId);
     }
 
     /// <summary>
     ///     This is the project tag repository
     /// </summary>
-    public class ProjectTagRepository : Repository<ProjectTag>,
-                                             IProjectTagRepository
+    public class ProjectCategoryRepository : Repository<ProjectCategory>,
+                                             IProjectCategoryRepository
     {
 
         /// <summary>
         ///     This is the project tag repository constructor
         /// </summary>
         /// <param name="dbContext"></param>
-        public ProjectTagRepository(DbContext dbContext) :
+        public ProjectCategoryRepository(DbContext dbContext) :
             base(dbContext) { }
 
-        public Task<ProjectTag> GetProjectTag(int projectId, int tagId)
+        public Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId)
         {
-            return DbSet.Where(p => p.Tag.Id == tagId && p.Project.Id == projectId)
+            return DbSet.Where(p => p.Category.Id == categoryId && p.Project.Id == projectId)
                         .FirstOrDefaultAsync();
         }
 
-        public Task<ProjectTag> GetProjectTag(int tagId)
+        public Task<ProjectCategory> GetProjectCategory(int tagId)
         {
-            return DbSet.Where(p => p.Tag.Id == tagId)
+            return DbSet.Where(p => p.Category.Id == tagId)
                         .FirstOrDefaultAsync();
         }
     }

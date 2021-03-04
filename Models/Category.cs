@@ -15,23 +15,17 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-namespace API.Resources
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace Models
 {
 
-    /// <summary>
-    ///     Object to return to frontend with the ProjectTag
-    /// </summary>
-    public class ProjectTagResourceResult
+    public class Category
     {
-
-        /// <summary>
-        ///     Gets or sets the Id of the project tag.
-        /// </summary>
         public int Id { get; set; }
 
-        /// <summary>
-        ///     Gets or sets the Name of the project tag.
-        /// </summary>
+        [Required]
         public string Name { get; set; }
 
     }

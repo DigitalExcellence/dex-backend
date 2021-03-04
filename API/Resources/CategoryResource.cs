@@ -22,9 +22,9 @@ namespace API.Resources
 {
 
     /// <summary>
-    ///     The view model of a role
+    ///     The view model of a category
     /// </summary>
-    public class TagResource
+    public class CategoryResource
     {
 
         /// <summary>

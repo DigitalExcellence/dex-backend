@@ -62,11 +62,11 @@ namespace API.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
-            services.AddScoped<ITagService, TagService>();
-            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-            services.AddScoped<IProjectTagService, ProjectTagService>();
-            services.AddScoped<IProjectTagRepository, ProjectTagRepository>();
+            services.AddScoped<IProjectCategoryService, ProjectCategoryService>();
+            services.AddScoped<IProjectCategoryRepository, ProjectCategoryRepository>();
 
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IFileRepository, FileRepository>();

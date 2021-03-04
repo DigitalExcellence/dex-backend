@@ -21,18 +21,18 @@ namespace API.Resources
 {
 
     /// <summary>
-    ///     The view model of a tag
+    ///     The view model of a Category
     /// </summary>
-    public class TagResourceResult
+    public class CategoryResourceResult
     {
 
         /// <summary>
-        ///     Get or Set the Id of a Tag
+        ///     Get or Set the Id of a Category
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        ///     Get or Set the Name of a Tag
+        ///     Get or Set the Name of a Category
         /// </summary>
         public string Name { get; set; }
 

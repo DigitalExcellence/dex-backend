@@ -105,7 +105,7 @@ namespace Data.Helpers
                                           Scopes = new List<RoleScope>
                                                    {
                                                        new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
-                                                       new RoleScope(nameof(Defaults.Scopes.TagRead))
+                                                       new RoleScope(nameof(Defaults.Scopes.CategoryRead))
                                                    }
             };
             roles.Add(registeredUserRole);
@@ -120,7 +120,7 @@ namespace Data.Helpers
                                            new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                                            new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                                            new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
-                                           new RoleScope(nameof(Defaults.Scopes.TagRead))
+                                           new RoleScope(nameof(Defaults.Scopes.CategoryRead))
                                        }
                           };
             roles.Add(prRole);
@@ -134,7 +134,7 @@ namespace Data.Helpers
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
-                                                    new RoleScope(nameof(Defaults.Scopes.TagRead)),
+                                                    new RoleScope(nameof(Defaults.Scopes.CategoryRead)),
                                                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                                 }
                                    };
@@ -150,8 +150,8 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.UserRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.RoleRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
-                                                      new RoleScope(nameof(Defaults.Scopes.TagRead)),
-                                                      new RoleScope(nameof(Defaults.Scopes.TagWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.CategoryRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.CategoryWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
@@ -171,7 +171,7 @@ namespace Data.Helpers
                                   Name = nameof(Defaults.Roles.Alumni),
                                   Scopes = new List<RoleScope>
                                   {
-                                      new RoleScope(nameof(Defaults.Scopes.TagRead))
+                                      new RoleScope(nameof(Defaults.Scopes.CategoryRead))
                                   }
                               };
             roles.Add(alumniRole);
@@ -179,30 +179,30 @@ namespace Data.Helpers
             return roles;
         }
 
-        public static List<Tag> SeedTags()
+        public static List<Category> SeedCategories()
         {
-            List<Tag> tags = new List<Tag>();
+            List<Category> categories = new List<Category>();
 
-            tags.AddRange(new[]{
-                new Tag
+            categories.AddRange(new[]{
+                new Category
                 {
-                    Name = "Some Tag 1"
+                    Name = "Some Category 1"
                 },
-                new Tag
+                new Category
                 {
-                    Name = "Some Tag 2"
+                    Name = "Some Category 2"
                 },
-                new Tag
+                new Category
                 {
-                    Name = "Some Tag 3"
+                    Name = "Some Category 3"
                 },
-                new Tag
+                new Category
                 {
-                    Name = "Some Tag 4"
+                    Name = "Some Category 4"
                 }
             });
 
-            return tags;
+            return categories;
         }
 
         /// <summary>

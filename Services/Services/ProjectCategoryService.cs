@@ -24,42 +24,42 @@ namespace Services.Services
 {
 
     /// <summary>
-    ///     This is the project tag service interface
+    ///     This is the project category service interface
     /// </summary>
-    public interface IProjectTagService : IService<ProjectTag>
+    public interface IProjectCategoryService : IService<ProjectCategory>
     {
-        Task<ProjectTag> GetProjectTag(int projectId, int tagId);
-        Task<ProjectTag> GetProjectTag(int tagId);
+        Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId);
+        Task<ProjectCategory> GetProjectCategory(int categoryId);
     }
 
     /// <summary>
-    ///     This is the project tag service
+    ///     This is the project category service
     /// </summary>
-    public class ProjectTagService : Service<ProjectTag>,
-                                          IProjectTagService
+    public class ProjectCategoryService : Service<ProjectCategory>,
+                                          IProjectCategoryService
     {
 
         /// <summary>
-        ///     This is the project like constructor
+        ///     This is the project category constructor
         /// </summary>
         /// <param name="repository"></param>
-        public ProjectTagService(IProjectTagRepository repository) :
+        public ProjectCategoryService(IProjectCategoryRepository repository) :
             base(repository) { }
 
         /// <summary>
         ///     Gets the repository
         /// </summary>
-        private new IProjectTagRepository Repository =>
-            (IProjectTagRepository) base.Repository;
+        private new IProjectCategoryRepository Repository =>
+            (IProjectCategoryRepository) base.Repository;
 
-        public Task<ProjectTag> GetProjectTag(int projectId, int tagId)
+        public Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId)
         {
-            return Repository.GetProjectTag(projectId, tagId);
+            return Repository.GetProjectCategory(projectId, categoryId);
         }
 
-        public Task<ProjectTag> GetProjectTag(int tagId)
+        public Task<ProjectCategory> GetProjectCategory(int categoryId)
         {
-            return Repository.GetProjectTag(tagId);
+            return Repository.GetProjectCategory(categoryId);
         }
 
     }

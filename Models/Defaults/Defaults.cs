@@ -96,11 +96,11 @@ namespace Models.Defaults
             [Description("This scope gives write access to the Role namespace")]
             public const string RoleWrite = "role:write";
 
-            [Description("This scope gives read access to the Tag namespace")]
-            public const string TagRead = "tag:read";
+            [Description("This scope gives read access to the Category namespace")]
+            public const string CategoryRead = "category:read";
 
-            [Description("This scope gives write access to the Tag namespace")]
-            public const string TagWrite = "tag:write";
+            [Description("This scope gives write access to the Category namespace")]
+            public const string CategoryWrite = "category:write";
 
             [Description("This scope gives write access to the embed namespace")]
             public const string EmbedWrite = "embed:write";

@@ -28,28 +28,28 @@ namespace Repositories.Tests.DataSources
 {
 
     /// <summary>
-    ///     Attribute to generate roles
+    ///     Attribute to generate categories
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class TagDataSourceAttribute : Attribute, IParameterDataSource
+    public class CategoryDataSourceAttribute : Attribute, IParameterDataSource
     {
 
         private readonly int amountToGenerate;
-        private readonly IFakeDataGenerator<Tag> fakeDataGenerator;
+        private readonly IFakeDataGenerator<Category> fakeDataGenerator;
 
         /// <summary>
-        ///     Initializes roleDataSourceAttribute
+        ///     Initializes categoryDataSourceAttribute
         /// </summary>
-        public TagDataSourceAttribute()
+        public CategoryDataSourceAttribute()
         {
-            fakeDataGenerator = new TagDataGenerator();
+            fakeDataGenerator = new CategoryDataGenerator();
         }
 
         /// <summary>
-        ///     Initializes roleDataSourceAttribute
+        ///     Initializes categoryDataSourceAttribute
         ///     and setting the amount of users to be generated
         /// </summary>
-        public TagDataSourceAttribute(int amount) : this()
+        public CategoryDataSourceAttribute(int amount) : this()
         {
             amountToGenerate = amount;
         }
@@ -65,9 +65,9 @@ namespace Repositories.Tests.DataSources
             {
                 return new[] {fakeDataGenerator.Generate()};
             }
-            List<Tag> roles = fakeDataGenerator.GenerateRange(amountToGenerate)
+            List<Category> categories = fakeDataGenerator.GenerateRange(amountToGenerate)
                                                 .ToList();
-            return new[] {roles};
+            return new[] {categories};
         }
 
     }

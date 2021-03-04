@@ -25,36 +25,36 @@ namespace Repositories
 {
 
     /// <summary>
-    ///     This is the interface of the tag repository
+    ///     This is the interface of the category repository
     /// </summary>
-    /// <seealso cref="IRepository{Tag}"/>
-    public interface ITagRepository : IRepository<Tag> {
+    /// <seealso cref="IRepository{Category}"/>
+    public interface ICategoryRepository : IRepository<Category> {
 
         /// <summary>
-        ///     This interface method gets all tags asynchronously
+        ///     This interface method gets all categories asynchronously
         /// </summary>
         /// <returns></returns>
-        Task<List<Tag>> GetAllAsync();
+        Task<List<Category>> GetAllAsync();
 
     }
 
     /// <summary>
-    ///     This is the tag repository
+    ///     This is the category repository
     /// </summary>
-    /// <seealso cref="Tag" />
-    /// <seealso cref="ITagRepository" />
-    public class TagRepository : Repository<Tag>, ITagRepository
+    /// <seealso cref="Category" />
+    /// <seealso cref="ICategoryRepository" />
+    public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="TagRepository" /> class.
+        ///     Initializes a new instance of the <see cref="CategoryRepository" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        public TagRepository(DbContext dbContext) : base(dbContext) { }
+        public CategoryRepository(DbContext dbContext) : base(dbContext) { }
 
-        public Task<List<Tag>> GetAllAsync()
+        public Task<List<Category>> GetAllAsync()
         {
-            return GetDbSet<Tag>()
+            return GetDbSet<Category>()
                    .ToListAsync();
         }
 

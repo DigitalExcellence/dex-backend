@@ -26,17 +26,17 @@ namespace Repositories.Tests.DataGenerators
     /// <summary>
     ///     FakeDataGenerator for the roles
     /// </summary>
-    public class TagDataGenerator : FakeDataGenerator<Tag>
+    public class CategoryDataGenerator : FakeDataGenerator<Category>
     {
 
         /// <summary>
         ///     Initializes the RoleDataGenerator
         ///     and define dataGenerator options
         /// </summary>
-        public TagDataGenerator()
+        public CategoryDataGenerator()
         {
-            Faker = new Faker<Tag>()
-                    .RuleFor(tag => tag.Name, faker => faker.Name.FirstName());
+            Faker = new Faker<Category>()
+                    .RuleFor(category => category.Name, faker => faker.Name.FirstName());
         }
 
     }

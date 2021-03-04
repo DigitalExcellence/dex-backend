@@ -27,57 +27,57 @@ namespace Repositories.Tests
 {
 
     [TestFixture]
-    public class TagRepositoryTest : RepositoryTest<Tag, TagRepository>
+    public class CategoryRepositoryTest : RepositoryTest<Category, CategoryRepository>
     {
 
-        protected new ITagRepository Repository => base.Repository;
+        protected new ICategoryRepository Repository => base.Repository;
 
         /// <summary>
-        ///     Test if tag with scope relations are retrieved correctly
+        ///     Test if category with scope relations are retrieved correctly
         /// </summary>
-        /// <param name="tag">The tag which is used as data to test.</param>
+        /// <param name="category">The category which is used as data to test.</param>
         [Test]
-        public async Task GetAllAsync_one([TagDataSource] Tag tag)
+        public async Task GetAllAsync_one([CategoryDataSource] Category category)
         {
-            DbContext.Add(tag);
+            DbContext.Add(category);
             await DbContext.SaveChangesAsync();
 
-            List<Tag> retrievedTags = await Repository.GetAllAsync();
-            Assert.AreEqual(new List<Tag>
+            List<Category> retrievedCategories = await Repository.GetAllAsync();
+            Assert.AreEqual(new List<Category>
                             {
-                                tag
+                                category
                             },
-                            retrievedTags);
+                            retrievedCategories);
         }
 
         /// <summary>
-        ///     Test if tag with scope relations are retrieved correctly
+        ///     Test if category with scope relations are retrieved correctly
         /// </summary>
-        /// <param name="tags">The tag which is used as data to test.</param>
+        /// <param name="categories">The category which is used as data to test.</param>
         [Test]
-        public async Task GetAllAsync_multiple([TagDataSource(10)] List<Tag> tags)
+        public async Task GetAllAsync_multiple([CategoryDataSource(10)] List<Category> categories)
         {
-            DbContext.AddRange(tags);
+            DbContext.AddRange(categories);
             await DbContext.SaveChangesAsync();
 
-            List<Tag> retrievedTags = await Repository.GetAllAsync();
-            Assert.AreEqual(tags, retrievedTags);
+            List<Category> retrievedCategories = await Repository.GetAllAsync();
+            Assert.AreEqual(categories, retrievedCategories);
         }
 
         /// <summary>
-        ///     Test if tag with scope relations are retrieved correctly when there are no tags.
+        ///     Test if category with scope relations are retrieved correctly when there are no categories.
         /// </summary>
         [Test]
-        public async Task GetAllAsync_NoTag()
+        public async Task GetAllAsync_NoCategory()
         {
-            List<Tag> tags = await Repository.GetAllAsync();
-            Assert.IsEmpty(tags);
+            List<Category> categories = await Repository.GetAllAsync();
+            Assert.IsEmpty(categories);
         }
 
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task AddAsyncTest_GoodFlow([TagDataSource] Tag entity)
+        public override Task AddAsyncTest_GoodFlow([CategoryDataSource] Category entity)
         {
             return base.AddAsyncTest_GoodFlow(entity);
         }
@@ -98,7 +98,7 @@ namespace Repositories.Tests
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task AddRangeTest_GoodFlow([TagDataSource(10)] List<Tag> entities)
+        public override Task AddRangeTest_GoodFlow([CategoryDataSource(10)] List<Category> entities)
         {
             return base.AddRangeTest_GoodFlow(entities);
         }
@@ -112,14 +112,14 @@ namespace Repositories.Tests
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task FindAsyncTest_BadFlow_NotExists([TagDataSource] Tag entity)
+        public override Task FindAsyncTest_BadFlow_NotExists([CategoryDataSource] Category entity)
         {
             return base.FindAsyncTest_BadFlow_NotExists(entity);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task FindAsyncTest_GoodFlow([TagDataSource] Tag entity)
+        public override Task FindAsyncTest_GoodFlow([CategoryDataSource] Category entity)
         {
             return base.FindAsyncTest_GoodFlow(entity);
         }
@@ -133,43 +133,43 @@ namespace Repositories.Tests
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task GetAllAsyncTest_GoodFlow([TagDataSource(10)] List<Tag> entities)
+        public override Task GetAllAsyncTest_GoodFlow([CategoryDataSource(10)] List<Category> entities)
         {
             return base.GetAllAsyncTest_GoodFlow(entities);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task RemoveAsyncTest_BadFlow_NotExists([TagDataSource] Tag entity)
+        public override Task RemoveAsyncTest_BadFlow_NotExists([CategoryDataSource] Category entity)
         {
             return base.RemoveAsyncTest_BadFlow_NotExists(entity);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task RemoveAsyncTest_GoodFlow([TagDataSource] Tag entity)
+        public override Task RemoveAsyncTest_GoodFlow([CategoryDataSource] Category entity)
         {
             return base.RemoveAsyncTest_GoodFlow(entity);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task UpdateTest_BadFlow_NotExists([TagDataSource] Tag entity,
-                                                          [TagDataSource] Tag updateEntity)
+        public override Task UpdateTest_BadFlow_NotExists([CategoryDataSource] Category entity,
+                                                          [CategoryDataSource] Category updateEntity)
         {
             return base.UpdateTest_BadFlow_NotExists(entity, updateEntity);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task UpdateTest_BadFlow_Null([TagDataSource] Tag entity)
+        public override Task UpdateTest_BadFlow_Null([CategoryDataSource] Category entity)
         {
             return base.UpdateTest_BadFlow_Null(entity);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task UpdateTest_GoodFlow([TagDataSource] Tag entity, [TagDataSource] Tag updateEntity)
+        public override Task UpdateTest_GoodFlow([CategoryDataSource] Category entity, [CategoryDataSource] Category updateEntity)
         {
             return base.UpdateTest_GoodFlow(entity, updateEntity);
         }

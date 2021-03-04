@@ -15,18 +15,25 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
 namespace Models
 {
 
-    public class Tag
+    public class ProjectCategory
     {
+
+        public ProjectCategory(Project project, Category category)
+        {
+            Project = project;
+            Category = category;
+        }
+
+        public ProjectCategory() { }
+
         public int Id { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        public Project Project { get; set; }
+
+        public Category Category { get; set; }
 
     }
 

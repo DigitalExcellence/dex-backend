@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _4_Data.Migrations
 {
-    public partial class AddTags : Migration
+    public partial class AddCategories : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tag",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -17,31 +17,31 @@ namespace _4_Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectTag",
+                name: "ProjectCategory",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProjectId = table.Column<int>(nullable: false),
-                    TagId = table.Column<int>(nullable: false)
+                    CategoryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectTag", x => x.Id);
+                    table.PrimaryKey("PK_ProjectCategory", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "ProjectTag");
+                name: "ProjectCategory");
         }
     }
 }

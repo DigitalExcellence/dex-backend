@@ -103,11 +103,11 @@ namespace API.Configuration
             CreateMap<RoleResource, Role>();
             CreateMap<Role, RoleResourceResult>();
 
-            CreateMap<TagResource, Tag>();
-            CreateMap<Tag, TagResourceResult>();
-            CreateMap<ProjectTag, ProjectTagResourceResult>()
-                .ForMember(q => q.Id, opt => opt.MapFrom(q=> q.Tag.Id))
-                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Tag.Name));
+            CreateMap<CategoryResource, Category>();
+            CreateMap<Category, CategoryResourceResult>();
+            CreateMap<ProjectCategory, ProjectCategoryResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(q=> q.Category.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Category.Name));
 
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();

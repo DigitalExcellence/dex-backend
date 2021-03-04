@@ -96,12 +96,12 @@ namespace Data
         public DbSet<Role> Role { get; set; }
 
         /// <summary>
-        ///     Gets or sets the tag.
+        ///     Gets or sets the category.
         /// </summary>
         /// <value>
-        ///     The tag.
+        ///     The category.
         /// </value>
-        public DbSet<Tag> Tag { get; set; }
+        public DbSet<Category> Category { get; set; }
 
         /// <summary>
         ///     Gets or sets the institution.
