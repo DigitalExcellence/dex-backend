@@ -50,7 +50,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<CategoryResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllCategories()
         {
-            List<Category> categories = await categoryService.GetAllAsync()
+            IEnumerable<Category> categories = await categoryService.GetAll()
                                                 .ConfigureAwait(false);
 
             return Ok(mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResourceResult>>(categories));
@@ -223,7 +223,7 @@ namespace API.Controllers
                              .ConfigureAwait(false);
             categoryService.Save();
 
-            List<Category> categories = await categoryService.GetAllAsync()
+            IEnumerable<Category> categories = await categoryService.GetAll()
                                                 .ConfigureAwait(false);
 
             return Ok(mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResourceResult>>(categories));
