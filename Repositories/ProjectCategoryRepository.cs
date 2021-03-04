@@ -48,7 +48,7 @@ namespace Repositories
     {
 
         /// <summary>
-        ///     This is the project category repository constructor
+        ///     This is the project category repository constructor 
         /// </summary>
         /// <param name="dbContext"></param>
         public ProjectCategoryRepository(DbContext dbContext) :

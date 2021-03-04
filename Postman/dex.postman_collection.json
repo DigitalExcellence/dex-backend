@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b4edb2f9-b68f-47c6-9a04-bfc64f10974b",
+		"_postman_id": "c88bcd4b-e972-4238-9ff1-289fa9987005",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -512,7 +512,7 @@
 					"response": []
 				},
 				{
-					"name": "Project-CreateProjectToTag-Administrator",
+					"name": "Project-CreateProjectToCategorize-Administrator",
 					"event": [
 						{
 							"listen": "test",
@@ -523,7 +523,7 @@
 									"",
 									"var jsonData = pm.response.json();",
 									"",
-									"pm.environment.set(\"projectIdToTag\", jsonData.id);",
+									"pm.environment.set(\"projectIdToCategorize\", jsonData.id);",
 									"",
 									"eval(pm.environment.get(\"commonTests\"))();",
 									"",
@@ -581,7 +581,7 @@
 					"response": []
 				},
 				{
-					"name": "Tag-CreateTagToBeTagged-Administrator",
+					"name": "Category-CreateCategoryToBeCategorized-Administrator",
 					"event": [
 						{
 							"listen": "test",
@@ -601,7 +601,7 @@
 									"    pm.response.to.be.json;\r",
 									"});\r",
 									"\r",
-									"pm.environment.set(\"tagIdToBeTagged\", jsonData.id);"
+									"pm.environment.set(\"categoryIdToBeCategorized\", jsonData.id);"
 								],
 								"type": "text/javascript"
 							}
@@ -618,7 +618,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"{{tagName}}\"\r\n}",
+							"raw": "{\r\n    \"name\": \"{{categoryName}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -626,13 +626,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{apiUrl}}/api/Tag",
+							"raw": "{{apiUrl}}/api/Category",
 							"host": [
 								"{{apiUrl}}"
 							],
 							"path": [
 								"api",
-								"Tag"
+								"Category"
 							]
 						}
 					},
@@ -1115,10 +1115,10 @@
 							]
 						},
 						{
-							"name": "Tag",
+							"name": "Category",
 							"item": [
 								{
-									"name": "Tag-CreateTag-Administrator",
+									"name": "Category-CreateCategory-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -1138,7 +1138,7 @@
 													"    pm.response.to.be.json;\r",
 													"});\r",
 													"\r",
-													"pm.environment.set(\"tagId\", jsonData.id);"
+													"pm.environment.set(\"categoryId\", jsonData.id);"
 												],
 												"type": "text/javascript"
 											}
@@ -1155,7 +1155,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"{{tagName}}\"\r\n}",
+											"raw": "{\r\n    \"name\": \"{{categoryName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1163,32 +1163,32 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetAllTags-Administrator",
+									"name": "Category-GetAllCategories-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"var foundAt;",
 													"",
-													"function findTag(jsonData, name) {",
+													"function findCategory(jsonData, name) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
 													"        if (jsonData[i].name == name) {",
 													"            return i;",
@@ -1209,13 +1209,13 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Tag: \" + tagName + \" is in list\", function () {",
-													"    foundAt = findTag(jsonData, tagName);",
+													"pm.test(\"Category: \" + categoryName + \" is in list\", function () {",
+													"    foundAt = findCategory(jsonData, categoryName);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});",
 													"",
-													"pm.test(\"Tag Name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
+													"pm.test(\"Category Name is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1232,27 +1232,27 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetTag-Administrator",
+									"name": "Category-GetCategory-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagId = parseInt(pm.environment.get(\"tagId\"));",
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryId = parseInt(pm.environment.get(\"categoryId\"));",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -1268,8 +1268,8 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"TagName is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"CategoryName is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1286,28 +1286,28 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-UpdateTag-Administrator",
+									"name": "Category-UpdateCategory-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagNameUpdated\");",
-													"pm.environment.set(\"tagName\", tagName);",
+													"var categoryName = pm.environment.get(\"categoryNameUpdated\");",
+													"pm.environment.set(\"categoryName\", categoryName);",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -1323,8 +1323,8 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Tag Name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"Category Name is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1342,7 +1342,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagNameUpdated}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1350,27 +1350,27 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetUpdatedTag-Administrator",
+									"name": "Category-GetUpdatedCategory-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -1386,8 +1386,8 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"TagName is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"CategoryName is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1404,21 +1404,21 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetTag-NonExisting-Administrator",
+									"name": "Category-GetCategory-NonExisting-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -1452,13 +1452,13 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/98989",
+											"raw": "{{apiUrl}}/api/Category/98989",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
+												"Category",
 												"98989"
 											]
 										}
@@ -2066,10 +2066,10 @@
 							]
 						},
 						{
-							"name": "TagProject",
+							"name": "CategorizeProject",
 							"item": [
 								{
-									"name": "Project-TagProject-Administrator",
+									"name": "Project-CategorizeProject-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -2104,23 +2104,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Administrator",
+									"name": "Project-UncategorizeProject-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -2155,16 +2155,16 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -4410,7 +4410,7 @@
 									"response": []
 								},
 								{
-									"name": "Tag-DeleteTag-Administrator",
+									"name": "Category-DeleteCategory-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -4440,14 +4440,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
@@ -4679,7 +4679,7 @@
 							"name": "Checkup-on-Cleanup",
 							"item": [
 								{
-									"name": "Tag-Get-Deleted-Tag-Administrator",
+									"name": "Category-Get-Deleted-Category-Administrator",
 									"event": [
 										{
 											"listen": "test",
@@ -4715,14 +4715,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
@@ -4989,18 +4989,18 @@
 							"name": "Preparation",
 							"item": [
 								{
-									"name": "Tag-CreateTag",
+									"name": "Category-CreateCategory",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
-													"pm.environment.set(\"tagId\", jsonData.id);",
+													"pm.environment.set(\"categoryId\", jsonData.id);",
 													"",
 													"pm.test(\"Status code is 201\", function () {",
 													"    pm.response.to.have.status(201);",
@@ -5016,8 +5016,8 @@
 													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
-													"pm.test(\"Project Name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"Category Name is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -5035,7 +5035,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagName}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -5043,13 +5043,13 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
@@ -5708,10 +5708,10 @@
 							]
 						},
 						{
-							"name": "Tag",
+							"name": "Category",
 							"item": [
 								{
-									"name": "Tag-CreateTag-Guest",
+									"name": "Category-CreateCategory-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -5745,7 +5745,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagName}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -5753,20 +5753,20 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetAllTags-Guest",
+									"name": "Category-GetAllCategories-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -5799,20 +5799,20 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetTag-Guest",
+									"name": "Category-GetCategory-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -5845,21 +5845,21 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-UpdateTag-Guest",
+									"name": "Category-UpdateCategory-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -5889,7 +5889,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagNameUpdated}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -5897,21 +5897,21 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-DeleteTag-Guest",
+									"name": "Category-DeleteCategory-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -5939,14 +5939,14 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagId}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagId}}"
+												"Category",
+												"{{categoryId}}"
 											]
 										}
 									},
@@ -6497,10 +6497,10 @@
 							]
 						},
 						{
-							"name": "TagProject",
+							"name": "CategorizeProject",
 							"item": [
 								{
-									"name": "Project-TagProject-Guest",
+									"name": "Project-CategorizeProject-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -6526,29 +6526,29 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "",
 												"type": "text",
+												"value": "",
 												"disabled": true
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Guest",
+									"name": "Project-UncategorizeProject-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -6573,16 +6573,16 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -9257,10 +9257,10 @@
 							]
 						},
 						{
-							"name": "Tag",
+							"name": "Category",
 							"item": [
 								{
-									"name": "Tag-CreateTag-Registered",
+									"name": "Category-CreateCategory-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -9291,13 +9291,13 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagName}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9305,32 +9305,32 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetAllTags-Registered",
+									"name": "Category-GetAllCategories-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"var foundAt;",
 													"",
-													"function findTag(jsonData, name) {",
+													"function findCategory(jsonData, name) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
 													"        if (jsonData[i].name == name) {",
 													"            return i;",
@@ -9351,13 +9351,13 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"TagTagliatelle met: \" + tagName + \" is in list\", function () {",
-													"    foundAt = findTag(jsonData, tagName);",
+													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
+													"    foundAt = findCategory(jsonData, categoryName);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
+													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -9369,31 +9369,31 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetTag-Registered",
+									"name": "Category-GetCategory-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagNameInitial\");",
+													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -9409,8 +9409,8 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matches: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"Category name is set correctly and matches: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -9422,26 +9422,26 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-UpdateTag-Registered",
+									"name": "Category-UpdateCategory-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -9468,13 +9468,13 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagNameUpdated}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9482,21 +9482,21 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-DeleteTag-Registered",
+									"name": "Category-DeleteCategory-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -9525,19 +9525,19 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -10208,10 +10208,10 @@
 							]
 						},
 						{
-							"name": "TagProject",
+							"name": "CategorizeProject",
 							"item": [
 								{
-									"name": "Project-TagProject-Self-Registered",
+									"name": "Project-CategorizeProject-Self-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -10240,28 +10240,28 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-TagProject-Other-Registered",
+									"name": "Project-CategorizeProject-Other-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -10289,23 +10289,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Self-Registered",
+									"name": "Project-UncategorizeProject-Self-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -10339,23 +10339,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Other-Registered",
+									"name": "Project-UncategorizeProject-Other-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -10383,16 +10383,16 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -14349,10 +14349,10 @@
 							]
 						},
 						{
-							"name": "Tag",
+							"name": "Category",
 							"item": [
 								{
-									"name": "Tag-CreateTag-DataOfficer",
+									"name": "Category-CreateCategory-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -14389,7 +14389,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagName}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -14397,32 +14397,32 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetAllTags-DataOfficer",
+									"name": "Category-GetAllCategories-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"var foundAt;",
 													"",
-													"function findTag(jsonData, name) {",
+													"function findCategory(jsonData, name) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
 													"        if (jsonData[i].name == name) {",
 													"            return i;",
@@ -14443,66 +14443,13 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"TagTagliatelle met: \" + tagName + \" is in list\", function () {",
-													"    foundAt = findTag(jsonData, tagName);",
+													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
+													"    foundAt = findCategory(jsonData, categoryName);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Tag"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Tag-GetTag-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var tagName = pm.environment.get(\"tagNameInitial\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Tag name is set correctly and matches: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -14519,21 +14466,74 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-UpdateTag-DataOfficer",
+									"name": "Category-GetCategory-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Tag name is set correctly and matches: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Category",
+												"{{categoryIdToBeCategorized}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Category-UpdateCategory-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -14566,7 +14566,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagNameUpdated}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -14574,21 +14574,21 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-DeleteTag-DataOfficer",
+									"name": "Category-DeleteCategory-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -14622,14 +14622,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -15160,60 +15160,10 @@
 							]
 						},
 						{
-							"name": "TagProject",
+							"name": "CategorizeProject",
 							"item": [
 								{
-									"name": "Project-TagProject-Self-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"tag",
-												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-TagProject-Other-SameInstitution-DataOfficer",
+									"name": "Project-CategorizeProject-Self-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -15247,23 +15197,73 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdWithInstitution}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdWithInstitution}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectId}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-TagProject-Other-DifferentInstitution-DataOfficer",
+									"name": "Project-CategorizeProject-Other-SameInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdWithInstitution}}/{{categoryIdToBeCategorized}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"category",
+												"{{projectIdWithInstitution}}",
+												"{{categoryIdToBeCategorized}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CategorizeProject-Other-DifferentInstitution-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -15291,23 +15291,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectToBeDeletedByUnauthorizedRoles}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectToBeDeletedByUnauthorizedRoles}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectToBeDeletedByUnauthorizedRoles}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Self-DataOfficer",
+									"name": "Project-UncategorizeProject-Self-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -15341,23 +15341,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Other-SameInstitution-DataOfficer",
+									"name": "Project-UncategorizeProject-Other-SameInstitution-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -15391,23 +15391,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdWithInstitution}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdWithInstitution}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectIdWithInstitution}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Other-DifferentInstitution-DataOfficer",
+									"name": "Project-UncategorizeProject-Other-DifferentInstitution-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -15435,16 +15435,16 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectToBeDeletedByUnauthorizedRoles}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectToBeDeletedByUnauthorizedRoles}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectToBeDeletedByUnauthorizedRoles}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -18609,10 +18609,10 @@
 							]
 						},
 						{
-							"name": "Tag",
+							"name": "Category",
 							"item": [
 								{
-									"name": "Tag-CreateTag-PR",
+									"name": "Category-CreateCategory-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -18649,7 +18649,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagName}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -18657,32 +18657,32 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetAllTags-PR",
+									"name": "Category-GetAllCategories-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"var foundAt;",
 													"",
-													"function findTag(jsonData, name) {",
+													"function findCategory(jsonData, name) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
 													"        if (jsonData[i].name == name) {",
 													"            return i;",
@@ -18703,13 +18703,13 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"TagTagliatelle met: \" + tagName + \" is in list\", function () {",
-													"    foundAt = findTag(jsonData, tagName);",
+													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
+													"    foundAt = findCategory(jsonData, categoryName);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
+													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -18726,26 +18726,26 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetTag-PR",
+									"name": "Category-GetCategory-PR",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagNameInitial\");",
+													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -18761,8 +18761,8 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matches: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"Category name is set correctly and matches: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -18779,21 +18779,21 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-UpdateTag-PR",
+									"name": "Category-UpdateCategory-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -18826,7 +18826,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagNameUpdated}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -18834,21 +18834,21 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-DeleteTag-PR",
+									"name": "Category-DeleteCategory-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -18882,14 +18882,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -19559,10 +19559,10 @@
 							]
 						},
 						{
-							"name": "TagProject",
+							"name": "CategorizeProject",
 							"item": [
 								{
-									"name": "Project-TagProject-Self-PR",
+									"name": "Project-CategorizeProject-Self-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -19596,23 +19596,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-TagProject-Other-PR",
+									"name": "Project-CategorizeProject-Other-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -19640,23 +19640,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Self-PR",
+									"name": "Project-UncategorizeProject-Self-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -19690,23 +19690,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Other-PR",
+									"name": "Project-UncategorizeProject-Other-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -19734,16 +19734,16 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -23235,10 +23235,10 @@
 							]
 						},
 						{
-							"name": "Tag",
+							"name": "Category",
 							"item": [
 								{
-									"name": "Tag-CreateTag-Alumni",
+									"name": "Category-CreateCategory-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -23275,7 +23275,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagName}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -23283,32 +23283,32 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetAllTags-Alumni",
+									"name": "Category-GetAllCategories-Alumni",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagName\");",
+													"var categoryName = pm.environment.get(\"categoryName\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"var foundAt;",
 													"",
-													"function findTag(jsonData, name) {",
+													"function findCategory(jsonData, name) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
 													"        if (jsonData[i].name == name) {",
 													"            return i;",
@@ -23329,13 +23329,13 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"TagTagliatelle met: \" + tagName + \" is in list\", function () {",
-													"    foundAt = findTag(jsonData, tagName);",
+													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
+													"    foundAt = findCategory(jsonData, categoryName);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matching: \" + tagName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(tagName);",
+													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
+													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -23352,26 +23352,26 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag",
+											"raw": "{{apiUrl}}/api/Category",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag"
+												"Category"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-GetTag-Alumni",
+									"name": "Category-GetCategory-Alumni",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var tagName = pm.environment.get(\"tagNameInitial\");",
+													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -23387,8 +23387,8 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Tag name is set correctly and matches: \" + tagName, function () {",
-													"    pm.expect(jsonData.name).to.eql(tagName);",
+													"pm.test(\"Category name is set correctly and matches: \" + categoryName, function () {",
+													"    pm.expect(jsonData.name).to.eql(categoryName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -23405,21 +23405,21 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-UpdateTag-Alumni",
+									"name": "Category-UpdateCategory-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -23452,7 +23452,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{tagNameUpdated}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -23460,21 +23460,21 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Tag-DeleteTag-Alumni",
+									"name": "Category-DeleteCategory-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -23508,14 +23508,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Tag",
-												"{{tagIdToBeTagged}}"
+												"Category",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -24103,10 +24103,10 @@
 							]
 						},
 						{
-							"name": "TagProject",
+							"name": "CategorizeProject",
 							"item": [
 								{
-									"name": "Project-TagProject-Self-Alumni",
+									"name": "Project-CategorizeProject-Self-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -24140,23 +24140,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-TagProject-Other-Alumni",
+									"name": "Project-CategorizeProject-Other-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -24184,23 +24184,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Self-Alumni",
+									"name": "Project-UncategorizeProject-Self-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -24234,23 +24234,23 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectId}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
+												"category",
 												"{{projectId}}",
-												"{{tagIdToBeTagged}}"
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-DeleteTagProject-Other-Alumni",
+									"name": "Project-UncategorizeProject-Other-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -24278,16 +24278,16 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/tag/{{projectIdToTag}}/{{tagIdToBeTagged}}",
+											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"tag",
-												"{{projectIdToTag}}",
-												"{{tagIdToBeTagged}}"
+												"category",
+												"{{projectIdToCategorize}}",
+												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -26858,7 +26858,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete-ProjectForTagging",
+					"name": "Delete-ProjectForCategorizing",
 					"event": [
 						{
 							"listen": "test",
@@ -26888,14 +26888,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectIdToTag}}",
+							"raw": "{{apiUrl}}/api/Project/{{projectIdToCategorize}}",
 							"host": [
 								"{{apiUrl}}"
 							],
 							"path": [
 								"api",
 								"Project",
-								"{{projectIdToTag}}"
+								"{{projectIdToCategorize}}"
 							]
 						}
 					},
@@ -26990,7 +26990,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete-TagForTagging",
+					"name": "Delete-CategoryForCategorizing",
 					"event": [
 						{
 							"listen": "test",
@@ -27020,14 +27020,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{apiUrl}}/api/Tag/{{tagIdToBeTagged}}",
+							"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
 							"host": [
 								"{{apiUrl}}"
 							],
 							"path": [
 								"api",
-								"Tag",
-								"{{tagIdToBeTagged}}"
+								"Category",
+								"{{categoryIdToBeCategorized}}"
 							]
 						}
 					},
