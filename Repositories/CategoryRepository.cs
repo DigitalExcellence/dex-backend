@@ -30,12 +30,6 @@ namespace Repositories
     /// <seealso cref="IRepository{Category}"/>
     public interface ICategoryRepository : IRepository<Category> {
 
-        /// <summary>
-        ///     This interface method gets all categories asynchronously
-        /// </summary>
-        /// <returns></returns>
-        Task<List<Category>> GetAllAsync();
-
     }
 
     /// <summary>
@@ -51,12 +45,6 @@ namespace Repositories
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public CategoryRepository(DbContext dbContext) : base(dbContext) { }
-
-        public Task<List<Category>> GetAllAsync()
-        {
-            return GetDbSet<Category>()
-                   .ToListAsync();
-        }
 
     }
 

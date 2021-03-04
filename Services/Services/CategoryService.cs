@@ -33,12 +33,6 @@ namespace Services.Services
     public interface ICategoryService : IService<Category>
     {
 
-        /// <summary>
-        /// This is the interface method to get all categories ansynchronous
-        /// </summary>
-        /// <returns>A list of categories</returns>
-        Task<List<Category>> GetAllAsync();
-
     }
 
     /// <summary>
@@ -57,15 +51,6 @@ namespace Services.Services
         ///     Gets the repository
         /// </summary>
         protected new ICategoryRepository Repository => (ICategoryRepository) base.Repository;
-
-        /// <summary>
-        /// Gets all asynchronous.
-        /// </summary>
-        /// <returns>A list of all categories.</returns>
-        public Task<List<Category>> GetAllAsync()
-        {
-            return Repository.GetAllAsync();
-        }
 
     }
 
