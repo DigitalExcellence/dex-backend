@@ -91,9 +91,7 @@ namespace Repositories.Tests.DataGenerators
                    .RuleFor(option => option.AuthFlow,
                             faker => isFollowingOauthFlow)
                    .RuleFor(option => option.OrderIndex,
-                            faker => currentIndex)
-                   .RuleFor(option => option.DataSourceId,
-                            faker => faker.Random.Int(1, 10));
+                            faker => currentIndex);
 
         }
 
