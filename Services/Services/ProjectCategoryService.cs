@@ -28,7 +28,14 @@ namespace Services.Services
     /// </summary>
     public interface IProjectCategoryService : IService<ProjectCategory>
     {
+        /// <summary>
+        ///     Gets project category by given project and category id
+        /// </summary>
         Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId);
+
+        /// <summary>
+        ///     Gets project category by given category id
+        /// </summary>
         Task<ProjectCategory> GetProjectCategory(int categoryId);
     }
 
@@ -52,11 +59,17 @@ namespace Services.Services
         private new IProjectCategoryRepository Repository =>
             (IProjectCategoryRepository) base.Repository;
 
+        /// <summary>
+        ///     Gets project category by given project and category id
+        /// </summary>
         public Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId)
         {
             return Repository.GetProjectCategory(projectId, categoryId);
         }
 
+        /// <summary>
+        ///     Gets project category by given category id
+        /// </summary>
         public Task<ProjectCategory> GetProjectCategory(int categoryId)
         {
             return Repository.GetProjectCategory(categoryId);

@@ -25,34 +25,47 @@ namespace Repositories
 {
 
     /// <summary>
-    ///     This is the interface of the project tag repository
+    ///     This is the interface of the project category repository
     /// </summary>
     public interface IProjectCategoryRepository : IRepository<ProjectCategory>
     {
+        /// <summary>
+        ///     Gets project category by given project and category id
+        /// </summary>
         Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId);
+
+        /// <summary>
+        ///     Gets project category by given category id
+        /// </summary>
         Task<ProjectCategory> GetProjectCategory(int categoryId);
     }
 
     /// <summary>
-    ///     This is the project tag repository
+    ///     This is the project category repository
     /// </summary>
     public class ProjectCategoryRepository : Repository<ProjectCategory>,
                                              IProjectCategoryRepository
     {
 
         /// <summary>
-        ///     This is the project tag repository constructor
+        ///     This is the project category repository constructor
         /// </summary>
         /// <param name="dbContext"></param>
         public ProjectCategoryRepository(DbContext dbContext) :
             base(dbContext) { }
 
+        /// <summary>
+        ///     Gets project category by given project and category id
+        /// </summary>
         public Task<ProjectCategory> GetProjectCategory(int projectId, int categoryId)
         {
             return DbSet.Where(p => p.Category.Id == categoryId && p.Project.Id == projectId)
                         .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        ///     Gets project category by given category id
+        /// </summary>
         public Task<ProjectCategory> GetProjectCategory(int tagId)
         {
             return DbSet.Where(p => p.Category.Id == tagId)

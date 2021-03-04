@@ -35,28 +35,6 @@ namespace Services.Tests
 
         protected new ICategoryService Service => base.Service;
 
-        /// <summary>
-        ///     Test whether the repository method is called and no changes have been applied to the object
-        /// </summary>
-        /// <param name="categories">A set of 10 categories.</param>
-        /// <returns></returns>
-        [Test]
-        public async Task GetAllAsync([CategoryDataSource(10)] List<Category> categories)
-        {
-            RepositoryMock.Setup(repository => repository.GetAllAsync())
-                          .Returns(Task.FromResult(categories));
-
-            List<Category> retrievedCategories = await Service.GetAllAsync();
-
-            Assert.DoesNotThrow(() => { RepositoryMock.Verify(repository => repository.GetAllAsync(), Times.Once); });
-
-            Assert.AreEqual(categories, retrievedCategories);
-            Assert.AreEqual(10, retrievedCategories.Count);
-        }
-
-
-
-
         /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public override void AddRangeTest_GoodFlow([CategoryDataSource(10)] IEnumerable<Category> entities)

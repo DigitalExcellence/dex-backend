@@ -32,49 +32,6 @@ namespace Repositories.Tests
 
         protected new ICategoryRepository Repository => base.Repository;
 
-        /// <summary>
-        ///     Test if category with scope relations are retrieved correctly
-        /// </summary>
-        /// <param name="category">The category which is used as data to test.</param>
-        [Test]
-        public async Task GetAllAsync_one([CategoryDataSource] Category category)
-        {
-            DbContext.Add(category);
-            await DbContext.SaveChangesAsync();
-
-            List<Category> retrievedCategories = await Repository.GetAllAsync();
-            Assert.AreEqual(new List<Category>
-                            {
-                                category
-                            },
-                            retrievedCategories);
-        }
-
-        /// <summary>
-        ///     Test if category with scope relations are retrieved correctly
-        /// </summary>
-        /// <param name="categories">The category which is used as data to test.</param>
-        [Test]
-        public async Task GetAllAsync_multiple([CategoryDataSource(10)] List<Category> categories)
-        {
-            DbContext.AddRange(categories);
-            await DbContext.SaveChangesAsync();
-
-            List<Category> retrievedCategories = await Repository.GetAllAsync();
-            Assert.AreEqual(categories, retrievedCategories);
-        }
-
-        /// <summary>
-        ///     Test if category with scope relations are retrieved correctly when there are no categories.
-        /// </summary>
-        [Test]
-        public async Task GetAllAsync_NoCategory()
-        {
-            List<Category> categories = await Repository.GetAllAsync();
-            Assert.IsEmpty(categories);
-        }
-
-
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
         public override Task AddAsyncTest_GoodFlow([CategoryDataSource] Category entity)
