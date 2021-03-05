@@ -35,6 +35,9 @@ namespace Services.Tests.ExternalDataProviders.DataGenerators.Github
         /// </summary>
         public GithubDataSourceResourceResultDataGenerator()
         {
+            GithubDataSourceOwnerResourceResultDataGenerator ownerGenerator =
+                new GithubDataSourceOwnerResourceResultDataGenerator();
+
             Faker = new Faker<GithubDataSourceResourceResult>()
                     .RuleFor(_ => _.Id, faker => faker.Random.Int())
                     .RuleFor(_ => _.Archived, faker => faker.Random.Bool())
@@ -49,6 +52,7 @@ namespace Services.Tests.ExternalDataProviders.DataGenerators.Github
                     .RuleFor(_ => _.HasProjects, faker => faker.Random.Bool())
                     .RuleFor(_ => _.HasDownloads, faker => faker.Random.Bool())
                     .RuleFor(_ => _.HasWiki, faker => faker.Random.Bool())
+                    .RuleFor(_ => _.Owner, ownerGenerator.Generate())
                     .RuleFor(_ => _.HasPages, faker => faker.Random.Bool());
         }
 
