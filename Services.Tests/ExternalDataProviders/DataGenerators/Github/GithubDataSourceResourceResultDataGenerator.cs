@@ -38,6 +38,9 @@ namespace Services.Tests.ExternalDataProviders.DataGenerators.Github
             GithubDataSourceOwnerResourceResultDataGenerator ownerGenerator =
                 new GithubDataSourceOwnerResourceResultDataGenerator();
 
+            GithubDataSourceLicenseResourceResultDataGenerator licenseGenerator =
+                new GithubDataSourceLicenseResourceResultDataGenerator();
+
             Faker = new Faker<GithubDataSourceResourceResult>()
                     .RuleFor(_ => _.Id, faker => faker.Random.Int())
                     .RuleFor(_ => _.Archived, faker => faker.Random.Bool())
@@ -53,6 +56,7 @@ namespace Services.Tests.ExternalDataProviders.DataGenerators.Github
                     .RuleFor(_ => _.HasDownloads, faker => faker.Random.Bool())
                     .RuleFor(_ => _.HasWiki, faker => faker.Random.Bool())
                     .RuleFor(_ => _.Owner, ownerGenerator.Generate())
+                    .RuleFor(_ => _.License, licenseGenerator.Generate())
                     .RuleFor(_ => _.HasPages, faker => faker.Random.Bool());
         }
 
