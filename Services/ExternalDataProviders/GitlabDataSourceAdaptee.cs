@@ -32,10 +32,29 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
+    public interface IGitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IAuthorizedDataSourceAdaptee
+    {
+
+        Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(string username);
+
+        Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
+
+        Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier);
+
+        Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllGitlabRepositories(string accessToken, string username);
+
+        Task<GitlabDataSourceResourceResult> FetchGitlabRepositoryById(string identifier, string accessToken);
+
+        Task<GitlabDataSourceUserResourceResult> FetchUserFromAccessToken(string accessToken);
+
+        Task<string> FetchReadme(string readmeUri);
+
+    }
+
     /// <summary>
     ///     This class is responsible for communicating with the external Gitlab API.
     /// </summary>
-    public class GitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IAuthorizedDataSourceAdaptee
+    public class GitlabDataSourceAdaptee : IGitlabDataSourceAdaptee
     {
 
         private readonly string clientId;
@@ -229,7 +248,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(
+        public async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(
             string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
@@ -253,7 +272,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        public async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
@@ -281,7 +300,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier)
+        public async Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
@@ -305,7 +324,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllGitlabRepositories(
+        public async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllGitlabRepositories(
             string accessToken,
             string username)
         {
@@ -331,7 +350,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GitlabDataSourceResourceResult> FetchGitlabRepositoryById(
+        public async Task<GitlabDataSourceResourceResult> FetchGitlabRepositoryById(
             string identifier,
             string accessToken)
         {
@@ -357,7 +376,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GitlabDataSourceUserResourceResult> FetchUserFromAccessToken(string accessToken)
+        public async Task<GitlabDataSourceUserResourceResult> FetchUserFromAccessToken(string accessToken)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest("user");
@@ -381,7 +400,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<string> FetchReadme(string readmeUri)
+        public async Task<string> FetchReadme(string readmeUri)
         {
             readmeUri = readmeUri.Replace("blob", "raw");
 

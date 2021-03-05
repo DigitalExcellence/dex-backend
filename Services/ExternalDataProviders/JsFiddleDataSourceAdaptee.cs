@@ -31,7 +31,14 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
-    public class JsFiddleDataSourceAdaptee : IPublicDataSourceAdaptee
+    public interface IJsFiddleDataSourceAdaptee : IPublicDataSourceAdaptee
+    {
+
+        Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username);
+
+    }
+
+    public class JsFiddleDataSourceAdaptee : IJsFiddleDataSourceAdaptee
     {
 
         /// <summary>
@@ -131,7 +138,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username)
+        public async Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"user/{username}/demo/list.json", Method.GET);

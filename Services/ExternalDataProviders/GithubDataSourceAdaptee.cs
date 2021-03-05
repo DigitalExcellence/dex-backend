@@ -33,10 +33,27 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
+    public interface IGithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
+    {
+
+        Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken);
+
+        Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(string username);
+
+        Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
+
+        Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier);
+
+        Task<string> FetchReadme(string user, string repository, string accessToken = null);
+
+        Task<string> FetchReadmeContent(Uri downloadUri);
+
+    }
+
     /// <summary>
     ///     This class is responsible for communicating with the external Github API.
     /// </summary>
-    public class GithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
+    public class GithubDataSourceAdaptee : IGithubDataSourceAdaptee
     {
 
         private readonly string clientId;
@@ -233,7 +250,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
+        public async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest("user/repos", Method.GET);
@@ -263,7 +280,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(
+        public async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(
             string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
@@ -286,7 +303,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        public async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
@@ -313,7 +330,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier)
+        public async Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repositories/{identifier}", Method.GET);
@@ -343,7 +360,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<string> FetchReadme(string user, string repository, string accessToken = null)
+        public async Task<string> FetchReadme(string user, string repository, string accessToken = null)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repos/{user}/{repository}/readme");
@@ -386,7 +403,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<string> FetchReadmeContent(Uri downloadUri)
+        public async Task<string> FetchReadmeContent(Uri downloadUri)
         {
             IRestClient client = restClientFactory.Create(downloadUri);
             IRestRequest request = new RestRequest(Method.GET);
