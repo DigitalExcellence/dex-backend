@@ -1,0 +1,391 @@
+{
+	"info": {
+		"_postman_id": "dff4ba06-7393-4f76-831c-2c57b0971548",
+		"name": "DEV-Cleanup",
+		"description": "Testing Digital Excellence API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "DeleteUsers",
+					"item": [
+						{
+							"name": "Registered",
+							"item": [
+								{
+									"name": "Delete-RegisteredUser",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{registeredUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{registeredUserId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "PR",
+							"item": [
+								{
+									"name": "Delete-PRUser",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{prUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{prUserId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "DataOfficer",
+							"item": [
+								{
+									"name": "Delete-DataOfficerUser",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User/{{dataOfficerUserId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"{{dataOfficerUserId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Delete-ProjectForFollowing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"value": "{{administratorUserIdentityId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/Project/{{projectIdToFollow}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project",
+								"{{projectIdToFollow}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-ProjectToBeDeletedByUnauthorizedRole",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{administratorUserIdentityId}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/Project/{{projectToBeDeletedByUnauthorizedRoles}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project",
+								"{{projectToBeDeletedByUnauthorizedRoles}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-UserForFollowing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"value": "{{administratorUserIdentityId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/User/{{userIdToFollow}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"User",
+								"{{userIdToFollow}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role-DeleteRole-Administrator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{administratorUserIdentityId}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/Role/{{roleId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Role",
+								"{{roleId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessToken",
+				"value": "{{accessToken}}",
+				"type": "string"
+			},
+			{
+				"key": "tokenType",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
+					"",
+					"let tokenUrl = pm.variables.get(\"tokenUrl\");",
+					"let clientId = pm.variables.get(\"clientId\");",
+					"let clientSecret = pm.variables.get(\"clientSecret\");",
+					"let scope = pm.variables.get(\"scope\");",
+					"",
+					"let getTokenRequest = {",
+					"    method: 'POST',",
+					"    url: tokenUrl,",
+					"    auth: {",
+					"        type: \"basic\",",
+					"        basic: [",
+					"            { key: \"username\", value: clientId },",
+					"            { key: \"password\", value: clientSecret }",
+					"        ]",
+					"    },",
+					"    body: {",
+					"        mode: 'formdata',",
+					"        formdata: [",
+					"            { key: 'grant_type', value: 'client_credentials' },",
+					"            { key: 'scope', value: scope }",
+					"        ]",
+					"    }",
+					"};",
+					"",
+					"pm.sendRequest(getTokenRequest, (err, response) => {",
+					"    let jsonResponse = response.json(),",
+					"        newAccessToken = jsonResponse.access_token;",
+					"",
+					"    console.log({ err, jsonResponse, newAccessToken })",
+					"",
+					"    pm.environment.set('accessToken', newAccessToken);",
+					"    pm.variables.set('accessToken', newAccessToken);",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
