@@ -264,8 +264,8 @@ namespace Services.ExternalDataProviders
             request.AddQueryParameter("visibility", "all");
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(string.IsNullOrEmpty(response.Content)) return null;
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
             IEnumerable<GithubDataSourceResourceResult> projects =
                 JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
             return projects;
@@ -287,8 +287,8 @@ namespace Services.ExternalDataProviders
             IRestRequest request = new RestRequest($"users/{username}/repos", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(string.IsNullOrEmpty(response.Content)) return null;
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
             IEnumerable<GithubDataSourceResourceResult> resourceResults =
                 JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
             return resourceResults;

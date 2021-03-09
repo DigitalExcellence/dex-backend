@@ -47,6 +47,7 @@ namespace Services.Tests.ExternalDataProviders.DataGenerators.Github
                     .RuleFor(_ => _.Disabled, faker => faker.Random.Bool())
                     .RuleFor(_ => _.Size, faker => faker.Random.Long())
                     .RuleFor(_ => _.Description, faker => faker.Name.JobDescriptor())
+                    .RuleFor(_ => _.Name, faker => faker.Name.FirstName())
                     .RuleFor(_ => _.StargazersCount, faker => faker.Random.Long())
                     .RuleFor(_ => _.WatchersCount, faker => faker.Random.Long())
                     .RuleFor(_ => _.ForksCount, faker => faker.Random.Long())
