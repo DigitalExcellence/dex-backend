@@ -26,7 +26,7 @@ using RestSharp;
 using Services.ExternalDataProviders;
 using Services.ExternalDataProviders.Resources;
 using Services.Sources;
-using Services.Tests.ExternalDataProviders.DataSources;
+using Services.Tests.ExternalDataProviders.DataSources.Github;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -40,8 +40,6 @@ namespace Services.Tests.ExternalDataProviders
     [TestFixture]
     public class GithubDataSourceAdapteeTest
     {
-
-        // TODO: Make base class for all the different data source adaptee tests.
 
         /// <summary>
         ///     The IDataSourceAdaptee which in this case is the IGithubDataSourceAdaptee.

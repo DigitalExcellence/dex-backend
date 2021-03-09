@@ -16,6 +16,7 @@
 */
 
 using NUnit.Framework.Interfaces;
+using Repositories.Tests.DataGenerators.Base;
 using Services.ExternalDataProviders.Resources;
 using Services.Tests.ExternalDataProviders.DataGenerators.Github;
 using System;
@@ -23,32 +24,31 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Services.Tests.ExternalDataProviders.DataSources
+namespace Services.Tests.ExternalDataProviders.DataSources.Github
 {
-
     /// <summary>
-    ///     Attribute to generate Github Data Source Readme Resource Results
+    ///     Attribute to generate Github Data Source Resource Results
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class GithubDataSourceReadmeResourceResultDataSourceAttribute : Attribute, IParameterDataSource
+    public class GithubDataSourceResourceResultDataSourceAttribute : Attribute, IParameterDataSource
     {
 
         private readonly int amountToGenerate;
-        private readonly GithubDataSourceReadmeResourceResultDataGenerator fakeDataGenerator;
+        private readonly IFakeDataGenerator<GithubDataSourceResourceResult> fakeDataGenerator;
 
         /// <summary>
         ///     Initializes GithubDataSourceResourceResultDataSourceAttribute.
         /// </summary>
-        public GithubDataSourceReadmeResourceResultDataSourceAttribute()
+        public GithubDataSourceResourceResultDataSourceAttribute()
         {
-            fakeDataGenerator = new GithubDataSourceReadmeResourceResultDataGenerator();
+            fakeDataGenerator = new GithubDataSourceResourceResultDataGenerator();
         }
 
         /// <summary>
-        ///     Initializes GithubDataSourceReadmeResourceResultDataSourceAttribute
+        ///     Initializes GithubDataSourceResourceResultDataSourceAttribute
         ///     and setting the amount of Github data source resource results to be generated.
         /// </summary>
-        public GithubDataSourceReadmeResourceResultDataSourceAttribute(int amount) : this()
+        public GithubDataSourceResourceResultDataSourceAttribute(int amount) : this()
         {
             amountToGenerate = amount;
         }
@@ -64,7 +64,7 @@ namespace Services.Tests.ExternalDataProviders.DataSources
             {
                 return new[] {fakeDataGenerator.Generate()};
             }
-            List<GithubDataSourceReadmeResourceResult> projects = fakeDataGenerator.GenerateRange(amountToGenerate)
+            List<GithubDataSourceResourceResult> projects = fakeDataGenerator.GenerateRange(amountToGenerate)
                                                                              .ToList();
             return new [] {projects};
         }
