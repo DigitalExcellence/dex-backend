@@ -17,16 +17,21 @@
 
 using API.Configuration;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Models.Exceptions;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using RestSharp;
 using Services.ExternalDataProviders;
+using Services.ExternalDataProviders.Resources;
 using Services.Sources;
+using Services.Tests.ExternalDataProviders.DataSources.JsFiddle;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -83,17 +88,65 @@ namespace Services.Tests.ExternalDataProviders
         }
 
         [Test]
-        public async Task FetchAllFiddlesFromUser_GoodFlow()
+        public async Task FetchAllFiddlesFromUser_GoodFlow(
+            [JsFiddleDataSourceResourceResultDataSource(50)] IEnumerable<JsFiddleDataSourceResourceResult> resourceResults)
         {
             // Arrange
-            
+            MockRestClient(resourceResults, HttpStatusCode.OK);
+            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
 
             // Act
-
+            Action act = () => dataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
+            IEnumerable<JsFiddleDataSourceResourceResult> results = await dataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
 
             // Assert
+            act.Should().NotThrow();
+            results.Should().BeEquivalentTo(resourceResults);
+        }
 
+        [Test]
+        public async Task FetchAllFiddlesFromUser_ResponseIsNotSuccessful()
+        {
+            // Arrange
+            string errorMessage = "Invalid test request";
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
+            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
 
+            // Act
+            Func<Task> act = () => dataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
+
+            // Assert
+            act.Should().ThrowExactly<ExternalException>()
+               .WithMessage(errorMessage);
+
+        }
+
+        [Test]
+        public void GetPublicProjectById_GoodFlow()
+        {
+            // Arrange
+            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
+
+            // Act
+            Func<Task> act = () => dataSourceAdaptee.FetchPublicFiddleFromUri(It.IsAny<Uri>());
+
+            // Assert
+            act.Should().ThrowExactly<NotSupportedByExternalApiException>()
+               .WithMessage("JsFiddle does not support the GetPublicProjectFromUri functionality");
+        }
+
+        [Test]
+        public void FetchPublicFiddleById_GoodFlow()
+        {
+            // Arrange
+            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
+
+            // Act
+            Func<Task> act = () => dataSourceAdaptee.FetchPublicFiddleById(It.IsAny<string>());
+
+            // Assert
+            act.Should().ThrowExactly<NotSupportedByExternalApiException>()
+               .WithMessage("JsFiddle does not support the GetPublicProjectById functionality");
         }
 
         private void MockRestClient(object result, HttpStatusCode statusCode, string errorMessage = null)
