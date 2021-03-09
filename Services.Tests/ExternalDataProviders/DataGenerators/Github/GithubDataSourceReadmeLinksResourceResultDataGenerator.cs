@@ -37,9 +37,9 @@ namespace Services.Tests.ExternalDataProviders.DataGenerators.Github
         public GithubDataSourceReadmeLinksResourceResultDataGenerator()
         {
             Faker = new Faker<GithubDataSourceReadmeLinksResourceResult>()
-                    .RuleFor(_ => _.Git, faker => new Uri(faker.Person.Website))
-                    .RuleFor(_ => _.Self, faker => new Uri(faker.Person.Website))
-                    .RuleFor(_ => _.Html, faker => new Uri(faker.Person.Website));
+                    .RuleFor(_ => _.Git, faker => new Uri(faker.Image.PicsumUrl()))
+                    .RuleFor(_ => _.Self, faker => new Uri(faker.Image.PicsumUrl()))
+                    .RuleFor(_ => _.Html, faker => new Uri(faker.Image.PicsumUrl()));
         }
 
     }

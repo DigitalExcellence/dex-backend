@@ -16,7 +16,6 @@
 */
 
 using NUnit.Framework.Interfaces;
-using Repositories.Tests.DataGenerators.Base;
 using Services.ExternalDataProviders.Resources;
 using Services.Tests.ExternalDataProviders.DataGenerators.Github;
 using System;
@@ -35,7 +34,7 @@ namespace Services.Tests.ExternalDataProviders.DataSources
     {
 
         private readonly int amountToGenerate;
-        private readonly IFakeDataGenerator<GithubDataSourceReadmeResourceResult> fakeDataGenerator;
+        private readonly GithubDataSourceReadmeResourceResultDataGenerator fakeDataGenerator;
 
         /// <summary>
         ///     Initializes GithubDataSourceResourceResultDataSourceAttribute.

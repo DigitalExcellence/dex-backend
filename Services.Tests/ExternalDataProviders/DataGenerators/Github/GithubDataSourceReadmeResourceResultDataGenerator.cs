@@ -43,10 +43,10 @@ namespace Services.Tests.ExternalDataProviders.DataGenerators.Github
                     .RuleFor(_ => _.Size, faker => faker.Random.Long())
                     .RuleFor(_ => _.Name, faker => faker.Name.FirstName())
                     .RuleFor(_ => _.Content, faker => faker.Lorem.Sentences(10))
-                    .RuleFor(_ => _.Url, faker => new Uri(faker.Person.Website))
-                    .RuleFor(_ => _.GitUrl, faker => new Uri(faker.Person.Website))
-                    .RuleFor(_ => _.HtmlUrl, faker => new Uri(faker.Person.Website))
-                    .RuleFor(_ => _.DownloadUrl, faker => new Uri(faker.Person.Website))
+                    .RuleFor(_ => _.Url, faker => new Uri(faker.Image.PicsumUrl()))
+                    .RuleFor(_ => _.GitUrl, faker => new Uri(faker.Image.PicsumUrl()))
+                    .RuleFor(_ => _.HtmlUrl, faker => new Uri(faker.Image.PicsumUrl()))
+                    .RuleFor(_ => _.DownloadUrl, faker => new Uri(faker.Image.PicsumUrl()))
                     .RuleFor(_ => _.Links, linksGenerator.Generate);
         }
 
