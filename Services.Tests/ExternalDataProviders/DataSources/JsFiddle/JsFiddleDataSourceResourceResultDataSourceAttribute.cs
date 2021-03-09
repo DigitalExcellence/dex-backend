@@ -66,7 +66,7 @@ namespace Services.Tests.ExternalDataProviders.DataSources.JsFiddle
             {
                 return new[] {fakeDataGenerator.Generate()};
             }
-            List<GithubDataSourceResourceResult> projects = fakeDataGenerator.GenerateRange(amountToGenerate)
+            List<JsFiddleDataSourceResourceResult> projects = fakeDataGenerator.GenerateRange(amountToGenerate)
                                                                              .ToList();
             return new [] {projects};
         }
