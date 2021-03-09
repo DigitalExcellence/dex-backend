@@ -339,6 +339,3 @@ IdentityServer/tempkey.rsa
 
 ###
 rabbitmq/data/
-
-# Dev config for notification system
-NotificationSystem/appsettingsnotificationsystem.Development.json
