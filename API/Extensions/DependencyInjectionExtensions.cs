@@ -19,6 +19,7 @@ using API.Common;
 using API.HelperClasses;
 using Data;
 using MessageBrokerPublisher;
+using MessageBrokerPublisher.HelperClasses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -99,6 +100,8 @@ namespace API.Extensions
 
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
+
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddExternalDataSources();
 
