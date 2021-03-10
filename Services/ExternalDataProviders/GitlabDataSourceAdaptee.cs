@@ -78,9 +78,10 @@ namespace Services.ExternalDataProviders
         /// <param name="restClientFactory">The rest client factory which is used to create rest clients.</param>
         /// <param name="mapper">The mapper which is used to map Github resource results to projects.</param>
         public GitlabDataSourceAdaptee(
+            IConfiguration configuration,
             IRestClientFactory restClientFactory,
-            IMapper mapper,
-            IConfiguration configuration)
+            IMapper mapper
+            )
         {
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
@@ -307,7 +308,7 @@ namespace Services.ExternalDataProviders
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
-            if(string.IsNullOrEmpty(response.ContentType)) return null;
+            if(string.IsNullOrEmpty(response.Content)) return null;
 
             GitlabDataSourceResourceResult resourceResult =
                 JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
@@ -360,7 +361,7 @@ namespace Services.ExternalDataProviders
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
-            if(string.IsNullOrEmpty(response.ContentType)) return null;
+            if(string.IsNullOrEmpty(response.Content)) return null;
 
             GitlabDataSourceResourceResult resourceResult =
                 JsonConvert.DeserializeObject<GitlabDataSourceResourceResult>(response.Content);
