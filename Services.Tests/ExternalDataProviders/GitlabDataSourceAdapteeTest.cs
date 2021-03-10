@@ -88,7 +88,8 @@ namespace Services.Tests.ExternalDataProviders
 
         [Test]
         public async Task FetchAllPublicGitlabRepositories_GoodFlow(
-            [GitlabDataSourceResourceResultDataSource(50)] IEnumerable<GitlabDataSourceResourceResult> resourceResults)
+            [GitlabDataSourceResourceResultDataSource(50)]
+            IEnumerable<GitlabDataSourceResourceResult> resourceResults)
         {
             // Arrange
             MockRestClient(resourceResults, HttpStatusCode.OK);
@@ -100,8 +101,10 @@ namespace Services.Tests.ExternalDataProviders
                 await dataSourceAdaptee.FetchAllPublicGitlabRepositories(It.IsAny<string>());
 
             // Assert
-            act.Should().NotThrow();
-            retrievedResourceResults.Should().BeEquivalentTo(resourceResults);
+            act.Should()
+               .NotThrow();
+            retrievedResourceResults.Should()
+                                    .BeEquivalentTo(resourceResults);
 
         }
 
@@ -117,13 +120,15 @@ namespace Services.Tests.ExternalDataProviders
             Func<Task> act = () => dataSourceAdaptee.FetchAllPublicGitlabRepositories(It.IsAny<string>());
 
             // Assert
-            act.Should().ThrowExactly<ExternalException>()
+            act.Should()
+               .ThrowExactly<ExternalException>()
                .WithMessage(errorMessage);
         }
 
         [Test]
         public async Task FetchPublicRepository_GoodFlow(
-            [GitlabDataSourceResourceResultDataSource] GitlabDataSourceResourceResult resourceResult)
+            [GitlabDataSourceResourceResultDataSource]
+            GitlabDataSourceResourceResult resourceResult)
         {
             // Arrange
             MockRestClient(resourceResult, HttpStatusCode.OK);
@@ -132,11 +137,14 @@ namespace Services.Tests.ExternalDataProviders
             // Act
             Uri testUri = new Uri("https://google.nl/test");
             Action act = () => dataSourceAdaptee.FetchPublicRepository(testUri);
-            GitlabDataSourceResourceResult retrievedResourceResult = await dataSourceAdaptee.FetchPublicRepository(testUri);
+            GitlabDataSourceResourceResult retrievedResourceResult =
+                await dataSourceAdaptee.FetchPublicRepository(testUri);
 
             // Assert
-            act.Should().NotThrow();
-            retrievedResourceResult.Should().BeEquivalentTo(resourceResult);
+            act.Should()
+               .NotThrow();
+            retrievedResourceResult.Should()
+                                   .BeEquivalentTo(resourceResult);
         }
 
         [Test]
@@ -144,7 +152,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             string errorMessage = "Invalid test request";
-            MockRestClient(null , HttpStatusCode.BadRequest, errorMessage);
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
             dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
 
             // Act
@@ -152,13 +160,15 @@ namespace Services.Tests.ExternalDataProviders
             Func<Task> act = () => dataSourceAdaptee.FetchPublicRepository(testUri);
 
             // Assert
-            act.Should().ThrowExactly<ExternalException>()
+            act.Should()
+               .ThrowExactly<ExternalException>()
                .WithMessage(errorMessage);
         }
 
         [Test]
         public async Task FetchPublicGitlabRepositoryById_GoodFlow(
-            [GitlabDataSourceResourceResultDataSource] GitlabDataSourceResourceResult resourceResult)
+            [GitlabDataSourceResourceResultDataSource]
+            GitlabDataSourceResourceResult resourceResult)
         {
             // Arrange
             MockRestClient(resourceResult, HttpStatusCode.OK);
@@ -166,11 +176,14 @@ namespace Services.Tests.ExternalDataProviders
 
             // Act
             Action act = () => dataSourceAdaptee.FetchPublicGitlabRepositoryById(It.IsAny<string>());
-            GitlabDataSourceResourceResult retrievedResourceResult = await dataSourceAdaptee.FetchPublicGitlabRepositoryById(It.IsAny<string>());
+            GitlabDataSourceResourceResult retrievedResourceResult =
+                await dataSourceAdaptee.FetchPublicGitlabRepositoryById(It.IsAny<string>());
 
             // Assert
-            act.Should().NotThrow();
-            retrievedResourceResult.Should().BeEquivalentTo(resourceResult);
+            act.Should()
+               .NotThrow();
+            retrievedResourceResult.Should()
+                                   .BeEquivalentTo(resourceResult);
         }
 
         [Test]
@@ -178,20 +191,22 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             string errorMessage = "Invalid test request";
-            MockRestClient(null , HttpStatusCode.BadRequest, errorMessage);
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
             dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
 
             // Act
             Func<Task> act = () => dataSourceAdaptee.FetchPublicGitlabRepositoryById(It.IsAny<string>());
 
             // Assert
-            act.Should().ThrowExactly<ExternalException>()
+            act.Should()
+               .ThrowExactly<ExternalException>()
                .WithMessage(errorMessage);
         }
 
         [Test]
         public async Task FetchAllGitlabRepositories_GoodFlow(
-            [GitlabDataSourceResourceResultDataSource(50)] IEnumerable<GitlabDataSourceResourceResult> resourceResults)
+            [GitlabDataSourceResourceResultDataSource(50)]
+            IEnumerable<GitlabDataSourceResourceResult> resourceResults)
         {
             // Arrange
             MockRestClient(resourceResults, HttpStatusCode.OK);
@@ -199,11 +214,14 @@ namespace Services.Tests.ExternalDataProviders
 
             // Act
             Action act = () => dataSourceAdaptee.FetchAllGitlabRepositories(It.IsAny<string>(), It.IsAny<string>());
-            IEnumerable<GitlabDataSourceResourceResult> retrievedResourceResults = await dataSourceAdaptee.FetchAllGitlabRepositories(It.IsAny<string>(), It.IsAny<string>());
+            IEnumerable<GitlabDataSourceResourceResult> retrievedResourceResults =
+                await dataSourceAdaptee.FetchAllGitlabRepositories(It.IsAny<string>(), It.IsAny<string>());
 
             // Assert
-            act.Should().NotThrow();
-            retrievedResourceResults.Should().BeEquivalentTo(resourceResults);
+            act.Should()
+               .NotThrow();
+            retrievedResourceResults.Should()
+                                    .BeEquivalentTo(resourceResults);
         }
 
         [Test]
@@ -218,13 +236,15 @@ namespace Services.Tests.ExternalDataProviders
             Func<Task> act = () => dataSourceAdaptee.FetchAllGitlabRepositories(It.IsAny<string>(), It.IsAny<string>());
 
             // Assert
-            act.Should().ThrowExactly<ExternalException>()
+            act.Should()
+               .ThrowExactly<ExternalException>()
                .WithMessage(errorMessage);
         }
 
         [Test]
         public async Task FetchGitlabRepositoryById_GoodFlow(
-            [GitlabDataSourceResourceResultDataSource] GitlabDataSourceResourceResult resourceResult)
+            [GitlabDataSourceResourceResultDataSource]
+            GitlabDataSourceResourceResult resourceResult)
         {
             // Arrange
             MockRestClient(resourceResult, HttpStatusCode.OK);
@@ -232,11 +252,14 @@ namespace Services.Tests.ExternalDataProviders
 
             // Act
             Action act = () => dataSourceAdaptee.FetchGitlabRepositoryById(It.IsAny<string>(), It.IsAny<string>());
-            GitlabDataSourceResourceResult retrievedResourceResult = await dataSourceAdaptee.FetchGitlabRepositoryById(It.IsAny<string>(), It.IsAny<string>());
+            GitlabDataSourceResourceResult retrievedResourceResult =
+                await dataSourceAdaptee.FetchGitlabRepositoryById(It.IsAny<string>(), It.IsAny<string>());
 
             // Assert
-            act.Should().NotThrow();
-            retrievedResourceResult.Should().BeEquivalentTo(resourceResult);
+            act.Should()
+               .NotThrow();
+            retrievedResourceResult.Should()
+                                   .BeEquivalentTo(resourceResult);
         }
 
         [Test]
@@ -244,15 +267,104 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             string errorMessage = "Invalid test request";
-            MockRestClient(null , HttpStatusCode.BadRequest, errorMessage);
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
             dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
 
             // Act
             Func<Task> act = () => dataSourceAdaptee.FetchGitlabRepositoryById(It.IsAny<string>(), It.IsAny<string>());
 
             // Assert
-            act.Should().ThrowExactly<ExternalException>()
+            act.Should()
+               .ThrowExactly<ExternalException>()
                .WithMessage(errorMessage);
+        }
+
+        [Test]
+        public async Task FetchUserFromAccessToken_GoodFlow(
+            [GitlabDataSourceUserResourceResultDataSource]
+            GitlabDataSourceUserResourceResult userResourceResult)
+        {
+            // Arrange
+            MockRestClient(userResourceResult, HttpStatusCode.OK);
+            dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
+
+            // Act
+            Action act = () => dataSourceAdaptee.FetchUserFromAccessToken(It.IsAny<string>());
+            GitlabDataSourceUserResourceResult retrievedUsers =
+                await dataSourceAdaptee.FetchUserFromAccessToken(It.IsAny<string>());
+
+            // Assert
+            act.Should()
+               .NotThrow();
+            retrievedUsers.Should()
+                          .BeEquivalentTo(userResourceResult);
+        }
+
+        [Test]
+        public void FetchUserFromAccessToken_ResponseIsNotSuccessful()
+        {
+            // Arrange
+            string errorMessage = "Invalid test request";
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
+            dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
+
+            // Act
+            Func<Task> act = () => dataSourceAdaptee.FetchUserFromAccessToken(It.IsAny<string>());
+
+            // Assert
+            act.Should()
+               .ThrowExactly<ExternalException>()
+               .WithMessage(errorMessage);
+
+        }
+
+        [Test]
+        public async Task FetchReadme_GoodFlow()
+        {
+            // Arrange
+            string readmeContent = new string("This is the content from a test readme file");
+            MockRestClient(readmeContent, HttpStatusCode.OK);
+            dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
+
+            // Act
+            Action act = () => dataSourceAdaptee.FetchReadme("https://google.nl/test");
+            string retrievedReadme = await dataSourceAdaptee.FetchReadme("https://google.nl/test");
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedReadme.Substring(1, retrievedReadme.Length-2).Should().Be(readmeContent);
+        }
+
+        [Test]
+        public async Task FetchReadme_ContentNotFound()
+        {
+            // Arrange
+            MockRestClient(null , HttpStatusCode.NotFound);
+            dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
+
+            // Act
+            Action act = () => dataSourceAdaptee.FetchReadme("https://google.nl/test");
+            string retrievedReadmeContent = await dataSourceAdaptee.FetchReadme("https://google.nl/test");
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedReadmeContent.Should().BeNullOrEmpty();
+
+        }
+
+        [Test]
+        public async Task FetchReadme_ResponseIsNotSuccessful()
+        {
+            // Arrange
+            string errorMessage = "Invalid test request";
+            MockRestClient(null , HttpStatusCode.BadRequest, errorMessage);
+            dataSourceAdaptee = new GitlabDataSourceAdaptee(configurationMock, clientFactoryMock.Object, mapper);
+
+            // Act
+            Func<Task> act = () => dataSourceAdaptee.FetchReadme("https://google.nl/test");
+
+            // Assert
+            act.Should().ThrowExactly<ExternalException>().WithMessage(errorMessage);
         }
 
         private void MockRestClient(object result, HttpStatusCode statusCode, string errorMessage = null)

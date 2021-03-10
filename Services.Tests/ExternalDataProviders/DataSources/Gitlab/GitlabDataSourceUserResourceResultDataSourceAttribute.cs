@@ -19,6 +19,7 @@
 using NUnit.Framework.Interfaces;
 using Repositories.Tests.DataGenerators.Base;
 using Services.ExternalDataProviders.Resources;
+using Services.Tests.ExternalDataProviders.DataGenerators.Gitlab;
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -26,6 +26,7 @@ using Services.Sources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -410,10 +411,14 @@ namespace Services.ExternalDataProviders
 
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(!response.IsSuccessful ||
-               string.IsNullOrEmpty(response.Content))
+            if(!response.IsSuccessful)
             {
-                return null;
+                if(response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                throw new ExternalException(response.ErrorMessage);
             }
 
             return response.Content;
