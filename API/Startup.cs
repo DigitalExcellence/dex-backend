@@ -104,11 +104,8 @@ namespace API
                 o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
-            services.AddScoped<IRabbitMQConnectionFactory>(
-                c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname,
-                                                   Config.RabbitMQ.Username,
-                                                   Config.RabbitMQ.Password));
-            services.AddScoped<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname, Config.RabbitMQ.Username, Config.RabbitMQ.Password));
+
+            services.AddSingleton<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname, Config.RabbitMQ.Username, Config.RabbitMQ.Password));
 
             services.AddSingleton<IElasticSearchContext>(new ElasticSearchContext(ElasticConfig.Hostname, ElasticConfig.Username, ElasticConfig.Password, ElasticConfig.IndexUrl));
 

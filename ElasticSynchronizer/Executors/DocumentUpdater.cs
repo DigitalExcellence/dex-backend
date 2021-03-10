@@ -44,7 +44,13 @@ namespace ElasticSynchronizer.Executors
         /// </summary>
         public void ParsePayload(string jsonBody)
         {
-            eSProject = JsonConvert.DeserializeObject<ESProjectDTO>(jsonBody);
+            try
+            {
+                eSProject = JsonConvert.DeserializeObject<ESProjectDTO>(jsonBody);
+            } catch(Exception e)
+            {
+                Log.Logger.Error("Failed: " + e.Message);
+            }
         }
 
 

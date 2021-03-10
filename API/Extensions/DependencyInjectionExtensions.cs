@@ -120,7 +120,7 @@ namespace API.Extensions
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
                         
             services.AddSingleton<Queries>();
-            services.AddScoped<ITaskPublisher, TaskPublisher>();
+            services.AddSingleton<ITaskPublisher, TaskPublisher>();
 
             return services;
         }

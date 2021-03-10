@@ -78,6 +78,7 @@ namespace NotificationSystem.Services
                 Log.Logger.Information("Task executed");
             } catch(Exception e)
             {
+                channel.BasicAck(ea.DeliveryTag, false);
                 Log.Logger.Error("Task failed: " + e.Message);
             }
         }
