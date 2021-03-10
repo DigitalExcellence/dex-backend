@@ -63,6 +63,12 @@ namespace Services.Services
 
         Task<bool> ProjectExistsAsync(int id);
 
+        /// <summary>
+        ///     Get the users projects
+        /// </summary>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
+        /// <returns>The total number of pages for the results</returns>
+        Task<IEnumerable<Project>> GetUserProjects(int userId);
     }
 
     /// <summary>
@@ -184,6 +190,11 @@ namespace Services.Services
         public async Task<bool> ProjectExistsAsync(int id)
         {
             return await Repository.ProjectExistsAsync(id);
+        }
+        
+        public Task<IEnumerable<Project>> GetUserProjects(int userId)
+        {
+            return Repository.GetUserProjects(userId);
         }
     }
 

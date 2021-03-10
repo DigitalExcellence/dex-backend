@@ -98,6 +98,12 @@ namespace Repositories
 
         Task<bool> ProjectExistsAsync(int id);
 
+        /// <summary>
+        ///     Get the user projects.
+        /// </summary>
+        /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
+        /// <returns>A enumerable of the users projects</returns>
+        Task<IEnumerable<Project>> GetUserProjects(int userId);
     }
 
     /// <summary>
@@ -160,26 +166,20 @@ namespace Repositories
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
                                                     .Include(u => u.User)
                                                     .Include(p => p.ProjectIcon)
-                                                    .Include(p => p.CallToAction);
+                                                    .Include(p => p.CallToAction)
+                                                    .Include( p => p.Collaborators )
+                                                    .Include( p => p.User )
+                                                    .Include( p => p.Likes );
+
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
 
+            //Execute the IQueryable to get a collection of results
+            List<Project> projectResults = await queryableProjects.ToListAsync();
 
-            foreach(Project project in queryableProjects)
-            {
-                project.Collaborators = await GetDbSet<Collaborator>()
-                                              .Where(p => p.ProjectId == project.Id)
-                                              .ToListAsync();
-                project.User = RedactUser(project.User);
-                project.Likes = await GetDbSet<ProjectLike>()
-                                      .Where(p => p.LikedProject.Id == project.Id)
-                                      .ToListAsync();
+            //Redact the user after fetching the collection from the project (no separate query needs to be executed)
+            projectResults.ForEach( project => project.User = RedactUser( project.User ) );
 
-                project.LinkedInstitutions = await GetDbSet<ProjectInstitution>()
-                                                 .Include(p => p.Institution)
-                                                 .Where(p => p.ProjectId == project.Id)
-                                                 .ToListAsync();
-            }
-            return await queryableProjects.ToListAsync();
+            return projectResults;
         }
 
         /// <summary>
@@ -291,6 +291,22 @@ namespace Repositories
             }
 
             DbSet.Update(entity);
+        }
+
+        /// <summary>
+        ///     Get the user projects.
+        /// </summary>
+        /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
+        /// <returns>A enumerable of the users projects</returns>
+        public async Task<IEnumerable<Project>> GetUserProjects(int userId)
+        {
+            IEnumerable<Project> projects = await GetDbSet<Project>()
+                   .Include(p => p.Collaborators)
+                   .Include(p => p.ProjectIcon)
+                   .Where(p => p.UserId == userId)
+                   .ToListAsync();
+
+            return projects;
         }
 
         /// <summary>
