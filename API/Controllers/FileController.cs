@@ -91,7 +91,7 @@ namespace API.Controllers
         [HttpPost]
         [Authorize]
         [Consumes("multipart/form-data")]
-        [ControllerAttributes.AllowedExtensions(new string[] { ".jpeg", ".png", ".jpg", ".gif" })]
+        [ControllerAttributes.AllowedFileExtensions(new string[] { ".jpeg", ".png", ".jpg", ".gif" })]
         [ControllerAttributes.MaxFileSize(2097152)]
         [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]

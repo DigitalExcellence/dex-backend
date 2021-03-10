@@ -29,7 +29,7 @@ namespace API.ControllerAttributes
     /// Attribute for settings the allowed file extensions for every single file in the request.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AllowedExtensionsAttribute : ActionFilterAttribute
+    public class AllowedFileExtensionsAttribute : ActionFilterAttribute
     {
         // The allowed extensions for files .jpg, .png, etc.
         private readonly string[] allowedExtensions;
@@ -38,7 +38,7 @@ namespace API.ControllerAttributes
         /// Constructor of the AllowedExtensionsAttribute consumes allowedExtensions.
         /// </summary>
         /// <param name="allowedExtensions"></param>
-        public AllowedExtensionsAttribute(string[] allowedExtensions)
+        public AllowedFileExtensionsAttribute(string[] allowedExtensions)
         {
             this.allowedExtensions = allowedExtensions.Select(x => x.ToLower()).ToArray();
         }
@@ -72,6 +72,7 @@ namespace API.ControllerAttributes
                     };
                     context.Result = new JsonResult(problem);
                     context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    break;
                 }
             }
             if(fileExtensionsAreValid)

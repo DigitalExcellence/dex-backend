@@ -68,6 +68,7 @@ namespace API.ControllerAttributes
                     };
                     context.Result = new JsonResult(problem);
                     context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    break;
                 }
             }
             if(fileSizeIsValid)
