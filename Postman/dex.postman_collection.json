@@ -95,7 +95,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n\t\"identityId\": \"{{prUserIdentityId}}\",\r\n    \"name\": \"Public Relationship Postman User\",\r\n    \"email\": \"PRUser@postman.com\"\r\n}",
+											"raw": "{\r\n\t\"identityId\": \"{{prUserIdentityId}}\",\r\n    \"name\": \"Public Relationship Postman User\",\r\n    \"email\": \"PRUser@postman.com\",\r\n    \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -492,6 +492,70 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n  \"shortDescription\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n  \"uri\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\",\r\n      \"role\": \"postmantest_ProjectToBeDeletedByUnauthorizedRoles\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}/api/Project",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Project-CreateProjectToMakePrivate-PRUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var projectName = pm.environment.get(\"projectName\");",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"projectToMakePrivateId\", jsonData.id);",
+									"",
+									"eval(pm.environment.get(\"commonTests\"))();",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response must be valid and have a json body\", function () {",
+									"     pm.response.to.be.success;",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
+									"    pm.expect(jsonData.name).to.eql(projectName);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{registeredUserIdentityId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToMakePrivate\",\r\n  \"shortDescription\": \"postmantest_ProjectMakePrivate\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectMakePrivate\",\r\n      \"role\": \"postmantest_ProjectMakePrivate\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1724,6 +1788,143 @@
 									"response": []
 								},
 								{
+									"name": "Project-MakeInstitutionPrivate-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 404 and have the right error\", function () {\r",
+													"    pm.response.to.have.status(404);\r",
+													"       pm.expect(jsonData.detail).to.eql('The creator of the project send in the request is not bound to an institution and can therefore not make the project private.');\r",
+													"    //This test must fail on this status, because its not really possible to add an institution to the administrator with how the tests are setup. Therefore the authentication works (which this test tests), but fails because the administrator doesn't have an institution which is fine because that isn't in the scope of this test.\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.notFound;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Other-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"var temporaryProjectId = pm.environment.get('temporaryProjectId');\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectToMakePrivateId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectToMakePrivateId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-LinkInstitutionToProject-Administrator",
 									"event": [
 										{
@@ -1745,7 +1946,7 @@
 													"\r",
 													"pm.test(\"The right institution and project were linked\", function(){\r",
 													"    pm.expect(jsonData.projectId).to.eql(pm.environment.get(\"projectId\"));\r",
-													"    pm.expect(jsonData.institutionId).to.eql(pm.environment.get(\"createdInstitutionId\"));\r",
+													"    pm.expect(jsonData.institutionId).to.eql(1);\r",
 													"})"
 												],
 												"type": "text/javascript"
@@ -1762,7 +1963,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/{{createdInstitutionId}}",
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -1771,7 +1972,7 @@
 												"Project",
 												"linkedinstitution",
 												"{{projectId}}",
-												"{{createdInstitutionId}}"
+												"1"
 											]
 										}
 									},
@@ -1809,7 +2010,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/{{createdInstitutionId}}",
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -1818,7 +2019,7 @@
 												"Project",
 												"linkedinstitution",
 												"{{projectId}}",
-												"{{createdInstitutionId}}"
+												"1"
 											]
 										}
 									},
@@ -5436,6 +5637,175 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.unauthorized;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.unauthorized;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.unauthorized\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"auth": {
@@ -8246,253 +8616,6 @@
 							]
 						},
 						{
-							"name": "Institution",
-							"item": [
-								{
-									"name": "Institution-CreateInstitution-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"98764342123\",\n    \"name\": \"mycooltestusername\",\n    \"email\": \"postmantest_email@example.com\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Institution-GetInstitution-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/User/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Institution-UpdateInstitution-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/User/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Instituiton-DeleteInstitution-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/User/1",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"User",
-												"1"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"auth": {
-								"type": "noauth"
-							},
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
 							"name": "Project",
 							"item": [
 								{
@@ -9068,7 +9191,6 @@
 											"script": {
 												"exec": [
 													"var jsonData = pm.response.json();\r",
-													"var temporaryProjectId = pm.environment.get('temporaryProjectId');\r",
 													"\r",
 													"eval(pm.environment.get(\"commonTests\"))();\r",
 													"\r",
@@ -9171,7 +9293,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/{{createdInstitutionId}}",
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -9180,7 +9302,7 @@
 												"Project",
 												"linkedinstitution",
 												"{{projectId}}",
-												"{{createdInstitutionId}}"
+												"1"
 											]
 										}
 									},
@@ -9218,7 +9340,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/{{createdInstitutionId}}",
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -9227,7 +9349,7 @@
 												"Project",
 												"linkedinstitution",
 												"{{projectId}}",
-												"{{createdInstitutionId}}"
+												"1"
 											]
 										}
 									},
@@ -10479,6 +10601,253 @@
 						{
 							"name": "Wizard",
 							"item": []
+						},
+						{
+							"name": "Institution",
+							"item": [
+								{
+									"name": "Institution-CreateInstitution-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"identityId\": \"98764342123\",\n    \"name\": \"mycooltestusername\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Institution-GetInstitution-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Institution-UpdateInstitution-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"bobz\",\r\n  \"email\": \"BobSmith@email.com\",\r\n  \"identityId\": {{administratorUserIdentityId}}\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/User/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Instituiton-DeleteInstitution-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/User/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"User",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"auth": {
+								"type": "noauth"
+							},
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
 						},
 						{
 							"name": "ProjectIcon",
@@ -11747,7 +12116,7 @@
 							"name": "Cleanup Registered",
 							"item": [
 								{
-									"name": "Project-DeleteProject-Self-Registered",
+									"name": "Project-DeleteProject-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -11776,6 +12145,15 @@
 												"value": "{{registeredUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
 											"host": [
@@ -13571,6 +13949,253 @@
 												"api",
 												"Project",
 												"{{projectToBeDeletedByUnauthorizedRoles}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"instituteprivate is set correctly\", function(){\r",
+													"    pm.expect(jsonData.institutePrivate).to.eql(true);\r",
+													"})\r",
+													"\r",
+													"pm.test(\"institute is added\", function(){\r",
+													"    pm.expect(jsonData.linkedInstitutions).not.empty.null;\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Other-SameInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"instituteprivate is set correctly\", function(){\r",
+													"    pm.expect(jsonData.institutePrivate).to.eql(false);\r",
+													"})\r",
+													"\r",
+													"pm.test(\"institute is added\", function(){\r",
+													"    pm.expect(jsonData.linkedInstitutions).not.empty.null;\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "false\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectToMakePrivateId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectToMakePrivateId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.forbidden\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
 											]
 										}
 									},
@@ -16494,7 +17119,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"postman_Pr_jerry\",\r\n  \"email\": \"{{updatedPrUserEmail}}\",\r\n  \"identityId\": \"{{prUserIdentityId}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"postman_Pr_jerry\",\r\n  \"email\": \"{{updatedPrUserEmail}}\",\r\n  \"identityId\": \"{{prUserIdentityId}}\",\r\n  \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -17229,6 +17854,178 @@
 												"api",
 												"Project",
 												"{{adminProjectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"instituteprivate is set correctly\", function(){\r",
+													"    pm.expect(jsonData.institutePrivate).to.eql(true);\r",
+													"})\r",
+													"\r",
+													"pm.test(\"institute is added\", function(){\r",
+													"    pm.expect(jsonData.linkedInstitutions).not.empty.null;\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.forbidden\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
 											]
 										}
 									},
@@ -21264,6 +22061,170 @@
 												"Project",
 												"like",
 												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{alumniIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{alumniIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.forbidden\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{alumniIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
 											]
 										}
 									},

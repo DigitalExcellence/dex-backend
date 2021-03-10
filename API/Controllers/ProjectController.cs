@@ -799,12 +799,17 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project identifier</param>
         /// <param name="institutePrivate">The new value for InstitutePrivate in the given project</param>
-        /// <returns>The updated project</returns>
+        /// <returns>
+        ///     StatusCode 200 If success,
+        ///     StatusCode 404 If the project or current user couldn't be found.
+        ///     StatusCode 404 The creator of the project doesn't belong to an institution 
+        ///     StatusCode 403 If the user doesn't have the rights to make the project private.
+        /// </returns>
         [HttpPut("instituteprivate/{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProjectResultResource), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateProjectPrivateStatus(int projectId, [FromBody] bool institutePrivate)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -816,7 +821,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to getting the user account.",
                     Detail = "The database does not contain a user with the provided user id.",
-                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                    Instance = "88cfe86d-fcdd-42d2-8460-1ea1d582d879"
                 };
                 return NotFound(problemDetails);
             }
@@ -830,8 +835,8 @@ namespace API.Controllers
                                                 {
                                                     Title = "Failed setting the status of the project.",
                                                     Detail = "The project send in the request could not be found in the database.",
-                                                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
-                                                };
+                                                    Instance = "68cdf62d-26ef-4b6e-9f98-fdddcfc0fc71"
+                };
                 return NotFound(problemDetails);
             }
 
@@ -860,7 +865,7 @@ namespace API.Controllers
                 {
                     Title = "Failed setting the status of the project.",
                     Detail = "The creator of the project send in the request is not bound to an institution and can therefore not make the project private.",
-                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                    Instance = "6972f184-7715-41e6-8bca-8b4ee63d5c58"
                 };
                 return NotFound(problemDetails);
             }
@@ -886,11 +891,16 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project identifier</param>
         /// <param name="institutionId">The institution identifier</param>
-        /// <returns>The created ProjectInstitution</returns>
+        /// <returns>
+        ///     StatusCode 201 If success,
+        ///     StatusCode 404 If the project, institution or current user couldn't be found.
+        ///     StatusCode 409 If the project is already linked to the institution.
+        /// </returns>
         [HttpPost("linkedinstitution/{projectId}/{institutionId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -902,7 +912,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the user account.",
                     Detail = "The database does not contain a user with the provided user id.",
-                    Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
+                    Instance = "11deede6-c76c-42cd-ac50-97743e3cff2a"
                 };
                 return NotFound(problemDetails);
             }
@@ -913,7 +923,7 @@ namespace API.Controllers
                 {
                     Title = "Failed setting the status of the project.",
                     Detail = "The project send in the request could not be found in the database.",
-                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                    Instance = "4a73928f-827f-44a5-b508-e6a8c73c1717"
                 };
                 return NotFound(problemDetails);
             }
@@ -924,7 +934,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the institution.",
                     Detail = "The institution send in the request could not be found in the database.",
-                    Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
+                    Instance = "01cdc6f4-42aa-4394-bbc8-2576e4f99498"
                 };
                 return NotFound(problemDetails);
             }
@@ -935,7 +945,7 @@ namespace API.Controllers
                 {
                     Title = "Institution is already linked to project.",
                     Detail = "The institution cannot be linked to the project because the institution is already part of the project.",
-                    Instance = "A6d03AC7-A40f-4E34-8E21-F59b80C7A207"
+                    Instance = "01b26993-0c9e-4890-a7fe-f0f39450e616"
                 };
                 return Conflict(problemDetails);
             }
@@ -956,7 +966,11 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project identifier</param>
         /// <param name="institutionId">The institution identifier</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     StatusCode 201 If success,
+        ///     StatusCode 404 If the project, institution or current user couldn't be found.
+        ///     StatusCode 409 If the project is not yet linked to the institution.
+        /// </returns>
         [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -972,7 +986,7 @@ namespace API.Controllers
                 {
                     Title = "Failed to getting the user account.",
                     Detail = "The database does not contain a user with the provided user id.",
-                    Instance = "???"
+                    Instance = "7561e57a-d957-4823-9b90-d107aa54f893"
                 };
                 return NotFound(problemDetails);
             }
@@ -983,7 +997,7 @@ namespace API.Controllers
                 {
                     Title = "Failed setting the status of the project.",
                     Detail = "The project send in the request could not be found in the database.",
-                    Instance = "F745296E-A257-4657-AB82-7071DCAEE69B"
+                    Instance = "f358fc51-0761-4929-8cca-71a6225fe0cd"
                 };
                 return NotFound(problemDetails);
             }
@@ -994,7 +1008,7 @@ namespace API.Controllers
                 {
                     Title = "Failed getting the institution.",
                     Detail = "The institution send in the request could not be found in the database.",
-                    Instance = "C1C974AF-15CE-4F38-8149-EF5E88D25DD9"
+                    Instance = "7065c1e7-0543-470e-ab55-403c13418626"
                 };
                 return NotFound(problemDetails);
             }
@@ -1005,7 +1019,7 @@ namespace API.Controllers
                 {
                     Title = "Institution is not yet linked to the project.",
                     Detail = "The institution cannot be unlinked from the project, because it is not linked to the project in the first place.",
-                    Instance = "???"
+                    Instance = "695ef305-06b3-4ad8-99f2-773cd0f03e6e"
                 };
                 return Conflict(problemDetails);
             }

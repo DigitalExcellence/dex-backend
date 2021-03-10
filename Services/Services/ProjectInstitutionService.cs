@@ -18,7 +18,6 @@ namespace Services.Services
         /// <returns></returns>
         bool InstitutionIsLinkedToProject(int projectId, int institutionId);
         ProjectInstitution FindByInstitutionIdAndProjectId(int projectId, int institutionId);
-        IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId);
 
         void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId);
 
@@ -35,11 +34,6 @@ namespace Services.Services
         public ProjectInstitution FindByInstitutionIdAndProjectId(int projectId, int institutionId)
         {
             return Repository.FindByInstitutionIdAndProjectId(projectId, institutionId);
-        }
-
-        public IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId)
-        {
-            return Repository.FindByInstitutionsIdAndProjectId(projectId, institutionId);
         }
 
         public void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId)

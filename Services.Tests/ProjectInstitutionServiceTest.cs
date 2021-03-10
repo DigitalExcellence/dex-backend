@@ -1,6 +1,9 @@
+using FluentAssertions;
 using Models;
+using Moq;
 using NUnit.Framework;
 using Repositories;
+using Repositories.Tests.DataSources;
 using Services.Services;
 using Services.Tests.Base;
 using System;
@@ -10,53 +13,62 @@ using System.Threading.Tasks;
 
 namespace Services.Tests
 {
-    public class ProjectInstitutionServiceTest : ServiceTest<ProjectInstitution, IProjectInstitutionService, IProjectInstitutionRepository>
+    public class ProjectInstitutionServiceTest : ServiceTest<ProjectInstitution, ProjectInstitutionService, IProjectInstitutionRepository>
     {
+        protected new IProjectInstitutionService Service => base.Service;
 
+
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddRangeTest_GoodFlow(IEnumerable<ProjectInstitution> entities)
+        public override void AddRangeTest_GoodFlow([ProjectInstitutionDataSource(30)] IEnumerable<ProjectInstitution> entities)
         {
             base.AddRangeTest_GoodFlow(entities);
         }
 
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddTest_GoodFlow(ProjectInstitution entity)
+        public override void AddTest_GoodFlow([ProjectInstitutionDataSource] ProjectInstitution entity)
         {
             base.AddTest_GoodFlow(entity);
         }
 
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task FindAsyncTest_GoodFlow(ProjectInstitution entity)
+        public override Task FindAsyncTest_GoodFlow([ProjectInstitutionDataSource] ProjectInstitution entity)
         {
             return base.FindAsyncTest_GoodFlow(entity);
         }
 
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task GetAll(List<ProjectInstitution> entities)
+        public override Task GetAll([ProjectInstitutionDataSource(100)] List<ProjectInstitution> entities)
         {
             return base.GetAll(entities);
         }
 
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Remove(ProjectInstitution entity)
+        public override void Remove([ProjectInstitutionDataSource] ProjectInstitution entity)
         {
             base.Remove(entity);
         }
 
         [Test]
-        public override Task RemoveAsync(int id)
+        public Task RemoveAsync()
         {
-            return base.RemoveAsync(id);
+            return base.RemoveAsync(1);
         }
 
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public override void Save()
         {
             base.Save();
         }
 
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Update(ProjectInstitution entity)
+        public override void Update([ProjectInstitutionDataSource] ProjectInstitution entity)
         {
             base.Update(entity);
         }

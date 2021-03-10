@@ -10,16 +10,9 @@ namespace Repositories
 {
     public interface IProjectInstitutionRepository : IRepository<ProjectInstitution>
     {
-        /// <summary>
-        /// Checks if the the given institution is already linked to the project
-        /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="institutionId"></param>
-        /// <returns></returns>
         bool InstitutionIsLinkedToProject(int projectId, int institutionId);
 
         ProjectInstitution FindByInstitutionIdAndProjectId(int projectId, int institutionId);
-        IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId);
 
         void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId);
 
@@ -36,10 +29,7 @@ namespace Repositories
             return GetDbSet<ProjectInstitution>().FirstOrDefault(pi => pi.ProjectId == projectId && pi.InstitutionId == institutionId);
         }
 
-        public IEnumerable<ProjectInstitution> FindByInstitutionsIdAndProjectId(int projectId, int institutionId)
-        {
-            return GetDbSet<ProjectInstitution>().Where(pi => pi.ProjectId == projectId && pi.InstitutionId == institutionId);
-        }
+
 
         public void RemoveByProjectIdAndInstitutionId(int projectId, int institutionId)
         {
