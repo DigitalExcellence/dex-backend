@@ -169,7 +169,8 @@ namespace Repositories
                                                     .Include(p => p.CallToAction)
                                                     .Include( p => p.Collaborators )
                                                     .Include( p => p.User )
-                                                    .Include( p => p.Likes );
+                                                    .Include( p => p.Likes )
+                                                    .Include(p => p.LinkedInstitutions);
 
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
 
