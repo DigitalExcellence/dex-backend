@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Graduation system for users whose FHICT account becomes unavailable. [#287](https://github.com/DigitalExcellence/dex-backend/issues/287)
-- Added wizard to automatically import project with a public and an oauth flow - [326](https://github.com/DigitalExcellence/dex-backend/issues/326)
+- Added wizard to automatically import project with a public and an oauth flow - [#326](https://github.com/DigitalExcellence/dex-backend/issues/326)
 - Added feature to link multiple institutions to a project. [#281](https://github.com/DigitalExcellence/dex-backend/issues/281)
+
 
 ### Changed
 
@@ -26,7 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Fixed
-- Fixed inefficient use of entity framework for the fetching-all-projects endpoint. [376](https://github.com/DigitalExcellence/dex-backend/issues/376)
+- Fixed inefficient use of entity framework for the fetching-all-projects endpoint. [#376](https://github.com/DigitalExcellence/dex-backend/issues/376)
+- An issue where the JobScheduler did not start in staging/production. [#382](https://github.com/DigitalExcellence/dex-backend/issues/382)
 
 ### Security
 
