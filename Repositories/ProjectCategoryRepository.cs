@@ -66,9 +66,9 @@ namespace Repositories
         /// <summary>
         ///     Gets project category by given category id
         /// </summary>
-        public Task<ProjectCategory> GetProjectCategory(int tagId)
+        public Task<ProjectCategory> GetProjectCategory(int categoryId)
         {
-            return DbSet.Where(p => p.Category.Id == tagId)
+            return DbSet.Where(p => p.Category.Id == categoryId)
                         .FirstOrDefaultAsync();
         }
     }
