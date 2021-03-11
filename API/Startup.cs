@@ -489,13 +489,6 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                // if(!context.ProjectLike.Any())
-                // {
-                //     List<Project> projects = context.Project.ToList();
-                //     context.ProjectLike.AddRange(Seed.SeedProjectLikes(projects));
-                //     context.SaveChanges();
-                // }
-
 
 
                 // TODO seed embedded projects
