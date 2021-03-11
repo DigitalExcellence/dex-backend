@@ -3404,9 +3404,7 @@
 													"});\r",
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
+													"     pm.response.to.be.badRequest;\r",
 													"});\r",
 													"\r",
 													""
@@ -3468,8 +3466,6 @@
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
 													"     pm.response.to.be.badRequest;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
 													"});\r",
 													"\r",
 													""
