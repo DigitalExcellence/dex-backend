@@ -799,12 +799,10 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project identifier</param>
         /// <param name="institutePrivate">The new value for InstitutePrivate in the given project</param>
-        /// <returns>
-        ///     StatusCode 200 If success,
-        ///     StatusCode 404 If the project or current user couldn't be found.
-        ///     StatusCode 404 The creator of the project doesn't belong to an institution 
-        ///     StatusCode 403 If the user doesn't have the rights to make the project private.
-        /// </returns>
+        /// <response code="404">If the project or current user couldn't be found.</response>
+        /// <response code="404">The creator of the project doesn't belong to an institution </response>
+        /// <response code="403">If the user doesn't have the rights to make the project private.</response>
+        /// <response code="200">If success</response>
         [HttpPut("instituteprivate/{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProjectResultResource), StatusCodes.Status200OK)]
@@ -891,11 +889,9 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project identifier</param>
         /// <param name="institutionId">The institution identifier</param>
-        /// <returns>
-        ///     StatusCode 201 If success,
-        ///     StatusCode 404 If the project, institution or current user couldn't be found.
-        ///     StatusCode 409 If the project is already linked to the institution.
-        /// </returns>
+        /// <response code="404">If the project, institution or current user couldn't be found.</response>
+        /// <response code="409">If the project is already linked to the institution.</response>
+        /// <response code="201">If success</response>
         [HttpPost("linkedinstitution/{projectId}/{institutionId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -966,11 +962,9 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project identifier</param>
         /// <param name="institutionId">The institution identifier</param>
-        /// <returns>
-        ///     StatusCode 201 If success,
-        ///     StatusCode 404 If the project, institution or current user couldn't be found.
-        ///     StatusCode 409 If the project is not yet linked to the institution.
-        /// </returns>
+        /// <response code="404">If the project, institution or current user couldn't be found.</response>
+        /// <response code="409">If the project is not yet linked to the institution.</response>
+        /// <response code="201">If success</response>
         [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
