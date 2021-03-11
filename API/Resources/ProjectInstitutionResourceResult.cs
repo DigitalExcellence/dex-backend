@@ -17,13 +17,26 @@
 
 namespace API.Resources
 {
+    /// <summary>
+    ///     The viewmodel returned when a project and institution are linked
+    /// </summary>
     public class ProjectInstitutionResourceResult
     {
-
+        /// <summary>
+        ///     This gets or sets the InstitutionId
+        /// </summary>
         public int InstitutionId { get; set; }
+        /// <summary>
+        ///     This gets or sets the InstititutionName
+        /// </summary>
         public string InstititutionName { get; set; }
+        /// <summary>
+        ///     This gets or sets the ProjectId
+        /// </summary>
         public int ProjectId { get; set; }
-
+        /// <summary>
+        ///     This gets or sets the ProjectName
+        /// </summary>
         public string ProjectName { get; set; }
     }
 }

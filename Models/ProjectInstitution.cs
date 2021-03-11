@@ -19,6 +19,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
+    /// <summary>
+    ///     This class contains an institution linked to a project
+    /// </summary>
     public class ProjectInstitution
     {
         public ProjectInstitution()
@@ -31,11 +34,40 @@ namespace Models
             this.ProjectId = projectId;
             this.InstitutionId = institutionId;
         }
-
+        /// <summary>
+        ///     Gets or set the identifier.
+        /// </summary>
+        /// <value>
+        ///     The identifier.
+        /// </value>
         public int Id { get; set; }
+        /// <summary>
+        ///     Gets or set the project identifier.
+        /// </summary>
+        /// <value>
+        ///     The project identifier.
+        /// </value>
         public int ProjectId { get; set; }
+        /// <summary>
+        ///     Gets or set the project.
+        /// </summary>
+        /// <value>
+        ///     The project.
+        /// </value>
         public Project Project { get; set; }
+        /// <summary>
+        ///     Gets or set the institution identifier.
+        /// </summary>
+        /// <value>
+        ///     The institution identifier.
+        /// </value>
         public int InstitutionId { get; set; }
+        /// <summary>
+        ///     Gets or set the institution.
+        /// </summary>
+        /// <value>
+        ///     The institution.
+        /// </value>
         public Institution Institution { get; set; }
         
     }

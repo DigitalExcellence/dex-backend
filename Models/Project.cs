@@ -48,7 +48,12 @@ namespace Models
         public string ShortDescription { get; set; }
 
         public List<Collaborator> Collaborators { get; set; }
-
+        /// <summary>
+        ///     Gets or set the linked institutions.
+        /// </summary>
+        /// <value>
+        ///     The linked institutions.
+        /// </value>
         public List<ProjectInstitution> LinkedInstitutions { get; set; }
 
         [Required]
@@ -75,8 +80,8 @@ namespace Models
         /// if the insitution is private, if the user is part of an institution linked to this project
         /// or if the user is the one who created the project
         /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
+        /// <param name="user">The user that wants access</param>
+        /// <returns>Boolean that determines whether the user has access</returns>
         public bool CanAccess(User user)
         {
             if(InstitutePrivate == false)
@@ -84,7 +89,7 @@ namespace Models
                 return true;
             }
 
-            if(User.Id == user.Id || LinkedInstitutions.Any(li => li.InstitutionId == user.InstitutionId))
+            if(IsCreator(user.Id) || LinkedInstitutions.Any(li => li.InstitutionId == user.InstitutionId))
             {
                 return true;
             }
@@ -92,6 +97,11 @@ namespace Models
             return false;
         }
 
+        /// <summary>
+        /// Checks if the user is the creator
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <returns>Boolean that determines whether the user is the creator of the project</returns>
         public bool IsCreator(int userId)
         {
             return this.UserId == userId;
