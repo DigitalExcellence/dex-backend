@@ -34,6 +34,11 @@ namespace API.Resources
         /// </summary>
         public string Role { get; set; }
 
+        /// <summary>
+        ///     Get or Set the LinkedUser of a collaborator
+        /// </summary>
+        public LinkedUserResource LinkedUser { get; set; }
+
     }
 
 }

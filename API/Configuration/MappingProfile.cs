@@ -142,6 +142,8 @@ namespace API.Configuration
 
             CreateMap<OauthTokens, OauthTokensResourceResult>();
 
+            CreateMap<LinkedUserResource, LinkedUser>();
+
             CreateExternalSourceMappingProfiles();
         }
 
