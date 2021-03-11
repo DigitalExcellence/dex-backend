@@ -98,7 +98,7 @@ namespace API.Resources
         public bool InstitutePrivate { get; set; }
 
         /// <summary>
-        ///     This gets or sets the tags belonging to a project.
+        ///     This gets or sets the categories belonging to a project.
         /// </summary>
         public List<ProjectCategoryResourceResult> Categories { get; set; }
 

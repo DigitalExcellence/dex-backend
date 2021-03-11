@@ -31,12 +31,12 @@ namespace API.Controllers
         ///     Initializes a new instance of the <see cref="CategoryController" /> class
         /// </summary>
         /// <param name="categoryService">The category service which is used to communicate with the logic layer.</param>
-        /// <param name="projectTagService">The project tag service which is used to communicate with the logic layer.</param>
+        /// <param name="projectCategoryService">The project category service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the model to the resource result.</param>
-        public CategoryController(ICategoryService categoryService, IProjectCategoryService projectTagService, IMapper mapper)
+        public CategoryController(ICategoryService categoryService, IProjectCategoryService projectCategoryService, IMapper mapper)
         {
             this.categoryService = categoryService;
-            this.projectCategoryService = projectTagService;
+            this.projectCategoryService = projectCategoryService;
             this.mapper = mapper;
         }
 
