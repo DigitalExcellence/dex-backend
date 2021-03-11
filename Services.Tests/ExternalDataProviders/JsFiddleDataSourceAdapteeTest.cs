@@ -15,77 +15,26 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using API.Configuration;
-using AutoMapper;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Models.Exceptions;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using RestSharp;
 using Services.ExternalDataProviders;
 using Services.ExternalDataProviders.Resources;
-using Services.Sources;
+using Services.Tests.Base;
 using Services.Tests.ExternalDataProviders.DataSources.JsFiddle;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Services.Tests.ExternalDataProviders
 {
 
     [TestFixture]
-    public class JsFiddleDataSourceAdapteeTest
+    public class JsFiddleDataSourceAdapteeTest : AdapteeTest<IJsFiddleDataSourceAdaptee>
     {
-
-        /// <summary>
-        ///     The IDataSourceAdaptee which in this case is the IGithubDataSourceAdaptee.
-        /// </summary>
-        private IJsFiddleDataSourceAdaptee dataSourceAdaptee;
-
-        /// <summary>
-        ///     A mock of the configuration.
-        /// </summary>
-        private IConfiguration configurationMock;
-
-        /// <summary>
-        ///     The actual mapper.
-        /// </summary>
-        private IMapper mapper;
-
-        private Mock<IRestClient> clientMock;
-
-        private Mock<IRestClientFactory> clientFactoryMock;
-
-        /// <summary>
-        ///     Initialize runs before every test
-        /// </summary>
-        [SetUp]
-        public void Initialize()
-        {
-            Dictionary<string, string> inMemoryConf = new Dictionary<string, string>
-                                                      {
-                                                          {"App:DataSources:JsFiddle", "valid_access_token"}
-                                                      };
-
-            configurationMock = new ConfigurationBuilder()
-                                .AddInMemoryCollection(inMemoryConf)
-                                .Build();
-
-            clientMock = new Mock<IRestClient>();
-
-            clientFactoryMock = new Mock<IRestClientFactory>();
-            clientFactoryMock
-                .Setup(_ => _.Create(It.IsAny<Uri>()))
-                .Returns(clientMock.Object);
-
-            MapperConfiguration mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
-            mapper = mappingConfig.CreateMapper();
-        }
 
         [Test]
         public async Task FetchAllFiddlesFromUser_GoodFlow(
@@ -93,11 +42,11 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             MockRestClient(resourceResults, HttpStatusCode.OK);
-            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
+            DataSourceAdaptee = new JsFiddleDataSourceAdaptee(ClientFactoryMock.Object, Mapper);
 
             // Act
-            Action act = () => dataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
-            IEnumerable<JsFiddleDataSourceResourceResult> results = await dataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
+            Action act = () => DataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
+            IEnumerable<JsFiddleDataSourceResourceResult> results = await DataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
 
             // Assert
             act.Should().NotThrow();
@@ -105,15 +54,15 @@ namespace Services.Tests.ExternalDataProviders
         }
 
         [Test]
-        public async Task FetchAllFiddlesFromUser_ResponseIsNotSuccessful()
+        public void FetchAllFiddlesFromUser_ResponseIsNotSuccessful()
         {
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
+            DataSourceAdaptee = new JsFiddleDataSourceAdaptee(ClientFactoryMock.Object, Mapper);
 
             // Act
-            Func<Task> act = () => dataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
+            Func<Task> act = () => DataSourceAdaptee.FetchAllFiddlesFromUser(It.IsAny<string>());
 
             // Assert
             act.Should().ThrowExactly<ExternalException>()
@@ -125,10 +74,10 @@ namespace Services.Tests.ExternalDataProviders
         public void GetPublicProjectById_GoodFlow()
         {
             // Arrange
-            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
+            DataSourceAdaptee = new JsFiddleDataSourceAdaptee(ClientFactoryMock.Object, Mapper);
 
             // Act
-            Func<Task> act = () => dataSourceAdaptee.FetchPublicFiddleFromUri(It.IsAny<Uri>());
+            Func<Task> act = () => DataSourceAdaptee.FetchPublicFiddleFromUri(It.IsAny<Uri>());
 
             // Assert
             act.Should().ThrowExactly<NotSupportedByExternalApiException>()
@@ -139,33 +88,14 @@ namespace Services.Tests.ExternalDataProviders
         public void FetchPublicFiddleById_GoodFlow()
         {
             // Arrange
-            dataSourceAdaptee = new JsFiddleDataSourceAdaptee(clientFactoryMock.Object, mapper);
+            DataSourceAdaptee = new JsFiddleDataSourceAdaptee(ClientFactoryMock.Object, Mapper);
 
             // Act
-            Func<Task> act = () => dataSourceAdaptee.FetchPublicFiddleById(It.IsAny<string>());
+            Func<Task> act = () => DataSourceAdaptee.FetchPublicFiddleById(It.IsAny<string>());
 
             // Assert
             act.Should().ThrowExactly<NotSupportedByExternalApiException>()
                .WithMessage("JsFiddle does not support the GetPublicProjectById functionality");
-        }
-
-        private void MockRestClient(object result, HttpStatusCode statusCode, string errorMessage = null)
-        {
-            Mock<IRestResponse> response = new Mock<IRestResponse>();
-            response.Setup(_ => _.Content)
-                    .Returns(JsonConvert.SerializeObject(result));
-
-            response.Setup(_ => _.StatusCode)
-                    .Returns(statusCode);
-
-            response.Setup(_ => _.IsSuccessful)
-                    .Returns(() => (int) statusCode >= 200 && (int) statusCode <= 299);
-
-            response.Setup(_ => _.ErrorMessage)
-                    .Returns(() => errorMessage);
-
-            clientMock.Setup(_ => _.ExecuteAsync(It.IsAny<IRestRequest>(), CancellationToken.None))
-                      .ReturnsAsync(response.Object);
         }
 
     }
