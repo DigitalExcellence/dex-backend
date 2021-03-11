@@ -65,7 +65,7 @@ namespace JobScheduler
         public async Task<List<UserTask>> GetExpectedGraduationUsersAsync()
         {
             HttpResponseMessage response =
-                await client.GetAsync("localhost/UserTask/CreateUserTasks/" + config.JobSchedulerConfig.TimeRange);
+                await client.GetAsync("api/UserTask/CreateUserTasks/" + config.JobSchedulerConfig.TimeRange);
             return JsonConvert.DeserializeObject<List<UserTask>>(await response.Content.ReadAsStringAsync());
         }
 
@@ -75,7 +75,7 @@ namespace JobScheduler
         /// <param name="userTaskId"></param>
         public void SetGraduationTaskStatusToMailed(int userTaskId)
         {
-            client.PutAsync("localhost/UserTask/SetToMailed/" + userTaskId, null);
+            client.PutAsync("api/UserTask/SetToMailed/" + userTaskId, null);
         }
 
     }
