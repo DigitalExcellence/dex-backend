@@ -178,6 +178,9 @@ namespace Repositories
             //Execute the IQueryable to get a collection of results
             List<Project> projectResults = await queryableProjects.ToListAsync();
 
+            //Redact the user after fetching the collection from the project (no separate query needs to be executed)
+            projectResults.ForEach(project => project.User = RedactUser(project.User));
+
             // This is needed because otherwise likes, collaborators and categories are missing!
             foreach(Project project in queryableProjects)
             {
