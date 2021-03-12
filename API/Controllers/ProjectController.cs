@@ -818,7 +818,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("category/{projectId}/{categoryId}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(typeof(ProjectCategoryResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
