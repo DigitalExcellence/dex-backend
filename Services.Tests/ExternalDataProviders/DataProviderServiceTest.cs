@@ -16,13 +16,13 @@
 */
 
 
+using FluentAssertions;
 using Models;
 using Moq;
 using NUnit.Framework;
 using Repositories.Tests.DataSources;
 using Services.ExternalDataProviders;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -51,6 +51,8 @@ namespace Services.Tests.ExternalDataProviders
         public void Initialize()
         {
             dataSourceMock = new Mock<IDataSourceAdaptee>();
+            dataSourceMock.As<IAuthorizedDataSourceAdaptee>();
+            dataSourceMock.As<IPublicDataSourceAdaptee>();
 
             loaderMock = new Mock<IDataProviderLoader>();
             loaderMock.Setup(_ => _.GetDataSourceByGuid(It.IsAny<string>()))
@@ -61,18 +63,92 @@ namespace Services.Tests.ExternalDataProviders
             service = new DataProviderService(loaderMock.Object);
         }
 
-        public async Task GetAllProjects_GoodFlow([ProjectDataSource(50)] IEnumerable<Project> projects)
+        [Test]
+        public async Task GetAllProjectsInAuthFlow_GoodFlow([ProjectDataSource(50)] IEnumerable<Project> projects)
         {
             // Arrange
+            dataSourceMock.As<IAuthorizedDataSourceAdaptee>().Setup(_ => _.GetAllProjects(It.IsAny<string>()))
+                          .ReturnsAsync(projects);
 
             // Act
-            Action act = () => service.GetAllProjects(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>());
+            Action act = () => service.GetAllProjects(It.IsAny<string>(), It.IsAny<string>(), true);
             IEnumerable<Project> retrievedProjects =
-                await service.GetAllProjects(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>());
+                await service.GetAllProjects(It.IsAny<string>(), It.IsAny<string>(), true);
 
             // Assert
+            act.Should().NotThrow();
+            retrievedProjects.Should().BeEquivalentTo(projects);
 
+        }
 
+        [Test]
+        public async Task GetAllProjectsInPublicFlow_GoodFlow([ProjectDataSource(50)] IEnumerable<Project> projects)
+        {
+            // Arrange
+            dataSourceMock.As<IPublicDataSourceAdaptee>().Setup(_ => _.GetAllPublicProjects(It.IsAny<string>()))
+                          .ReturnsAsync(projects);
+
+            // Act
+            Action act = () => service.GetAllProjects(It.IsAny<string>(), It.IsAny<string>(), false);
+            IEnumerable<Project> retrievedProjects =
+                await service.GetAllProjects(It.IsAny<string>(), It.IsAny<string>(), false);
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedProjects.Should().BeEquivalentTo(projects);
+
+        }
+
+        [Test]
+        public async Task GetProjectByIdInAuthFlow_GoodFlow([ProjectDataSource] Project project)
+        {
+            // Arrange
+            dataSourceMock.As<IAuthorizedDataSourceAdaptee>().Setup(_ => _.GetProjectById(It.IsAny<string>(), It.IsAny<string>()))
+                          .ReturnsAsync(project);
+
+            // Act
+            Action act = () => service.GetProjectById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), true);
+            Project retrievedProject =
+                await service.GetProjectById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), true);
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedProject.Should().Be(project);
+        }
+
+        [Test]
+        public async Task GetProjectByIdInPublicFlow_GoodFlow([ProjectDataSource] Project project)
+        {
+            // Arrange
+            dataSourceMock.As<IPublicDataSourceAdaptee>().Setup(_ => _.GetPublicProjectById(It.IsAny<string>()))
+                          .ReturnsAsync(project);
+
+            // Act
+            Action act = () => service.GetProjectById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), false);
+            Project retrievedProject =
+                await service.GetProjectById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), false);
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedProject.Should().Be(project);
+        }
+
+        [Test]
+        public async Task GetProjectFromUri_GoodFlow([ProjectDataSource] Project project)
+        {
+            // Arrange
+            dataSourceMock.As<IPublicDataSourceAdaptee>()
+                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>()))
+                          .ReturnsAsync(project);
+
+            // Act
+            Action act = () => service.GetProjectFromUri(It.IsAny<string>(), "https://google.nl/test");
+            Project retrievedProject =
+                await service.GetProjectFromUri(It.IsAny<string>(), "https://google.nl/test");
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedProject.Should().Be(project);
         }
 
     }
