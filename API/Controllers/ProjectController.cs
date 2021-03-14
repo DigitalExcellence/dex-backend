@@ -896,7 +896,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProjectInstitutionResourceResult), StatusCodes.Status201Created)]
         public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -964,9 +964,10 @@ namespace API.Controllers
         /// <param name="institutionId">The institution identifier</param>
         /// <response code="404">If the project, institution or current user couldn't be found.</response>
         /// <response code="409">If the project is not yet linked to the institution.</response>
-        /// <response code="201">If success</response>
+        /// <response code="200">If success</response>
         [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId, int institutionId)
