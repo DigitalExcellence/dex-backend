@@ -904,7 +904,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("category/{projectId}/{categoryId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProjectResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
