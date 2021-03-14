@@ -272,11 +272,13 @@ namespace API.Controllers
         /// <response code="400">
         ///     The 400 Bad Request status code is returned when the project
         ///     resource is not specified or failed to save project to the database.
+        ///     404 not found when the user is not bound to and institution and tries to make the project isntitute private
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
         {
             if(projectResource == null)
@@ -326,6 +328,22 @@ namespace API.Controllers
             project.ProjectIcon = file;
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
+
+            if(project.InstitutePrivate)
+            {
+                if(project.User.InstitutionId == default)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Unable to create project.",
+                        Detail = "The insitute private is set to true, but the user creating the project isn't bound to an institution.",
+                        Instance = "b942c55d-01be-4fd1-90a1-a5ad3d172403"
+                    };
+                    return NotFound(problem);
+                }
+
+                project.LinkedInstitutions.Add(new ProjectInstitution { Project = project, Institution = project.User.Institution });
+            }
 
             try
             {
@@ -448,9 +466,21 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }
             }
+
+            if(projectResource.InstitutePrivate != project.InstitutePrivate)
+            {
+                IActionResult updateResponse = await UpdateProjectPrivateStatus(project.Id, project.InstitutePrivate).ConfigureAwait(false);
+
+                if(!(updateResponse is OkObjectResult))
+                    return updateResponse;
+            }
+
+
             mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
+
+
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
@@ -830,10 +860,10 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "Failed setting the status of the project.",
-                                                    Detail = "The project send in the request could not be found in the database.",
-                                                    Instance = "68cdf62d-26ef-4b6e-9f98-fdddcfc0fc71"
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "68cdf62d-26ef-4b6e-9f98-fdddcfc0fc71"
                 };
                 return NotFound(problemDetails);
             }
@@ -986,7 +1016,7 @@ namespace API.Controllers
                 return NotFound(problemDetails);
             }
 
-            if (!await projectService.ProjectExistsAsync(projectId))
+            if(!await projectService.ProjectExistsAsync(projectId))
             {
                 ProblemDetails problemDetails = new ProblemDetails
                 {
