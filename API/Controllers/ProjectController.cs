@@ -374,11 +374,13 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the updated project.</response>
         /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
         /// <response code="404">The 404 not Found status code is returned when the project to update is not found.</response>
+        /// <response code="400">The 404 if the use tries to update the institute private property with this endpoint.</response>
         [HttpPut("{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
             Project project = await projectService.FindAsync(projectId)
@@ -427,6 +429,17 @@ namespace API.Controllers
                 }
             }
 
+            if (projectResource.InstitutePrivate != project.InstitutePrivate)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Unable to update project.",
+                    Detail = $"It is not possible to update the institute private of a project with this endpoint. Please use the {nameof(UpdateProjectPrivateStatus)} endpoint.",
+                    Instance = "6a92321e-c6a7-41d9-90ee-9148566718e3"
+                };
+                return BadRequest(problem);
+            }
+
             // Upload the new file if there is one
             File file = null;
             if(projectResource.FileId != 0)
@@ -466,15 +479,6 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }
             }
-
-            if(projectResource.InstitutePrivate != project.InstitutePrivate)
-            {
-                IActionResult updateResponse = await UpdateProjectPrivateStatus(project.Id, project.InstitutePrivate).ConfigureAwait(false);
-
-                if(!(updateResponse is OkObjectResult))
-                    return updateResponse;
-            }
-
 
             mapper.Map(projectResource, project);
             projectService.Update(project);
