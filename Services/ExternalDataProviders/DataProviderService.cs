@@ -258,6 +258,7 @@ namespace Services.ExternalDataProviders
         {
             foreach(IDataSourceAdaptee source in adaptees)
             {
+                if(source.DataSourceWizardPages == null) continue;
                 source.DataSourceWizardPages = source.DataSourceWizardPages.Where(page => page.AuthFlow == authFlow)
                                                      .ToList();
             }
