@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Graduation system for users whose FHICT account becomes unavailable. [#287](https://github.com/DigitalExcellence/dex-backend/issues/287)
 - Added wizard to automatically import project with a public and an oauth flow - [#326](https://github.com/DigitalExcellence/dex-backend/issues/326)
+- Added action annotations for max allowed file size and allowed extensions - [#272](https://github.com/DigitalExcellence/dex-backend/issues/272)
 
 ### Changed
 
