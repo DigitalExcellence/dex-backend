@@ -46,10 +46,13 @@ namespace ElasticSynchronizer.Executors
         {
             try
             {
+                Log.Logger.Information("Document updater");
+                Log.Logger.Information("Json payload: " + jsonBody);
                 eSProject = JsonConvert.DeserializeObject<ESProjectDTO>(jsonBody);
             } catch(Exception e)
             {
                 Log.Logger.Error("Failed: " + e.Message);
+                Log.Logger.Information(jsonBody);
             }
         }
 

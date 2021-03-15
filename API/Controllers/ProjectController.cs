@@ -743,7 +743,7 @@ namespace API.Controllers
                 userProjectLikeService.Save();
 
                 // Update Elastic Database about this change.
-                userProjectLikeService.SyncProjectToES(projectToLike);
+                await userProjectLikeService.SyncProjectToES(projectToLike);
                 return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(like));
             } catch(DbUpdateException e)
             {
@@ -822,7 +822,7 @@ namespace API.Controllers
             userProjectLikeService.Save();
 
             // Update Elastic Database about this change.
-            userProjectLikeService.SyncProjectToES(projectToLike);
+            await userProjectLikeService.SyncProjectToES(projectToLike);
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
         }
 
