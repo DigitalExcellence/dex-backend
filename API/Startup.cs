@@ -188,6 +188,10 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.WizardPageWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.WizardPageWrite))));
             });
 
             services.AddCors();
