@@ -15,30 +15,19 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System.ComponentModel.DataAnnotations;
-
-namespace Models
+namespace API.Resources
 {
 
-    public class ProjectCategory
+    /// <summary>
+    ///     Object to retrieve from tthe frontend with the ProjectCategory
+    /// </summary>
+    public class ProjectCategoryResource
     {
 
-        public ProjectCategory(Project project, Category category)
-        {
-            Project = project;
-            Category = category;
-        }
-
-        public ProjectCategory() { }
-
-        public int Id { get; set; }
-
-        [Required]
-        public Project Project { get; set; }
-
-        [Required]
-        public Category Category { get; set; }
-
+        /// <summary>
+        ///     Gets or sets the Id of the category.
+        /// </summary>
+        public int CategoryId { get; set; }
     }
 
 }

@@ -28,7 +28,7 @@ namespace Models
         public Project()
         {
             Collaborators = new List<Collaborator>();
-            Categories = new List<ProjectCategory>();
+            //Categories = new List<ProjectCategory>();
         }
 
         public int Id { get; set; }
@@ -67,7 +67,7 @@ namespace Models
 
         public bool InstitutePrivate { get; set; }
 
-        public List<ProjectCategory> Categories { get; set; }
+        public List<ProjectCategory> Categories { get; set; } = new List<ProjectCategory>();
 
 
     }

@@ -338,10 +338,39 @@ namespace API.Controllers
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
 
+            ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
+
+            foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
+            {
+                ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
+                if(alreadyExcProjectCategory == null)
+                {
+                    Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
+
+                    if(category == null)
+                    {
+                        ProblemDetails problem = new ProblemDetails
+                        {
+                            Title = "Failed to save new project.",
+                            Detail = "One of the given categories did not exist.",
+                            Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
+                        };
+                        return BadRequest(problem);
+                    }
+
+                    ProjectCategory projectCategory = new ProjectCategory(project, category);
+                    await projectCategoryService.AddAsync(projectCategory)
+                                           .ConfigureAwait(false);
+                }
+            }
+
             try
             {
                 projectService.Add(project);
                 projectService.Save();
+
+                projectCategoryService.Save();
+
                 return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
             } catch(DbUpdateException e)
             {

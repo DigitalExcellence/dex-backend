@@ -74,7 +74,6 @@ namespace Services.Services
         {
             return Repository.GetProjectCategory(categoryId);
         }
-
     }
 
 }
