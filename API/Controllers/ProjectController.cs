@@ -488,6 +488,11 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }
             }
+
+            ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
+            IEnumerable<Category> projectCategories = (await categoryService.GetAll()).Where(c => projectCategoryResources.Any(pcr => pcr.CategoryId == c.Id));
+            await projectCategoryService.UpdateProjectCategories(project, projectCategories);
+
             mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
@@ -567,6 +572,8 @@ namespace API.Controllers
                     return NotFound(problem);
                 }
             }
+
+            await projectCategoryService.ClearProjectCategories(project);
 
             await projectService.RemoveAsync(projectId)
                                 .ConfigureAwait(false);

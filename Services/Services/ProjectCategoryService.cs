@@ -18,7 +18,9 @@
 using Models;
 using Repositories;
 using Services.Base;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Services.Services
 {
@@ -37,6 +39,16 @@ namespace Services.Services
         ///     Gets project category by given category id
         /// </summary>
         Task<ProjectCategory> GetProjectCategory(int categoryId);
+
+        /// <summary>
+        ///     Update project categories by given project and categories
+        /// </summary>
+        Task UpdateProjectCategories(Project project, IEnumerable<Category> categories);
+
+        /// <summary>
+        ///     Clear project categories by given project
+        /// </summary>
+        Task ClearProjectCategories(Project project);
     }
 
     /// <summary>
@@ -73,6 +85,33 @@ namespace Services.Services
         public Task<ProjectCategory> GetProjectCategory(int categoryId)
         {
             return Repository.GetProjectCategory(categoryId);
+        }
+
+        /// <summary>
+        ///     Update project categories by given project and categories
+        /// </summary>
+        public async Task UpdateProjectCategories(Project project, IEnumerable<Category> categories)
+        {
+            IEnumerable<ProjectCategory> allProjectCategories = await Repository.GetAll();
+
+            IEnumerable<int> currentProjectCategoryIds = allProjectCategories.Where(pc => pc.Project.Id == project.Id).Select(pc => pc.Id);
+            await Repository.RemoveRangeAsync(currentProjectCategoryIds);
+
+            IEnumerable<ProjectCategory> projectCategories = categories.Select(c => new ProjectCategory(project, c));
+            await Repository.AddRangeAsync(projectCategories);
+
+            Repository.Save();
+        }
+
+        /// <summary>
+        ///     Clear project categories by given project
+        /// </summary>
+        public async Task ClearProjectCategories(Project project)
+        {
+            IEnumerable<int> currentProjectCategoryIds = (await Repository.GetAll()).Where(pc => pc.Project.Id == project.Id).Select(pc => pc.Id);
+            await Repository.RemoveRangeAsync(currentProjectCategoryIds);
+
+            Repository.Save();
         }
     }
 
