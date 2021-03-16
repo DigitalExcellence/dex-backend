@@ -107,7 +107,7 @@ namespace API.Controllers
         ///     The 404 Not Found status code is returned when no data source with the specified
         ///     guid could be found.
         /// </response>
-        [HttpGet("guid")]
+        [HttpGet("{guid}")]
         [Authorize]
         [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -205,7 +205,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(!await wizardPageService.ValidateWizardPagesExist(
+            if(dataSourceModel.DataSourceWizardPages.Any() && !await wizardPageService.ValidateWizardPagesExist(
                     dataSourceResource.WizardPageResources.Select(w => w.WizardPageId)))
             {
                 ProblemDetails problem = new ProblemDetails
