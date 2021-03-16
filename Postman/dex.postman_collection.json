@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "13571396-77d9-4088-8e9e-6ca9827ad60f",
+		"_postman_id": "a24303d4-c31b-4795-b337-c7769b484f6c",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -3732,6 +3732,328 @@
 							]
 						},
 						{
+							"name": "WizardPage",
+							"item": [
+								{
+									"name": "WizardPage-CreateWizardPage-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.environment.set(\"wizardPageId\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Call to action option type is lowercase\", function () {",
+													"    pm.expect(jsonData.type).to.eql(jsonData.type.toLowerCase());",
+													"});",
+													"",
+													"pm.test(\"Call to action option value is lowercase\", function () {",
+													"    pm.expect(jsonData.value).to.eql(jsonData.value.toLowerCase());",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_WizardPage-CreateWizardPage-Administrator\",\r\n  \"description\": \"postman_WizardPage-CreateWizardPage-Administrator-Description\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetAllWizardPages-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var pageId = parseInt(pm.environment.get(\"wizardPageId\"));",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"var foundAt;",
+													"",
+													"function findOption(jsonData, id) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].id == id) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Wizard page with id: \" + pageId + \" is in list\", function () {",
+													"    foundAt = findOption(jsonData, pageId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetWizardPageById-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"var wizardPageId = pm.environment.get(\"wizardPageId\");",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check previously created wizard page with id \" + wizardPageId, function () {",
+													"    pm.expect(jsonData.id).to.eql(wizardPageId);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-UpdateWizardPage-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var wizardPageName = pm.environment.get(\"updatedWizardPageName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if updated Wizard Page Name matches: \" + wizardPageName, function () {",
+													"    pm.expect(jsonData.name).to.eql(wizardPageName);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{updatedWizardPageName}}\",\r\n  \"description\": \"postmantest_Institution-UpdateInstitution-Administrator\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetUpdatedWizardPage-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var wizardPageId = parseInt(pm.environment.get(\"wizardPageId\"));",
+													"var updatedWizardPageName = pm.environment.get(\"updatedWizardPageName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if updated Wizard Page Id matches: \" + wizardPageId, function () {",
+													"    pm.expect(jsonData.id).to.eql(wizardPageId);",
+													"});",
+													"",
+													"pm.test(\"Check if updated Wizard Page Name matches: \" + updatedWizardPageName, function () {",
+													"    pm.expect(jsonData.name).to.eql(updatedWizardPageName);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Cleanup",
 							"item": [
 								{
@@ -4037,6 +4359,47 @@
 												"api",
 												"CallToActionOption",
 												"{{callToActionOptionId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-DeleteWizardPage-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
 											]
 										}
 									},
