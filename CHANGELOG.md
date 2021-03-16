@@ -25,7 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Fixed
-- Fixed inefficient use of entity framework for the fetching-all-projects endpoint. [376](https://github.com/DigitalExcellence/dex-backend/issues/376)
+- Fixed inefficient use of entity framework for the fetching-all-projects endpoint. [#376](https://github.com/DigitalExcellence/dex-backend/issues/376)
+- Fixed an issue where GitHub action for deployment failed. [#402](https://github.com/DigitalExcellence/dex-backend/issues/402)
 
 ### Security
 
