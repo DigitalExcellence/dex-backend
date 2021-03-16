@@ -20,6 +20,7 @@ using API.Extensions;
 using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
+using MessageBrokerPublisher.HelperClasses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +57,7 @@ namespace API.Controllers
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
+        private readonly IEmailSender emailSender;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
@@ -78,6 +80,7 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
+        /// <param name="emailSender">Something something something</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -86,7 +89,8 @@ namespace API.Controllers
                                  IAuthorizationHelper authorizationHelper,
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
-                                 ICallToActionOptionService callToActionOptionService)
+                                 ICallToActionOptionService callToActionOptionService,
+                                 IEmailSender emailSender)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -97,6 +101,7 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
+            this.emailSender = emailSender;
         }
 
         /// <summary>
@@ -791,6 +796,66 @@ namespace API.Controllers
             userProjectLikeService.Save();
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="collaboratorId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpPost("link-collaborator/{projectId}/{collaboratorId}/{userId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> LinkCollaborator(int projectId, int collaboratorId, int userId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                                .ConfigureAwait(false);
+
+            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId)
+                                                  .ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "AB1F47F5-97E8-4AFB-891D-E350FB7247D5"
+                };
+                return NotFound(problem);
+            }
+
+            Collaborator collaborator = project.Collaborators.Where(c => c.Id == collaboratorId).FirstOrDefault();
+
+            if(collaborator.LinkedUser != null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed linking collaborator.",
+                    Detail = "User is already something.",
+                    Instance = "xxx" // TODO
+                };
+                return BadRequest(problem);
+            }
+
+            if(currentUser.Id == userId)
+            {
+
+            }
+            else
+            {
+                User user = await userService.FindAsync(userId);
+
+                ProjectCollaboratorLinkRequestEmail email = await projectService.PrepareLinkRequestMail(collaborator, user);
+                projectService.Save();
+
+                emailSender.Send(user.Email, email.Content, email.Content);
+            }
+
+            return Ok();
+        }
+
 
     }
 

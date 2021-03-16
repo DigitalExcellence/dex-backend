@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.Resources;
 using Ganss.XSS;
 using Models;
 using Repositories;
@@ -67,6 +68,8 @@ namespace Services.Services
         /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The total number of pages for the results</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
+
+        Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user);
     }
 
     /// <summary>
@@ -188,6 +191,20 @@ namespace Services.Services
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {
             return Repository.GetUserProjects(userId);
+        }
+
+        public Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user)
+        {
+            string acceptHash = "f3434f34f4f334fd"; // TODO
+
+            collaborator.LinkedUser = new LinkedUser { Status = LinkedUserStatus.PENDING, User = user };
+    
+            string requestAcceptUrl = $"localhost/project/link/accept/{acceptHash}";
+
+            string emailContent = $"aaaa <a href=\"{requestAcceptUrl}\">KLIK HIER</a>";
+            string recipient = user.Email;
+
+            return Task.FromResult(new ProjectCollaboratorLinkRequestEmail { Content = emailContent, Title = "You've got mail!" });
         }
     }
 
