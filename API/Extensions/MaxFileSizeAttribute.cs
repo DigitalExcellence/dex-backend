@@ -30,9 +30,9 @@ namespace API.Extensions
         private readonly int maxFileSize;
 
         /// <summary>
-        ///     Constructor for maximum filesize attribute
+        ///     Constructor for maximum filesize attribute with file size in bytes.
         /// </summary>
-        /// <param name="maxFileSize"></param>
+        /// <param name="maxFileSize">Max file size in bytes</param>
         public MaxFileSizeAttribute(int maxFileSize)
         {
             this.maxFileSize = maxFileSize;

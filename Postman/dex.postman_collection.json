@@ -3685,6 +3685,128 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "File-CreateFile-MaxFileSize",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"adminFileId\", jsonData.id)\r",
+													"\r",
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than 800ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.badRequest;\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "Postman/testimage4MB.jpg"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "File-CreateFile-AllowedExtensions",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"adminFileId\", jsonData.id)\r",
+													"\r",
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than 800ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.badRequest;\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "Postman/testfile.txt"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -9077,7 +9199,7 @@
 									"response": []
 								},
 								{
-									"name": "Project-DeleteProject-Other-Registered Copy",
+									"name": "Project-DeleteProject-Other-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -9358,6 +9480,7 @@
 							]
 						},
 						{
+
 							"name": "UserProjects",
 							"item": [
 								{
