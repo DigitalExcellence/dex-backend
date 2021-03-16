@@ -114,13 +114,11 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.staging.dex.software/external/callback/fhict
-      - App__JobScheduler__ClientId={$JOBSCHEDULER_CLIENT_ID}
-      - App__JobScheduler__ClientSecret={$JOBSCHEDULER_CLIENT_SECRET}
       - Cert_File=/app/identity.staging.dex.software_pfx.pfx
       - Cert_Thumb=${CERT_THUMB}
       - Cert_Password=${CERT_PASSWORD}
       - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
-      - App__JobScheduler__ClientSecet=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
+      - App__JobScheduler__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
       - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
     labels:
       - "traefik.enable=true"
@@ -161,15 +159,16 @@ services:
     container_name: jobscheduler
     restart: on-failure
     environment:
-        - Config__IdentityServerConfig__IdentityUrl=https://identity.staging.dex.software
+        - Config__IdentityServerConfig__IdentityUrl=https://identity.staging.dex.software/
         - Config__IdentityServerConfig__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
         - Config__IdentityServerConfig__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
-        - Config__ApiConfig__ApiUrl=https://api.staging.dex.software
+        - Config__ApiConfig__ApiUrl=https://api.staging.dex.software/
         - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
         - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
         - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
         rabbitmq-network:
+        mssql-network:
 
   frontend:
     image: digitalexcellence/stagingfrontend
