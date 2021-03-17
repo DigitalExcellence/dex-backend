@@ -24,6 +24,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Services.ExternalDataProviders;
+using Services.ExternalDataProviders.Helpers;
 using Services.Services;
 using Services.Sources;
 
@@ -99,6 +100,8 @@ namespace API.Extensions
 
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
+
+            services.AddScoped<IAssemblyHelper, AssemblyHelper>();
 
             services.AddExternalDataSources();
 

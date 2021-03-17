@@ -19,6 +19,7 @@ using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Repositories;
+using Services.ExternalDataProviders.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,6 +67,7 @@ namespace Services.ExternalDataProviders
         private readonly IDataSourceModelRepository dataSourceModelRepository;
         private readonly IMapper mapper;
         private readonly IServiceScopeFactory serviceScopeFactory;
+        private readonly IAssemblyHelper assemblyHelper;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DataProviderLoader" /> class.
@@ -78,14 +80,17 @@ namespace Services.ExternalDataProviders
         ///     The data source model repository which is used for communicating with the
         ///     repository layer.
         /// </param>
+        /// <param name="assemblyHelper">The assembly helper retrieves to correct location of the executing assembly.</param>
         /// <param name="mapper">The mapper which is used to convert the adaptees to data source models.</param>
         public DataProviderLoader(
             IServiceScopeFactory serviceScopeFactory,
             IDataSourceModelRepository dataSourceModelRepository,
+            IAssemblyHelper assemblyHelper,
             IMapper mapper)
         {
             this.serviceScopeFactory = serviceScopeFactory;
             this.dataSourceModelRepository = dataSourceModelRepository;
+            this.assemblyHelper = assemblyHelper;
             this.mapper = mapper;
         }
 
@@ -145,18 +150,13 @@ namespace Services.ExternalDataProviders
         {
             List<IDataSourceAdaptee> dataSources = new List<IDataSourceAdaptee>();
             using IServiceScope scope = serviceScopeFactory.CreateScope();
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            string folder = Path.GetDirectoryName(executingAssembly.Location);
 
-            foreach(string dll in Directory.GetFiles(folder, "*.dll"))
+            Type[] types = assemblyHelper.RetrieveTypesFromExecutingAssemblyFolderFiles();
+            foreach(Type type in types)
             {
-                Assembly assembly = Assembly.LoadFrom(dll);
-                foreach(Type type in assembly.GetTypes())
-                {
-                    if(type.GetInterface("IDataSourceAdaptee") != typeof(IDataSourceAdaptee)) continue;
-                    object dataSourceAdaptee = scope.ServiceProvider.GetService(type);
-                    if(dataSourceAdaptee != null) dataSources.Add(dataSourceAdaptee as IDataSourceAdaptee);
-                }
+                if(type.GetInterface("IDataSourceAdaptee") != typeof(IDataSourceAdaptee)) continue;
+                object dataSourceAdaptee = scope.ServiceProvider.GetService(type);
+                if(dataSourceAdaptee != null) dataSources.Add(dataSourceAdaptee as IDataSourceAdaptee);
             }
 
             return dataSources;
@@ -170,8 +170,11 @@ namespace Services.ExternalDataProviders
             // no model in the database is found, this should get added to the database.
             IEnumerable<IDataSourceAdaptee> adapteesWithoutModel =
                 sources.Where(s => sourceModels.SingleOrDefault(m => m.Guid == s.Guid) == null);
-            await dataSourceModelRepository.AddRangeAsync(
-                mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
+            if(adapteesWithoutModel.Any())
+            {
+                await dataSourceModelRepository.AddRangeAsync(
+                    mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSource>>(adapteesWithoutModel));
+            }
 
             // For every model in the database, check if an adaptee is found. Whenever
             // no adaptee is found, this should get removed from the database.
