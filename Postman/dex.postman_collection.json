@@ -2960,10 +2960,6 @@
 							]
 						},
 						{
-							"name": "Wizard",
-							"item": []
-						},
-						{
 							"name": "Institution",
 							"item": [
 								{
@@ -7043,33 +7039,6 @@
 							]
 						},
 						{
-							"name": "Wizard",
-							"item": [],
-							"auth": {
-								"type": "noauth"
-							},
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
 							"name": "Institution",
 							"item": [
 								{
@@ -7783,7 +7752,8 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
 											}
 										],
 										"body": {
@@ -7843,7 +7813,8 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
 											}
 										],
 										"url": {
@@ -7894,7 +7865,8 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
 											}
 										],
 										"url": {
@@ -7946,7 +7918,8 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
 											}
 										],
 										"body": {
@@ -8007,7 +7980,8 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
 											}
 										],
 										"url": {
@@ -8037,7 +8011,7 @@
 							"name": "DataSource",
 							"item": [
 								{
-									"name": "DataSource-GetAllDataSources-Administrator",
+									"name": "DataSource-GetAllDataSources-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -8068,6 +8042,9 @@
 										}
 									],
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [
 											{
@@ -8091,7 +8068,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetWizardPageById-Administrator",
+									"name": "WizardPage-GetWizardPageById-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -8144,7 +8121,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-UpdateWizardPage-Administrator",
+									"name": "WizardPage-UpdateWizardPage-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -8206,7 +8183,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetUpdatedWizardPage-Administrator",
+									"name": "WizardPage-GetUpdatedWizardPage-Guest",
 									"event": [
 										{
 											"listen": "test",
@@ -8240,7 +8217,8 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
 											}
 										],
 										"url": {
@@ -11298,10 +11276,6 @@
 							]
 						},
 						{
-							"name": "Wizard",
-							"item": []
-						},
-						{
 							"name": "Institution",
 							"item": [
 								{
@@ -12815,7 +12789,7 @@
 							"name": "WizardPage",
 							"item": [
 								{
-									"name": "WizardPage-CreateWizardPage-Guest",
+									"name": "WizardPage-CreateWizardPage-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -12872,7 +12846,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetAllWizardPages-Guest",
+									"name": "WizardPage-GetAllWizardPages-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -12938,7 +12912,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetWizardPageById-Guest",
+									"name": "WizardPage-GetWizardPageById-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -12993,7 +12967,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-UpdateWizardPage-Guest",
+									"name": "WizardPage-UpdateWizardPage-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -13056,7 +13030,7 @@
 							"name": "DataSource",
 							"item": [
 								{
-									"name": "DataSource-GetAllDataSources-Administrator",
+									"name": "DataSource-GetAllDataSources-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -13072,11 +13046,6 @@
 													"     pm.response.to.be.ok;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Wizard page with id: \" + dataSourceId + \" is in list\", function () {",
-													"    foundAt = findOption(jsonData, dataSourceId);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
 													"});",
 													""
 												],
@@ -13107,7 +13076,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetWizardPageById-Administrator",
+									"name": "WizardPage-GetWizardPageById-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -13144,7 +13113,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -13162,7 +13131,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-UpdateWizardPage-Administrator",
+									"name": "WizardPage-UpdateWizardPage-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -13193,7 +13162,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
+												"value": "{{registeredUserIdentityId}}",
 												"disabled": true
 											}
 										],
@@ -16311,10 +16280,6 @@
 							]
 						},
 						{
-							"name": "Wizard",
-							"item": []
-						},
-						{
 							"name": "Institution",
 							"item": [
 								{
@@ -17101,7 +17066,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -17176,7 +17141,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -17230,7 +17195,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -17279,7 +17244,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -17311,7 +17276,7 @@
 							"name": "DataSource",
 							"item": [
 								{
-									"name": "DataSource-GetAllDataSources-Administrator",
+									"name": "DataSource-GetAllDataSources-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -17358,7 +17323,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetWizardPageById-Administrator",
+									"name": "WizardPage-GetWizardPageById-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -17413,7 +17378,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-UpdateWizardPage-Administrator",
+									"name": "WizardPage-UpdateWizardPage-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -20945,10 +20910,6 @@
 							]
 						},
 						{
-							"name": "Wizard",
-							"item": []
-						},
-						{
 							"name": "Institution",
 							"item": [
 								{
@@ -21736,7 +21697,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{prUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -21811,7 +21772,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{prUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -21865,7 +21826,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{prUserIdentityId}}"
 											}
 										],
 										"url": {
@@ -21914,7 +21875,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{prUserIdentityId}}"
 											}
 										],
 										"body": {
@@ -21946,7 +21907,7 @@
 							"name": "DataSource",
 							"item": [
 								{
-									"name": "DataSource-GetAllDataSources-Administrator",
+									"name": "DataSource-GetAllDataSources-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -21994,7 +21955,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetWizardPageById-Administrator",
+									"name": "WizardPage-GetWizardPageById-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -22049,7 +22010,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-UpdateWizardPage-Administrator",
+									"name": "WizardPage-UpdateWizardPage-PR",
 									"event": [
 										{
 											"listen": "test",
@@ -25805,7 +25766,7 @@
 							"name": "WizardPage",
 							"item": [
 								{
-									"name": "WizardPage-CreateWizardPage-Guest",
+									"name": "WizardPage-CreateWizardPage-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -25836,7 +25797,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{alumniIdentityId}}"
 											}
 										],
 										"body": {
@@ -25862,7 +25823,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetAllWizardPages-Guest",
+									"name": "WizardPage-GetAllWizardPages-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -25911,7 +25872,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{alumniIdentityId}}"
 											}
 										],
 										"url": {
@@ -25928,7 +25889,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-GetWizardPageById-Guest",
+									"name": "WizardPage-GetWizardPageById-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -25965,7 +25926,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{alumniIdentityId}}"
 											}
 										],
 										"url": {
@@ -25983,7 +25944,7 @@
 									"response": []
 								},
 								{
-									"name": "WizardPage-UpdateWizardPage-Guest",
+									"name": "WizardPage-UpdateWizardPage-Alumni",
 									"event": [
 										{
 											"listen": "test",
@@ -26014,7 +25975,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{alumniIdentityId}}"
 											}
 										],
 										"body": {
@@ -26035,6 +25996,173 @@
 												"api",
 												"WizardPage",
 												"{{wizardPageId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "DataSource",
+							"item": [
+								{
+									"name": "DataSource-GetAllDataSources-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetWizardPageById-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"var dataSourceId = pm.environment.get(\"dataSourceId\");",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check previously created data source with id \" + dataSourceId, function () {",
+													"    pm.expect(jsonData.guid).to.eql(dataSourceId);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource",
+												"{{dataSourceId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-UpdateWizardPage-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"Title\": \"{{updatedDataSourceName}}\",\r\n  \"description\": \"postmantest_DataSource-UpdateDataSource-Administrator\",\r\n  \"IsVisible\": true,\r\n  \"IconId\": 0,\r\n  \"WizardPageResources\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource",
+												"{{dataSourceId}}"
 											]
 										}
 									},
