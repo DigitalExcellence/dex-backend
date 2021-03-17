@@ -144,10 +144,10 @@ namespace Repositories
                 int id = user.First().ToObject<int>();
                 similarUserIds.Add(id);
             }
-            // First result is the user itself, remove that one.
+            // Remove the user itself.
             if(similarUserIds.Count != 0)
             {
-                similarUserIds.RemoveAt(0);
+                similarUserIds.Remove(userId);
             }
 
             return similarUserIds;
