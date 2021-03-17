@@ -329,6 +329,8 @@ namespace Repositories
         public override void Add(Project entity)
         {
             base.Add(entity);
+            base.Save();
+            Console.WriteLine("Add method id: " + entity.Id);
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
@@ -362,13 +364,16 @@ namespace Repositories
         /// <returns>
         /// The task wherein the addition of the project from the database is executed.
         /// </returns>
-        public override Task AddAsync(Project entity)
+        public override async Task AddAsync(Project entity)
         {
+                       
+            await base.AddAsync(entity);
+            base.Save();
+            Console.WriteLine("AddAsync method id: " + entity.Id);
             SetLikes(entity);
             ESProjectFormatDTO projectToSync = new ESProjectFormatDTO();
             ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
-            return base.AddAsync(entity);
         }
 
         /// <summary>
