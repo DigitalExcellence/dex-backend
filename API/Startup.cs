@@ -452,7 +452,7 @@ namespace API
                 if(!context.Institution.Any())
                 {
                     // Seed institutions
-                    context.Institution.Add(Seed.SeedInstitution());
+                    context.Institution.AddRange(Seed.SeedInstitution());
                     context.SaveChanges();
                 }
 
@@ -489,6 +489,7 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
+
 
                 // TODO seed embedded projects
             }

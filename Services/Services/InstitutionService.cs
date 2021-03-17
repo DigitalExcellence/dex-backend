@@ -43,6 +43,7 @@ namespace Services.Services
         /// <returns>This method returns the found institution with the specified identity id.</returns>
         Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId);
 
+        Task<bool> InstitutionExistsAsync(int institutionId);
     }
 
     /// <summary>
@@ -81,6 +82,10 @@ namespace Services.Services
             return await Repository.GetInstitutionByInstitutionIdentityId(institutionIdentityId);
         }
 
+        public async Task<bool> InstitutionExistsAsync(int institutionId)
+        {
+            return await Repository.InstitutionExistsAsync(institutionId);
+        }
     }
 
 }
