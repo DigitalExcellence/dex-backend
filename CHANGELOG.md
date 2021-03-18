@@ -29,7 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed inefficient use of entity framework for the fetching-all-projects endpoint. [#376](https://github.com/DigitalExcellence/dex-backend/issues/376)
-- Fixed an issue where GitHub action for deployment failed. [#402](https://github.com/DigitalExcellence/dex-backend/issues/402)
 - An issue where the JobScheduler did not start in staging/production. [#382](https://github.com/DigitalExcellence/dex-backend/issues/382)
 - Fixed an issue where getting all projects was very slow. [#394](https://github.com/DigitalExcellence/dex-backend/issues/394)
 
