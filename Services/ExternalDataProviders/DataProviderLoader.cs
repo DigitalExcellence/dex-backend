@@ -151,10 +151,10 @@ namespace Services.ExternalDataProviders
             List<IDataSourceAdaptee> dataSources = new List<IDataSourceAdaptee>();
             using IServiceScope scope = serviceScopeFactory.CreateScope();
 
-            Type[] types = assemblyHelper.RetrieveTypesFromExecutingAssemblyFolderFiles();
+            Type[] types =
+                assemblyHelper.RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(typeof(IDataSourceAdaptee));
             foreach(Type type in types)
             {
-                if(type.GetInterface("IDataSourceAdaptee") != typeof(IDataSourceAdaptee)) continue;
                 object dataSourceAdaptee = scope.ServiceProvider.GetService(type);
                 if(dataSourceAdaptee != null) dataSources.Add(dataSourceAdaptee as IDataSourceAdaptee);
             }

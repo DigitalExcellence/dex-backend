@@ -43,19 +43,14 @@ namespace Services.Tests.ExternalDataProviders
         private Mock<IAssemblyHelper> assemblyHelperMock;
         private IMapper mapper;
 
+        private Mock<IDataSourceAdaptee> returnedTypeFromLoader;
+
         private Type[] returnedTypesFromAssembly;
 
         [SetUp]
         public void Initialize()
         {
-            Mock<IServiceScope> scopeMock = new Mock<IServiceScope>();
-            scopeMock
-                .Setup(_ => _.ServiceProvider.GetService(It.IsAny<Type>()))
-                .Returns(new object());
-
             factoryMock = new Mock<IServiceScopeFactory>();
-            factoryMock.Setup(_ => _.CreateScope())
-                       .Returns(scopeMock.Object);
 
             repositoryMock = new Mock<IDataSourceModelRepository>();
 
@@ -74,13 +69,21 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             returnedTypesFromAssembly = new[]
                                         {
-                                            typeof(GithubDataSourceAdaptee),
-                                            typeof(GitlabDataSourceAdaptee),
-                                            typeof(JsFiddleDataSourceAdaptee),
+                                            typeof(GithubDataSourceAdaptee)
                                         };
 
-            assemblyHelperMock.Setup(_ => _.RetrieveTypesFromExecutingAssemblyFolderFiles())
+            assemblyHelperMock.Setup(_ => _.RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(It.IsAny<Type>()))
                               .Returns(returnedTypesFromAssembly);
+
+            returnedTypeFromLoader = new Mock<IDataSourceAdaptee>().As<IDataSourceAdaptee>();
+
+            Mock<IServiceScope> scopeMock = new Mock<IServiceScope>();
+            scopeMock
+                .Setup(_ => _.ServiceProvider.GetService(It.IsAny<Type>()))
+                .Returns(returnedTypeFromLoader.Object);
+
+            factoryMock.Setup(_ => _.CreateScope())
+                       .Returns(scopeMock.Object);
 
             // Act
             Action act = () => loader.GetAllDataSources();
@@ -88,7 +91,7 @@ namespace Services.Tests.ExternalDataProviders
 
             // Assert
             act.Should().NotThrow();
-            retrievedDataSources.Count.Should().Be(3);
+            retrievedDataSources.Count.Should().Be(1);
             repositoryMock.Verify(_ => _.AddRangeAsync(It.IsAny<IEnumerable<DataSource>>()), Times.Exactly(2));
             repositoryMock.Verify(_ => _.RemoveAsync(It.IsAny<int>()), Times.Never);
 
@@ -138,6 +141,132 @@ namespace Services.Tests.ExternalDataProviders
             retrievedDataSources.Count.Should().Be(0);
             repositoryMock.Verify(_ => _.AddRangeAsync(It.IsAny<IEnumerable<DataSource>>()), Times.Never);
             repositoryMock.Verify(_ => _.RemoveAsync(It.IsAny<int>()), Times.Exactly(2));
+
+        }
+
+        [Test]
+        public async Task GetDataSourceByGuid_GoodFlow()
+        {
+            // Arrange
+            returnedTypesFromAssembly = new[]
+                                        {
+                                            typeof(GithubDataSourceAdaptee)
+                                        };
+
+            assemblyHelperMock.Setup(_ => _.RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(It.IsAny<Type>()))
+                              .Returns(returnedTypesFromAssembly);
+
+            string guid = "de38e528-1d6d-40e7-83b9-4334c51c19be";
+            returnedTypeFromLoader = new Mock<IDataSourceAdaptee>().As<IDataSourceAdaptee>();
+            returnedTypeFromLoader.Setup(_ => _.Guid)
+                                  .Returns(guid);
+
+            Mock<IServiceScope> scopeMock = new Mock<IServiceScope>();
+            scopeMock
+                .Setup(_ => _.ServiceProvider.GetService(It.IsAny<Type>()))
+                .Returns(returnedTypeFromLoader.Object);
+
+            factoryMock.Setup(_ => _.CreateScope())
+                       .Returns(scopeMock.Object);
+
+            // Act
+            Action act = () => loader.GetDataSourceByGuid(guid);
+            IDataSourceAdaptee retrievedDataSource = await loader.GetDataSourceByGuid(guid);
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedDataSource.Should().NotBeNull();
+            retrievedDataSource.Guid.Should().Be(guid);
+            scopeMock.Verify(_ => _.ServiceProvider.GetService(It.IsAny<Type>()), Times.Exactly(2));
+
+        }
+
+        [Test]
+        public async Task GetDataSourceByGuid_NoDataSourceFound()
+        {
+            // Arrange
+            assemblyHelperMock.Setup(_ => _.RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(It.IsAny<Type>()))
+                              .Returns(new Type[0]);
+
+            Mock<IServiceScope> scopeMock = new Mock<IServiceScope>();
+            scopeMock
+                .Setup(_ => _.ServiceProvider.GetService(It.IsAny<Type>()))
+                .Returns((IDataSourceAdaptee)null);
+
+            factoryMock.Setup(_ => _.CreateScope())
+                       .Returns(scopeMock.Object);
+
+            // Act
+            Action act = () => loader.GetDataSourceByGuid(It.IsAny<string>());
+            IDataSourceAdaptee retrievedDataSource = await loader.GetDataSourceByGuid(It.IsAny<string>());
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedDataSource.Should().BeNull();
+            scopeMock.Verify(_ => _.ServiceProvider.GetService(It.IsAny<Type>()), Times.Exactly(0));
+
+        }
+
+        [Test]
+        public async Task GetDataSourceByName_GoodFlow()
+        {
+            // Arrange
+            returnedTypesFromAssembly = new[]
+                                        {
+                                            typeof(GithubDataSourceAdaptee)
+                                        };
+
+            assemblyHelperMock.Setup(_ => _.RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(It.IsAny<Type>()))
+                              .Returns(returnedTypesFromAssembly);
+
+            string name = "TestSource";
+            returnedTypeFromLoader = new Mock<IDataSourceAdaptee>().As<IDataSourceAdaptee>();
+            returnedTypeFromLoader.Setup(_ => _.Title)
+                                  .Returns(name);
+
+            Mock<IServiceScope> scopeMock = new Mock<IServiceScope>();
+            scopeMock
+                .Setup(_ => _.ServiceProvider.GetService(It.IsAny<Type>()))
+                .Returns(returnedTypeFromLoader.Object);
+
+            factoryMock.Setup(_ => _.CreateScope())
+                       .Returns(scopeMock.Object);
+
+            // Act
+            Action act = () => loader.GetDataSourceByName(name);
+            IDataSourceAdaptee retrievedDataSource = await loader.GetDataSourceByName(name);
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedDataSource.Should().NotBeNull();
+            retrievedDataSource.Title.Should().Be(name);
+            scopeMock.Verify(_ => _.ServiceProvider.GetService(It.IsAny<Type>()), Times.Exactly(2));
+
+        }
+
+        [Test]
+        public async Task GetDataSourceByName_NoDataSourceFound()
+        {
+            // Arrange
+            assemblyHelperMock.Setup(_ => _.RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(It.IsAny<Type>()))
+                              .Returns(new Type[0]);
+
+            Mock<IServiceScope> scopeMock = new Mock<IServiceScope>();
+            scopeMock
+                .Setup(_ => _.ServiceProvider.GetService(It.IsAny<Type>()))
+                .Returns((IDataSourceAdaptee)null);
+
+            factoryMock.Setup(_ => _.CreateScope())
+                       .Returns(scopeMock.Object);
+
+            // Act
+            Action act = () => loader.GetDataSourceByName(It.IsAny<string>());
+            IDataSourceAdaptee retrievedDataSource = await loader.GetDataSourceByName(It.IsAny<string>());
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedDataSource.Should().BeNull();
+            scopeMock.Verify(_ => _.ServiceProvider.GetService(It.IsAny<Type>()), Times.Exactly(0));
 
         }
 

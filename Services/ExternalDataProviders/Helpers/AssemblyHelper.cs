@@ -28,6 +28,8 @@ namespace Services.ExternalDataProviders.Helpers
 
         Type[] RetrieveTypesFromExecutingAssemblyFolderFiles();
 
+        Type[] RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(Type @interface);
+
     }
 
     public class AssemblyHelper : IAssemblyHelper
@@ -56,6 +58,19 @@ namespace Services.ExternalDataProviders.Helpers
             }
 
             return types.ToArray();
+        }
+
+        public Type[] RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(Type @interface)
+        {
+            Type[] typesFromAssembly = RetrieveTypesFromExecutingAssemblyFolderFiles();
+            List<Type> typesWithInterface = new List<Type>();
+            foreach(Type type in typesFromAssembly)
+            {
+                if(type.GetInterface("IDataSourceAdaptee") != @interface) continue;
+                typesWithInterface.Add(type);
+            }
+
+            return typesWithInterface.ToArray();
         }
 
     }
