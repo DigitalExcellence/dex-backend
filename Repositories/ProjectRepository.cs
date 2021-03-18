@@ -21,6 +21,7 @@ using Models.Defaults;
 using Repositories.Base;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -163,11 +164,10 @@ namespace Repositories
             bool? highlighted = null
         )
         {
-            IQueryable<Project> queryableProjects = GetDbSet<Project>();
+            IQueryable<Project> queryableProjects = GetDbSet<Project>().Include(u => u.User);
             queryableProjects.Include(p => p.ProjectIcon).Load();
             queryableProjects.Include(p => p.CallToAction).Load();
             queryableProjects.Include(p => p.Collaborators).Load();
-            queryableProjects.Include(p => p.User).Load();
             queryableProjects.Include(p => p.Likes).Load();
             queryableProjects.Include(p => p.LinkedInstitutions).Load();
 
@@ -442,21 +442,21 @@ namespace Repositories
         /// <returns>This method returns the filtered IQueryable including the project user.</returns>
         private async Task<IQueryable<Project>> GetProjectQueryable(string query)
         {
-            IQueryable<Project> projectsToReturn = GetDbSet<Project>();
-                    projectsToReturn.Include(p => p.User).Load();
+            IQueryable<Project> projectsToReturn = GetDbSet<Project>()
+                                                   .Include(u => u.User)
+                                                   .Where(p =>
+                                                              p.Name.Contains(query) ||
+                                                              p.Description.Contains(query) ||
+                                                              p.ShortDescription.Contains(query) ||
+                                                              p.Uri.Contains(query) ||
+                                                              p.Id.ToString()
+                                                               .Equals(query) ||
+                                                              p.User.Name.Contains(query));
                     projectsToReturn.Include(p => p.ProjectIcon).Load();
                     projectsToReturn.Include(p => p.CallToAction).Load();
                     projectsToReturn.Include(p => p.Likes).Load();
-                    projectsToReturn.Where(p =>
-                                               p.Name.Contains(query) ||
-                                               p.Description.Contains(query) ||
-                                               p.ShortDescription.Contains(query) ||
-                                               p.Uri.Contains(query) ||
-                                               p.Id.ToString()
-                                                .Equals(query) ||
-                                               p.User.Name.Contains(query)).Load();
 
-            foreach(Project project in projectsToReturn)
+                    foreach(Project project in projectsToReturn)
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
