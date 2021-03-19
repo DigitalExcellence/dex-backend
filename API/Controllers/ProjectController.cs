@@ -249,7 +249,7 @@ namespace API.Controllers
 
                 if(project.CanAccess(currentUser))
                 {
-                    return Ok(mapper.Map<Project, ProjectResultResource>(project));
+                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
                 }
 
             } else
