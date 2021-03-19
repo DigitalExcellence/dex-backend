@@ -27,13 +27,15 @@ using System.Threading.Tasks;
 
 namespace Services.Tests
 {
+
     [TestFixture]
     public class UserServiceTest : ServiceTest<User, UserService, IUserRepository>
     {
-        protected new IUserService Service => (IUserService) base.Service;
+
+        protected new IUserService Service => base.Service;
 
         /// <summary>
-        /// Test if repository method is called
+        ///     Test if repository method is called
         /// </summary>
         /// <returns></returns>
         [Test]
@@ -42,11 +44,8 @@ namespace Services.Tests
             int userId = 1;
             User user = new User();
 
-            RepositoryMock.Setup(
-               repository => repository.GetUserAsync(userId))
-               .Returns(
-                   Task.FromResult(user)
-               );
+            RepositoryMock.Setup(repository => repository.GetUserAsync(userId))
+                          .Returns(Task.FromResult(user));
 
             //Test
             User received = await Service.GetUserAsync(userId);
@@ -55,7 +54,7 @@ namespace Services.Tests
         }
 
         /// <summary>
-        /// Test if repository method is called
+        ///     Test if repository method is called
         /// </summary>
         /// <returns> assert if removeuser does not thow exceptions.</returns>
         [Test]
@@ -63,70 +62,72 @@ namespace Services.Tests
         {
             int userId = 1;
 
-            RepositoryMock.Setup(
-                repository => repository.RemoveUserAsync(userId));
+            RepositoryMock.Setup(repository => repository.RemoveUserAsync(userId));
 
             await Service.RemoveUserAsync(userId);
 
-            Assert.DoesNotThrow(() => {
+            Assert.DoesNotThrow(() =>
+            {
                 RepositoryMock.Verify(repository => repository.RemoveUserAsync(userId), Times.Once);
             });
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddRangeTest_GoodFlow([UserDataSource(50)]IEnumerable<User> entities)
+        public override void AddRangeTest_GoodFlow([UserDataSource(50)] IEnumerable<User> entities)
         {
             base.AddRangeTest_GoodFlow(entities);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void AddTest_GoodFlow([UserDataSource]User entity)
+        public override void AddTest_GoodFlow([UserDataSource] User entity)
         {
             base.AddTest_GoodFlow(entity);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task FindAsyncTest_GoodFlow([UserDataSource]User entity)
+        public override Task FindAsyncTest_GoodFlow([UserDataSource] User entity)
         {
             return base.FindAsyncTest_GoodFlow(entity);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override Task GetAll([UserDataSource(50)]List<User> entities)
+        public override Task GetAll([UserDataSource(50)] List<User> entities)
         {
             return base.GetAll(entities);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Remove([UserDataSource]User entity)
+        public override void Remove([UserDataSource] User entity)
         {
             base.Remove(entity);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public Task RemoveAsync()
         {
             return base.RemoveAsync(1);
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
         public override void Save()
         {
             base.Save();
         }
 
-        ///<inheritdoc cref="ServiceTest{TDomain, TService, TRepository}"/>
+        /// <inheritdoc cref="ServiceTest{TDomain, TService, TRepository}" />
         [Test]
-        public override void Update([UserDataSource]User entity)
+        public override void Update([UserDataSource] User entity)
         {
             base.Update(entity);
         }
+
     }
+
 }

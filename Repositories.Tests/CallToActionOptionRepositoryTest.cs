@@ -28,21 +28,22 @@ namespace Repositories.Tests
 {
 
     /// <summary>
-    /// The CallToActionOptionRepositoryTest class will test the methods in the CallToActionOptionRepository.
+    ///     The CallToActionOptionRepositoryTest class will test the methods in the CallToActionOptionRepository.
     /// </summary>
-    /// <seealso cref="RepositoryTest{CallToActionOption,CallToActionOptionRepository}"/>
+    /// <seealso cref="RepositoryTest{TDomain,TRepository}" />
     public class CallToActionOptionRepositoryTest : RepositoryTest<CallToActionOption, CallToActionOptionRepository>
     {
 
         /// <summary>
-        /// Gets the repository
+        ///     Gets the repository
         /// </summary>
         /// <value>
-        /// The repository</value>
+        ///     The repository
+        /// </value>
         protected new ICallToActionOptionRepository Repository => base.Repository;
 
         /// <summary>
-        /// This method tests the GetCallToActionOptionsFromTypeAsync method in a good flow scenario.
+        ///     This method tests the GetCallToActionOptionsFromTypeAsync method in a good flow scenario.
         /// </summary>
         /// <param name="options">The call to action options stored, generated to mock the options from the database.</param>
         /// <returns>This method will return a passing result for the test.</returns>
@@ -52,22 +53,27 @@ namespace Repositories.Tests
         {
             // Arrange
             string firstType = options
-                               .ToList()[0].Type;
+                               .ToList()[0]
+                               .Type;
             int totalTimesFirstType = options.Count(o => o.Type == firstType);
             await DbContext.AddRangeAsync(options);
             await DbContext.SaveChangesAsync();
 
             // Act
-            IEnumerable<CallToActionOption> retrievedInstitutions = await Repository.GetCallToActionOptionsFromTypeAsync(firstType);
+            IEnumerable<CallToActionOption> retrievedInstitutions =
+                await Repository.GetCallToActionOptionsFromTypeAsync(firstType);
 
             // Assert
-            retrievedInstitutions.Count().Should().Be(totalTimesFirstType);
-            retrievedInstitutions.Should().BeEquivalentTo(options.Where(o => o.Type == firstType));
+            retrievedInstitutions.Count()
+                                 .Should()
+                                 .Be(totalTimesFirstType);
+            retrievedInstitutions.Should()
+                                 .BeEquivalentTo(options.Where(o => o.Type == firstType));
         }
 
         /// <summary>
-        /// This method tests the GetCallToActionOptionsFromTypeAsync method whenever there are no call to action options found
-        /// with the specified type identifier.
+        ///     This method tests the GetCallToActionOptionsFromTypeAsync method whenever there are no call to action options found
+        ///     with the specified type identifier.
         /// </summary>
         /// <returns>This method will return a passing reuslt for the test.</returns>
         [Test]
@@ -81,10 +87,11 @@ namespace Repositories.Tests
 
             // Assert
             retrievedOptions
-                .Should().NotBeNull();
+                .Should()
+                .NotBeNull();
             retrievedOptions
-                .Should().BeEmpty();
-
+                .Should()
+                .BeEmpty();
         }
 
     }

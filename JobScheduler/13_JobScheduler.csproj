@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-JobScheduler-3CE46EAB-4F12-4C7D-A37B-BFA136C798C1</UserSecretsId>
+    <AssemblyName>13_JobScheduler</AssemblyName>
+    <RootNamespace>13_JobScheduler</RootNamespace>
+      <Version>1.1.0-beta</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Worker.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <ProjectReference Include="..\MessageBrokerPublisher\09_MessageBrokerPublisher.csproj" />
+      <ProjectReference Include="..\Models\07_Models.csproj" />
+  </ItemGroup>
+</Project>

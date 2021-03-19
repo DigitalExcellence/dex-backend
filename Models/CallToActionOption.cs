@@ -19,26 +19,28 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
+
     /// <summary>
-    /// This class contains all the properties for a call to action option.
-    /// An example would be the title of an call to action. The type would be
-    /// 'Title' and the Value is the text on the call to action.
+    ///     This class contains all the properties for a call to action option.
+    ///     An example would be the title of an call to action. The type would be
+    ///     'Title' and the Value is the text on the call to action.
     /// </summary>
     public class CallToActionOption
     {
+
         /// <summary>
-        /// Gets or sets a value for the Id property.
+        ///     Gets or sets a value for the Id property.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Type property.
+        ///     Gets or sets a value for the Type property.
         /// </summary>
         [Required]
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the Value property.
+        ///     Gets or sets a value for the Value property.
         /// </summary>
         [Required]
         public string Value { get; set; }

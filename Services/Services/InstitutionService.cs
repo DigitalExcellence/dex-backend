@@ -17,50 +17,75 @@
 
 using Models;
 using Repositories;
-using Repositories.Base;
 using Services.Base;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the interface of the institution service
+    /// </summary>
     public interface IInstitutionService : IService<Institution>
     {
 
         /// <summary>
-        /// This method gets all the institutions asynchronous.
+        ///     This method gets all the institutions asynchronous.
         /// </summary>
         /// <returns>This method returns a list of institutions.</returns>
         Task<IEnumerable<Institution>> GetInstitutionsAsync();
 
         /// <summary>
-        /// This method gets the institution with the specified identity id asynchronous.
+        ///     This method gets the institution with the specified identity id asynchronous.
         /// </summary>
         /// <param name="institutionIdentityId">The identity id which is used for searching the institution.</param>
         /// <returns>This method returns the found institution with the specified identity id.</returns>
         Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId);
 
+        Task<bool> InstitutionExistsAsync(int institutionId);
     }
 
+    /// <summary>
+    ///     This is the institution service
+    /// </summary>
     public class InstitutionService : Service<Institution>, IInstitutionService
     {
 
+        /// <summary>
+        ///     This is the constructor of the institution service
+        /// </summary>
+        /// <param name="repository"></param>
         public InstitutionService(IInstitutionRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IInstitutionRepository Repository => (IInstitutionRepository) base.Repository;
 
+        /// <summary>
+        ///     This method gets all the institutions asynchronous.
+        /// </summary>
+        /// <returns>This method returns a list of institutions.</returns>
         public async Task<IEnumerable<Institution>> GetInstitutionsAsync()
         {
             return await Repository.GetInstitutionsAsync();
         }
 
+        /// <summary>
+        ///     This method gets the institution with the specified identity id asynchronous.
+        /// </summary>
+        /// <param name="institutionIdentityId">The identity id which is used for searching the institution.</param>
+        /// <returns>This method returns the found institution with the specified identity id.</returns>
         public async Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId)
         {
             return await Repository.GetInstitutionByInstitutionIdentityId(institutionIdentityId);
         }
 
+        public async Task<bool> InstitutionExistsAsync(int institutionId)
+        {
+            return await Repository.InstitutionExistsAsync(institutionId);
+        }
     }
 
 }

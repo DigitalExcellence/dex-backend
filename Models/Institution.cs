@@ -13,7 +13,9 @@
 * You can find a copy of the GNU Lesser General Public License 
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
-*/  
+*/
+
+using System.Collections.Generic;
 
 namespace Models
 {
@@ -22,22 +24,22 @@ namespace Models
     {
 
         /// <summary>
-        /// Gets or sets a the id of the institution.
+        ///     Gets or sets a the id of the institution.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the name of the institution.
+        ///     Gets or sets a value for the name of the institution.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the description of the institution.
+        ///     Gets or sets a value for the description of the institution.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for the identity id of this institution.
+        ///     Gets or sets a value for the identity id of this institution.
         /// </summary>
         public string IdentityId { get; set; }
 

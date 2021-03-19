@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -32,6 +33,9 @@ namespace Models
             UserProject = new List<UserProject>();
             FollowedUsers = new List<UserUser>();
             LikedProjectsByUsers = new List<ProjectLike>();
+            UserTasks = new List<UserTask>();
+            AccountCreationDate = DateTime.Now;
+            ExpectedGraduationDate = DateTime.Now.AddYears(4);
         }
 
         public int Id { get; set; }
@@ -52,39 +56,55 @@ namespace Models
         public List<LinkedService> Services { get; set; }
 
         public List<UserProject> UserProject { get; set; }
+
         [InverseProperty("FollowedUser")]
         public List<UserUser> FollowedUsers { get; set; }
 
         public string ProfileUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the user profile is public.
+        ///     Gets or sets a value indicating whether the user profile is public.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if this instance is public; otherwise, <c>false</c>.
+        ///     <c>true</c> if this instance is public; otherwise, <c>false</c>.
         /// </value>
         public bool IsPublic { get; set; }
 
+        public DateTime? AccountCreationDate { get; set; }
+
+        public DateTime? ExpectedGraduationDate { get; set; }
+
         /// <summary>
-        /// Gets or sets the value of the list object which keeps project list
-        /// who liked by an individual user.
+        ///     Gets or sets the value of the list object which keeps project list
+        ///     who liked by an individual user.
         /// </summary>
         /// <value>
-        /// The list object that keeps projects.
+        ///     The list object that keeps projects.
         /// </value>
         public List<ProjectLike> LikedProjectsByUsers { get; set; }
 
 
         /// <summary>
-        /// Gets or sets a value for the Id of the institution where the user is registered.
+        ///     Gets or sets a value for the Id of the institution where the user is registered.
         /// </summary>
         public int? InstitutionId { get; set; }
 
         /// <summary>
-        /// Gets or sets the institution where the user is registered.
+        ///     Gets or sets the institution where the user is registered.
         /// </summary>
         public Institution Institution { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the user tasks
+        /// </summary>
+        public List<UserTask> UserTasks { get; set; }
+
+        public bool IsDataOfficerForInstitution(int institutionId)
+        {
+            return InstitutionId != null &&
+                   InstitutionId.Value == institutionId &&
+                   Role.Name == Defaults.Defaults.Roles.DataOfficer;
+        }
     }
 
 }

@@ -22,14 +22,16 @@ using System.Collections.Generic;
 
 namespace Repositories.Tests.DataGenerators
 {
+
     /// <summary>
-    /// FakeDataGenerator for the roles
+    ///     FakeDataGenerator for the roles
     /// </summary>
     public class RoleDataGenerator : FakeDataGenerator<Role>
     {
+
         /// <summary>
-        /// Initializes the RoleDataGenerator
-        /// and define dataGenerator options
+        ///     Initializes the RoleDataGenerator
+        ///     and define dataGenerator options
         /// </summary>
         public RoleDataGenerator()
         {
@@ -44,5 +46,7 @@ namespace Repositories.Tests.DataGenerators
                     .RuleFor(role => role.Scopes, roleScopes)
                     .RuleFor(role => role.Name, faker => faker.Random.String2(10));
         }
+
     }
+
 }

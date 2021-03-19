@@ -20,23 +20,24 @@ using API.HelperClasses;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Defaults;
 using Models.Exceptions;
 using Services.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using File = Models.File;
 
 namespace API.Controllers
 {
+
     /// <summary>
-    /// This class is responsible for handling HTTP requests that are related
-    /// to file uploading, for example creating, retrieving or deleting.
+    ///     This class is responsible for handling HTTP requests that are related
+    ///     to file uploading, for example creating, retrieving or deleting.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -44,17 +45,21 @@ namespace API.Controllers
     {
 
         private readonly IFileService fileService;
+        private readonly IFileUploader fileUploader;
         private readonly IMapper mapper;
         private readonly IUserService userService;
-        private readonly IFileUploader fileUploader;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileController"/> class.
+        ///     Initializes a new instance of the <see cref="FileController" /> class.
         /// </summary>
         /// <param name="fileService">The file service.</param>
         /// <param name="mapper">The mapper.</param>
         /// <param name="userService">The User service</param>
         /// <param name="fileUploader">The file uploader extension</param>
-        public FileController(IFileService fileService, IMapper mapper, IFileUploader fileUploader, IUserService userService)
+        public FileController(IFileService fileService,
+                              IMapper mapper,
+                              IFileUploader fileUploader,
+                              IUserService userService)
         {
             this.fileService = fileService;
             this.mapper = mapper;
@@ -63,7 +68,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for retrieving all files
+        ///     This method is responsible for retrieving all files
         /// </summary>
         /// <returns>A response and list of files.</returns>
         /// <response code="200">This endpoint returns all projects.</response>
@@ -78,7 +83,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method is responsible for uploading a file
+        ///     This method is responsible for uploading a file
         /// </summary>
         /// <returns>This methods return status code 200 </returns>
         /// <response code="200">This endpoint returns all files.</response>
@@ -86,6 +91,8 @@ namespace API.Controllers
         [HttpPost]
         [Authorize]
         [Consumes("multipart/form-data")]
+        [ControllerAttributes.AllowedFileExtensions(new string[] { ".jpeg", ".png", ".jpg", ".gif" })]
+        [ControllerAttributes.MaxFileSize(2097152)]
         [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UploadSingleFile([FromForm] FileResource fileResource)
@@ -119,20 +126,20 @@ namespace API.Controllers
             } catch(FileExistException fileExistException)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = fileExistException.Message,
-                     Detail = "Please rename filename.",
-                     Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
+                {
+                    Title = fileExistException.Message,
+                    Detail = "Please rename filename.",
+                    Instance = "D902F8C6-23FF-4506-B272-C757BD709464"
                 };
-                return BadRequest(problem); 
+                return BadRequest(problem);
             }
         }
 
         /// <summary>
-        /// Find file by id
+        ///     Find file by id
         /// </summary>
         /// <param name="fileId"></param>
-        ///<response code="200">This endpoint returns one single file.</response>
+        /// <response code="200">This endpoint returns one single file.</response>
         /// <returns> File </returns>
         [HttpGet("{fileId}")]
         [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
@@ -156,7 +163,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Deletes single file
+        ///     Deletes single file
         /// </summary>
         /// <param name="fileId"></param>
         /// <response code="200">This endpoint deletes one single file.</response>
@@ -177,10 +184,10 @@ namespace API.Controllers
             if(file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "File was not found.",
-                     Detail = "File was not found.",
-                     Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
+                {
+                    Title = "File was not found.",
+                    Detail = "File was not found.",
+                    Instance = "9D3830A2-E7D1-4610-A147-1D43BFB8DDBC"
                 };
                 return NotFound(problem);
             }
@@ -189,35 +196,34 @@ namespace API.Controllers
             if(!(file.Uploader.Id.Equals(user.Id) || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "Not authorized.",
-                     Detail = "You do not have the required permissions to delete this file.",
-                     Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
-                 };
+                {
+                    Title = "Not authorized.",
+                    Detail = "You do not have the required permissions to delete this file.",
+                    Instance = "88967A6F-B168-44E2-A8E7-E9EBD555940E"
+                };
                 return Unauthorized(problem);
-                
             }
 
             try
             {
                 await fileService.RemoveAsync(fileId)
-                                    .ConfigureAwait(false);
+                                 .ConfigureAwait(false);
                 fileService.Save();
                 fileUploader.DeleteFileFromDirectory(file);
                 return Ok();
             } catch(FileNotFoundException)
             {
                 ProblemDetails problem = new ProblemDetails
-                 {
-                     Title = "File could not be deleted because the path does not exist.",
-                     Detail = "File could not be found.",
-                     Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
-                 };
+                {
+                    Title = "File could not be deleted because the path does not exist.",
+                    Detail = "File could not be found.",
+                    Instance = "436349B4-50D9-49FD-8618-82367BEB7941"
+                };
 
                 return NotFound(problem);
-            } 
-            
+            }
         }
 
     }
+
 }

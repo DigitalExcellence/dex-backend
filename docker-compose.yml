@@ -40,11 +40,45 @@ services:
       - ASPNETCORE_HTTPS_PORT=5005
       - ASPNETCORE_Kestrel__Certificates__Default__Password=W64x4AD8dNj9kImdX3tayS
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-identity.pfx
+      - App__JobScheduler__ClientId=dex-jobscheduler
+      - App__JobScheduler__ClientSecret=test
+      - App__ApiAuthentication__ClientSecret=test
     networks:
       mssql-network:
     ports:
       - 5004:5004
       - 5005:5005
+
+  api:
+    container_name: api
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: API/Dockerfile.dev
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=master;User=sa;Password=Dexcelence!1;
+      - App__IdentityServer__IdentityUrl=http://identity:5004
+      - App__IdentityServer__ClientId=dex-api
+      - App__IdentityServer__ClientSecret=test
+      - ASPNETCORE_URLS=http://+:5000;https://+:5001;
+      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=xI90DrNea7M6UJFNDwip6t
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+    networks:
+      mssql-network:
+      rabbitmq-network:
+    ports:
+      - 5000:5000
+      - 5001:5001
+    deploy:
+       restart_policy:
+        condition: on-failure
+
 
   notificationservice:
     container_name: notificationservice
@@ -65,33 +99,23 @@ services:
     networks:
       rabbitmq-network:
 
-  api:
-    container_name: api
+  jobscheduler:
+    container_name: jobscheduler
     restart: on-failure
     build:
-      context: .
-      dockerfile: API/Dockerfile.dev
-    depends_on:
-      - db
+        context: .
+        dockerfile: JobScheduler/Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Server=db;Database=master;User=sa;Password=Dexcelence!1;
-      - App__IdentityServer__IdentityUrl=http://identity:5004
-      - ASPNETCORE_URLS=http://+:5000;https://+:5001;
-      - ASPNETCORE_HTTPS_PORT=5001
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=xI90DrNea7M6UJFNDwip6t
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
-      - App__RabbitMQ__Hostname=rabbitmq
-      - App__RabbitMQ__Username=test
-      - App__RabbitMQ__Password=test
+        - Config__IdentityServerConfig__IdentityUrl=http://identity:5004/
+        - Config__IdentityServerConfig__ClientId=dex-jobscheduler
+        - Config__IdentityServerConfig__ClientSecret=test
+        - Config__ApiConfig__ApiUrl=https://api:5001/
+        - Config__RabbitMQ__Hostname=rabbitmq
+        - Config__RabbitMQ__Username=test
+        - Config__RabbitMQ__Password=test
     networks:
-      mssql-network:
-      rabbitmq-network:
-    ports:
-      - 5000:5000
-      - 5001:5001
-    deploy:
-       restart_policy:
-        condition: on-failure
+        rabbitmq-network:
+        mssql-network:
 
 networks:
   mssql-network:

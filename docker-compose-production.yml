@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   db:
     image: digitalexcellence/database
     container_name: db
@@ -48,9 +49,17 @@ services:
       - App__Frontend__ClientId=${PRODUCTION_API_FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${PRODUCTION_API_FRONTEND_CLIENT_SECRET}
       - App__IdentityServer__IdentityUrl=https://identity.dex.software
+      - App__IdentityServer__ClientId=${API_CLIENT_ID}
+      - App__IdentityServer__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__DataSources__Github__ClientId=${App__DataSources__Github__ClientId}
+      - App__DataSources__Github__ClientSecret=${App__DataSources__Github__ClientSecret}
+      - App__DataSources__Github__RedirectUri=${App__DataSources__Github__RedirectUri}
+      - App__DataSources__Gitlab__ClientId=${App__DataSources__Gitlab__ClientId}
+      - App__DataSources__Gitlab__ClientSecret=${App__DataSources__Gitlab__ClientSecret}
+      - App__DataSources__Gitlab__RedirectUri=${App__DataSources__Gitlab__RedirectUri}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=http"
@@ -95,9 +104,13 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.dex.software/external/callback/fhict
+      - App__ApiAuthentication__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - Cert_File=/app/identity.dex.software_pfx.pfx
       - Cert_Thumb=${CERT_THUMB}
       - Cert_Password=${CERT_PASSWORD}
+      - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
+      - App__JobScheduler__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
       - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
     labels:
       - "traefik.enable=true"
@@ -135,6 +148,22 @@ services:
         condition: on-failure
     networks:
       rabbitmq-network:
+
+  jobscheduler:
+    image: digitalexcellence/jobscheduler:latest
+    container_name: jobscheduler
+    restart: on-failure
+    environment:
+        - Config__IdentityServerConfig__IdentityUrl=https://identity.dex.software/
+        - Config__IdentityServerConfig__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
+        - Config__IdentityServerConfig__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
+        - Config__ApiConfig__ApiUrl=https://api.dex.software/
+        - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+        - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
+        - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
+    networks:
+        rabbitmq-network:
+        mssql-network:
 
   frontend:
     image: digitalexcellence/frontend:latest

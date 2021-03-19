@@ -15,20 +15,21 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using System;
 using Models;
 using Services.Sources;
+using System;
 
 namespace Services.Services
 {
+
     /// <summary>
-    /// The source manager interface.
+    ///     The source manager interface.
     /// </summary>
     public interface ISourceManagerService
     {
 
         /// <summary>
-        /// Fetches the project.
+        ///     Fetches the project.
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
         /// <returns>The project.</returns>
@@ -37,21 +38,23 @@ namespace Services.Services
     }
 
     /// <summary>
-    /// SourceManagerService
+    ///     SourceManagerService
     /// </summary>
     public class SourceManagerService : ISourceManagerService
     {
+
         /// <summary>
-        /// The git lab source
-        /// </summary>
-        private readonly IGitLabSource gitLabSource;
-        /// <summary>
-        /// The git hub source
+        ///     The git hub source
         /// </summary>
         private readonly IGitHubSource gitHubSource;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SourceManagerService"/> class.
+        ///     The git lab source
+        /// </summary>
+        private readonly IGitLabSource gitLabSource;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SourceManagerService" /> class.
         /// </summary>
         /// <param name="gitlabSource">The gitlab source.</param>
         /// <param name="githubSource">The github source.</param>
@@ -59,10 +62,10 @@ namespace Services.Services
         {
             gitLabSource = gitlabSource;
             gitHubSource = githubSource;
-
         }
+
         /// <summary>
-        /// Fetches the project.
+        ///     Fetches the project.
         /// </summary>
         /// <param name="sourceURI">The source URI.</param>
         /// <returns>The project.</returns>
@@ -72,12 +75,9 @@ namespace Services.Services
             {
                 return gitLabSource.GetProjectInformation(sourceURI);
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
     }
-}
 
+}

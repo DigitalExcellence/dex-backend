@@ -19,32 +19,39 @@ using System;
 
 namespace API.Resources
 {
+
     /// <summary>
-    /// File resource resource result
+    ///     File resource resource result
     /// </summary>
     /// <seealso cref="API.Resources.FileResourceResult" />
     public class FileResourceResult
     {
+
         /// <summary>
-        /// Id of File
+        ///     Id of File
         /// </summary>
         public int Id { get; set; }
+
         /// <summary>
-        /// Path of file
+        ///     Path of file
         /// </summary>
         public string Path { get; set; }
+
         /// <summary>
-        /// Upload Date and time
+        ///     Upload Date and time
         /// </summary>
         public DateTime UploadDateTime { get; set; }
+
         /// <summary>
-        /// File name
+        ///     File name
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
-        /// User Id that uploaded the file
+        ///     User Id that uploaded the file
         /// </summary>
         public int UploaderUserId { get; set; }
 
     }
+
 }

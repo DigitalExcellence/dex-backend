@@ -14,8 +14,6 @@
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
-
-using API.Extensions;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,18 +21,18 @@ namespace API.Resources
 {
 
     /// <summary>
-    /// Embedded project resource result
+    ///     Embedded project resource result
     /// </summary>
     /// <seealso cref="API.Resources.FileResource" />
     public class FileResource
     {
+
         /// <summary>
-        /// IFormFile 
+        ///     IFormFile
         /// </summary>
         [Required(ErrorMessage = "Please add a file")]
-        [AllowedExtensions(new [] { ".jpg", ".png", ".jpeg"})]
-        [MaxFileSize(2097152)]
         public IFormFile File { get; set; }
-        
+
     }
+
 }

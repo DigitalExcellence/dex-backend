@@ -27,17 +27,25 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     This is the interface of the project service
+    /// </summary>
     public interface IProjectService : IService<Project>
     {
 
         /// <summary>
-        /// Get a list of all the projects
+        ///     Get a list of all the projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams);
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams);
 
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        /// <summary>
+        ///     Gets a project including owner and collaborators
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Project entity</returns>
+        Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
         /// <summary>
         ///     Get the number of projects
@@ -53,15 +61,37 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        Task<bool> ProjectExistsAsync(int id);
+
+        /// <summary>
+        ///     Get the users projects
+        /// </summary>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
+        /// <returns>The total number of pages for the results</returns>
+        Task<IEnumerable<Project>> GetUserProjects(int userId);
     }
 
+    /// <summary>
+    ///     This is the project service
+    /// </summary>
     public class ProjectService : Service<Project>, IProjectService
     {
 
+        /// <summary>
+        ///     This is the project service constructor
+        /// </summary>
+        /// <param name="repository"></param>
         public ProjectService(IProjectRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     Gets the repository
+        /// </summary>
         protected new IProjectRepository Repository => (IProjectRepository) base.Repository;
 
+        /// <summary>
+        ///     This is a overridden add method
+        /// </summary>
+        /// <param name="entity"></param>
         public override void Add(Project entity)
         {
             // Sanitize description before executing default behaviour.
@@ -70,6 +100,10 @@ namespace Services.Services
             base.Add(entity);
         }
 
+        /// <summary>
+        ///     This is a overridden update method
+        /// </summary>
+        /// <param name="entity"></param>
         public override void Update(Project entity)
         {
             // Sanitize description before executing default behaviour.
@@ -79,11 +113,11 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Get a list of all the projects
+        ///     Get a list of all the projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        public Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams)
+        public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams)
         {
             if(!projectFilterParams.AmountOnPage.HasValue ||
                projectFilterParams.AmountOnPage <= 0)
@@ -112,7 +146,11 @@ namespace Services.Services
             }
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
-            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip, take, orderBy, orderByDirection, projectFilterParams.Highlighted);
+            return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(skip,
+                                                                   take,
+                                                                   orderBy,
+                                                                   orderByDirection,
+                                                                   projectFilterParams.Highlighted);
         }
 
         /// <summary>
@@ -139,11 +177,25 @@ namespace Services.Services
             return (int) Math.Ceiling(count / (decimal) projectFilterParams.AmountOnPage);
         }
 
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        /// <summary>
+        ///     Gets a project with owner and collaborators asynchronous
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A project entity</returns>
+        public Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id)
         {
-            return Repository.FindWithUserAndCollaboratorsAsync(id);
+            return Repository.FindWithUserCollaboratorsAndInstitutionsAsync(id);
         }
 
+        public async Task<bool> ProjectExistsAsync(int id)
+        {
+            return await Repository.ProjectExistsAsync(id);
+        }
+        
+        public Task<IEnumerable<Project>> GetUserProjects(int userId)
+        {
+            return Repository.GetUserProjects(userId);
+        }
     }
 
 }

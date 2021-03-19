@@ -32,27 +32,29 @@ namespace Services.Tests
 {
 
     /// <summary>
-    /// CallToActionServiceTest
+    ///     CallToActionServiceTest
     /// </summary>
     /// <seealso cref="ICallToActionOptionRepository" />
     [TestFixture]
-    public class CallToActionOptionServiceTest : ServiceTest<CallToActionOption, CallToActionOptionService, ICallToActionOptionRepository>
+    public class CallToActionOptionServiceTest : ServiceTest<CallToActionOption, CallToActionOptionService,
+        ICallToActionOptionRepository>
     {
 
         /// <summary>
-        /// Gets the service.
+        ///     Gets the service.
         /// </summary>
         /// <value>
-        /// The service.
+        ///     The service.
         /// </value>
         protected new ICallToActionOptionService Service => base.Service;
 
         /// <summary>
-        /// This method tests the GetCallToActionOptionsFromTypeAsync method in a good flow.
+        ///     This method tests the GetCallToActionOptionsFromTypeAsync method in a good flow.
         /// </summary>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
-        public async Task GetCallToActionOptionsFromTypeAsync_GoodFlow([CallToActionOptionDataSource(30)] IEnumerable<CallToActionOption> options)
+        public async Task GetCallToActionOptionsFromTypeAsync_GoodFlow(
+            [CallToActionOptionDataSource(30)] IEnumerable<CallToActionOption> options)
         {
             // Arrange
             RepositoryMock
@@ -70,15 +72,16 @@ namespace Services.Tests
             act.Should()
                .NotThrow();
             actualOptions
-                .Should().Contain(options);
+                .Should()
+                .Contain(options);
             actualOptions.Count()
-                .Should().Be(30);
-
+                         .Should()
+                         .Be(30);
         }
 
         /// <summary>
-        /// This method tests the GetCallToActionOptionsFromTypeAsync method whenever there are no call to actions
-        /// found with the specified type identifier.
+        ///     This method tests the GetCallToActionOptionsFromTypeAsync method whenever there are no call to actions
+        ///     found with the specified type identifier.
         /// </summary>
         /// <returns>This method will return a passing result for the test.</returns>
         [Test]
@@ -99,7 +102,8 @@ namespace Services.Tests
             // Assert
             actualOptions.Should()
                          .BeEmpty();
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
     }
