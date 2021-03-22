@@ -23,9 +23,11 @@ using Models;
 using Models.Defaults;
 using Models.Exceptions;
 using Moq;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataSources;
 using Repositories.Tests.Extensions;
 using RestSharp;
@@ -130,13 +132,33 @@ namespace Repositories.Tests
         {
             Repository.CreateProjectIndex();
             RestClientMock.Verify(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.PUT)), Times.Once);
+
         }
 
         [Test]
-        public void GetLikedProjectsFromSimilarUser_Goodflow()
+        public async Task GetLikedProjectsFromSimilarUser_Goodflow()
         {
+            RestRequest request = new RestRequest("_search", Method.POST);
+            string body = ElasticSearchResults.GetLikedProjectsFromSimilarUserQuery.Replace("ReplaceWithUserId", (1).ToString())
+                .Replace("ReplaceWithSimilarUserId", (2).ToString());
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
 
-            
+            IRestResponse restResponse = new RestResponse();
+            restResponse.Content = ElasticSearchResults.GetLikedProjectsFromSimilarUserResult;
+
+            List<ESProjectDTO> projectDTOs = new List<ESProjectDTO>();
+            ParseJsonToESProjectFormatDTOList(restResponse, projectDTOs);
+            List<Project> projects = await ConvertProjects(projectDTOs);
+
+            RestClientMock.Setup(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.POST))).Returns(restResponse).Verifiable();
+
+            List<Project> projectsToTest = await Repository.GetLikedProjectsFromSimilarUser(1, 2);
+
+            RestClientMock.VerifyAll();
+            CollectionAssert.AreEqual(projectsToTest, projects);
+
+
+
         }
 
 
@@ -1145,6 +1167,26 @@ namespace Repositories.Tests
 
             }
             return convertedProjects;
+        }
+
+        private void ParseJsonToESProjectFormatDTOList(IRestResponse restResponse, List<ESProjectDTO> esProjectFormats)
+        {
+            JObject esProjects = JObject.Parse(restResponse.Content);
+            JToken projects = esProjects.GetValue("hits")["hits"];
+            foreach(JToken project in projects)
+            {
+                esProjectFormats.Add(project.Last.First.ToObject<ESProjectDTO>());
+            }
+        }
+
+        private async Task<List<Project>> ConvertProjects(List<ESProjectDTO> elasticSearchProjects)
+        {
+            List<Project> projects = new List<Project>();
+            foreach(ESProjectDTO p in elasticSearchProjects)
+            {
+                projects.Add(await Repository.FindWithUserAndCollaboratorsAsync(p.Id));
+            }
+            return projects;
         }
 
     }
