@@ -108,6 +108,7 @@ namespace API.Controllers
         /// <returns>This method returns a list of in ElasticSearch formatted projects.</returns>
         /// <response code="200">This endpoint returns a list of in ElasticSearch formatted projects.</response>
         [HttpGet("export")]
+        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectExport))]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> MigrateDatabaseToElasticSearch()
