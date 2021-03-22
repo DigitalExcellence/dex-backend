@@ -69,6 +69,11 @@ namespace Services.Tests.ExternalDataProviders
             service = new DataProviderService(loaderMock.Object);
         }
 
+        /// <summary>
+        ///     This method tests the GetAllProjects method in a good flow with the auth flow selected.
+        ///     In this scenario projects are found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of projects.</returns>
         [Test]
         public async Task GetAllProjectsInAuthFlow_GoodFlow([ProjectDataSource(50)] IEnumerable<Project> projects)
         {
@@ -87,6 +92,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetAllProjects method in a good flow with the public flow selected.
+        ///     In this scenario projects are found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of projects.</returns>
         [Test]
         public async Task GetAllProjectsInPublicFlow_GoodFlow([ProjectDataSource(50)] IEnumerable<Project> projects)
         {
@@ -105,6 +115,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetProjectById method in a good flow with the auth flow selected.
+        ///     In this scenario the project with the specified id is found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct project.</returns>
         [Test]
         public async Task GetProjectByIdInAuthFlow_GoodFlow([ProjectDataSource] Project project)
         {
@@ -122,6 +137,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedProject.Should().Be(project);
         }
 
+        /// <summary>
+        ///     This method tests the GetProjectById method in a good flow with the auth flow selected.
+        ///     In this scenario no projects are found with the specified id and nothing is returned.
+        /// </summary>
+        /// <returns>The tested method will return null.</returns>
         [Test]
         public async Task GetProjectByIdInAuthFlow_NoProjectsFound()
         {
@@ -140,6 +160,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedProject.Should().BeNull();
         }
 
+        /// <summary>
+        ///     This method tests the GetProjectById method in a good flow with the public flow selected.
+        ///     In this scenario the project with the specified id is found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct project.</returns>
         [Test]
         public async Task GetProjectByIdInPublicFlow_GoodFlow([ProjectDataSource] Project project)
         {
@@ -157,6 +182,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedProject.Should().Be(project);
         }
 
+        /// <summary>
+        ///     This method tests the GetProjectById method in a good flow with the public flow selected.
+        ///     In this scenario no projects are found with the specified id and nothing is returned.
+        /// </summary>
+        /// <returns>The tested method will return null.</returns>
         [Test]
         public async Task GetProjectByIdInPublicFlow_NoProjectsFound()
         {
@@ -175,6 +205,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedProject.Should().BeNull();
         }
 
+        /// <summary>
+        ///     This method tests the GetProjectFromUri method in a good flow.
+        ///     In this scenario the project from the uri is found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct project.</returns>
         [Test]
         public async Task GetProjectFromUri_GoodFlow([ProjectDataSource] Project project)
         {
@@ -193,6 +228,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedProject.Should().Be(project);
         }
 
+        /// <summary>
+        ///     This method tests the GetProjectFromUri method.
+        ///     In this scenario no projects are found with the specified uri and nothing is returned.
+        /// </summary>
+        /// <returns>The tested method will return null.</returns>
         [Test]
         public async Task GetProjectFromUri_NoProjectFound()
         {
@@ -211,6 +251,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedProject.Should().BeNull();
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSources method in a good flow with no search specification.
+        ///     In this scenario the correct data sources are found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of data sources.</returns>
         [Test]
         public async Task RetrieveDataSourcesWithNoSearchSpecification_GoodFlow()
         {
@@ -228,6 +273,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSources method in a flow with no search specification.
+        ///     In this scenario no data sources are found.
+        /// </summary>
+        /// <returns>The tested method will return an empty collection.</returns>
         [Test]
         public async Task RetrieveDataSourcesWithNoSearchSpecification_NoAdapteesFound()
         {
@@ -243,6 +293,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSources method in a flow with the public search specification.
+        ///     In this scenario data sources are found and returned.
+        /// </summary>
+        /// <returns>The tested method will return a collection of data sources supporting the public flow.</returns>
         [Test]
         public async Task RetrieveDataSourcesWithPublicSearchSpecification_GoodFlow()
         {
@@ -260,8 +315,13 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSources method in a flow with the auth search specification.
+        ///     In this scenario data sources are found and returned.
+        /// </summary>
+        /// <returns>The tested method will return a collection of data sources supporting the auth flow.</returns>
         [Test]
-        public async Task RetrieveDataSourcesWithAutherizedSearchSpecification_GoodFlow()
+        public async Task RetrieveDataSourcesWithAuthorizedSearchSpecification_GoodFlow()
         {
             // Arrange
             dataSources.Add(new Mock<IPublicDataSourceAdaptee>().Object);
@@ -277,6 +337,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSourceByGuid method in a good flow where a data source
+        ///     with the specified guid is found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the data source with the specified guid.</returns>
         [Test]
         public async Task RetrieveDataSourceByGuid_GoodFlow()
         {
@@ -292,6 +357,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedAdaptee.Should().BeAssignableTo(typeof(IDataSourceAdaptee));
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSourceByGuid method in a flow where a data source
+        ///     with the specified guid is not found.
+        /// </summary>
+        /// <returns>The tested method will return null.</returns>
         [Test]
         public async Task RetrieveDataSourceByGuid_NoDataSourceFound()
         {
@@ -309,6 +379,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSourceByName method in a good flow where a data source
+        ///     with the specified name is found and returned.
+        /// </summary>
+        /// <returns>The tested method will return the data source with the specified name.</returns>
         [Test]
         public async Task RetrieveDataSourceByName_GoodFlow()
         {
@@ -324,6 +399,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedAdaptee.Should().BeAssignableTo(typeof(IDataSourceAdaptee));
         }
 
+        /// <summary>
+        ///     This method tests the RetrieveDataSourceByGuid method in a good flow where a data source
+        ///     with the specified name is not found.
+        /// </summary>
+        /// <returns>The tested method will return null.</returns>
         [Test]
         public async Task RetrieveDataSourceByName_NoDataSourceFound()
         {
