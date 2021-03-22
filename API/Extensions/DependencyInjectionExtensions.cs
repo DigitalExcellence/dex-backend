@@ -101,7 +101,7 @@ namespace API.Extensions
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
 
-            services.AddScoped<IAssemblyHelper, AssemblyHelper>();
+            services.AddSingleton<IAssemblyHelper, AssemblyHelper>();
 
             services.AddExternalDataSources();
 
