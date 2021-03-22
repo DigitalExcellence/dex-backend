@@ -49,3 +49,7 @@ jobs:
 
     - name: Postman tests
       run: npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --delay-request=200 -n 3
+      
+    - name: Recommendation tests
+      run: npm install -g newman && newman run Postman/ElasticSearch/DeX_Elastic.postman_collection.json -e Postman/ElasticSearch/DeX_Elastic.postman_environment.json --insecure --delay-request=200 -n 3
+      
