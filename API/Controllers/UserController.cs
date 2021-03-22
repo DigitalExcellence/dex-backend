@@ -52,7 +52,7 @@ namespace API.Controllers
         private readonly IRoleService roleService;
         private readonly IUserService userService;
         private readonly IUserUserService userUserService;
-
+        private readonly IProjectService projectService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="UserController" /> class
         /// </summary>
@@ -65,12 +65,14 @@ namespace API.Controllers
         ///     class.
         /// </param>
         /// <param name="userUserService">The user user service is responsible for users that are following users.</param>
+        /// <param name="projectService">The project service which is responsible for retreiving the users projects</param>
         public UserController(IUserService userService,
                               IMapper mapper,
                               IRoleService roleService,
                               IAuthorizationHelper authorizationHelper,
                               IInstitutionService institutionService,
-                              IUserUserService userUserService)
+                              IUserUserService userUserService,
+                              IProjectService projectService)
         {
             this.userService = userService;
             this.mapper = mapper;
@@ -78,6 +80,7 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.institutionService = institutionService;
             this.userUserService = userUserService;
+            this.projectService = projectService;
         }
 
         /// <summary>
@@ -97,11 +100,11 @@ namespace API.Controllers
             if(user == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the user account.",
-                                             Detail = "The user could not be found in the database.",
-                                             Instance = "A4C4EEFA-1D3E-4E64-AF00-76C44D805D98"
-                                         };
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "d9a88dca-5c91-49c4-bf7d-7cac0c6d5673"
+                };
                 return NotFound(problem);
             }
             return Ok(mapper.Map<User, UserResourceResult>(user));
@@ -159,17 +162,44 @@ namespace API.Controllers
         }
 
         /// <summary>
-        ///     This method is responsible for creating the account.
+        /// The method is responsible for retrieving the current users projects.
         /// </summary>
-        /// <param name="accountResource">The account resource which is used for creating the account.</param>
-        /// <returns>This method returns the created user as user resource result.</returns>
-        /// <response code="200">This endpoint returns the created user.</response>
-        /// <response code="400">
-        ///     The 400 Bad Request status code is return when the institution id is invalid
-        ///     or when saving the user to the database failed.
-        /// </response>
-        /// <response code="404">The institution with the specified institution id could not be found.</response>
-        [HttpPost]
+        /// <returns>The current user projects as resource result.</returns>
+        /// <response code="200">This endpoint returns the current users projects.</response>
+        /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
+        [HttpGet("projects")]
+        [Authorize]
+        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetUserProjects()
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            if(user == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "ddcfef77-af2a-4ef0-a6bc-bd458b79306d"
+                };
+                return NotFound(problem);
+            }
+
+            IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id);
+
+            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(userProjects));
+        }
+
+            /// <summary>
+            /// This method is responsible for creating the account.
+            /// </summary>
+            /// <param name="accountResource">The account resource which is used for creating the account.</param>
+            /// <returns>This method returns the created user as user resource result.</returns>
+            /// <response code="200">This endpoint returns the created user.</response>
+            /// <response code="400">The 400 Bad Request status code is return when the institution id is invalid
+            /// or when saving the user to the database failed.</response>
+            /// <response code="404">The institution with the specified institution id could not be found.</response>
+            [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -403,11 +433,11 @@ namespace API.Controllers
             if(await userService.FindAsync(userId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the user account.",
-                                             Detail = "The database does not contain a user with this user id.",
-                                             Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
-                                         };
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "C4C62149-FF9A-4E4C-8C9F-6BBF518BA085"
+                };
                 return NotFound(problem);
             }
 
@@ -465,11 +495,11 @@ namespace API.Controllers
             if(user.Id == followedUserId)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "You can not follow yourself",
-                                             Detail = "You can not follow yourself",
-                                             Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
-                                         };
+                {
+                    Title = "You can not follow yourself",
+                    Detail = "You can not follow yourself",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
                 return NotFound(problem);
             }
             UserUser userUser = new UserUser(user, followedUser);

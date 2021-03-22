@@ -6,9 +6,7 @@
         <DocumentationFile>.\API.xml</DocumentationFile>
         <Company>Digital Excellence Fontys</Company>
         <LangVersion>8</LangVersion>
-        <Version>1.0.1-beta</Version>
-        <UserSecretsId>2e42aa9b-93be-4b66-99a4-cfbc4ee01acf</UserSecretsId>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <Version>1.1.0-beta</Version>
     </PropertyGroup>
 
     <ItemGroup>

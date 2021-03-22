@@ -190,7 +190,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
             Assert.AreEqual(100, retrieved.Count);
             foreach(Project project in projects)
             {
@@ -210,7 +210,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -228,7 +228,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -252,13 +252,13 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Tests
-            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync(0, 1);
+            List<Project> retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(0, 1);
             Assert.AreEqual(1, retrieved.Count, "Get all with skip take failed");
 
-            retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync(0, 10);
+            retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(0, 10);
             Assert.AreEqual(10, retrieved.Count, "Get all with skip take failed");
 
-            retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync(10, 10);
+            retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(10, 10);
             Assert.AreEqual(10, retrieved.Count, "Get all with skip take failed");
         }
 
@@ -282,7 +282,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Tests
-            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync(1000, 10);
+            List<Project> retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(1000, 10);
             Assert.AreEqual(0, retrieved.Count);
         }
 
@@ -341,7 +341,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
             Assert.AreEqual(1, retrieved.Count);
             Assert.AreEqual(retrieved[0]
                             .User.Email,
@@ -367,7 +367,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Test
-            List<Project> retrieved = await Repository.GetAllWithUsersAndCollaboratorsAsync();
+            List<Project> retrieved = await Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
             Assert.AreEqual(1, retrieved.Count);
             Assert.AreEqual(retrieved[0]
                             .User.Email,
@@ -658,7 +658,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Testing
-            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(1);
             Assert.AreEqual(projects[0]
                                 .Id,
                             retrieved.Id);
@@ -708,7 +708,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Testing
-            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(project.Id);
+            Project retrieved = await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(project.Id);
             Assert.AreEqual(project.Id, retrieved.Id);
             Assert.AreEqual(project.Name, retrieved.Name);
             Assert.AreEqual(project.ShortDescription, retrieved.ShortDescription);
@@ -746,7 +746,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Testing
-            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(project.Id);
+            Project retrieved = await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(project.Id);
             Assert.AreEqual(project.Id, retrieved.Id);
             Assert.AreEqual(project.Name, retrieved.Name);
             Assert.AreEqual(project.ShortDescription, retrieved.ShortDescription);
@@ -768,7 +768,7 @@ namespace Repositories.Tests
         public async Task FindWithUserAndCollaboratorsAsyncTest_BadFlow_NoProjects()
         {
             // Testing
-            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(1);
             Assert.IsNull(retrieved);
         }
 
@@ -800,7 +800,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Testing
-            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(1);
 
             // Retrieved is null because there are no users and users is required
             Assert.IsNull(retrieved);
@@ -824,7 +824,7 @@ namespace Repositories.Tests
             await DbContext.SaveChangesAsync();
 
             // Testing
-            Project retrieved = await Repository.FindWithUserAndCollaboratorsAsync(1);
+            Project retrieved = await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(1);
             Assert.AreEqual(projects[0]
                                 .Id,
                             retrieved.Id);

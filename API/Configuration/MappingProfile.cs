@@ -172,6 +172,11 @@ namespace API.Configuration
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.WizardPage.Description));
+
+            CreateMap<ProjectInstitution, ProjectInstitutionResourceResult>()
+                .ForMember(dest => dest.InstititutionName, opt => opt.MapFrom(src => src.Institution.Name))
+                .ForMember(dest => dest.ProjectName, opt => opt.MapFrom(src => src.Project.Name));
+
         }
 
     }

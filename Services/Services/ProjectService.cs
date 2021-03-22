@@ -47,7 +47,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Project entity</returns>
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
         /// <summary>
         ///     Get the number of projects
@@ -63,6 +63,14 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        Task<bool> ProjectExistsAsync(int id);
+
+        /// <summary>
+        ///     Get the users projects
+        /// </summary>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
+        /// <returns>The total number of pages for the results</returns>
+        Task<IEnumerable<Project>> GetUserProjects(int userId);
         /// <summary>
         ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
         /// </summary>
@@ -189,9 +197,14 @@ namespace Services.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns>A project entity</returns>
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id)
         {
-            return Repository.FindWithUserAndCollaboratorsAsync(id);
+            return Repository.FindWithUserCollaboratorsAndInstitutionsAsync(id);
+        }
+
+        public async Task<bool> ProjectExistsAsync(int id)
+        {
+            return await Repository.ProjectExistsAsync(id);
         }
 
         /// <summary>
@@ -230,6 +243,11 @@ namespace Services.Services
             Repository.CreateProjectIndex();
         }
 
+        
+        public Task<IEnumerable<Project>> GetUserProjects(int userId)
+        {
+            return Repository.GetUserProjects(userId);
+        }
     }
 
 }

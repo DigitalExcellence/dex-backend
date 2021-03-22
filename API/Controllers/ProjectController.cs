@@ -57,7 +57,8 @@ namespace API.Controllers
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
-
+        private readonly IProjectInstitutionService projectInstitutionService;
+        private readonly IInstitutionService institutionService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -79,6 +80,8 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
+        /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
+        /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -87,7 +90,9 @@ namespace API.Controllers
                                  IAuthorizationHelper authorizationHelper,
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
-                                 ICallToActionOptionService callToActionOptionService)
+                                 ICallToActionOptionService callToActionOptionService,
+                                 IProjectInstitutionService projectInstitutionService,
+                                 IInstitutionService institutionService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -98,6 +103,8 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
+            this.projectInstitutionService = projectInstitutionService;
+            this.institutionService = institutionService;
         }
 
 
@@ -145,9 +152,9 @@ namespace API.Controllers
             [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
-                                     {
-                                         Title = "Invalid search request."
-                                     };
+            {
+                Title = "Invalid search request."
+            };
             if(projectFilterParamsResource.Page != null &&
                projectFilterParamsResource.Page < 1)
             {
@@ -189,12 +196,7 @@ namespace API.Controllers
 
                 foreach(Project project in projects)
                 {
-                    if(project.InstitutePrivate == false)
-                    {
-                        filteredProjects.Add(project);
-                    }
-                    if(project.InstitutePrivate &&
-                       currentUser.InstitutionId == project.User.InstitutionId)
+                    if(project.CanAccess(currentUser))
                     {
                         filteredProjects.Add(project);
                     }
@@ -214,16 +216,16 @@ namespace API.Controllers
             IEnumerable<ProjectResultResource> results =
                 mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(filteredProjects);
             ProjectResultsResource resultsResource = new ProjectResultsResource
-                                                     {
-                                                         Results = results.ToArray(),
-                                                         Count = results.Count(),
-                                                         TotalCount =
+            {
+                Results = results.ToArray(),
+                Count = results.Count(),
+                TotalCount =
                                                              await projectService.ProjectsCount(projectFilterParams),
-                                                         Page = projectFilterParams.Page,
-                                                         TotalPages =
+                Page = projectFilterParams.Page,
+                TotalPages =
                                                              await projectService.GetProjectsTotalPages(
                                                                  projectFilterParams)
-                                                     };
+            };
 
             return Ok(resultsResource);
         }
@@ -247,25 +249,25 @@ namespace API.Controllers
             if(projectId < 0)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting project.",
-                                             Detail =
+                {
+                    Title = "Failed getting project.",
+                    Detail =
                                                  "The Id is smaller then 0 and therefore it could never be a valid project id.",
-                                             Instance = "D590A4FE-FDBA-4AE5-B184-BC7395C45D4E"
-                                         };
+                    Instance = "D590A4FE-FDBA-4AE5-B184-BC7395C45D4E"
+                };
                 return BadRequest(problem);
             }
 
-            Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId)
+            Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(projectId)
                                                   .ConfigureAwait(false);
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting project.",
-                                             Detail = "The project could not be found in the database.",
-                                             Instance = "38516C41-4BFB-47BE-A759-1206BE6D2D13"
-                                         };
+                {
+                    Title = "Failed getting project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "38516C41-4BFB-47BE-A759-1206BE6D2D13"
+                };
                 return NotFound(problem);
             }
 
@@ -274,15 +276,11 @@ namespace API.Controllers
                 User currentUser = await HttpContext.GetContextUser(userService)
                                                     .ConfigureAwait(false);
 
-                if(project.InstitutePrivate &&
-                   currentUser.InstitutionId == project.User.InstitutionId)
+                if(project.CanAccess(currentUser))
                 {
                     return Ok(mapper.Map<Project, ProjectResourceResult>(project));
                 }
-                if(project.InstitutePrivate == false)
-                {
-                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
-                }
+
             } else
             {
                 if(project.InstitutePrivate == false)
@@ -303,21 +301,23 @@ namespace API.Controllers
         /// <response code="400">
         ///     The 400 Bad Request status code is returned when the project
         ///     resource is not specified or failed to save project to the database.
+        ///     404 not found when the user is not bound to and institution and tries to make the project isntitute private
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
         {
             if(projectResource == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to create a new project.",
-                                             Detail = "The specified project resource was null.",
-                                             Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
-                                         };
+                {
+                    Title = "Failed to create a new project.",
+                    Detail = "The specified project resource was null.",
+                    Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
+                };
                 return BadRequest(problem);
             }
 
@@ -329,12 +329,12 @@ namespace API.Controllers
                 if(!callToActionOptions.Any())
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Call to action value was not found.",
-                                                 Detail =
+                    {
+                        Title = "Call to action value was not found.",
+                        Detail =
                                                      "The specified call to action value was not found while creating the project.",
-                                                 Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                                             };
+                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                    };
                     return BadRequest(problem);
                 }
             }
@@ -346,17 +346,33 @@ namespace API.Controllers
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "File was not found.",
-                                             Detail = "The specified file was not found while creating project.",
-                                             Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
-                                         };
+                {
+                    Title = "File was not found.",
+                    Detail = "The specified file was not found while creating project.",
+                    Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
+                };
                 return BadRequest(problem);
             }
 
             project.ProjectIcon = file;
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
+
+            if(project.InstitutePrivate)
+            {
+                if(project.User.InstitutionId == default)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Unable to create project.",
+                        Detail = "The insitute private is set to true, but the user creating the project isn't bound to an institution.",
+                        Instance = "b942c55d-01be-4fd1-90a1-a5ad3d172403"
+                    };
+                    return NotFound(problem);
+                }
+
+                project.LinkedInstitutions.Add(new ProjectInstitution { Project = project, Institution = project.User.Institution });
+            }
 
             try
             {
@@ -369,11 +385,11 @@ namespace API.Controllers
 
 
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to save new project.",
-                                             Detail = "There was a problem while saving the project to the database.",
-                                             Instance = "9FEEF001-F91F-44E9-8090-6106703AB033"
-                                         };
+                {
+                    Title = "Failed to save new project.",
+                    Detail = "There was a problem while saving the project to the database.",
+                    Instance = "9FEEF001-F91F-44E9-8090-6106703AB033"
+                };
                 return BadRequest(problem);
             }
         }
@@ -387,11 +403,13 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the updated project.</response>
         /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
         /// <response code="404">The 404 not Found status code is returned when the project to update is not found.</response>
+        /// <response code="400">The 404 if the use tries to update the institute private property with this endpoint.</response>
         [HttpPut("{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
         {
             Project project = await projectService.FindAsync(projectId)
@@ -399,11 +417,11 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to update project.",
-                                             Detail = "The specified project could not be found in the database.",
-                                             Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
-                                         };
+                {
+                    Title = "Failed to update project.",
+                    Detail = "The specified project could not be found in the database.",
+                    Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
+                };
                 return NotFound(problem);
             }
 
@@ -414,11 +432,11 @@ namespace API.Controllers
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to edit the project.",
-                                             Detail = "The user is not allowed to edit the project.",
-                                             Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
-                                         };
+                {
+                    Title = "Failed to edit the project.",
+                    Detail = "The user is not allowed to edit the project.",
+                    Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
+                };
                 return Unauthorized(problem);
             }
 
@@ -430,14 +448,25 @@ namespace API.Controllers
                 if(!callToActionOptions.Any())
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Call to action value was not found.",
-                                                 Detail =
+                    {
+                        Title = "Call to action value was not found.",
+                        Detail =
                                                      "The specified call to action value was not found while creating the project.",
-                                                 Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                                             };
+                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                    };
                     return BadRequest(problem);
                 }
+            }
+
+            if (projectResource.InstitutePrivate != project.InstitutePrivate)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Unable to update project.",
+                    Detail = $"It is not possible to update the institute private of a project with this endpoint. Please use the {nameof(UpdateProjectPrivateStatus)} endpoint.",
+                    Instance = "6a92321e-c6a7-41d9-90ee-9148566718e3"
+                };
+                return BadRequest(problem);
             }
 
             // Upload the new file if there is one
@@ -471,17 +500,20 @@ namespace API.Controllers
                 } else
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "File was not found.",
-                                                 Detail = "The specified file was not found while updating project.",
-                                                 Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
-                                             };
+                    {
+                        Title = "File was not found.",
+                        Detail = "The specified file was not found while updating project.",
+                        Instance = "69166D3D-6D34-4050-BD25-71F1BEBE43D3"
+                    };
                     return BadRequest(problem);
                 }
             }
+
             mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
+
+
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
@@ -507,11 +539,11 @@ namespace API.Controllers
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to delete the project.",
-                                             Detail = "The project could not be found in the database.",
-                                             Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
-                                         };
+                {
+                    Title = "Failed to delete the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "AF63CF48-ECAA-4996-BAA0-BF52926D12AC"
+                };
                 return NotFound(problem);
             }
 
@@ -525,11 +557,11 @@ namespace API.Controllers
             if(!(project.UserId == user.Id || isAllowed))
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to delete the project.",
-                                             Detail = "The user is not allowed to delete the project.",
-                                             Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
-                                         };
+                {
+                    Title = "Failed to delete the project.",
+                    Detail = "The user is not allowed to delete the project.",
+                    Instance = "D0363680-5B4F-40A1-B381-0A7544C70164"
+                };
                 return Unauthorized(problem);
             }
 
@@ -549,11 +581,11 @@ namespace API.Controllers
                 } catch(FileNotFoundException)
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "File could not be deleted because the path does not exist.",
-                                                 Detail = "File could not be found.",
-                                                 Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
-                                             };
+                    {
+                        Title = "File could not be deleted because the path does not exist.",
+                        Detail = "File could not be found.",
+                        Instance = "367594c4-1fab-47ae-beb4-a41b53c65a18"
+                    };
 
                     return NotFound(problem);
                 }
@@ -584,22 +616,22 @@ namespace API.Controllers
             if(await userService.FindAsync(user.Id) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the user account.",
-                                             Detail = "The database does not contain a user with this user id.",
-                                             Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
-                                         };
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
                 return NotFound(problem);
             }
 
             if(userProjectService.CheckIfUserFollows(user.Id, projectId))
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "User already follows this project",
-                                             Detail = "You are already following this project.",
-                                             Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
-                                         };
+                {
+                    Title = "User already follows this project",
+                    Detail = "You are already following this project.",
+                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
+                };
                 return Conflict(problem);
             }
 
@@ -608,11 +640,11 @@ namespace API.Controllers
             if(await projectService.FindAsync(projectId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the project.",
-                                             Detail = "The database does not contain a project with this project id.",
-                                             Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
-                                         };
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
                 return NotFound(problem);
             }
             UserProject userProject = new UserProject(project, user);
@@ -640,22 +672,22 @@ namespace API.Controllers
             if(await userService.FindAsync(user.Id) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the user account.",
-                                             Detail = "The database does not contain a user with this user id.",
-                                             Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
-                                         };
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with this user id.",
+                    Instance = "B778C55A-D41E-4101-A7A0-F02F76E5A6AE"
+                };
                 return NotFound(problem);
             }
 
             if(userProjectService.CheckIfUserFollows(user.Id, projectId) == false)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "User is not following this project",
-                                             Detail = "You are not following this project.",
-                                             Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
-                                         };
+                {
+                    Title = "User is not following this project",
+                    Detail = "You are not following this project.",
+                    Instance = "27D14082-9906-4EB8-AE4C-65BAEC0BB4FD"
+                };
                 return Conflict(problem);
             }
 
@@ -664,11 +696,11 @@ namespace API.Controllers
             if(await projectService.FindAsync(projectId) == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the project.",
-                                             Detail = "The database does not contain a project with this project id.",
-                                             Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
-                                         };
+                {
+                    Title = "Failed getting the project.",
+                    Detail = "The database does not contain a project with this project id.",
+                    Instance = "57C13F73-6D22-41F3-AB05-0CCC1B3C8328"
+                };
                 return NotFound(problem);
             }
             UserProject userProject = new UserProject(project, user);
@@ -701,23 +733,23 @@ namespace API.Controllers
             if(currentUser == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "Failed to getting the user account.",
-                                                    Detail =
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail =
                                                         "The database does not contain a user with the provided user id.",
-                                                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
-                                                };
+                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                };
                 return NotFound(problemDetails);
             }
 
             if(userProjectLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectId))
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "User already liked this project",
-                                                    Detail = "You already liked this project.",
-                                                    Instance = "5B0104E2-C864-4ADB-9321-32CD352DC124"
-                                                };
+                {
+                    Title = "User already liked this project",
+                    Detail = "You already liked this project.",
+                    Instance = "5B0104E2-C864-4ADB-9321-32CD352DC124"
+                };
                 return Conflict(problemDetails);
             }
 
@@ -726,12 +758,12 @@ namespace API.Controllers
             if(projectToLike == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "Failed to getting the project.",
-                                                    Detail =
+                {
+                    Title = "Failed to getting the project.",
+                    Detail =
                                                         "The database does not contain a project with the provided project id.",
-                                                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
-                                                };
+                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                };
                 return NotFound(problemDetails);
             }
 
@@ -750,11 +782,11 @@ namespace API.Controllers
                 Log.Logger.Error(e, "Database exception!");
 
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "Could not create the liked project details.",
-                                                    Detail = "The database failed to save the liked project.",
-                                                    Instance = "F941879E-6C25-4A35-A962-8E86382E1849"
-                                                };
+                {
+                    Title = "Could not create the liked project details.",
+                    Detail = "The database failed to save the liked project.",
+                    Instance = "F941879E-6C25-4A35-A962-8E86382E1849"
+                };
                 return BadRequest(problemDetails);
             }
         }
@@ -781,23 +813,23 @@ namespace API.Controllers
             if(currentUser == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "Failed to getting the user account.",
-                                                    Detail =
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail =
                                                         "The database does not contain a user with the provided user id.",
-                                                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
-                                                };
+                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                };
                 return NotFound(problemDetails);
             }
 
             if(!userProjectLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectId))
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "User didn't like this project.",
-                                                    Detail = "You did not like this project at the moment.",
-                                                    Instance = "03590F81-C06D-4707-A646-B9B7F79B8A15"
-                                                };
+                {
+                    Title = "User didn't like this project.",
+                    Detail = "You did not like this project at the moment.",
+                    Instance = "03590F81-C06D-4707-A646-B9B7F79B8A15"
+                };
                 return Conflict(problemDetails);
             }
 
@@ -807,12 +839,12 @@ namespace API.Controllers
             if(projectToLike == null)
             {
                 ProblemDetails problemDetails = new ProblemDetails
-                                                {
-                                                    Title = "Failed to getting the project.",
-                                                    Detail =
+                {
+                    Title = "Failed to getting the project.",
+                    Detail =
                                                         "The database does not contain a project with the provided project id.",
-                                                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
-                                                };
+                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                };
                 return NotFound(problemDetails);
             }
 
@@ -826,6 +858,240 @@ namespace API.Controllers
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
         }
 
+
+
+        /// <summary>
+        /// Updates the institutionprivate property of a project to the given value in the body
+        /// and adds the institution of the creator to the project if the institution isn't yet linked
+        /// to the project and institutePrivate is true.
+        /// </summary>
+        /// <param name="projectId">The project identifier</param>
+        /// <param name="institutePrivate">The new value for InstitutePrivate in the given project</param>
+        /// <response code="404">If the project or current user couldn't be found.</response>
+        /// <response code="404">The creator of the project doesn't belong to an institution </response>
+        /// <response code="403">If the user doesn't have the rights to make the project private.</response>
+        /// <response code="200">If success</response>
+        [HttpPut("instituteprivate/{projectId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectResultResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> UpdateProjectPrivateStatus(int projectId, [FromBody] bool institutePrivate)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                              .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "88cfe86d-fcdd-42d2-8460-1ea1d582d879"
+                };
+                return NotFound(problemDetails);
+            }
+
+            Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(projectId)
+                                                  .ConfigureAwait(false);
+
+            if(project == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "68cdf62d-26ef-4b6e-9f98-fdddcfc0fc71"
+                };
+                return NotFound(problemDetails);
+            }
+
+            bool isAllowed = await authorizationHelper.UserIsAllowed(currentUser,
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
+                                                                     project.UserId);
+
+            bool isCreatorAndHasScope =
+                project.IsCreator(currentUser.Id) &&
+                userService.UserHasScope(currentUser.IdentityId, nameof(Defaults.Scopes.ProjectWrite));
+
+            //If the current user isn't the creator of the project or the dataofficer of the organization which the creator belongs to
+            //Then this user is not authorized to link the institution to the project
+            if(!(isCreatorAndHasScope ||
+                 isAllowed))
+            {
+                return Forbid();
+            }
+
+            int projectCreatorInstitutionId = project.User.InstitutionId.GetValueOrDefault();
+
+            if(projectCreatorInstitutionId == default)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The creator of the project send in the request is not bound to an institution and can therefore not make the project private.",
+                    Instance = "6972f184-7715-41e6-8bca-8b4ee63d5c58"
+                };
+                return NotFound(problemDetails);
+            }
+
+            //Link institution of the creator of the project to project if the institution isn't linked to the project yet
+            if(institutePrivate &&
+                !projectInstitutionService.InstitutionIsLinkedToProject(projectId, projectCreatorInstitutionId))
+            {
+                ProjectInstitution projectInstitution = new ProjectInstitution(projectId, projectCreatorInstitutionId);
+                await projectInstitutionService.AddAsync(projectInstitution).ConfigureAwait(false);
+            }
+
+            project.InstitutePrivate = institutePrivate;
+            projectService.Update(project);
+
+            projectService.Save();
+
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+        }
+
+        /// <summary>
+        /// Links given project and institution. This function is admin only!
+        /// </summary>
+        /// <param name="projectId">The project identifier</param>
+        /// <param name="institutionId">The institution identifier</param>
+        /// <response code="404">If the project, institution or current user couldn't be found.</response>
+        /// <response code="409">If the project is already linked to the institution.</response>
+        /// <response code="201">If success</response>
+        [HttpPost("linkedinstitution/{projectId}/{institutionId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ProjectInstitutionResourceResult), StatusCodes.Status201Created)]
+        public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed getting the user account.",
+                    Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "11deede6-c76c-42cd-ac50-97743e3cff2a"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await projectService.ProjectExistsAsync(projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "4a73928f-827f-44a5-b508-e6a8c73c1717"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await institutionService.InstitutionExistsAsync(institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed getting the institution.",
+                    Detail = "The institution send in the request could not be found in the database.",
+                    Instance = "01cdc6f4-42aa-4394-bbc8-2576e4f99498"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Institution is already linked to project.",
+                    Detail = "The institution cannot be linked to the project because the institution is already part of the project.",
+                    Instance = "01b26993-0c9e-4890-a7fe-f0f39450e616"
+                };
+                return Conflict(problemDetails);
+            }
+
+            ProjectInstitution projectInstitution = new ProjectInstitution(projectId, institutionId);
+            await projectInstitutionService.AddAsync(projectInstitution);
+            projectInstitutionService.Save();
+
+            //Maybe a bit wasteful to get the entire project and institution but its fast enough for now.
+            projectInstitution.Project = await projectService.FindAsync(projectId);
+            projectInstitution.Institution = await institutionService.FindAsync(institutionId);
+
+            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionResourceResult>(projectInstitution));
+        }
+
+        /// <summary>
+        /// Links given project and institution. This function is admin only!
+        /// </summary>
+        /// <param name="projectId">The project identifier</param>
+        /// <param name="institutionId">The institution identifier</param>
+        /// <response code="404">If the project, institution or current user couldn't be found.</response>
+        /// <response code="409">If the project is not yet linked to the institution.</response>
+        /// <response code="200">If success</response>
+        [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId, int institutionId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "7561e57a-d957-4823-9b90-d107aa54f893"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await projectService.ProjectExistsAsync(projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "f358fc51-0761-4929-8cca-71a6225fe0cd"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await institutionService.InstitutionExistsAsync(institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed getting the institution.",
+                    Detail = "The institution send in the request could not be found in the database.",
+                    Instance = "7065c1e7-0543-470e-ab55-403c13418626"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Institution is not yet linked to the project.",
+                    Detail = "The institution cannot be unlinked from the project, because it is not linked to the project in the first place.",
+                    Instance = "695ef305-06b3-4ad8-99f2-773cd0f03e6e"
+                };
+                return Conflict(problemDetails);
+            }
+
+            projectInstitutionService.RemoveByProjectIdAndInstitutionId(projectId, institutionId);
+            projectInstitutionService.Save();
+
+            return Ok();
+        }
     }
 
 }
