@@ -62,7 +62,11 @@ namespace Services.Tests.ExternalDataProviders
             loader = new DataProviderLoader(factoryMock.Object, repositoryMock.Object, assemblyHelperMock.Object ,mapper);
         }
 
-
+        /// <summary>
+        ///     This method tests the GetAllDataSources method in a good flow. In this scenario data sources do
+        ///     exist and are found.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of data sources.</returns>
         [Test]
         public async Task GetAllDataSources_GoodFlow()
         {
@@ -97,6 +101,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetAllDataSources method in a flow where no data sources
+        ///     are found.
+        /// </summary>
+        /// <returns>The tested method will return an empty collection of data sources.</returns>
         [Test]
         public async Task GetAllDataSources_NoDataSources()
         {
@@ -118,6 +127,13 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetAllDataSources method in a flow where no local data sources are found,
+        ///     however there are implementations found in the data base.
+        /// </summary>
+        /// <returns>
+        ///     The tested method will return an empty collection and the implementations will get removed from the database.
+        /// </returns>
         [Test]
         public async Task GetAllDataSources_NoDataSourcesLocalButDataSourceInDb()
         {
@@ -144,6 +160,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetDataSourceById method in a good flow. In this scenario a data source with the
+        ///     specified guid exists and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct data source with the specified guid.</returns>
         [Test]
         public async Task GetDataSourceByGuid_GoodFlow()
         {
@@ -181,6 +202,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetDataSourceById method in a flow where no data source could be found
+        ///     with the specified guid.
+        /// </summary>
+        /// <returns>The tested method will return no data source.</returns>
         [Test]
         public async Task GetDataSourceByGuid_NoDataSourceFound()
         {
@@ -207,6 +233,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetDataSourceByName method in a good flow. In this scenario a data source with the
+        ///     specified name exists and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct data source with the specified guid.</returns>
         [Test]
         public async Task GetDataSourceByName_GoodFlow()
         {
@@ -244,6 +275,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetDataSourceByName method in a flow where no data source could be found
+        ///     with the specified name.
+        /// </summary>
+        /// <returns>The tested method will return no data source.</returns>
         [Test]
         public async Task GetDataSourceByName_NoDataSourceFound()
         {
