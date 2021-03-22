@@ -237,6 +237,24 @@ namespace Repositories.Tests
             CollectionAssert.AreEqual(expectedSimilarUsers, similarUsers);
         }
 
+        /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
+        [Test]
+        public void GetSimilarUsers_BadFlow()
+        {
+            IRestResponse restResponse = new RestResponse()
+                                         {
+                                             StatusCode = HttpStatusCode.BadRequest,
+                                             Content = ElasticSearchResults.GetSimilarUserResult
+                                         };
+
+            RestClientMock.Setup(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.POST)))
+                          .Returns(restResponse);
+            List<int> similarUsers = Repository.GetSimilarUsers(1);
+            List<int> expectedSimilarUsers = new List<int>();
+
+            CollectionAssert.AreEqual(expectedSimilarUsers, similarUsers);
+        }
+
 
     }
 

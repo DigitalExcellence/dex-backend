@@ -501,13 +501,6 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                if(!context.ProjectLike.Any())
-                {
-                    List<Project> projects = context.Project.ToList();
-                    List<User> users = context.User.ToList();
-                    context.ProjectLike.AddRange(Seed.SeedLikes(projects, users));
-                    context.SaveChanges();
-                }
 
                 // TODO seed embedded projects
             }
