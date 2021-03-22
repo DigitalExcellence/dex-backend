@@ -26,6 +26,7 @@ using Moq;
 using NUnit.Framework;
 using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataSources;
 using Repositories.Tests.Extensions;
 using RestSharp;
@@ -130,13 +131,15 @@ namespace Repositories.Tests
         {
             Repository.CreateProjectIndex();
             RestClientMock.Verify(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.PUT)), Times.Once);
+
         }
 
         [Test]
         public void GetLikedProjectsFromSimilarUser_Goodflow()
         {
+            RestRequest request = new RestRequest("_search", Method.POST);
 
-            
+            Repository.GetLikedProjectsFromSimilarUser(1, 2);
         }
 
 
