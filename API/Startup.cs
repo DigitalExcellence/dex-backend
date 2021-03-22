@@ -199,6 +199,8 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
+                o.AddPolicy(nameof(Defaults.Scopes.AdminProjectExport),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.AdminProjectExport))));
             });
 
             services.AddCors();

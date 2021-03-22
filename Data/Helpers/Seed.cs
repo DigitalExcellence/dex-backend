@@ -157,7 +157,8 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.FileWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
-                                                      new RoleScope(nameof(Defaults.Scopes.DataSourceWrite))
+                                                      new RoleScope(nameof(Defaults.Scopes.DataSourceWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.AdminProjectExport))
                                                   }
             };
             roles.Add(administratorRole);
