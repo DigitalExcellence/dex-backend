@@ -83,7 +83,8 @@ namespace Services.Tests
                                              "FileWrite",
                                              "CallToActionOptionWrite",
                                              "UserTaskWrite",
-                                             "AdminProjectWrite"
+                                             "AdminProjectWrite",
+                                             "AdminProjectExport"
                                          };
             List<string> retrievedScopes = Service.GetValidScopes();
 
