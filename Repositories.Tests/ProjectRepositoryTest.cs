@@ -160,14 +160,7 @@ namespace Repositories.Tests
 
 
         }
-
-
-
-
-
-
-
-
+        
         /// <summary>
         /// Test if project with user relations are retrieved correctly
         /// </summary>
@@ -1184,7 +1177,7 @@ namespace Repositories.Tests
             List<Project> projects = new List<Project>();
             foreach(ESProjectDTO p in elasticSearchProjects)
             {
-                projects.Add(await Repository.FindWithUserAndCollaboratorsAsync(p.Id));
+                projects.Add(await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(p.Id));
             }
             return projects;
         }

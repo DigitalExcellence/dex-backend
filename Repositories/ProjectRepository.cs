@@ -117,7 +117,6 @@ namespace Repositories
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
         /// <returns>A enumerable of the users projects</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
         Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId);
         void CreateProjectIndex();
         void DeleteIndex();
@@ -639,7 +638,7 @@ namespace Repositories
             List<Project> projects = new List<Project>();
             foreach(ESProjectDTO p in elasticSearchProjects)
             {
-                projects.Add(await FindWithUserAndCollaboratorsAsync(p.Id));
+                projects.Add(await FindWithUserCollaboratorsAndInstitutionsAsync(p.Id));
             }
             return projects;
         }
