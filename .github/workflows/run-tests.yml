@@ -49,3 +49,27 @@ jobs:
 
     - name: Postman tests
       run: npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --delay-request=200 -n 3
+      
+   recommendationsystem-test:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Docker Compose
+      run: docker-compose up --build -d
+
+    - name: Sleep for 30 seconds
+      uses: juliangruber/sleep-action@v1
+      with:
+        time: 30s
+
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.15.3'
+
+    - name: Recommendation tests
+      run: npm install -g newman && newman run Postman/ElasticSearch/DeX_Elastic.postman_collection.json -e Postman/ElasticSearch/DeX_Elastic.postman_environment.json --insecure --delay-request=200 -n 3
+      
+         
