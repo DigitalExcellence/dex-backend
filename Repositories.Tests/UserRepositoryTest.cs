@@ -22,9 +22,12 @@ using Moq;
 using NUnit.Framework;
 using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataSources;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Repositories.Tests
@@ -35,6 +38,7 @@ namespace Repositories.Tests
     {
         protected Mock<IElasticSearchContext> ElasticSearchContext;
         protected Mock<Queries> Queries;
+        protected Mock<RestClient> RestClientMock;
 
         [SetUp]
         public override void Initialize()
@@ -43,9 +47,9 @@ namespace Repositories.Tests
             ElasticSearchContext = new Mock<IElasticSearchContext>();
             Queries = new Mock<Queries>();
 
-            ElasticSearchContext.Setup(x => x.CreateRestClientForElasticRequests()).Verifiable();
+            RestClientMock = new Mock<RestClient>();
+            ElasticSearchContext.Setup(x => x.CreateRestClientForElasticRequests()).Returns(RestClientMock.Object);
             Repository = new UserRepository(DbContext, ElasticSearchContext.Object, Queries.Object);
-            ElasticSearchContext.Verify();
         }
 
         /// <summary>
@@ -211,6 +215,28 @@ namespace Repositories.Tests
         {
             return base.UpdateTest_GoodFlow(entity, updateEntity);
         }
+
+        /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
+        [Test]
+        public void GetSimilarUsers_GoodFlow()
+        {
+            IRestResponse restResponse = new RestResponse()
+                                         {
+                                             StatusCode = HttpStatusCode.OK,
+                                             Content = ElasticSearchResults.GetSimilarUserResult
+                                         };
+
+            RestClientMock.Setup(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.POST)))
+                          .Returns(restResponse);
+            List<int> similarUsers = Repository.GetSimilarUsers(1);
+            List<int> expectedSimilarUsers = new List<int>()
+                                             {
+                                                 6, 7, 30, 8, 23, 27, 29, 33, 10
+                                             };
+
+            CollectionAssert.AreEqual(expectedSimilarUsers, similarUsers);
+        }
+
 
     }
 

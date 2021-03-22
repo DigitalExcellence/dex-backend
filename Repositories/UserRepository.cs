@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Repositories
@@ -130,7 +131,7 @@ namespace Repositories
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             IRestResponse restResponse = client.Execute(request);
 
-            if(!restResponse.IsSuccessful)
+            if(restResponse.StatusCode != HttpStatusCode.OK)
             {
                 return similarUserIds;
             }
