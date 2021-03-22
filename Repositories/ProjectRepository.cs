@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -111,6 +112,15 @@ namespace Repositories
         void CreateProjectIndex();
         void DeleteIndex();
         void MigrateDatabase(List<Project> projectsToExport);
+
+        /// <summary>
+        ///     This method will call the ElasticSearch index to retreive projects where the title starts with the query.
+        /// </summary>
+        /// <param name="query">The string of characters with which the title must begin</param>
+        /// <returns>
+        ///     This method return a list of projects where the title, or part of the title matches the query.
+        /// </returns>
+        Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
     }
 
     /// <summary>
@@ -594,6 +604,10 @@ namespace Repositories
 
         private void ParseJsonToESProjectFormatDTOList(IRestResponse restResponse, List<ESProjectDTO> esProjectFormats)
         {
+            if(restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                return;
+            }
             JObject esProjects = JObject.Parse(restResponse.Content);
             JToken projects = esProjects.GetValue("hits")["hits"];
             foreach(JToken project in projects)
@@ -642,6 +656,27 @@ namespace Repositories
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
                      
             
+        }
+
+        /// <summary>
+        ///     This method will call the ElasticSearch index to retreive projects where the title starts with the query.
+        /// </summary>
+        /// <param name="query">The string of characters with which the title must begin</param>
+        /// <returns>
+        ///     This method return a list of projects where the title, or part of the title matches the query.
+        /// </returns>
+        public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
+        {
+            RestRequest request = new RestRequest("_search", Method.POST);
+            string body = queries.SearchProjectsByPartOfTitle
+                .Replace("ReplaceWithQuery", query);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = elasticSearchContext.Execute(request);
+
+            List<ESProjectDTO> esProjectFormats = new List<ESProjectDTO>();
+
+            ParseJsonToESProjectFormatDTOList(restResponse, esProjectFormats);
+            return await ConvertProjects(esProjectFormats);
         }
     }
 

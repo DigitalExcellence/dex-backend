@@ -76,6 +76,12 @@ namespace Services.Services
         /// <returns>The project with users and collaborators</returns>
         Task<List<Project>> GetAllWithUserAndCollaboratorsAsync();
 
+        /// <summary>
+        ///     Get projects where the title begins with a certain string of characters.
+        /// </summary>
+        /// <param name="Query">The string with which the title must begin</param>
+        /// <returns>The projects where the title matches the query</returns>
+        Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
     }
 
     /// <summary>
@@ -230,6 +236,10 @@ namespace Services.Services
             Repository.CreateProjectIndex();
         }
 
+        public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
+        {
+            return await Repository.FindProjectsWhereTitleStartsWithQuery(query);
+        }
     }
 
 }

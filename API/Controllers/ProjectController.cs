@@ -229,6 +229,21 @@ namespace API.Controllers
             return Ok(resultsResource);
         }
 
+
+        [HttpGet("search/autocomplete")]
+        [ProducesResponseType(typeof(AutocompleteProjectsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
+        {
+            List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
+            AutocompleteProjectsResource resultResource = new AutocompleteProjectsResource();
+            List<AutocompleteProjectResource> autocompleteProjectResources = mapper.Map<List<Project>, List<AutocompleteProjectResource>>(projects);
+            resultResource.AutocompleteProjects = autocompleteProjectResources;
+
+            return Ok(resultResource);
+        }
+
+
         /// <summary>
         ///     This method is responsible for retrieving a single project.
         /// </summary>

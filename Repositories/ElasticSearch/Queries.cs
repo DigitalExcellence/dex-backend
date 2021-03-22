@@ -23,9 +23,11 @@ namespace Repositories.ElasticSearch
             "\"text\",\"analyzer\":\"autocomplete\",\"search_analyzer\":\"autocomplete_search\"},\"Description\":" +
             "{ \"type\":\"text\",\"analyzer\":\"description_index\",\"search_analyzer\":\"description_search\"}," +
             "\"Likes\":{ \"type\":\"integer\"} } }}";
+        private string searchProjectsByPartOfTitle = "{\"query\":{\"match\":{\"ProjectName\":{\"query\":\"ReplaceWithQuery\"}}}}";
 
         public string ProjectRecommendations { get => projectRecommendations; }
         public string SimilarUsers { get => similarUsers; }
         public string IndexProjects { get => indexProjects; }
+        public string SearchProjectsByPartOfTitle { get => searchProjectsByPartOfTitle; set => searchProjectsByPartOfTitle = value; }
     }
 }
