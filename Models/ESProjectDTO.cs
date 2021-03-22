@@ -24,7 +24,7 @@ namespace Models
     /// <summary>
     /// This model is the model used to create, update or delete documents in Elastic Search.
     /// </summary>
-    public class ESProjectFormatDTO
+    public class ESProjectDTO
     {
 
         /// <summary>

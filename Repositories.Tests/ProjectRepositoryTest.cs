@@ -21,12 +21,14 @@ using MessageBrokerPublisher;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
 using Moq;
 using NUnit.Framework;
 using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
 using Repositories.Tests.DataSources;
 using Repositories.Tests.Extensions;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -43,6 +45,7 @@ namespace Repositories.Tests
         protected Mock<IElasticSearchContext> ElasticSearchContext;
         protected Mock<ITaskPublisher> TaskPublisher;
         protected Mock<Queries> Queries;
+        protected Mock<RestClient> RestClientMock;
 
 
         /// <summary>
@@ -52,12 +55,96 @@ namespace Repositories.Tests
         [SetUp]
         public override void Initialize()
         {
-            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
-            ElasticSearchContext = new Mock<IElasticSearchContext>();
+            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);            
             TaskPublisher = new Mock<ITaskPublisher>();
             Queries = new Mock<Queries>();
+            ElasticSearchContext = new Mock<IElasticSearchContext>();
+            RestClientMock = new Mock<RestClient>();
+            ElasticSearchContext.Setup(x => x.CreateRestClientForElasticRequests()).Returns(RestClientMock.Object);
+
             Repository = new ProjectRepository(DbContext, ElasticSearchContext.Object, TaskPublisher.Object, Queries.Object);
         }
+
+
+        [Test]
+        public async Task SyncProjectToESTest_Goodflow([ProjectDataSource(1)] Project project)
+        {
+            DbContext.Add(project);
+            await DbContext.SaveChangesAsync();
+            ESProjectDTO dto = new ESProjectDTO();
+            ProjectToEsProjectESDTO(project, dto);
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
+            Subject subject = Subject.ELASTIC_CREATE_OR_UPDATE;
+            TaskPublisher.Setup(x => x.RegisterTask(It.Is<string>(x => x == payload), It.Is<Subject>(x => x == subject))).Verifiable();
+            
+
+            await Repository.SyncProjectToES(project);
+
+            TaskPublisher.VerifyAll();
+
+
+        }
+
+        [Test]
+        public void SyncProjectToESTest_Badflow([ProjectDataSource(1)] Project project)
+        {
+            ESProjectDTO dto = new ESProjectDTO();
+            ProjectToEsProjectESDTO(project, dto);
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
+            Subject subject = Subject.ELASTIC_CREATE_OR_UPDATE;
+
+
+            TaskPublisher.Setup(x => x.RegisterTask(It.Is<string>(x => x == payload), It.Is<Subject>(x => x == subject))).Verifiable();
+
+
+            Assert.ThrowsAsync<NotFoundException>(async () => await Repository.SyncProjectToES(project));
+
+        }
+
+        [Test]
+        public void MigratDatabaseTest_Goodflow([ProjectDataSource(30)] List<Project> projects)
+        {
+            List<ESProjectDTO> dTOs = ProjectsToProjectESDTO(projects);
+            Subject subject = Subject.ELASTIC_CREATE_OR_UPDATE;
+
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<string>(), It.Is<Subject>(x => x == subject))).Verifiable();
+
+            Repository.MigrateDatabase(projects);
+
+            TaskPublisher.Verify(x => x.RegisterTask(It.IsAny<string>(), It.Is<Subject>(x => x == subject)), Times.Exactly(projects.Count));
+
+            TaskPublisher.VerifyAll();
+
+        }
+
+        [Test]
+        public void DeleteIndexTest_Goodflow()
+        {
+            Repository.DeleteIndex();
+
+            RestClientMock.Verify(x => x.Execute(It.Is<RestRequest>( x => x.Method == Method.DELETE)), Times.Once);
+        }
+
+        [Test]
+        public void CreateProjectIndex_Goodflow()
+        {
+            Repository.CreateProjectIndex();
+            RestClientMock.Verify(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.PUT)), Times.Once);
+        }
+
+        [Test]
+        public void GetLikedProjectsFromSimilarUser_Goodflow()
+        {
+
+            
+        }
+
+
+
+
+
+
+
 
         /// <summary>
         /// Test if project with user relations are retrieved correctly
@@ -1028,6 +1115,36 @@ namespace Repositories.Tests
             }
 
             return projects;
+        }
+
+        private void ProjectToEsProjectESDTO(Project project, ESProjectDTO dto)
+        {
+            List<int> likes = new List<int>();
+            if(project.Likes != null)
+            {
+                foreach(ProjectLike projectLike in project.Likes)
+                {
+                    likes.Add(projectLike.UserId);
+                }
+            }
+            dto.Description = project.Description;
+            dto.ProjectName = project.Name;
+            dto.Id = project.Id;
+            dto.Created = project.Created;
+            dto.Likes = likes;
+        }
+
+        private List<ESProjectDTO> ProjectsToProjectESDTO(List<Project> projects)
+        {
+            List<ESProjectDTO> convertedProjects = new List<ESProjectDTO>();
+            foreach(Project project in projects)
+            {
+                ESProjectDTO convertedProject = new ESProjectDTO();
+                ProjectToEsProjectESDTO(project, convertedProject);
+                convertedProjects.Add(convertedProject);
+
+            }
+            return convertedProjects;
         }
 
     }

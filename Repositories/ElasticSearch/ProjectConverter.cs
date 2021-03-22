@@ -8,13 +8,13 @@ namespace Repositories.ElasticSearch
 {
     public static class ProjectConverter
     {
-        public static List<ESProjectFormatDTO> ProjectsToProjectESDTOs(List<Project> projectsToConvert)
+        public static List<ESProjectDTO> ProjectsToProjectESDTOs(List<Project> projectsToConvert)
         {
             
-            List<ESProjectFormatDTO> convertedProjects = new List<ESProjectFormatDTO>();
+            List<ESProjectDTO> convertedProjects = new List<ESProjectDTO>();
             foreach(Project project in projectsToConvert)
             {
-                ESProjectFormatDTO convertedProject = new ESProjectFormatDTO();
+                ESProjectDTO convertedProject = new ESProjectDTO();
                 ProjectToESProjectDTO(project, convertedProject);
                 convertedProjects.Add(convertedProject);
 
@@ -22,7 +22,7 @@ namespace Repositories.ElasticSearch
             return convertedProjects;
         }
 
-        public static void ProjectToESProjectDTO(Project project, ESProjectFormatDTO convertedProject)
+        public static void ProjectToESProjectDTO(Project project, ESProjectDTO convertedProject)
         {
             List<int> likes = new List<int>();
             if (project.Likes != null)
