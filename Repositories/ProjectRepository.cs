@@ -52,7 +52,7 @@ namespace Repositories
         /// <param name="orderByAsc"></param>
         /// <param name="highlighted"></param>
         /// <returns>List of projects</returns>
-        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
@@ -172,7 +172,7 @@ namespace Repositories
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <returns>This method returns a list of projects filtered by the specified parameters.</returns>
-        public virtual async Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
+        public virtual async Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,

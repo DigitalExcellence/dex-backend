@@ -114,7 +114,7 @@ namespace API.Controllers
         {
             try
             {
-                List<Project> projectsToExport = await projectService.GetAllWithUserAndCollaboratorsAsync();
+                List<Project> projectsToExport = await projectService.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
                 projectService.MigrateDatabase(projectsToExport);
 
                 return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectsToExport));
@@ -177,7 +177,7 @@ namespace API.Controllers
                 mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
 
             IEnumerable<Project> projects =
-                await projectService.GetAllWithUsersAndCollaboratorsAsync(projectFilterParams);
+                await projectService.GetAllWithUsersCollaboratorsAndInstitutionsAsync(projectFilterParams);
 
             List<Project> filteredProjects = new List<Project>();
 
