@@ -80,6 +80,15 @@ namespace Data
         public DbSet<CollaboratorLinkedUser> CollaboratorLinkedUser { get; set; }
 
         /// <summary>
+        ///     Gets or sets the collaborator link requests
+        /// </summary>
+        /// <value>
+        ///     The collaborator link requests
+        /// </value>
+        public DbSet<CollaboratorLinkRequest> CollaboratorLinkRequest { get; set; }
+
+
+        /// <summary>
         ///     Gets or sets the highlight.
         /// </summary>
         /// <value>

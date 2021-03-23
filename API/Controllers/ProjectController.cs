@@ -823,9 +823,9 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed getting project.",
+                    Title = "Failed linnking collaborator.",
                     Detail = "The project could not be found in the database.",
-                    Instance = "AB1F47F5-97E8-4AFB-891D-E350FB7247D5"
+                    Instance = "xxx" // TODO
                 };
                 return NotFound(problem);
             }
@@ -843,15 +843,26 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            User user = await userService.FindAsync(userId);
+
+            if(user == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed linking collaborator.",
+                    Detail = "The user could not be found in the database.",
+                    Instance = "xxx" //TODO
+                };
+                return NotFound(problem);
+            }
+
             if(currentUser.Id == userId)
             {
 
             }
             else
             {
-                User user = await userService.FindAsync(userId);
-
-                if(await projectService.CanUserEdit(user, project) == false)
+                if(await projectService.CanUserEdit(currentUser, project) == false)
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
@@ -876,6 +887,7 @@ namespace API.Controllers
 
                 return Ok(email);
             }
+
             return NotFound();
 
         }

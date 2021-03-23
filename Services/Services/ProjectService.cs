@@ -236,6 +236,11 @@ namespace Services.Services
                 }
             }
 
+            if(user.Role.Name == nameof(Defaults.Roles.Administrator))
+            {
+                return Task.FromResult(true);
+            }
+
             return Task.FromResult(projectOwner == user);
         }
 

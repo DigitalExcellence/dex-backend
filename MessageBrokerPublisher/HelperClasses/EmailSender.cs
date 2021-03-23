@@ -68,4 +68,12 @@ namespace MessageBrokerPublisher.HelperClasses
 
     }
 
+    public class OfflineEmailSender : IEmailSender
+    {
+        public void Send(string recipient, string textContent, string htmlContent)
+        {
+            return;
+        }
+    }
+
 }

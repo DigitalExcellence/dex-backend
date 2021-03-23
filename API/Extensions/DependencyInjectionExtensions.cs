@@ -103,8 +103,8 @@ namespace API.Extensions
 
             services.AddScoped<IEmailSender, EmailSender>();
 
-            services.AddSingleton<ICollaboratorLinkRequestService, CollaboratorLinkRequestService>();
-            services.AddSingleton<ICollaboratorLinkRequestRepository, CollaboratorLinkRequestRepository>();
+            services.AddScoped<ICollaboratorLinkRequestService, CollaboratorLinkRequestService>();
+            services.AddScoped<ICollaboratorLinkRequestRepository, CollaboratorLinkRequestRepository>();
 
             services.AddExternalDataSources();
 

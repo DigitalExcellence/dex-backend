@@ -7,7 +7,7 @@ namespace Models
 {
     public class CollaboratorLinkRequest
     {
-        public int Id;
+        public int Id { get; set; }
 
         [Required]
         public string RequestHash { get; set; }
