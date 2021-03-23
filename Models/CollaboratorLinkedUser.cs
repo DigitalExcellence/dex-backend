@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models
 {
-    public class LinkedUser
+    public class CollaboratorLinkedUser
     {
         /// <summary>
         ///     Gets or sets a the id of the linked user.

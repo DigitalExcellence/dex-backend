@@ -205,7 +205,7 @@ namespace Services.Services
 
         public Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user, string acceptHash)
         {
-            collaborator.LinkedUser = new LinkedUser { Status = LinkedUserStatus.PENDING, User = user };
+            collaborator.LinkedUser = new CollaboratorLinkedUser { Status = LinkedUserStatus.PENDING, User = user };
     
             string requestAcceptUrl = $"localhost/project/link/accept/{acceptHash}";
 

@@ -29,7 +29,7 @@ namespace Models
 
         public int ProjectId { get; set; }
 
-        public LinkedUser LinkedUser { get; set; }
+        public CollaboratorLinkedUser LinkedUser { get; set; }
 
     }
 
