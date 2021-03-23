@@ -18,11 +18,13 @@
 using API.Resources;
 using Ganss.XSS;
 using Models;
+using Models.Defaults;
 using Repositories;
 using Services.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Services.Services
@@ -69,7 +71,15 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
 
-        Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user);
+        Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user, string acceptHash);
+
+        /// <summary>
+        /// Check if a user can edit a project
+        /// </summary>
+        /// <param name="user">User to check</param>
+        /// <param name="project">Project to check</param>
+        /// <returns>True if user can edit</returns>
+        Task<bool> CanUserEdit(User user, Project project);
     }
 
     /// <summary>
@@ -193,10 +203,8 @@ namespace Services.Services
             return Repository.GetUserProjects(userId);
         }
 
-        public Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user)
+        public Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user, string acceptHash)
         {
-            string acceptHash = "f3434f34f4f334fd"; // TODO
-
             collaborator.LinkedUser = new LinkedUser { Status = LinkedUserStatus.PENDING, User = user };
     
             string requestAcceptUrl = $"localhost/project/link/accept/{acceptHash}";
@@ -206,6 +214,32 @@ namespace Services.Services
 
             return Task.FromResult(new ProjectCollaboratorLinkRequestEmail { Content = emailContent, Title = "You've got mail!" });
         }
+
+        /// <summary>
+        /// Check if a user can edit a project
+        /// </summary>
+        /// <param name="user">User to check</param>
+        /// <param name="project">Project to check</param>
+        /// <returns>True if user can edit</returns>
+        public Task<bool> CanUserEdit(User user, Project project)
+        {
+            User projectOwner = project.User;
+            Institution projectInstitution = projectOwner.Institution;
+
+            if(projectInstitution != null)
+            {
+                bool sameInstitution = user.Institution == projectInstitution;
+
+                if(user.Role.Name == nameof(Defaults.Roles.DataOfficer))
+                {
+                    return Task.FromResult(sameInstitution);
+                }
+            }
+
+            return Task.FromResult(projectOwner == user);
+        }
+
+        
     }
 
 }

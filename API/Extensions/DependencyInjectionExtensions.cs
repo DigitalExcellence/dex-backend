@@ -101,7 +101,10 @@ namespace API.Extensions
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
 
-            services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailSender, EmailSender>();
+
+            services.AddSingleton<ICollaboratorLinkRequestService, CollaboratorLinkRequestService>();
+            services.AddSingleton<ICollaboratorLinkRequestRepository, CollaboratorLinkRequestRepository>();
 
             services.AddExternalDataSources();
 

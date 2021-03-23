@@ -58,6 +58,7 @@ namespace API.Controllers
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
         private readonly IEmailSender emailSender;
+        private readonly ICollaboratorLinkRequestService collaboratorLinkRequestService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
@@ -81,6 +82,7 @@ namespace API.Controllers
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
         /// <param name="emailSender">Something something something</param>
+        /// <param name="collaboratorLinkRequestService">something something</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -90,7 +92,8 @@ namespace API.Controllers
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
                                  ICallToActionOptionService callToActionOptionService,
-                                 IEmailSender emailSender)
+                                 IEmailSender emailSender,
+                                 ICollaboratorLinkRequestService collaboratorLinkRequestService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -102,6 +105,7 @@ namespace API.Controllers
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
             this.emailSender = emailSender;
+            this.collaboratorLinkRequestService = collaboratorLinkRequestService;
         }
 
         /// <summary>
@@ -804,7 +808,7 @@ namespace API.Controllers
         /// <param name="collaboratorId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        [HttpPost("link-collaborator/{projectId}/{collaboratorId}/{userId}")]
+        [HttpPost("collaborator/link/{projectId}/{collaboratorId}/{userId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -847,11 +851,64 @@ namespace API.Controllers
             {
                 User user = await userService.FindAsync(userId);
 
-                ProjectCollaboratorLinkRequestEmail email = await projectService.PrepareLinkRequestMail(collaborator, user);
+                if(await projectService.CanUserEdit(user, project) == false)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = "Failed linking collaborator.",
+                        Detail = "Not allowed to send invite.",
+                        Instance = "xxx" // TODO
+                    };
+                    return Unauthorized(problem);
+                }
+
+                CollaboratorLinkRequest collaboratorLinkRequest =
+                    await collaboratorLinkRequestService.RegisterCollaboratorLinkRequest(collaborator);
+
+                ProjectCollaboratorLinkRequestEmail email =
+                    await projectService.PrepareLinkRequestMail(collaborator,
+                                                                user,
+                                                                collaboratorLinkRequest.RequestHash);
                 projectService.Save();
+                collaboratorLinkRequestService.Save();
 
                 emailSender.Send(user.Email, email.Content, email.Content);
+
+                return Ok(email);
             }
+            return NotFound();
+
+        }
+
+        /// <summary>
+        ///     Accept collaborator link request by given hash, previously sent in an email
+        /// </summary>
+        /// <param name="requestHash">Request identifier sent in an email</param>
+        /// <returns>Ok</returns>
+        [HttpPost("collaborator/accept/{requestHash}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AcceptCollaborator(string requestHash)
+        {
+            CollaboratorLinkRequest collaboratorLinkRequest =
+                (await collaboratorLinkRequestService.GetAll())
+                .Where(clr => clr.RequestHash == requestHash).FirstOrDefault();
+
+            if(collaboratorLinkRequest == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed accepting link collaborator.",
+                    Detail = "Hash does not exist.",
+                    Instance = "xxx" // TODO
+                };
+                return BadRequest(problem);
+            }
+
+            collaboratorLinkRequest.Collaborator.LinkedUser.Status = LinkedUserStatus.ACCEPTED;
+
+            collaboratorLinkRequestService.Update(collaboratorLinkRequest);
+            collaboratorLinkRequestService.Save();
 
             return Ok();
         }
