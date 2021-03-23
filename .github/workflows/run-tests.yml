@@ -37,10 +37,10 @@ jobs:
     - name: Docker Compose
       run: docker-compose up --build -d
 
-    - name: Sleep for 30 seconds
+    - name: Sleep for 90 seconds
       uses: juliangruber/sleep-action@v1
       with:
-        time: 30s
+        time: 90s
 
     - name: Setup node
       uses: actions/setup-node@v1
