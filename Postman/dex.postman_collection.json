@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "20b47465-340f-404f-b92c-ad1289146972",
+		"_postman_id": "34d4c05b-272c-496f-a8d7-c75e15867de6",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -9480,7 +9480,6 @@
 							]
 						},
 						{
-
 							"name": "UserProjects",
 							"item": [
 								{
@@ -21032,10 +21031,6 @@
 											"     pm.response.to.be.ok;",
 											"     pm.response.to.be.withBody;",
 											"     pm.response.to.be.json;",
-											"});",
-											"",
-											"pm.test(\"Check if updated graduation date matches: \" + tomorrowDate, function () {",
-											"    pm.expect(jsonData.expectedGraduationDateTime).to.eql(tomorrowDate);",
 											"});"
 										],
 										"type": "text/javascript"
