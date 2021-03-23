@@ -32,8 +32,12 @@ using System.Threading.Tasks;
 namespace Services.Tests.ExternalDataProviders
 {
 
+    /// <summary>
+    ///     DataProviderLoaderTest
+    /// </summary>
+    /// <seealso cref="DataProviderLoader" />
     [TestFixture]
-    public class DataLoaderTest
+    public class DataProviderLoaderTest
     {
 
         private IDataProviderLoader loader;

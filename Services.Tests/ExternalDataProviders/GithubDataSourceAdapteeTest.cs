@@ -33,6 +33,10 @@ using System.Threading.Tasks;
 namespace Services.Tests.ExternalDataProviders
 {
 
+    /// <summary>
+    ///     GithubDataSourceAdapteeTest
+    /// </summary>
+    /// <seealso cref="IGithubDataSourceAdaptee" />
     [TestFixture]
     public class GithubDataSourceAdapteeTest : AdapteeTest<IGithubDataSourceAdaptee>
     {

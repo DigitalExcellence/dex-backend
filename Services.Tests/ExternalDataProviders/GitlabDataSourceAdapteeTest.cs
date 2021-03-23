@@ -32,6 +32,10 @@ using System.Threading.Tasks;
 namespace Services.Tests.ExternalDataProviders
 {
 
+    /// <summary>
+    ///     GitlabDataSourceAdapteeTest
+    /// </summary>
+    /// <seealso cref="IGitlabDataSourceAdaptee" />
     [TestFixture]
     public class GitlabDataSourceAdapteeTest : AdapteeTest<IGitlabDataSourceAdaptee>
     {
@@ -52,6 +56,11 @@ namespace Services.Tests.ExternalDataProviders
                                 .Build();
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllPublicGitlabRepositories method in a good flow. In this scenario
+        ///     gitlab data sources exist and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of resource results.</returns>
         [Test]
         public async Task FetchAllPublicGitlabRepositories_GoodFlow(
             [GitlabDataSourceResourceResultDataSource(50)]
@@ -74,6 +83,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllPublicGitlabRepositories method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchAllPublicGitlabRepositories_ResponseIsNotSuccessful()
         {
@@ -91,6 +105,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicRepository method in a good flow. In this scenario
+        ///     the gitlab data source exists and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource result.</returns>
         [Test]
         public async Task FetchPublicRepository_GoodFlow(
             [GitlabDataSourceResourceResultDataSource]
@@ -113,6 +132,11 @@ namespace Services.Tests.ExternalDataProviders
                                    .BeEquivalentTo(resourceResult);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicRepository method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchPublicRepository_ResponseIsNotSuccessful()
         {
@@ -131,6 +155,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicGitlabRepositoryById method in a good flow. In this scenario
+        ///     the gitlab data source with the specified identifier exists and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource result with the specified identifier.</returns>
         [Test]
         public async Task FetchPublicGitlabRepositoryById_GoodFlow(
             [GitlabDataSourceResourceResultDataSource]
@@ -152,6 +181,11 @@ namespace Services.Tests.ExternalDataProviders
                                    .BeEquivalentTo(resourceResult);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicGitlabRepositoryById method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchPublicGitlabRepositoryById_ResponseIsNotSuccessful()
         {
@@ -169,6 +203,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllGitlabRepositories method in a good flow. In this scenario
+        ///     the gitlab data sources exist and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource results.</returns>
         [Test]
         public async Task FetchAllGitlabRepositories_GoodFlow(
             [GitlabDataSourceResourceResultDataSource(50)]
@@ -190,6 +229,11 @@ namespace Services.Tests.ExternalDataProviders
                                     .BeEquivalentTo(resourceResults);
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllGitlabRepositories method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchAllGitlabRepositories_ResponseIsNotSuccessful()
         {
@@ -207,6 +251,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchGitlabRepositoryById method in a good flow. In this scenario
+        ///     the gitlab data sources with the specified identifier is found and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource result.</returns>
         [Test]
         public async Task FetchGitlabRepositoryById_GoodFlow(
             [GitlabDataSourceResourceResultDataSource]
@@ -228,6 +277,11 @@ namespace Services.Tests.ExternalDataProviders
                                    .BeEquivalentTo(resourceResult);
         }
 
+        /// <summary>
+        ///     This method tests the FetchGitlabRepositoryById method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchGitlabRepositoryById_ResponseIsNotSuccessful()
         {
@@ -245,6 +299,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchUserFromAccessToken method in a good flow. In this scenario
+        ///     the gitlab user data sources from the access token is found and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct user resource result.</returns>
         [Test]
         public async Task FetchUserFromAccessToken_GoodFlow(
             [GitlabDataSourceUserResourceResultDataSource]
@@ -266,6 +325,11 @@ namespace Services.Tests.ExternalDataProviders
                           .BeEquivalentTo(userResourceResult);
         }
 
+        /// <summary>
+        ///     This method tests the FetchUserFromAccessToken method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchUserFromAccessToken_ResponseIsNotSuccessful()
         {
@@ -284,6 +348,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadme method in a good flow. In this scenario
+        ///     the readme content is found and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct readme content.</returns>
         [Test]
         public async Task FetchReadme_GoodFlow()
         {
@@ -301,6 +370,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedReadme.Substring(1, retrievedReadme.Length-2).Should().Be(readmeContent);
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadme method in a flow where the readme content
+        ///     is not found.
+        /// </summary>
+        /// <returns>The tested method will receive 404 Not Found from the external API.</returns>
         [Test]
         public async Task FetchReadme_ContentNotFound()
         {
@@ -318,6 +392,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadme method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchReadme_ResponseIsNotSuccessful()
         {
