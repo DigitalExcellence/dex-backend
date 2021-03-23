@@ -53,6 +53,11 @@ namespace Services.Tests.ExternalDataProviders
                                 .Build();
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllGithubProjects method in a good flow. In this scenario github data sources
+        ///     exist and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of resource results.</returns>
         [Test]
         public async Task FetchAllGithubProjects_GoodFlow(
             [GithubDataSourceResourceResultDataSource(30)] IEnumerable<GithubDataSourceResourceResult> resourceResults)
@@ -71,6 +76,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllGithubProjects method in a bad flow where the http status code from the
+        ///     response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchAllGithubProjects_ResponseIsNotSuccessful()
         {
@@ -87,6 +97,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllPublicGithubProjects method in a good flow. In this scenario github data sources
+        ///     exist and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of resource results.</returns>
         [Test]
         public async Task FetchAllPublicGithubRepositories_GoodFlow(
             [GithubDataSourceResourceResultDataSource(30)] IEnumerable<GithubDataSourceResourceResult> resourceResults)
@@ -104,6 +119,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedResourceResults.Should().BeEquivalentTo(resourceResults);
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllPublicGithubRepositories method in a bad flow where the http status
+        ///     code from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchAllPublicGithubRepositories_ResponseIsNotSuccessful()
         {
@@ -120,6 +140,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicRepository method in a good flow. In this scenario a github data source
+        ///     exists and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource result.</returns>
         [Test]
         public async Task FetchPublicRepository_GoodFlow(
             [GithubDataSourceResourceResultDataSource] GithubDataSourceResourceResult resourceResult)
@@ -138,6 +163,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedResourceResult.Should().BeEquivalentTo(resourceResult);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicRepository method in a bad flow where the http status
+        ///     code from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchPublicRepository_ResponseIsNotSuccessful()
         {
@@ -155,6 +185,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicGithubProjectById method in a good flow. In this scenario
+        ///     a github data source with the specified identifier exists and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource result.</returns>
         [Test]
         public async Task FetchPublicGithubProjectById_GoodFlow(
             [GithubDataSourceResourceResultDataSource] GithubDataSourceResourceResult resourceResult)
@@ -172,6 +207,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedResourceResult.Should().BeEquivalentTo(resourceResult);
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicGithubProjectById method in a bad flow where the http status
+        ///     code from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchPublicGithubProjectById_ResponseIsNotSuccessful()
         {
@@ -188,6 +228,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadme method in a good flow. In this scenario
+        ///     a readme github data source is found and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct readme resource result.</returns>
         [Test]
         public async Task FetchReadme_GoodFlow(
             [GithubDataSourceReadmeResourceResultDataSource] GithubDataSourceReadmeResourceResult resourceResult)
@@ -205,6 +250,10 @@ namespace Services.Tests.ExternalDataProviders
             retrievedResourceResult.Should().BeEquivalentTo(JsonConvert.SerializeObject(resourceResult));
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadme method in a flow where the readme could not be found.
+        /// </summary>
+        /// <returns>The tested method will receive a 404 Not Found response from the external API.</returns>
         [Test]
         public async Task FetchReadme_ReadmeNotFound()
         {
@@ -221,6 +270,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedReadme.Should().BeNullOrEmpty();
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadme method in a bad flow where the http status
+        ///     code from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchReadme_ResponseIsNotSuccessful()
         {
@@ -236,6 +290,11 @@ namespace Services.Tests.ExternalDataProviders
             act.Should().ThrowExactly<ExternalException>().WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadmeContent method in a good flow. In this scenario
+        ///     a readme content is found and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct readme content.</returns>
         [Test]
         public async Task FetchReadmeContent_GoodFlow()
         {
@@ -253,6 +312,10 @@ namespace Services.Tests.ExternalDataProviders
             retrievedResourceResult.Substring(1, retrievedResourceResult.Length-2).Should().BeEquivalentTo(readmeContent);
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadmeContent method in a flow where the readme content could not be found.
+        /// </summary>
+        /// <returns>The tested method will receive a 404 Not Found response from the external API.</returns>
         [Test]
         public async Task FetchReadmeContent_ContentNotFound()
         {
@@ -269,6 +332,11 @@ namespace Services.Tests.ExternalDataProviders
             retrievedReadmeContent.Should().BeNullOrEmpty();
         }
 
+        /// <summary>
+        ///     This method tests the FetchReadmeContent method in a bad flow where the http status
+        ///     code from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchReadmeContent_ResponseIsNotSuccessful()
         {
