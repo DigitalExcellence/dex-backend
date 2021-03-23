@@ -136,7 +136,7 @@ namespace Models.Defaults
             public const string AdminProjectWrite = "adminproject:write";
 
             [Description("This scopes give write access to the wizard page namespace")]
-            public const string WizardPageWrite = "wizardPage:write";
+            public const string WizardPageWrite = "wizardpage:write";
 
         }
 
