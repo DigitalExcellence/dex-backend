@@ -32,10 +32,19 @@ using System.Threading.Tasks;
 namespace Services.Tests.ExternalDataProviders
 {
 
+    /// <summary>
+    ///     JsFiddleDataSourceAdapteeTest
+    /// </summary>
+    /// <seealso cref="IJsFiddleDataSourceAdaptee" />
     [TestFixture]
     public class JsFiddleDataSourceAdapteeTest : AdapteeTest<IJsFiddleDataSourceAdaptee>
     {
 
+        /// <summary>
+        ///     This method tests the FetchAllFiddlesFromUser method in a good flow. In this scenario
+        ///     JsFiddle data sources exist and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct collection of resource results.</returns>
         [Test]
         public async Task FetchAllFiddlesFromUser_GoodFlow(
             [JsFiddleDataSourceResourceResultDataSource(50)] IEnumerable<JsFiddleDataSourceResourceResult> resourceResults)
@@ -53,6 +62,11 @@ namespace Services.Tests.ExternalDataProviders
             results.Should().BeEquivalentTo(resourceResults);
         }
 
+        /// <summary>
+        ///     This method tests the FetchAllFiddlesFromUser method in a bad flow where the http status code
+        ///     from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
         public void FetchAllFiddlesFromUser_ResponseIsNotSuccessful()
         {
@@ -70,6 +84,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the GetPublicProjectById method in a good flow. In this scenario a
+        ///     JsFiddle with the specified identifier is found and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource result.</returns>
         [Test]
         public void GetPublicProjectById_GoodFlow()
         {
@@ -84,6 +103,11 @@ namespace Services.Tests.ExternalDataProviders
                .WithMessage("JsFiddle does not support the GetPublicProjectFromUri functionality");
         }
 
+        /// <summary>
+        ///     This method tests the FetchPublicFiddleById method in a good flow. In this scenario a
+        ///     JsFiddle with the specified identifier is found and will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct resource result.</returns>s
         [Test]
         public void FetchPublicFiddleById_GoodFlow()
         {
