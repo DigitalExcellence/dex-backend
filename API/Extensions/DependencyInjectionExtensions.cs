@@ -103,17 +103,6 @@ namespace API.Extensions
 
             services.AddSingleton<IAssemblyHelper, AssemblyHelper>();
 
-            services.AddExternalDataSources();
-
-            return services;
-        }
-
-        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
-        {
-            services.AddScoped<GithubDataSourceAdaptee>();
-            services.AddScoped<GitlabDataSourceAdaptee>();
-            services.AddScoped<JsFiddleDataSourceAdaptee>();
-
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
 
@@ -122,7 +111,16 @@ namespace API.Extensions
 
             services.AddScoped<ITaskPublisher, TaskPublisher>();
 
+            services.AddExternalDataSources();
+
             return services;
+        }
+
+        private static void AddExternalDataSources(this IServiceCollection services)
+        {
+            services.AddScoped<GithubDataSourceAdaptee>();
+            services.AddScoped<GitlabDataSourceAdaptee>();
+            services.AddScoped<JsFiddleDataSourceAdaptee>();
         }
 
     }

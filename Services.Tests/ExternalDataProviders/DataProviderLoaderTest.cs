@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using API.Configuration;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +24,7 @@ using NUnit.Framework;
 using Repositories;
 using Services.ExternalDataProviders;
 using Services.ExternalDataProviders.Helpers;
+using Services.Tests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -39,7 +39,6 @@ namespace Services.Tests.ExternalDataProviders
     [TestFixture]
     public class DataProviderLoaderTest
     {
-
         private IDataProviderLoader loader;
 
         private Mock<IServiceScopeFactory> factoryMock;
@@ -60,8 +59,7 @@ namespace Services.Tests.ExternalDataProviders
 
             assemblyHelperMock = new Mock<IAssemblyHelper>();
 
-            MapperConfiguration mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
-            mapper = mappingConfig.CreateMapper();
+            mapper = AutoMapperServiceTestHelper.GetIMapper();
 
             loader = new DataProviderLoader(factoryMock.Object, repositoryMock.Object, assemblyHelperMock.Object ,mapper);
         }

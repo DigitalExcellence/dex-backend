@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using API.Configuration;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -23,6 +22,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using Services.ExternalDataProviders;
 using Services.Sources;
+using Services.Tests.Helpers;
 using System;
 using System.Net;
 using System.Threading;
@@ -52,15 +52,14 @@ namespace Services.Tests.Base
 
         protected AdapteeTest()
         {
+            Mapper = AutoMapperServiceTestHelper.GetIMapper();
+
             clientMock = new Mock<IRestClient>();
 
             ClientFactoryMock = new Mock<IRestClientFactory>();
             ClientFactoryMock
                 .Setup(_ => _.Create(It.IsAny<Uri>()))
                 .Returns(clientMock.Object);
-
-            MapperConfiguration mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
-            Mapper = mappingConfig.CreateMapper();
         }
 
         protected void MockRestClient(object result, HttpStatusCode statusCode, string errorMessage = null)
