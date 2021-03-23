@@ -34,10 +34,25 @@ namespace Services.ExternalDataProviders
     public interface IJsFiddleDataSourceAdaptee : IPublicDataSourceAdaptee
     {
 
+        /// <summary>
+        ///     This method is responsible for retrieving all public projects from a user, via the username, from the JsFiddle API.
+        /// </summary>
+        /// <param name="username">The username which will be used to search to retrieve all public projects from the user.</param>
+        /// <returns>This method returns a collections of public projects from the user</returns>
         Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a fiddle by uri.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a JsFiddle data source resource result from the specified uri.</returns>
         Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleFromUri(Uri sourceUri);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public fiddle by identifier.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a JsFiddle data source resource result.</returns>
         Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleById(string identifier);
 
     }

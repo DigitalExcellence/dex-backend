@@ -36,16 +36,81 @@ namespace Services.ExternalDataProviders
     public interface IGithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
     {
 
+        /// <summary>
+        ///     This method is responsible for retrieving all the github repository contents.
+        /// </summary>
+        /// <param name="accessToken">The access token which is used to authenticate.</param>
+        /// <returns>This method returns a collection of github data source resource results.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from all public repositories from a user.
+        /// </summary>
+        /// <param name="username">The username which is used to retrieve projects from the correct user.</param>
+        /// <returns>This method returns a collection of github data source resource results.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(string username);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a repository by uri.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a github data source resource result from the specified uri.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public repositories from an identifier.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a github data source resource result.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the readme from a repository.
+        /// </summary>
+        /// <param name="user">
+        ///     This parameter represents the owners of the repository. This is in most cases the name of the user
+        ///     or in some other case the name of the organization.
+        /// </param>
+        /// <param name="repository">This parameter represents the name of the repository.</param>
+        /// <param name="accessToken">
+        ///     This parameter is the access token, which is used to retrieve a readme from a private
+        ///     repository. In case of a public repository, the default value is null.
+        /// </param>
+        /// <returns>This method returns the content of the readme.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<string> FetchReadme(string user, string repository, string accessToken = null);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from the readme.
+        /// </summary>
+        /// <param name="downloadUri">
+        ///     The download uri parameter represents the uri where the content of the readme gets
+        ///     downloaded.
+        /// </param>
+        /// <returns>This method will return the content from the readme.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<string> FetchReadmeContent(Uri downloadUri);
 
     }

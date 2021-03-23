@@ -36,18 +36,86 @@ namespace Services.ExternalDataProviders
     public interface IGitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IAuthorizedDataSourceAdaptee
     {
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from all the public Gitlab projects from a user.
+        /// </summary>
+        /// <param name="username">
+        ///     The username which is used to retrieve the correct collection of projects from the specified
+        ///     user.
+        /// </param>
+        /// <returns>This method returns a collection of Gitlab data source resource results from the specified user.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(string username);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public Gitlab project by uri.
+        /// </summary>
+        /// <param name="sourceUri">The  source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a Gitlab data source resource result from the specified source uri.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public Gitlab project by id.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a Gitlab data source resource result with the specified identifier.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier);
 
+        /// <summary>
+        ///     This method is responsible for retrieving all the gitlab project contents.
+        /// </summary>
+        /// <param name="accessToken">The access token which is used to authenticate.</param>
+        /// <param name="username">The username which is used to retrieve the correct collection of projects.</param>
+        /// <returns>This method returns a collection of Gitlab data source resource results.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllGitlabRepositories(string accessToken, string username);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public Gitlab project by id.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <param name="accessToken">The access token which is used to specify which user is logged in.</param>
+        /// <returns>This method returns a Gitlab data source resource result with the specified identifier.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<GitlabDataSourceResourceResult> FetchGitlabRepositoryById(string identifier, string accessToken);
 
+        /// <summary>
+        ///     This method is responsible for retrieving a user from the specified access token.
+        /// </summary>
+        /// <param name="accessToken">The access token parameter which is used to retrieve the correct user.</param>
+        /// <returns>This method returns the user from the access token.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<GitlabDataSourceUserResourceResult> FetchUserFromAccessToken(string accessToken);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the readme from a repository.
+        /// </summary>
+        /// <param name="readmeUri">This parameter represents the the uri of the readme file that should get retrieved.</param>
+        /// <returns>This method returns the content of the readme.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
         Task<string> FetchReadme(string readmeUri);
 
     }
@@ -347,6 +415,7 @@ namespace Services.ExternalDataProviders
         ///     This method is responsible for retrieving the content from a public Gitlab project by id.
         /// </summary>
         /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <param name="accessToken">The access token which is used to specify which user is logged in.</param>
         /// <returns>This method returns a Gitlab data source resource result with the specified identifier.</returns>
         /// <exception cref="ExternalException">
         ///     This method could throw an external exception whenever the status code is not
