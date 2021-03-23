@@ -136,7 +136,6 @@ namespace Services.Tests
         ///     Gets the embedded project goodflow.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// <param name="embeddedProjects">The embedded projects.</param>
         [Test]
         public async Task GetEmbeddedProject_goodflow([EmbeddedDataSource] EmbeddedProject project)
         {

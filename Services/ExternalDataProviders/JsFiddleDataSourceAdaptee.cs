@@ -30,7 +30,9 @@ using System.Threading.Tasks;
 
 namespace Services.ExternalDataProviders
 {
-
+    /// <summary>
+    ///     The JsFiddle data source
+    /// </summary>
     public class JsFiddleDataSourceAdaptee : IPublicDataSourceAdaptee
     {
 

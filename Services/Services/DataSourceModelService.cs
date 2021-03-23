@@ -60,6 +60,9 @@ namespace Services.Services
         /// <param name="repository">The repository that will be used to communicate with the repository layer.</param>
         public DataSourceModelService(IDataSourceModelRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     The repository
+        /// </summary>
         protected new IDataSourceModelRepository Repository => (IDataSourceModelRepository) base.Repository;
 
         /// <summary>

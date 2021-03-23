@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 namespace Services.Services
 {
 
+    /// <summary>
+    ///     The wizard page service
+    /// </summary>
     public interface IWizardPageService : IService<WizardPage>
     {
 
@@ -37,11 +40,21 @@ namespace Services.Services
 
     }
 
+    /// <summary>
+    ///     The wizard page service
+    /// </summary>
     public class WizardPageService : Service<WizardPage>, IWizardPageService
     {
 
+        /// <summary>
+        ///     The wizard page service constructor
+        /// </summary>
+        /// <param name="repository"></param>
         public WizardPageService(IWizardPageRepository repository) : base(repository) { }
 
+        /// <summary>
+        ///     The repository
+        /// </summary>
         protected new IWizardPageRepository Repository => (IWizardPageRepository) base.Repository;
 
         /// <summary>

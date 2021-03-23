@@ -42,7 +42,14 @@ namespace Services.Tests.Base
         where TRepository : class, IRepository<TDomain>
     {
 
+        /// <summary>
+        ///     The mocked repository
+        /// </summary>
         protected Mock<TRepository> RepositoryMock;
+
+        /// <summary>
+        ///     The service 
+        /// </summary>
         protected TService Service;
 
         /// <summary>

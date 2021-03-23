@@ -116,6 +116,10 @@ namespace Services.ExternalDataProviders
         private readonly IDataProviderLoader dataProviderLoader;
         private IDataProviderAdapter dataProviderAdapter;
 
+        /// <summary>
+        ///     The data provider service constructor
+        /// </summary>
+        /// <param name="dataProviderLoader"></param>
         public DataProviderService(IDataProviderLoader dataProviderLoader)
         {
             this.dataProviderLoader = dataProviderLoader;

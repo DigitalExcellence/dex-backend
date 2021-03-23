@@ -326,6 +326,7 @@ namespace Services.ExternalDataProviders
         ///     This method is responsible for retrieving the content from a public Gitlab project by id.
         /// </summary>
         /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <param name="accessToken"></param>
         /// <returns>This method returns a Gitlab data source resource result with the specified identifier.</returns>
         /// <exception cref="ExternalException">
         ///     This method could throw an external exception whenever the status code is not

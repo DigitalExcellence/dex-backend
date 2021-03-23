@@ -37,8 +37,16 @@ namespace Services.Tests
         DataSourceModelServiceTest : ServiceTest<DataSource, DataSourceModelService, IDataSourceModelRepository>
     {
 
+        /// <summary>
+        ///     The service
+        /// </summary>
         protected new IDataSourceModelService Service => base.Service;
 
+        /// <summary>
+        ///     Get datasource by GUID. Good flow
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <returns></returns>
         [Test]
         public async Task GetDataSourceByGuid_GoodFlow([DataSourceModelDataSource(1)] DataSource dataSource)
         {
@@ -62,6 +70,10 @@ namespace Services.Tests
                             .Be(dataSource);
         }
 
+        /// <summary>
+        ///     The get data source by guid bad flow test
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetDataSourceByGuid_NoDataSourceFound()
         {

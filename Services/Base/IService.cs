@@ -54,6 +54,10 @@ namespace Services.Base
         /// <param name="entities"></param>
         void AddRange(IEnumerable<TEntity> entities);
 
+        /// <summary>
+        ///     This is the interface method for adding a range of entities asynchronous
+        /// </summary>
+        /// <param name="entities"></param>
         Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         /// <summary>

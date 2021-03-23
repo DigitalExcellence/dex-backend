@@ -23,9 +23,15 @@ using System;
 namespace Services.Tests
 {
 
+    /// <summary>
+    ///     The github source tests
+    /// </summary>
     public class GitHubSourceTest : SourceTest<GitHubSource>
     {
 
+        /// <summary>
+        ///     The source
+        /// </summary>
         protected new GitHubSource Source => base.Source;
 
         /// <summary>

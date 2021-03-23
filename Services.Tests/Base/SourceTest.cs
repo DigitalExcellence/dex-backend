@@ -37,7 +37,14 @@ namespace Services.Tests.Base
         where TSource : class
     {
 
+        /// <summary>
+        ///     The mocked restclient
+        /// </summary>
         protected Mock<IRestClientFactory> RestClientFactoryMock;
+
+        /// <summary>
+        ///     The source
+        /// </summary>
         protected TSource Source;
 
         /// <summary>

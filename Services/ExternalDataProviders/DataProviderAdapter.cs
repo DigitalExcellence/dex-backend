@@ -68,11 +68,18 @@ namespace Services.ExternalDataProviders
 
     }
 
+    /// <summary>
+    ///     This is the Dataprovider adapater
+    /// </summary>
     public class DataProviderAdapter : IDataProviderAdapter
     {
 
         private readonly IDataSourceAdaptee adaptee;
 
+        /// <summary>
+        ///     This is the data provider adapter constructor
+        /// </summary>
+        /// <param name="adaptee"></param>
         public DataProviderAdapter(IDataSourceAdaptee adaptee)
         {
             this.adaptee = adaptee;

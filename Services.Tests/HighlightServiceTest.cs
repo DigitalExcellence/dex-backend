@@ -28,10 +28,16 @@ using System.Threading.Tasks;
 namespace Services.Tests
 {
 
+    /// <summary>
+    ///     The highlight service test class
+    /// </summary>
     [TestFixture]
     public class HighlightServiceTest : ServiceTest<Highlight, HighlightService, IHighlightRepository>
     {
 
+        /// <summary>
+        ///     The service
+        /// </summary>
         protected new IHighlightService Service => base.Service;
 
         /// <summary>

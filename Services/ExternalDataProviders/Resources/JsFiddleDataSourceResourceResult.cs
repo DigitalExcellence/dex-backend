@@ -20,30 +20,57 @@ using Newtonsoft.Json;
 namespace Services.ExternalDataProviders.Resources
 {
 
+    /// <summary>
+    ///     The jsFiddle Data source resource result
+    /// </summary>
     public class JsFiddleDataSourceResourceResult
     {
 
+        /// <summary>
+        ///     The framework
+        /// </summary>
         [JsonProperty("framework")]
         public string Framework { get; set; }
 
+        /// <summary>
+        ///     The version
+        /// </summary>
         [JsonProperty("version")]
         public int Version { get; set; }
 
+        /// <summary>
+        ///     The description
+        /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        /// <summary>
+        ///     The title
+        /// </summary>
         [JsonProperty("title")]
         public string Title { get; set; }
 
+        /// <summary>
+        ///     The url
+        /// </summary>
         [JsonProperty("url")]
         public string Url { get; set; }
 
+        /// <summary>
+        ///     The author
+        /// </summary>
         [JsonProperty("author")]
         public string Author { get; set; }
 
+        /// <summary>
+        ///     The latest version
+        /// </summary>
         [JsonProperty("latest_version")]
         public int LatestVersion { get; set; }
 
+        /// <summary>
+        ///     The created date
+        /// </summary>
         [JsonProperty("created")]
         public string Created { get; set; }
 

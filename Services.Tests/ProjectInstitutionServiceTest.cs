@@ -13,8 +13,14 @@ using System.Threading.Tasks;
 
 namespace Services.Tests
 {
+    /// <summary>
+    ///     The project institution service test class
+    /// </summary>
     public class ProjectInstitutionServiceTest : ServiceTest<ProjectInstitution, ProjectInstitutionService, IProjectInstitutionRepository>
     {
+        /// <summary>
+        ///     The service
+        /// </summary>
         protected new IProjectInstitutionService Service => base.Service;
 
 
@@ -53,6 +59,10 @@ namespace Services.Tests
             base.Remove(entity);
         }
 
+        /// <summary>
+        ///     The remove async test
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public Task RemoveAsync()
         {

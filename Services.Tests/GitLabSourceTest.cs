@@ -28,10 +28,16 @@ using System.Net;
 namespace Services.Tests
 {
 
+    /// <summary>
+    ///     Gitlab source test
+    /// </summary>
     [TestFixture]
     public class GitLabSourceTest : SourceTest<GitLabSource>
     {
 
+        /// <summary>
+        ///     The source
+        /// </summary>
         protected new GitLabSource Source => base.Source;
 
         /// <summary>

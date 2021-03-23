@@ -5,6 +5,11 @@
     <LangVersion>8</LangVersion>
     <Version>1.1.0-beta</Version>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath></OutputPath>
+    <DocumentationFile>.\Services.xml</DocumentationFile>
+  </PropertyGroup>
     
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />

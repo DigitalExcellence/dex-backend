@@ -18,9 +18,15 @@
 namespace NotificationSystem.Contracts
 {
 
+    /// <summary>
+    ///     The interface of the notification
+    /// </summary>
     public interface INotification
     {
 
+        /// <summary>
+        ///     The subject
+        /// </summary>
         public string Subject { get; }
 
     }

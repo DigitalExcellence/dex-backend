@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 namespace NotificationSystem.Services
 {
 
+    /// <summary>
+    ///     The email sender class
+    /// </summary>
     public class EmailSender : INotificationService
     {
 
@@ -32,6 +35,12 @@ namespace NotificationSystem.Services
         private readonly EmailAddress from;
         private readonly bool sandboxMode;
 
+        /// <summary>
+        ///     The email sender constructor
+        /// </summary>
+        /// <param name="sendGridClient"></param>
+        /// <param name="emailFrom"></param>
+        /// <param name="sandboxMode"></param>
         public EmailSender(ISendGridClient sendGridClient, string emailFrom, bool sandboxMode = false)
         {
             client = sendGridClient;
@@ -39,13 +48,24 @@ namespace NotificationSystem.Services
             this.sandboxMode = sandboxMode;
         }
 
+        /// <summary>
+        ///     The email notification
+        /// </summary>
         public EmailNotification Notification { get; set; }
 
+        /// <summary>
+        ///     The parse payload
+        /// </summary>
+        /// <param name="jsonBody"></param>
         public void ParsePayload(string jsonBody)
         {
             Notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
         }
 
+        /// <summary>
+        ///     The execute task method
+        /// </summary>
+        /// <returns></returns>
         public Response ExecuteTask()
         {
             EmailNotification emailNotification = Notification;
@@ -55,6 +75,10 @@ namespace NotificationSystem.Services
                 .Result;
         }
 
+        /// <summary>
+        ///     The validate payload method
+        /// </summary>
+        /// <returns></returns>
         public bool ValidatePayload()
         {
             EmailNotification emailNotification = Notification;

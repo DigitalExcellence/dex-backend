@@ -24,25 +24,50 @@ using System.Text;
 namespace NotificationSystem.Services
 {
 
+    /// <summary>
+    ///     The interface of the rabbit MQ listener
+    /// </summary>
     public interface IRabbitMQListener
     {
 
+        /// <summary>
+        /// The create consumer method
+        /// </summary>
+        /// <param name="notificationService"></param>
+        /// <returns></returns>
         EventingBasicConsumer CreateConsumer(INotificationService notificationService);
 
+        /// <summary>
+        ///     The start consumer method
+        /// </summary>
+        /// <param name="consumer"></param>
+        /// <param name="subject"></param>
         void StartConsumer(EventingBasicConsumer consumer, string subject);
 
     }
 
+    /// <summary>
+    ///     The rabbit MQ listener class
+    /// </summary>
     public class RabbitMQListener : IRabbitMQListener
     {
 
         private readonly IModel channel;
 
+        /// <summary>
+        ///     The rabbit MQ listener constructor
+        /// </summary>
+        /// <param name="channel"></param>
         public RabbitMQListener(IModel channel)
         {
             this.channel = channel;
         }
 
+        /// <summary>
+        ///     The create consumer method start create a consumer
+        /// </summary>
+        /// <param name="notificationService"></param>
+        /// <returns></returns>
         public EventingBasicConsumer CreateConsumer(INotificationService notificationService)
         {
             EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
@@ -50,6 +75,11 @@ namespace NotificationSystem.Services
             return consumer;
         }
 
+        /// <summary>
+        ///     The start consumer starts listening to a channel
+        /// </summary>
+        /// <param name="consumer"></param>
+        /// <param name="subject"></param>
         public void StartConsumer(EventingBasicConsumer consumer, string subject)
         {
             channel.BasicConsume(subject,
@@ -57,6 +87,12 @@ namespace NotificationSystem.Services
                                  consumer);
         }
 
+        /// <summary>
+        ///     The set callback method
+        /// </summary>
+        /// <param name="notificationService"></param>
+        /// <param name="basicConsumer"></param>
+        /// <returns></returns>
         public EventingBasicConsumer SetCallBack(INotificationService notificationService, IBasicConsumer basicConsumer)
         {
             EventingBasicConsumer consumer = (EventingBasicConsumer) basicConsumer;
@@ -64,6 +100,11 @@ namespace NotificationSystem.Services
             return consumer;
         }
 
+        /// <summary>
+        ///     The callback method
+        /// </summary>
+        /// <param name="notificationService"></param>
+        /// <param name="ea"></param>
         public void CallBack(INotificationService notificationService, BasicDeliverEventArgs ea)
         {
             byte[] body = ea.Body.ToArray();

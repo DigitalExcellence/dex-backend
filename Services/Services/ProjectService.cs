@@ -61,6 +61,11 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        /// <summary>
+        ///     Find if the projects exisits
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<bool> ProjectExistsAsync(int id);
 
         /// <summary>
@@ -187,11 +192,21 @@ namespace Services.Services
             return Repository.FindWithUserCollaboratorsAndInstitutionsAsync(id);
         }
 
+        /// <summary>
+        ///     Finds and returns if the projects exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>boolean</returns>
         public async Task<bool> ProjectExistsAsync(int id)
         {
             return await Repository.ProjectExistsAsync(id);
         }
         
+        /// <summary>
+        ///     Find the projects that belong to a certain user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {
             return Repository.GetUserProjects(userId);

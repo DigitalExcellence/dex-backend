@@ -28,10 +28,16 @@ using System.Threading.Tasks;
 namespace Services.Tests
 {
 
+    /// <summary>
+    ///     The user service test class
+    /// </summary>
     [TestFixture]
     public class UserServiceTest : ServiceTest<User, UserService, IUserRepository>
     {
 
+        /// <summary>
+        ///     The service
+        /// </summary>
         protected new IUserService Service => base.Service;
 
         /// <summary>

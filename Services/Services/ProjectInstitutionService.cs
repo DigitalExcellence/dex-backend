@@ -42,6 +42,10 @@ namespace Services.Services
     /// </summary>
     public class ProjectInstitutionService : Service<ProjectInstitution>, IProjectInstitutionService
     {
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="repository"></param>
         public ProjectInstitutionService(IProjectInstitutionRepository repository) : base(repository)
         {
         }

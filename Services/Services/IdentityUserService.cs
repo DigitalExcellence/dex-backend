@@ -78,6 +78,11 @@ namespace Services.Services
         /// <returns>The retrieved IdentityUser</returns>
         Task<IdentityUser> FindAsync(string subjectId);
 
+        /// <summary>
+        ///     Finds the identity user by subject id
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <returns></returns>
         Task<IdentityUser> FindBySubjectId(string subjectId);
 
     }
@@ -186,6 +191,11 @@ namespace Services.Services
             return Repository.FindAsync(subjectId);
         }
 
+        /// <summary>
+        ///     Find the identity user by subject Id
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <returns></returns>
         public async Task<IdentityUser> FindBySubjectId(string subjectId)
         {
             return await Repository.FindBySubjectId(subjectId);

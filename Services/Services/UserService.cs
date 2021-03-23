@@ -82,6 +82,11 @@ namespace Services.Services
         /// <returns>boolean</returns>
         bool UserWithRoleExists(Role role);
 
+        /// <summary>
+        /// Gets all expecting graduating users
+        /// </summary>
+        /// <param name="amountOfMonths"></param>
+        /// <returns></returns>
         List<User> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
     }
@@ -180,6 +185,11 @@ namespace Services.Services
             return Repository.UserWithRoleExists(role);
         }
 
+        /// <summary>
+        ///     Gets all expecting graduating users
+        /// </summary>
+        /// <param name="amountOfMonths"></param>
+        /// <returns></returns>
         public List<User> GetAllExpectedGraduatingUsers(int amountOfMonths)
         {
             List<User> users = Repository.GetAllExpectedGraduatingUsers(amountOfMonths)

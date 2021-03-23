@@ -29,10 +29,16 @@ using System.Threading.Tasks;
 namespace Services.Tests
 {
 
+    /// <summary>
+    ///     The role service test class
+    /// </summary>
     [TestFixture]
     public class RoleServiceTest : ServiceTest<Role, RoleService, IRoleRepository>
     {
 
+        /// <summary>
+        ///     The service
+        /// </summary>
         protected new IRoleService Service => base.Service;
 
         /// <summary>

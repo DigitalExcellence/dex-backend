@@ -8,6 +8,10 @@
       <Version>1.1.0-beta</Version>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\JobScheduler.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Worker.cs" />
   </ItemGroup>

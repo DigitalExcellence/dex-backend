@@ -20,13 +20,28 @@ using SendGrid;
 namespace NotificationSystem.Contracts
 {
 
+    /// <summary>
+    ///     The interface of the notification service
+    /// </summary>
     public interface INotificationService
     {
 
+        /// <summary>
+        ///     The parse payload method, this deserializes the object
+        /// </summary>
+        /// <param name="jsonBody"></param>
         void ParsePayload(string jsonBody);
 
+        /// <summary>
+        ///     The validate payload, this checks if the payload is OK.
+        /// </summary>
+        /// <returns></returns>
         bool ValidatePayload();
 
+        /// <summary>
+        ///     The execute tasks method
+        /// </summary>
+        /// <returns></returns>
         Response ExecuteTask();
 
     }

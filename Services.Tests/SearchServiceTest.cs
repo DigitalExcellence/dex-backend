@@ -51,7 +51,14 @@ namespace Services.Tests
             Service = new SearchService(RepositoryMock.Object);
         }
 
+        /// <summary>
+        ///     The service
+        /// </summary>
         protected ISearchService Service;
+
+        /// <summary>
+        ///     The mocked repository
+        /// </summary>
         protected Mock<IProjectRepository> RepositoryMock;
 
         /// <summary>
