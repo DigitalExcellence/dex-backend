@@ -46,6 +46,7 @@ namespace NotificationSystem.Tests
 
             // Act
             emailSender.ParsePayload(payload);
+            
 
             // Assert
             Assert.AreEqual(notification.RecipientEmail, emailSender.Notification.RecipientEmail);
@@ -197,7 +198,7 @@ namespace NotificationSystem.Tests
             string payload = JsonConvert.SerializeObject(notification);
 
             string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
+                                                              "..\\..\\..\\..\\NotificationSystem\\appsettingsnotificationsystem.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
                                            .AddJsonFile(jsonConfig, true, true)
                                            .AddEnvironmentVariables()
@@ -224,7 +225,7 @@ namespace NotificationSystem.Tests
             string payload = JsonConvert.SerializeObject(notification);
 
             string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
+                                                              "..\\..\\..\\..\\NotificationSystem\\appsettingsnotificationsystem.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
                                            .AddJsonFile(jsonConfig, true, true)
                                            .AddEnvironmentVariables()
@@ -254,7 +255,7 @@ namespace NotificationSystem.Tests
             string payload = JsonConvert.SerializeObject(notification);
 
             string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
+                                                              "..\\..\\..\\..\\NotificationSystem\\appsettingsnotificationsystem.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
                                            .AddJsonFile(jsonConfig, true, true)
                                            .AddEnvironmentVariables()
