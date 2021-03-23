@@ -4167,13 +4167,12 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -4211,12 +4210,10 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4255,13 +4252,12 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -4299,12 +4295,10 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 400\", function () {",
 													"    pm.response.to.have.status(400);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4343,12 +4337,10 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4387,13 +4379,12 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -4431,12 +4422,10 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4480,6 +4469,8 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
 													"});",
@@ -4488,10 +4479,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4530,6 +4517,8 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
 													"});",
@@ -4538,10 +4527,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4578,7 +4563,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4588,10 +4573,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4628,7 +4609,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4638,10 +4619,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4678,7 +4655,8 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4688,10 +4666,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -7756,13 +7730,12 @@
 												"exec": [
 													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -12479,14 +12452,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12537,14 +12506,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12621,14 +12586,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -16475,14 +16436,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -16523,14 +16480,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -16663,15 +16616,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -16747,14 +16697,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -16791,14 +16737,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -16839,14 +16781,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -20771,14 +20709,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -20820,15 +20754,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -20864,14 +20795,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -20908,14 +20835,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -24519,14 +24442,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24567,15 +24485,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
@@ -24617,15 +24532,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
@@ -24667,15 +24579,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -24711,15 +24620,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
@@ -24761,14 +24667,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24811,14 +24713,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24861,16 +24759,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24918,15 +24812,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -25002,15 +24893,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -25256,15 +25144,12 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+									"\r",
 									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -25300,14 +25185,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -25344,14 +25223,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -25388,15 +25261,10 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});"
+									""
 								],
 								"type": "text/javascript"
 							}
