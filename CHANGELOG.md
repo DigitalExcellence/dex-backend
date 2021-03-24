@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Fixed
+- Renamed IdentityServer to match the rest of the project name. - [#386](https://github.com/DigitalExcellence/dex-backend/issues/386)
 
 
 ### Security

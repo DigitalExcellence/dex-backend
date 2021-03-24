@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06_Data", "Data\06_Data.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07_Models", "Models\07_Models.csproj", "{22BBD62E-AD77-46E5-86F8-900737BE19FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6_IdentityServer", "IdentityServer\6_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "08_IdentityServer", "IdentityServer\08_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_MessageBrokerPublisher", "MessageBrokerPublisher\09_MessageBrokerPublisher.csproj", "{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}"
 EndProject
