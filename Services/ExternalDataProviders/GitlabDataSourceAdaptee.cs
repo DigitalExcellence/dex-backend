@@ -77,7 +77,7 @@ namespace Services.ExternalDataProviders
                                               .Value;
 
             OauthUrl =
-                $"https://gitlab.com/oauth/authorize?client_id={clientId}&redirect_uri={RedirectUri}&response_type=code&scope=read_repository+read_user";
+                string.Format(configurationSection.GetSection("OauthUrl").Value, clientId, RedirectUri);
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the guid from the Gitlab data source adaptee.
         /// </summary>
-        public string Guid => "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
+        public string Guid { get; protected set; } = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
 
         /// <summary>
         ///     Gets or sets a value for the Title property from the Gitlab data source adaptee.
