@@ -73,7 +73,7 @@ namespace Services.Tests.ExternalDataProviders
         public async Task GetAllDataSources_GoodFlow()
         {
             // Arrange
-            returnedTypesFromAssembly = new[]
+            returnedTypesFromAssembly = new Type[]
                                         {
                                             typeof(GithubDataSourceAdaptee)
                                         };
@@ -171,7 +171,7 @@ namespace Services.Tests.ExternalDataProviders
         public async Task GetDataSourceByGuid_GoodFlow()
         {
             // Arrange
-            returnedTypesFromAssembly = new[]
+            returnedTypesFromAssembly = new Type[]
                                         {
                                             typeof(GithubDataSourceAdaptee)
                                         };
@@ -244,7 +244,7 @@ namespace Services.Tests.ExternalDataProviders
         public async Task GetDataSourceByName_GoodFlow()
         {
             // Arrange
-            returnedTypesFromAssembly = new[]
+            returnedTypesFromAssembly = new Type[]
                                         {
                                             typeof(GithubDataSourceAdaptee)
                                         };
