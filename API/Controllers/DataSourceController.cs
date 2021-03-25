@@ -86,7 +86,6 @@ namespace API.Controllers
         /// <returns>This method returns a collection of data sources.</returns>
         /// <response code="200">This endpoint returns the available data sources with the specified flow.</response>
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(typeof(IEnumerable<DataSourceResourceResult>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
