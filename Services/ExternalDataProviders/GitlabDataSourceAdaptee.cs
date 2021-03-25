@@ -118,6 +118,15 @@ namespace Services.ExternalDataProviders
         /// </exception>
         Task<string> FetchReadme(string readmeUri);
 
+        /// <summary>
+        ///     This method is responsible for retrieving Oauth tokens from the Github API.
+        /// </summary>
+        /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
+        /// <returns>This method returns the Oauth tokens.</returns>
+        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
+        Task<OauthTokens> FetchOauthTokens(string code);
+
+
     }
 
     /// <summary>
@@ -184,8 +193,18 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
         /// <returns>This method returns the Oauth tokens.</returns>
-        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         public async Task<OauthTokens> GetTokens(string code)
+        {
+            return await FetchOauthTokens(code);
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving Oauth tokens from the Github API.
+        /// </summary>
+        /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
+        /// <returns>This method returns the Oauth tokens.</returns>
+        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
+        public async Task<OauthTokens> FetchOauthTokens(string code)
         {
             Uri baseUriGitlab = new Uri("https://gitlab.com/");
             IRestClient client = restClientFactory.Create(baseUriGitlab);

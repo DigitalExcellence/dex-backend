@@ -17,6 +17,7 @@
 
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Models;
 using Moq;
 using NUnit.Framework;
 using Services.ExternalDataProviders;
@@ -407,6 +408,49 @@ namespace Services.Tests.ExternalDataProviders
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchReadme("https://google.nl/test");
+
+            // Assert
+            act.Should().ThrowExactly<ExternalException>().WithMessage(errorMessage);
+        }
+
+        /// <summary>
+        ///     This method tests the FetchOauthTokens method in a good flow. In this scenario
+        ///     a Oauth tokens object will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct readme content.</returns>
+        [Test]
+        public async Task FetchOauthTokens_GoodFlow()
+        {
+            OauthTokens oauthTokens = new OauthTokens { AccessToken = "token" };
+            MockRestClient(oauthTokens, HttpStatusCode.OK);
+            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+
+            // Act
+            Action act = () => DataSourceAdaptee.FetchOauthTokens(It.IsAny<string>());
+            OauthTokens retrievedOauthTokens = await DataSourceAdaptee.FetchOauthTokens(It.IsAny<string>());
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedOauthTokens.Should().BeEquivalentTo(oauthTokens);
+            retrievedOauthTokens.Should().NotBeNull();
+
+        }
+
+        /// <summary>
+        ///     This method tests the FetchOauthTokens method in a bad flow where the http status
+        ///     code from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
+        [Test]
+        public void FetchOauthTokens_ResponseIsNotSuccessful()
+        {
+            // Arrange
+            string errorMessage = "Invalid test request";
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
+            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+
+            // Act
+            Func<Task> act = () => DataSourceAdaptee.FetchOauthTokens(It.IsAny<string>());
 
             // Assert
             act.Should().ThrowExactly<ExternalException>().WithMessage(errorMessage);
