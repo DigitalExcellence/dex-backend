@@ -603,6 +603,8 @@ namespace API.Controllers
         /// </summary>
         /// <returns> Ok </returns>
         [HttpGet("projectrecommendations/{amount}")]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+        [Authorize]
         public async Task<IActionResult> GetRecommendedProjects(int amount)
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
