@@ -25,10 +25,11 @@ using System;
 
 namespace ElasticSynchronizer.Executors
 {
-
+    /// <summary>
+    ///     This class is used as a callback to be passed into the RabbitMQ Consumer.
+    /// </summary>
     public class DocumentUpdater : ICallbackService
     {
-
         private readonly Config config;
         private readonly RestClient restClient;
         private ESProjectDTO eSProject;

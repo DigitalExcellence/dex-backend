@@ -52,9 +52,9 @@ namespace Repositories
         ///     This is the project like repository constructor
         /// </summary>
         /// <param name="dbContext"></param>
-       public UserProjectLikeRepository(DbContext dbContext, ITaskPublisher TaskPublisher) :
+       public UserProjectLikeRepository(DbContext dbContext, ITaskPublisher taskPublisher) :
             base(dbContext) {
-            taskPublisher = TaskPublisher;
+            this.taskPublisher = taskPublisher;
         }
 
         /// <summary>

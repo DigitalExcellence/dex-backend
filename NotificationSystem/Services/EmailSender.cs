@@ -30,7 +30,7 @@ namespace NotificationSystem.Services
         private readonly ISendGridClient client;
         private readonly EmailAddress from;
         private readonly bool sandboxMode;
-        private EmailNotification notification { get; set; }
+        private EmailNotification notification;
         private Response response;
         
         public EmailSender(ISendGridClient sendGridClient,  string emailFrom, bool sandboxMode = false)
@@ -40,12 +40,10 @@ namespace NotificationSystem.Services
             this.sandboxMode = sandboxMode;
         }
 
-        public EmailNotification Notification { get; set; }
 
         public void ParsePayload(string jsonBody)
         {
             notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
-            Notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
         }
 
         public void ExecuteTask()
@@ -83,6 +81,7 @@ namespace NotificationSystem.Services
         }
 
         public Response Response { get => response; set => response = value; }
+        public EmailNotification Notification { get => notification;}
     }
 
 }

@@ -38,7 +38,7 @@ namespace ElasticSynchronizer.Workers
         private readonly RestClient restClient;
         private readonly string subject = "ELASTIC_CREATE_OR_UPDATE";
 
-        public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config, RestClient restClient)
+        public UpdateProjectWorker(ILogger<UpdateProjectWorker> logger, Config config, RestClient restClient, string subject, ICallbackService callback)
         {
             this.logger = logger;
             this.config = config;

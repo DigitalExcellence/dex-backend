@@ -318,8 +318,7 @@ namespace Repositories
 
             DbSet.Update(entity);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
             
 
@@ -347,8 +346,7 @@ namespace Repositories
             base.Save();
             Console.WriteLine("Add method id: " + entity.Id);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
         }
 
@@ -364,8 +362,7 @@ namespace Repositories
             entityList.ForEach(x =>
             {
                 SetLikes(x);
-                ESProjectDTO projectToSync = new ESProjectDTO();
-                ProjectConverter.ProjectToESProjectDTO(x, projectToSync);
+                ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(x);
                 taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync),
                     Subject.ELASTIC_CREATE_OR_UPDATE);
             });
@@ -386,8 +383,7 @@ namespace Repositories
             base.Save();
             Console.WriteLine("AddAsync method id: " + entity.Id);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
         }
 
@@ -399,8 +395,7 @@ namespace Repositories
         {
             base.Remove(entity);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
         }
 
@@ -432,8 +427,7 @@ namespace Repositories
         {
             Project entity = DbSet.Find(id);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
             return base.RemoveAsync(id);
         }
@@ -668,8 +662,7 @@ namespace Repositories
             {
                 throw new NotFoundException("Project to sync was not found");
             }
-            ESProjectDTO eSProjectDTO = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(projectToSync, eSProjectDTO);
+            ESProjectDTO eSProjectDTO = ProjectConverter.ProjectToESProjectDTO(projectToSync);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
                      
             
