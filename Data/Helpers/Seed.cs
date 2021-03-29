@@ -376,6 +376,32 @@ namespace Data.Helpers
                    };
         }
 
+        /// <summary>
+        ///     This method seeds wizard pages.
+        /// </summary>
+        /// <returns>Returns a list of wizard pages that can be seeded into the database.</returns>
+        public static List<WizardPage> SeedWizardPages()
+        {
+            return new List<WizardPage>
+                   {
+                       new WizardPage
+                       {
+                           Name = "Enter your username",
+                           Description = "Enter the username you would like to retrieve projects from"
+                       },
+                       new WizardPage
+                       {
+                           Name = "Paste the link to your project",
+                           Description = "Enter the link to your project that you would like to import"
+                       },
+                       new WizardPage
+                       {
+                           Name = "Select the correct project",
+                           Description = "Select which project you would like to retrieve"
+                       }
+                   };
+        }
+
     }
 
 }

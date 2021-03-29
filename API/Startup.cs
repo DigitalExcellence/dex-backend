@@ -493,6 +493,11 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
+                if(!context.WizardPage.Any())
+                {
+                    context.WizardPage.AddRange(Seed.SeedWizardPages());
+                    context.SaveChangesAsync();
+                }
 
                 // TODO seed embedded projects
             }
