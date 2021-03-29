@@ -169,6 +169,7 @@ services:
         - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
         rabbitmq-network:
+	mssql-network:
         
   elasticsynchronizer:
     image: digitalexcellence/elasticsynchronizer:latest
