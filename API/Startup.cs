@@ -20,7 +20,6 @@ using API.Extensions;
 using API.Filters;
 using API.HelperClasses;
 using API.InternalResources;
-using Bogus.Extensions;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
