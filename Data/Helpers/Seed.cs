@@ -402,6 +402,34 @@ namespace Data.Helpers
                    };
         }
 
+        public static List<DataSource> SeedDataSources()
+        {
+            return new List<DataSource>
+                   {
+                       new DataSource
+                       {
+                           Title = "Github",
+                           Guid = "de38e528-1d6d-40e7-83b9-4334c51c19be",
+                           IsVisible = true,
+                           Description = "Seeded description for the Github data source adaptee"
+                       },
+                       new DataSource
+                       {
+                           Title = "Gitlab",
+                           Guid = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a",
+                           IsVisible = true,
+                           Description = "Seeded description for the Gitlab data source adaptee"
+                       },
+                       new DataSource
+                       {
+                           Title = "JsFiddle",
+                           Guid = "96666870-3afe-44e2-8d62-337d49cf972d",
+                           IsVisible = false,
+                           Description = "Seeded description for the JsFiddle data source adaptee"
+                       }
+                   };
+        }
+
     }
 
 }

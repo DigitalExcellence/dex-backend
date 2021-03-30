@@ -498,6 +498,12 @@ namespace API
                     context.WizardPage.AddRange(Seed.SeedWizardPages());
                     context.SaveChangesAsync();
                 }
+                if(!context.DataSource.Any())
+                {
+                    context.DataSource.AddRange(Seed.SeedDataSources());
+                    context.SaveChangesAsync();
+                }
+                SeedHelper.SeedDataSourceWizardPages(context);
 
                 // TODO seed embedded projects
             }
