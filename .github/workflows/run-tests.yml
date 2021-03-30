@@ -48,4 +48,4 @@ jobs:
         node-version: '10.15.3'
 
     - name: Postman tests
-      run: npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --delay-request=200 -n 3
+      run: npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --reporter-cli-no-console --reporter-cli-no-success-assertions --delay-request=200 -n 3
