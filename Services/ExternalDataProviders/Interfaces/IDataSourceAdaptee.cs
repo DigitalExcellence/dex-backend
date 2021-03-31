@@ -40,7 +40,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the Base Url from the data source adaptee.
         /// </summary>
-        string BaseUrl { get; set; }
+        string BaseApiUrl { get; set; }
 
         /// <summary>
         ///     Gets or sets a value for the IsVisible property from the data source adaptee.

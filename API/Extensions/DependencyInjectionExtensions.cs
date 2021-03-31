@@ -113,6 +113,7 @@ namespace API.Extensions
             services.AddScoped<GithubDataSourceAdaptee>();
             services.AddScoped<GitlabDataSourceAdaptee>();
             services.AddScoped<JsFiddleDataSourceAdaptee>();
+            services.AddScoped<FontysGitlabDataSourceAdaptee>();
 
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();

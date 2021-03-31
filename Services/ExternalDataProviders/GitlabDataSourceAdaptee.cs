@@ -98,7 +98,7 @@ namespace Services.ExternalDataProviders
         /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         public async Task<OauthTokens> GetTokens(string code)
         {
-            Uri baseUriGitlab = new Uri("https://gitlab.com/");
+            Uri baseUriGitlab = new Uri(BaseUrl);
             IRestClient client = restClientFactory.Create(baseUriGitlab);
             IRestRequest request = new RestRequest("oauth/token", Method.POST);
             client.Authenticator = new HttpBasicAuthenticator(clientId, clientSecret);
@@ -156,7 +156,9 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the Base Url from the Gitlab data source adaptee.
         /// </summary>
-        public string BaseUrl { get; set; } = "https://gitlab.com/api/v4/";
+        public string BaseApiUrl { get; set; } = "https://gitlab.com/api/v4/";
+
+        public string BaseUrl { get; set; } = "https://gitlab.com/";
 
         /// <summary>
         ///     Gets or sets a value for the IsVisible property from the Gitlab data source adaptee.
@@ -232,7 +234,7 @@ namespace Services.ExternalDataProviders
         private async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(
             string username)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"users/{username}/projects");
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -260,7 +262,7 @@ namespace Services.ExternalDataProviders
             string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
                                           .Substring(1)
                                           .Replace("/", "%2F");
-            Uri serializedUri = new Uri(BaseUrl + "projects/" + projectPath);
+            Uri serializedUri = new Uri(BaseApiUrl + "projects/" + projectPath);
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
@@ -283,7 +285,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         private async Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -309,7 +311,7 @@ namespace Services.ExternalDataProviders
             string accessToken,
             string username)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"users/{username}/projects");
             request.AddHeader("Authorization", $"Bearer {accessToken}");
             IRestResponse response = await client.ExecuteAsync(request);
@@ -335,7 +337,7 @@ namespace Services.ExternalDataProviders
             string identifier,
             string accessToken)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
             request.AddHeader("Authorization", $"Bearer {accessToken}");
             IRestResponse response = await client.ExecuteAsync(request);
@@ -359,7 +361,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         private async Task<GitlabDataSourceUserResourceResult> FetchUserFromAccessToken(string accessToken)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest("user");
             request.AddHeader("Authorization", $"Bearer {accessToken}");
             IRestResponse response = await client.ExecuteAsync(request);

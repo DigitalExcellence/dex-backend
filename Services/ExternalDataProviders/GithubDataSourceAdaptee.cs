@@ -92,7 +92,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the Base Url from the Github data source adaptee.
         /// </summary>
-        public string BaseUrl { get; set; } = "https://api.github.com/";
+        public string BaseApiUrl { get; set; } = "https://api.github.com/";
 
         /// <summary>
         ///     Gets or sets a value for the IsVisible property from the Github data source adaptee.
@@ -235,7 +235,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest("user/repos", Method.GET);
 
             request.AddHeaders(new List<KeyValuePair<string, string>>
@@ -266,7 +266,7 @@ namespace Services.ExternalDataProviders
         private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(
             string username)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"users/{username}/repos", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -293,7 +293,7 @@ namespace Services.ExternalDataProviders
             // Get the project path without the prefix slash
             string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
                                           .Substring(1);
-            Uri serializedUri = new Uri(BaseUrl + "repos/" + projectPath);
+            Uri serializedUri = new Uri(BaseApiUrl + "repos/" + projectPath);
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
@@ -315,7 +315,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         private async Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"repositories/{identifier}", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -345,7 +345,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         private async Task<string> FetchReadme(string user, string repository, string accessToken = null)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"repos/{user}/{repository}/readme");
 
             if(accessToken != null)

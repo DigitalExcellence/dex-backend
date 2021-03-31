@@ -13,6 +13,8 @@ namespace Services.ExternalDataProviders
         {
             Title = "FontysGitlab";
             Guid = "6a73f5ee-e7a5-4ef5-b874-0da0993d6f13";
+            BaseApiUrl = "https://git.fhict.nl/api/v4/";
+            BaseUrl = "https://git.fhict.nl/";
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the Base Url from the JsFiddle data source adaptee.
         /// </summary>
-        public string BaseUrl { get; set; } = "http://jsfiddle.net/api/";
+        public string BaseApiUrl { get; set; } = "http://jsfiddle.net/api/";
 
         /// <summary>
         ///     Gets or sets a value for the IsVisible property from the JsFiddle data source adaptee.
@@ -133,7 +133,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         private async Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"user/{username}/demo/list.json", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
