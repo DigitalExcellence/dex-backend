@@ -120,12 +120,11 @@ namespace API.Extensions
           
         }
 
-        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
+        private static void AddExternalDataSources(this IServiceCollection services)
         {
             services.AddScoped<GithubDataSourceAdaptee>();
             services.AddScoped<GitlabDataSourceAdaptee>();
             services.AddScoped<JsFiddleDataSourceAdaptee>();
-
         }
 
     }
