@@ -456,7 +456,7 @@ namespace API
                 if(!context.Institution.Any())
                 {
                     // Seed institutions
-                    context.Institution.Add(Seed.SeedInstitution());
+                    context.Institution.AddRange(Seed.SeedInstitution());
                     context.SaveChanges();
                 }
 
@@ -504,6 +504,7 @@ namespace API
                     context.SaveChangesAsync();
                 }
                 SeedHelper.SeedDataSourceWizardPages(context);
+
 
                 // TODO seed embedded projects
             }

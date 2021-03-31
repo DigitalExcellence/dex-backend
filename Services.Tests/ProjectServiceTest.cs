@@ -44,7 +44,7 @@ namespace Services.Tests
         public async Task GetAllWithUsersAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                     repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
                                          null,
                                          project => project.Updated,
@@ -52,7 +52,7 @@ namespace Services.Tests
                                          null))
                           .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+            List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
                                                   {
                                                       Page = null,
                                                       AmountOnPage = null,
@@ -64,7 +64,7 @@ namespace Services.Tests
             Assert.DoesNotThrow(() =>
             {
                 RepositoryMock.Verify(repository =>
-                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                          repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
                                               null,
                                               project => project.Updated,
@@ -86,7 +86,7 @@ namespace Services.Tests
         public async Task GetAllOrderedByCreatedAscendingAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                     repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
                                          null,
                                          project => project.Created,
@@ -94,7 +94,7 @@ namespace Services.Tests
                                          null))
                           .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+            List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
                                                   {
                                                       Page = null,
                                                       AmountOnPage = null,
@@ -106,7 +106,7 @@ namespace Services.Tests
             Assert.DoesNotThrow(() =>
             {
                 RepositoryMock.Verify(repository =>
-                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                          repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
                                               null,
                                               project => project.Created,
@@ -128,7 +128,7 @@ namespace Services.Tests
         public async Task GetAllOrderedByNameDescendingAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                     repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
                                          null,
                                          project => project.Name,
@@ -136,7 +136,7 @@ namespace Services.Tests
                                          null))
                           .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+            List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
                                                   {
                                                       Page = null,
                                                       AmountOnPage = null,
@@ -148,7 +148,7 @@ namespace Services.Tests
             Assert.DoesNotThrow(() =>
             {
                 RepositoryMock.Verify(repository =>
-                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                          repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
                                               null,
                                               project => project.Name,
@@ -170,7 +170,7 @@ namespace Services.Tests
         public async Task GetAllHighlightedAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                     repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
                                          null,
                                          project => project.Updated,
@@ -178,7 +178,7 @@ namespace Services.Tests
                                          true))
                           .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+            List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
                                                   {
                                                       Page = null,
                                                       AmountOnPage = null,
@@ -190,7 +190,7 @@ namespace Services.Tests
             Assert.DoesNotThrow(() =>
             {
                 RepositoryMock.Verify(repository =>
-                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                          repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
                                               null,
                                               project => project.Updated,
@@ -212,7 +212,7 @@ namespace Services.Tests
         public async Task GetAllNoHighlightedAsync_GoodFlow([ProjectDataSource(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.GetAllWithUsersAndCollaboratorsAsync(
+                                     repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
                                          null,
                                          project => project.Updated,
@@ -220,7 +220,7 @@ namespace Services.Tests
                                          false))
                           .Returns(Task.FromResult(projects));
 
-            List<Project> retrievedProjects = await Service.GetAllWithUsersAndCollaboratorsAsync(new ProjectFilterParams
+            List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
                                                   {
                                                       Page = null,
                                                       AmountOnPage = null,
@@ -232,7 +232,7 @@ namespace Services.Tests
             Assert.DoesNotThrow(() =>
             {
                 RepositoryMock.Verify(repository =>
-                                          repository.GetAllWithUsersAndCollaboratorsAsync(
+                                          repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
                                               null,
                                               project => project.Updated,
@@ -252,14 +252,14 @@ namespace Services.Tests
         [Test]
         public async Task FindWithUserAndCollaboratorsAsync([ProjectDataSource] Project project)
         {
-            RepositoryMock.Setup(repository => repository.FindWithUserAndCollaboratorsAsync(1))
+            RepositoryMock.Setup(repository => repository.FindWithUserCollaboratorsAndInstitutionsAsync(1))
                           .Returns(Task.FromResult(project));
 
-            Project retrievedProject = await Service.FindWithUserAndCollaboratorsAsync(1);
+            Project retrievedProject = await Service.FindWithUserCollaboratorsAndInstitutionsAsync(1);
 
             Assert.DoesNotThrow(() =>
             {
-                RepositoryMock.Verify(repository => repository.FindWithUserAndCollaboratorsAsync(1),
+                RepositoryMock.Verify(repository => repository.FindWithUserCollaboratorsAndInstitutionsAsync(1),
                                       Times.Once);
             });
 

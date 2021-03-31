@@ -44,6 +44,7 @@ namespace Repositories
         /// <returns>This method returns the found institution with the specified identity id.</returns>
         Task<Institution> GetInstitutionByInstitutionIdentityId(string institutionIdentityId);
 
+        Task<bool> InstitutionExistsAsync(int institution);
     }
 
     /// <summary>
@@ -81,6 +82,10 @@ namespace Repositories
                        .FirstOrDefaultAsync(i => i.IdentityId == institutionIdentityId);
         }
 
+        public async Task<bool> InstitutionExistsAsync(int institutionId)
+        {
+            return await GetDbSet<Institution>().AnyAsync(i => i.Id == institutionId);
+        }
     }
 
 }

@@ -101,8 +101,6 @@ namespace API.Extensions
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
 
-            services.AddSingleton<IAssemblyHelper, AssemblyHelper>();
-
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
 
@@ -111,16 +109,23 @@ namespace API.Extensions
 
             services.AddScoped<ITaskPublisher, TaskPublisher>();
 
+            services.AddSingleton<IAssemblyHelper, AssemblyHelper>();
+          
+            services.AddScoped<IProjectInstitutionService, ProjectInstitutionService>();
+            services.AddScoped<IProjectInstitutionRepository, ProjectInstitutionRepository>();
+          
             services.AddExternalDataSources();
 
             return services;
+          
         }
 
-        private static void AddExternalDataSources(this IServiceCollection services)
+        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
         {
             services.AddScoped<GithubDataSourceAdaptee>();
             services.AddScoped<GitlabDataSourceAdaptee>();
             services.AddScoped<JsFiddleDataSourceAdaptee>();
+
         }
 
     }

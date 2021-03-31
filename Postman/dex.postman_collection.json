@@ -1738,7 +1738,8 @@
 									"response": []
 								},
 								{
-									"name": "Project-DeleteLikeProject-Administrator",
+									"name": "
+                  ",
 									"event": [
 										{
 											"listen": "test",
@@ -3028,8 +3029,8 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -3257,14 +3258,24 @@
 										}
 									],
 									"request": {
-										"method": "GET",
+										"method": "POST",
 										"header": [
 											{
 												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
 											}
 										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "Postman/testimage4MB.jpg"
+												}
+											]
+										},
 										"url": {
 											"raw": "{{apiUrl}}/api/Role/{{roleId}}",
 											"host": [
@@ -8052,6 +8063,15 @@
 												],
 												"type": "text/javascript"
 											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
 										}
 									],
 									"request": {
@@ -11587,6 +11607,15 @@
 												"value": "{{registeredUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{apiUrl}}/api/Highlight/Project/{{projectId}}",
 											"host": [
@@ -13088,6 +13117,15 @@
 												"value": "{{registeredUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "false\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{apiUrl}}/api/file/{{ProjectIconRegisteredFileId}}",
 											"host": [
@@ -16779,6 +16817,10 @@
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});",
+													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"    pm.response.to.be.ok;",
 													"    pm.response.to.be.withBody;",
@@ -16851,6 +16893,15 @@
 												"value": "{{dataOfficerUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{apiUrl}}/api/Highlight/Project/{{projectId}}",
 											"host": [
