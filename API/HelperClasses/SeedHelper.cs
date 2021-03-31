@@ -74,11 +74,19 @@ namespace API.HelperClasses
                 User foundEntity = usersInDb.Find(e => e.IdentityId == seedUser.IdentityId);
                 foundEntity.Role = seedUser.Role;
                 context.Update(foundEntity);
-                context.SaveChanges();
-                return;
             }
+            else if(usersInDb.Find(e => e.Role == seedUser.Role) != null)
+            {
+                User foundEntity = usersInDb.Find(e => e.Role == seedUser.Role);
+                foundEntity.IdentityId = seedUser.IdentityId;
+                foundEntity.Name = seedUser.Name;
+                foundEntity.Email = seedUser.Email;
 
-            context.User.Add(seedUser);
+                context.Update(foundEntity);
+            }
+            else { 
+                context.User.Add(seedUser);
+            }
             context.SaveChanges();
         }
 

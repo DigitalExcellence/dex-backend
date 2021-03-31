@@ -447,6 +447,9 @@ namespace API
             SeedHelper.InsertRoles(Seed.SeedRoles(), context);
             List<Role> roles = context.Role.ToList();
 
+            // Check if User and their Role & Identity match in the database, if it doesn't match: user is added or updated.
+            SeedHelper.InsertUser(Seed.SeedAdminUser(roles), context);
+
             if(!env.IsProduction())
             {
                 if(!context.Institution.Any())
@@ -458,10 +461,6 @@ namespace API
 
                 if(!context.User.Any())
                 {
-                    // seed admin
-                    context.User.Add(Seed.SeedAdminUser(roles));
-                    context.SaveChanges();
-
                     //Seed random users
                     context.User.Add(Seed.SeedPrUser(roles));
                     context.User.AddRange(Seed.SeedUsers(roles));
