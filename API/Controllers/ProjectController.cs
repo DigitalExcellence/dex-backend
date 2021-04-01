@@ -489,10 +489,6 @@ namespace API.Controllers
                 }
             }
 
-            ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
-            IEnumerable<Category> projectCategories = (await categoryService.GetAll()).Where(c => projectCategoryResources.Any(pcr => pcr.CategoryId == c.Id));
-            await projectCategoryService.UpdateProjectCategories(project, projectCategories);
-
             mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
