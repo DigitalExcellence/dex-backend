@@ -338,29 +338,32 @@ namespace API.Controllers
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
 
-            ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
-
-            foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
+            if(projectResource.Categories != null)
             {
-                ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
-                if(alreadyExcProjectCategory == null)
+                ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
+
+                foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
                 {
-                    Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
-
-                    if(category == null)
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
+                    if(alreadyExcProjectCategory == null)
                     {
-                        ProblemDetails problem = new ProblemDetails
-                        {
-                            Title = "Failed to save new project.",
-                            Detail = "One of the given categories did not exist.",
-                            Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
-                        };
-                        return BadRequest(problem);
-                    }
+                        Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
 
-                    ProjectCategory projectCategory = new ProjectCategory(project, category);
-                    await projectCategoryService.AddAsync(projectCategory)
-                                           .ConfigureAwait(false);
+                        if(category == null)
+                        {
+                            ProblemDetails problem = new ProblemDetails
+                            {
+                                Title = "Failed to save new project.",
+                                Detail = "One of the given categories did not exist.",
+                                Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
+                            };
+                            return BadRequest(problem);
+                        }
+
+                        ProjectCategory projectCategory = new ProjectCategory(project, category);
+                        await projectCategoryService.AddAsync(projectCategory)
+                                               .ConfigureAwait(false);
+                    }
                 }
             }
 
@@ -890,7 +893,7 @@ namespace API.Controllers
                                                                      nameof(Defaults.Scopes.InstitutionProjectWrite),
                                                                      project.UserId);
 
-            if(!(project.UserId == user.Id || isAllowed))
+            if(project.UserId != user.Id && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -976,7 +979,7 @@ namespace API.Controllers
                                                                      nameof(Defaults.Scopes.InstitutionProjectWrite),
                                                                      project.UserId);
 
-            if(!(project.UserId == user.Id || isAllowed))
+            if(project.UserId != user.Id && !isAllowed)
             {
                 ProblemDetails problem = new ProblemDetails
                 {

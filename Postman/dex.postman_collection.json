@@ -657,8 +657,8 @@
 									"",
 									"eval(pm.environment.get(\"commonTests\"))();",
 									"",
-									"pm.test(\"Status code is 401\", function () {",
-									"    pm.response.to.have.status(401);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
 									"});"
 								],
 								"type": "text/javascript"
