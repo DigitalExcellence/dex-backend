@@ -850,7 +850,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("category/{projectId}/{categoryId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectCategoryResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProjectResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
@@ -921,7 +921,7 @@ namespace API.Controllers
 
             projectCategoryService.Save();
 
-            return Ok(mapper.Map<ProjectCategory, ProjectCategoryResourceResult>(projectCategory));
+            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
         }
 
         /// <summary>
