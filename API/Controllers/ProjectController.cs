@@ -993,6 +993,117 @@ namespace API.Controllers
                 };
                 return NotFound(problemDetails);
             }
+            if(!await projectService.ProjectExistsAsync(projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "4a73928f-827f-44a5-b508-e6a8c73c1717"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await institutionService.InstitutionExistsAsync(institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed getting the institution.",
+                    Detail = "The institution send in the request could not be found in the database.",
+                    Instance = "01cdc6f4-42aa-4394-bbc8-2576e4f99498"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Institution is already linked to project.",
+                    Detail = "The institution cannot be linked to the project because the institution is already part of the project.",
+                    Instance = "01b26993-0c9e-4890-a7fe-f0f39450e616"
+                };
+                return Conflict(problemDetails);
+            }
+
+            ProjectInstitution projectInstitution = new ProjectInstitution(projectId, institutionId);
+            await projectInstitutionService.AddAsync(projectInstitution);
+            projectInstitutionService.Save();
+
+            //Maybe a bit wasteful to get the entire project and institution but its fast enough for now.
+            projectInstitution.Project = await projectService.FindAsync(projectId);
+            projectInstitution.Institution = await institutionService.FindAsync(institutionId);
+
+            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionResourceResult>(projectInstitution));
+        }
+
+        /// <summary>
+        /// Links given project and institution. This function is admin only!
+        /// </summary>
+        /// <param name="projectId">The project identifier</param>
+        /// <param name="institutionId">The institution identifier</param>
+        /// <response code="404">If the project, institution or current user couldn't be found.</response>
+        /// <response code="409">If the project is not yet linked to the institution.</response>
+        /// <response code="200">If success</response>
+        [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
+        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId, int institutionId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                            .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail = "The database does not contain a user with the provided user id.",
+                    Instance = "7561e57a-d957-4823-9b90-d107aa54f893"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await projectService.ProjectExistsAsync(projectId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed setting the status of the project.",
+                    Detail = "The project send in the request could not be found in the database.",
+                    Instance = "f358fc51-0761-4929-8cca-71a6225fe0cd"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!await institutionService.InstitutionExistsAsync(institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed getting the institution.",
+                    Detail = "The institution send in the request could not be found in the database.",
+                    Instance = "7065c1e7-0543-470e-ab55-403c13418626"
+                };
+                return NotFound(problemDetails);
+            }
+
+            if(!projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Institution is not yet linked to the project.",
+                    Detail = "The institution cannot be unlinked from the project, because it is not linked to the project in the first place.",
+                    Instance = "695ef305-06b3-4ad8-99f2-773cd0f03e6e"
+                };
+                return Conflict(problemDetails);
+            }
+
+            projectInstitutionService.RemoveByProjectIdAndInstitutionId(projectId, institutionId);
+            projectInstitutionService.Save();
+
+            return Ok();
+        }
 
         /// <summary>
         ///     Categorize a project
@@ -1162,118 +1273,6 @@ namespace API.Controllers
             projectCategoryService.Save();
 
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
-        }
-
-            if(!await projectService.ProjectExistsAsync(projectId))
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed setting the status of the project.",
-                    Detail = "The project send in the request could not be found in the database.",
-                    Instance = "4a73928f-827f-44a5-b508-e6a8c73c1717"
-                };
-                return NotFound(problemDetails);
-            }
-
-            if(!await institutionService.InstitutionExistsAsync(institutionId))
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed getting the institution.",
-                    Detail = "The institution send in the request could not be found in the database.",
-                    Instance = "01cdc6f4-42aa-4394-bbc8-2576e4f99498"
-                };
-                return NotFound(problemDetails);
-            }
-
-            if(projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Institution is already linked to project.",
-                    Detail = "The institution cannot be linked to the project because the institution is already part of the project.",
-                    Instance = "01b26993-0c9e-4890-a7fe-f0f39450e616"
-                };
-                return Conflict(problemDetails);
-            }
-
-            ProjectInstitution projectInstitution = new ProjectInstitution(projectId, institutionId);
-            await projectInstitutionService.AddAsync(projectInstitution);
-            projectInstitutionService.Save();
-
-            //Maybe a bit wasteful to get the entire project and institution but its fast enough for now.
-            projectInstitution.Project = await projectService.FindAsync(projectId);
-            projectInstitution.Institution = await institutionService.FindAsync(institutionId);
-
-            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionResourceResult>(projectInstitution));
-        }
-
-        /// <summary>
-        /// Links given project and institution. This function is admin only!
-        /// </summary>
-        /// <param name="projectId">The project identifier</param>
-        /// <param name="institutionId">The institution identifier</param>
-        /// <response code="404">If the project, institution or current user couldn't be found.</response>
-        /// <response code="409">If the project is not yet linked to the institution.</response>
-        /// <response code="200">If success</response>
-        [HttpDelete("linkedinstitution/{projectId}/{institutionId}")]
-        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> UnlinkInstitutionFromProjectAsync(int projectId, int institutionId)
-        {
-            User currentUser = await HttpContext.GetContextUser(userService)
-                                            .ConfigureAwait(false);
-
-            if(currentUser == null)
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed to getting the user account.",
-                    Detail = "The database does not contain a user with the provided user id.",
-                    Instance = "7561e57a-d957-4823-9b90-d107aa54f893"
-                };
-                return NotFound(problemDetails);
-            }
-
-            if(!await projectService.ProjectExistsAsync(projectId))
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed setting the status of the project.",
-                    Detail = "The project send in the request could not be found in the database.",
-                    Instance = "f358fc51-0761-4929-8cca-71a6225fe0cd"
-                };
-                return NotFound(problemDetails);
-            }
-
-            if(!await institutionService.InstitutionExistsAsync(institutionId))
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Failed getting the institution.",
-                    Detail = "The institution send in the request could not be found in the database.",
-                    Instance = "7065c1e7-0543-470e-ab55-403c13418626"
-                };
-                return NotFound(problemDetails);
-            }
-
-            if(!projectInstitutionService.InstitutionIsLinkedToProject(projectId, institutionId))
-            {
-                ProblemDetails problemDetails = new ProblemDetails
-                {
-                    Title = "Institution is not yet linked to the project.",
-                    Detail = "The institution cannot be unlinked from the project, because it is not linked to the project in the first place.",
-                    Instance = "695ef305-06b3-4ad8-99f2-773cd0f03e6e"
-                };
-                return Conflict(problemDetails);
-            }
-
-            projectInstitutionService.RemoveByProjectIdAndInstitutionId(projectId, institutionId);
-            projectInstitutionService.Save();
-
-            return Ok();
         }
     }
 
