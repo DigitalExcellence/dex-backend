@@ -512,75 +512,6 @@
 					"response": []
 				},
 				{
-					"name": "Project-CreateProjectToCategorize-Administrator",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var projectName = pm.environment.get(\"projectName\");",
-									"var adminUserName = pm.environment.get(\"adminUserName\");",
-									"",
-									"var jsonData = pm.response.json();",
-									"",
-									"pm.environment.set(\"projectIdToCategorize\", jsonData.id);",
-									"",
-									"eval(pm.environment.get(\"commonTests\"))();",
-									"",
-									"pm.test(\"Status code is 201\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test(\"Response must be valid and have a json body\", function () {",
-									"     pm.response.to.be.success;",
-									"     pm.response.to.be.withBody;",
-									"     pm.response.to.be.json;",
-									"});",
-									"",
-									"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
-									"    pm.expect(jsonData.name).to.eql(projectName);",
-									"});",
-									"",
-									"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
-									"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "IdentityId",
-								"type": "text",
-								"value": "{{administratorUserIdentityId}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToTag\",\r\n  \"shortDescription\": \"postmantest_ProjectToTag\",\r\n  \"uri\": \"postmantest_ProjectToTag\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToTag\",\r\n      \"role\": \"postmantest_ProjectToTag\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{apiUrl}}/api/Project",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Category-CreateCategoryToBeCategorized-Administrator",
 					"event": [
 						{
@@ -636,6 +567,133 @@
 							"path": [
 								"api",
 								"Category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Project-CreateProjectToCategorize-Administrator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var projectName = pm.environment.get(\"projectName\");",
+									"var adminUserName = pm.environment.get(\"adminUserName\");",
+									"var categoryName = pm.environment.get(\"categoryNameInitial\");",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"projectIdToCategorize\", jsonData.id);",
+									"",
+									"eval(pm.environment.get(\"commonTests\"))();",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response must be valid and have a json body\", function () {",
+									"     pm.response.to.be.success;",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
+									"    pm.expect(jsonData.name).to.eql(projectName);",
+									"});",
+									"",
+									"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
+									"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
+									"});",
+									"",
+									"pm.test(\"Category is set correctly and matching: \" + categoryName, function () {",
+									"    pm.expect(jsonData.categories[0].name).to.eql(categoryName);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{administratorUserIdentityId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToTag\",\r\n  \"shortDescription\": \"postmantest_ProjectToTag\",\r\n  \"uri\": \"postmantest_ProjectToTag\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToTag\",\r\n      \"role\": \"postmantest_ProjectToTag\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"categories\": [\r\n    {\r\n      \"categoryId\": {{categoryIdToBeCategorized}}\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}/api/Project",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Project-RemoveProjectCategories-Administrator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"eval(pm.environment.get(\"commonTests\"))();",
+									"",
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{administratorUserIdentityId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project",
+								"category",
+								"{{projectIdToCategorize}}",
+								"{{categoryIdToBeCategorized}}"
 							]
 						}
 					},
