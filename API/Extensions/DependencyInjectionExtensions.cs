@@ -106,6 +106,9 @@ namespace API.Extensions
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
 
+            services.AddScoped<IProjectInstitutionService, ProjectInstitutionService>();
+            services.AddScoped<IProjectInstitutionRepository, ProjectInstitutionRepository>();
+
             services.AddExternalDataSources();
 
             return services;

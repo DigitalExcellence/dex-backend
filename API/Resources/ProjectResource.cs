@@ -62,7 +62,7 @@ namespace API.Resources
         public CallToActionResource CallToAction { get; set; }
 
         /// <summary>
-        ///     Sets or gets if project is visible to institute members only or not
+        ///     This gets or sets the institute private property
         /// </summary>
         public bool InstitutePrivate { get; set; }
 

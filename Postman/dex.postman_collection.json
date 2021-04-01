@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c88bcd4b-e972-4238-9ff1-289fa9987005",
+		"_postman_id": "20b47465-340f-404f-b92c-ad1289146972",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -45,7 +45,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n\t\"identityId\": \"{{registeredUserIdentityId}}\",\r\n    \"name\": \"Registered Postman User\",\r\n    \"email\": \"registeredUser@postman.com\"\r\n}",
+											"raw": "{\r\n\t\"identityId\": \"{{registeredUserIdentityId}}\",\r\n    \"name\": \"Registered Postman User\",\r\n    \"email\": \"registeredUser@postman.com\",\r\n    \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -95,7 +95,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n\t\"identityId\": \"{{prUserIdentityId}}\",\r\n    \"name\": \"Public Relationship Postman User\",\r\n    \"email\": \"PRUser@postman.com\"\r\n}",
+											"raw": "{\r\n\t\"identityId\": \"{{prUserIdentityId}}\",\r\n    \"name\": \"Public Relationship Postman User\",\r\n    \"email\": \"PRUser@postman.com\",\r\n    \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -512,80 +512,17 @@
 					"response": []
 				},
 				{
-					"name": "Category-CreateCategoryToBeCategorized-Administrator",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = pm.response.json();\r",
-									"\r",
-									"eval(pm.environment.get(\"commonTests\"))();\r",
-									"\r",
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response must be valid and have a json body\", function () {\r",
-									"    pm.response.to.be.success;\r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});\r",
-									"\r",
-									"pm.environment.set(\"categoryIdToBeCategorized\", jsonData.id);\r",
-									"\r",
-									"var categoryNameInitial = pm.environment.get(\"categoryNameInitial\");\r",
-									"pm.environment.set(\"categoryName\", categoryNameInitial);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "IdentityId",
-								"type": "text",
-								"value": "{{administratorUserIdentityId}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"{{categoryNameInitial}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{apiUrl}}/api/Category",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Category"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Project-CreateProjectToCategorize-Administrator",
+					"name": "Project-CreateProjectToMakePrivate-PRUser",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
 									"var projectName = pm.environment.get(\"projectName\");",
-									"var adminUserName = pm.environment.get(\"adminUserName\");",
-									"var categoryName = pm.environment.get(\"categoryNameInitial\");",
 									"",
 									"var jsonData = pm.response.json();",
 									"",
-									"pm.environment.set(\"projectIdToCategorize\", jsonData.id);",
+									"pm.environment.set(\"projectToMakePrivateId\", jsonData.id);",
 									"",
 									"eval(pm.environment.get(\"commonTests\"))();",
 									"",
@@ -601,14 +538,6 @@
 									"",
 									"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
 									"    pm.expect(jsonData.name).to.eql(projectName);",
-									"});",
-									"",
-									"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
-									"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
-									"});",
-									"",
-									"pm.test(\"Category is set correctly and matching: \" + categoryName, function () {",
-									"    pm.expect(jsonData.categories[0].name).to.eql(categoryName);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -621,12 +550,12 @@
 							{
 								"key": "IdentityId",
 								"type": "text",
-								"value": "{{administratorUserIdentityId}}"
+								"value": "{{registeredUserIdentityId}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToTag\",\r\n  \"shortDescription\": \"postmantest_ProjectToTag\",\r\n  \"uri\": \"postmantest_ProjectToTag\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToTag\",\r\n      \"role\": \"postmantest_ProjectToTag\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"categories\": [\r\n    {\r\n      \"categoryId\": {{categoryIdToBeCategorized}}\r\n    }\r\n  ]\r\n}",
+							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToMakePrivate\",\r\n  \"shortDescription\": \"postmantest_ProjectMakePrivate\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectMakePrivate\",\r\n      \"role\": \"postmantest_ProjectMakePrivate\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -641,59 +570,6 @@
 							"path": [
 								"api",
 								"Project"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Project-RemoveProjectCategories-Administrator",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = pm.response.json();",
-									"",
-									"eval(pm.environment.get(\"commonTests\"))();",
-									"",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "IdentityId",
-								"type": "text",
-								"value": "{{administratorUserIdentityId}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project",
-								"category",
-								"{{projectIdToCategorize}}",
-								"{{categoryIdToBeCategorized}}"
 							]
 						}
 					},
@@ -760,7 +636,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"User-CreateUser-Administrator@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"999\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"User-CreateUser-Administrator@example.com\",\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1176,30 +1052,36 @@
 							]
 						},
 						{
-							"name": "Category",
+							"name": "Institution",
 							"item": [
 								{
-									"name": "Category-CreateCategory-Administrator",
+									"name": "Institution-CreateInstitution-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 201\", function () {\r",
-													"    pm.response.to.have.status(201);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.success;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});\r",
-													"\r",
-													"pm.environment.set(\"categoryId\", jsonData.id);"
+													"var institutionName = pm.environment.get(\"institutionName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.environment.set(\"createdInstitutionId\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check if created Name matches: \" + institutionName, function () {",
+													"    pm.expect(jsonData.name).to.eql(institutionName);",
+													"});"
 												],
 												"type": "text/javascript"
 											}
@@ -1216,7 +1098,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"{{categoryName}}\"\r\n}",
+											"raw": "{\n    \"name\": \"{{institutionName}}\",\n    \"description\": \"postmantest_Institution-CreateInstitution-Administrator\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1224,39 +1106,29 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Category",
+											"raw": "{{apiUrl}}/api/Institution",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Category"
+												"Institution"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Category-GetAllCategories-Administrator",
+									"name": "Institution-GetInstitution-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var categoryName = pm.environment.get(\"categoryName\");",
+													"var createdInstitutionId = parseInt(pm.environment.get(\"createdInstitutionId\"));",
+													"var institutionName = pm.environment.get(\"institutionName\");",
 													"",
 													"var jsonData = pm.response.json();",
-													"",
-													"var foundAt;",
-													"",
-													"function findCategory(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].name == name) {",
-													"            return i;",
-													"        }",
-													"    }",
-													"    return -1;",
-													"}",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
@@ -1270,13 +1142,12 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Category: \" + categoryName + \" is in list\", function () {",
-													"    foundAt = findCategory(jsonData, categoryName);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
+													"pm.test(\"Check if updated Id matches: \" + createdInstitutionId, function () {",
+													"    pm.expect(jsonData.id).to.eql(createdInstitutionId);",
 													"});",
 													"",
-													"pm.test(\"Category Name is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
+													"pm.test(\"Check previously created UserName with id \" + institutionName, function () {",
+													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1293,82 +1164,28 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Category",
+											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Category"
+												"Institution",
+												"{{createdInstitutionId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Category-GetCategory-Administrator",
+									"name": "Institution-UpdateInstitution-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var categoryId = parseInt(pm.environment.get(\"categoryId\"));",
-													"var categoryName = pm.environment.get(\"categoryName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"CategoryName is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-UpdateCategory-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryNameUpdated\");",
-													"pm.environment.set(\"categoryName\", categoryName);",
+													"var institutionName = pm.environment.get(\"updatedInstitutionName\");",
+													"pm.environment.set(\"institutionName\", institutionName);",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -1384,8 +1201,8 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Category Name is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
+													"pm.test(\"Check if updated Institution Name matches: \" + institutionName, function () {",
+													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1403,7 +1220,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{updatedInstitutionName}}\",\r\n  \"description\": \"postmantest_Institution-UpdateInstitution-Administrator\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1411,27 +1228,28 @@
 											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
+											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Category",
-												"{{categoryId}}"
+												"Institution",
+												"{{createdInstitutionId}}"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Category-GetUpdatedCategory-Administrator",
+									"name": "Institution-GetUpdatedInstitution-Administrator",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var categoryName = pm.environment.get(\"categoryName\");",
+													"var createdInstitutionId = parseInt(pm.environment.get(\"createdInstitutionId\"));",
+													"var institutionName = pm.environment.get(\"institutionName\")",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
@@ -1447,56 +1265,12 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"CategoryName is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetCategory-NonExisting-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 404\", function () {",
-													"    pm.response.to.have.status(404);",
+													"pm.test(\"Check if updated Institution Id matches: \" + createdInstitutionId, function () {",
+													"    pm.expect(jsonData.id).to.eql(createdInstitutionId);",
 													"});",
 													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.notFound;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
+													"pm.test(\"Check if updated institution matches: \" + institutionName, function () {",
+													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -1513,14 +1287,21 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Category/98989",
+											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"Category",
-												"98989"
+												"Institution",
+												"{{createdInstitutionId}}"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
 											]
 										}
 									},
@@ -2005,6 +1786,244 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 404 and have the right error\", function () {\r",
+													"    pm.response.to.have.status(404);\r",
+													"       pm.expect(jsonData.detail).to.eql('The creator of the project send in the request is not bound to an institution and can therefore not make the project private.');\r",
+													"    //This test must fail on this status, because its not really possible to add an institution to the administrator with how the tests are setup. Therefore the authentication works (which this test tests), but fails because the administrator doesn't have an institution which is fine because that isn't in the scope of this test.\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.notFound;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Other-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"var temporaryProjectId = pm.environment.get('temporaryProjectId');\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectToMakePrivateId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectToMakePrivateId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 201\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"The right institution and project were linked\", function(){\r",
+													"    pm.expect(jsonData.projectId).to.eql(pm.environment.get(\"projectId\"));\r",
+													"    pm.expect(jsonData.institutionId).to.eql(1);\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.ok\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -2119,113 +2138,6 @@
 												"project",
 												"follow",
 												"{{projectIdToFollow}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "CategorizeProject",
-							"item": [
-								{
-									"name": "Project-CategorizeProject-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});\r",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -3612,264 +3524,6 @@
 							"item": []
 						},
 						{
-							"name": "Institution",
-							"item": [
-								{
-									"name": "Institution-CreateInstitution-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var institutionName = pm.environment.get(\"institutionName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.environment.set(\"createdInstitutionId\", jsonData.id);",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 201\", function () {",
-													"    pm.response.to.have.status(201);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.success;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check if created Name matches: \" + institutionName, function () {",
-													"    pm.expect(jsonData.name).to.eql(institutionName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"name\": \"{{institutionName}}\",\n    \"description\": \"postmantest_Institution-CreateInstitution-Administrator\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Institution",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Institution"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Institution-GetInstitution-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var createdInstitutionId = parseInt(pm.environment.get(\"createdInstitutionId\"));",
-													"var institutionName = pm.environment.get(\"institutionName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check if updated Id matches: \" + createdInstitutionId, function () {",
-													"    pm.expect(jsonData.id).to.eql(createdInstitutionId);",
-													"});",
-													"",
-													"pm.test(\"Check previously created UserName with id \" + institutionName, function () {",
-													"    pm.expect(jsonData.name).to.eql(institutionName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Institution",
-												"{{createdInstitutionId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Institution-UpdateInstitution-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var institutionName = pm.environment.get(\"updatedInstitutionName\");",
-													"pm.environment.set(\"institutionName\", institutionName);",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check if updated Institution Name matches: \" + institutionName, function () {",
-													"    pm.expect(jsonData.name).to.eql(institutionName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{updatedInstitutionName}}\",\r\n  \"description\": \"postmantest_Institution-UpdateInstitution-Administrator\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Institution",
-												"{{createdInstitutionId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Institution-GetUpdatedInstitution-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var createdInstitutionId = parseInt(pm.environment.get(\"createdInstitutionId\"));",
-													"var institutionName = pm.environment.get(\"institutionName\")",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check if updated Institution Id matches: \" + createdInstitutionId, function () {",
-													"    pm.expect(jsonData.id).to.eql(createdInstitutionId);",
-													"});",
-													"",
-													"pm.test(\"Check if updated institution matches: \" + institutionName, function () {",
-													"    pm.expect(jsonData.name).to.eql(institutionName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Institution/{{createdInstitutionId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Institution",
-												"{{createdInstitutionId}}"
-											],
-											"query": [
-												{
-													"key": "",
-													"value": "",
-													"disabled": true
-												}
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
 							"name": "File",
 							"item": [
 								{
@@ -4027,6 +3681,128 @@
 												"api",
 												"File",
 												"{{adminFileId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "File-CreateFile-MaxFileSize",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"adminFileId\", jsonData.id)\r",
+													"\r",
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than 800ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.badRequest;\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "Postman/testimage4MB.jpg"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "File-CreateFile-AllowedExtensions",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"adminFileId\", jsonData.id)\r",
+													"\r",
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response time is less than 800ms\", function () {\r",
+													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.badRequest;\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "Postman/testfile.txt"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
 											]
 										}
 									},
@@ -4471,50 +4247,6 @@
 									"response": []
 								},
 								{
-									"name": "Category-DeleteCategory-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Project-DeleteProject-Administrator",
 									"event": [
 										{
@@ -4739,56 +4471,6 @@
 						{
 							"name": "Checkup-on-Cleanup",
 							"item": [
-								{
-									"name": "Category-Get-Deleted-Category-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
-													"pm.test(\"Status code is 404\", function () {",
-													"    pm.response.to.have.status(404);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.notFound;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryId}}"
-											]
-										}
-									},
-									"response": []
-								},
 								{
 									"name": "Project-Get-Deleted-Project-Administrator",
 									"event": [
@@ -5049,73 +4731,6 @@
 						{
 							"name": "Preparation",
 							"item": [
-								{
-									"name": "Category-CreateCategory",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"var categoryName = pm.environment.get(\"categoryName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.environment.set(\"categoryId\", jsonData.id);",
-													"",
-													"pm.test(\"Status code is 201\", function () {",
-													"    pm.response.to.have.status(201);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.success;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
-													"pm.test(\"Category Name is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
 								{
 									"name": "Project-CreateProject",
 									"event": [
@@ -5769,276 +5384,6 @@
 							]
 						},
 						{
-							"name": "Category",
-							"item": [
-								{
-									"name": "Category-CreateCategory-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetAllCategories-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetCategory-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-UpdateCategory-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.unauthorized;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-DeleteCategory-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"auth": {
-								"type": "noauth"
-							},
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
 							"name": "Project",
 							"item": [
 								{
@@ -6414,6 +5759,175 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.unauthorized;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.unauthorized;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.unauthorized\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"auth": {
@@ -6550,100 +6064,6 @@
 												"project",
 												"follow",
 												"{{projectIdToFollow}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "CategorizeProject",
-							"item": [
-								{
-									"name": "Project-CategorizeProject-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "",
-												"disabled": true
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "DELETE",
-										"header": [],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -8864,7 +8284,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\"\n}",
+											"raw": "{\n\t\"identityId\": \"{{createdUserId}}\",\n    \"name\": \"{{userName}}\",\n    \"email\": \"postmantest_email@example.com\",\n    \"institutionId\": 1\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9029,7 +8449,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"postman_User-UpdateUser-Self-Registered_alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{registeredUserIdentityId}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"postman_User-UpdateUser-Self-Registered_alicez\",\r\n  \"email\": \"{{updatedAliceEmail}}\",\r\n  \"identityId\": \"{{registeredUserIdentityId}}\",\r\n  \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9318,315 +8738,6 @@
 							]
 						},
 						{
-							"name": "Category",
-							"item": [
-								{
-									"name": "Category-CreateCategory-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetAllCategories-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"var foundAt;",
-													"",
-													"function findCategory(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].name == name) {",
-													"            return i;",
-													"        }",
-													"    }",
-													"    return -1;",
-													"}",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
-													"    foundAt = findCategory(jsonData, categoryName);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
-													"});",
-													"",
-													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetCategory-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Category name is set correctly and matches: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-UpdateCategory-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-DeleteCategory-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
 							"name": "Project",
 							"item": [
 								{
@@ -9658,6 +8769,15 @@
 												],
 												"type": "text/javascript"
 											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
 										}
 									],
 									"request": {
@@ -9671,7 +8791,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9902,7 +9022,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -10125,6 +9245,473 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Other-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{adminProjectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{adminProjectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"instituteprivate is set correctly\", function(){\r",
+													"    pm.expect(jsonData.institutePrivate).to.eql(true);\r",
+													"})\r",
+													"\r",
+													"pm.test(\"institute is added\", function(){\r",
+													"    pm.expect(jsonData.linkedInstitutions).not.empty.null;\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.forbidden\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-CreateProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.environment.set(\"userProjectProjectId1\", jsonData.id)",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"description\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_UserProject-CreateProject-Registered\",\r\n      \"role\": \"postmantest_UserProject-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UserProject-CreateProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.environment.set(\"userProjectProjectId2\", jsonData.id)",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"description\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_UserProject-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_UserProject-CreateProject-Registered\",\r\n      \"role\": \"postmantest_UserProject-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UserProject-GetProject-Self-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Project count matches: 4\", function () {",
+													"    pm.expect(jsonData.length).to.eql(4);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/user/projects",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"user",
+												"projects"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UserProject-DeleteProject-Other-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{userProjectProjectId1}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{userProjectProjectId1}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UserProject-DeleteProject-Other-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{userProjectProjectId2}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{userProjectProjectId2}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -10265,199 +9852,6 @@
 											""
 										]
 									}
-								}
-							]
-						},
-						{
-							"name": "CategorizeProject",
-							"item": [
-								{
-									"name": "Project-CategorizeProject-Self-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-CategorizeProject-Other-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Self-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Other-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
 								}
 							]
 						},
@@ -13080,7 +12474,7 @@
 							"name": "Cleanup Registered",
 							"item": [
 								{
-									"name": "Project-DeleteProject-Self-Registered",
+									"name": "Project-DeleteProject-Registered",
 									"event": [
 										{
 											"listen": "test",
@@ -13109,6 +12503,15 @@
 												"value": "{{registeredUserIdentityId}}"
 											}
 										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
 											"host": [
@@ -14410,315 +13813,6 @@
 							]
 						},
 						{
-							"name": "Category",
-							"item": [
-								{
-									"name": "Category-CreateCategory-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetAllCategories-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"var foundAt;",
-													"",
-													"function findCategory(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].name == name) {",
-													"            return i;",
-													"        }",
-													"    }",
-													"    return -1;",
-													"}",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
-													"    foundAt = findCategory(jsonData, categoryName);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
-													"});",
-													"",
-													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetCategory-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Tag name is set correctly and matches: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-UpdateCategory-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-DeleteCategory-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
 							"name": "Project",
 							"item": [
 								{
@@ -15217,14 +14311,9 @@
 										}
 									},
 									"response": []
-								}
-							]
-						},
-						{
-							"name": "CategorizeProject",
-							"item": [
+								},
 								{
-									"name": "Project-CategorizeProject-Self-DataOfficer",
+									"name": "Project-MakeInstitutionPrivate-DataOfficer",
 									"event": [
 										{
 											"listen": "test",
@@ -15242,6 +14331,156 @@
 													"     pm.response.to.be.ok;\r",
 													"     pm.response.to.be.withBody;\r",
 													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"instituteprivate is set correctly\", function(){\r",
+													"    pm.expect(jsonData.institutePrivate).to.eql(true);\r",
+													"})\r",
+													"\r",
+													"pm.test(\"institute is added\", function(){\r",
+													"    pm.expect(jsonData.linkedInstitutions).not.empty.null;\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Other-SameInstitution-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"instituteprivate is set correctly\", function(){\r",
+													"    pm.expect(jsonData.institutePrivate).to.eql(false);\r",
+													"})\r",
+													"\r",
+													"pm.test(\"institute is added\", function(){\r",
+													"    pm.expect(jsonData.linkedInstitutions).not.empty.null;\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "false\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectToMakePrivateId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectToMakePrivateId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
 													"});"
 												],
 												"type": "text/javascript"
@@ -15253,140 +14492,43 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"category",
+												"linkedinstitution",
 												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
+												"1"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Project-CategorizeProject-Other-SameInstitution-DataOfficer",
+									"name": "Project-UnlinkInstitution-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
 													"eval(pm.environment.get(\"commonTests\"))();\r",
 													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
 													"});\r",
 													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdWithInstitution}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdWithInstitution}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-CategorizeProject-Other-DifferentInstitution-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectToBeDeletedByUnauthorizedRoles}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectToBeDeletedByUnauthorizedRoles}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Self-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.forbidden\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -15397,115 +14539,21 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
+												"value": "{{dataOfficerUserIdentityId}}",
+												"type": "text"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
 												"Project",
-												"category",
+												"linkedinstitution",
 												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Other-SameInstitution-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdWithInstitution}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdWithInstitution}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Other-DifferentInstitution-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectToBeDeletedByUnauthorizedRoles}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectToBeDeletedByUnauthorizedRoles}}",
-												"{{categoryIdToBeCategorized}}"
+												"1"
 											]
 										}
 									},
@@ -18429,7 +17477,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"postman_Pr_jerry\",\r\n  \"email\": \"{{updatedPrUserEmail}}\",\r\n  \"identityId\": \"{{prUserIdentityId}}\"\r\n}",
+											"raw": "{\r\n  \"name\": \"postman_Pr_jerry\",\r\n  \"email\": \"{{updatedPrUserEmail}}\",\r\n  \"identityId\": \"{{prUserIdentityId}}\",\r\n  \"institutionId\": 1\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -18642,315 +17690,6 @@
 												"User",
 												"follow",
 												"{{userIdToFollow}}"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
-							"name": "Category",
-							"item": [
-								{
-									"name": "Category-CreateCategory-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetAllCategories-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"var foundAt;",
-													"",
-													"function findCategory(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].name == name) {",
-													"            return i;",
-													"        }",
-													"    }",
-													"    return -1;",
-													"}",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
-													"    foundAt = findCategory(jsonData, categoryName);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
-													"});",
-													"",
-													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetCategory-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Category name is set correctly and matches: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-UpdateCategory-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-DeleteCategory-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
 											]
 										}
 									},
@@ -19477,6 +18216,178 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"instituteprivate is set correctly\", function(){\r",
+													"    pm.expect(jsonData.institutePrivate).to.eql(true);\r",
+													"})\r",
+													"\r",
+													"pm.test(\"institute is added\", function(){\r",
+													"    pm.expect(jsonData.linkedInstitutions).not.empty.null;\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.forbidden\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{prUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -19616,199 +18527,6 @@
 											""
 										]
 									}
-								}
-							]
-						},
-						{
-							"name": "CategorizeProject",
-							"item": [
-								{
-									"name": "Project-CategorizeProject-Self-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-CategorizeProject-Other-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Self-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Other-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
 								}
 							]
 						},
@@ -23296,315 +22014,6 @@
 							]
 						},
 						{
-							"name": "Category",
-							"item": [
-								{
-									"name": "Category-CreateCategory-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryName}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetAllCategories-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"var foundAt;",
-													"",
-													"function findCategory(jsonData, name) {",
-													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].name == name) {",
-													"            return i;",
-													"        }",
-													"    }",
-													"    return -1;",
-													"}",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Category met: \" + categoryName + \" is in list\", function () {",
-													"    foundAt = findCategory(jsonData, categoryName);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
-													"});",
-													"",
-													"pm.test(\"Category name is set correctly and matching: \" + categoryName, function () {",
-													"    pm.expect(jsonData[foundAt].name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-GetCategory-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var categoryName = pm.environment.get(\"categoryNameInitial\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Category name is set correctly and matches: \" + categoryName, function () {",
-													"    pm.expect(jsonData.name).to.eql(categoryName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-UpdateCategory-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.forbidden;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{categoryNameUpdated}}\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Category-DeleteCategory-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Category",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								}
-							]
-						},
-						{
 							"name": "Project",
 							"item": [
 								{
@@ -24014,6 +22423,170 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-MakeInstitutionPrivate-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{alumniIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "true\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/instituteprivate/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"instituteprivate",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-LinkInstitutionToProject-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.forbidden;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{alumniIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UnlinkInstitution-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 403\", function () {\r",
+													"    pm.response.to.have.status(403);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.forbidden\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{alumniIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/linkedinstitution/{{projectId}}/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"linkedinstitution",
+												"{{projectId}}",
+												"1"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -24160,199 +22733,6 @@
 											""
 										]
 									}
-								}
-							]
-						},
-						{
-							"name": "CategorizeProject",
-							"item": [
-								{
-									"name": "Project-CategorizeProject-Self-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-CategorizeProject-Other-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Self-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectId}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectId}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UncategorizeProject-Other-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 401\", function () {\r",
-													"    pm.response.to.have.status(401);\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/category/{{projectIdToCategorize}}/{{categoryIdToBeCategorized}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"category",
-												"{{projectIdToCategorize}}",
-												"{{categoryIdToBeCategorized}}"
-											]
-										}
-									},
-									"response": []
 								}
 							]
 						},
@@ -26919,50 +25299,6 @@
 					"response": []
 				},
 				{
-					"name": "Delete-ProjectForCategorizing",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "IdentityId",
-								"type": "text",
-								"value": "{{administratorUserIdentityId}}"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectIdToCategorize}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Project",
-								"{{projectIdToCategorize}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Delete-ProjectToBeDeletedByUnauthorizedRole",
 					"event": [
 						{
@@ -27045,50 +25381,6 @@
 								"api",
 								"User",
 								"{{userIdToFollow}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete-CategoryForCategorizing",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "IdentityId",
-								"type": "text",
-								"value": "{{administratorUserIdentityId}}"
-							}
-						],
-						"url": {
-							"raw": "{{apiUrl}}/api/Category/{{categoryIdToBeCategorized}}",
-							"host": [
-								"{{apiUrl}}"
-							],
-							"path": [
-								"api",
-								"Category",
-								"{{categoryIdToBeCategorized}}"
 							]
 						}
 					},

@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Models
 {
@@ -28,7 +29,7 @@ namespace Models
         public Project()
         {
             Collaborators = new List<Collaborator>();
-            //Categories = new List<ProjectCategory>();
+            LinkedInstitutions = new List<ProjectInstitution>();
         }
 
         public int Id { get; set; }
@@ -47,6 +48,13 @@ namespace Models
         public string ShortDescription { get; set; }
 
         public List<Collaborator> Collaborators { get; set; }
+        /// <summary>
+        ///     Gets or set the linked institutions.
+        /// </summary>
+        /// <value>
+        ///     The linked institutions.
+        /// </value>
+        public List<ProjectInstitution> LinkedInstitutions { get; set; }
 
         [Required]
         public string Uri { get; set; }
@@ -69,6 +77,38 @@ namespace Models
 
         public List<ProjectCategory> Categories { get; set; } = new List<ProjectCategory>();
 
+
+        /// <summary>
+        /// Checks if the user can access the project based on
+        /// if the insitution is private, if the user is part of an institution linked to this project
+        /// or if the user is the one who created the project
+        /// </summary>
+        /// <param name="user">The user that wants access</param>
+        /// <returns>Boolean that determines whether the user has access</returns>
+        public bool CanAccess(User user)
+        {
+            if(InstitutePrivate == false)
+            {
+                return true;
+            }
+
+            if(IsCreator(user.Id) || LinkedInstitutions.Any(li => li.InstitutionId == user.InstitutionId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the user is the creator
+        /// </summary>
+        /// <param name="userId">The user identifier</param>
+        /// <returns>Boolean that determines whether the user is the creator of the project</returns>
+        public bool IsCreator(int userId)
+        {
+            return this.UserId == userId;
+        }
 
     }
 

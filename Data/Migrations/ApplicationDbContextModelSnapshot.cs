@@ -283,6 +283,28 @@ namespace _4_Data.Migrations
                     b.ToTable("Project");
                 });
 
+            modelBuilder.Entity("Models.ProjectInstitution", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("InstitutionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstitutionId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectInstitution");
+                });
+
             modelBuilder.Entity("Models.ProjectLike", b =>
                 {
                     b.Property<int>("Id")
@@ -572,6 +594,21 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.User", "User")
                         .WithMany("Projects")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.ProjectInstitution", b =>
+                {
+                    b.HasOne("Models.Institution", "Institution")
+                        .WithMany()
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Project", "Project")
+                        .WithMany("LinkedInstitutions")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

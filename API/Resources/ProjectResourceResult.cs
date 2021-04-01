@@ -68,6 +68,11 @@ namespace API.Resources
         public ICollection<CollaboratorResourceResult> Collaborators { get; set; }
 
         /// <summary>
+        ///     This gets or sets the linkedInstitutions
+        /// </summary>
+        public ICollection<ProjectInstitutionResourceResult> LinkedInstitutions { get; set; }
+
+        /// <summary>
         ///     This gets or sets the Created time of the project.
         /// </summary>
         public DateTime Created { get; set; }
