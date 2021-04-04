@@ -126,7 +126,6 @@ namespace Services.ExternalDataProviders
         /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         Task<OauthTokens> FetchOauthTokens(string code);
 
-
     }
 
     /// <summary>

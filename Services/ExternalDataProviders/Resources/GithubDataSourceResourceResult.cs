@@ -406,7 +406,7 @@ namespace Services.ExternalDataProviders.Resources
     /// <summary>
     ///     Viewmodel for the github data source contributor source.
     /// </summary>
-    public class GithubDataSourceContributorsResourceResult
+    public class GithubDataSourceContributorResourceResult
     {
 
         /// <summary>
