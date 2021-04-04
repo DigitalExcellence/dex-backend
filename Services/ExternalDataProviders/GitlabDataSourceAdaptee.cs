@@ -126,6 +126,13 @@ namespace Services.ExternalDataProviders
         /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         Task<OauthTokens> FetchOauthTokens(string code);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the contributors from a Gitlab repository.
+        /// </summary>
+        /// <param name="id">This parameter represents the id of the repository.</param>
+        /// <returns>This method returns the gitlab data source contributors resource result.</returns>
+        public Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id);
+
     }
 
     /// <summary>
@@ -247,6 +254,9 @@ namespace Services.ExternalDataProviders
             GitlabDataSourceResourceResult resourceResult = await FetchGitlabRepositoryById(projectId, accessToken);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            List<GitLabDataSourceContributorResourceResult> contributors =
+                await FetchContributorsFromRepository(resourceResult.Id);
+            project.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Name }));
             return project;
         }
 
@@ -308,6 +318,9 @@ namespace Services.ExternalDataProviders
             GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            List<GitLabDataSourceContributorResourceResult> contributors =
+                await FetchContributorsFromRepository(resourceResult.Id);
+            project.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Name }));
             return project;
         }
 
@@ -321,6 +334,9 @@ namespace Services.ExternalDataProviders
             GitlabDataSourceResourceResult resourceResult = await FetchPublicGitlabRepositoryById(identifier);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+            List<GitLabDataSourceContributorResourceResult> contributors =
+                await FetchContributorsFromRepository(resourceResult.Id);
+            project.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Name }));
             return project;
         }
 
@@ -509,6 +525,24 @@ namespace Services.ExternalDataProviders
             }
 
             return response.Content;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving the contributors from a Gitlab repository.
+        /// </summary>
+        /// <param name="id">This parameter represents the id of the repository.</param>
+        /// <returns>This method returns the gitlab data source contributors resource result.</returns>
+        public async Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"/projects/{id}/repository/contributors");
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            List<GitLabDataSourceContributorResourceResult> resourceResult =
+                JsonConvert.DeserializeObject<List<GitLabDataSourceContributorResourceResult>>(response.Content);
+            return resourceResult;
         }
 
     }
