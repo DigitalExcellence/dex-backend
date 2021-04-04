@@ -403,4 +403,128 @@ namespace Services.ExternalDataProviders.Resources
 
     }
 
+    /// <summary>
+    ///     Viewmodel for the github data source contributor source.
+    /// </summary>
+    public class GithubDataSourceContributorsResourceResult
+    {
+
+        /// <summary>
+        ///     Gets or sets a value for the Login property.
+        /// </summary>
+        [JsonProperty("login")]
+        public string Login { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Id property.
+        /// </summary>
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Node Id property.
+        /// </summary>
+        [JsonProperty("node_id")]
+        public string NodeId { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Avatar Url property.
+        /// </summary>
+        [JsonProperty("avatar_url")]
+        public Uri AvatarUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Gravatar id property.
+        /// </summary>
+        [JsonProperty("gravatar_id")]
+        public string GravatarId { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Url property.
+        /// </summary>
+        [JsonProperty("url")]
+        public Uri Url { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the HtmlUrl property.
+        /// </summary>
+        [JsonProperty("html_url")]
+        public Uri HtmlUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the FollowersUrl property.
+        /// </summary>
+        [JsonProperty("followers_url")]
+        public Uri FollowersUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the FollowingUrl property.
+        /// </summary>
+        [JsonProperty("following_url")]
+        public string FollowingUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the GistsUrl property.
+        /// </summary>
+        [JsonProperty("gists_url")]
+        public string GistsUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the StarredUrl property.
+        /// </summary>
+        [JsonProperty("starred_url")]
+        public string StarredUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the SubscriptionsUrl property.
+        /// </summary>
+        [JsonProperty("subscriptions_url")]
+        public Uri SubscriptionsUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the OrganizationUrl property.
+        /// </summary>
+        [JsonProperty("organizations_url")]
+        public Uri OrganizationsUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the ReposUrl property.
+        /// </summary>
+        [JsonProperty("repos_url")]
+        public Uri ReposUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the EventsUrl property.
+        /// </summary>
+        [JsonProperty("events_url")]
+        public string EventsUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the ReceivedEventsUrl property.
+        /// </summary>
+        [JsonProperty("received_events_url")]
+        public Uri ReceivedEventsUrl { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Type property.
+        /// </summary>
+        [JsonProperty("type")]
+        public GithubDataSourceContributorTypeEnumResourceResult Type { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the SiteAdmin property.
+        /// </summary>
+        [JsonProperty("site_admin")]
+        public bool SiteAdmin { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Contributions property.
+        /// </summary>
+        [JsonProperty("contributions")]
+        public long Contributions { get; set; }
+
+    }
+
+    public enum GithubDataSourceContributorTypeEnumResourceResult { Bot, User };
+
 }
