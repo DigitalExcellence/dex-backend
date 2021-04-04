@@ -121,6 +121,14 @@ namespace Services.ExternalDataProviders
         /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         Task<OauthTokens> FetchOauthTokens(string code);
 
+        /// <summary>
+        ///     This method is responsible for retrieving the contributors from a Github repository.
+        /// </summary>
+        /// <param name="owner">This parameter represents the owner of the repository.</param>
+        /// <param name="repo">This parameter represents the name of the repository.</param>
+        /// <returns>This method returns the github data source contributors resource result.</returns>
+        Task<List<GithubDataSourceContributorsResourceResult>> FetchContributorsFromRepository(string owner, string repo);
+
     }
 
     /// <summary>
@@ -277,6 +285,9 @@ namespace Services.ExternalDataProviders
             p.Description =
                 await FetchReadme(projectWithSpecifiedId.Owner.Login, projectWithSpecifiedId.Name, accessToken) ??
                 p.Description;
+            List<GithubDataSourceContributorsResourceResult> contributors =
+                await FetchContributorsFromRepository(projectWithSpecifiedId.Owner.Login, projectWithSpecifiedId.Name);
+            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login }));
             return p;
         }
 
@@ -306,6 +317,9 @@ namespace Services.ExternalDataProviders
         {
             GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri);
             Project p = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
+            List<GithubDataSourceContributorsResourceResult> contributors =
+                await FetchContributorsFromRepository(githubDataSource.Owner.Login, githubDataSource.Name);
+            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login })); 
             p.Description = await FetchReadme(githubDataSource.Owner.Login, githubDataSource.Name) ?? p.Description;
             return p;
         }
@@ -321,6 +335,9 @@ namespace Services.ExternalDataProviders
             Project p = mapper.Map<GithubDataSourceResourceResult, Project>(projectResourceResult);
             p.Description = await FetchReadme(projectResourceResult.Owner.Login, projectResourceResult.Name) ??
                             p.Description;
+            List<GithubDataSourceContributorsResourceResult> contributors =
+                await FetchContributorsFromRepository(projectResourceResult.Owner.Login, projectResourceResult.Name);
+            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login }));
             return p;
         }
 
@@ -503,6 +520,25 @@ namespace Services.ExternalDataProviders
             }
 
             return response.Content;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving the contributors from a Github repository.
+        /// </summary>
+        /// <param name="owner">This parameter represents the owner of the repository.</param>
+        /// <param name="repo">This parameter represents the name of the repository.</param>
+        /// <returns>This method returns the github data source contributors resource result.</returns>
+        public async Task<List<GithubDataSourceContributorsResourceResult>> FetchContributorsFromRepository(string owner, string repo)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"repos/{owner}/{repo}/contributors");
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            List<GithubDataSourceContributorsResourceResult> resourceResult =
+                JsonConvert.DeserializeObject<List<GithubDataSourceContributorsResourceResult>>(response.Content);
+            return resourceResult;
         }
 
     }
