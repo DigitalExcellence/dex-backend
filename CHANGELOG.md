@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Changed
-
+- Improved integration tests. - [#395](https://github.com/DigitalExcellence/dex-backend/issues/395)
 
 ### Deprecated
 
