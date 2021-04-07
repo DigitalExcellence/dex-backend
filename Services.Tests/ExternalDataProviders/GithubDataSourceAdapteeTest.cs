@@ -402,9 +402,9 @@ namespace Services.Tests.ExternalDataProviders
 
         /// <summary>
         ///     This method tests the FetchContributorsFromRepository method in a good flow. In this scenario
-        ///     a contributor resource results will get returned.
+        ///     a collection contributor resource results will get returned.
         /// </summary>
-        /// <returns>The tested method will return the correct readme content.</returns>
+        /// <returns>The tested method will return the correct contributors resource result collection.</returns>
         [Test]
         public async Task FetchContributorsFromRepository_GoodFlow(
             [GithubDataSourceContributorResourceResultDataSource(30)] IEnumerable<GithubDataSourceContributorResourceResult> resourceResults)

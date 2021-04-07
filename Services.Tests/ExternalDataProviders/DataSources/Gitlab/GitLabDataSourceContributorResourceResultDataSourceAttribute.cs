@@ -28,28 +28,29 @@ namespace Services.Tests.ExternalDataProviders.DataSources.Gitlab
 {
 
     /// <summary>
-    ///     Attribute to generate Gitlab Data Source Resource Results
+    ///     Attribute to generate Gitlab Data Source Contributor Resource Results
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class GitlabDataSourceResourceResultDataSourceAttribute : Attribute, IParameterDataSource
+    public class GitLabDataSourceContributorResourceResultDataSourceAttribute : Attribute, IParameterDataSource
     {
 
         private readonly int amountToGenerate;
-        private readonly IFakeDataGenerator<GitlabDataSourceResourceResult> fakeDataGenerator;
+        private readonly IFakeDataGenerator<GitLabDataSourceContributorResourceResult> fakeDataGenerator;
 
         /// <summary>
-        ///     Initializes GitlabDataSourceResourceResultDataSourceAttribute.
+        ///     Initializes GitLabDataSourceContributorResourceResultDataSourceAttribute.
         /// </summary>
-        public GitlabDataSourceResourceResultDataSourceAttribute()
+        public GitLabDataSourceContributorResourceResultDataSourceAttribute()
         {
-            fakeDataGenerator = new GitlabDataSourceResourceResultDataGenerator();
+            fakeDataGenerator = new GitLabDataSourceContributorResourceResultDataGenerator();
         }
 
         /// <summary>
-        ///     Initializes GitlabDataSourceResourceResultDataSourceAttribute
+        ///     Initializes GitLabDataSourceContributorResourceResultDataSourceAttribute
         ///     and setting the amount of Github data source resource results to be generated.
         /// </summary>
-        public GitlabDataSourceResourceResultDataSourceAttribute(int amountToGenerate) : this()
+        public GitLabDataSourceContributorResourceResultDataSourceAttribute(int amountToGenerate)
+            : this()
         {
             this.amountToGenerate = amountToGenerate;
         }
@@ -63,11 +64,11 @@ namespace Services.Tests.ExternalDataProviders.DataSources.Gitlab
         {
             if(amountToGenerate <= 1)
             {
-                return new[] {fakeDataGenerator.Generate()};
+                return new[] { fakeDataGenerator.Generate() };
             }
-            List<GitlabDataSourceResourceResult> projects = fakeDataGenerator.GenerateRange(amountToGenerate)
-                                                                             .ToList();
-            return new [] {projects};
+            List<GitLabDataSourceContributorResourceResult> projects = fakeDataGenerator.GenerateRange(amountToGenerate)
+                                                                                        .ToList();
+            return new[] { projects };
         }
 
     }

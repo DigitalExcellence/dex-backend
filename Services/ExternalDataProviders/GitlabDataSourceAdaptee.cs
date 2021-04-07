@@ -254,9 +254,6 @@ namespace Services.ExternalDataProviders
             GitlabDataSourceResourceResult resourceResult = await FetchGitlabRepositoryById(projectId, accessToken);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
-            List<GitLabDataSourceContributorResourceResult> contributors =
-                await FetchContributorsFromRepository(resourceResult.Id);
-            project.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Name }));
             return project;
         }
 
@@ -535,7 +532,7 @@ namespace Services.ExternalDataProviders
         public async Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
-            IRestRequest request = new RestRequest($"/projects/{id}/repository/contributors");
+            IRestRequest request = new RestRequest($"projects/{id}/repository/contributors");
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(string.IsNullOrEmpty(response.Content)) return null;
