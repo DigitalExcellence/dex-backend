@@ -285,9 +285,6 @@ namespace Services.ExternalDataProviders
             p.Description =
                 await FetchReadme(projectWithSpecifiedId.Owner.Login, projectWithSpecifiedId.Name, accessToken) ??
                 p.Description;
-            List<GithubDataSourceContributorResourceResult> contributors =
-                await FetchContributorsFromRepository(projectWithSpecifiedId.Owner.Login, projectWithSpecifiedId.Name);
-            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login }));
             return p;
         }
 
@@ -544,3 +541,4 @@ namespace Services.ExternalDataProviders
     }
 
 }
+

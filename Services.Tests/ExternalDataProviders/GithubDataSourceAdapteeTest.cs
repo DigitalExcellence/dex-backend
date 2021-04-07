@@ -400,6 +400,48 @@ namespace Services.Tests.ExternalDataProviders
             act.Should().ThrowExactly<ExternalException>().WithMessage(errorMessage);
         }
 
+        /// <summary>
+        ///     This method tests the FetchContributorsFromRepository method in a good flow. In this scenario
+        ///     a contributor resource results will get returned.
+        /// </summary>
+        /// <returns>The tested method will return the correct readme content.</returns>
+        [Test]
+        public async Task FetchContributorsFromRepository_GoodFlow(
+            [GithubDataSourceContributorResourceResultDataSource(30)] IEnumerable<GithubDataSourceContributorResourceResult> resourceResults)
+        {
+            // Arrange
+            MockRestClient(resourceResults, HttpStatusCode.OK);
+            DataSourceAdaptee = new GithubDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+
+            // Act
+            Action act = () => DataSourceAdaptee.FetchContributorsFromRepository(It.IsAny<string>(), It.IsAny<string>());
+            IEnumerable<GithubDataSourceContributorResourceResult> retrievedResourceResults = await DataSourceAdaptee.FetchContributorsFromRepository(It.IsAny<string>(), It.IsAny<string>());
+
+            // Assert
+            act.Should().NotThrow();
+            retrievedResourceResults.Should().BeEquivalentTo(resourceResults);
+        }
+
+        /// <summary>
+        ///     This method tests the FetchContributorsFromRepository method in a bad flow where the http status
+        ///     code from the response is not successful.
+        /// </summary>
+        /// <returns>The tested method will receive a not successful response from the external API.</returns>
+        [Test]
+        public void FetchContributorsFromRepository_ResponseIsNotSuccessful()
+        {
+            // Arrange
+            string errorMessage = "Invalid test request";
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
+            DataSourceAdaptee = new GithubDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+
+            // Act
+            Func<Task> act = () => DataSourceAdaptee.FetchOauthTokens(It.IsAny<string>());
+
+            // Assert
+            act.Should().ThrowExactly<ExternalException>().WithMessage(errorMessage);
+        }
+
     }
 
 }
