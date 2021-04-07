@@ -21032,10 +21032,6 @@
 											"     pm.response.to.be.ok;",
 											"     pm.response.to.be.withBody;",
 											"     pm.response.to.be.json;",
-											"});",
-											"",
-											"pm.test(\"Check if updated graduation date matches: \" + tomorrowDate, function () {",
-											"    pm.expect(jsonData.expectedGraduationDateTime).to.eql(tomorrowDate);",
 											"});"
 										],
 										"type": "text/javascript"
