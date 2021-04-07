@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Recommendation system, allowing users to get projects recommended based on similar users. [#63](https://github.com/DigitalExcellence/dex-backend/issues/63)
 
 ### Changed
-
+- Improved integration tests. - [#395](https://github.com/DigitalExcellence/dex-backend/issues/395)
 
 ### Deprecated
 
