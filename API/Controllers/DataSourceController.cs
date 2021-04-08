@@ -204,8 +204,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(dataSourceModel.DataSourceWizardPages.Any() && !await wizardPageService.ValidateWizardPagesExist(
-                    dataSourceResource.WizardPageResources.Select(w => w.WizardPageId)))
+            if(dataSourceResource.WizardPageResources != null &&
+               dataSourceResource.WizardPageResources.Any() && !await wizardPageService.ValidateWizardPagesExist(
+               dataSourceResource.WizardPageResources.Select(w => w.WizardPageId)))
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
