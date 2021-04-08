@@ -123,6 +123,7 @@ services:
         rabbitmq-network:
         
   elasticsynchronizer:
+    image:  digitalexcellence/elasticsynchronizer
     container_name: elasticsynchronizer
     restart: on-failure
     build: 
@@ -143,6 +144,7 @@ services:
       mssql-network:
       
   elasticsearch:
+    image:  digitalexcellence/elasticsearch
     container_name: elasticsearch
     build:
       context: elasticsearch/
