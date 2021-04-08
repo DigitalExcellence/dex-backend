@@ -18,6 +18,8 @@
 using Models;
 using Repositories;
 using Services.Base;
+using System;
+using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -36,6 +38,12 @@ namespace Services.Services
         /// <returns>Boolean</returns>
         bool CheckIfUserAlreadyLiked(int userId, int projectId);
 
+        /// <summary>
+        ///     This is the interface method which synchronizes the project to Elastic Search
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns>Task</returns>
+        Task SyncProjectToES(Project project);
     }
 
     /// <summary>
@@ -44,13 +52,18 @@ namespace Services.Services
     public class UserProjectLikeService : Service<ProjectLike>,
                                           IUserProjectLikeService
     {
+        private readonly IProjectRepository projectRepository;
 
         /// <summary>
         ///     This is the project like constructor
         /// </summary>
         /// <param name="repository"></param>
-        public UserProjectLikeService(IUserProjectLikeRepository repository) :
-            base(repository) { }
+        /// <param name="projectRepository"></param>
+        public UserProjectLikeService(IUserProjectLikeRepository repository, IProjectRepository projectRepository) :
+            base(repository)
+        {
+            this.projectRepository = projectRepository;
+        }
 
         /// <summary>
         ///     Gets the repository
@@ -58,8 +71,19 @@ namespace Services.Services
         private new IUserProjectLikeRepository Repository =>
             (IUserProjectLikeRepository) base.Repository;
 
+
         /// <summary>
-        ///     This is the interface method which checks if the user already like a project
+        ///     This is the method which synchronizes the project to Elastic Search
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns>Task</returns>
+        public async Task SyncProjectToES(Project project)
+        {
+             await projectRepository.SyncProjectToES(project);
+        }
+
+        /// <summary>
+        ///     This is the method which checks if the user already like a project
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="projectId"></param>

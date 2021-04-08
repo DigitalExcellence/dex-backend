@@ -15,12 +15,25 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Data;
+using FluentAssertions;
+using MessageBrokerPublisher;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
+using Moq;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataSources;
+using Repositories.Tests.Extensions;
+using RestSharp;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Repositories.Tests
@@ -29,11 +42,127 @@ namespace Repositories.Tests
     [TestFixture]
     public class ProjectRepositoryTest : RepositoryTest<Project, ProjectRepository>
     {
+        protected new ApplicationDbContext DbContext;
+        protected new IProjectRepository Repository;
+        protected Mock<IElasticSearchContext> ElasticSearchContext;
+        protected Mock<ITaskPublisher> TaskPublisher;
+        protected Mock<Queries> Queries;
+        protected Mock<RestClient> RestClientMock;
 
-        protected new IProjectRepository Repository => base.Repository;
 
         /// <summary>
-        ///     Test if project with user relations are retrieved correctly
+        /// Initialize runs before every test
+        /// Initialize the repository with reflection
+        /// </summary>
+        [SetUp]
+        public override void Initialize()
+        {
+            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);            
+            TaskPublisher = new Mock<ITaskPublisher>();
+            Queries = new Mock<Queries>();
+            ElasticSearchContext = new Mock<IElasticSearchContext>();
+            RestClientMock = new Mock<RestClient>();
+            ElasticSearchContext.Setup(x => x.CreateRestClientForElasticRequests()).Returns(RestClientMock.Object);
+
+            Repository = new ProjectRepository(DbContext, ElasticSearchContext.Object, TaskPublisher.Object, Queries.Object);
+        }
+
+
+        [Test]
+        public async Task SyncProjectToESTest_Goodflow([ProjectDataSource(1)] Project project)
+        {
+            DbContext.Add(project);
+            await DbContext.SaveChangesAsync();
+            ESProjectDTO dto = new ESProjectDTO();
+            ProjectToEsProjectESDTO(project, dto);
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
+            Subject subject = Subject.ELASTIC_CREATE_OR_UPDATE;
+            TaskPublisher.Setup(x => x.RegisterTask(It.Is<string>(x => x == payload), It.Is<Subject>(x => x == subject))).Verifiable();
+            
+
+            await Repository.SyncProjectToES(project);
+
+            TaskPublisher.VerifyAll();
+
+
+        }
+
+        [Test]
+        public void SyncProjectToESTest_Badflow([ProjectDataSource(1)] Project project)
+        {
+            ESProjectDTO dto = new ESProjectDTO();
+            ProjectToEsProjectESDTO(project, dto);
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(dto);
+            Subject subject = Subject.ELASTIC_CREATE_OR_UPDATE;
+
+
+            TaskPublisher.Setup(x => x.RegisterTask(It.Is<string>(x => x == payload), It.Is<Subject>(x => x == subject))).Verifiable();
+
+
+            Assert.ThrowsAsync<NotFoundException>(async () => await Repository.SyncProjectToES(project));
+
+        }
+
+        [Test]
+        public void MigratDatabaseTest_Goodflow([ProjectDataSource(30)] List<Project> projects)
+        {
+            List<ESProjectDTO> dTOs = ProjectsToProjectESDTO(projects);
+            Subject subject = Subject.ELASTIC_CREATE_OR_UPDATE;
+
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<string>(), It.Is<Subject>(x => x == subject))).Verifiable();
+
+            Repository.MigrateDatabase(projects);
+
+            TaskPublisher.Verify(x => x.RegisterTask(It.IsAny<string>(), It.Is<Subject>(x => x == subject)), Times.Exactly(projects.Count));
+
+            TaskPublisher.VerifyAll();
+
+        }
+
+        [Test]
+        public void DeleteIndexTest_Goodflow()
+        {
+            Repository.DeleteIndex();
+
+            RestClientMock.Verify(x => x.Execute(It.Is<RestRequest>( x => x.Method == Method.DELETE)), Times.Once);
+        }
+
+        [Test]
+        public void CreateProjectIndex_Goodflow()
+        {
+            Repository.CreateProjectIndex();
+            RestClientMock.Verify(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.PUT)), Times.Once);
+
+        }
+
+        [Test]
+        public async Task GetLikedProjectsFromSimilarUser_Goodflow()
+        {
+            RestRequest request = new RestRequest("_search", Method.POST);
+            string body = ElasticSearchResults.GetLikedProjectsFromSimilarUserQuery.Replace("ReplaceWithUserId", (1).ToString())
+                .Replace("ReplaceWithSimilarUserId", (2).ToString());
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+
+            IRestResponse restResponse = new RestResponse();
+            restResponse.Content = ElasticSearchResults.GetLikedProjectsFromSimilarUserResult;
+
+            List<ESProjectDTO> projectDTOs = new List<ESProjectDTO>();
+            ParseJsonToESProjectFormatDTOList(restResponse, projectDTOs);
+            List<Project> projects = await ConvertProjects(projectDTOs);
+
+            RestClientMock.Setup(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.POST))).Returns(restResponse).Verifiable();
+
+            List<Project> projectsToTest = await Repository.GetLikedProjectsFromSimilarUser(1, 2);
+
+            RestClientMock.VerifyAll();
+            CollectionAssert.AreEqual(projectsToTest, projects);
+
+
+
+        }
+        
+        /// <summary>
+        /// Test if project with user relations are retrieved correctly
         /// </summary>
         /// <param name="projects">The project which are used as data to test</param>
         /// <param name="users">The users which are used as data to test</param>
@@ -713,37 +842,78 @@ namespace Repositories.Tests
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task AddAsyncTest_GoodFlow([ProjectDataSource] Project entity)
+        public override async Task AddAsyncTest_GoodFlow([ProjectDataSource]Project entity)
         {
-            return base.AddAsyncTest_GoodFlow(entity);
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<string>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+
+            Repository.Add(entity);
+            await DbContext.SaveChangesAsync();
+            
+            PropertyInfo property = entity.GetType().GetProperty("Id");
+            int id;
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                id = (int) property.GetValue(entity);
+            }
+
+            Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
+            TaskPublisher.Verify();
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
         public override void AddRangeTest_BadFlow_EmptyList()
         {
-            base.AddRangeTest_BadFlow_EmptyList();
+            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            {
+                TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+                Repository.Add(null);
+                await DbContext.SaveChangesAsync();
+            });
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
         public override void AddRangeTest_BadFlow_Null()
         {
-            base.AddRangeTest_BadFlow_Null();
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+            It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+            Assert.Throws<ArgumentNullException>(() => Repository.AddRange(null));
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task AddRangeTest_GoodFlow([ProjectDataSource(5)] List<Project> entities)
+        public override async Task AddRangeTest_GoodFlow([ProjectDataSource(5)]List<Project> entities)
         {
-            return base.AddRangeTest_GoodFlow(entities);
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+            Repository.AddRange(entities);
+            await DbContext.SaveChangesAsync();
+
+            foreach(Project entity in entities)
+            {
+                int id = entity.Id;                
+                Repository.Invoking(async r => await r.FindAsync(id)).Should().NotBeNull();
+                TaskPublisher.Verify();
+            }
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
         public override void AddTest_BadFlow_Null()
         {
-            base.AddTest_BadFlow_Null();
+            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            {
+                TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+                Repository.Add(null);
+                await DbContext.SaveChangesAsync();
+            });
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
@@ -779,53 +949,146 @@ namespace Repositories.Tests
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task GetAllAsyncTest_Badflow_Empty()
+        public override async Task GetAllAsyncTest_Badflow_Empty()
         {
-            return base.GetAllAsyncTest_Badflow_Empty();
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+
+            List<Project> retrievedEntities = (List<Project>) await Repository.GetAll();
+            Assert.AreEqual(0, retrievedEntities.Count);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task GetAllAsyncTest_GoodFlow([ProjectDataSource(5)] List<Project> entities)
+        public override async Task GetAllAsyncTest_GoodFlow([ProjectDataSource(5)]List<Project> entities)
         {
-            return base.GetAllAsyncTest_GoodFlow(entities);
+            int amountToTest = entities.Count;
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+
+            await DbContext.AddRangeAsync(entities);
+            await DbContext.SaveChangesAsync();
+
+            List<Project> retrievedEntities = (List<Project>) await Repository.GetAll();
+            Assert.AreEqual(amountToTest, retrievedEntities.Count);
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task RemoveAsyncTest_BadFlow_NotExists([ProjectDataSource] Project entity)
+        public override async Task RemoveAsyncTest_BadFlow_NotExists([ProjectDataSource]Project entity)
         {
-            return base.RemoveAsyncTest_BadFlow_NotExists(entity);
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+            Repository.Add(entity);
+            TaskPublisher.Verify();
+            await DbContext.SaveChangesAsync();            
+            Assert.ThrowsAsync<NullReferenceException>(async () => await Repository.RemoveAsync(-1));
+
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task RemoveAsyncTest_GoodFlow([ProjectDataSource] Project entity)
+        public override async Task RemoveAsyncTest_GoodFlow([ProjectDataSource]Project entity)
         {
-            return base.RemoveAsyncTest_GoodFlow(entity);
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+            Repository.Add(entity);
+            TaskPublisher.Verify();
+            await DbContext.SaveChangesAsync();
+
+            Type type = entity.GetType();
+            PropertyInfo property = type.GetProperty("Id");
+            int id;
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                id = (int) property.GetValue(entity);
+            }
+
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_DELETE))).Verifiable();
+
+            await Repository.RemoveAsync(id);
+            await DbContext.SaveChangesAsync();
+            TaskPublisher.Verify();
+            Assert.NotNull(Repository.FindAsync(id));
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task UpdateTest_BadFlow_NotExists([ProjectDataSource] Project entity,
-                                                          [ProjectDataSource] Project updateEntity)
+        public override async Task UpdateTest_BadFlow_NotExists([ProjectDataSource]Project entity, [ProjectDataSource]Project updateEntity)
         {
-            return base.UpdateTest_BadFlow_NotExists(entity, updateEntity);
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+
+            Repository.Add(entity);
+            await DbContext.SaveChangesAsync();
+
+            Type type = entity.GetType();
+            PropertyInfo property = type.GetProperty("Id");
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                property.SetValue(updateEntity, -1);
+            }
+
+            Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
+            {
+                Repository.Update(updateEntity);
+                await DbContext.SaveChangesAsync();
+            });
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task UpdateTest_BadFlow_Null([ProjectDataSource] Project entity)
+        public override async Task UpdateTest_BadFlow_Null([ProjectDataSource]Project entity)
         {
-            return base.UpdateTest_BadFlow_Null(entity);
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+
+            Repository.Add(entity);
+            await DbContext.SaveChangesAsync();
+
+            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            {
+                Repository.Update(null);
+                await DbContext.SaveChangesAsync();
+            });
         }
 
         /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
         [Test]
-        public override Task UpdateTest_GoodFlow([ProjectDataSource] Project entity,
-                                                 [ProjectDataSource] Project updateEntity)
+        public override async Task UpdateTest_GoodFlow([ProjectDataSource]Project entity, [ProjectDataSource]Project updateEntity)
         {
-            return base.UpdateTest_GoodFlow(entity, updateEntity);
+            Project copy = entity.CloneObject<Project>();
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+
+            Repository.Add(entity);
+            await DbContext.SaveChangesAsync();
+
+            Type type = entity.GetType();
+            PropertyInfo property = type.GetProperty("Id");
+            int id;
+            if(property == null)
+            {
+                throw new Exception("Id property does not exist");
+            } else
+            {
+                id = (int) property.GetValue(entity);
+            }
+            TaskPublisher.Setup(x => x.RegisterTask(It.IsAny<String>(),
+                It.Is<Subject>(x => x == Subject.ELASTIC_CREATE_OR_UPDATE))).Verifiable();
+
+            Repository.Update(entity);
+            await DbContext.SaveChangesAsync();
+            Assert.AreEqual(entity, await Repository.FindAsync(id));
+            Assert.AreNotEqual(copy, await Repository.FindAsync(id));
+            TaskPublisher.VerifyAll();
         }
 
         private List<Project> SetStaticTestData(List<Project> projects, List<User> users = null)
@@ -866,6 +1129,56 @@ namespace Repositories.Tests
                 }
             }
 
+            return projects;
+        }
+
+        private void ProjectToEsProjectESDTO(Project project, ESProjectDTO dto)
+        {
+            List<int> likes = new List<int>();
+            if(project.Likes != null)
+            {
+                foreach(ProjectLike projectLike in project.Likes)
+                {
+                    likes.Add(projectLike.UserId);
+                }
+            }
+            dto.Description = project.Description;
+            dto.ProjectName = project.Name;
+            dto.Id = project.Id;
+            dto.Created = project.Created;
+            dto.Likes = likes;
+        }
+
+        private List<ESProjectDTO> ProjectsToProjectESDTO(List<Project> projects)
+        {
+            List<ESProjectDTO> convertedProjects = new List<ESProjectDTO>();
+            foreach(Project project in projects)
+            {
+                ESProjectDTO convertedProject = new ESProjectDTO();
+                ProjectToEsProjectESDTO(project, convertedProject);
+                convertedProjects.Add(convertedProject);
+
+            }
+            return convertedProjects;
+        }
+
+        private void ParseJsonToESProjectFormatDTOList(IRestResponse restResponse, List<ESProjectDTO> esProjectFormats)
+        {
+            JObject esProjects = JObject.Parse(restResponse.Content);
+            JToken projects = esProjects.GetValue("hits")["hits"];
+            foreach(JToken project in projects)
+            {
+                esProjectFormats.Add(project.Last.First.ToObject<ESProjectDTO>());
+            }
+        }
+
+        private async Task<List<Project>> ConvertProjects(List<ESProjectDTO> elasticSearchProjects)
+        {
+            List<Project> projects = new List<Project>();
+            foreach(ESProjectDTO p in elasticSearchProjects)
+            {
+                projects.Add(await Repository.FindWithUserCollaboratorsAndInstitutionsAsync(p.Id));
+            }
             return projects;
         }
 

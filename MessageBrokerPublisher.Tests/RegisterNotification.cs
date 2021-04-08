@@ -31,7 +31,7 @@ namespace MessageBrokerPublisher.Tests
     {
 
         [Test]
-        public void RegisterNotification_EmailNotification_NotificationRegistered()
+        public void RegisterTask_EmailNotification_NotificationRegistered()
         {
             // Arrange
             EmailNotificationRegister notification =
@@ -75,10 +75,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.Setup(x => x.CreateConnection())
                                  .Returns(connectionMock.Object);
 
-            ITaskPublisher notificationSender = new TaskPublisher(connectionFactoryMock.Object);
+            ITaskPublisher taskPublisher = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act
-            notificationSender.RegisterTask(payload, Subject.EMAIL);
+            taskPublisher.RegisterTask(payload, Subject.EMAIL);
 
             // Assert
             connectionFactoryMock.Verify();
@@ -87,7 +87,7 @@ namespace MessageBrokerPublisher.Tests
         }
 
         [Test]
-        public void RegisterNotification_EmailNotification_WithoutPayload_Throws()
+        public void RegisterTask_EmailNotification_WithoutPayload_Throws()
         {
             // Arrange
             EmailNotificationRegister notification =
@@ -131,10 +131,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.Setup(x => x.CreateConnection())
                                  .Returns(connectionMock.Object);
 
-            ITaskPublisher notificationSender = new TaskPublisher(connectionFactoryMock.Object);
+            ITaskPublisher taskPublisher = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => notificationSender.RegisterTask(null, Subject.EMAIL));
+            Assert.Throws<ArgumentNullException>(() => taskPublisher.RegisterTask(null, Subject.EMAIL));
         }
 
     }
