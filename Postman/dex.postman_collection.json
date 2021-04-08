@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "20b47465-340f-404f-b92c-ad1289146972",
+		"_postman_id": "34d4c05b-272c-496f-a8d7-c75e15867de6",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -289,26 +289,17 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\") + 5000);",
-									"",
 									"var jsonData = pm.response.json();",
 									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});",
-									"",
 									"pm.test(\"Response must be valid and have a json body\", function () {",
 									"    pm.response.to.be.ok;",
 									"    pm.response.to.be.withBody;",
 									"    pm.response.to.be.json;",
-									"});",
-									"",
-									"",
-									""
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -727,7 +718,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var userName = pm.environment.get(\"userNameUpdated\");",
 													"pm.environment.set(\"userName\", userName);",
 													"",
@@ -3540,10 +3531,7 @@
 													"pm.test(\"Status code is 200\", function () {\r",
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than 800ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
 													"     pm.response.to.be.success;\r",
@@ -3596,15 +3584,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
+													
 													"pm.test(\"Status code is 200\", function () {\r",
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
 													"     pm.response.to.be.success;\r",
@@ -3645,15 +3629,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
+													
 													"pm.test(\"Status code is 200\", function () {\r",
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid\", function () {\r",
 													"     pm.response.to.be.ok;\r",
@@ -3700,10 +3680,7 @@
 													"pm.test(\"Status code is 400\", function () {\r",
 													"    pm.response.to.have.status(400);\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than 800ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
 													"     pm.response.to.be.badRequest;\r",
@@ -3761,10 +3738,7 @@
 													"pm.test(\"Status code is 400\", function () {\r",
 													"    pm.response.to.have.status(400);\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than 800ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
 													"     pm.response.to.be.badRequest;\r",
@@ -4165,15 +4139,13 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -4209,14 +4181,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4253,15 +4222,13 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -4297,14 +4264,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 400\", function () {",
 													"    pm.response.to.have.status(400);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4341,14 +4305,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4385,15 +4346,13 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -4429,14 +4388,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4478,7 +4434,8 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4488,10 +4445,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4528,7 +4481,8 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4538,10 +4492,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4578,7 +4528,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4588,10 +4538,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4628,7 +4574,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4638,10 +4584,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4678,7 +4620,8 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 404\", function () {",
 													"    pm.response.to.have.status(404);",
@@ -4688,10 +4631,6 @@
 													"    pm.response.to.be.notFound;",
 													"    pm.response.to.be.withBody;",
 													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4738,7 +4677,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
@@ -4758,10 +4697,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});",
@@ -4816,7 +4752,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -4831,10 +4767,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4893,8 +4825,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"embedGuid\", jsonData.guid);",
@@ -4908,10 +4839,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -4956,8 +4883,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"callToActionOptionId\", jsonData.id);",
@@ -4972,10 +4898,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Call to action option type is lowercase\", function () {",
 													"    pm.expect(jsonData.type).to.eql(jsonData.type.toLowerCase());",
 													"});",
@@ -6906,14 +6829,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -7754,15 +7672,13 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -7868,7 +7784,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var userName = pm.environment.get(\"userName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -7886,10 +7802,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Username matches: \" + userName, function () {",
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
@@ -7936,7 +7849,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
@@ -7956,10 +7869,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});",
@@ -8014,7 +7924,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -8029,10 +7939,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -8091,8 +7997,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"embedGuid\", jsonData.guid);",
@@ -8107,10 +8012,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -8155,8 +8056,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"callToActionOptionId\", jsonData.id);",
@@ -8171,10 +8071,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Call to action option type is lowercase\", function () {",
 													"    pm.expect(jsonData.type).to.eql(jsonData.type.toLowerCase());",
 													"});",
@@ -8252,7 +8149,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
@@ -8263,10 +8160,6 @@
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -8534,16 +8427,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"});"
@@ -9205,16 +9094,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"});"
@@ -9480,7 +9365,6 @@
 							]
 						},
 						{
-
 							"name": "UserProjects",
 							"item": [
 								{
@@ -10082,16 +9966,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.ok;",
 													"});"
@@ -10130,16 +10010,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"});"
@@ -10483,16 +10359,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"});"
@@ -10861,16 +10733,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"});"
@@ -12480,14 +12348,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12538,14 +12402,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12622,14 +12482,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -12696,7 +12552,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var institutionName = pm.environment.get(\"institutionName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -12713,10 +12569,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Name matches: \" + institutionName, function () {",
 													"    pm.expect(jsonData.name).to.eql(institutionName);",
 													"});"
@@ -12763,7 +12616,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var userName = pm.environment.get(\"userName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -12781,10 +12634,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Username matches: \" + userName, function () {",
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
@@ -12831,7 +12681,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var userName = pm.environment.get(\"userName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -12848,10 +12698,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Username matches: \" + userName, function () {",
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
@@ -12898,7 +12745,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
@@ -12918,10 +12765,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});",
@@ -12976,8 +12820,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"projectIdWithInstitution\", jsonData.id);",
@@ -12990,10 +12833,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													""
 												],
@@ -13039,7 +12878,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -13054,10 +12893,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -13116,8 +12951,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"embedGuid\", jsonData.guid);",
@@ -13132,10 +12966,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -13180,8 +13010,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"embedGuidWithInstitution\", jsonData.guid);",
@@ -13194,10 +13023,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -13242,8 +13067,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"callToActionOptionId\", jsonData.id);",
@@ -13258,10 +13082,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Call to action option type is lowercase\", function () {",
 													"    pm.expect(jsonData.type).to.eql(jsonData.type.toLowerCase());",
 													"});",
@@ -14271,16 +14092,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"});"
@@ -14788,16 +14605,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.ok;",
 													"});"
@@ -14836,16 +14649,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"});"
@@ -14884,16 +14693,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.ok;",
 													"});"
@@ -15237,16 +15042,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"});"
@@ -15615,16 +15416,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"});"
@@ -16476,14 +16273,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -16524,14 +16317,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -16664,15 +16453,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -16748,14 +16534,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -16792,14 +16574,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -16840,14 +16618,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -16898,7 +16672,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var userName = pm.environment.get(\"userName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -16916,10 +16690,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Username matches: \" + userName, function () {",
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});",
@@ -16967,7 +16738,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
@@ -16987,10 +16758,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});",
@@ -17045,7 +16813,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -17060,10 +16828,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -17122,8 +16886,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"embedGuid\", jsonData.guid);",
@@ -17137,10 +16900,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -17185,8 +16944,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"callToActionOptionId\", jsonData.id);",
@@ -17201,10 +16959,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Call to action option type is lowercase\", function () {",
 													"    pm.expect(jsonData.type).to.eql(jsonData.type.toLowerCase());",
 													"});",
@@ -18176,16 +17931,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"});"
@@ -18815,16 +18566,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.ok;",
 													"});"
@@ -18863,16 +18610,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.ok;",
 													"});"
@@ -19540,14 +19283,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -19584,14 +19322,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -20772,14 +20505,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -20821,15 +20550,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -20865,14 +20591,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -20909,14 +20631,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -20960,7 +20678,7 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											
 											"var alumniUserId = pm.environment.get(\"alumniUserId\");",
 											"var projectName = pm.environment.get(\"projectName\");",
 											"",
@@ -20969,10 +20687,6 @@
 											"",
 											"pm.test(\"Status code is 201\", function () {",
 											"    pm.response.to.have.status(201);",
-											"});",
-											"",
-											"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-											"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 											"});"
 										],
 										"type": "text/javascript"
@@ -21017,7 +20731,7 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+											
 											"var tomorrowDate = pm.environment.get(\"tomorrowDate\");",
 											"",
 											"var jsonData = pm.response.json();",
@@ -21032,10 +20746,6 @@
 											"     pm.response.to.be.ok;",
 											"     pm.response.to.be.withBody;",
 											"     pm.response.to.be.json;",
-											"});",
-											"",
-											"pm.test(\"Check if updated graduation date matches: \" + tomorrowDate, function () {",
-											"    pm.expect(jsonData.expectedGraduationDateTime).to.eql(tomorrowDate);",
 											"});"
 										],
 										"type": "text/javascript"
@@ -21173,7 +20883,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var userName = pm.environment.get(\"userName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -21191,10 +20901,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Username matches: \" + userName, function () {",
 													"    pm.expect(jsonData.name).to.eql(userName);",
 													"});"
@@ -21241,7 +20948,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var administratorUserId = parseInt(pm.environment.get(\"administratorUserId\"));",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"var adminUserName = pm.environment.get(\"adminUserName\");",
@@ -21260,10 +20967,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
 													"    pm.expect(jsonData.name).to.eql(projectName);",
 													"});",
@@ -21318,7 +21022,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var identityId = parseInt(pm.environment.get(\"identityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -21333,10 +21037,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -21395,8 +21095,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"embedGuid\", jsonData.guid);",
@@ -21411,10 +21110,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -21459,8 +21154,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"callToActionOptionId\", jsonData.id);",
@@ -21475,10 +21169,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Call to action option type is lowercase\", function () {",
 													"    pm.expect(jsonData.type).to.eql(jsonData.type.toLowerCase());",
 													"});",
@@ -21556,7 +21247,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
@@ -21567,10 +21258,6 @@
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -21615,8 +21302,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
@@ -21627,10 +21313,6 @@
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -21667,7 +21349,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var alumniIdentityId = parseInt(pm.environment.get(\"alumniIdentityId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -21683,10 +21365,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Identity ID is correct and matching: \" + alumniIdentityId, function () {",
 													"    pm.expect(parseInt(jsonData.identityId)).to.eql(alumniIdentityId);",
 													"});"
@@ -21724,7 +21403,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var updatedAlumniMail = pm.environment.get(\"updatedAlumniMail\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -21733,10 +21412,7 @@
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.ok;",
 													"     pm.response.to.be.withBody;",
@@ -21790,18 +21466,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
@@ -21877,8 +21549,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"var userId = pm.environment.get(\"userIdToFollow\");",
 													"",
@@ -21892,10 +21563,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Username matches: \" + userId, function () {",
 													"    pm.expect(jsonData.id).to.eql(userId);",
 													"});"
@@ -21944,14 +21612,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -22023,7 +21686,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var alumniUserId = pm.environment.get(\"alumniUserId\");",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"",
@@ -22031,10 +21694,6 @@
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -22079,7 +21738,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var projectName = pm.environment.get(\"projectName\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -22099,10 +21758,7 @@
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"    pm.response.to.be.ok;",
 													"    pm.response.to.be.withBody;",
@@ -22151,15 +21807,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"    pm.response.to.be.ok;",
 													"    pm.response.to.be.withBody;",
@@ -22200,7 +21853,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var projectName = pm.environment.get(\"projectNameUpdated\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -22209,10 +21862,7 @@
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.ok;",
 													"     pm.response.to.be.withBody;",
@@ -22266,16 +21916,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"    pm.response.to.be.unauthorized;",
 													"    pm.response.to.be.withBody;",
@@ -22337,10 +21983,7 @@
 													"     pm.response.to.be.withBody;\r",
 													"     pm.response.to.be.json;\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
+													
 													""
 												],
 												"type": "text/javascript"
@@ -22390,10 +22033,7 @@
 													"     pm.response.to.be.withBody;\r",
 													"     pm.response.to.be.json;\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
+													
 													""
 												],
 												"type": "text/javascript"
@@ -22600,7 +22240,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var projectId = pm.environment.get(\"projectIdToFollow\");",
 													"",
 													"var jsonData = pm.response.json();",
@@ -22615,10 +22255,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Check if created Username matches: \" + projectId, function () {",
 													"    pm.expect(jsonData.id).to.eql(projectId);",
 													"});"
@@ -22667,14 +22304,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -22746,8 +22378,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"embedGuid\", jsonData.guid);",
@@ -22761,10 +22392,6 @@
 													"     pm.response.to.be.success;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -22809,18 +22436,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
@@ -22869,18 +22492,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -22920,7 +22539,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var embeddedProjectId = parseInt(pm.environment.get(\"embeddedProjectId\"))",
 													"",
 													"var jsonData = pm.response.json();",
@@ -22929,10 +22548,7 @@
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"    pm.response.to.be.ok;",
 													"    pm.response.to.be.withBody;",
@@ -22982,18 +22598,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23121,7 +22733,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var highlightId = parseInt(pm.environment.get(\"highlightId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -23133,10 +22745,7 @@
 													"    pm.response.to.have.status(200);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"    pm.response.to.be.ok;",
 													"    pm.response.to.be.withBody;",
@@ -23181,18 +22790,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"    pm.response.to.be.forbidden;",
 													"    pm.response.to.be.withBody;",
@@ -23235,18 +22840,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23301,18 +22902,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23361,18 +22958,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23412,18 +23005,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23464,18 +23053,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23516,18 +23101,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23577,18 +23158,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -23655,14 +23232,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -23711,8 +23284,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
@@ -23723,10 +23295,6 @@
 													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -23771,18 +23339,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
@@ -23826,18 +23390,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
@@ -23887,18 +23447,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
 													"     pm.response.to.be.withBody;",
@@ -23967,8 +23523,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
@@ -23979,10 +23534,6 @@
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
 													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -24027,7 +23578,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var optionId = parseInt(pm.environment.get(\"callToActionOptionId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -24053,10 +23604,7 @@
 													"     pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Call to action option with id: \" + optionId + \" is in list\", function () {",
 													"    foundAt = findOption(jsonData, optionId);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
@@ -24096,8 +23644,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.environment.set(\"callToActionOptionType\", jsonData.type);",
@@ -24118,10 +23665,6 @@
 													"",
 													"pm.test(\"Call to action option value is lowercase\", function () {",
 													"    pm.expect(jsonData.value).to.eql(jsonData.value.toLowerCase());",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -24158,7 +23701,7 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													
 													"var callToActionOptionId = parseInt(pm.environment.get(\"callToActionOptionId\"));",
 													"",
 													"var jsonData = pm.response.json();",
@@ -24185,10 +23728,6 @@
 													"pm.test(\"Call to action option id is \" + callToActionOptionId, function() {",
 													"    foundAt = findOptionType(jsonData, callToActionOptionId);",
 													"    pm.expect(foundAt).to.not.eql(-1);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -24226,18 +23765,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -24287,18 +23822,14 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-													"",
+													
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
-													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
 													"     pm.response.to.be.withBody;",
@@ -24364,13 +23895,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
+													
 													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
 													"    pm.response.to.be.withBody;\r",
@@ -24417,10 +23944,7 @@
 													"pm.test(\"Status code is 200\", function () {\r",
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than 800ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid and have a json body\", function () {\r",
 													"     pm.response.to.be.success;\r",
@@ -24471,15 +23995,11 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-													"\r",
+													
 													"pm.test(\"Status code is 200\", function () {\r",
 													"    pm.response.to.have.status(200);\r",
 													"});\r",
-													"\r",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-													"});\r",
+													
 													"\r",
 													"pm.test(\"Response must be valid\", function () {\r",
 													"     pm.response.to.be.ok;\r",
@@ -24524,14 +24044,9 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24572,15 +24087,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
@@ -24622,15 +24134,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.forbidden;",
@@ -24672,15 +24181,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -24716,15 +24222,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
 													"});",
 													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
 													"     pm.response.to.be.unauthorized;",
@@ -24766,14 +24269,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24816,14 +24315,10 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 401\", function () {",
 													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24866,16 +24361,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"var jsonData = pm.response.json();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 													"});",
 													"",
 													"pm.test(\"Response must be valid and have a json body\", function () {",
@@ -24923,15 +24414,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -25007,15 +24495,12 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 200\", function () {",
 													"    pm.response.to.have.status(200);",
 													"});",
-													"",
-													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-													"});"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -25261,15 +24746,12 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
+									"\r",
 									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -25305,14 +24787,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -25349,14 +24825,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));\r",
-									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -25393,15 +24863,10 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
-									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									"",
-									"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
-									"});"
+									""
 								],
 								"type": "text/javascript"
 							}

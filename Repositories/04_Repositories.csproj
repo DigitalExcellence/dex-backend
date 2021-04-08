@@ -7,11 +7,35 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <None Remove="ElasticSearch\Queries\IndexProjects.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="ElasticSearch\Queries\IndexProjects.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="RestSharp" Version="106.11.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data\06_Data.csproj" />
+    <ProjectReference Include="..\MessageBrokerPublisher\09_MessageBrokerPublisher.csproj" />
     <ProjectReference Include="..\Models\07_Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ElasticSearch\Queries\GetProjectRecommendations.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ElasticSearch\Queries\GetSimilarUsers.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

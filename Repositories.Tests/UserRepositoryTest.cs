@@ -15,11 +15,19 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Data;
+using Microsoft.EntityFrameworkCore;
 using Models;
+using Moq;
 using NUnit.Framework;
+using Repositories.ElasticSearch;
 using Repositories.Tests.Base;
+using Repositories.Tests.DataGenerators;
 using Repositories.Tests.DataSources;
+using RestSharp;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Repositories.Tests
@@ -28,8 +36,21 @@ namespace Repositories.Tests
     [TestFixture]
     public class UserRepositoryTest : RepositoryTest<User, UserRepository>
     {
+        protected Mock<IElasticSearchContext> ElasticSearchContext;
+        protected Mock<Queries> Queries;
+        protected Mock<RestClient> RestClientMock;
 
-        protected new IUserRepository Repository => base.Repository;
+        [SetUp]
+        public override void Initialize()
+        {
+            DbContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+            ElasticSearchContext = new Mock<IElasticSearchContext>();
+            Queries = new Mock<Queries>();
+
+            RestClientMock = new Mock<RestClient>();
+            ElasticSearchContext.Setup(x => x.CreateRestClientForElasticRequests()).Returns(RestClientMock.Object);
+            Repository = new UserRepository(DbContext, ElasticSearchContext.Object, Queries.Object);
+        }
 
         /// <summary>
         ///     User is retrieved correctly
@@ -99,6 +120,7 @@ namespace Repositories.Tests
         [Test]
         public override Task AddAsyncTest_GoodFlow([UserDataSource] User entity)
         {
+
             return base.AddAsyncTest_GoodFlow(entity);
         }
 
@@ -193,6 +215,46 @@ namespace Repositories.Tests
         {
             return base.UpdateTest_GoodFlow(entity, updateEntity);
         }
+
+        /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
+        [Test]
+        public void GetSimilarUsers_GoodFlow()
+        {
+            IRestResponse restResponse = new RestResponse()
+                                         {
+                                             StatusCode = HttpStatusCode.OK,
+                                             Content = ElasticSearchResults.GetSimilarUserResult
+                                         };
+
+            RestClientMock.Setup(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.POST)))
+                          .Returns(restResponse);
+            List<int> similarUsers = Repository.GetSimilarUsers(1);
+            List<int> expectedSimilarUsers = new List<int>()
+                                             {
+                                                 6, 7, 30, 8, 23, 27, 29, 33, 10
+                                             };
+
+            CollectionAssert.AreEqual(expectedSimilarUsers, similarUsers);
+        }
+
+        /// <inheritdoc cref="RepositoryTest{TDomain, TRepository}" />
+        [Test]
+        public void GetSimilarUsers_BadFlow()
+        {
+            IRestResponse restResponse = new RestResponse()
+                                         {
+                                             StatusCode = HttpStatusCode.BadRequest,
+                                             Content = ElasticSearchResults.GetSimilarUserResult
+                                         };
+
+            RestClientMock.Setup(x => x.Execute(It.Is<RestRequest>(x => x.Method == Method.POST)))
+                          .Returns(restResponse);
+            List<int> similarUsers = Repository.GetSimilarUsers(1);
+            List<int> expectedSimilarUsers = new List<int>();
+
+            CollectionAssert.AreEqual(expectedSimilarUsers, similarUsers);
+        }
+
 
     }
 

@@ -15,12 +15,23 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using MessageBrokerPublisher;
 using Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Repositories;
+using RestSharp;
+using RestSharp.Authenticators;
 using Services.Base;
+using Services.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
+using File = Models.File;
 
 namespace Services.Services
 {
@@ -82,6 +93,19 @@ namespace Services.Services
         /// <returns>boolean</returns>
         bool UserWithRoleExists(Role role);
 
+        /// <summary>
+        ///     This is the interface method which get x amount of project recommendation for the user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="amountOfProjects"></param>
+        /// <returns>List of projects</returns>
+        Task<List<Project>> GetRecommendedProjects(int userId, int amountOfProjects);
+
+        /// <summary>
+        ///     This is the interface method which gets all expected graduating users.
+        /// </summary>
+        /// <param name="amountOfMonths"></param>
+        /// <returns>List of users</returns>
         List<User> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
     }
@@ -91,12 +115,20 @@ namespace Services.Services
     /// </summary>
     public class UserService : Service<User>, IUserService
     {
+        private readonly ElasticConfig elasticConfig;
+        private readonly IProjectRepository projectRepository;
 
         /// <summary>
         ///     This is the constructor of the user service
         /// </summary>
         /// <param name="repository"></param>
-        public UserService(IUserRepository repository) : base(repository) { }
+        /// <param name="projectRepository"></param>
+        /// <param name="config"></param>
+        public UserService(IUserRepository repository, IProjectRepository projectRepository, ElasticConfig config) : base(repository)
+        {
+            elasticConfig = config;
+            this.projectRepository = projectRepository;
+        }
 
         /// <summary>
         ///     Gets the repository
@@ -180,6 +212,64 @@ namespace Services.Services
             return Repository.UserWithRoleExists(role);
         }
 
+        /// <summary>
+        ///     This is the method which get x amount of project recommendation for the user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="amountOfProjects"></param>
+        /// <returns>List of projects</returns>
+        public async Task<List<Project>> GetRecommendedProjects(int userId, int amountOfProjects)
+        {
+            // Get all similar users
+            IEnumerable<int> similarUserIds = GetSimilarUsers(userId);
+            List<Project> recommendedProjects = new List<Project>();
+
+            // Iterate through users and their liked projects (which are not liked by user with userId) to find projects to recommend. When 10 projects are found the projects are returned.
+            foreach(int user in similarUserIds)
+            {
+                List<Project> projectsFromUser = await projectRepository.GetLikedProjectsFromSimilarUser(userId, user);
+                foreach(Project project in projectsFromUser.Where(project => !recommendedProjects.Contains(project)))
+                {
+                    recommendedProjects.Add(project);
+                    if(recommendedProjects.Count == amountOfProjects)
+                    {
+                        return recommendedProjects;
+                    }
+                }
+            }
+
+            // If no recommendations were found for similar users then throw error. 
+            if(recommendedProjects.Count == 0)
+            {
+                throw new RecommendationNotFoundException("Similar user(s) do not have any projects you do not like yet.");
+            }
+            
+            return recommendedProjects;
+        }
+
+        /// <summary>
+        ///     This is the method which find a list of similar users (based on project likes) in order most similar to least similar user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>List of user ids</returns>
+        private IEnumerable<int> GetSimilarUsers(int userId)
+        {
+            List<int> foundUserIds = Repository.GetSimilarUsers(userId);
+
+            // If no similar users were found then throw error.
+            if(foundUserIds.Count == 0)
+            {
+                throw new RecommendationNotFoundException("No similar user(s) were found.");
+            }
+
+            return foundUserIds;
+        }
+
+        /// <summary>
+        ///     This is the interface method which gets all expected graduating users.
+        /// </summary>
+        /// <param name="amountOfMonths"></param>
+        /// <returns>List of users</returns>
         public List<User> GetAllExpectedGraduatingUsers(int amountOfMonths)
         {
             List<User> users = Repository.GetAllExpectedGraduatingUsers(amountOfMonths)

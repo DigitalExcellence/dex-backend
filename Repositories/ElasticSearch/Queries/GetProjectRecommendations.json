@@ -1,0 +1,16 @@
+{
+    "query": {
+        "bool": {
+            "must": {
+                "term": {
+                    "Likes": "ReplaceWithSimilarUserId"
+                }
+            },
+            "must_not": {
+                "term": {
+                    "Likes": "ReplaceWithUserId"
+                }
+            }
+        }
+    }
+}

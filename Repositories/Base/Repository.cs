@@ -146,7 +146,14 @@ namespace Repositories.Base
                 throw new KeyNotFoundException($"Id: {id} not found");
             }
 
-            Remove(entity);
+            if(DbContext.Entry(entity)
+                        .State ==
+               EntityState.Detached)
+            {
+                DbSet.Attach(entity);
+            }
+
+            DbSet.Remove(entity);
         }
 
         /// <summary>

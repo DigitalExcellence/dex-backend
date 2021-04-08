@@ -43,13 +43,10 @@ namespace NotificationSystem.Tests
             modelMock.Setup(x => x.BasicAck(eventArgs.DeliveryTag, false))
                      .Verifiable();
             Mock<EventingBasicConsumer> consumerMock = new Mock<EventingBasicConsumer>(modelMock.Object);
-            Mock<INotificationService> notificationmock = new Mock<INotificationService>();
-            notificationmock.Setup(x => x.ParsePayload(It.Is<string>(x => x == payload)))
-                            .Verifiable();
-            notificationmock.Setup(x => x.ValidatePayload())
-                            .Verifiable();
-            notificationmock.Setup(x => x.ExecuteTask())
-                            .Verifiable();
+            Mock<ICallbackService> notificationmock = new Mock<ICallbackService>();
+            notificationmock.Setup(x => x.ParsePayload(It.Is<string>(x => x == payload))).Verifiable();
+            notificationmock.Setup(x => x.ValidatePayload()).Verifiable();
+            notificationmock.Setup(x => x.ExecuteTask()).Verifiable();
 
             RabbitMQListener listener = new RabbitMQListener(modelMock.Object);
 

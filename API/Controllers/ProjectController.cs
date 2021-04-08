@@ -28,6 +28,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -106,6 +107,33 @@ namespace API.Controllers
             this.institutionService = institutionService;
         }
 
+
+
+        /// <summary>
+        ///     This method is responsible for retrieving all projects in ElasticSearch formatted model. After these project are retrieved the endpoint registers the projects at the messagebroker to synchronize.
+        /// </summary>
+        /// <returns>This method returns a list of in ElasticSearch formatted projects.</returns>
+        /// <response code="200">This endpoint returns a list of in ElasticSearch formatted projects.</response>
+        [HttpGet("export")]
+        [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectExport))]
+        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> MigrateDatabaseToElasticSearch()
+        {
+            try
+            {
+                List<Project> projectsToExport = await projectService.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
+                projectService.MigrateDatabase(projectsToExport);
+
+                return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectsToExport));
+            } catch(Exception e)
+            {
+                Log.Logger.Error(e.Message);
+                return BadRequest(e.Message);
+            }
+
+        }
+
         /// <summary>
         ///     This method is responsible for retrieving all projects.
         /// </summary>
@@ -116,6 +144,8 @@ namespace API.Controllers
         ///     The 400 Bad Request status code is returned when values inside project filter params resource are
         ///     invalid.
         /// </response>
+        ///
+
         [HttpGet]
         [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
@@ -743,8 +773,10 @@ namespace API.Controllers
                 ProjectLike like = new ProjectLike(projectToLike, currentUser);
                 await userProjectLikeService.AddAsync(like)
                                             .ConfigureAwait(false);
-
                 userProjectLikeService.Save();
+
+                // Update Elastic Database about this change.
+                await userProjectLikeService.SyncProjectToES(projectToLike);
                 return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(like));
             } catch(DbUpdateException e)
             {
@@ -821,6 +853,9 @@ namespace API.Controllers
             userProjectLikeService.Remove(projectLike);
 
             userProjectLikeService.Save();
+
+            // Update Elastic Database about this change.
+            await userProjectLikeService.SyncProjectToES(projectToLike);
             return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
         }
 
