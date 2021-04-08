@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1a7e3cdd-296e-4e09-a0a9-094a8751503d",
+		"_postman_id": "dc51f2d2-522b-4f93-a2cc-7d6baebc3388",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -8027,6 +8027,536 @@
 							]
 						},
 						{
+							"name": "WizardPage",
+							"item": [
+								{
+									"name": "WizardPage-CreateWizardPage-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_WizardPage-CreateWizardPage-Administrator\",\r\n  \"description\": \"postman_WizardPage-CreateWizardPage-Administrator-Description\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetAllWizardPages-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetWizardPageById-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-UpdateWizardPage-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{updatedWizardPageName}}\",\r\n  \"description\": \"postmantest_Institution-UpdateInstitution-Administrator\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetUpdatedWizardPage-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "DataSource",
+							"item": [
+								{
+									"name": "DataSource-GetAllDataSources-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Retrieved data sources are not empty\", function () {",
+													"    pm.expect(jsonData[0]).not.equal(null);",
+													"    pm.environment.set(\"dataSourceId\", jsonData[0].guid);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetWizardPageById-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource",
+												"{{dataSourceId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-UpdateWizardPage-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"Title\": \"{{updatedDataSourceName}}\",\r\n  \"description\": \"postmantest_DataSource-UpdateDataSource-Administrator\",\r\n  \"IsVisible\": true,\r\n  \"IconId\": 0,\r\n  \"WizardPageResources\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource",
+												"{{dataSourceId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetUpdatedWizardPage-Guest",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.unauthorized;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "CallToActionOption",
 							"item": [
 								{
@@ -8335,536 +8865,6 @@
 											""
 										]
 									}
-								}
-							]
-						},
-						{
-							"name": "DataSource",
-							"item": [
-								{
-									"name": "DataSource-GetAllDataSources-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Retrieved data sources are not empty\", function () {",
-													"    pm.expect(jsonData[0]).not.equal(null);",
-													"    pm.environment.set(\"dataSourceId\", jsonData[0].guid);",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-GetWizardPageById-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource",
-												"{{dataSourceId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-UpdateWizardPage-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"Title\": \"{{updatedDataSourceName}}\",\r\n  \"description\": \"postmantest_DataSource-UpdateDataSource-Administrator\",\r\n  \"IsVisible\": true,\r\n  \"IconId\": 0,\r\n  \"WizardPageResources\": null\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource",
-												"{{dataSourceId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-GetUpdatedWizardPage-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"WizardPage",
-												"{{wizardPageId}}"
-											],
-											"query": [
-												{
-													"key": "",
-													"value": "",
-													"disabled": true
-												}
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "WizardPage",
-							"item": [
-								{
-									"name": "WizardPage-CreateWizardPage-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"postman_WizardPage-CreateWizardPage-Administrator\",\r\n  \"description\": \"postman_WizardPage-CreateWizardPage-Administrator-Description\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/WizardPage",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"WizardPage"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-GetAllWizardPages-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/WizardPage",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"WizardPage"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-GetWizardPageById-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"WizardPage",
-												"{{wizardPageId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-UpdateWizardPage-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{updatedWizardPageName}}\",\r\n  \"description\": \"postmantest_Institution-UpdateInstitution-Administrator\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"WizardPage",
-												"{{wizardPageId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-GetUpdatedWizardPage-Guest",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 401\", function () {",
-													"    pm.response.to.have.status(401);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.unauthorized;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"WizardPage",
-												"{{wizardPageId}}"
-											],
-											"query": [
-												{
-													"key": "",
-													"value": "",
-													"disabled": true
-												}
-											]
-										}
-									},
-									"response": []
 								}
 							]
 						},
@@ -13504,23 +13504,27 @@
 							]
 						},
 						{
-							"name": "File",
+							"name": "DataSource",
 							"item": [
 								{
-									"name": "Get-Files-Registered",
+									"name": "DataSource-GetAllDataSources-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});"
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -13531,121 +13535,132 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/File",
+											"raw": "{{apiUrl}}/api/DataSource",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"File"
+												"DataSource"
 											]
 										}
 									},
 									"response": []
 								},
 								{
-									"name": "Post-File-Registered",
+									"name": "WizardPage-GetWizardPageById-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"pm.environment.set(\"registeredFileId\", jsonData.id)\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.success;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
+													"var jsonData = pm.response.json();",
+													"",
+													"var dataSourceId = pm.environment.get(\"dataSourceId\");",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check previously created data source with id \" + dataSourceId, function () {",
+													"    pm.expect(jsonData.guid).to.eql(dataSourceId);",
+													"});",
+													""
 												],
 												"type": "text/javascript"
 											}
 										}
 									],
 									"request": {
-										"method": "POST",
+										"method": "GET",
 										"header": [
 											{
 												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource",
+												"{{dataSourceId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-UpdateWizardPage-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
 												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
+												"disabled": true
 											}
 										],
 										"body": {
-											"mode": "formdata",
-											"formdata": [
-												{
-													"key": "File",
-													"type": "file",
-													"src": "Postman/testimage.png"
+											"mode": "raw",
+											"raw": "{\r\n  \"Title\": \"{{updatedDataSourceName}}\",\r\n  \"description\": \"postmantest_DataSource-UpdateDataSource-Administrator\",\r\n  \"IsVisible\": true,\r\n  \"IconId\": 0,\r\n  \"WizardPageResources\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
 												}
-											]
+											}
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/File",
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"File"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Delete-File-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{registeredUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/File/{{registeredFileId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"File",
-												"{{registeredFileId}}"
+												"DataSource",
+												"{{dataSourceId}}"
 											]
 										}
 									},
@@ -13895,27 +13910,23 @@
 							]
 						},
 						{
-							"name": "DataSource",
+							"name": "File",
 							"item": [
 								{
-									"name": "DataSource-GetAllDataSources-Registered",
+									"name": "Get-Files-Registered",
 									"event": [
 										{
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});"
 												],
 												"type": "text/javascript"
 											}
@@ -13926,132 +13937,121 @@
 										"header": [
 											{
 												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-GetWizardPageById-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"var dataSourceId = pm.environment.get(\"dataSourceId\");",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check previously created data source with id \" + dataSourceId, function () {",
-													"    pm.expect(jsonData.guid).to.eql(dataSourceId);",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource",
-												"{{dataSourceId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-UpdateWizardPage-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
 												"value": "{{registeredUserIdentityId}}",
-												"disabled": true
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/File",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Post-File-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"pm.environment.set(\"registeredFileId\", jsonData.id)\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"     pm.response.to.be.success;\r",
+													"     pm.response.to.be.withBody;\r",
+													"     pm.response.to.be.json;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
 											}
 										],
 										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"Title\": \"{{updatedDataSourceName}}\",\r\n  \"description\": \"postmantest_DataSource-UpdateDataSource-Administrator\",\r\n  \"IsVisible\": true,\r\n  \"IconId\": 0,\r\n  \"WizardPageResources\": null\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "File",
+													"type": "file",
+													"src": "Postman/testimage.png"
 												}
-											}
+											]
 										},
 										"url": {
-											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"raw": "{{apiUrl}}/api/File",
 											"host": [
 												"{{apiUrl}}"
 											],
 											"path": [
 												"api",
-												"DataSource",
-												"{{dataSourceId}}"
+												"File"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete-File-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid\", function () {\r",
+													"     pm.response.to.be.ok;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{registeredUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/File/{{registeredFileId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"File",
+												"{{registeredFileId}}"
 											]
 										}
 									},
@@ -18160,172 +18160,6 @@
 							]
 						},
 						{
-							"name": "DataSource",
-							"item": [
-								{
-									"name": "DataSource-GetAllDataSources-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-GetWizardPageById-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"var dataSourceId = pm.environment.get(\"dataSourceId\");",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Check previously created data source with id \" + dataSourceId, function () {",
-													"    pm.expect(jsonData.guid).to.eql(dataSourceId);",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource",
-												"{{dataSourceId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "WizardPage-UpdateWizardPage-DataOfficer",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.forbidden;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}",
-												"disabled": true
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"Title\": \"{{updatedDataSourceName}}\",\r\n  \"description\": \"postmantest_DataSource-UpdateDataSource-Administrator\",\r\n  \"IsVisible\": true,\r\n  \"IconId\": 0,\r\n  \"WizardPageResources\": null\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"DataSource",
-												"{{dataSourceId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
 							"name": "WizardPage",
 							"item": [
 								{
@@ -18559,6 +18393,172 @@
 												"api",
 												"WizardPage",
 												"{{wizardPageId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "DataSource",
+							"item": [
+								{
+									"name": "DataSource-GetAllDataSources-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-GetWizardPageById-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"var dataSourceId = pm.environment.get(\"dataSourceId\");",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.ok;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Check previously created data source with id \" + dataSourceId, function () {",
+													"    pm.expect(jsonData.guid).to.eql(dataSourceId);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource",
+												"{{dataSourceId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-UpdateWizardPage-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.forbidden;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"Title\": \"{{updatedDataSourceName}}\",\r\n  \"description\": \"postmantest_DataSource-UpdateDataSource-Administrator\",\r\n  \"IsVisible\": true,\r\n  \"IconId\": 0,\r\n  \"WizardPageResources\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/DataSource/{{dataSourceId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"DataSource",
+												"{{dataSourceId}}"
 											]
 										}
 									},
@@ -19388,6 +19388,66 @@
 											"path": [
 												"api",
 												"CallToActionOption"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-CreateWizardPage-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.environment.set(\"wizardPageId\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"     pm.response.to.be.success;",
+													"     pm.response.to.be.withBody;",
+													"     pm.response.to.be.json;",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"postman_WizardPage-CreateWizardPage-Administrator\",\r\n  \"description\": \"postman_WizardPage-CreateWizardPage-Administrator-Description\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage"
 											]
 										}
 									},
@@ -28103,6 +28163,50 @@
 												"api",
 												"User",
 												"{{createdUserId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WizardPage-DeleteWizardPage-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var responseTimeThreshold = parseInt(pm.environment.get(\"responseTimeThreshold\"));",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response time is less than \" + responseTimeThreshold + \"ms\", function () {",
+													"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/WizardPage/{{wizardPageId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"WizardPage",
+												"{{wizardPageId}}"
 											]
 										}
 									},

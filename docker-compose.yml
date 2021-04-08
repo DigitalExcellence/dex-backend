@@ -49,6 +49,26 @@ services:
       - 5004:5004
       - 5005:5005
 
+  elasticsynchronizer:
+    container_name: elasticsynchronizer
+    restart: on-failure
+    build: 
+      context: .
+      dockerfile: ElasticSynchronizer/Dockerfile
+    depends_on: 
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__Elastic__Hostname=elasticsearch
+      - App__Elastic__Username=elastic
+      - App__Elastic__Password=changeme
+      - App__Elastic__IndexUrl=projects/
+    networks:
+      rabbitmq-network: 
+      mssql-network: 
+
   api:
     container_name: api
     restart: on-failure
@@ -69,16 +89,45 @@ services:
       - App__RabbitMQ__Hostname=rabbitmq
       - App__RabbitMQ__Username=test
       - App__RabbitMQ__Password=test
+      - App__Elastic__Hostname=elasticsearch
+      - App__Elastic__Username=elastic
+      - App__Elastic__Password=changeme
+      - App__Elastic__IndexUrl=projects/ 
     networks:
       mssql-network:
       rabbitmq-network:
     ports:
       - 5000:5000
       - 5001:5001
-    deploy:
-       restart_policy:
-        condition: on-failure
 
+  elasticsearch:
+    container_name: elasticsearch
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: 7.10.0
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: ./elasticsearch/config/analysis/wn_s.txt
+        target: /usr/share/elasticsearch/config/analysis/wn_s.txt
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      mssql-network:
 
   notificationservice:
     container_name: notificationservice
@@ -117,6 +166,9 @@ services:
         rabbitmq-network:
         mssql-network:
 
+volumes:
+  elasticsearch:  
+
 networks:
   mssql-network:
     driver: bridge
@@ -126,3 +178,5 @@ networks:
         - subnet: 172.16.238.0/24
   rabbitmq-network:
     driver: bridge
+
+

@@ -158,7 +158,8 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.DataSourceWrite)),
-                                                      new RoleScope(nameof(Defaults.Scopes.WizardPageWrite))
+                                                      new RoleScope(nameof(Defaults.Scopes.WizardPageWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.AdminProjectExport))
                                                   }
             };
             roles.Add(administratorRole);
@@ -344,6 +345,45 @@ namespace Data.Helpers
                 collaborators.Add(collaborator2);
             }
             return collaborators;
+        }
+
+        /// <summary>
+        /// Seed random ProjectLikes into the database
+        /// </summary>
+        public static List<ProjectLike> SeedLikes(List<Project> projects, List<User> users)
+        {
+            List<ProjectLike> projectLikes = new List<ProjectLike>();
+            foreach(Project project in projects)
+            {
+                List<User> usersThatLiked = new List<User>();
+                Random random = new Random();
+                int randomLikes = random.Next(5, 15);
+                for(int i = 0; i < randomLikes; i++)
+                {
+                    ProjectLike projectLike = new ProjectLike
+                    {
+                        UserId = project.User.Id,
+                        LikedProject = project
+                    };
+
+                    bool userFound = false;
+                    while(!userFound)
+                    {
+                        int randomUserId = random.Next(0, users.Count);
+                        User u = users[randomUserId];
+                        if(!usersThatLiked.Contains(u))
+                        {
+                            projectLike.ProjectLiker = u;
+                            usersThatLiked.Add(u);
+                            userFound = true;
+                        }
+                    }
+
+                    projectLikes.Add(projectLike);
+                }
+
+            }
+            return projectLikes;
         }
 
         /// <summary>

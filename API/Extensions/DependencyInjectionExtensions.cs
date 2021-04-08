@@ -25,6 +25,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Services.ExternalDataProviders;
 using Services.ExternalDataProviders.Helpers;
+using Repositories.ElasticSearch;
+using Services.Resources;
 using Services.Services;
 using Services.Sources;
 
@@ -107,6 +109,7 @@ namespace API.Extensions
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
 
+            services.AddSingleton<Queries>();
             services.AddScoped<ITaskPublisher, TaskPublisher>();
 
             services.AddSingleton<IAssemblyHelper, AssemblyHelper>();

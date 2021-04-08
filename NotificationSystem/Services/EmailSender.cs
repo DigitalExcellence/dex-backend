@@ -24,40 +24,37 @@ using System.Threading.Tasks;
 
 namespace NotificationSystem.Services
 {
-
-    public class EmailSender : INotificationService
+    public class EmailSender : ICallbackService
     {
 
         private readonly ISendGridClient client;
         private readonly EmailAddress from;
         private readonly bool sandboxMode;
-
-        public EmailSender(ISendGridClient sendGridClient, string emailFrom, bool sandboxMode = false)
+        private EmailNotification notification;
+        private Response response;
+        
+        public EmailSender(ISendGridClient sendGridClient,  string emailFrom, bool sandboxMode = false)
         {
             client = sendGridClient;
             from = new EmailAddress(emailFrom);
             this.sandboxMode = sandboxMode;
         }
 
-        public EmailNotification Notification { get; set; }
 
         public void ParsePayload(string jsonBody)
         {
-            Notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
+            notification = JsonConvert.DeserializeObject<EmailNotification>(jsonBody);
         }
 
-        public Response ExecuteTask()
+        public void ExecuteTask()
         {
-            EmailNotification emailNotification = Notification;
-            return Execute(emailNotification.RecipientEmail,
-                           emailNotification.TextContent,
-                           emailNotification.HtmlContent)
-                .Result;
+            EmailNotification emailNotification = notification;
+            response = Execute(emailNotification.RecipientEmail, emailNotification.TextContent, emailNotification.HtmlContent).Result;
         }
 
         public bool ValidatePayload()
         {
-            EmailNotification emailNotification = Notification;
+            EmailNotification emailNotification = notification;
 
             if(string.IsNullOrEmpty(emailNotification.RecipientEmail) ||
                string.IsNullOrWhiteSpace(emailNotification.RecipientEmail))
@@ -83,6 +80,8 @@ namespace NotificationSystem.Services
             return await client.SendEmailAsync(msg);
         }
 
+        public Response Response { get => response; set => response = value; }
+        public EmailNotification Notification { get => notification;}
     }
 
 }

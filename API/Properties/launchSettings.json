@@ -1,14 +1,13 @@
 {
-    "$schema": "http://json.schemastore.org/launchsettings.json",
-    "profiles": {
-        "Dex-API": {
-            "commandName": "Project",
-            "launchBrowser": true,
-            "launchUrl": "",
-            "applicationUrl": "https://localhost:5001",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
-        }
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Dex-API": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:5001"
     }
+  }
 }
