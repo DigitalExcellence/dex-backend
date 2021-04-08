@@ -92,9 +92,9 @@ namespace Services.Services
         /// </summary>
         public async Task UpdateProjectCategories(Project project, IEnumerable<Category> categories)
         {
-            IEnumerable<ProjectCategory> allProjectCategories = await Repository.GetAll();
+            IEnumerable<ProjectCategory> savedProjectCategories = await Repository.GetProjectCategories(project.Id);
 
-            IEnumerable<int> currentProjectCategoryIds = allProjectCategories.Where(pc => pc.Project.Id == project.Id).Select(pc => pc.Id);
+            IEnumerable<int> currentProjectCategoryIds = savedProjectCategories.Select(pc => pc.Id);
             await Repository.RemoveRangeAsync(currentProjectCategoryIds);
 
             IEnumerable<ProjectCategory> projectCategories = categories.Select(c => new ProjectCategory(project, c));
@@ -108,7 +108,7 @@ namespace Services.Services
         /// </summary>
         public async Task ClearProjectCategories(Project project)
         {
-            IEnumerable<int> currentProjectCategoryIds = (await Repository.GetAll()).Where(pc => pc.Project.Id == project.Id).Select(pc => pc.Id);
+            IEnumerable<int> currentProjectCategoryIds = (await Repository.GetProjectCategories(project.Id)).Select(pc => pc.Id);
             await Repository.RemoveRangeAsync(currentProjectCategoryIds);
 
             Repository.Save();

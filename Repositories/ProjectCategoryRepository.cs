@@ -18,6 +18,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,6 +39,11 @@ namespace Repositories
         ///     Gets project category by given category id
         /// </summary>
         Task<ProjectCategory> GetProjectCategory(int categoryId);
+
+        /// <summary>
+        ///     Gets project categories by given projectid 
+        /// </summary>
+        Task<List<ProjectCategory>> GetProjectCategories(int projectId);
     }
 
     /// <summary>
@@ -70,6 +76,14 @@ namespace Repositories
         {
             return DbSet.Where(p => p.Category.Id == categoryId)
                         .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        ///     Gets project categories by given projectid 
+        /// </summary>
+        public Task<List<ProjectCategory>> GetProjectCategories(int projectId)
+        {
+            return DbSet.Where(p => p.Project.Id == projectId).ToListAsync();
         }
     }
 }
