@@ -511,12 +511,12 @@ namespace API
                 if(!context.WizardPage.Any())
                 {
                     context.WizardPage.AddRange(Seed.SeedWizardPages());
-                    context.SaveChangesAsync();
+                    context.SaveChanges();
                 }
                 if(!context.DataSource.Any())
                 {
                     context.DataSource.AddRange(Seed.SeedDataSources());
-                    context.SaveChangesAsync();
+                    context.SaveChanges();
                 }
                 SeedHelper.SeedDataSourceWizardPages(context);
 
