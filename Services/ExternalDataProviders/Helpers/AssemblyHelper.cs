@@ -55,11 +55,10 @@ namespace Services.ExternalDataProviders.Helpers
         ///     This method is responsible for retrieving the location from the executing assembly.
         /// </summary>
         /// <returns>This method returns the location from the executing assembly.</returns>
-        private string GetLocationOfExecutingAssembly()
+        private Assembly GetExecutingAssembly()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            string folder = Path.GetDirectoryName(executingAssembly.Location);
-            return folder;
+            return executingAssembly;
         }
 
         /// <summary>
@@ -80,11 +79,8 @@ namespace Services.ExternalDataProviders.Helpers
         {
             List<Type> types = new List<Type>();
 
-            foreach(string dll in Directory.GetFiles(GetLocationOfExecutingAssembly(), "*.dll"))
-            {
-                Assembly assembly = Assembly.LoadFrom(dll);
-                types.AddRange(RetrieveTypesFromAssembly(assembly));
-            }
+            Assembly assembly = GetExecutingAssembly();
+            types.AddRange(RetrieveTypesFromAssembly(assembly));
 
             return types.ToArray();
         }
