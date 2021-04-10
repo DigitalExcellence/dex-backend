@@ -50,6 +50,14 @@ namespace Services.ExternalDataProviders
         Task<IDataSourceAdaptee> GetDataSourceByGuid(string guid);
 
         /// <summary>
+        ///     This method validates whether a data source with the specified guid exists.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that will get checked.</param>
+        /// <returns>This method return whether the data source exists or does not exists.</returns>
+
+        bool IsExistingDataSource(string guid);
+
+        /// <summary>
         ///     This method is responsible for retrieving a data source by the specified name.
         /// </summary>
         /// <param name="name">This name will get used for searching the correct data source.</param>
@@ -115,6 +123,18 @@ namespace Services.ExternalDataProviders
         {
             return (await GetAllDataSources())
                 .SingleOrDefault(d => d.Guid == guid);
+        }
+
+        /// <summary>
+        ///     This method validates whether a data source with the specified guid exists.
+        /// </summary>
+        /// <param name="dataSourceGuid">The data source guid that will get checked.</param>
+        /// <returns>This method return whether the data source exists or does not exists.</returns>
+
+        public bool IsExistingDataSource(string guid)
+        {
+            List<IDataSourceAdaptee> dataSources = GetLocalAdapteeImplementations();
+            return dataSources.FirstOrDefault(d => d.Guid == guid) != null;
         }
 
         /// <summary>

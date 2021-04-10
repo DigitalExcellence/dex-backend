@@ -157,7 +157,7 @@ namespace Services.ExternalDataProviders
         /// <returns>This method return whether the data source exists or does not exists.</returns>
         public bool IsExistingDataSourceGuid(string dataSourceGuid)
         {
-            return dataProviderLoader.GetDataSourceByGuid(dataSourceGuid) != null;
+            return dataProviderLoader.IsExistingDataSource(dataSourceGuid);
         }
 
         /// <summary>
