@@ -350,6 +350,11 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the isExistingDataSource method in a flow where no data source could be found
+        ///     with the specified guid.
+        /// </summary>
+        /// <returns>The tested method will return false.</returns>
         [Test]
         public void IsExistingDataSource_DataSourceDoesNotExist()
         {
