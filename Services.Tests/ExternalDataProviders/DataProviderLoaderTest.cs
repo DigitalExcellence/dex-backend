@@ -308,6 +308,62 @@ namespace Services.Tests.ExternalDataProviders
 
         }
 
+        /// <summary>
+        ///     This method tests the IsExistingDataSource method in a good flow. In this scenario a data source with the
+        ///     specified guid exists.
+        /// </summary>
+        /// <returns>The tested method will return true.</returns>
+        [Test]
+        public void IsExistingDataSource_GoodFlow()
+        {
+            // Arrange
+            returnedTypesFromAssembly = new Type[]
+                                        {
+                                            typeof(GithubDataSourceAdaptee)
+                                        };
+
+            assemblyHelperMock.Setup(_ => _.RetrieveTypesFromExecutingAssemblyFolderFolderByInterface(It.IsAny<Type>()))
+                              .Returns(returnedTypesFromAssembly);
+
+            string guid = "de38e528-1d6d-40e7-83b9-4334c51c19be";
+            returnedTypeFromLoader = new Mock<IDataSourceAdaptee>();
+            returnedTypeFromLoader.Setup(_ => _.Guid)
+                                  .Returns(guid);
+
+            Mock<IServiceScope> scopeMock = new Mock<IServiceScope>();
+            scopeMock
+                .Setup(_ => _.ServiceProvider.GetService(It.IsAny<Type>()))
+                .Returns(returnedTypeFromLoader.Object);
+
+            factoryMock.Setup(_ => _.CreateScope())
+                       .Returns(scopeMock.Object);
+
+            // Act
+            Action act = () => loader.IsExistingDataSource(guid);
+            bool dataSourceExists = loader.IsExistingDataSource(guid);
+
+            // Assert
+            act.Should().NotThrow();
+            dataSourceExists.Should().BeTrue();
+            scopeMock.Verify(_ => _.ServiceProvider.GetService(It.IsAny<Type>()), Times.Exactly(2));
+
+
+        }
+
+        [Test]
+        public void IsExistingDataSource_DataSourceDoesNotExist()
+        {
+            // Arrange
+
+            Action act = () => loader.IsExistingDataSource(It.IsAny<string>());
+            bool dataSourceExists = loader.IsExistingDataSource(It.IsAny<string>());
+
+            // Assert
+            act.Should().NotThrow();
+            dataSourceExists.Should().BeFalse();
+
+        }
+
 
     }
 
