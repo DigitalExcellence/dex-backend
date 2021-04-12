@@ -460,6 +460,9 @@ namespace API
             SeedHelper.InsertRoles(Seed.SeedRoles(), context);
             List<Role> roles = context.Role.ToList();
 
+            context.User.Add(Seed.SeedAdminUser2(roles));
+            context.SaveChanges();
+
             if(!env.IsProduction())
             {
                 if(!context.Institution.Any())

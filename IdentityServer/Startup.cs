@@ -241,7 +241,7 @@ namespace IdentityServer
                                                                              e => e.SubjectId ==
                                                                                  identityUser.SubjectId)))
             {
-                if(env.IsProduction())
+                if(true)
                 {
                     identityUser.Password = TestUsers.CreateTestUserPassword(identityUser.Username);
                 }
