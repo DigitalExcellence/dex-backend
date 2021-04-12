@@ -458,9 +458,9 @@ namespace Data.Helpers
             User user = new User
             {
                 Role = adminRole,
-                IdentityId = "32423444",
-                Email = "admin@dex.software",
-                Name = "Administrator admin",
+                IdentityId = "32423446",
+                Email = "elastic_admin@dex.software",
+                Name = "ElasticSearch Admin",
             };
 
             return user;

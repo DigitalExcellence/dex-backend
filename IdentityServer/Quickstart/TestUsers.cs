@@ -108,10 +108,10 @@ namespace IdentityServer
                                            },
                                            new IdentityUser
                                            {
-                                               SubjectId = "32423444",
-                                               Username = "Admin",
+                                               SubjectId = "32423446",
+                                               Username = "ElasticAdmin",
                                                Password = LoginHelper.GetHashPassword("Admin321!"),
-                                               Name = "Admin",
+                                               Name = "Elastic",
                                                Firstname = "Admin",
                                                Lastname = "Admin",
                                                Email = "Admin@email.com"
