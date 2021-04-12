@@ -520,6 +520,36 @@ namespace API.Controllers
                 }
             }
 
+            await projectCategoryService.ClearProjectCategories(project);
+            if(projectResource.Categories != null)
+            {
+                ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
+
+                foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
+                {
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
+                    if(alreadyExcProjectCategory == null)
+                    {
+                        Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
+
+                        if(category == null)
+                        {
+                            ProblemDetails problem = new ProblemDetails
+                            {
+                                Title = "Failed to update project.",
+                                Detail = "One of the given categories did not exist.",
+                                Instance = "xxx"
+                            };
+                            return BadRequest(problem);
+                        }
+
+                        ProjectCategory projectCategory = new ProjectCategory(project, category);
+                        await projectCategoryService.AddAsync(projectCategory)
+                                               .ConfigureAwait(false);
+                    }
+                }
+            }
+
             mapper.Map(projectResource, project);
             projectService.Update(project);
             projectService.Save();
