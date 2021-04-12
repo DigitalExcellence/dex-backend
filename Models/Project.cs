@@ -75,7 +75,7 @@ namespace Models
 
         public bool InstitutePrivate { get; set; }
 
-        public List<ProjectCategory> Categories { get; set; } = new List<ProjectCategory>();
+        public List<ProjectCategory> Categories { get; set; }
 
 
         /// <summary>
