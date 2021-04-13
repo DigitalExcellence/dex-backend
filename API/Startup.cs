@@ -524,6 +524,12 @@ namespace API
                 // TODO seed embedded projects
             }
 
+            if(env.IsProduction())
+            {
+                context.User.Add(Seed.SeedAdminUser2(roles));
+                context.SaveChanges();
+            }
+
             // Seed call to action options
             List<CallToActionOption> options = Seed.SeedCallToActionOptions();
             foreach(CallToActionOption callToActionOption in options)
