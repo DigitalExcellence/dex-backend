@@ -525,13 +525,6 @@ namespace API
                 // TODO seed embedded projects
             }
 
-            if(env.IsProduction())
-            {
-                context.DataSource.RemoveRange(context.DataSource.ToList());
-                context.User.Remove(context.User.FirstOrDefault(e => e.Name == "ElasticSearch Admin"));
-                context.SaveChanges();
-            }
-
             // Seed call to action options
             List<CallToActionOption> options = Seed.SeedCallToActionOptions();
             foreach(CallToActionOption callToActionOption in options)
