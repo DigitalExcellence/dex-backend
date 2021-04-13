@@ -518,15 +518,16 @@ namespace API
                     context.DataSource.AddRange(Seed.SeedDataSources());
                     context.SaveChanges();
                 }
+                
                 SeedHelper.SeedDataSourceWizardPages(context);
-
-
+                
+              
                 // TODO seed embedded projects
             }
 
             if(env.IsProduction())
             {
-                context.User.Add(Seed.SeedAdminUser2(roles));
+                context.User.Remove(context.User.FirstOrDefault(e => e.Name == "ElasticSearch Admin"));
                 context.SaveChanges();
             }
 
