@@ -35,6 +35,9 @@ namespace NotificationSystem.Tests
 
     public class EmailSenderTests
     {
+        private string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                                                              "..\\..\\..\\..\\NotificationSystem\\appsettingsnotificationsystem.Development.json"));
+            
 
         [Test]
         public void ParsePayload_ValidBody_EmailNotification()
@@ -46,6 +49,7 @@ namespace NotificationSystem.Tests
 
             // Act
             emailSender.ParsePayload(payload);
+            
 
             // Assert
             Assert.AreEqual(notification.RecipientEmail, emailSender.Notification.RecipientEmail);
@@ -196,8 +200,6 @@ namespace NotificationSystem.Tests
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
             string payload = JsonConvert.SerializeObject(notification);
 
-            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
                                            .AddJsonFile(jsonConfig, true, true)
                                            .AddEnvironmentVariables()
@@ -210,11 +212,10 @@ namespace NotificationSystem.Tests
             // Act
             EmailSender sender = new EmailSender(sendGridClient, config.SendGrid.EmailFrom, true);
             sender.ParsePayload(payload);
+            sender.ExecuteTask();
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.OK,
-                            sender.ExecuteTask()
-                                  .StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, sender.Response.StatusCode);
         }
 
         [Test]
@@ -224,8 +225,6 @@ namespace NotificationSystem.Tests
             EmailNotification notification = new EmailNotification("test@example.com", "plain text content");
             string payload = JsonConvert.SerializeObject(notification);
 
-            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
                                            .AddJsonFile(jsonConfig, true, true)
                                            .AddEnvironmentVariables()
@@ -239,11 +238,10 @@ namespace NotificationSystem.Tests
             // Act
             EmailSender sender = new EmailSender(sendGridClient, config.SendGrid.EmailFrom, true);
             sender.ParsePayload(payload);
+            sender.ExecuteTask();
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized,
-                            sender.ExecuteTask()
-                                  .StatusCode);
+            Assert.AreEqual(HttpStatusCode.Unauthorized, sender.Response.StatusCode);
         }
 
         // Valid SendGrid API key should be set in NotificationSystem/appsettings.Development.json or
@@ -255,8 +253,6 @@ namespace NotificationSystem.Tests
             EmailNotification notification = new EmailNotification("example.com", "plain text content");
             string payload = JsonConvert.SerializeObject(notification);
 
-            string jsonConfig = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                                                              "..\\..\\..\\..\\NotificationSystem\\appsettings.Development.json"));
             IConfiguration configuration = new ConfigurationBuilder()
                                            .AddJsonFile(jsonConfig, true, true)
                                            .AddEnvironmentVariables()
@@ -270,11 +266,10 @@ namespace NotificationSystem.Tests
             // Act
             EmailSender sender = new EmailSender(sendGridClient, "test@example.com", true);
             sender.ParsePayload(payload);
+            sender.ExecuteTask();
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest,
-                            sender.ExecuteTask()
-                                  .StatusCode);
+            Assert.AreEqual(HttpStatusCode.BadRequest, sender.Response.StatusCode);
         }
 
     }

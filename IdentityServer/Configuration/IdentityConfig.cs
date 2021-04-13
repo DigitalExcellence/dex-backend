@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -48,7 +48,8 @@ namespace IdentityServer.Configuration
                         new Scope(nameof(Defaults.Scopes.EmbedWrite)),
                         new Scope(nameof(Defaults.Scopes.EmbedRead)),
                         new Scope(nameof(Defaults.Scopes.FileWrite)),
-                        new Scope(nameof(Defaults.Scopes.UserTaskWrite))
+                        new Scope(nameof(Defaults.Scopes.UserTaskWrite)),
+                        new Scope(nameof(Defaults.Scopes.WizardPageWrite))
                     }
                 },
                 new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
@@ -110,7 +111,8 @@ namespace IdentityServer.Configuration
                                nameof(Defaults.Scopes.EmbedWrite),
                                nameof(Defaults.Scopes.EmbedRead),
                                nameof(Defaults.Scopes.FileWrite),
-                               nameof(Defaults.Scopes.UserTaskWrite)
+                               nameof(Defaults.Scopes.UserTaskWrite),
+                               nameof(Defaults.Scopes.WizardPageWrite)
                            },
                            Claims = new List<Claim>
                                     {

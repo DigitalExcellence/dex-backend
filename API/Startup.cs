@@ -41,6 +41,7 @@ using Models.Defaults;
 using Newtonsoft.Json;
 using Polly;
 using Serilog;
+using Services.Resources;
 using Services.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
@@ -68,6 +69,9 @@ namespace API
         {
             Config = configuration.GetSection("App")
                                   .Get<Config>();
+            ElasticConfig = configuration.GetSection("App")
+                                         .GetSection("Elastic")
+                                         .Get<ElasticConfig>();
             Config.OriginalConfiguration = configuration;
             Environment = environment;
         }
@@ -76,6 +80,11 @@ namespace API
         ///     Config file of API
         /// </summary>
         public Config Config { get; }
+
+        /// <summary>
+        ///     Config file of Elastic
+        /// </summary>
+        public ElasticConfig ElasticConfig { get; }
 
         /// <summary>
         ///     Environment of the API
@@ -94,10 +103,11 @@ namespace API
                 o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
             });
-            services.AddScoped<IRabbitMQConnectionFactory>(
-                c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname,
-                                                   Config.RabbitMQ.Username,
-                                                   Config.RabbitMQ.Password));
+
+            services.AddSingleton<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname, Config.RabbitMQ.Username, Config.RabbitMQ.Password));
+
+            services.AddSingleton<IElasticSearchContext>(new ElasticSearchContext(ElasticConfig.Hostname, ElasticConfig.Username, ElasticConfig.Password, ElasticConfig.IndexUrl));
+
             services.AddAutoMapper();
 
             services.UseConfigurationValidation();
@@ -193,6 +203,14 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.WizardPageWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.WizardPageWrite))));
+              
+                o.AddPolicy(nameof(Defaults.Scopes.AdminProjectExport),
+                    policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.AdminProjectExport))));
+
             });
 
             services.AddCors();
@@ -276,6 +294,7 @@ namespace API
 
             // Add application services.
             services.AddSingleton(Config);
+            services.AddSingleton(ElasticConfig);
             services.AddServicesAndRepositories();
             services.AddProblemDetails();
         }
@@ -500,9 +519,26 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
+                if(!context.WizardPage.Any())
+                {
+                    context.WizardPage.AddRange(Seed.SeedWizardPages());
+                    context.SaveChanges();
+                }
+                if(!context.DataSource.Any())
+                {
+                    context.DataSource.AddRange(Seed.SeedDataSources());
+                    context.SaveChanges();
+                }
+                SeedHelper.SeedDataSourceWizardPages(context);
 
 
                 // TODO seed embedded projects
+            }
+
+            if(env.IsProduction())
+            {
+                context.User.Add(Seed.SeedAdminUser2(roles));
+                context.SaveChanges();
             }
 
             // Seed call to action options

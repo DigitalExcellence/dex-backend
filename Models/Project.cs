@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Models
 {
@@ -71,6 +72,7 @@ namespace Models
 
         public CallToAction CallToAction { get; set; }
 
+        [JsonIgnore]
         public List<ProjectLike> Likes { get; set; }
 
         public bool InstitutePrivate { get; set; }

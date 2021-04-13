@@ -15,12 +15,18 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Data;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Newtonsoft.Json.Linq;
 using Repositories.Base;
+using Repositories.ElasticSearch;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Repositories
@@ -76,6 +82,7 @@ namespace Repositories
         /// <returns></returns>
         Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
+        List<int> GetSimilarUsers(int userId);
     }
 
     /// <summary>
@@ -85,12 +92,16 @@ namespace Repositories
     /// <seealso cref="IUserRepository" />
     public class UserRepository : Repository<User>, IUserRepository
     {
-
+        private RestClient client;
+        private Queries queries;
         /// <summary>
         ///     Initializes a new instance of the <see cref="UserRepository" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        public UserRepository(DbContext dbContext) : base(dbContext) { }
+        public UserRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, Queries queries) : base(dbContext) {
+            client = elasticSearchContext.CreateRestClientForElasticRequests();
+            this.queries = queries;
+        }
 
         /// <summary>
         ///     Finds the asynchronous.
@@ -108,6 +119,41 @@ namespace Repositories
                          .Include(s => s.LikedProjectsByUsers)
                          .SingleOrDefaultAsync();
         }
+
+        
+
+        public List<int> GetSimilarUsers(int userId)
+        {
+            List<int> similarUserIds = new List<int>();
+
+            RestRequest request = new RestRequest("_search?size=0", Method.POST);
+            string body = queries.SimilarUsers.Replace("ReplaceWithUserId", userId.ToString());
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = client.Execute(request);
+
+            if(restResponse.StatusCode != HttpStatusCode.OK)
+            {
+                return similarUserIds;
+            }
+
+            // Put user id's of similar users in a list.
+            
+            JToken users = JToken.Parse(restResponse.Content)
+                              .SelectTokens("aggregations.user-liked.bucket.buckets").First();
+            foreach(JToken user in users)
+            {
+                int id = user.First().ToObject<int>();
+                similarUserIds.Add(id);
+            }
+            // Remove the user itself.
+            if(similarUserIds.Count != 0)
+            {
+                similarUserIds.Remove(userId);
+            }
+
+            return similarUserIds;
+        }
+
 
         /// <summary>
         ///     Gets the user asynchronous.
