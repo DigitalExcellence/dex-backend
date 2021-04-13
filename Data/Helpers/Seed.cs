@@ -158,6 +158,7 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.DataSourceWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.WizardPageWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.AdminProjectExport))
                                                   }
             };
@@ -447,6 +448,60 @@ namespace Data.Helpers
                        {
                            Type = "title",
                            Value = "Get in touch"
+                       }
+                   };
+        }
+
+        /// <summary>
+        ///     This method seeds wizard pages.
+        /// </summary>
+        /// <returns>Returns a list of wizard pages that can be seeded into the database.</returns>
+        public static List<WizardPage> SeedWizardPages()
+        {
+            return new List<WizardPage>
+                   {
+                       new WizardPage
+                       {
+                           Name = "Enter your username",
+                           Description = "Enter the username you would like to retrieve projects from"
+                       },
+                       new WizardPage
+                       {
+                           Name = "Paste the link to your project",
+                           Description = "Enter the link to your project that you would like to import"
+                       },
+                       new WizardPage
+                       {
+                           Name = "Select the correct project",
+                           Description = "Select which project you would like to retrieve"
+                       }
+                   };
+        }
+
+        public static List<DataSource> SeedDataSources()
+        {
+            return new List<DataSource>
+                   {
+                       new DataSource
+                       {
+                           Title = "Github",
+                           Guid = "de38e528-1d6d-40e7-83b9-4334c51c19be",
+                           IsVisible = true,
+                           Description = "Seeded description for the Github data source adaptee"
+                       },
+                       new DataSource
+                       {
+                           Title = "Gitlab",
+                           Guid = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a",
+                           IsVisible = true,
+                           Description = "Seeded description for the Gitlab data source adaptee"
+                       },
+                       new DataSource
+                       {
+                           Title = "JsFiddle",
+                           Guid = "96666870-3afe-44e2-8d62-337d49cf972d",
+                           IsVisible = false,
+                           Description = "Seeded description for the JsFiddle data source adaptee"
                        }
                    };
         }

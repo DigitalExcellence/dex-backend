@@ -82,6 +82,68 @@ namespace API.HelperClasses
             context.SaveChanges();
         }
 
+        /// <summary>
+        ///     This method checks if the data sources has a collection of wizard pages. If not,
+        ///     they will get added to the data source. This is just for testing purposes and does
+        ///     not have to get extended when new data sources are added.
+        /// </summary>
+        /// <param name="context"></param>
+        public static void SeedDataSourceWizardPages(ApplicationDbContext context)
+        {
+            foreach(DataSource dataSource in context.DataSource)
+            {
+                if(dataSource.DataSourceWizardPages == null || !dataSource.DataSourceWizardPages.Any())
+                {
+                    dataSource.DataSourceWizardPages = new List<DataSourceWizardPage>();
+                    // Github
+                    if(dataSource.Guid == "de38e528-1d6d-40e7-83b9-4334c51c19be")
+                    {
+                        if(context.WizardPage.FirstOrDefault(p => p.Id == 2) != null)
+                            dataSource.DataSourceWizardPages.Add(new DataSourceWizardPage
+                                                             {
+                                                                 AuthFlow = false,
+                                                                 DataSourceId = dataSource.Id,
+                                                                 OrderIndex = 1,
+                                                                 WizardPageId = 2
+                                                             });
+                    }
+                    // Gitlab
+                    else if(dataSource.Guid == "66de59d4-5db0-4bf8-a9a5-06abe8d3443a")
+                    {
+                        if(context.WizardPage.FirstOrDefault(p => p.Id == 2) != null)
+                            dataSource.DataSourceWizardPages.Add(new DataSourceWizardPage
+                                                             {
+                                                                 AuthFlow = false,
+                                                                 DataSourceId = dataSource.Id,
+                                                                 OrderIndex = 1,
+                                                                 WizardPageId = 2
+                                                             });
+                    }
+                    // JsFiddle
+                    else if(dataSource.Guid == "96666870-3afe-44e2-8d62-337d49cf972d")
+                    {
+                        if(context.WizardPage.FirstOrDefault(p => p.Id == 1) != null)
+                            dataSource.DataSourceWizardPages.Add(new DataSourceWizardPage
+                                                             {
+                                                                 AuthFlow = false,
+                                                                 DataSourceId = dataSource.Id,
+                                                                 OrderIndex = 1,
+                                                                 WizardPageId = 1
+                                                             });
+
+                        if(context.WizardPage.FirstOrDefault(p => p.Id == 3) != null)
+                            dataSource.DataSourceWizardPages.Add(new DataSourceWizardPage
+                                                             {
+                                                                 AuthFlow = false,
+                                                                 DataSourceId = dataSource.Id,
+                                                                 OrderIndex = 2,
+                                                                 WizardPageId = 3
+                                                             });
+                    }
+                }
+            }
+        }
+
     }
 
 }

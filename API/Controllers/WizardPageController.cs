@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Defaults;
 using Serilog;
 using Services.Services;
 using System.Collections.Generic;
@@ -127,7 +128,7 @@ namespace API.Controllers
         ///     when a database update exception occured.
         /// </response>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.WizardPageWrite))]
         [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateWizardPage(WizardPageResource wizardPageResource)
@@ -178,7 +179,7 @@ namespace API.Controllers
         ///     the specified id.
         /// </response>
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.WizardPageWrite))]
         [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -229,7 +230,7 @@ namespace API.Controllers
         ///     the specified id.
         /// </response>
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Policy = nameof(Defaults.Scopes.WizardPageWrite))]
         [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
