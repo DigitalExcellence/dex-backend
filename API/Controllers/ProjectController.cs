@@ -538,7 +538,7 @@ namespace API.Controllers
                             {
                                 Title = "Failed to update project.",
                                 Detail = "One of the given categories did not exist.",
-                                Instance = "xxx"
+                                Instance = "09D1458E-B2CF-4F23-B120-DDD38A7727C9"
                             };
                             return BadRequest(problem);
                         }
