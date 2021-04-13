@@ -24,6 +24,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Services.ExternalDataProviders;
+using Services.ExternalDataProviders.Helpers;
 using Repositories.ElasticSearch;
 using Services.Resources;
 using Services.Services;
@@ -102,30 +103,31 @@ namespace API.Extensions
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
 
-            services.AddScoped<IProjectInstitutionService, ProjectInstitutionService>();
-            services.AddScoped<IProjectInstitutionRepository, ProjectInstitutionRepository>();
-
-            services.AddExternalDataSources();
-
-            return services;
-        }
-
-        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
-        {
-            services.AddScoped<GithubDataSourceAdaptee>();
-            services.AddScoped<GitlabDataSourceAdaptee>();
-            services.AddScoped<JsFiddleDataSourceAdaptee>();
-
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
 
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
-                        
+
             services.AddSingleton<Queries>();
             services.AddSingleton<ITaskPublisher, TaskPublisher>();
 
+            services.AddSingleton<IAssemblyHelper, AssemblyHelper>();
+          
+            services.AddScoped<IProjectInstitutionService, ProjectInstitutionService>();
+            services.AddScoped<IProjectInstitutionRepository, ProjectInstitutionRepository>();
+          
+            services.AddExternalDataSources();
+
             return services;
+          
+        }
+
+        private static void AddExternalDataSources(this IServiceCollection services)
+        {
+            services.AddScoped<GithubDataSourceAdaptee>();
+            services.AddScoped<GitlabDataSourceAdaptee>();
+            services.AddScoped<JsFiddleDataSourceAdaptee>();
         }
 
     }

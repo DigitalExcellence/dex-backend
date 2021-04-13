@@ -47,7 +47,7 @@ namespace Services.ExternalDataProviders
         /// <param name="id">The id of the project which will get used for searching the correct project.</param>
         /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
         /// <returns>This method returns a project with the specified identifier.</returns>
-        Task<Project> GetProjectById(string dataSourceGuid, string token, int id, bool needsAuth);
+        Task<Project> GetProjectById(string dataSourceGuid, string token, string id, bool needsAuth);
 
         /// <summary>
         ///     This method validates whether a data source with the specified guid exists.
@@ -143,11 +143,11 @@ namespace Services.ExternalDataProviders
         /// <param name="id">The id of the project which will get used for searching the correct project.</param>
         /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
         /// <returns>This method returns a project with the specified identifier.</returns>
-        public async Task<Project> GetProjectById(string dataSourceGuid, string token, int id, bool needsAuth)
+        public async Task<Project> GetProjectById(string dataSourceGuid, string token, string id, bool needsAuth)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
-            return await dataProviderAdapter.GetProjectByGuid(token, id.ToString(), needsAuth);
+            return await dataProviderAdapter.GetProjectByGuid(token, id, needsAuth);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Services.ExternalDataProviders
         /// <returns>This method return whether the data source exists or does not exists.</returns>
         public bool IsExistingDataSourceGuid(string dataSourceGuid)
         {
-            return dataProviderLoader.GetDataSourceByGuid(dataSourceGuid) != null;
+            return dataProviderLoader.IsExistingDataSource(dataSourceGuid);
         }
 
         /// <summary>
@@ -258,6 +258,7 @@ namespace Services.ExternalDataProviders
         {
             foreach(IDataSourceAdaptee source in adaptees)
             {
+                if(source.DataSourceWizardPages == null) continue;
                 source.DataSourceWizardPages = source.DataSourceWizardPages.Where(page => page.AuthFlow == authFlow)
                                                      .ToList();
             }

@@ -31,7 +31,33 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
-    public class JsFiddleDataSourceAdaptee : IPublicDataSourceAdaptee
+    public interface IJsFiddleDataSourceAdaptee : IPublicDataSourceAdaptee
+    {
+
+        /// <summary>
+        ///     This method is responsible for retrieving all public projects from a user, via the username, from the JsFiddle API.
+        /// </summary>
+        /// <param name="username">The username which will be used to search to retrieve all public projects from the user.</param>
+        /// <returns>This method returns a collections of public projects from the user</returns>
+        Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a fiddle by uri.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a JsFiddle data source resource result from the specified uri.</returns>
+        Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleFromUri(Uri sourceUri);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public fiddle by identifier.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a JsFiddle data source resource result.</returns>
+        Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleById(string identifier);
+
+    }
+
+    public class JsFiddleDataSourceAdaptee : IJsFiddleDataSourceAdaptee
     {
 
         /// <summary>
@@ -107,7 +133,19 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
         /// <returns>This method throws a not supported by external API exception.</returns>
-        public Task<Project> GetPublicProjectFromUri(Uri sourceUri)
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
+        {
+            JsFiddleDataSourceResourceResult jsFiddleSource = await FetchPublicFiddleFromUri(sourceUri);
+            Project project = mapper.Map<JsFiddleDataSourceResourceResult, Project>(jsFiddleSource);
+            return project;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a fiddle by uri.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a JsFiddle data source resource result from the specified uri.</returns>
+        public Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleFromUri(Uri sourceUri)
         {
             throw new NotSupportedByExternalApiException(Title, nameof(GetPublicProjectFromUri));
         }
@@ -117,7 +155,19 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="identifier">The identifier which will be used to retrieve the correct project.</param>
         /// <returns>This method throws a not supported by external API exception.</returns>
-        public Task<Project> GetPublicProjectById(string identifier)
+        public async Task<Project> GetPublicProjectById(string identifier)
+        {
+            JsFiddleDataSourceResourceResult jsFiddleSource = await FetchPublicFiddleById(identifier);
+            Project project = mapper.Map<JsFiddleDataSourceResourceResult, Project>(jsFiddleSource);
+            return project;
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public fiddle by identifier.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a JsFiddle data source resource result.</returns>
+        public Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleById(string identifier)
         {
             throw new NotSupportedByExternalApiException(Title, nameof(GetPublicProjectById));
         }
@@ -131,14 +181,14 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username)
+        public async Task<IEnumerable<JsFiddleDataSourceResourceResult>> FetchAllFiddlesFromUser(string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"user/{username}/demo/list.json", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(string.IsNullOrEmpty(response.Content)) return null;
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
 
             IEnumerable<JsFiddleDataSourceResourceResult> resourceResult =
                 JsonConvert.DeserializeObject<IEnumerable<JsFiddleDataSourceResourceResult>>(response.Content);
