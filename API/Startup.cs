@@ -527,6 +527,7 @@ namespace API
 
             if(env.IsProduction())
             {
+                context.DataSource.RemoveRange(context.DataSource.ToList());
                 context.User.Remove(context.User.FirstOrDefault(e => e.Name == "ElasticSearch Admin"));
                 context.SaveChanges();
             }
