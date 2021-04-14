@@ -629,10 +629,6 @@ namespace Repositories
 
         private void ParseJsonToESProjectFormatDTOList(IRestResponse restResponse, List<ESProjectDTO> esProjectFormats)
         {
-            if(restResponse.StatusCode != HttpStatusCode.OK)
-            {
-                return;
-            }
             JObject esProjects = JObject.Parse(restResponse.Content);
             JToken projects = esProjects.GetValue("hits")["hits"];
             foreach(JToken project in projects)
