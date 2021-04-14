@@ -18,6 +18,7 @@
 using NotificationSystem.Contracts;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Serilog;
 using System;
 using System.Text;
 
@@ -26,8 +27,7 @@ namespace NotificationSystem.Services
 
     public interface IRabbitMQListener
     {
-
-        EventingBasicConsumer CreateConsumer(INotificationService notificationService);
+        EventingBasicConsumer CreateConsumer(ICallbackService notificationService);
 
         void StartConsumer(EventingBasicConsumer consumer, string subject);
 
@@ -43,7 +43,7 @@ namespace NotificationSystem.Services
             this.channel = channel;
         }
 
-        public EventingBasicConsumer CreateConsumer(INotificationService notificationService)
+        public EventingBasicConsumer CreateConsumer(ICallbackService notificationService)
         {
             EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
             SetCallBack(notificationService, consumer);
@@ -57,14 +57,14 @@ namespace NotificationSystem.Services
                                  consumer);
         }
 
-        public EventingBasicConsumer SetCallBack(INotificationService notificationService, IBasicConsumer basicConsumer)
+        public EventingBasicConsumer SetCallBack(ICallbackService notificationService, IBasicConsumer basicConsumer)
         {
             EventingBasicConsumer consumer = (EventingBasicConsumer) basicConsumer;
             consumer.Received += (sender, ea) => { CallBack(notificationService, ea); };
             return consumer;
         }
 
-        public void CallBack(INotificationService notificationService, BasicDeliverEventArgs ea)
+        public void CallBack(ICallbackService notificationService, BasicDeliverEventArgs ea)
         {
             byte[] body = ea.Body.ToArray();
             string jsonBody = Encoding.UTF8.GetString(body);
@@ -75,11 +75,11 @@ namespace NotificationSystem.Services
                 notificationService.ValidatePayload();
                 notificationService.ExecuteTask();
                 channel.BasicAck(ea.DeliveryTag, false);
-                Console.WriteLine("Task executed");
+                Log.Logger.Information("Task executed");
             } catch(Exception e)
             {
-                Console.WriteLine("Task failed");
-                Console.WriteLine(e.Message);
+                channel.BasicAck(ea.DeliveryTag, false);
+                Log.Logger.Error("Task failed: " + e.Message);
             }
         }
 

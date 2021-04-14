@@ -20,6 +20,7 @@ using Models;
 using Models.Defaults;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Data.Helpers
 {
@@ -41,9 +42,9 @@ namespace Data.Helpers
             for(int i = 1; i < 5; i++)
             {
                 RoleScope roleScope = new RoleScope("ProjectWrite", i)
-                                      {
-                                          RoleId = i
-                                      };
+                {
+                    RoleId = i
+                };
                 roleScopes.Add(roleScope);
             }
 
@@ -61,9 +62,9 @@ namespace Data.Helpers
         public static Role SeedAlumniRole()
         {
             Role alumniRole = new Role
-                              {
-                                  Name = Defaults.Roles.Alumni
-                              };
+            {
+                Name = Defaults.Roles.Alumni
+            };
 
             return alumniRole;
         }
@@ -99,20 +100,20 @@ namespace Data.Helpers
         {
             List<Role> roles = new List<Role>();
             Role registeredUserRole = new Role
-                                      {
-                                          Name = nameof(Defaults.Roles.RegisteredUser),
+            {
+                Name = nameof(Defaults.Roles.RegisteredUser),
 
-                                          Scopes = new List<RoleScope>
+                Scopes = new List<RoleScope>
                                                    {
                                                        new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                                    }
-                                      };
+            };
             roles.Add(registeredUserRole);
 
             Role prRole = new Role
-                          {
-                              Name = nameof(Defaults.Roles.PrUser),
-                              Scopes = new List<RoleScope>
+            {
+                Name = nameof(Defaults.Roles.PrUser),
+                Scopes = new List<RoleScope>
                                        {
                                            new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
                                            new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
@@ -120,13 +121,13 @@ namespace Data.Helpers
                                            new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                                            new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                        }
-                          };
+            };
             roles.Add(prRole);
 
             Role dataOfficerRole = new Role
-                                   {
-                                       Name = nameof(Defaults.Roles.DataOfficer),
-                                       Scopes = new List<RoleScope>
+            {
+                Name = nameof(Defaults.Roles.DataOfficer),
+                Scopes = new List<RoleScope>
                                                 {
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserRead)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
@@ -134,13 +135,13 @@ namespace Data.Helpers
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                                 }
-                                   };
+            };
             roles.Add(dataOfficerRole);
 
             Role administratorRole = new Role
-                                     {
-                                         Name = nameof(Defaults.Roles.Administrator),
-                                         Scopes = new List<RoleScope>
+            {
+                Name = nameof(Defaults.Roles.Administrator),
+                Scopes = new List<RoleScope>
                                                   {
                                                       new RoleScope(nameof(Defaults.Scopes.AdminProjectWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.UserWrite)),
@@ -156,16 +157,18 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.FileWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.CallToActionOptionWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
-                                                      new RoleScope(nameof(Defaults.Scopes.DataSourceWrite))
+                                                      new RoleScope(nameof(Defaults.Scopes.DataSourceWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.WizardPageWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.AdminProjectExport))
                                                   }
-                                     };
+            };
             roles.Add(administratorRole);
 
             Role alumniRole = new Role
-                              {
-                                  Name = nameof(Defaults.Roles.Alumni),
-                                  Scopes = new List<RoleScope>()
-                              };
+            {
+                Name = nameof(Defaults.Roles.Alumni),
+                Scopes = new List<RoleScope>()
+            };
             roles.Add(alumniRole);
 
             return roles;
@@ -181,12 +184,12 @@ namespace Data.Helpers
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
 
             User user = new User
-                        {
-                            Role = adminRole,
-                            IdentityId = "88421113",
-                            Email = "Administrator@dex.software",
-                            Name = "Administrator bob"
-                        };
+            {
+                Role = adminRole,
+                IdentityId = "88421113",
+                Email = "Administrator@dex.software",
+                Name = "Administrator bob",
+            };
 
             return user;
         }
@@ -198,12 +201,45 @@ namespace Data.Helpers
         public static Institution SeedInstitution()
         {
             Institution institution = new Institution
-                                      {
-                                          Name = "Fontys",
-                                          Description = "Description for Fontys",
-                                          IdentityId = "https://identity.fhict.nl"
-                                      };
+            {
+                Name = "Fontys",
+                Description = "Description for Fontys",
+                IdentityId = "https://identity.fhict.nl"
+            };
             return institution;
+        }
+
+        public static List<Institution> SeedInstitutions()
+        {
+            return new List<Institution>
+            {
+                new Institution
+                {
+                    Name = "Fontys",
+                    Description = "Description for Fontys",
+                    IdentityId = "https://identity.fhict.nl"
+                },
+                new Institution()
+                {
+                    Name = "Fontys2",
+                    Description = "Description for Fontys2",
+                    IdentityId = "https://identity.fhict.nl"
+                },
+                new Institution()
+                {
+                    Name = "Fontys3",
+                    Description = "Description for Fontys3",
+                    IdentityId = "https://identity.fhict.nl"
+                }
+            };
+        }
+
+        public static IEnumerable<ProjectLike> SeedProjectLikes(List<Project> projects)
+        {
+            foreach(Project project in projects)
+            {
+                yield return new ProjectLike { Date = DateTime.Now, LikedProject = project, UserId = 1 };
+            }
         }
 
         /// <summary>
@@ -215,12 +251,12 @@ namespace Data.Helpers
         {
             Role prRole = roles.Find(i => i.Name == nameof(Defaults.Roles.PrUser));
             User user = new User
-                        {
-                            IdentityId = "985632147",
-                            Email = "Pr@dex.software",
-                            Name = "Pr jerry",
-                            Role = prRole
-                        };
+            {
+                IdentityId = "985632147",
+                Email = "Pr@dex.software",
+                Name = "Pr jerry",
+                Role = prRole
+            };
 
             return user;
         }
@@ -234,13 +270,13 @@ namespace Data.Helpers
         {
             Role dataOfficerRole = roles.Find(role => role.Name == nameof(Defaults.Roles.DataOfficer));
             User user = new User
-                        {
-                            IdentityId = "954654861",
-                            Email = "dataofficer@dex.software",
-                            Name = "data officer Sam",
-                            Role = dataOfficerRole,
-                            InstitutionId = 1
-                        };
+            {
+                IdentityId = "954654861",
+                Email = "dataofficer@dex.software",
+                Name = "data officer Sam",
+                Role = dataOfficerRole,
+                InstitutionId = 1
+            };
 
             return user;
         }
@@ -249,12 +285,12 @@ namespace Data.Helpers
         {
             Role alumniRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Alumni));
             User user = new User
-                        {
-                            IdentityId = "123456789",
-                            Email = "Alumni@dex.software",
-                            Name = "Alumni test",
-                            Role = alumniRole
-                        };
+            {
+                IdentityId = "123456789",
+                Email = "Alumni@dex.software",
+                Name = "Alumni test",
+                Role = alumniRole
+            };
 
             return user;
         }
@@ -280,6 +316,7 @@ namespace Data.Helpers
 
                 project.Created = DateTime.Now.AddDays(-2);
                 project.Updated = DateTime.Now;
+
                 projects.Add(project);
             }
 
@@ -303,10 +340,50 @@ namespace Data.Helpers
                 collaborator.ProjectId = project.Id;
                 collaborator2.ProjectId = project.Id;
 
+
                 collaborators.Add(collaborator);
                 collaborators.Add(collaborator2);
             }
             return collaborators;
+        }
+
+        /// <summary>
+        /// Seed random ProjectLikes into the database
+        /// </summary>
+        public static List<ProjectLike> SeedLikes(List<Project> projects, List<User> users)
+        {
+            List<ProjectLike> projectLikes = new List<ProjectLike>();
+            foreach(Project project in projects)
+            {
+                List<User> usersThatLiked = new List<User>();
+                Random random = new Random();
+                int randomLikes = random.Next(5, 15);
+                for(int i = 0; i < randomLikes; i++)
+                {
+                    ProjectLike projectLike = new ProjectLike
+                    {
+                        UserId = project.User.Id,
+                        LikedProject = project
+                    };
+
+                    bool userFound = false;
+                    while(!userFound)
+                    {
+                        int randomUserId = random.Next(0, users.Count);
+                        User u = users[randomUserId];
+                        if(!usersThatLiked.Contains(u))
+                        {
+                            projectLike.ProjectLiker = u;
+                            usersThatLiked.Add(u);
+                            userFound = true;
+                        }
+                    }
+
+                    projectLikes.Add(projectLike);
+                }
+
+            }
+            return projectLikes;
         }
 
         /// <summary>
@@ -375,6 +452,74 @@ namespace Data.Helpers
                    };
         }
 
+        /// <summary>
+        ///     This method seeds wizard pages.
+        /// </summary>
+        /// <returns>Returns a list of wizard pages that can be seeded into the database.</returns>
+        public static List<WizardPage> SeedWizardPages()
+        {
+            return new List<WizardPage>
+                   {
+                       new WizardPage
+                       {
+                           Name = "Enter your username",
+                           Description = "Enter the username you would like to retrieve projects from"
+                       },
+                       new WizardPage
+                       {
+                           Name = "Paste the link to your project",
+                           Description = "Enter the link to your project that you would like to import"
+                       },
+                       new WizardPage
+                       {
+                           Name = "Select the correct project",
+                           Description = "Select which project you would like to retrieve"
+                       }
+                   };
+        }
+
+        public static List<DataSource> SeedDataSources()
+        {
+            return new List<DataSource>
+                   {
+                       new DataSource
+                       {
+                           Title = "Github",
+                           Guid = "de38e528-1d6d-40e7-83b9-4334c51c19be",
+                           IsVisible = true,
+                           Description = "Seeded description for the Github data source adaptee"
+                       },
+                       new DataSource
+                       {
+                           Title = "Gitlab",
+                           Guid = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a",
+                           IsVisible = true,
+                           Description = "Seeded description for the Gitlab data source adaptee"
+                       },
+                       new DataSource
+                       {
+                           Title = "JsFiddle",
+                           Guid = "96666870-3afe-44e2-8d62-337d49cf972d",
+                           IsVisible = false,
+                           Description = "Seeded description for the JsFiddle data source adaptee"
+                       }
+                   };
+        }
+
+        public static User SeedAdminUser2(List<Role> roles)
+        {
+            Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
+
+            User user = new User
+            {
+                Role = adminRole,
+                IdentityId = "32423446",
+                Email = "elastic_admin@dex.software",
+                Name = "ElasticSearch Admin",
+            };
+
+            return user;
+        }
     }
 
 }

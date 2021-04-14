@@ -16,6 +16,7 @@
 */
 
 using Ganss.XSS;
+using MessageBrokerPublisher;
 using Models;
 using Repositories;
 using Services.Base;
@@ -23,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Services.Resources;
 
 namespace Services.Services
 {
@@ -38,14 +40,14 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams);
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams);
 
         /// <summary>
         ///     Gets a project including owner and collaborators
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Project entity</returns>
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
         /// <summary>
         ///     Get the number of projects
@@ -61,12 +63,27 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        Task<bool> ProjectExistsAsync(int id);
+
         /// <summary>
         ///     Get the users projects
         /// </summary>
         /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The total number of pages for the results</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
+        /// <summary>
+        ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
+        /// </summary>
+        /// <param name="projectsToExport"></param>
+        void MigrateDatabase(List<Project> projectsToExport);
+
+        /// <summary>
+        ///     Get project by id with users and collaborators
+        /// </summary>
+        /// <param name="id">The parameter is the id of the project.</param>
+        /// <returns>The project with users and collaborators</returns>
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync();
+
     }
 
     /// <summary>
@@ -115,7 +132,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        public Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams)
+        public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams)
         {
             if(!projectFilterParams.AmountOnPage.HasValue ||
                projectFilterParams.AmountOnPage <= 0)
@@ -144,11 +161,11 @@ namespace Services.Services
             }
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
-            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip,
-                                                                   take,
-                                                                   orderBy,
-                                                                   orderByDirection,
-                                                                   projectFilterParams.Highlighted);
+            return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(skip,
+                                                                               take,
+                                                                               orderBy,
+                                                                               orderByDirection,
+                                                                               projectFilterParams.Highlighted);
         }
 
         /// <summary>
@@ -180,11 +197,53 @@ namespace Services.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns>A project entity</returns>
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id)
         {
-            return Repository.FindWithUserAndCollaboratorsAsync(id);
+            return Repository.FindWithUserCollaboratorsAndInstitutionsAsync(id);
         }
 
+        public async Task<bool> ProjectExistsAsync(int id)
+        {
+            return await Repository.ProjectExistsAsync(id);
+        }
+
+        /// <summary>
+        ///     Get project by id with users and collaborators
+        /// </summary>
+        /// <param name="id">The parameter is the id of the project.</param>
+        /// <returns>The project with users and collaborators</returns>
+        public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync()
+        {
+            return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
+        }
+        public void MigrateDatabase(List<Project> projectsToExport)
+        {
+            // Creates the old index so the eventual old Elastic DB is deleted.
+            DeleteIndex();
+            // (Re)creates the index in Elastic.
+            CreateProjectIndexElastic();
+            // Migrates the data from MSSQL to Elastic.
+            Repository.MigrateDatabase(projectsToExport);
+            
+        }
+
+        /// <summary>
+        ///     Deletes the old ElasticSearch index.
+        /// </summary>
+        private void DeleteIndex()
+        {
+            Repository.DeleteIndex();
+        }
+
+        /// <summary>
+        ///     (Re)creates the new Elastic Search index.
+        /// </summary>
+        private void CreateProjectIndexElastic()
+        {
+            Repository.CreateProjectIndex();
+        }
+
+        
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {
             return Repository.GetUserProjects(userId);

@@ -5,18 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
-
-
 
 ### Added
 
-- Graduation system for users whose FHICT account becomes unavailable. [#287](https://github.com/DigitalExcellence/dex-backend/issues/287)
-- Added wizard to automatically import project with a public and an oauth flow - [326](https://github.com/DigitalExcellence/dex-backend/issues/326)
+- Added tests for the wizard - [#372](https://github.com/DigitalExcellence/dex-backend/issues/372)
+- Recommendation system, allowing users to get projects recommended based on similar users. [#63](https://github.com/DigitalExcellence/dex-backend/issues/63)
 
 ### Changed
-
+- Improved integration tests. - [#395](https://github.com/DigitalExcellence/dex-backend/issues/395)
 
 ### Deprecated
 
@@ -25,9 +22,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ### Fixed
-- Fixed inefficient use of entity framework for the fetching-all-projects endpoint. [376](https://github.com/DigitalExcellence/dex-backend/issues/376)
+- Renamed IdentityServer to match the rest of the project name. - [#386](https://github.com/DigitalExcellence/dex-backend/issues/386)
+
 
 ### Security
+
+
+## Release v.1.1.0-beta - 18-03-2021
+
+### Added
+
+- Graduation system for users whose FHICT account becomes unavailable. - [#287](https://github.com/DigitalExcellence/dex-backend/issues/287)
+- Added wizard to automatically import projects with a public and an oauth flow. - [#326](https://github.com/DigitalExcellence/dex-backend/issues/326)
+- Added feature to link multiple institutions to a project. - [#281](https://github.com/DigitalExcellence/dex-backend/issues/281)
+- Added action annotations for max allowed file size and allowed extensions. - [#272](https://github.com/DigitalExcellence/dex-backend/issues/272)
+
+### Fixed
+- Fixed inefficient use of entity framework for the fetching-all-projects endpoint. - [#376](https://github.com/DigitalExcellence/dex-backend/issues/376)
+- An issue where the JobScheduler did not start in staging/production. - [#382](https://github.com/DigitalExcellence/dex-backend/issues/382)
+- Fixed an issue where getting all projects was very slow. - [#394](https://github.com/DigitalExcellence/dex-backend/issues/394)
 
 
 ## Release v.1.0.1-beta - 31-01-2021

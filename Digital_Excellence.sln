@@ -22,11 +22,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06_Data", "Data\06_Data.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07_Models", "Models\07_Models.csproj", "{22BBD62E-AD77-46E5-86F8-900737BE19FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "6_IdentityServer", "IdentityServer\6_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "08_IdentityServer", "IdentityServer\08_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_MessageBrokerPublisher", "MessageBrokerPublisher\09_MessageBrokerPublisher.csproj", "{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\10_MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "14_ElasticSynchronizer", "ElasticSynchronizer\14_ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "11_NotificationSystem", "NotificationSystem\11_NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
 EndProject
@@ -80,6 +82,10 @@ Global
 		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F2E803B-9C59-4A7F-9830-6627381851EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8FB8195-9C72-4366-9F4B-65230EF98031}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0F1BB66-1749-47B7-940F-2EA6D004F33B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0F1BB66-1749-47B7-940F-2EA6D004F33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0F1BB66-1749-47B7-940F-2EA6D004F33B}.Release|Any CPU.ActiveCfg = Release|Any CPU

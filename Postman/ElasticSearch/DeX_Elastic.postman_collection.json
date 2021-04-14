@@ -1,0 +1,2292 @@
+{
+	"info": {
+		"_postman_id": "bb63de1d-4b49-45dd-9517-ac44e49fc183",
+		"name": "DeX_Elastic",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Warmup",
+			"item": [
+				{
+					"name": "Register users",
+					"item": [
+						{
+							"name": "Create-RegisteredUser1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.environment.set(\"userId1\", jsonData.id)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"identityId\": \"{{registeredUserIdentityId1}}\",\r\n    \"name\": \"User 1\",\r\n    \"email\": \"registeredUser1@postman.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create-RegisteredUser2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.environment.set(\"userId2\", jsonData.id)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"identityId\": \"{{registeredUserIdentityId2}}\",\r\n    \"name\": \"User 2\",\r\n    \"email\": \"registeredUser2@postman.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create-RegisteredUser3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.environment.set(\"userId3\", jsonData.id)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"identityId\": \"{{registeredUserIdentityId3}}\",\r\n    \"name\": \"User 3\",\r\n    \"email\": \"registeredUser3@postman.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Post projects",
+					"item": [
+						{
+							"name": "Project-CreateProjectToFollow1-Administrator",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId1\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.success;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"type": "text",
+										"value": "{{administratorUserIdentityId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Project 1\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-CreateProjectToFollow2-Administrator",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId2\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.success;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"type": "text",
+										"value": "{{administratorUserIdentityId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Project 2\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-CreateProjectToFollow3-Administrator",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId3\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.success;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"type": "text",
+										"value": "{{administratorUserIdentityId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Project 3\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-CreateProjectToFollow4-Administrator",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId4\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.success;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"type": "text",
+										"value": "{{administratorUserIdentityId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Project 4\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-CreateProjectToFollow5-Administrator",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId5\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.success;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"type": "text",
+										"value": "{{administratorUserIdentityId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Project 5\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Project-CreateProjectToFollow6-Administrator",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.environment.set(\"projectId6\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Response must be valid and have a json body\", function () {",
+											"     pm.response.to.be.success;",
+											"     pm.response.to.be.withBody;",
+											"     pm.response.to.be.json;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"type": "text",
+										"value": "{{administratorUserIdentityId}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Project 5\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "TestCase1",
+			"item": [
+				{
+					"name": "Warmup",
+					"item": [
+						{
+							"name": "User1-Like-Project1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId1}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId2}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId3}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId3}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tests",
+					"item": [
+						{
+							"name": "Get Project Recommendations",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var project1 = pm.environment.get(\"projectId1\");\r",
+											"var project2 = pm.environment.get(\"projectId2\");\r",
+											"var foundProject1;\r",
+											"var foundProject2;\r",
+											"\r",
+											"function findProject(jsonData, id) {\r",
+											"    for (var i = 0; i < jsonData.length; i++) {\r",
+											"        if (jsonData[i].id == id) {\r",
+											"            console.log(jsonData[i].id);\r",
+											"            console.log(id);\r",
+											"            return i;\r",
+											"        }\r",
+											"    }\r",
+											"    return -1;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Expected projects are recommended: \", function() {\r",
+											"    foundProject1 = findProject(jsonData, project1);\r",
+											"    foundProject2 = findProject(jsonData, project2);\r",
+											"    console.log(foundProject1);\r",
+											"    console.log(foundProject2);\r",
+											"    pm.expect(foundProject1).to.not.eql(-1);\r",
+											"    pm.expect(foundProject2).to.not.eql(-1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(function(){}, [2500]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/projectrecommendations/2",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"projectrecommendations",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cleanup",
+					"item": [
+						{
+							"name": "User1-Like-Project1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId1}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId2}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId3}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId3}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "TestCase2",
+			"item": [
+				{
+					"name": "Warmup",
+					"item": [
+						{
+							"name": "User1-Like-Project1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId1}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId2}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId3}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project6",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId6}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId6}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId4}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId4}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project5",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId5}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId5}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project6",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId6}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId6}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User3-Like-Project6",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId3}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId6}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId6}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tests",
+					"item": [
+						{
+							"name": "Get 5 Project Recommendations",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var project1 = pm.environment.get(\"projectId1\");\r",
+											"var project2 = pm.environment.get(\"projectId2\");\r",
+											"var project3 = pm.environment.get(\"projectId3\");\r",
+											"var project4 = pm.environment.get(\"projectId4\");\r",
+											"var project5 = pm.environment.get(\"projectId5\");\r",
+											"var foundProject1;\r",
+											"var foundProject2;\r",
+											"var foundProject3;\r",
+											"var foundProject4;\r",
+											"var foundProject5;\r",
+											"\r",
+											"function findProject(jsonData, id) {\r",
+											"    for (var i = 0; i < jsonData.length; i++) {\r",
+											"        if (jsonData[i].id == id) {\r",
+											"            return i;\r",
+											"        }\r",
+											"    }\r",
+											"    return -1;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Expected projects are recommended: \", function() {\r",
+											"    foundProject1 = findProject(jsonData, project1);\r",
+											"    foundProject2 = findProject(jsonData, project2);\r",
+											"    foundProject3 = findProject(jsonData, project3);\r",
+											"    foundProject5 = findProject(jsonData, project4);\r",
+											"    foundProject6 = findProject(jsonData, project5);\r",
+											"    pm.expect(foundProject1).to.not.eql(-1);\r",
+											"    pm.expect(foundProject2).to.not.eql(-1);\r",
+											"    pm.expect(foundProject3).to.not.eql(-1);\r",
+											"    pm.expect(foundProject4).to.not.eql(-1);\r",
+											"    pm.expect(foundProject5).to.not.eql(-1);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"5 projects are returned.\", function() {\r",
+											"    pm.expect(jsonData.length).to.be.eql(5);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(function(){}, [2500]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId3}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/projectrecommendations/6",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"projectrecommendations",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get 4 Project Recommendations",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var project1 = pm.environment.get(\"projectId1\");\r",
+											"var project2 = pm.environment.get(\"projectId2\");\r",
+											"var project3 = pm.environment.get(\"projectId3\");\r",
+											"var project4 = pm.environment.get(\"projectId4\");\r",
+											"var project5 = pm.environment.get(\"projectId5\");\r",
+											"var foundProject1;\r",
+											"var foundProject2;\r",
+											"var foundProject3;\r",
+											"var foundProject4;\r",
+											"var foundProject5;\r",
+											"\r",
+											"function findProject(jsonData, id) {\r",
+											"    for (var i = 0; i < jsonData.length; i++) {\r",
+											"        if (jsonData[i].id == id) {\r",
+											"            return i;\r",
+											"        }\r",
+											"    }\r",
+											"    return -1;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Expected projects are recommended: \", function() {\r",
+											"    foundProject1 = findProject(jsonData, project1);\r",
+											"    foundProject2 = findProject(jsonData, project2);\r",
+											"    foundProject3 = findProject(jsonData, project3);\r",
+											"    foundProject5 = findProject(jsonData, project4);\r",
+											"    foundProject6 = findProject(jsonData, project5);\r",
+											"    pm.expect(foundProject1).to.not.eql(-1);\r",
+											"    pm.expect(foundProject2).to.not.eql(-1);\r",
+											"    pm.expect(foundProject3).to.not.eql(-1);\r",
+											"    pm.expect(foundProject4).to.not.eql(-1);\r",
+											"    pm.expect(foundProject5).to.not.eql(-1);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"4 projects are returned\", function() {\r",
+											"    pm.expect(jsonData.length).to.be.eql(4);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"setTimeout(function(){}, [2500]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId3}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/User/projectrecommendations/4",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"projectrecommendations",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cleanup",
+					"item": [
+						{
+							"name": "User1-Like-Project1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId1}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId2}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User1-Like-Project3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId1}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId3}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId4}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId4}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project5",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId5}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId5}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User2-Like-Project6",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId2}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId6}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId6}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User3-Like-Project6",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response must be valid and have a json body\", function () {\r",
+											"     pm.response.to.be.ok;\r",
+											"     pm.response.to.be.withBody;\r",
+											"     pm.response.to.be.json;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{registeredUserIdentityId3}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/like/{{projectId6}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"like",
+										"{{projectId6}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "Delete Users",
+					"item": [
+						{
+							"name": "Delete-RegisteredUser1",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{userId1}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{userId1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete-RegisteredUser2",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{userId2}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{userId2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete-RegisteredUser2 Copy",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/User/{{userId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"User",
+										"{{userId3}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Projects",
+					"item": [
+						{
+							"name": "Delete-Project1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId1}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete-Project2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId2}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete-Project3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId3}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId3}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete-Project4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId4}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId4}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete-Project5",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId5}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId5}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete-Project6",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/{{projectId6}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"{{projectId6}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "tokenType",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "accessToken",
+				"value": "{{accessToken}}",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
+					"",
+					"let tokenUrl = pm.variables.get(\"tokenUrl\");",
+					"let clientId = pm.variables.get(\"clientId\");",
+					"let clientSecret = pm.variables.get(\"clientSecret\");",
+					"let scope = pm.variables.get(\"scope\");",
+					"",
+					"let getTokenRequest = {",
+					"    method: 'POST',",
+					"    url: tokenUrl,",
+					"    auth: {",
+					"        type: \"basic\",",
+					"        basic: [",
+					"            { key: \"username\", value: clientId },",
+					"            { key: \"password\", value: clientSecret }",
+					"        ]",
+					"    },",
+					"    body: {",
+					"        mode: 'formdata',",
+					"        formdata: [",
+					"            { key: 'grant_type', value: 'client_credentials' },",
+					"            { key: 'scope', value: scope }",
+					"        ]",
+					"    }",
+					"};",
+					"",
+					"pm.sendRequest(getTokenRequest, (err, response) => {",
+					"    let jsonResponse = response.json(),",
+					"        newAccessToken = jsonResponse.access_token;",
+					"",
+					"    console.log({ err, jsonResponse, newAccessToken })",
+					"",
+					"    pm.environment.set('accessToken', newAccessToken);",
+					"    pm.variables.set('accessToken', newAccessToken);",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

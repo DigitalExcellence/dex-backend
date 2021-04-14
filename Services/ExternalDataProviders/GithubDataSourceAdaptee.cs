@@ -33,10 +33,108 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
+    public interface IGithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
+    {
+
+        /// <summary>
+        ///     This method is responsible for retrieving all the github repository contents.
+        /// </summary>
+        /// <param name="accessToken">The access token which is used to authenticate.</param>
+        /// <returns>This method returns a collection of github data source resource results.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from all public repositories from a user.
+        /// </summary>
+        /// <param name="username">The username which is used to retrieve projects from the correct user.</param>
+        /// <returns>This method returns a collection of github data source resource results.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(string username);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a repository by uri.
+        /// </summary>
+        /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a github data source resource result from the specified uri.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from a public repositories from an identifier.
+        /// </summary>
+        /// <param name="identifier">The identifier which is used to retrieve the correct project.</param>
+        /// <returns>This method returns a github data source resource result.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the readme from a repository.
+        /// </summary>
+        /// <param name="user">
+        ///     This parameter represents the owners of the repository. This is in most cases the name of the user
+        ///     or in some other case the name of the organization.
+        /// </param>
+        /// <param name="repository">This parameter represents the name of the repository.</param>
+        /// <param name="accessToken">
+        ///     This parameter is the access token, which is used to retrieve a readme from a private
+        ///     repository. In case of a public repository, the default value is null.
+        /// </param>
+        /// <returns>This method returns the content of the readme.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        Task<string> FetchReadme(string user, string repository, string accessToken = null);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the content from the readme.
+        /// </summary>
+        /// <param name="downloadUri">
+        ///     The download uri parameter represents the uri where the content of the readme gets
+        ///     downloaded.
+        /// </param>
+        /// <returns>This method will return the content from the readme.</returns>
+        /// <exception cref="ExternalException">
+        ///     This method could throw an external exception whenever the status code is not
+        ///     successful.
+        /// </exception>
+        Task<string> FetchReadmeContent(Uri downloadUri);
+
+        /// <summary>
+        ///     This method is responsible for retrieving Oauth tokens from the Github API.
+        /// </summary>
+        /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
+        /// <returns>This method returns the Oauth tokens.</returns>
+        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
+        Task<OauthTokens> FetchOauthTokens(string code);
+
+        /// <summary>
+        ///     This method is responsible for retrieving the contributors from a Github repository.
+        /// </summary>
+        /// <param name="owner">This parameter represents the owner of the repository.</param>
+        /// <param name="repo">This parameter represents the name of the repository.</param>
+        /// <returns>This method returns the github data source contributors resource result.</returns>
+        Task<List<GithubDataSourceContributorResourceResult>> FetchContributorsFromRepository(string owner, string repo);
+
+    }
+
     /// <summary>
     ///     This class is responsible for communicating with the external Github API.
     /// </summary>
-    public class GithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
+    public class GithubDataSourceAdaptee : IGithubDataSourceAdaptee
     {
 
         private readonly string clientId;
@@ -129,8 +227,18 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
         /// <returns>This method returns the Oauth tokens.</returns>
-        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         public async Task<OauthTokens> GetTokens(string code)
+        {
+            return await FetchOauthTokens(code);
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving Oauth tokens from the Github API.
+        /// </summary>
+        /// <param name="code">The code which is used to retrieve the Oauth tokens.</param>
+        /// <returns>This method returns the Oauth tokens.</returns>
+        /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
+        public async Task<OauthTokens> FetchOauthTokens(string code)
         {
             Uri baseGithubUrl = new Uri("https://github.com/");
             IRestClient client = restClientFactory.Create(baseGithubUrl);
@@ -206,6 +314,9 @@ namespace Services.ExternalDataProviders
         {
             GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri);
             Project p = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
+            List<GithubDataSourceContributorResourceResult> contributors =
+                await FetchContributorsFromRepository(githubDataSource.Owner.Login, githubDataSource.Name);
+            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login })); 
             p.Description = await FetchReadme(githubDataSource.Owner.Login, githubDataSource.Name) ?? p.Description;
             return p;
         }
@@ -221,6 +332,9 @@ namespace Services.ExternalDataProviders
             Project p = mapper.Map<GithubDataSourceResourceResult, Project>(projectResourceResult);
             p.Description = await FetchReadme(projectResourceResult.Owner.Login, projectResourceResult.Name) ??
                             p.Description;
+            List<GithubDataSourceContributorResourceResult> contributors =
+                await FetchContributorsFromRepository(projectResourceResult.Owner.Login, projectResourceResult.Name);
+            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login }));
             return p;
         }
 
@@ -233,7 +347,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
+        public async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest("user/repos", Method.GET);
@@ -247,8 +361,8 @@ namespace Services.ExternalDataProviders
             request.AddQueryParameter("visibility", "all");
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(string.IsNullOrEmpty(response.Content)) return null;
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
             IEnumerable<GithubDataSourceResourceResult> projects =
                 JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
             return projects;
@@ -263,15 +377,15 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(
+        public async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(
             string username)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"users/{username}/repos", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
-            if(string.IsNullOrEmpty(response.Content)) return null;
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            if(string.IsNullOrEmpty(response.Content)) return null;
             IEnumerable<GithubDataSourceResourceResult> resourceResults =
                 JsonConvert.DeserializeObject<IEnumerable<GithubDataSourceResourceResult>>(response.Content);
             return resourceResults;
@@ -286,7 +400,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        public async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
@@ -313,7 +427,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier)
+        public async Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repositories/{identifier}", Method.GET);
@@ -343,7 +457,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<string> FetchReadme(string user, string repository, string accessToken = null)
+        public async Task<string> FetchReadme(string user, string repository, string accessToken = null)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repos/{user}/{repository}/readme");
@@ -386,7 +500,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        private async Task<string> FetchReadmeContent(Uri downloadUri)
+        public async Task<string> FetchReadmeContent(Uri downloadUri)
         {
             IRestClient client = restClientFactory.Create(downloadUri);
             IRestRequest request = new RestRequest(Method.GET);
@@ -405,6 +519,26 @@ namespace Services.ExternalDataProviders
             return response.Content;
         }
 
+        /// <summary>
+        ///     This method is responsible for retrieving the contributors from a Github repository.
+        /// </summary>
+        /// <param name="owner">This parameter represents the owner of the repository.</param>
+        /// <param name="repo">This parameter represents the name of the repository.</param>
+        /// <returns>This method returns the github data source contributors resource result.</returns>
+        public async Task<List<GithubDataSourceContributorResourceResult>> FetchContributorsFromRepository(string owner, string repo)
+        {
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestRequest request = new RestRequest($"repos/{owner}/{repo}/contributors");
+            IRestResponse response = await client.ExecuteAsync(request);
+
+            if(string.IsNullOrEmpty(response.Content)) return null;
+            if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            List<GithubDataSourceContributorResourceResult> resourceResult =
+                JsonConvert.DeserializeObject<List<GithubDataSourceContributorResourceResult>>(response.Content);
+            return resourceResult;
+        }
+
     }
 
 }
+
