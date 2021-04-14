@@ -158,6 +158,11 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.RoleWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
 
+                o.AddPolicy(nameof(Defaults.Scopes.CategoryRead),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CategoryRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.CategoryWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CategoryWrite))));
+
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
@@ -468,6 +473,12 @@ namespace API
 
             if(!env.IsProduction())
             {
+                if(!context.Category.Any())
+                {
+                    context.Category.AddRange(Seed.SeedCategories());
+                    context.SaveChanges();
+                }
+
                 if(!context.Institution.Any())
                 {
                     // Seed institutions

@@ -20,6 +20,7 @@ using AutoMapper;
 using Models;
 using Services.ExternalDataProviders;
 using Services.ExternalDataProviders.Resources;
+using System.Collections.Generic;
 
 namespace API.Configuration
 {
@@ -83,7 +84,8 @@ namespace API.Configuration
 
             CreateMap<User, LimitedUserResourceResult>();
 
-            CreateMap<ProjectResource, Project>();
+            CreateMap<ProjectResource, Project>()
+                .ForMember(q => q.Categories, opt => opt.Ignore());
             CreateMap<Project, ProjectResourceResult>();
             CreateMap<ProjectLike, ProjectLikesResourceResult>();
             CreateMap<Project, ProjectHighlightResourceResult>();
@@ -102,6 +104,13 @@ namespace API.Configuration
 
             CreateMap<RoleResource, Role>();
             CreateMap<Role, RoleResourceResult>();
+
+            CreateMap<CategoryResource, Category>();
+            CreateMap<Category, CategoryResourceResult>();
+            CreateMap<ProjectCategoryResource, ProjectCategory>();
+            CreateMap<ProjectCategory, ProjectCategoryResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(q=> q.Category.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Category.Name));
 
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();

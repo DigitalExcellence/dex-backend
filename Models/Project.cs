@@ -77,6 +77,9 @@ namespace Models
 
         public bool InstitutePrivate { get; set; }
 
+        public List<ProjectCategory> Categories { get; set; }
+
+
         /// <summary>
         /// Checks if the user can access the project based on
         /// if the insitution is private, if the user is part of an institution linked to this project
