@@ -1537,6 +1537,7 @@
 											"function findProject(jsonData, id) {\r",
 											"    for (var i = 0; i < jsonData.length; i++) {\r",
 											"        if (jsonData[i].id == id) {\r",
+											"            \r",
 											"            return i;\r",
 											"        }\r",
 											"    }\r",
@@ -1598,7 +1599,7 @@
 									"script": {
 										"exec": [
 											"var jsonData = pm.response.json();\r",
-											"var project1 = pm.environment.get(\"projectId3\");\r",
+											"var project3 = pm.environment.get(\"projectId3\");\r",
 											"\r",
 											"function findProject(jsonData, id) {\r",
 											"    for (var i = 0; i < jsonData.length; i++) {\r",
@@ -1610,8 +1611,8 @@
 											"}\r",
 											"\r",
 											"pm.test(\"Expected projects are suggested: \", function() {\r",
-											"    foundProject1 = findProject(jsonData.autocompleteProjects, project1);\r",
-											"    pm.expect(foundProject1).to.not.eql(-1);\r",
+											"    foundProject = findProject(jsonData.autocompleteProjects, project3);\r",
+											"    pm.expect(foundProject).to.not.eql(-1);\r",
 											"});\r",
 											"\r",
 											""
