@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bb63de1d-4b49-45dd-9517-ac44e49fc183",
+		"_postman_id": "8cc3f0c7-3271-4261-9950-950fefbc2d3d",
 		"name": "DeX_Elastic",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -187,7 +187,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"name\": \"Project 1\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"raw": "{\r\n  \"name\": \"Testproject 1\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -299,7 +299,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"name\": \"Project 3\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+									"raw": "{\r\n  \"name\": \"DeX Backend\",\r\n  \"description\": \"postmantest_ProjectToFollow\",\r\n  \"shortDescription\": \"postmantest_ProjectToFollow\",\r\n  \"uri\": \"postmantest_ProjectToFollow\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToFollow\",\r\n      \"role\": \"postmantest_ProjectToFollow\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1519,6 +1519,138 @@
 										"User",
 										"projectrecommendations",
 										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get autocomplete test 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var project1 = pm.environment.get(\"projectId1\");\r",
+											"\r",
+											"function findProject(jsonData, id) {\r",
+											"    for (var i = 0; i < jsonData.length; i++) {\r",
+											"        if (jsonData[i].id == id) {\r",
+											"            return i;\r",
+											"        }\r",
+											"    }\r",
+											"    return -1;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Expected projects are suggested: \", function() {\r",
+											"    foundProject1 = findProject(jsonData.autocompleteProjects, project1);\r",
+											"    pm.expect(foundProject1).to.not.eql(-1);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/search/autocomplete?query=Test",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"search",
+										"autocomplete"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "Test"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get autocomplete test 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"var project1 = pm.environment.get(\"projectId3\");\r",
+											"\r",
+											"function findProject(jsonData, id) {\r",
+											"    for (var i = 0; i < jsonData.length; i++) {\r",
+											"        if (jsonData[i].id == id) {\r",
+											"            return i;\r",
+											"        }\r",
+											"    }\r",
+											"    return -1;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Expected projects are suggested: \", function() {\r",
+											"    foundProject1 = findProject(jsonData.autocompleteProjects, project1);\r",
+											"    pm.expect(foundProject1).to.not.eql(-1);\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/search/autocomplete?query=DeX",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"search",
+										"autocomplete"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "DeX"
+										}
 									]
 								}
 							},
