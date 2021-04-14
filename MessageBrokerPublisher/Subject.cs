@@ -15,9 +15,14 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+
 namespace MessageBrokerPublisher
 {
 
+
+    /// <summary>
+    ///     These subjects are the RabbitMQ Queues to which to publish to.
+    /// </summary>
     public enum Subject
     {
         EMAIL,

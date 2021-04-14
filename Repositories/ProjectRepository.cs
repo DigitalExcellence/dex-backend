@@ -28,6 +28,7 @@ using Repositories.ElasticSearch;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -53,7 +54,7 @@ namespace Repositories
         /// <param name="orderByAsc"></param>
         /// <param name="highlighted"></param>
         /// <returns>List of projects</returns>
-        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
@@ -107,7 +108,16 @@ namespace Repositories
         /// <returns>
         ///     This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
+
+        Task<bool> ProjectExistsAsync(int id);
+
+        /// <summary>
+        ///     Get the user projects.
+        /// </summary>
+        /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
+        /// <returns>A enumerable of the users projects</returns>
+        Task<IEnumerable<Project>> GetUserProjects(int userId);
         Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId);
         void CreateProjectIndex();
         void DeleteIndex();
@@ -182,7 +192,7 @@ namespace Repositories
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <returns>This method returns a list of projects filtered by the specified parameters.</returns>
-        public virtual async Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(
+        public virtual async Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
@@ -190,13 +200,12 @@ namespace Repositories
             bool? highlighted = null
         )
         {
-            IQueryable<Project> queryableProjects = GetDbSet<Project>()
-                                                    .Include(u => u.User)
-                                                    .Include(p => p.ProjectIcon)
-                                                    .Include(p => p.CallToAction)
-                                                    .Include( p => p.Collaborators )
-                                                    .Include( p => p.User )
-                                                    .Include( p => p.Likes );
+            IQueryable<Project> queryableProjects = GetDbSet<Project>().Include(u => u.User);
+            queryableProjects.Include(p => p.ProjectIcon).Load();
+            queryableProjects.Include(p => p.CallToAction).Load();
+            queryableProjects.Include(p => p.Collaborators).Load();
+            queryableProjects.Include(p => p.Likes).Load();
+            queryableProjects.Include(p => p.LinkedInstitutions).Load();
 
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
 
@@ -266,7 +275,7 @@ namespace Repositories
         /// <returns>
         ///     This method returns possibly redacted Project object with user and collaborators.
         /// </returns>
-        public async Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public async Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id)
         {
             Project project = await GetDbSet<Project>()
                                     .Include(p => p.User)
@@ -282,6 +291,11 @@ namespace Repositories
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
+
+                project.LinkedInstitutions = await GetDbSet<ProjectInstitution>()
+                                                    .Include(p => p.Institution)
+                                                    .Where(p => p.ProjectId == project.Id)
+                                                    .ToListAsync();
             }
 
             return RedactUser(project);
@@ -314,8 +328,7 @@ namespace Repositories
 
             DbSet.Update(entity);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
             
 
@@ -343,8 +356,7 @@ namespace Repositories
             base.Save();
             Console.WriteLine("Add method id: " + entity.Id);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
         }
 
@@ -360,8 +372,7 @@ namespace Repositories
             entityList.ForEach(x =>
             {
                 SetLikes(x);
-                ESProjectDTO projectToSync = new ESProjectDTO();
-                ProjectConverter.ProjectToESProjectDTO(x, projectToSync);
+                ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(x);
                 taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync),
                     Subject.ELASTIC_CREATE_OR_UPDATE);
             });
@@ -382,8 +393,7 @@ namespace Repositories
             base.Save();
             Console.WriteLine("AddAsync method id: " + entity.Id);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
         }
 
@@ -395,12 +405,28 @@ namespace Repositories
         {
             base.Remove(entity);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
         }
 
         /// <summary>
+        ///     Get the user projects.
+        /// </summary>
+        /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
+        /// <returns>A enumerable of the users projects</returns>
+        public async Task<IEnumerable<Project>> GetUserProjects(int userId)
+        {
+            IEnumerable<Project> projects = await GetDbSet<Project>()
+                   .Include(p => p.Collaborators)
+                   .Include(p => p.ProjectIcon)
+                   .Where(p => p.UserId == userId)
+                   .ToListAsync();
+
+            return projects;
+        }
+
+        /// <summary>
+        ///     This method redacts user email from the Project if isPublic setting is set to false.
         /// This method asynchronously removes the project from the database and ES Index coupled to the given id.
         /// </summary>
         /// <param name="id">The project parameter represents unique identifier.</param>
@@ -411,8 +437,7 @@ namespace Repositories
         {
             Project entity = DbSet.Find(id);
             SetLikes(entity);
-            ESProjectDTO projectToSync = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(entity, projectToSync);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
             return base.RemoveAsync(id);
         }
@@ -551,11 +576,8 @@ namespace Repositories
         /// <returns>This method returns the filtered IQueryable including the project user.</returns>
         private async Task<IQueryable<Project>> GetProjectQueryable(string query)
         {
-            IQueryable<Project> projectsToReturn = DbSet
-                                                   .Include(p => p.User)
-                                                   .Include(i => i.ProjectIcon)
-                                                   .Include(p => p.CallToAction)
-                                                   .Include(l => l.Likes)
+            IQueryable<Project> projectsToReturn = GetDbSet<Project>()
+                                                   .Include(u => u.User)
                                                    .Where(p =>
                                                               p.Name.Contains(query) ||
                                                               p.Description.Contains(query) ||
@@ -564,8 +586,11 @@ namespace Repositories
                                                               p.Id.ToString()
                                                                .Equals(query) ||
                                                               p.User.Name.Contains(query));
+                    projectsToReturn.Include(p => p.ProjectIcon).Load();
+                    projectsToReturn.Include(p => p.CallToAction).Load();
+                    projectsToReturn.Include(p => p.Likes).Load();
 
-            foreach(Project project in projectsToReturn)
+                    foreach(Project project in projectsToReturn)
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
@@ -621,7 +646,7 @@ namespace Repositories
             List<Project> projects = new List<Project>();
             foreach(ESProjectDTO p in elasticSearchProjects)
             {
-                projects.Add(await FindWithUserAndCollaboratorsAsync(p.Id));
+                projects.Add(await FindWithUserCollaboratorsAndInstitutionsAsync(p.Id));
             }
             return projects;
         }
@@ -651,8 +676,7 @@ namespace Repositories
             {
                 throw new NotFoundException("Project to sync was not found");
             }
-            ESProjectDTO eSProjectDTO = new ESProjectDTO();
-            ProjectConverter.ProjectToESProjectDTO(projectToSync, eSProjectDTO);
+            ESProjectDTO eSProjectDTO = ProjectConverter.ProjectToESProjectDTO(projectToSync);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
                      
             
@@ -677,6 +701,10 @@ namespace Repositories
 
             ParseJsonToESProjectFormatDTOList(restResponse, esProjectFormats);
             return await ConvertProjects(esProjectFormats);
+        }
+        public Task<bool> ProjectExistsAsync(int id)
+        {
+            return GetDbSet<Project>().AnyAsync(i => i.Id == id);
         }
     }
 

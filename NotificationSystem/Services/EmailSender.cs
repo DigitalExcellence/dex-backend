@@ -40,7 +40,6 @@ namespace NotificationSystem.Services
             this.sandboxMode = sandboxMode;
         }
 
-        public EmailNotification Notification { get; set; }
 
         public void ParsePayload(string jsonBody)
         {
@@ -82,6 +81,7 @@ namespace NotificationSystem.Services
         }
 
         public Response Response { get => response; set => response = value; }
+        public EmailNotification Notification { get => notification;}
     }
 
 }

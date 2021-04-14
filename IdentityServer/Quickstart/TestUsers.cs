@@ -105,6 +105,16 @@ namespace IdentityServer
                                                Firstname = "Alumni",
                                                Lastname = "Test",
                                                Email = "alumnirole@email.com"
+                                           },
+                                           new IdentityUser
+                                           {
+                                               SubjectId = "32423446",
+                                               Username = "ElasticAdmin",
+                                               Password = LoginHelper.GetHashPassword("Admin321!"),
+                                               Name = "Elastic",
+                                               Firstname = "Admin",
+                                               Lastname = "Admin",
+                                               Email = "Admin@email.com"
                                            }
                                        };
 

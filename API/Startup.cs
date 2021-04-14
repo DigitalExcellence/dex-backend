@@ -20,7 +20,6 @@ using API.Extensions;
 using API.Filters;
 using API.HelperClasses;
 using API.InternalResources;
-using Bogus.Extensions;
 using Data;
 using Data.Helpers;
 using FluentValidation.AspNetCore;
@@ -199,8 +198,14 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.UserTaskWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.UserTaskWrite))));
+
+                o.AddPolicy(nameof(Defaults.Scopes.WizardPageWrite),
+                            policy => policy.Requirements.Add(
+                                new ScopeRequirement(nameof(Defaults.Scopes.WizardPageWrite))));
+              
                 o.AddPolicy(nameof(Defaults.Scopes.AdminProjectExport),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.AdminProjectExport))));
+
             });
 
             services.AddCors();
@@ -466,7 +471,7 @@ namespace API
                 if(!context.Institution.Any())
                 {
                     // Seed institutions
-                    context.Institution.Add(Seed.SeedInstitution());
+                    context.Institution.AddRange(Seed.SeedInstitution());
                     context.SaveChanges();
                 }
 
@@ -503,7 +508,20 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-
+                if(!context.WizardPage.Any())
+                {
+                    context.WizardPage.AddRange(Seed.SeedWizardPages());
+                    context.SaveChanges();
+                }
+                if(!context.DataSource.Any())
+                {
+                    context.DataSource.AddRange(Seed.SeedDataSources());
+                    context.SaveChanges();
+                }
+                
+                SeedHelper.SeedDataSourceWizardPages(context);
+                
+              
                 // TODO seed embedded projects
             }
 

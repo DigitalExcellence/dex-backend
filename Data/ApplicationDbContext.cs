@@ -178,6 +178,7 @@ namespace Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
             modelBuilder.ApplyConfiguration(new DataSourceWizardPageConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectInstitutionConfiguration());
         }
 
     }

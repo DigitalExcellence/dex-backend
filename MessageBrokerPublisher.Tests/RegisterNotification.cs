@@ -75,10 +75,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.Setup(x => x.CreateConnection())
                                  .Returns(connectionMock.Object);
 
-            ITaskPublisher TaskPublisher = new TaskPublisher(connectionFactoryMock.Object);
+            ITaskPublisher taskPublisher = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act
-            TaskPublisher.RegisterTask(payload, Subject.EMAIL);
+            taskPublisher.RegisterTask(payload, Subject.EMAIL);
 
             // Assert
             connectionFactoryMock.Verify();
@@ -131,10 +131,10 @@ namespace MessageBrokerPublisher.Tests
             connectionFactoryMock.Setup(x => x.CreateConnection())
                                  .Returns(connectionMock.Object);
 
-            ITaskPublisher TaskPublisher = new TaskPublisher(connectionFactoryMock.Object);
+            ITaskPublisher taskPublisher = new TaskPublisher(connectionFactoryMock.Object);
 
             // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => TaskPublisher.RegisterTask(null, Subject.EMAIL));
+            Assert.Throws<ArgumentNullException>(() => taskPublisher.RegisterTask(null, Subject.EMAIL));
         }
 
     }

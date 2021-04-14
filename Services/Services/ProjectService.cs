@@ -40,14 +40,14 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams);
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams);
 
         /// <summary>
         ///     Gets a project including owner and collaborators
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Project entity</returns>
-        Task<Project> FindWithUserAndCollaboratorsAsync(int id);
+        Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
         /// <summary>
         ///     Get the number of projects
@@ -63,6 +63,14 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
 
+        Task<bool> ProjectExistsAsync(int id);
+
+        /// <summary>
+        ///     Get the users projects
+        /// </summary>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
+        /// <returns>The total number of pages for the results</returns>
+        Task<IEnumerable<Project>> GetUserProjects(int userId);
         /// <summary>
         ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
         /// </summary>
@@ -74,7 +82,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="id">The parameter is the id of the project.</param>
         /// <returns>The project with users and collaborators</returns>
-        Task<List<Project>> GetAllWithUserAndCollaboratorsAsync();
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync();
 
         /// <summary>
         ///     Get projects where the title begins with a certain string of characters.
@@ -130,7 +138,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>A list of all the projects</returns>
-        public Task<List<Project>> GetAllWithUsersAndCollaboratorsAsync(ProjectFilterParams projectFilterParams)
+        public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(ProjectFilterParams projectFilterParams)
         {
             if(!projectFilterParams.AmountOnPage.HasValue ||
                projectFilterParams.AmountOnPage <= 0)
@@ -159,11 +167,11 @@ namespace Services.Services
             }
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
-            return Repository.GetAllWithUsersAndCollaboratorsAsync(skip,
-                                                                   take,
-                                                                   orderBy,
-                                                                   orderByDirection,
-                                                                   projectFilterParams.Highlighted);
+            return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(skip,
+                                                                               take,
+                                                                               orderBy,
+                                                                               orderByDirection,
+                                                                               projectFilterParams.Highlighted);
         }
 
         /// <summary>
@@ -195,9 +203,14 @@ namespace Services.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns>A project entity</returns>
-        public Task<Project> FindWithUserAndCollaboratorsAsync(int id)
+        public Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id)
         {
-            return Repository.FindWithUserAndCollaboratorsAsync(id);
+            return Repository.FindWithUserCollaboratorsAndInstitutionsAsync(id);
+        }
+
+        public async Task<bool> ProjectExistsAsync(int id)
+        {
+            return await Repository.ProjectExistsAsync(id);
         }
 
         /// <summary>
@@ -205,9 +218,9 @@ namespace Services.Services
         /// </summary>
         /// <param name="id">The parameter is the id of the project.</param>
         /// <returns>The project with users and collaborators</returns>
-        public Task<List<Project>> GetAllWithUserAndCollaboratorsAsync()
+        public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync()
         {
-            return Repository.GetAllWithUsersAndCollaboratorsAsync();
+            return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
         }
         public void MigrateDatabase(List<Project> projectsToExport)
         {
@@ -236,6 +249,11 @@ namespace Services.Services
             Repository.CreateProjectIndex();
         }
 
+        
+        public Task<IEnumerable<Project>> GetUserProjects(int userId)
+        {
+            return Repository.GetUserProjects(userId);
+        }
         public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
         {
             return await Repository.FindProjectsWhereTitleStartsWithQuery(query);

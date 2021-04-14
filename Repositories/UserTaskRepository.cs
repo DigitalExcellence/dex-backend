@@ -25,23 +25,57 @@ using System.Threading.Tasks;
 namespace Repositories
 {
 
+    /// <summary>
+    ///     This is the user task repository
+    /// </summary>
     public interface IUserTaskRepository : IRepository<UserTask>
     {
-
+        /// <summary>
+        ///     This is the interface method which gets all user tasks for a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>List of user tasks</returns>
         public Task<List<UserTask>> GetUserTasksForUser(int userId);
+
+        /// <summary>
+        ///     This is the interface method which gets all user tasks
+        /// </summary>
+        /// <returns>List of user tasks</returns>
+        Task<IEnumerable<UserTask>> GetAllUserTasks();
 
     }
 
+    /// <summary>
+    ///     This is the user task repository
+    /// </summary>
     public class UserTaskRepository : Repository<UserTask>, IUserTaskRepository
     {
-
+        /// <summary>
+        ///     This is the constructor of the user task repository
+        /// </summary>
+        /// <param name="dbContext"></param>
         public UserTaskRepository(DbContext dbContext) : base(dbContext) { }
 
-
+        /// <summary>
+        ///     This is the method which gets all user tasks for a specific user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>List of user tasks</returns>
         public async Task<List<UserTask>> GetUserTasksForUser(int userId)
         {
             return await GetDbSet<UserTask>()
                          .Where(u => u.User.Id == userId)
+                         .ToListAsync();
+        }
+
+        /// <summary>
+        ///     This is the method which gets all user tasks
+        /// </summary>
+        /// <returns>List of user tasks</returns>
+        public async Task<IEnumerable<UserTask>> GetAllUserTasks()
+        {
+            return await GetDbSet<UserTask>()
+                         .Include(u => u.User)
                          .ToListAsync();
         }
 

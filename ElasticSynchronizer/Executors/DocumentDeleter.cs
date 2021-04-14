@@ -26,7 +26,9 @@ using System;
 
 namespace ElasticSynchronizer.Executors
 {
-
+    /// <summary>
+    ///     This class is used as a callback to be passed into the RabbitMQ Consumer.
+    /// </summary>
     public class DocumentDeleter : ICallbackService
     {
 

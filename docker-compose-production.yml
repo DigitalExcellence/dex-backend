@@ -97,8 +97,6 @@ services:
       - App__Api__DeXApiUrl=https://api.dex.software
       - App__Api__ClientId=${API_CLIENT_ID}
       - App__Api__ClientSecret=${API_CLIENT_SECRET}
-      - App__ApiAuthentication__ClientId=${API_CLIENT_ID}
-      - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - App__Frontend__RedirectUriFrontend=https://dex.software/auth-callback
       - App__Frontend__RefreshUriFrontend=https://dex.software/silent-refresh.html
       - App__Frontend__RedirectUriPostman=https://www.postman.com/oauth2/callback
@@ -110,15 +108,13 @@ services:
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.dex.software/external/callback/fhict
-      - App__ApiAuthentication__ClientId=${PRODUCTION_API_AUTHENTICATION_CLIENT_ID}
-      - App__ApiAuthentication__ClientSecret=${PRODUCTION_API_AUTHENTICATION_CLIENT_SECRET}
-      - App__JobScheduler__ClientId={$PRODUCTION_JOBSCHEDULER_CLIENT_ID}
-      - App__JobScheduler__ClientSecret={$PRODUCTION_JOBSCHEDULER_CLIENT_SECRET}
+      - App__ApiAuthentication__ClientId=${API_AUTHENTICATION_CLIENT_ID}
+      - App__ApiAuthentication__ClientSecret=${API_AUTHENTICATION_CLIENT_SECRET}
       - Cert_File=/app/identity.dex.software_pfx.pfx
       - Cert_Thumb=${CERT_THUMB}
       - Cert_Password=${CERT_PASSWORD}
       - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
-      - App__JobScheduler__ClientSecet=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
+      - App__JobScheduler__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
       - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
     labels:
       - "traefik.enable=true"
@@ -162,15 +158,16 @@ services:
     container_name: jobscheduler
     restart: on-failure
     environment:
-        - Config__IdentityServerConfig__IdentityUrl=https://identity.dex.software
+        - Config__IdentityServerConfig__IdentityUrl=https://identity.dex.software/
         - Config__IdentityServerConfig__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
         - Config__IdentityServerConfig__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
-        - Config__ApiConfig__ApiUrl=https://api.dex.software
+        - Config__ApiConfig__ApiUrl=https://api.dex.software/
         - Config__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
         - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
         - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
         rabbitmq-network:
+	mssql-network:
         
   elasticsynchronizer:
     image: digitalexcellence/elasticsynchronizer:latest
