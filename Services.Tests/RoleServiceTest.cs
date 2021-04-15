@@ -67,6 +67,8 @@ namespace Services.Tests
                                              "ProjectWrite",
                                              "UserRead",
                                              "UserWrite",
+                                             "CategoryRead",
+                                             "CategoryWrite",
                                              "HighlightRead",
                                              "HighlightWrite",
                                              "RoleRead",
@@ -79,11 +81,13 @@ namespace Services.Tests
                                              "InstitutionEmbedWrite",
                                              "InstitutionRead",
                                              "InstitutionWrite",
-                                             "DataSourceWrite",
                                              "FileWrite",
+                                             "DataSourceWrite",
                                              "CallToActionOptionWrite",
                                              "UserTaskWrite",
-                                             "AdminProjectWrite"
+                                             "AdminProjectWrite",
+                                             "WizardPageWrite",
+                                             "AdminProjectExport"
                                          };
             List<string> retrievedScopes = Service.GetValidScopes();
 

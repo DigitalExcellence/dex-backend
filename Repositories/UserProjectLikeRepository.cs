@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using MessageBrokerPublisher;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Base;
@@ -45,13 +46,26 @@ namespace Repositories
     public class UserProjectLikeRepository : Repository<ProjectLike>,
                                              IUserProjectLikeRepository
     {
+        private ITaskPublisher taskPublisher;
 
         /// <summary>
         ///     This is the project like repository constructor
         /// </summary>
         /// <param name="dbContext"></param>
-        public UserProjectLikeRepository(DbContext dbContext) :
-            base(dbContext) { }
+       public UserProjectLikeRepository(DbContext dbContext, ITaskPublisher taskPublisher) :
+            base(dbContext) {
+            this.taskPublisher = taskPublisher;
+        }
+
+        /// <summary>
+        ///     This is the override add method.
+        /// </summary>
+        /// <param name="projectLike"></param>
+        public override void Add(ProjectLike projectLike)
+        {
+            DbContext.Add(projectLike);
+        }
+
 
         /// <summary>
         ///     This method removes the project like

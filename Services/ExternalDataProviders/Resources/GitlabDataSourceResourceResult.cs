@@ -282,4 +282,42 @@ namespace Services.ExternalDataProviders.Resources
 
     }
 
+    /// <summary>
+    ///     Viewmodel for the gitlab data source contributor source.
+    /// </summary>
+    public class GitLabDataSourceContributorResourceResult
+    {
+
+        /// <summary>
+        ///     Gets or sets a value for the Name property.
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Email property.
+        /// </summary>
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Commits property.
+        /// </summary>
+        [JsonProperty("commits")]
+        public long Commits { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Additions property.
+        /// </summary>
+        [JsonProperty("additions")]
+        public long Additions { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value for the Deletions property.
+        /// </summary>
+        [JsonProperty("deletions")]
+        public long Deletions { get; set; }
+
+    }
+
 }

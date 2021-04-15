@@ -49,6 +49,10 @@ services:
       - App__DataSources__Gitlab__ClientId=${App__DataSources__Gitlab__ClientId}
       - App__DataSources__Gitlab__ClientSecret=${App__DataSources__Gitlab__ClientSecret}
       - App__DataSources__Gitlab__RedirectUri=${App__DataSources__Gitlab__RedirectUri}
+      - App__Elastic__Hostname=${App__ElasticSearch__Hostname}
+      - App__Elastic__Username=${App__ElasticSearch__Username}
+      - App__Elastic__Password=${App__ElasticSearch__Password}
+      - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
     image:  digitalexcellence/api
     networks:
       mssql-network:
@@ -79,8 +83,7 @@ services:
       - App__FfhictOIDC__RedirectUri=${FFHICTOIDC_REDIRECT_URI}
       - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
       - App__JobScheduler__ClientSecet=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
-      - SENTRY_DSN=${SENTRY_DSN}
-      
+      - SENTRY_DSN=${SENTRY_DSN}  
     image: digitalexcellence/identity
 
   notificationservice:
@@ -118,6 +121,60 @@ services:
         - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
         rabbitmq-network:
+        
+  elasticsynchronizer:
+    image:  digitalexcellence/elasticsynchronizer
+    container_name: elasticsynchronizer
+    restart: on-failure
+    build: 
+      context: .
+      dockerfile: ElasticSynchronizer/Dockerfile
+    depends_on: 
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__Elastic__Hostname=${App__ElasticSearch__Hostname}
+      - App__Elastic__Username=${App__ElasticSearch__Username}
+      - App__Elastic__Password=${App__ElasticSearch__Password}
+      - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl}
+    networks:
+      rabbitmq-network:
+      mssql-network:
+      
+  elasticsearch:
+    image:  digitalexcellence/elasticsearch
+    container_name: elasticsearch
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: 7.10.0
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: ./elasticsearch/config/analysis/wn_s.txt
+        target: /usr/share/elasticsearch/config/analysis/wn_s.txt
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: ${App__ElasticSearch__Password}
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      mssql-network: 
+
+volumes:
+  elasticsearch:
 
 networks:
   mssql-network:

@@ -1,0 +1,10 @@
+{
+    "profiles": {
+        "ElasticSynchronizer": {
+            "commandName": "Project",
+            "environmentVariables": {
+                "ELASTIC_DOTNET_ENVIRONMENT": "Development"
+            }
+        }
+    }
+}

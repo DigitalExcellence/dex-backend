@@ -77,6 +77,11 @@ namespace API.Resources
         /// </summary>
         public List<ProjectLikesResourceResult> Likes { get; set; }
 
+        /// <summary>
+        ///     This gets or sets the categories of the project.
+        /// </summary>
+        public List<ProjectCategoryResourceResult> Categories { get; set; }
+
     }
 
 }

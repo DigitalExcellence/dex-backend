@@ -9,20 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-
 ### Changed
-
 
 ### Deprecated
 
-
 ### Removed
-
 
 ### Fixed
 
-
 ### Security
+
+
+## Release v.1.2.0-beta - 15-04-2021
+
+### Added
+
+- Added tests for the wizard - [#372](https://github.com/DigitalExcellence/dex-backend/issues/372)
+- Recommendation system, allowing users to get projects recommended based on similar users [#63](https://github.com/DigitalExcellence/dex-backend/issues/63)
+- Categories. It is now possible to categorize projects. [#362](https://github.com/DigitalExcellence/dex-backend/issues/362)
+
+### Changed
+- Improved integration tests in pipeline - [#395](https://github.com/DigitalExcellence/dex-backend/issues/395)
+
+### Fixed
+- Renamed IdentityServer to match the rest of the project name - [#386](https://github.com/DigitalExcellence/dex-backend/issues/386)
 
 
 ## Release v.1.1.0-beta - 18-03-2021

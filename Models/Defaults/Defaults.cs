@@ -96,6 +96,12 @@ namespace Models.Defaults
             [Description("This scope gives write access to the Role namespace")]
             public const string RoleWrite = "role:write";
 
+            [Description("This scope gives read access to the Category namespace")]
+            public const string CategoryRead = "category:read";
+
+            [Description("This scope gives write access to the Category namespace")]
+            public const string CategoryWrite = "category:write";
+
             [Description("This scope gives write access to the embed namespace")]
             public const string EmbedWrite = "embed:write";
 
@@ -134,6 +140,12 @@ namespace Models.Defaults
 
             [Description("This scope gives write access to the project namespace")]
             public const string AdminProjectWrite = "adminproject:write";
+
+            [Description("This scopes give write access to the wizard page namespace")]
+            public const string WizardPageWrite = "wizardpage:write";
+
+            [Description("This scope gives access to the export method in the Project namespace")]
+            public const string AdminProjectExport = "adminproject:export";
 
         }
 

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.1.0-beta</Version>
+    <Version>1.2.0-beta</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,6 +39,7 @@
     <PackageReference Include="NetEscapades.Configuration.Validation" Version="2.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
     <PackageReference Include="SendGrid" Version="9.21.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 
 </Project>

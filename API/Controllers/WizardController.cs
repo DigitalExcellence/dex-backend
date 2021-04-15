@@ -266,7 +266,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByGuidFromExternalDataSource([FromQuery] string dataSourceGuid,
             [FromQuery] string token,
-            int projectId,
+            string projectId,
             [FromQuery] bool needsAuth)
         {
             if(!Guid.TryParse(dataSourceGuid, out Guid _))
