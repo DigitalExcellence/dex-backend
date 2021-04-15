@@ -115,6 +115,16 @@ namespace IdentityServer
                                                Firstname = "Admin",
                                                Lastname = "Admin",
                                                Email = "Admin@email.com"
+                                           },
+                                           new IdentityUser
+                                           {
+                                               SubjectId = "74489498",
+                                               Username = "DeXAdmin",
+                                               Password = LoginHelper.GetHashPassword("Admin321!"),
+                                               Name = "Admin",
+                                               Firstname = "DeX",
+                                               Lastname = "Admin",
+                                               Email = "DeXAdmin@email.com"
                                            }
                                        };
 
