@@ -523,6 +523,16 @@ namespace API
                 // TODO seed embedded projects
             }
 
+            if(context.User.FirstOrDefault(e => e.IdentityId == "74489498") != null)
+            {
+                context.User.Remove(context.User.FirstOrDefault(e => e.IdentityId == "74489498"));
+                context.SaveChanges();
+            } 
+
+            context.User.Add(Seed.SeedAdminUser2(roles));
+            context.SaveChanges();
+            
+
             // Seed call to action options
             List<CallToActionOption> options = Seed.SeedCallToActionOptions();
             foreach(CallToActionOption callToActionOption in options)

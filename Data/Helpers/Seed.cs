@@ -540,6 +540,20 @@ namespace Data.Helpers
                    };
         }
 
+        public static User SeedAdminUser2(List<Role> roles)
+        {
+            Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
+
+            User user = new User
+            {
+                Role = adminRole,
+                IdentityId = "74489498",
+                Email = "DeXAdmin@email.com",
+                Name = "DeX Admin",
+            };
+
+            return user;
+        }
     }
 
 }
