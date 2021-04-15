@@ -16,15 +16,18 @@
 */
 
 using API.Common;
+using API.Configuration;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGeneration;
 using Models;
 using Models.Defaults;
 using Serilog;
+using Services.Resources;
 using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -594,6 +597,46 @@ namespace API.Controllers
             return Ok(mapper.Map<User, UserResourceResult>(user));
         }
 
+
+        /// <summary>
+        /// Get recommended projects for the user who is logged in.
+        /// </summary>
+        /// <returns> Ok </returns>
+        [HttpGet("projectrecommendations/{amount}")]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+        [Authorize]
+        public async Task<IActionResult> GetRecommendedProjects(int amount)
+        {
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+
+            if(await userService.FindAsync(user.Id) == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the user account.",
+                                             Detail = "The database does not contain a user with this user id.",
+                                             Instance = "1245BE3A-A200-4275-8622-D2D8ECEC55D3"
+                };
+                return NotFound(problem);
+            }
+
+            try
+            {
+                List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id, amount);
+                return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectRecommendations));
+
+            } catch(RecommendationNotFoundException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting the recommendations",
+                                             Detail = e.Message,
+                                             Instance = "948319D2-1A19-4E00-AF50-DB5D096AFD39"
+                                         };
+                return NotFound(problem);
+            }
+            
+        }
     }
 
 }

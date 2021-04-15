@@ -15,13 +15,21 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+
+using Data;
+using MessageBrokerPublisher;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
+using Newtonsoft.Json.Linq;
 using Repositories.Base;
+using Repositories.ElasticSearch;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -87,6 +95,10 @@ namespace Repositories
         /// <returns>This method returns the amount of projects matching the filters.</returns>
         Task<int> SearchCountAsync(string query, bool? highlighted = null);
 
+
+        Task SyncProjectToES(Project project);
+        
+
         /// <summary>
         ///     This method will retrieve a project with user and collaborators async. Project will be redacted if user
         ///     has that setting configured.
@@ -105,6 +117,10 @@ namespace Repositories
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
         /// <returns>A enumerable of the users projects</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
+        Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId);
+        void CreateProjectIndex();
+        void DeleteIndex();
+        void MigrateDatabase(List<Project> projectsToExport);
     }
 
     /// <summary>
@@ -112,12 +128,22 @@ namespace Repositories
     /// </summary>
     public class ProjectRepository : Repository<Project>, IProjectRepository
     {
+        private readonly ITaskPublisher taskPublisher;
+        private readonly RestClient elasticSearchContext;
+        private readonly Queries queries;
 
         /// <summary>
         ///     This is the constructor of the project repository
         /// </summary>
         /// <param name="dbContext"></param>
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
+
+
+        public ProjectRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, ITaskPublisher taskPublisher, Queries queries) : base(dbContext) {
+            this.taskPublisher = taskPublisher;
+            this.elasticSearchContext = elasticSearchContext.CreateRestClientForElasticRequests();
+            this.queries = queries;
+        }
 
         /// <summary>
         ///     This method finds the project async by project the specified id.
@@ -141,6 +167,10 @@ namespace Repositories
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
 
@@ -177,9 +207,24 @@ namespace Repositories
             List<Project> projectResults = await queryableProjects.ToListAsync();
 
             //Redact the user after fetching the collection from the project (no separate query needs to be executed)
-            projectResults.ForEach( project => project.User = RedactUser( project.User ) );
+            projectResults.ForEach(project => project.User = RedactUser(project.User));
 
-            return projectResults;
+            // This is needed because otherwise likes, collaborators and categories are missing!
+            foreach(Project project in queryableProjects)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .ToListAsync();
+                project.User = RedactUser(project.User);
+                project.Likes = await GetDbSet<ProjectLike>()
+                                      .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
+                                      .ToListAsync();
+            }
+            return await queryableProjects.ToListAsync();
         }
 
         /// <summary>
@@ -255,6 +300,10 @@ namespace Repositories
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
+                                      .ToListAsync();
 
                 project.LinkedInstitutions = await GetDbSet<ProjectInstitution>()
                                                     .Include(p => p.Institution)
@@ -291,6 +340,86 @@ namespace Repositories
             }
 
             DbSet.Update(entity);
+            SetLikes(entity);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+            
+
+        }
+
+        private static void SetLikes(Project entity)
+        {
+            if (entity != null)
+            {
+                if (entity.Likes != null)
+                {
+                    _ = entity.Likes;
+                }
+                
+            }            
+        }
+
+        /// <summary>
+        /// This method adds the given project to the database and ES Index.
+        /// </summary>
+        /// <param name="entity">The entity parameter represents a project to be added.</param>
+        public override void Add(Project entity)
+        {
+            base.Add(entity);
+            base.Save();
+            Console.WriteLine("Add method id: " + entity.Id);
+            SetLikes(entity);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+        }
+
+        public override void AddRange(IEnumerable<Project> entities)
+        {
+            List<Project> entityList = entities.ToList();
+            for(int i = 0; i < entityList.Count; i++)
+            {
+                entityList[i] = UpdateCreatedField(entityList[i]);
+                entityList[i] = UpdateUpdatedField(entityList[i]);
+            }
+            DbSet.AddRange(entityList);
+            entityList.ForEach(x =>
+            {
+                SetLikes(x);
+                ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(x);
+                taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync),
+                    Subject.ELASTIC_CREATE_OR_UPDATE);
+            });
+            
+        }
+
+        /// <summary>
+        /// This method asynchronously adds the project to the database and ES Index.
+        /// </summary>
+        /// <param name="entity">The project parameter represents the project to be added.</param>
+        /// <returns>
+        /// The task wherein the addition of the project from the database is executed.
+        /// </returns>
+        public override async Task AddAsync(Project entity)
+        {
+                       
+            await base.AddAsync(entity);
+            base.Save();
+            Console.WriteLine("AddAsync method id: " + entity.Id);
+            SetLikes(entity);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+        }
+
+        /// <summary>
+        /// This method removes the project from the database and ES Index.
+        /// </summary>
+        /// <param name="entity">The entity parameter represents a project to be removed.</param>
+        public override void Remove(Project entity)
+        {
+            base.Remove(entity);
+            SetLikes(entity);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
         }
 
         /// <summary>
@@ -311,6 +440,24 @@ namespace Repositories
 
         /// <summary>
         ///     This method redacts user email from the Project if isPublic setting is set to false.
+        /// This method asynchronously removes the project from the database and ES Index coupled to the given id.
+        /// </summary>
+        /// <param name="id">The project parameter represents unique identifier.</param>
+        /// <returns>
+        /// The task wherein the removal of the project from the database is executed.
+        /// </returns>
+        public override Task RemoveAsync(int id)
+        {
+            Project entity = DbSet.Find(id);
+            SetLikes(entity);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_DELETE);
+            return base.RemoveAsync(id);
+        }
+
+
+        /// <summary>
+        /// This method redacts user email from the Project if isPublic setting is set to false.
         /// </summary>
         /// <param name="project">The project parameter represents the project object that will be used.</param>
         /// <returns>
@@ -455,8 +602,9 @@ namespace Repositories
                     projectsToReturn.Include(p => p.ProjectIcon).Load();
                     projectsToReturn.Include(p => p.CallToAction).Load();
                     projectsToReturn.Include(p => p.Likes).Load();
+                    projectsToReturn.Include(p => p.Categories).Load();
 
-                    foreach(Project project in projectsToReturn)
+            foreach (Project project in projectsToReturn)
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
@@ -464,10 +612,89 @@ namespace Repositories
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
+                                      .ToListAsync();
             }
             return projectsToReturn;
         }
 
+        public void CreateProjectIndex()
+        {
+            string body = queries.IndexProjects;
+            RestRequest request = new RestRequest(Method.PUT);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            elasticSearchContext.Execute(request);
+        }
+
+
+        public async Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId)
+        {
+            RestRequest request = new RestRequest("_search", Method.POST);
+            string body = queries.ProjectRecommendations
+                .Replace("ReplaceWithUserId", userId.ToString())
+                .Replace("ReplaceWithSimilarUserId", similarUserId.ToString());
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = elasticSearchContext.Execute(request);
+
+            List<ESProjectDTO> esProjectFormats = new List<ESProjectDTO>();
+
+            ParseJsonToESProjectFormatDTOList(restResponse, esProjectFormats);
+            return await ConvertProjects(esProjectFormats);
+
+        }
+
+        private void ParseJsonToESProjectFormatDTOList(IRestResponse restResponse, List<ESProjectDTO> esProjectFormats)
+        {
+            JObject esProjects = JObject.Parse(restResponse.Content);
+            JToken projects = esProjects.GetValue("hits")["hits"];
+            foreach(JToken project in projects)
+            {
+                esProjectFormats.Add(project.Last.First.ToObject<ESProjectDTO>());
+            }
+        }
+
+        private async Task<List<Project>> ConvertProjects(List<ESProjectDTO> elasticSearchProjects)
+        {
+            List<Project> projects = new List<Project>();
+            foreach(ESProjectDTO p in elasticSearchProjects)
+            {
+                projects.Add(await FindWithUserCollaboratorsAndInstitutionsAsync(p.Id));
+            }
+            return projects;
+        }
+
+
+        public void DeleteIndex()
+        {
+            RestRequest request = new RestRequest(Method.DELETE);
+            elasticSearchContext.Execute(request);
+        }
+
+        public void MigrateDatabase(List<Project> projectsToExport)
+        {
+            // Converts the Projects to Elastic format.
+            List<ESProjectDTO> projectsToExportDTOs = ProjectConverter.ProjectsToProjectESDTOs(projectsToExport);
+            foreach(ESProjectDTO project in projectsToExportDTOs)
+            {
+                // Registers an Elastic formatted project at the message broker to be inserted into Elastic DB.
+                taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(project), Subject.ELASTIC_CREATE_OR_UPDATE);
+            }
+        }
+
+        public async Task SyncProjectToES(Project project)
+        {
+            Project projectToSync = await FindAsync(project.Id);
+            if (projectToSync == null)
+            {
+                throw new NotFoundException("Project to sync was not found");
+            }
+            ESProjectDTO eSProjectDTO = ProjectConverter.ProjectToESProjectDTO(projectToSync);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
+                     
+            
+        }
         public Task<bool> ProjectExistsAsync(int id)
         {
             return GetDbSet<Project>().AnyAsync(i => i.Id == id);

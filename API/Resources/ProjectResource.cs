@@ -66,6 +66,11 @@ namespace API.Resources
         /// </summary>
         public bool InstitutePrivate { get; set; }
 
+        /// <summary>
+        ///     This gets or sets the categories
+        /// </summary>
+        public ICollection<ProjectCategoryResource> Categories { get; set; }
+
     }
 
 }

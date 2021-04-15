@@ -16,6 +16,7 @@
 */
 
 using Ganss.XSS;
+using MessageBrokerPublisher;
 using Models;
 using Repositories;
 using Services.Base;
@@ -23,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Services.Resources;
 
 namespace Services.Services
 {
@@ -69,6 +71,19 @@ namespace Services.Services
         /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The total number of pages for the results</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
+        /// <summary>
+        ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
+        /// </summary>
+        /// <param name="projectsToExport"></param>
+        void MigrateDatabase(List<Project> projectsToExport);
+
+        /// <summary>
+        ///     Get project by id with users and collaborators
+        /// </summary>
+        /// <param name="id">The parameter is the id of the project.</param>
+        /// <returns>The project with users and collaborators</returns>
+        Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync();
+
     }
 
     /// <summary>
@@ -147,10 +162,10 @@ namespace Services.Services
 
             bool orderByDirection = projectFilterParams.SortDirection == "asc";
             return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(skip,
-                                                                   take,
-                                                                   orderBy,
-                                                                   orderByDirection,
-                                                                   projectFilterParams.Highlighted);
+                                                                               take,
+                                                                               orderBy,
+                                                                               orderByDirection,
+                                                                               projectFilterParams.Highlighted);
         }
 
         /// <summary>
@@ -191,6 +206,43 @@ namespace Services.Services
         {
             return await Repository.ProjectExistsAsync(id);
         }
+
+        /// <summary>
+        ///     Get project by id with users and collaborators
+        /// </summary>
+        /// <param name="id">The parameter is the id of the project.</param>
+        /// <returns>The project with users and collaborators</returns>
+        public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync()
+        {
+            return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
+        }
+        public void MigrateDatabase(List<Project> projectsToExport)
+        {
+            // Creates the old index so the eventual old Elastic DB is deleted.
+            DeleteIndex();
+            // (Re)creates the index in Elastic.
+            CreateProjectIndexElastic();
+            // Migrates the data from MSSQL to Elastic.
+            Repository.MigrateDatabase(projectsToExport);
+            
+        }
+
+        /// <summary>
+        ///     Deletes the old ElasticSearch index.
+        /// </summary>
+        private void DeleteIndex()
+        {
+            Repository.DeleteIndex();
+        }
+
+        /// <summary>
+        ///     (Re)creates the new Elastic Search index.
+        /// </summary>
+        private void CreateProjectIndexElastic()
+        {
+            Repository.CreateProjectIndex();
+        }
+
         
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {

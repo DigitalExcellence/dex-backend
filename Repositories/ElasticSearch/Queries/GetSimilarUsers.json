@@ -1,0 +1,18 @@
+{
+    "aggs": {
+        "user-liked": {
+            "filter": {
+                "term": {
+                    "Likes": "ReplaceWithUserId"
+                }
+            },
+            "aggs": {
+                "bucket": {
+                    "terms": {
+                        "field": "Likes"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -20,6 +20,7 @@ using AutoMapper;
 using Models;
 using Services.ExternalDataProviders;
 using Services.ExternalDataProviders.Resources;
+using System.Collections.Generic;
 
 namespace API.Configuration
 {
@@ -83,7 +84,8 @@ namespace API.Configuration
 
             CreateMap<User, LimitedUserResourceResult>();
 
-            CreateMap<ProjectResource, Project>();
+            CreateMap<ProjectResource, Project>()
+                .ForMember(q => q.Categories, opt => opt.Ignore());
             CreateMap<Project, ProjectResourceResult>();
             CreateMap<ProjectLike, ProjectLikesResourceResult>();
             CreateMap<Project, ProjectHighlightResourceResult>();
@@ -102,6 +104,13 @@ namespace API.Configuration
 
             CreateMap<RoleResource, Role>();
             CreateMap<Role, RoleResourceResult>();
+
+            CreateMap<CategoryResource, Category>();
+            CreateMap<Category, CategoryResourceResult>();
+            CreateMap<ProjectCategoryResource, ProjectCategory>();
+            CreateMap<ProjectCategory, ProjectCategoryResourceResult>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(q=> q.Category.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Category.Name));
 
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
@@ -142,20 +151,6 @@ namespace API.Configuration
 
             CreateMap<OauthTokens, OauthTokensResourceResult>();
 
-            CreateExternalSourceMappingProfiles();
-        }
-
-        private void CreateExternalSourceMappingProfiles()
-        {
-            CreateMap<JsFiddleDataSourceResourceResult, Project>()
-                .ForMember(d => d.Name, opt => opt.MapFrom(m => m.Title));
-
-            CreateMap<GithubDataSourceResourceResult, Project>()
-                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
-
-            CreateMap<GitlabDataSourceResourceResult, Project>()
-                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
-
             CreateMap<CallToActionResource, CallToAction>()
                 .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));
             CreateMap<CallToAction, CallToActionResourceResult>();
@@ -176,6 +171,21 @@ namespace API.Configuration
             CreateMap<ProjectInstitution, ProjectInstitutionResourceResult>()
                 .ForMember(dest => dest.InstititutionName, opt => opt.MapFrom(src => src.Institution.Name))
                 .ForMember(dest => dest.ProjectName, opt => opt.MapFrom(src => src.Project.Name));
+
+
+            CreateExternalSourceMappingProfiles();
+        }
+
+        private void CreateExternalSourceMappingProfiles()
+        {
+            CreateMap<JsFiddleDataSourceResourceResult, Project>()
+                .ForMember(d => d.Name, opt => opt.MapFrom(m => m.Title));
+
+            CreateMap<GithubDataSourceResourceResult, Project>()
+                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<GitlabDataSourceResourceResult, Project>()
+                .ForMember(dest => dest.ShortDescription, opt => opt.MapFrom(src => src.Description));
 
         }
 

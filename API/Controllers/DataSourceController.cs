@@ -86,7 +86,6 @@ namespace API.Controllers
         /// <returns>This method returns a collection of data sources.</returns>
         /// <response code="200">This endpoint returns the available data sources with the specified flow.</response>
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(typeof(IEnumerable<DataSourceResourceResult>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
@@ -107,7 +106,7 @@ namespace API.Controllers
         ///     The 404 Not Found status code is returned when no data source with the specified
         ///     guid could be found.
         /// </response>
-        [HttpGet("guid")]
+        [HttpGet("{guid}")]
         [Authorize]
         [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -205,8 +204,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(!await wizardPageService.ValidateWizardPagesExist(
-                    dataSourceResource.WizardPageResources.Select(w => w.WizardPageId)))
+            if(dataSourceResource.WizardPageResources != null &&
+               dataSourceResource.WizardPageResources.Any() && !await wizardPageService.ValidateWizardPagesExist(
+               dataSourceResource.WizardPageResources.Select(w => w.WizardPageId)))
             {
                 ProblemDetails problem = new ProblemDetails
                                          {

@@ -60,6 +60,10 @@ services:
       - App__DataSources__Gitlab__ClientId=${App__DataSources__Gitlab__ClientId}
       - App__DataSources__Gitlab__ClientSecret=${App__DataSources__Gitlab__ClientSecret}
       - App__DataSources__Gitlab__RedirectUri=${App__DataSources__Gitlab__RedirectUri}
+      - App__Elastic__Hostname=${App__ElasticSearch__Hostname}
+      - App__Elastic__Username=${App__ElasticSearch__Username}
+      - App__Elastic__Password=${App__ElasticSearch__Password}
+      - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=http"
@@ -163,7 +167,40 @@ services:
         - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
         rabbitmq-network:
-        mssql-network:
+	mssql-network:
+        
+  elasticsynchronizer:
+    image: digitalexcellence/elasticsynchronizer:latest
+    container_name: elasticsynchronizer
+    restart: on-failure
+    depends_on: 
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
+      - App__RabbitMQ__Username=${App__RabbitMQ__Username}
+      - App__RabbitMQ__Password=${App__RabbitMQ__Password}
+      - App__Elastic__Hostname=${App__ElasticSearch__Hostname}
+      - App__Elastic__Username=${App__ElasticSearch__Username}
+      - App__Elastic__Password=${App__ElasticSearch__Password}
+      - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl}
+    networks:
+      rabbitmq-network:
+      mssql-network:
+      
+  elasticsearch:
+    image: digitalexcellence/elasticsearch:latest
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: ${App__ElasticSearch__Password}
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      mssql-network:
 
   frontend:
     image: digitalexcellence/frontend:latest
@@ -183,6 +220,9 @@ services:
       - "traefik.http.routers.frontend-secure.service=frontend"
       - "traefik.http.services.frontend.loadbalancer.server.port=443"
       - "traefik.docker.network=proxy"
+
+volumes:
+  elasticsearch: 
 
 networks:
   mssql-network:

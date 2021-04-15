@@ -24,6 +24,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Services.ExternalDataProviders;
+using Services.ExternalDataProviders.Helpers;
+using Repositories.ElasticSearch;
+using Services.Resources;
 using Services.Services;
 using Services.Sources;
 
@@ -61,6 +64,12 @@ namespace API.Extensions
 
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+            services.AddScoped<IProjectCategoryService, ProjectCategoryService>();
+            services.AddScoped<IProjectCategoryRepository, ProjectCategoryRepository>();
 
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IFileRepository, FileRepository>();
@@ -100,15 +109,27 @@ namespace API.Extensions
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
 
+            services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
+            services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
+
+            services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
+            services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
+
+            services.AddSingleton<Queries>();
+            services.AddSingleton<ITaskPublisher, TaskPublisher>();
+
+            services.AddSingleton<IAssemblyHelper, AssemblyHelper>();
+          
             services.AddScoped<IProjectInstitutionService, ProjectInstitutionService>();
             services.AddScoped<IProjectInstitutionRepository, ProjectInstitutionRepository>();
-
+          
             services.AddExternalDataSources();
 
             return services;
+          
         }
 
-        private static IServiceCollection AddExternalDataSources(this IServiceCollection services)
+        private static void AddExternalDataSources(this IServiceCollection services)
         {
             services.AddScoped<GithubDataSourceAdaptee>();
             services.AddScoped<GitlabDataSourceAdaptee>();
