@@ -376,10 +376,10 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee =
-                dataSourceAdaptee as IAuthorizedDataSourceAdaptee;
+            IPrivateDataSourceAdaptee privateDataSourceAdaptee =
+                dataSourceAdaptee as IPrivateDataSourceAdaptee;
 
-            if(authorizedDataSourceAdaptee == null)
+            if(privateDataSourceAdaptee == null)
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
@@ -392,7 +392,7 @@ namespace API.Controllers
 
             try
             {
-                OauthTokens tokens = await authorizedDataSourceAdaptee.GetTokens(code);
+                OauthTokens tokens = await privateDataSourceAdaptee.GetTokens(code);
                 OauthTokensResourceResult resourceResult = mapper.Map<OauthTokens, OauthTokensResourceResult>(tokens);
                 return Ok(resourceResult);
             } catch(NotSupportedByExternalApiException e)

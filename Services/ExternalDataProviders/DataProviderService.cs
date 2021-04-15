@@ -227,7 +227,7 @@ namespace Services.ExternalDataProviders
 
             sources = FilterAuthPages(sources, needsAuth.Value);
 
-            if(needsAuth.Value) return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
+            if(needsAuth.Value) return sources.Where(s => s is IPrivateDataSourceAdaptee);
 
             return sources.Where(s => s is IPublicDataSourceAdaptee);
         }

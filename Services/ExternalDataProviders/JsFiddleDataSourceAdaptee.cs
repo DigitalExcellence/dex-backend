@@ -87,6 +87,11 @@ namespace Services.ExternalDataProviders
         public string Guid => "96666870-3afe-44e2-8d62-337d49cf972d";
 
         /// <summary>
+        ///     Defines whether the API requires authentication by default (even for fetching 'public' projects).
+        /// </summary>
+        public bool AlwaysRequiresAuthentication { get; protected set; } = false;
+
+        /// <summary>
         ///     Gets or sets a value for the Title property from the JsFiddle data source adaptee.
         /// </summary>
         public string Title { get; set; } = "JsFiddle";

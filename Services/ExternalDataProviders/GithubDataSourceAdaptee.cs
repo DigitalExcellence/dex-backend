@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
-    public interface IGithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
+    public interface IGithubDataSourceAdaptee : IPrivateDataSourceAdaptee, IPublicDataSourceAdaptee
     {
 
         /// <summary>
@@ -181,6 +181,11 @@ namespace Services.ExternalDataProviders
         ///     Gets the value for the guid from the Github data source adaptee.
         /// </summary>
         public string Guid => "de38e528-1d6d-40e7-83b9-4334c51c19be";
+
+        /// <summary>
+        ///     Defines whether the API requires authentication by default (even for fetching 'public' projects).
+        /// </summary>
+        public bool AlwaysRequiresAuthentication { get; protected set; } = false;
 
         /// <summary>
         ///     Gets or sets a value for the Title property from the Github data source adaptee.

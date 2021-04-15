@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
-    public interface IGitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IAuthorizedDataSourceAdaptee
+    public interface IGitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IPrivateDataSourceAdaptee
     {
 
         /// <summary>
@@ -155,6 +155,8 @@ namespace Services.ExternalDataProviders
         /// </summary>
         private readonly IRestClientFactory restClientFactory;
 
+        private bool alwaysRequiresAuthentication;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="GitlabDataSourceAdaptee" /> class./>
         /// </summary>
@@ -262,6 +264,11 @@ namespace Services.ExternalDataProviders
         ///     Gets the value for the guid from the Gitlab data source adaptee.
         /// </summary>
         public string Guid { get; protected set; } = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
+
+        /// <summary>
+        ///     Defines whether the API requires authentication by default (even for fetching 'public' projects).
+        /// </summary>
+        public bool AlwaysRequiresAuthentication { get; protected set; } = false;
 
         /// <summary>
         ///     Gets or sets a value for the Title property from the Gitlab data source adaptee.
