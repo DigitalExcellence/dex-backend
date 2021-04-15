@@ -521,39 +521,25 @@ namespace Data.Helpers
                            Title = "Github",
                            Guid = "de38e528-1d6d-40e7-83b9-4334c51c19be",
                            IsVisible = true,
-                           Description = "Seeded description for the Github data source adaptee"
+                           Description = ""
                        },
                        new DataSource
                        {
                            Title = "Gitlab",
                            Guid = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a",
                            IsVisible = true,
-                           Description = "Seeded description for the Gitlab data source adaptee"
+                           Description = ""
                        },
                        new DataSource
                        {
                            Title = "JsFiddle",
                            Guid = "96666870-3afe-44e2-8d62-337d49cf972d",
                            IsVisible = false,
-                           Description = "Seeded description for the JsFiddle data source adaptee"
+                           Description = ""
                        }
                    };
         }
 
-        public static User SeedAdminUser2(List<Role> roles)
-        {
-            Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
-
-            User user = new User
-            {
-                Role = adminRole,
-                IdentityId = "32423446",
-                Email = "elastic_admin@dex.software",
-                Name = "ElasticSearch Admin",
-            };
-
-            return user;
-        }
     }
 
 }

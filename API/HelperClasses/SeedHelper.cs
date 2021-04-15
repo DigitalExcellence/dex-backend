@@ -142,6 +142,7 @@ namespace API.HelperClasses
                     }
                 }
             }
+            context.SaveChanges();
         }
 
     }

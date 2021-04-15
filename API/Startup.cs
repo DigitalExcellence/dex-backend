@@ -519,20 +519,7 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                if(!context.WizardPage.Any())
-                {
-                    context.WizardPage.AddRange(Seed.SeedWizardPages());
-                    context.SaveChanges();
-                }
-                if(!context.DataSource.Any())
-                {
-                    context.DataSource.AddRange(Seed.SeedDataSources());
-                    context.SaveChanges();
-                }
                 
-                SeedHelper.SeedDataSourceWizardPages(context);
-                
-              
                 // TODO seed embedded projects
             }
 
@@ -547,6 +534,19 @@ namespace API
                     context.SaveChanges();
                 }
             }
+
+            if(!context.WizardPage.Any())
+            {
+                context.WizardPage.AddRange(Seed.SeedWizardPages());
+                context.SaveChanges();
+            }
+            if(!context.DataSource.Any())
+            {
+                context.DataSource.AddRange(Seed.SeedDataSources());
+                context.SaveChanges();
+            }
+
+            SeedHelper.SeedDataSourceWizardPages(context);
         }
 
         /// <summary>
