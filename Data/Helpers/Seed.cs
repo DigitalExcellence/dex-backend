@@ -105,7 +105,8 @@ namespace Data.Helpers
 
                 Scopes = new List<RoleScope>
                                                    {
-                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
+                                                       new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                                                       new RoleScope(nameof(Defaults.Scopes.CategoryRead))
                                                    }
             };
             roles.Add(registeredUserRole);
@@ -119,7 +120,8 @@ namespace Data.Helpers
                                            new RoleScope(nameof(Defaults.Scopes.EmbedWrite)),
                                            new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                                            new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
-                                           new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
+                                           new RoleScope(nameof(Defaults.Scopes.ProjectWrite)),
+                                           new RoleScope(nameof(Defaults.Scopes.CategoryRead))
                                        }
             };
             roles.Add(prRole);
@@ -133,6 +135,7 @@ namespace Data.Helpers
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionUserWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionEmbedWrite)),
                                                     new RoleScope(nameof(Defaults.Scopes.InstitutionProjectWrite)),
+                                                    new RoleScope(nameof(Defaults.Scopes.CategoryRead)),
                                                     new RoleScope(nameof(Defaults.Scopes.ProjectWrite))
                                                 }
             };
@@ -148,6 +151,8 @@ namespace Data.Helpers
                                                       new RoleScope(nameof(Defaults.Scopes.UserRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.RoleRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.RoleWrite)),
+                                                      new RoleScope(nameof(Defaults.Scopes.CategoryRead)),
+                                                      new RoleScope(nameof(Defaults.Scopes.CategoryWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.HighlightRead)),
                                                       new RoleScope(nameof(Defaults.Scopes.HighlightWrite)),
                                                       new RoleScope(nameof(Defaults.Scopes.EmbedRead)),
@@ -165,13 +170,42 @@ namespace Data.Helpers
             roles.Add(administratorRole);
 
             Role alumniRole = new Role
-            {
-                Name = nameof(Defaults.Roles.Alumni),
-                Scopes = new List<RoleScope>()
-            };
+                              {
+                                  Name = nameof(Defaults.Roles.Alumni),
+                                  Scopes = new List<RoleScope>
+                                  {
+                                      new RoleScope(nameof(Defaults.Scopes.CategoryRead))
+                                  }
+                              };
             roles.Add(alumniRole);
 
             return roles;
+        }
+
+        public static List<Category> SeedCategories()
+        {
+            List<Category> categories = new List<Category>();
+
+            categories.AddRange(new[]{
+                new Category
+                {
+                    Name = "Some Category 1"
+                },
+                new Category
+                {
+                    Name = "Some Category 2"
+                },
+                new Category
+                {
+                    Name = "Some Category 3"
+                },
+                new Category
+                {
+                    Name = "Some Category 4"
+                }
+            });
+
+            return categories;
         }
 
         /// <summary>
@@ -487,25 +521,39 @@ namespace Data.Helpers
                            Title = "Github",
                            Guid = "de38e528-1d6d-40e7-83b9-4334c51c19be",
                            IsVisible = true,
-                           Description = "Seeded description for the Github data source adaptee"
+                           Description = ""
                        },
                        new DataSource
                        {
                            Title = "Gitlab",
                            Guid = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a",
                            IsVisible = true,
-                           Description = "Seeded description for the Gitlab data source adaptee"
+                           Description = ""
                        },
                        new DataSource
                        {
                            Title = "JsFiddle",
                            Guid = "96666870-3afe-44e2-8d62-337d49cf972d",
                            IsVisible = false,
-                           Description = "Seeded description for the JsFiddle data source adaptee"
+                           Description = ""
                        }
                    };
         }
 
+        public static User SeedAdminUser2(List<Role> roles)
+        {
+            Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));
+
+            User user = new User
+            {
+                Role = adminRole,
+                IdentityId = "74489498",
+                Email = "DeXAdmin@email.com",
+                Name = "DeX Admin",
+            };
+
+            return user;
+        }
     }
 
 }

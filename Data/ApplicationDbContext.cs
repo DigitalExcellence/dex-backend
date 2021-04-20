@@ -96,6 +96,14 @@ namespace Data
         public DbSet<Role> Role { get; set; }
 
         /// <summary>
+        ///     Gets or sets the category.
+        /// </summary>
+        /// <value>
+        ///     The category.
+        /// </value>
+        public DbSet<Category> Category { get; set; }
+
+        /// <summary>
         ///     Gets or sets the institution.
         /// </summary>
         /// <value>
