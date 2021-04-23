@@ -63,22 +63,36 @@ namespace API.HelperClasses
         /// </summary>
         /// <param name="seedUser"></param>
         /// <param name="context"></param>
-        public static void InsertUser(User seedUser, ApplicationDbContext context)
+        public static void InsertUsers(List<User> seedUsers, ApplicationDbContext context)
         {
-            List<User> usersInDb = context.User.AsQueryable()
+            foreach(User seedUser in seedUsers)
+            {
+                List<User> usersInDb = context.User.AsQueryable()
                                           .Include(e => e.Role)
                                           .ToList();
 
-            if(usersInDb.Find(e => e.IdentityId == seedUser.IdentityId) != null)
-            {
-                User foundEntity = usersInDb.Find(e => e.IdentityId == seedUser.IdentityId);
-                foundEntity.Role = seedUser.Role;
-                context.Update(foundEntity);
-                context.SaveChanges();
-                return;
+                if(usersInDb.Find(e => e.IdentityId == seedUser.IdentityId) != null)
+                {
+                    User foundEntity = usersInDb.Find(e => e.IdentityId == seedUser.IdentityId);
+                    foundEntity.Role = seedUser.Role;
+                    context.Update(foundEntity);
+                    context.SaveChanges();
+                    return;
+                }
+                if(usersInDb.Find(e => e.Name == seedUser.Name) != null || usersInDb.Find(e => e.Email == seedUser.Email) != null)
+                {
+                  
+                    User foundEntity = usersInDb.Find(e => e.Name == seedUser.Name || e.Email == seedUser.Email);
+                    foundEntity.Role = seedUser.Role;
+                    foundEntity.IdentityId = seedUser.IdentityId;
+                    foundEntity.Name = seedUser.Name;
+                    foundEntity.Email = seedUser.Email;
+                    context.Update(foundEntity);
+                    context.SaveChanges();
+                    return;
+                }
+                context.User.Add(seedUser);
             }
-
-            context.User.Add(seedUser);
             context.SaveChanges();
         }
 
