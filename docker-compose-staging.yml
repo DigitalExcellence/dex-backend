@@ -44,6 +44,7 @@ services:
     networks:
       - proxy
       - mssql-network
+      - rabbitmq-network
     depends_on:
       - db
     volumes:

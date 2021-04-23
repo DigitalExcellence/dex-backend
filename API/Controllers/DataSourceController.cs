@@ -219,14 +219,7 @@ namespace API.Controllers
 
             if(dataSourceResource.IconId != 0)
             {
-                if(dataSourceModel.Icon != null)
-                {
-                    File fileToDelete = await fileService.FindAsync(dataSourceModel.Icon.Id);
-                    fileUploader.DeleteFileFromDirectory(fileToDelete);
-                    await fileService.RemoveAsync(dataSourceModel.Icon.Id);
-                    fileService.Save();
-                }
-
+                
                 File file = await fileService.FindAsync(dataSourceResource.IconId);
                 if(file != null)
                 {

@@ -67,6 +67,8 @@ namespace Services.Tests
                                              "ProjectWrite",
                                              "UserRead",
                                              "UserWrite",
+                                             "CategoryRead",
+                                             "CategoryWrite",
                                              "HighlightRead",
                                              "HighlightWrite",
                                              "RoleRead",
