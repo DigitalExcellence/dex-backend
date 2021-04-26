@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8cc3f0c7-3271-4261-9950-950fefbc2d3d",
+		"_postman_id": "35c11209-a7f9-4792-a704-efbef8cf5b4f",
 		"name": "DeX_Elastic",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -8,6 +8,60 @@
 		{
 			"name": "Warmup",
 			"item": [
+				{
+					"name": "Setup Elastic",
+					"item": [
+						{
+							"name": "Migrate to Elastic",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"pm.environment.set(\"userId1\", jsonData.id)"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "IdentityId",
+										"value": "{{administratorUserIdentityId}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/api/Project/export",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"Project",
+										"export"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Register users",
 					"item": [
@@ -1571,7 +1625,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{apiUrl}}/api/Project/search/autocomplete?query=Test",
+									"raw": "{{apiUrl}}/api/Project/search/autocomplete?query=te",
 									"host": [
 										"{{apiUrl}}"
 									],
@@ -1584,7 +1638,7 @@
 									"query": [
 										{
 											"key": "query",
-											"value": "Test"
+											"value": "te"
 										}
 									]
 								}
@@ -2077,7 +2131,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete-RegisteredUser2 Copy",
+							"name": "Delete-RegisteredUser3",
 							"request": {
 								"method": "DELETE",
 								"header": [
