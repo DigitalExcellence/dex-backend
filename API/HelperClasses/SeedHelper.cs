@@ -90,7 +90,7 @@ namespace API.HelperClasses
         /// <param name="context"></param>
         public static void SeedDataSourceWizardPages(ApplicationDbContext context)
         {
-            foreach(DataSource dataSource in context.DataSource)
+            foreach(DataSource dataSource in context.DataSource.Include(wp => wp.DataSourceWizardPages))
             {
                 if(dataSource.DataSourceWizardPages == null || !dataSource.DataSourceWizardPages.Any())
                 {
@@ -142,6 +142,7 @@ namespace API.HelperClasses
                     }
                 }
             }
+            context.SaveChanges();
         }
 
     }

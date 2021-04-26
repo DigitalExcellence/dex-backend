@@ -158,6 +158,11 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.RoleWrite),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.RoleWrite))));
 
+                o.AddPolicy(nameof(Defaults.Scopes.CategoryRead),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CategoryRead))));
+                o.AddPolicy(nameof(Defaults.Scopes.CategoryWrite),
+                            policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.CategoryWrite))));
+
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedRead),
                             policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.EmbedRead))));
                 o.AddPolicy(nameof(Defaults.Scopes.EmbedWrite),
@@ -468,6 +473,12 @@ namespace API
 
             if(!env.IsProduction())
             {
+                if(!context.Category.Any())
+                {
+                    context.Category.AddRange(Seed.SeedCategories());
+                    context.SaveChanges();
+                }
+
                 if(!context.Institution.Any())
                 {
                     // Seed institutions
@@ -508,22 +519,10 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                if(!context.WizardPage.Any())
-                {
-                    context.WizardPage.AddRange(Seed.SeedWizardPages());
-                    context.SaveChanges();
-                }
-                if(!context.DataSource.Any())
-                {
-                    context.DataSource.AddRange(Seed.SeedDataSources());
-                    context.SaveChanges();
-                }
                 
-                SeedHelper.SeedDataSourceWizardPages(context);
-                
-              
                 // TODO seed embedded projects
             }
+            
 
             // Seed call to action options
             List<CallToActionOption> options = Seed.SeedCallToActionOptions();
@@ -536,6 +535,19 @@ namespace API
                     context.SaveChanges();
                 }
             }
+
+            if(!context.WizardPage.Any())
+            {
+                context.WizardPage.AddRange(Seed.SeedWizardPages());
+                context.SaveChanges();
+            }
+            if(!context.DataSource.Any())
+            {
+                context.DataSource.AddRange(Seed.SeedDataSources());
+                context.SaveChanges();
+            }
+
+            SeedHelper.SeedDataSourceWizardPages(context);
         }
 
         /// <summary>

@@ -178,6 +178,10 @@ namespace Repositories
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
                                       .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
+                                      .ToListAsync();
             }
 
             return RedactUser(project);
@@ -213,9 +217,24 @@ namespace Repositories
             List<Project> projectResults = await queryableProjects.ToListAsync();
 
             //Redact the user after fetching the collection from the project (no separate query needs to be executed)
-            projectResults.ForEach( project => project.User = RedactUser( project.User ) );
+            projectResults.ForEach(project => project.User = RedactUser(project.User));
 
-            return projectResults;
+            // This is needed because otherwise likes, collaborators and categories are missing!
+            foreach(Project project in queryableProjects)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .ToListAsync();
+                project.User = RedactUser(project.User);
+                project.Likes = await GetDbSet<ProjectLike>()
+                                      .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
+                                      .ToListAsync();
+            }
+            return await queryableProjects.ToListAsync();
         }
 
         /// <summary>
@@ -290,6 +309,10 @@ namespace Repositories
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
 
                 project.LinkedInstitutions = await GetDbSet<ProjectInstitution>()
@@ -589,14 +612,19 @@ namespace Repositories
                     projectsToReturn.Include(p => p.ProjectIcon).Load();
                     projectsToReturn.Include(p => p.CallToAction).Load();
                     projectsToReturn.Include(p => p.Likes).Load();
+                    projectsToReturn.Include(p => p.Categories).Load();
 
-                    foreach(Project project in projectsToReturn)
+            foreach (Project project in projectsToReturn)
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
+                                      .ToListAsync();
+                project.Categories = await GetDbSet<ProjectCategory>()
+                                      .Include(p => p.Category)
+                                      .Where(p => p.Project.Id == project.Id)
                                       .ToListAsync();
             }
             return projectsToReturn;

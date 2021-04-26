@@ -38,6 +38,7 @@ services:
     networks:
       - proxy
       - mssql-network
+      - rabbitmq-network
     depends_on:
       - db
     volumes:
@@ -166,8 +167,8 @@ services:
         - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
         - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
-        rabbitmq-network:
-	mssql-network:
+      rabbitmq-network:
+      mssql-network:
         
   elasticsynchronizer:
     image: digitalexcellence/elasticsynchronizer:latest
