@@ -239,7 +239,12 @@ namespace API.Controllers
             return Ok(resultsResource);
         }
 
-
+        /// <summary>
+        ///     This method returns suggestions while searching for projects
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>This method returns a list of autocomplete project resources.</returns>
+        /// <response code="200">This endpoint returns a list with suggested projects.</response>
         [HttpGet("search/autocomplete")]
         [ProducesResponseType(typeof(AutocompleteProjectsResource), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
