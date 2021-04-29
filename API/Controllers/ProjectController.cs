@@ -246,16 +246,13 @@ namespace API.Controllers
         /// <returns>This method returns a list of autocomplete project resources.</returns>
         /// <response code="200">This endpoint returns a list with suggested projects.</response>
         [HttpGet("search/autocomplete")]
-        [ProducesResponseType(typeof(AutocompleteProjectsResource), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(List<AutocompleteProjectResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
         {
             List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
-            AutocompleteProjectsResource resultResource = new AutocompleteProjectsResource();
-            List<AutocompleteProjectResource> autocompleteProjectResources = mapper.Map<List<Project>, List<AutocompleteProjectResource>>(projects);
-            resultResource.AutocompleteProjects = autocompleteProjectResources;
-
-            return Ok(resultResource);
+            List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
+            
+            return Ok(autocompleteProjectResourceResults);
         }
 
 

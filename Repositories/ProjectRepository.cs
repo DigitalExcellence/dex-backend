@@ -124,7 +124,7 @@ namespace Repositories
         void MigrateDatabase(List<Project> projectsToExport);
 
         /// <summary>
-        ///     This method will call the ElasticSearch index to retreive projects where the title starts with the query.
+        ///     This method will call the ElasticSearch index to retrieve projects where the title starts with the query.
         /// </summary>
         /// <param name="query">The string of characters with which the title must begin</param>
         /// <returns>
@@ -707,7 +707,7 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     This method will call the ElasticSearch index to retreive projects where the title starts with the query.
+        ///     This method will call the ElasticSearch index to retrieve projects where the title starts with the query.
         /// </summary>
         /// <param name="query">The string of characters with which the title must begin</param>
         /// <returns>

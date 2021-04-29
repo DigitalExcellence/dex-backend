@@ -9,7 +9,7 @@ namespace API.Resources
     /// <summary>
     ///     The view model of a single autocompleted search project.
     /// </summary>
-    public class AutocompleteProjectResource
+    public class AutocompleteProjectResourceResult
     {
         /// <summary>
         ///     Gets or sets the Id of the autocompleted search project.
