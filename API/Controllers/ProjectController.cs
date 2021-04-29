@@ -802,12 +802,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Request to link an exising DeX user to a collaborator within a project.
+        ///     Request to link an exising DeX user to a collaborator within a project.
         /// </summary>
         /// <param name="projectId">The project related to the linking.</param>
         /// <param name="collaboratorId">The ID of the collaborator within the given project</param>
         /// <param name="userId">The DeX user the collaborator should represent.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///     StatusCode 200 if success,
+        ///     StatusCode 400 if the collaborator has already been linked to a(nother) DeX user,
+        ///     StatusCode 404 if some requested resources aren't found.
+        /// </returns>
         [HttpPost("collaborator/link/{projectId}/{collaboratorId}/{userId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -825,7 +829,7 @@ namespace API.Controllers
                 {
                     Title = "Failed linnking collaborator.",
                     Detail = "The project could not be found in the database.",
-                    Instance = "xxx" // TODO
+                    Instance = "078187fa-a8be-11eb-bcbc-0242ac130002"
                 };
                 return NotFound(problem);
             }
@@ -838,7 +842,7 @@ namespace API.Controllers
                 {
                     Title = "Failed linking collaborator.",
                     Detail = "User is already something.",
-                    Instance = "xxx" // TODO
+                    Instance = "0da7858a-a8be-11eb-bcbc-0242ac130002"
                 };
                 return BadRequest(problem);
             }
@@ -851,7 +855,7 @@ namespace API.Controllers
                 {
                     Title = "Failed linking collaborator.",
                     Detail = "The user could not be found in the database.",
-                    Instance = "xxx" //TODO
+                    Instance = "10c0d23a-a8be-11eb-bcbc-0242ac130002"
                 };
                 return NotFound(problem);
             }
@@ -868,7 +872,7 @@ namespace API.Controllers
                     {
                         Title = "Failed linking collaborator.",
                         Detail = "Not allowed to send invite.",
-                        Instance = "xxx" // TODO
+                        Instance = "4af1780c-a8c7-11eb-bcbc-0242ac130002"
                     };
                     return Unauthorized(problem);
                 }
@@ -896,7 +900,10 @@ namespace API.Controllers
         ///     Accept collaborator link request by given hash, previously sent in an email
         /// </summary>
         /// <param name="requestHash">Request identifier sent in an email</param>
-        /// <returns>Ok</returns>
+        /// <returns>
+        ///     StatusCode 200 if the linked collaborator has been accepted,
+        ///     StatusCode 400 if requestHash doesn't exist.
+        /// </returns>
         [HttpPost("collaborator/accept/{requestHash}")]
         [Authorize]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -912,7 +919,7 @@ namespace API.Controllers
                 {
                     Title = "Failed accepting link collaborator.",
                     Detail = "Hash does not exist.",
-                    Instance = "xxx" // TODO
+                    Instance = "67443384-a8c0-11eb-bcbc-0242ac130002"
                 };
                 return BadRequest(problem);
             }
