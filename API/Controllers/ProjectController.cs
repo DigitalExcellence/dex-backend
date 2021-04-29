@@ -802,11 +802,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Request to link an exising DeX user to a collaborator within a project.
         /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="collaboratorId"></param>
-        /// <param name="userId"></param>
+        /// <param name="projectId">The project related to the linking.</param>
+        /// <param name="collaboratorId">The ID of the collaborator within the given project</param>
+        /// <param name="userId">The DeX user the collaborator should represent.</param>
         /// <returns></returns>
         [HttpPost("collaborator/link/{projectId}/{collaboratorId}/{userId}")]
         [Authorize]
