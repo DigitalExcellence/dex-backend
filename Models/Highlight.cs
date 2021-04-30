@@ -39,6 +39,8 @@ namespace Models
 
         public DateTime? EndDate { get; set; }
 
+        public File Image { get; set; }
+
     }
 
 }
