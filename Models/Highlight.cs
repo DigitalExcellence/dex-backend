@@ -41,6 +41,8 @@ namespace Models
 
         public File Image { get; set; }
 
+        public int? ImageId { get; set; }
+
     }
 
 }
