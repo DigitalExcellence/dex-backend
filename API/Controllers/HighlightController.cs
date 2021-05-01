@@ -43,16 +43,22 @@ namespace API.Controllers
 
         private readonly IHighlightService highlightService;
         private readonly IMapper mapper;
+        private readonly IFileService fileService;
+        private readonly IProjectService projectService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="HighlightController" /> class
         /// </summary>
         /// <param name="highlightService">The highlight service which is used to communicate with the logic layer.</param>
         /// <param name="mapper">The mapper which is used to convert the resources to the models to resource results.</param>
-        public HighlightController(IHighlightService highlightService, IMapper mapper)
+        /// <param name="fileService">The file service which is used to communicate with the logic layer.</param>
+        /// <param name="projectService">The project service which is used to communicate with the logic layer.</param>
+        public HighlightController(IHighlightService highlightService, IMapper mapper, IFileService fileService, IProjectService projectService)
         {
             this.highlightService = highlightService;
             this.mapper = mapper;
+            this.fileService = fileService;
+            this.projectService = projectService;
         }
 
         /// <summary>
@@ -165,7 +171,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public IActionResult CreateHighlight(HighlightResource highlightResource)
+        public async Task<IActionResult> CreateHighlight(HighlightResource highlightResource)
         {
             if(highlightResource == null)
             {
@@ -179,6 +185,38 @@ namespace API.Controllers
             }
 
             Highlight highlight = mapper.Map<HighlightResource, Highlight>(highlightResource);
+            File file = null;
+
+            if(highlightResource.ImageId != null)
+            {
+                file = await fileService.FindAsync(highlightResource.ImageId.Value);
+                if(file == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "File was not found.",
+                                                 Detail = "The specified file was not found while creating highlight.",
+                                                 Instance = "F4AF3D06-DD74-40E0-99BB-8E1183A6A734"
+                                             };
+                    return BadRequest(problem);
+                }
+            }
+
+            Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(highlightResource.ProjectId);
+
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Project was not found.",
+                                             Detail = "The specified project was not found while creating highlight.",
+                                             Instance = "A6DBEE27-0363-479B-B099-A467D4B2CF00"
+                                         };
+                return BadRequest(problem);
+            }
+
+            highlight.Image = file;
+            highlight.Project = project;
 
             try
             {
