@@ -24,6 +24,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -171,6 +172,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> CreateHighlight(HighlightResource highlightResource)
         {
             if(highlightResource == null)
@@ -198,7 +200,7 @@ namespace API.Controllers
                                                  Detail = "The specified file was not found while creating highlight.",
                                                  Instance = "F4AF3D06-DD74-40E0-99BB-8E1183A6A734"
                                              };
-                    return BadRequest(problem);
+                    return NotFound(problem);
                 }
             }
 
@@ -212,7 +214,7 @@ namespace API.Controllers
                                              Detail = "The specified project was not found while creating highlight.",
                                              Instance = "A6DBEE27-0363-479B-B099-A467D4B2CF00"
                                          };
-                return BadRequest(problem);
+                return NotFound(problem);
             }
 
             highlight.Image = file;
@@ -252,6 +254,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
         [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UpdateHighlight(int highlightId,
                                                          [FromBody] HighlightResource highlightResource)
         {
@@ -269,10 +272,57 @@ namespace API.Controllers
 
             mapper.Map(highlightResource, highlight);
 
-            highlightService.Update(highlight);
-            highlightService.Save();
+            File file = null;
 
-            return Ok(mapper.Map<Highlight, HighlightResourceResult>(highlight));
+            if(highlightResource.ImageId != null)
+            {
+                file = await fileService.FindAsync(highlightResource.ImageId.Value);
+                if(file == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "File was not found.",
+                                                 Detail = "The specified file was not found while creating highlight.",
+                                                 Instance = "412CC9A8-CB2A-4389-9F9C-F8494AB65AE0"
+                                             };
+                    return NotFound(problem);
+                }
+            }
+
+            Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(highlightResource.ProjectId);
+
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Project was not found.",
+                                             Detail = "The specified project was not found while creating highlight.",
+                                             Instance = "B923484E-D562-4F03-A57E-88D02819EBD6"
+                                         };
+                return NotFound(problem);
+            }
+
+            highlight.Image = file;
+            highlight.Project = project;
+
+            try
+            {
+                highlightService.Update(highlight);
+                highlightService.Save();
+
+                return Ok(mapper.Map<Highlight, HighlightResourceResult>(highlight));
+            } catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e, "Database exception");
+
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed updating highlight.",
+                                             Detail = "Failed updating the highlight to the database.",
+                                             Instance = "D9933508-F7B6-44B1-9266-5B040D2EA07D"
+                };
+                return BadRequest(problem);
+            }
         }
 
         /// <summary>
