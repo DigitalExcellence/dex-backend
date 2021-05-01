@@ -33,11 +33,6 @@ namespace API.Resources
         public int Id { get; set; }
 
         /// <summary>
-        ///     This gets or sets the id of the project that this highlight is associated with
-        /// </summary>
-        public int ProjectId { get; set; }
-
-        /// <summary>
         ///     This gets or sets the description of the project that this highlight is associated with
         /// </summary>
         public string Description { get; set; }
