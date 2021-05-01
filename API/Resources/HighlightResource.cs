@@ -50,7 +50,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the image id of the project that this highlight is associated with
         /// </summary>
-        public int ImageId { get; set; }
+        public int? ImageId { get; set; }
 
     }
 
