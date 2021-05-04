@@ -249,10 +249,17 @@ namespace API.Controllers
         [ProducesResponseType(typeof(List<AutocompleteProjectResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
         {
-            List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
-            List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
+            try
+            {
+                List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
+                List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
+                return Ok(autocompleteProjectResourceResults);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
             
-            return Ok(autocompleteProjectResourceResults);
         }
 
 
