@@ -56,6 +56,7 @@ namespace API.Controllers
         private readonly IProjectService projectService;
         private readonly IProjectCategoryService projectCategoryService;
         private readonly ICategoryService categoryService;
+        private readonly IProjectCommentService projectCommentService;
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
@@ -84,6 +85,7 @@ namespace API.Controllers
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
         /// <param name="categoryService">The category service is used to work with categories</param>
         /// <param name="projectCategoryService">The project category service is used to connect projects and categories</param>
+        /// <param name="projectCommentService"></param>
         /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
         public ProjectController(IProjectService projectService,
@@ -98,7 +100,8 @@ namespace API.Controllers
                                  IInstitutionService institutionService,
                                  ICallToActionOptionService callToActionOptionService,
                                  ICategoryService categoryService,
-                                 IProjectCategoryService projectCategoryService)
+                                 IProjectCategoryService projectCategoryService,
+                                 IProjectCommentService projectCommentService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -113,6 +116,7 @@ namespace API.Controllers
             this.projectCategoryService = projectCategoryService;
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
+            this.projectCommentService = projectCommentService;
         }
 
 
@@ -1338,6 +1342,63 @@ namespace API.Controllers
             projectCategoryService.Save();
 
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+        }
+
+        /// <summary>
+        /// Gets the comments belonging to the provided project-id.
+        /// </summary>
+        /// <param name="projectId">The project-id for which to retrieve the comments.</param>
+        /// <returns></returns>
+        [HttpGet("comments/{projectId}")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(List<ProjectCommentResourceResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetCommentsAsync(int projectId)
+        {
+            if(projectId < 0)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting comments",
+                                             Detail =
+                                                 "The projectId is smaller than 0 and therefore it could never retrieve comments.",
+                                             Instance = ""
+                                         };
+                return BadRequest(problem);
+            }
+
+            List<ProjectComment> comments = await projectCommentService.GetProjectComments(projectId);
+
+            if(comments == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting comments",
+                                             Detail = "The comments could not be found in the database.",
+                                             Instance = ""
+
+                                         };
+                return NotFound(problem);
+            }
+
+            return Ok(mapper.Map<List<ProjectComment>, List<ProjectCommentResourceResult>>(comments));
+        }
+
+        /// <summary>
+        /// Post a new comment to the provided project-id
+        /// </summary>
+        /// <param name="projectId">The project-id to add the new comment to</param>
+        /// <param name="comment">The added comment and its metadata</param>
+        /// <returns></returns>
+        [HttpPost("comment/{projectId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectCommentResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PostCommentAsync(int projectId, [FromBody] ProjectCommentResource comment)
+        {
+            return null;
         }
     }
 

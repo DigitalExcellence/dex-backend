@@ -112,6 +112,10 @@ namespace API.Configuration
                 .ForMember(q => q.Id, opt => opt.MapFrom(q=> q.Category.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Category.Name));
 
+            CreateMap<ProjectCommentResource, ProjectComment>();
+            CreateMap<ProjectComment, ProjectCommentResourceResult>();
+
+
             CreateMap<EmbeddedProjectResource, EmbeddedProject>();
             CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
 
