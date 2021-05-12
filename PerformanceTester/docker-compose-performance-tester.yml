@@ -1,9 +1,0 @@
-version: '3.8'
-
-services: 
-    k6: 
-      command: "run /tests.js"
-      container_name: k6-cli
-      image: "loadimpact/k6:latest"
-      volumes: 
-        - "./tests.js:/tests.js"
