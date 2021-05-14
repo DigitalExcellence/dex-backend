@@ -157,7 +157,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                                     .Where(s => s.Id == id)
                                     .Include(p => p.ProjectIcon)
-                                    .Include(p => p.CallToAction)
+                                    .Include(p => p.CallToActions)
                                     .SingleOrDefaultAsync();
 
             if(project != null)
@@ -196,7 +196,7 @@ namespace Repositories
         {
             IQueryable<Project> queryableProjects = GetDbSet<Project>().Include(u => u.User);
             queryableProjects.Include(p => p.ProjectIcon).Load();
-            queryableProjects.Include(p => p.CallToAction).Load();
+            queryableProjects.Include(p => p.CallToActions).Load();
             queryableProjects.Include(p => p.Collaborators).Load();
             queryableProjects.Include(p => p.Likes).Load();
             queryableProjects.Include(p => p.LinkedInstitutions).Load();
@@ -289,7 +289,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                                     .Include(p => p.User)
                                     .Include(p => p.ProjectIcon)
-                                    .Include(p => p.CallToAction)
+                                    .Include(p => p.CallToActions)
                                     .Where(p => p.Id == id)
                                     .FirstOrDefaultAsync();
             if(project != null)
@@ -600,7 +600,7 @@ namespace Repositories
                                                                .Equals(query) ||
                                                               p.User.Name.Contains(query));
                     projectsToReturn.Include(p => p.ProjectIcon).Load();
-                    projectsToReturn.Include(p => p.CallToAction).Load();
+                    projectsToReturn.Include(p => p.CallToActions).Load();
                     projectsToReturn.Include(p => p.Likes).Load();
                     projectsToReturn.Include(p => p.Categories).Load();
 

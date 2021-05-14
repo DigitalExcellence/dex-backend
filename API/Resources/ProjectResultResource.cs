@@ -70,7 +70,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the call to action of the project.
         /// </summary>
-        public CallToActionResourceResult CallToAction { get; set; }
+        public List<CallToActionResourceResult> CallToActions { get; set; }
 
         /// <summary>
         ///     This gets or sets the likes of the project.

@@ -329,22 +329,26 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
-
-            if(projectResource.CallToAction != null)
+            
+            if(projectResource.CallToActions != null)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                foreach(CallToActionResource callToAction in projectResource.CallToActions)
                 {
-                    ProblemDetails problem = new ProblemDetails
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+
+                    if(!callToActionOptions.Any())
                     {
-                        Title = "Call to action value was not found.",
-                        Detail =
-                                                     "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                    };
-                    return BadRequest(problem);
+                        ProblemDetails problem = new ProblemDetails
+                                                 {
+                                                     Title = "Call to action value was not found.",
+                                                     Detail =
+                                                         "The specified call to action value was not found while creating the project.",
+                                                     Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                                                 };
+                        return BadRequest(problem);
+                    }
                 }
             }
 
@@ -481,21 +485,24 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            if(projectResource.CallToAction != null)
+            if(projectResource.CallToActions != null)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                foreach(CallToActionResource callToAction in projectResource.CallToActions)
                 {
-                    ProblemDetails problem = new ProblemDetails
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+                    if(!callToActionOptions.Any())
                     {
-                        Title = "Call to action value was not found.",
-                        Detail =
-                                                     "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                    };
-                    return BadRequest(problem);
+                        ProblemDetails problem = new ProblemDetails
+                                                 {
+                                                     Title = "Call to action value was not found.",
+                                                     Detail =
+                                                         "The specified call to action value was not found while creating the project.",
+                                                     Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                                                 };
+                        return BadRequest(problem);
+                    }
                 }
             }
 
