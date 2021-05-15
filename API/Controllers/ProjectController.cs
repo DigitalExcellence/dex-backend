@@ -255,11 +255,16 @@ namespace API.Controllers
                 List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
                 return Ok(autocompleteProjectResourceResults);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                return BadRequest(e.Message);
+                return BadRequest(
+                    new ProblemDetails
+                    {
+                        Title = "Autocomplete results could not be retrieved.",
+                        Detail = "Something went wrong.",
+                        Instance = "26E7C55F-21DE-4A7B-804C-BC0B74597222"
+                    });
             }
-            
         }
 
 
