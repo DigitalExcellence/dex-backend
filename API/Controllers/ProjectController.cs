@@ -407,7 +407,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                     {
                         Title = "Unable to create project.",
-                        Detail = "The insitute private is set to true, but the user creating the project isn't bound to an institution.",
+                        Detail = "The institute private is set to true, but the user creating the project isn't bound to an institution.",
                         Instance = "b942c55d-01be-4fd1-90a1-a5ad3d172403"
                     };
                     return NotFound(problem);
