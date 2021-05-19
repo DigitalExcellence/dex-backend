@@ -246,8 +246,10 @@ namespace API.Controllers
         /// <param name="query"></param>
         /// <returns>This method returns a list of autocomplete project resources.</returns>
         /// <response code="200">This endpoint returns a list with suggested projects.</response>
+        /// <response code="503">A 503 status code is returned when the Elastic Search service is unavailable.</response>
         [HttpGet("search/autocomplete")]
         [ProducesResponseType(typeof(List<AutocompleteProjectResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), 503)]
         public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
         {
             try
