@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
 using Serilog;
 using Services.Services;
 using System;
@@ -255,13 +256,13 @@ namespace API.Controllers
                 List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
                 return Ok(autocompleteProjectResourceResults);
             }
-            catch(Exception)
+            catch(ElasticUnavailableException)
             {
-                return BadRequest(
+                return StatusCode(503,
                     new ProblemDetails
                     {
                         Title = "Autocomplete results could not be retrieved.",
-                        Detail = "Something went wrong.",
+                        Detail = "ElasticSearch service unavailable.",
                         Instance = "26E7C55F-21DE-4A7B-804C-BC0B74597222"
                     });
             }

@@ -720,9 +720,9 @@ namespace Repositories
                 .Replace("ReplaceWithQuery", query);
             request.AddParameter("application/json", body, ParameterType.RequestBody);
             IRestResponse restResponse = elasticSearchContext.Execute(request);
-            if(!restResponse.IsSuccessful)
+            if(!restResponse.IsSuccessful && restResponse.Content == "")
             {
-                throw new Exception(restResponse.ErrorMessage);
+                throw new ElasticUnavailableException();
             }
             List<ESProjectDTO> esProjectFormats = new List<ESProjectDTO>();
 
