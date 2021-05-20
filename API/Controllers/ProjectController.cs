@@ -29,6 +29,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -806,7 +807,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project related to the linking.</param>
         /// <param name="collaboratorId">The ID of the collaborator within the given project</param>
-        /// <param name="userId">The DeX user the collaborator should represent.</param>
+        /// <param name="userEmail">The email of DeX user what the collaborator should represent.</param>
         /// <returns>
         ///     StatusCode 200 if success,
         ///     StatusCode 400 if the collaborator has already been linked to a(nother) DeX user,
@@ -816,13 +817,16 @@ namespace API.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> LinkCollaborator(int projectId, int collaboratorId, int userId)
+        public async Task<IActionResult> LinkCollaborator(int projectId, int collaboratorId, string userEmail)
         {
+            //TODO: how to handle collaborator if it doesn't exist (rename method to LinkExistingCollaborator)?
+
             User currentUser = await HttpContext.GetContextUser(userService)
                                                 .ConfigureAwait(false);
 
             Project project = await projectService.FindWithUserAndCollaboratorsAsync(projectId)
                                                   .ConfigureAwait(false);
+
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -841,13 +845,13 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed linking collaborator.",
-                    Detail = "User is already something.",
+                    Detail = "Collaborator already has been linked.",
                     Instance = "0da7858a-a8be-11eb-bcbc-0242ac130002"
                 };
                 return BadRequest(problem);
             }
 
-            User user = await userService.FindAsync(userId);
+            User user = await userService.GetUserByEmail(userEmail);
 
             if(user == null)
             {
@@ -860,36 +864,37 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            if(currentUser.Id == userId)
+            if(currentUser.Id == user.Id)// [User flow] The user wants to link themselves to the collaborator.
             {
-
+                //TODO user flow
             }
-            else
+            else// [Project Creator/Owner flow] The project creator/owner wants to link a user to a collaborator.
             {
-                if(await projectService.CanUserEdit(currentUser, project) == false)
-                {
-                    ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Failed linking collaborator.",
-                        Detail = "Not allowed to send invite.",
-                        Instance = "4af1780c-a8c7-11eb-bcbc-0242ac130002"
-                    };
-                    return Unauthorized(problem);
-                }
+                throw new NotImplementedException();//Uses system; :|
+                //if(await projectService.CanUserEdit(currentUser, project) == false)
+                //{
+                //    ProblemDetails problem = new ProblemDetails
+                //    {
+                //        Title = "Failed linking collaborator.",
+                //        Detail = "Not allowed to send invite.",
+                //        Instance = "4af1780c-a8c7-11eb-bcbc-0242ac130002"
+                //    };
+                //    return Unauthorized(problem);
+                //}
 
-                CollaboratorLinkRequest collaboratorLinkRequest =
-                    await collaboratorLinkRequestService.RegisterCollaboratorLinkRequest(collaborator);
+                //CollaboratorLinkRequest collaboratorLinkRequest =
+                //    await collaboratorLinkRequestService.RegisterCollaboratorLinkRequest(collaborator);
 
-                ProjectCollaboratorLinkRequestEmail email =
-                    await projectService.PrepareLinkRequestMail(collaborator,
-                                                                user,
-                                                                collaboratorLinkRequest.RequestHash);
-                projectService.Save();
-                collaboratorLinkRequestService.Save();
+                //ProjectCollaboratorLinkRequestEmail email =
+                //    await projectService.PrepareLinkRequestMail(collaborator,
+                //                                                user,
+                //                                                collaboratorLinkRequest.RequestHash);
+                //projectService.Save();
+                //collaboratorLinkRequestService.Save();
 
-                emailSender.Send(user.Email, email.Content, email.Content);
+                //emailSender.Send(user.Email, email.Content, email.Content);
 
-                return Ok(email);
+                //return Ok(email);
             }
 
             return NotFound();

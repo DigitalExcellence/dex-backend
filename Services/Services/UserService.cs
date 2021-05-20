@@ -60,6 +60,13 @@ namespace Services.Services
         User GetUserByUsername(string upn);
 
         /// <summary>
+        ///     This is the interface method which gets the user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>User entity</returns>
+        Task<User> GetUserByEmail(string email);
+
+        /// <summary>
         ///     This is the interface method which checks if the user has a certain scope
         /// </summary>
         /// <param name="identityId"></param>
@@ -142,6 +149,16 @@ namespace Services.Services
         /// <param name="upn"></param>
         /// <returns>User entity</returns>
         public User GetUserByUsername(string upn)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        ///     This is the method which gets the user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>User entity</returns>
+        public async Task<User> GetUserByEmail(string email)
         {
             throw new NotImplementedException();
         }
