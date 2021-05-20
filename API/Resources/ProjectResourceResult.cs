@@ -97,6 +97,8 @@ namespace API.Resources
         /// </summary>
         public List<ProjectLikesResourceResult> Likes { get; set; }
 
+        public List<FileResourceResult> Images { get; set; }
+
         /// <summary>
         ///     Sets or gets if project is visible to institute members only or not
         /// </summary>

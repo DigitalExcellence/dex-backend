@@ -363,6 +363,23 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            foreach(int projectResourceImageId in projectResource.ImageIds)
+            {
+                Models.File image = await fileService.FindAsync(projectResourceImageId);
+                if(image == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Image was not found.",
+                                                 Detail = "The specified image was not found while creating project.",
+                                                 Instance = "BBE862F5-0F88-478A-92EF-6864860ACEC5"
+                    };
+                    return BadRequest(problem);
+                }
+
+                project.Images.Add(image);
+            }
+
             project.ProjectIcon = file;
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
@@ -548,6 +565,23 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
+            }
+
+            foreach(int projectResourceImageId in projectResource.ImageIds)
+            {
+                Models.File image = await fileService.FindAsync(projectResourceImageId);
+                if(image == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Image was not found.",
+                                                 Detail = "The specified image was not found while creating project.",
+                                                 Instance = "BBE862F5-0F88-478A-92EF-6864860ACEC5"
+                                             };
+                    return BadRequest(problem);
+                }
+
+                project.Images.Add(image);
             }
 
             await projectCategoryService.ClearProjectCategories(project);

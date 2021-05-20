@@ -159,6 +159,7 @@ namespace Repositories
                                     .Where(s => s.Id == id)
                                     .Include(p => p.ProjectIcon)
                                     .Include(p => p.CallToAction)
+                                    .Include(p => p.Images)
                                     .SingleOrDefaultAsync();
 
             if(project != null)
@@ -202,6 +203,7 @@ namespace Repositories
                 .Include(p => p.Collaborators)
                 .Include(p => p.Likes)
                 .Include(p => p.LinkedInstitutions)
+                .Include(p => p.Images)
                 .Include(p => p.Categories)
                     .ThenInclude(c => c.Category);
 
@@ -279,6 +281,7 @@ namespace Repositories
                                     .Include(p => p.User)
                                     .Include(p => p.ProjectIcon)
                                     .Include(p => p.CallToAction)
+                                    .Include(p => p.Images)
                                     .Where(p => p.Id == id)
                                     .FirstOrDefaultAsync();
             if(project != null)
@@ -421,6 +424,7 @@ namespace Repositories
             IEnumerable<Project> projects = await GetDbSet<Project>()
                    .Include(p => p.Collaborators)
                    .Include(p => p.ProjectIcon)
+                   .Include(p => p.Images)
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
 

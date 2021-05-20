@@ -71,6 +71,8 @@ namespace API.Resources
         /// </summary>
         public ICollection<ProjectCategoryResource> Categories { get; set; }
 
+        public IEnumerable<int> ImageIds { get; set; }
+
     }
 
 }
