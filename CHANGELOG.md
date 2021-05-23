@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-- Added possibility to have multiple call to actions per project. - [#316](https://github.com/DigitalExcellence/dex-backend/issues/416)
+- Added possibility to have multiple call to actions per project. - [#416](https://github.com/DigitalExcellence/dex-backend/issues/416)
 ### Deprecated
 
 ### Removed
