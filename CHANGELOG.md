@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
+- Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
 
 ### Changed
 
