@@ -1,0 +1,211 @@
+version: "3.9"
+services: 
+
+  db:
+    build:
+      context: .
+      dockerfile: Data/Dockerfile
+    networks:
+      - mssql-network
+    environment:
+      - MSSQL_SA_PASSWORD=Dexcelence!1
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role != manager]
+      restart_policy:
+        condition: on-failure
+        
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:3.8.9'
+    environment:
+      - RABBITMQ_USERNAME=test
+      - RABBITMQ_PASSWORD=test
+    ports:
+      - 5672:5672
+      - 5671:5671
+      - 15672:15672
+    networks:
+      rabbitmq-network:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+
+  identity:
+    build:
+      context: .
+      dockerfile: IdentityServer/Dockerfile.dev
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=identity;User=sa;Password=Dexcelence!1;
+      - App__Self__IssuerUri=https://identity:5005
+      - App__Api__DeXApiUrl=https://api:5001
+      - ASPNETCORE_URLS=http://+:5004;https://+:5005;
+      - ASPNETCORE_HTTPS_PORT=5005
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=W64x4AD8dNj9kImdX3tayS
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-identity.pfx
+      - App__JobScheduler__ClientId=dex-jobscheduler
+      - App__JobScheduler__ClientSecret=test
+      - App__ApiAuthentication__ClientSecret=test
+    networks:
+      mssql-network:
+    ports:
+      - 5004:5004
+      - 5005:5005
+    deploy:
+      mode: replicated
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+
+  elasticsynchronizer:
+    build: 
+      context: .
+      dockerfile: ElasticSynchronizer/Dockerfile
+    depends_on: 
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__Elastic__Hostname=elasticsearch
+      - App__Elastic__Username=elastic
+      - App__Elastic__Password=changeme
+      - App__Elastic__IndexUrl=projects/
+    networks:
+      rabbitmq-network: 
+      mssql-network: 
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+
+  api:
+    build:
+      context: .
+      dockerfile: API/Dockerfile.dev
+    depends_on:
+      - db
+      - rabbitmq
+      - identity
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=master;User=sa;Password=Dexcelence!1;
+      - App__IdentityServer__IdentityUrl=http://identity:5004
+      - App__IdentityServer__ClientId=dex-api
+      - App__IdentityServer__ClientSecret=test
+      - ASPNETCORE_URLS=http://+:5000;https://+:5001;
+      - ASPNETCORE_HTTPS_PORT=5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=xI90DrNea7M6UJFNDwip6t
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/dex-api.pfx
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__Elastic__Hostname=elasticsearch
+      - App__Elastic__Username=elastic
+      - App__Elastic__Password=changeme
+      - App__Elastic__IndexUrl=projects/ 
+    networks:
+      mssql-network:
+      rabbitmq-network:
+    ports:
+      - 5000:5000
+      - 5001:5001
+    deploy:
+      mode: replicated
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+
+
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: 7.10.0
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: ./elasticsearch/config/analysis/wn_s.txt
+        target: /usr/share/elasticsearch/config/analysis/wn_s.txt
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      mssql-network:
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  notificationservice:
+    build:
+      context: .
+      dockerfile: NotificationSystem/Dockerfile
+    depends_on:
+      - rabbitmq
+    environment:
+      - App__RabbitMQ__Hostname=rabbitmq
+      - App__RabbitMQ__Username=test
+      - App__RabbitMQ__Password=test
+      - App__SendGrid__ApiKey=test
+      - App__SendGrid__EmailFrom=test
+    stdin_open: true
+    tty: true
+    networks:
+      rabbitmq-network:
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  jobscheduler:
+    build:
+        context: .
+        dockerfile: JobScheduler/Dockerfile
+    environment:
+        - Config__IdentityServerConfig__IdentityUrl=http://identity:5004/
+        - Config__IdentityServerConfig__ClientId=dex-jobscheduler
+        - Config__IdentityServerConfig__ClientSecret=test
+        - Config__ApiConfig__ApiUrl=https://api:5001/
+        - Config__RabbitMQ__Hostname=rabbitmq
+        - Config__RabbitMQ__Username=test
+        - Config__RabbitMQ__Password=test
+    networks:
+        rabbitmq-network:
+        mssql-network:
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  elasticsearch:  
+
+networks:
+  mssql-network:
+  rabbitmq-network:
+
+
+
