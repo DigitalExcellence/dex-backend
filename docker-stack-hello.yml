@@ -3,7 +3,8 @@ version: "3.9"
 services:
 
   app:
-    image: 'hello-world'
+    image: 'alpine'
+    command: ping docker.com
     deploy:
       replicas: 20
       restart_policy:
