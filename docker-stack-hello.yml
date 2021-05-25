@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+
+  app:
+    image: 'hello-world'
+    deploy:
+      replicas: 20
+      restart-policy:
+        condition: on-failure
