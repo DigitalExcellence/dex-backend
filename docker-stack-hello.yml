@@ -6,5 +6,5 @@ services:
     image: 'hello-world'
     deploy:
       replicas: 20
-      restart-policy:
+      restart_policy:
         condition: on-failure
