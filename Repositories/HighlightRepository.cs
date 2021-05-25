@@ -71,6 +71,7 @@ namespace Repositories
                                       .Where(s => s.Id == id)
                                       .Include(p => p.Project)
                                       .Include(p => p.Project.ProjectIcon)
+                                      .Include(p => p.Image)
                                       .SingleOrDefaultAsync();
 
             return RedactUser(project);
@@ -87,6 +88,7 @@ namespace Repositories
                                                .Where(s => s.EndDate >= DateTime.Now || s.EndDate == null)
                                                .Include(p => p.Project)
                                                .Include(p => p.Project.ProjectIcon)
+                                               .Include(p => p.Image)
                                                .ToListAsync();
             return RedactUser(highlights);
         }
@@ -102,6 +104,7 @@ namespace Repositories
                          .Where(s => s.ProjectId == projectId)
                          .Include(p => p.Project)
                          .Include(p => p.Project.ProjectIcon)
+                         .Include(p => p.Image)
                          .ToListAsync();
         }
 
