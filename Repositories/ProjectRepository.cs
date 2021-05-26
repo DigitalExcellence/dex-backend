@@ -213,12 +213,33 @@ namespace Repositories
                 .Include(p => p.Likes)
                 .Include(p => p.LinkedInstitutions)
                 .Include(p => p.Categories)
-                    .ThenInclude(c => c.Category);
+                    .ThenInclude(c => c.Category)
+                  //Don't get the description for performance reasons.
+                  .Select(p => new Project
+                  {
+                      UserId = p.UserId,
+                      User = p.User,
+                      Id = p.Id,
+                      ProjectIconId = p.ProjectIconId,
+                      ProjectIcon = p.ProjectIcon,
+                      CallToAction = p.CallToAction,
+                      Collaborators = p.Collaborators,
+                      Likes = p.Likes,
+                      LinkedInstitutions = p.LinkedInstitutions,
+                      Categories = p.Categories,
+                      Created = p.Created,
+                      InstitutePrivate = p.InstitutePrivate,
+                      Name = p.Name,
+                      ShortDescription = p.ShortDescription,
+                      Updated = p.Updated,
+                      Uri = p.Uri
+                  });
 
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
 
             //Execute the IQueryable to get a collection of results
-            List<Project> projectResults = await queryableProjects.ToListAsync();
+            List<Project> projectResults = await queryableProjects
+                .ToListAsync();
 
             //Redact the user after fetching the collection from the project (no separate query needs to be executed)
             projectResults.ForEach(project => project.User = RedactUser(project.User));

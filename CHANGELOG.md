@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed the get all projects query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
+- Removed getting the description for the projects get all query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
 
 ### Security
 
