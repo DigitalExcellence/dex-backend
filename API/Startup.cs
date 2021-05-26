@@ -519,13 +519,7 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                if(!context.CallToAction.Any())
-                {
-                    List<Project> projects = context.Project.ToList();
-                    context.CallToAction.AddRange(Seed.SeedCallToActions(projects));
-                    context.SaveChanges();
-                }
-                
+
                 // TODO seed embedded projects
             }
             

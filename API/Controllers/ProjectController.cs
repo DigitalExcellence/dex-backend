@@ -47,7 +47,7 @@ namespace API.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-
+        
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly ICallToActionOptionService callToActionOptionService;
         private readonly IFileService fileService;
@@ -319,6 +319,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
         {
+
             if(projectResource == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -332,6 +333,35 @@ namespace API.Controllers
             
             if(projectResource.CallToActions != null)
             {
+
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue)
+                                  .Any(cta => cta.Count() > 1))
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Duplicate call to action value.",
+                                                 Detail =
+                                                     "It is not possible to create a project with multiple of the same call to actions.",
+                                                 Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
+                    };
+                    return BadRequest(problem);
+                }
+
+                //This should be refactored. As for much of the code in the controllers, see issue #411 - Refactor controllers.
+                int maxAmountOfCallToActions = 4;
+
+                if(projectResource.CallToActions.Count > maxAmountOfCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Maximum amount of call to actions exceeded.",
+                                                 Detail =
+                                                     $"It is not possible to create a project with more than {maxAmountOfCallToActions} call to actions.",
+                                                 Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                                             };
+                    return BadRequest(problem);
+                }
+
                 foreach(CallToActionResource callToAction in projectResource.CallToActions)
                 {
                     IEnumerable<CallToActionOption> callToActionOptions =

@@ -21,7 +21,7 @@ namespace _4_Data.Migrations
             migrationBuilder.AddColumn<int>(
                 name: "ProjectId",
                 table: "CallToAction",
-                nullable: true);
+                nullable: false);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CallToAction_ProjectId",
@@ -55,7 +55,7 @@ namespace _4_Data.Migrations
                 name: "CallToActionId",
                 table: "Project",
                 type: "int",
-                nullable: true);
+                nullable: false);
             
             migrationBuilder.CreateIndex(
                 name: "IX_Project_CallToActionId",

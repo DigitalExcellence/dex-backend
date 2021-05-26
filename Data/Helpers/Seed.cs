@@ -487,34 +487,6 @@ namespace Data.Helpers
         }
 
         /// <summary>
-        ///     This method seeds call to actions.
-        /// </summary>
-        /// <returns>Returns a list of call to actions options that can be seeded into the database.</returns>
-        public static List<CallToAction> SeedCallToActions(List<Project> projects)
-        {
-            List<CallToAction> callToActions = new List<CallToAction>();
-
-            for(int i = 0; i < projects.Count; i++)
-            {
-                for(int j = 0; j < new Random().Next(0, 3); j++)
-                {
-                    Faker<CallToAction> fakeCallToAction = new Faker<CallToAction>()
-                                                           .RuleFor(c => c.OptionValue, f => f.Lorem.Word())
-                                                           .RuleFor(c => c.Value, f => f.Lorem.Word())
-                                                           .RuleFor(c => c.ProjectId, projects[i].Id);
-
-                    CallToAction callToAction = fakeCallToAction.Generate();
-
-                    callToActions.Add(callToAction);
-                }
-                
-            }
-
-            return callToActions;
-
-        }
-
-        /// <summary>
         ///     This method seeds wizard pages.
         /// </summary>
         /// <returns>Returns a list of wizard pages that can be seeded into the database.</returns>
