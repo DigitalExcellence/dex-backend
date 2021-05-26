@@ -9,14 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Changed
+- Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
 
+### Changed
+- Added possibility to have multiple call to actions per project. - [#416](https://github.com/DigitalExcellence/dex-backend/issues/416)
 ### Deprecated
 
 ### Removed
 
 ### Fixed
-
+- Fixed the get all projects query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
 ### Security
 
 
