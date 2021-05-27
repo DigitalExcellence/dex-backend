@@ -97,6 +97,9 @@ namespace API.Resources
         /// </summary>
         public List<ProjectLikesResourceResult> Likes { get; set; }
 
+        /// <summary>
+        ///     This gets or sets the images in de project.
+        /// </summary>
         public List<FileResourceResult> Images { get; set; }
 
         /// <summary>
