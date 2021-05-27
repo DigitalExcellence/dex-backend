@@ -160,6 +160,8 @@ namespace Services.Services
         /// <returns>User entity</returns>
         public async Task<User> GetUserByEmail(string email)
         {
+            //TODO
+            //return await Repository.FindUserByEmailAsync()
             throw new NotImplementedException();
         }
 

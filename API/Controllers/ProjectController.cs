@@ -812,7 +812,7 @@ namespace API.Controllers
         ///     StatusCode 400 if the collaborator has already been linked to a(nother) DeX user,
         ///     StatusCode 404 if some requested resources aren't found.
         /// </returns>
-        [HttpPost("collaborator/link/{projectId}/{collaboratorId}/{userId}")]
+        [HttpPost("collaborator/link/{projectId}/{collaboratorId}/{userEmail}")]
         [Authorize]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -851,7 +851,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            User user = await userService.GetUserByEmail(userEmail);
+            User user = await userService.GetUserByEmail(userEmail);//TODO: Not Implemented yet!
 
             if(user == null)
             {
@@ -878,14 +878,19 @@ namespace API.Controllers
                 collaborator.LinkedUser = linkedUserRequest;
 
                 //TODO: save changes to db
-
-                string emailAddress = project.User.Email;
+                //projectService.Save();
+                //collaboratorLinkRequestService.Save();
 
                 //Generate a mail for the project owner/creator concerning the changed collaborator.
                 ProjectCollaboratorLinkRequestEmail mail =
-                    await projectService.GenerateLinkRequestMail(collaborator, emailAddress, linkedUserRequest.AcceptanceHash);
+                    await projectService.GenerateLinkRequestMail(collaborator, linkedUserRequest.AcceptanceHash);
+
+                string emailAddress = project.User.Email;
 
                 //TODO: send mail
+                emailSender.Send(emailAddress, mail.Content, mail.Content);
+
+                return Ok(mail);
             }
             else// [Project Creator/Owner flow] The project creator/owner wants to link a user to a collaborator.
             {

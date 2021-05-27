@@ -72,7 +72,7 @@ namespace Services.Services
         Task<IEnumerable<Project>> GetUserProjects(int userId);
 
         // TODO: Summary
-        Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string to, string acceptHash);
+        Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string acceptHash);
 
         /// <summary>
         ///     Check if a user can edit a project
@@ -205,14 +205,15 @@ namespace Services.Services
         }
 
         // TODO: Summary
-        public Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string to, string acceptHash)
+        public Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string acceptHash)
         {
             string requestAcceptUrl = $"localhost/project/collaborator/accept/{acceptHash}";
 
             string emailContent = $"aaaa <a href=\"{requestAcceptUrl}\">KLIK HIER</a>";
-            string recipient = to;
 
-            return Task.FromResult(new ProjectCollaboratorLinkRequestEmail { Content = emailContent, Title = "You've got mail!" });
+            return Task.FromResult(
+                new ProjectCollaboratorLinkRequestEmail { Content = emailContent, Title = "You've got mail!" }
+            );
         }
 
         /// <summary>
