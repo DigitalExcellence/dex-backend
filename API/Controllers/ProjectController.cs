@@ -29,7 +29,6 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -820,6 +819,7 @@ namespace API.Controllers
         public async Task<IActionResult> LinkCollaborator(int projectId, int collaboratorId, string userEmail)
         {
             //TODO: how to handle collaborator if it doesn't exist (rename method to LinkExistingCollaborator)?
+            // Solution: Make a new controller specifically for this task, and if the selected collaboratorId doesn't exist: bad request
 
             User currentUser = await HttpContext.GetContextUser(userService)
                                                 .ConfigureAwait(false);
@@ -831,7 +831,7 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed linnking collaborator.",
+                    Title = "Failed linking collaborator.",
                     Detail = "The project could not be found in the database.",
                     Instance = "078187fa-a8be-11eb-bcbc-0242ac130002"
                 };
@@ -846,7 +846,7 @@ namespace API.Controllers
                 {
                     Title = "Failed linking collaborator.",
                     Detail = "Collaborator already has been linked.",
-                    Instance = "0da7858a-a8be-11eb-bcbc-0242ac130002"
+                    Instance = "0da7858b-a8be-11eb-bcbc-0242ac130002"
                 };
                 return BadRequest(problem);
             }
@@ -859,18 +859,37 @@ namespace API.Controllers
                 {
                     Title = "Failed linking collaborator.",
                     Detail = "The user could not be found in the database.",
-                    Instance = "10c0d23a-a8be-11eb-bcbc-0242ac130002"
+                    Instance = "10c0d23c-a8be-11eb-bcbc-0242ac130002"
                 };
                 return NotFound(problem);
             }
 
+            //TODO: Should this code be put into a service?
             if(currentUser.Id == user.Id)// [User flow] The user wants to link themselves to the collaborator.
             {
-                //TODO user flow
+                CollaboratorLinkedUser linkedUserRequest = new CollaboratorLinkedUser()
+                {
+                    Id = 1,
+                    User = user,
+                    AcceptanceHash = "HASH-123",//TODO: generate link/hash code
+                    Status = LinkedUserStatus.PENDING
+                };
+
+                collaborator.LinkedUser = linkedUserRequest;
+
+                //TODO: save changes to db
+
+                string emailAddress = project.User.Email;
+
+                //Generate a mail for the project owner/creator concerning the changed collaborator.
+                ProjectCollaboratorLinkRequestEmail mail =
+                    await projectService.GenerateLinkRequestMail(collaborator, emailAddress, linkedUserRequest.AcceptanceHash);
+
+                //TODO: send mail
             }
             else// [Project Creator/Owner flow] The project creator/owner wants to link a user to a collaborator.
             {
-                throw new NotImplementedException();//Uses system; :|
+                return StatusCode(501);//Not Implemented
                 //if(await projectService.CanUserEdit(currentUser, project) == false)
                 //{
                 //    ProblemDetails problem = new ProblemDetails

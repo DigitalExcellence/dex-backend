@@ -12,12 +12,17 @@ namespace Models
         public int Id { get; set; }
 
         /// <summary>
-        /// Linked user.
+        ///     Linked user.
         /// </summary>
         public User User { get; set; }
 
         /// <summary>
-        /// Status of the linked user.
+        ///     The hash to allow for the Status of this model to change to: 'Accepted'
+        /// </summary>
+        public string AcceptanceHash { get; set; }
+
+        /// <summary>
+        ///     Status of the linked user.
         /// </summary>
         public LinkedUserStatus Status { get; set; }
     }

@@ -71,10 +71,11 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
 
-        Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user, string acceptHash);
+        // TODO: Summary
+        Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string to, string acceptHash);
 
         /// <summary>
-        /// Check if a user can edit a project
+        ///     Check if a user can edit a project
         /// </summary>
         /// <param name="user">User to check</param>
         /// <param name="project">Project to check</param>
@@ -203,14 +204,13 @@ namespace Services.Services
             return Repository.GetUserProjects(userId);
         }
 
-        public Task<ProjectCollaboratorLinkRequestEmail> PrepareLinkRequestMail(Collaborator collaborator, User user, string acceptHash)
+        // TODO: Summary
+        public Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string to, string acceptHash)
         {
-            collaborator.LinkedUser = new CollaboratorLinkedUser { Status = LinkedUserStatus.PENDING, User = user };
-    
-            string requestAcceptUrl = $"localhost/project/link/accept/{acceptHash}";
+            string requestAcceptUrl = $"localhost/project/collaborator/accept/{acceptHash}";
 
             string emailContent = $"aaaa <a href=\"{requestAcceptUrl}\">KLIK HIER</a>";
-            string recipient = user.Email;
+            string recipient = to;
 
             return Task.FromResult(new ProjectCollaboratorLinkRequestEmail { Content = emailContent, Title = "You've got mail!" });
         }
