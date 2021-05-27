@@ -59,7 +59,7 @@ namespace API
             try
             {
                 Log.Information("Starting host...");
-                CreateHostBuilder(args)
+                CreateWebHostBuilder(args)
                     .Build()
                     .Run();
                 return 0;
@@ -78,7 +78,7 @@ namespace API
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>The webhostbuilder instance.</returns>
-        public static IWebHostBuilder CreateHostBuilder(string[] args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             // Appsettings is renamed because of an issue where the project loaded another appsettings.json
             return WebHost.CreateDefaultBuilder(args)
