@@ -851,7 +851,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            User user = await userService.GetUserByEmail(userEmail);//TODO: Not Implemented yet!
+            User user = await userService.GetUserByEmail(userEmail);
 
             if(user == null)
             {

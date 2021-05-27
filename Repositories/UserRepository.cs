@@ -76,6 +76,13 @@ namespace Repositories
         /// <returns></returns>
         Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
+        /// <summary>
+        ///     Finds the User based on the given email asynchronous.
+        /// </summary>
+        /// <param name="userId">The user's email.</param>
+        /// <returns>Returns the user object.</returns>
+        Task<User> FindUserByEmailAsync(string email);
+
     }
 
     /// <summary>
@@ -214,6 +221,23 @@ namespace Repositories
             return await GetDbSet<User>()
                          .Where(u => u.ExpectedGraduationDate >= now && u.ExpectedGraduationDate <= max)
                          .ToListAsync();
+        }
+
+        /// <summary>
+        ///     Finds the User based on the given email asynchronous.
+        /// </summary>
+        /// <param name="userId">The user's email.</param>
+        /// <returns>Returns the user object.</returns>
+        public async Task<User> FindUserByEmailAsync(string email)
+        {
+            return await GetDbSet<User>()
+                         .Where(s => s.Email == email)
+                         .Include(s => s.Role)//TODO: What is this?
+                         .ThenInclude(s => s.Scopes)//TODO: What is this?
+                         .Include(u => u.Institution)//TODO: What is this?
+                         .Include(f => f.UserProject)//TODO: What is this?
+                         .Include(s => s.LikedProjectsByUsers)//TODO: What is this?
+                         .SingleOrDefaultAsync();
         }
 
     }
