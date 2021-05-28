@@ -29211,21 +29211,11 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 201\", function () {",
-													"    pm.response.to.have.status(201);",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
-													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
-													"    pm.expect(jsonData.name).to.eql(projectName);",
-													"});",
-													"",
-													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
-													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
-													"});",
-													"",
-													"pm.test(\"Call to action is not null\", function() {",
-													"    pm.expect(jsonData.callToActions.length == 1);",
-													"})"
+													""
 												],
 												"type": "text/javascript"
 											}
@@ -29286,21 +29276,9 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 201\", function () {",
-													"    pm.response.to.have.status(201);",
-													"});",
-													"",
-													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
-													"    pm.expect(jsonData.name).to.eql(projectName);",
-													"});",
-													"",
-													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
-													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
-													"});",
-													"",
-													"pm.test(\"Call to action is not null\", function() {",
-													"    pm.expect(jsonData.callToActions.length == 2);",
-													"})"
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});"
 												],
 												"type": "text/javascript"
 											}
@@ -29361,9 +29339,8 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 400\", function () {",
-													"    pm.response.to.have.status(400);",
-													"    pm.response.instance == \"40EE82EB-930F-40C8-AE94-0041F7573FE9\";",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													""
@@ -29427,11 +29404,9 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 400\", function () {",
-													"    pm.response.to.have.status(400);",
-													"    pm.response.instance == \"E780005D-BBEB-423E-BA01-58145D3DBDF5\";",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
-													"",
 													""
 												],
 												"type": "text/javascript"
@@ -29492,9 +29467,8 @@
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
-													"pm.test(\"Status code is 400\", function () {",
-													"    pm.response.to.have.status(400);",
-													"    pm.response.instance == \"D2C8416A-9C55-408B-9468-F0E5C635F9B7\";",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
 													"});",
 													"",
 													""
@@ -29518,7 +29492,7 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
+												"value": "{{alumniIdentityId}}"
 											}
 										],
 										"body": {
@@ -32586,88 +32560,6 @@
 												"api",
 												"Project",
 												"{{projectId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-DeleteProject2-Self-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{projectId2}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{projectId2}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-DeleteProject3-Self-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{projectId3}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{projectId3}}"
 											]
 										}
 									},
