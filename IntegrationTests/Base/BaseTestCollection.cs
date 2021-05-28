@@ -1,15 +1,18 @@
 using IntegrationTests.Settings;
+using IntegrationTests.Test.Base;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace IntegrationTests.Base
 {
-    public abstract class BaseTest : IClassFixture<HttpClientFactory>, IClassFixture<HttpHelper>, IAsyncLifetime
+    public abstract class BaseTestCollection : IClassFixture<HttpClientFactory>, IClassFixture<HttpHelper>, IAsyncLifetime
     {
-        protected HttpConnection Connection;
-        protected HttpHelper HttpHelper;
+        public HttpConnection Connection;
+        public HttpHelper HttpHelper;
 
-        public BaseTest()
+        protected BaseTest[] Tests;
+
+        public BaseTestCollection()
         {
             this.Connection = new HttpClientFactory().GetConnection();
             this.HttpHelper = new HttpHelper();
