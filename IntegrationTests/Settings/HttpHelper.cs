@@ -33,10 +33,10 @@ namespace IntegrationTests.Settings
                 );
         }
 
-        public async Task<object> GetFromResponse(HttpResponseMessage response, Type type)
+        public async Task<dynamic> GetFromResponse(HttpResponseMessage response, Type type)
         {
             string responseStr = await response.Content.ReadAsStringAsync();
-            object responseObj = JsonConvert.DeserializeObject(responseStr, type);
+            dynamic responseObj = JsonConvert.DeserializeObject(responseStr, type);
             return responseObj;
         }
     }
