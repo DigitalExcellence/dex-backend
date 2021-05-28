@@ -1,5 +1,6 @@
 using IntegrationTests.Settings;
 using IntegrationTests.Test.Base;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -9,24 +10,29 @@ namespace IntegrationTests.Base
     {
         public HttpConnection Connection;
         public HttpHelper HttpHelper;
+        public string IdentityId = "88421113";
 
-        protected BaseTest[] Tests;
+        protected LinkedList<BaseTest> Tests;
 
         public BaseTestCollection()
         {
-            this.Connection = new HttpClientFactory().GetConnection();
-            this.HttpHelper = new HttpHelper();
+            Connection = new HttpClientFactory().GetConnection();
+            HttpHelper = new HttpHelper();
         }
 
-        //public BaseTest(HttpClientFactory factory, HttpHelper httpHelper)
+
+        //[Fact]
+        //public virtual async Task ACLTest()
         //{
-        //    this.Connection = factory.GetConnection();
-        //    this.HttpHelper = httpHelper;
+        //    foreach(BaseTest test in Tests)
+        //    {
+        //        await test.Execute();
+        //    }
         //}
 
         public async Task InitializeAsync()
         {
-            await Connection.ApplyAuthenticationToClient();
+            await Connection.ApplyAuthenticationToClient(IdentityId);
         }
 
         public Task DisposeAsync()

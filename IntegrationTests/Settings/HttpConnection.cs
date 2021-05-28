@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IntegrationTests.Settings
@@ -23,11 +20,6 @@ namespace IntegrationTests.Settings
             if(accessToken != null) return accessToken;
 
             return await RenewAccessToken();
-        }
-
-        public async Task ApplyAuthenticationToClient()
-        {
-            await ApplyAuthenticationToClient("88421113");
         }
 
         public async Task ApplyAuthenticationToClient(string identityId)
