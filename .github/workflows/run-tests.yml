@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Test Services
-      run: dotnet test --no-restore --verbosity normal 03_Services.Tests
+      run: dotnet test --no-restore --verbosity normal Services.Tests
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
