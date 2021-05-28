@@ -9,6 +9,7 @@ namespace IntegrationTests.Settings
 {
     public class HttpClientFactory
     {
+        private static string url = "https://127.0.0.1";
         private HttpClientHandler handler { get; set; }
 
         public HttpClientFactory()
@@ -30,7 +31,7 @@ namespace IntegrationTests.Settings
         public HttpClient CreateClient(string port)
         {
             var client = new HttpClient(handler);
-            client.BaseAddress = new Uri($"https://localhost:{port}");
+            client.BaseAddress = new Uri($"{url}:{port}");
 
             return client;
         }
@@ -44,7 +45,7 @@ namespace IntegrationTests.Settings
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:5004/connect/token")
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{url}:5005/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };

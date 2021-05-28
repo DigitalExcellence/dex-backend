@@ -14,17 +14,7 @@ namespace IntegrationTests.TestCollection
 
         public virtual async Task Execute()
         {
-            await Create();
-            await GetCreated();
-        }
-
-        public async Task Create()
-        {
             await new CreateTest(this, CreateEndpointResult, CreateResource).Execute();
-        }
-
-        public async Task GetCreated()
-        {
             await new GetTest(this, GetEndpointResult, CreateCheckProperties, CreateResource).Execute();
         }
     }

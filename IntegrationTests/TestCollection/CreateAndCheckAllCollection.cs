@@ -11,11 +11,6 @@ namespace IntegrationTests.TestCollection
         public override async Task Execute()
         {
             await base.Execute();
-            await GetAllContains();
-        }
-
-        public async Task GetAllContains()
-        {
             await new GetAllContainsTest(this, GetAllEndpointResult).Execute();
         }
     }

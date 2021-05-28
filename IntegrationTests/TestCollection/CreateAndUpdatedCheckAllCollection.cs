@@ -13,17 +13,7 @@ namespace IntegrationTests.TestCollection
         public override async Task Execute()
         {
             await base.Execute();
-            await Update();
-            await GetUpdated();
-        }
-
-        public async Task Update()
-        {
             await new UpdateTest(this, UpdateEndpointResult, UpdateResource).Execute();
-        }
-
-        public async Task GetUpdated()
-        {
             await new GetTest(this, GetEndpointResult, UpdateCheckProperties, UpdateResource).Execute();
         }
     }
