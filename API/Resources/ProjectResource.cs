@@ -59,7 +59,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the call to action
         /// </summary>
-        public CallToActionResource CallToAction { get; set; }
+        public List<CallToActionResource> CallToActions { get; set; }
 
         /// <summary>
         ///     This gets or sets the institute private property

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a73f56b6-95d9-4dc6-a648-7ff12a4457a5",
+		"_postman_id": "24ed191e-3261-40e3-8d9a-c6ac94c55667",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -1914,6 +1914,342 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-OneCallToAction-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId2\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 1);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-MultipleCallToActions-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId3\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 2);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction2-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionValueInvalid-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"40EE82EB-930F-40C8-AE94-0041F7573FE9\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"postmantest_Project\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionLimitExceeded-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"E780005D-BBEB-423E-BA01-58145D3DBDF5\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Provide feedback\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"More information\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Get in touch\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionSameAction-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"D2C8416A-9C55-408B-9468-F0E5C635F9B7\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-Administrator",
 									"event": [
 										{
@@ -2886,7 +3222,7 @@
 													"function findHighlight(jsonData, idToFind){",
 													"    for(var i = 0; i< jsonData.length; i++)",
 													"    {",
-													"        if(jsonData[i].project.id == idToFind) ",
+													"        if(jsonData[i].projectId == idToFind) ",
 													"        { ",
 													"            return i; ",
 													"        }",
@@ -3022,7 +3358,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -5486,6 +5822,88 @@
 												"api",
 												"Project",
 												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject2-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId2}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId2}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject3-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId3}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId3}}"
 											]
 										}
 									},
@@ -11337,6 +11755,354 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-OneCallToAction-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId2\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 1);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-MultipleCallToActions-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId3\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 2);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction2-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionValueInvalid-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"40EE82EB-930F-40C8-AE94-0041F7573FE9\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"postmantest_Project\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionLimitExceeded-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"E780005D-BBEB-423E-BA01-58145D3DBDF5\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Provide feedback\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"More information\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Get in touch\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionSameAction-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"D2C8416A-9C55-408B-9468-F0E5C635F9B7\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-Registered",
 									"event": [
 										{
@@ -12963,7 +13729,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -15619,6 +16385,104 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-DeleteProject2-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId2}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId2}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject3-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId3}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId3}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -17333,6 +18197,352 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-OneCallToAction-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var dataOfficerUserId = pm.environment.get(\"dataOfficerUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId2\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + dataOfficerUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(dataOfficerUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 1);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-MultipleCallToActions-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var dataOfficerUserId = pm.environment.get(\"dataOfficerUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId3\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + dataOfficerUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(dataOfficerUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 2);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction2-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionValueInvalid-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"40EE82EB-930F-40C8-AE94-0041F7573FE9\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"postmantest_Project\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionLimitExceeded-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"E780005D-BBEB-423E-BA01-58145D3DBDF5\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Provide feedback\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"More information\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Get in touch\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionSameAction-Data Officer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"D2C8416A-9C55-408B-9468-F0E5C635F9B7\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-DataOfficer",
 									"event": [
 										{
@@ -18743,7 +19953,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -20639,6 +21849,104 @@
 									"response": []
 								},
 								{
+									"name": "Project-DeleteProject2-Self-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId2}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId2}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject3-Self-DataOfficer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId3}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId3}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-DeleteProject-Other-SameInstitution-DataOfficer",
 									"event": [
 										{
@@ -22274,6 +23582,352 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-OneCallToAction-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var PrUserId = pm.environment.get(\"PrUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId2\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + PrUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(PrUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 1);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-MultipleCallToActions-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var PrUserId = pm.environment.get(\"PrUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId3\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + PrUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(PrUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 2);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction2-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionValueInvalid-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"40EE82EB-930F-40C8-AE94-0041F7573FE9\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"postmantest_Project\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionLimitExceeded-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"E780005D-BBEB-423E-BA01-58145D3DBDF5\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Provide feedback\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"More information\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Get in touch\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionSameAction-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"D2C8416A-9C55-408B-9468-F0E5C635F9B7\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-PR",
 									"event": [
 										{
@@ -23734,7 +25388,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -24013,7 +25667,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -24152,7 +25806,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -25869,6 +27523,86 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Project-DeleteProject2-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId2}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId2}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject3-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId3}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId3}}"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -27462,6 +29196,354 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-OneCallToAction-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId2\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 1);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-MultipleCallToActions-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"pm.environment.set(\"projectId3\", jsonData.id);",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 201\", function () {",
+													"    pm.response.to.have.status(201);",
+													"});",
+													"",
+													"pm.test(\"Project Name is set correctly and matches: \" + projectName, function () {",
+													"    pm.expect(jsonData.name).to.eql(projectName);",
+													"});",
+													"",
+													"pm.test(\"Identity Id is set correctly and matches: \" + registeredUserId, function () {",
+													"    pm.expect(jsonData.user.id).to.eql(registeredUserId);",
+													"});",
+													"",
+													"pm.test(\"Call to action is not null\", function() {",
+													"    pm.expect(jsonData.callToActions.length == 2);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction2-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionValueInvalid-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"40EE82EB-930F-40C8-AE94-0041F7573FE9\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"postmantest_Project\",\r\n      \"value\": \"https://postmantest-calltoaction1-registered.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionLimitExceeded-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"E780005D-BBEB-423E-BA01-58145D3DBDF5\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Provide feedback\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"More information\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Get in touch\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionSameAction-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"D2C8416A-9C55-408B-9468-F0E5C635F9B7\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-Alumni",
 									"event": [
 										{
@@ -28586,7 +30668,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].project.id == item) {",
+													"        if (jsonData[i].projectId == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -30504,6 +32586,88 @@
 												"api",
 												"Project",
 												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject2-Self-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId2}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId2}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-DeleteProject3-Self-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId3}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId3}}"
 											]
 										}
 									},

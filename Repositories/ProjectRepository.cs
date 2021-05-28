@@ -158,7 +158,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                                     .Where(s => s.Id == id)
                                     .Include(p => p.ProjectIcon)
-                                    .Include(p => p.CallToAction)
+                                    .Include(p => p.CallToActions)
                                     .SingleOrDefaultAsync();
 
             if(project != null)
@@ -198,7 +198,7 @@ namespace Repositories
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
                 .Include(u => u.User)
                 .Include(p => p.ProjectIcon)
-                .Include(p => p.CallToAction)
+                .Include(p => p.CallToActions)
                 .Include(p => p.Collaborators)
                 .Include(p => p.Likes)
                 .Include(p => p.LinkedInstitutions)
@@ -212,7 +212,7 @@ namespace Repositories
                       Id = p.Id,
                       ProjectIconId = p.ProjectIconId,
                       ProjectIcon = p.ProjectIcon,
-                      CallToAction = p.CallToAction,
+                      CallToActions = p.CallToActions,
                       Collaborators = p.Collaborators,
                       Likes = p.Likes,
                       LinkedInstitutions = p.LinkedInstitutions,
@@ -299,7 +299,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                                     .Include(p => p.User)
                                     .Include(p => p.ProjectIcon)
-                                    .Include(p => p.CallToAction)
+                                    .Include(p => p.CallToActions)
                                     .Where(p => p.Id == id)
                                     .FirstOrDefaultAsync();
             if(project != null)
@@ -610,7 +610,7 @@ namespace Repositories
                                                                .Equals(query) ||
                                                               p.User.Name.Contains(query));
             projectsToReturn.Include(p => p.ProjectIcon).Load();
-            projectsToReturn.Include(p => p.CallToAction).Load();
+            projectsToReturn.Include(p => p.CallToActions).Load();
             projectsToReturn.Include(p => p.Likes).Load();
             projectsToReturn.Include(p => p.Categories).Load();
 
