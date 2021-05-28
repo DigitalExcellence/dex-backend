@@ -78,10 +78,9 @@ namespace Services.Services
         void MigrateDatabase(List<Project> projectsToExport);
 
         /// <summary>
-        ///     Get project by id with users and collaborators
+        ///     Get all projects in the database with collaborators and institutions
         /// </summary>
-        /// <param name="id">The parameter is the id of the project.</param>
-        /// <returns>The project with users and collaborators</returns>
+        /// <returns>Returns all projects in the database with collaborators and institutions</returns>
         Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync();
 
     }
@@ -165,7 +164,8 @@ namespace Services.Services
                                                                                take,
                                                                                orderBy,
                                                                                orderByDirection,
-                                                                               projectFilterParams.Highlighted);
+                                                                               projectFilterParams.Highlighted,
+                                                                               projectFilterParams.Categories);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Services.Services
         /// <returns>The number of projects</returns>
         public virtual async Task<int> ProjectsCount(ProjectFilterParams projectFilterParams)
         {
-            return await Repository.CountAsync(projectFilterParams.Highlighted);
+            return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories);
         }
 
         /// <summary>
@@ -208,10 +208,9 @@ namespace Services.Services
         }
 
         /// <summary>
-        ///     Get project by id with users and collaborators
+        ///     Get all projects in the database with collaborators and institutions
         /// </summary>
-        /// <param name="id">The parameter is the id of the project.</param>
-        /// <returns>The project with users and collaborators</returns>
+        /// <returns>Returns all projects in the database with collaborators and institutions</returns>
         public Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync()
         {
             return Repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
@@ -224,7 +223,7 @@ namespace Services.Services
             CreateProjectIndexElastic();
             // Migrates the data from MSSQL to Elastic.
             Repository.MigrateDatabase(projectsToExport);
-            
+
         }
 
         /// <summary>
@@ -243,7 +242,7 @@ namespace Services.Services
             Repository.CreateProjectIndex();
         }
 
-        
+
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {
             return Repository.GetUserProjects(userId);

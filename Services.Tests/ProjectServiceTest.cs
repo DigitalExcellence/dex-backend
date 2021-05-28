@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -49,6 +49,7 @@ namespace Services.Tests
                                          null,
                                          project => project.Updated,
                                          true,
+                                         null,
                                          null))
                           .Returns(Task.FromResult(projects));
 
@@ -69,6 +70,7 @@ namespace Services.Tests
                                               null,
                                               project => project.Updated,
                                               true,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -91,6 +93,7 @@ namespace Services.Tests
                                          null,
                                          project => project.Created,
                                          true,
+                                         null,
                                          null))
                           .Returns(Task.FromResult(projects));
 
@@ -111,6 +114,7 @@ namespace Services.Tests
                                               null,
                                               project => project.Created,
                                               true,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -133,6 +137,7 @@ namespace Services.Tests
                                          null,
                                          project => project.Name,
                                          false,
+                                         null,
                                          null))
                           .Returns(Task.FromResult(projects));
 
@@ -153,6 +158,7 @@ namespace Services.Tests
                                               null,
                                               project => project.Name,
                                               false,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -175,7 +181,8 @@ namespace Services.Tests
                                          null,
                                          project => project.Updated,
                                          true,
-                                         true))
+                                         true,
+                                         null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
@@ -195,7 +202,8 @@ namespace Services.Tests
                                               null,
                                               project => project.Updated,
                                               true,
-                                              true),
+                                              true,
+                                              null),
                                       Times.Once);
             });
 
@@ -217,7 +225,8 @@ namespace Services.Tests
                                          null,
                                          project => project.Updated,
                                          true,
-                                         false))
+                                         false,
+                                         null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
@@ -237,7 +246,8 @@ namespace Services.Tests
                                               null,
                                               project => project.Updated,
                                               true,
-                                              false),
+                                              false,
+                                              null),
                                       Times.Once);
             });
 

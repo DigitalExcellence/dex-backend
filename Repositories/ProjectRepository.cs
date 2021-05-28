@@ -52,21 +52,24 @@ namespace Repositories
         /// <param name="orderBy"></param>
         /// <param name="orderByAsc"></param>
         /// <param name="highlighted"></param>
+        /// <param name="categories"></param>
         /// <returns>List of projects</returns>
         Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
-            bool? highlighted = null
+            bool? highlighted = null,
+            ICollection<int> categories = null
         );
 
         /// <summary>
         ///     This interface method counts the amount of projects matching the filters.
         /// </summary>
         /// <param name="highlighted"></param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>number of projects found</returns>
-        Task<int> CountAsync(bool? highlighted = null);
+        Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null);
 
         /// <summary>
         ///     This interface method searches the database for projects matching the search query and parameters.
@@ -77,6 +80,7 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
         Task<IEnumerable<Project>> SearchAsync(
             string query,
@@ -84,7 +88,8 @@ namespace Repositories
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
-            bool? highlighted = null
+            bool? highlighted = null,
+            ICollection<int> categories = null
         );
 
         /// <summary>
@@ -92,8 +97,9 @@ namespace Repositories
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
-        Task<int> SearchCountAsync(string query, bool? highlighted = null);
+        Task<int> SearchCountAsync(string query, bool? highlighted = null, ICollection<int> categories = null);
 
 
         Task SyncProjectToES(Project project);
@@ -186,13 +192,15 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns a list of projects filtered by the specified parameters.</returns>
         public virtual async Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
-            bool? highlighted = null
+            bool? highlighted = null,
+            ICollection<int> categories = null
         )
         {
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
@@ -225,7 +233,7 @@ namespace Repositories
                       Uri = p.Uri
                   });
 
-            queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
+            queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
 
             //Execute the IQueryable to get a collection of results
             List<Project> projectResults = await queryableProjects
@@ -241,10 +249,11 @@ namespace Repositories
         ///     This method counts the amount of projects matching the filters.
         /// </summary>
         /// <param name="highlighted">The highlighted parameter represents whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
-        public virtual async Task<int> CountAsync(bool? highlighted = null)
+        public virtual async Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null)
         {
-            return await ApplyFilters(DbSet, null, null, null, true, highlighted)
+            return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
                        .CountAsync();
         }
 
@@ -257,6 +266,7 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
         public virtual async Task<IEnumerable<Project>> SearchAsync(
             string query,
@@ -264,11 +274,12 @@ namespace Repositories
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
-            bool? highlighted = null
+            bool? highlighted = null,
+            ICollection<int> categories = null
         )
         {
             List<Project> result =
-                await ApplyFilters(await GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted)
+                await ApplyFilters(await GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted, categories)
                     .ToListAsync();
             return result.Where(p => ProjectContainsQuery(p, query))
                          .ToList();
@@ -279,10 +290,11 @@ namespace Repositories
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
-        public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
+        public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null, ICollection<int> categories = null)
         {
-            return await ApplyFilters(await GetProjectQueryable(query), null, null, null, true, highlighted)
+            return await ApplyFilters(await GetProjectQueryable(query), null, null, null, true, highlighted, categories)
                        .CountAsync();
         }
 
@@ -527,6 +539,7 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories"></param>
         /// <returns>
         ///     This method returns a IQueryable Projects collection based on the given filters.
         /// </returns>
@@ -536,7 +549,8 @@ namespace Repositories
             int? take,
             Expression<Func<Project, object>> orderBy,
             bool orderByAsc,
-            bool? highlighted
+            bool? highlighted,
+            ICollection<int> categories
         )
         {
             if(highlighted.HasValue)
@@ -550,6 +564,11 @@ namespace Repositories
                                                                  .ToList();
 
                 queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id) == highlighted.Value);
+            }
+
+            if(categories != null && categories.Count > 0)
+            {
+                queryable = queryable.Where(p => p.Categories.Any(cat => categories.Contains(cat.Id)));
             }
 
             if(orderBy != null)
