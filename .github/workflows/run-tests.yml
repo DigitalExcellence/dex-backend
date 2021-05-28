@@ -22,12 +22,54 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+    - name: Test Services
+      run: dotnet test --no-restore --verbosity normal 03_Services.Tests
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
+        
+    - name: Test Repositories
+      run: dotnet test --no-restore --verbosity normal 05_Repositories.Tests
+      env:
+        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
+        App__SendGrid__EmailFrom: test@dex.software
+        
+    - name: Test MessageBrokerPublisher
+      run: dotnet test --no-restore --verbosity normal 10_MessageBrokerPublisher.Tests
+      env:
+        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
+        App__SendGrid__EmailFrom: test@dex.software
+        
+    - name: Test NotificationSystem
+      run: dotnet test --no-restore --verbosity normal 12_NotificationSystem.Tests
+      env:
+        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
+        App__SendGrid__EmailFrom: test@dex.software
+        
+  integration-test-vs:
+    runs-on: ubuntu-18.04
 
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+
+    - name: Test Services
+      run: dotnet test --no-restore --verbosity normal 15_IntegrationTests
+      env:
+        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
+        App__SendGrid__EmailFrom: test@dex.software
+        
   integration-test:
     runs-on: ubuntu-18.04
 
