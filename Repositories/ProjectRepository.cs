@@ -568,6 +568,7 @@ namespace Repositories
 
             if(categories != null && categories.Count > 0)
             {
+                // Check for every project if there is any project-category that matches the selected categories
                 queryable = queryable.Where(p => p.Categories.Any(cat => categories.Contains(cat.Id)));
             }
 
@@ -582,7 +583,7 @@ namespace Repositories
                 }
             }
 
-            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
+            if(skip.HasValue && skip.Value > 0) queryable = queryable.Skip(skip.Value);
             if(take.HasValue) queryable = queryable.Take(take.Value);
             return queryable;
         }

@@ -139,7 +139,7 @@ namespace Services.Services
 
             int? skip = null;
             int? take = null;
-            if(projectFilterParams.Page.HasValue)
+            if(projectFilterParams.Page.HasValue && projectFilterParams.Page.Value > 1)
             {
                 skip = projectFilterParams.AmountOnPage * (projectFilterParams.Page - 1);
                 take = projectFilterParams.AmountOnPage;
