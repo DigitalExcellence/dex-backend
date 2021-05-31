@@ -1,16 +1,16 @@
 /*
 * Digital Excellence Copyright (C) 2020 Brend Smits
-* 
-* This program is free software: you can redistribute it and/or modify 
-* it under the terms of the GNU Lesser General Public License as published 
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published
 * by the Free Software Foundation version 3 of the License.
-* 
-* This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty 
-* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
-* 
-* You can find a copy of the GNU Lesser General Public License 
+*
+* You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
@@ -69,7 +69,8 @@ namespace Services.Tests
                                                             It.IsAny<int?>(),
                                                             It.IsAny<Expression<Func<Project, object>>>(),
                                                             It.IsAny<bool>(),
-                                                            It.IsAny<bool?>()))
+                                                            It.IsAny<bool?>(),
+                                                            It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.AsEnumerable()));
 
             IEnumerable<Project> resultedProjects = await Service.SearchInternalProjects("",
@@ -90,6 +91,7 @@ namespace Services.Tests
                                               null,
                                               project => project.Updated,
                                               true,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -112,7 +114,8 @@ namespace Services.Tests
                                                             It.IsAny<int?>(),
                                                             It.IsAny<Expression<Func<Project, object>>>(),
                                                             It.IsAny<bool>(),
-                                                            It.IsAny<bool?>()))
+                                                            It.IsAny<bool?>(),
+                                                            It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.AsEnumerable()));
 
             IEnumerable<Project> resultedProjects = await Service.SearchInternalProjects("",
@@ -133,6 +136,7 @@ namespace Services.Tests
                                               null,
                                               project => project.Updated,
                                               false,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -154,7 +158,8 @@ namespace Services.Tests
                                                             It.IsAny<int?>(),
                                                             It.IsAny<Expression<Func<Project, object>>>(),
                                                             It.IsAny<bool>(),
-                                                            It.IsAny<bool?>()))
+                                                            It.IsAny<bool?>(),
+                                                            It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.AsEnumerable()));
 
             IEnumerable<Project> resultedProjects = await Service.SearchInternalProjects("",
@@ -175,6 +180,7 @@ namespace Services.Tests
                                               null,
                                               project => project.Name,
                                               false,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -196,7 +202,8 @@ namespace Services.Tests
                                                             It.IsAny<int?>(),
                                                             It.IsAny<Expression<Func<Project, object>>>(),
                                                             It.IsAny<bool>(),
-                                                            It.IsAny<bool?>()))
+                                                            It.IsAny<bool?>(),
+                                                            It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.AsEnumerable()));
 
             IEnumerable<Project> resultedProjects = await Service.SearchInternalProjects("",
@@ -217,6 +224,7 @@ namespace Services.Tests
                                               null,
                                               project => project.Created,
                                               false,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -238,7 +246,8 @@ namespace Services.Tests
                                                             It.IsAny<int?>(),
                                                             It.IsAny<Expression<Func<Project, object>>>(),
                                                             It.IsAny<bool>(),
-                                                            It.IsAny<bool?>()))
+                                                            It.IsAny<bool?>(),
+                                                            It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.AsEnumerable()));
 
             IEnumerable<Project> resultedProjects = await Service.SearchInternalProjects("",
@@ -259,6 +268,7 @@ namespace Services.Tests
                                               20,
                                               project => project.Updated,
                                               true,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -281,7 +291,8 @@ namespace Services.Tests
                                                             It.IsAny<int?>(),
                                                             It.IsAny<Expression<Func<Project, object>>>(),
                                                             It.IsAny<bool>(),
-                                                            It.IsAny<bool?>()))
+                                                            It.IsAny<bool?>(),
+                                                            It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.AsEnumerable()));
 
             IEnumerable<Project> resultedProjects = await Service.SearchInternalProjects("",
@@ -302,6 +313,7 @@ namespace Services.Tests
                                               17,
                                               project => project.Updated,
                                               true,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -319,7 +331,7 @@ namespace Services.Tests
             [ProjectDataSourceAttribute(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>()))
+                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>(), It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.Count));
 
             int totalCount = await Service.SearchInternalProjectsCount("",
@@ -333,7 +345,7 @@ namespace Services.Tests
                                                                        });
             Assert.DoesNotThrow(() =>
             {
-                RepositoryMock.Verify(repository => repository.SearchCountAsync("", null),
+                RepositoryMock.Verify(repository => repository.SearchCountAsync("", null, null),
                                       Times.Once);
             });
 
@@ -350,7 +362,7 @@ namespace Services.Tests
             [ProjectDataSourceAttribute(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>()))
+                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>(), It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.Count));
 
             int totalCount = await Service.SearchInternalProjectsCount("",
@@ -364,7 +376,7 @@ namespace Services.Tests
                                                                        });
             Assert.DoesNotThrow(() =>
             {
-                RepositoryMock.Verify(repository => repository.SearchCountAsync("", true),
+                RepositoryMock.Verify(repository => repository.SearchCountAsync("", true, null),
                                       Times.Once);
             });
 
@@ -381,7 +393,7 @@ namespace Services.Tests
             [ProjectDataSourceAttribute(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>()))
+                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>(), It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.Count));
 
             int totalCount = await Service.SearchInternalProjectsCount("",
@@ -395,7 +407,7 @@ namespace Services.Tests
                                                                        });
             Assert.DoesNotThrow(() =>
             {
-                RepositoryMock.Verify(repository => repository.SearchCountAsync("", false),
+                RepositoryMock.Verify(repository => repository.SearchCountAsync("", false, null),
                                       Times.Once);
             });
 
@@ -411,7 +423,7 @@ namespace Services.Tests
             [ProjectDataSourceAttribute(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>()))
+                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>(), It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.Count));
 
             int totalPages = await Service.SearchInternalProjectsTotalPages("",
@@ -425,7 +437,7 @@ namespace Services.Tests
                                                                             });
             Assert.DoesNotThrow(() =>
             {
-                RepositoryMock.Verify(repository => repository.SearchCountAsync("", false),
+                RepositoryMock.Verify(repository => repository.SearchCountAsync("", false, null),
                                       Times.Once);
             });
 
@@ -442,7 +454,7 @@ namespace Services.Tests
             [ProjectDataSourceAttribute(10)] List<Project> projects)
         {
             RepositoryMock.Setup(repository =>
-                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>()))
+                                     repository.SearchCountAsync(It.IsAny<string>(), It.IsAny<bool?>(), It.IsAny<ICollection<int>>()))
                           .Returns(Task.FromResult(projects.Count));
 
             int totalPages = await Service.SearchInternalProjectsTotalPages("",
@@ -456,7 +468,7 @@ namespace Services.Tests
                                                                             });
             Assert.DoesNotThrow(() =>
             {
-                RepositoryMock.Verify(repository => repository.SearchCountAsync("", false),
+                RepositoryMock.Verify(repository => repository.SearchCountAsync("", false, null),
                                       Times.Once);
             });
 
