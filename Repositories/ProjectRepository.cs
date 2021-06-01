@@ -212,11 +212,11 @@ namespace Repositories
                                                     .Include(p => p.LinkedInstitutions)
                                                     .Include(p => p.Categories)
                                                     .ThenInclude(c => c.Category);
-                  //Don't get the description for performance reasons.
 
                   queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
 
             //Execute the IQueryable to get a collection of results
+            //Don't get the description for performance reasons.
             List<Project> projectResults = await queryableProjects.Select(p => new Project
                                                                                {
                                                                                    UserId = p.UserId,
@@ -572,7 +572,8 @@ namespace Repositories
             if(categories != null && categories.Count > 0)
             {
                 // Check for every project if there is any project-category that matches the selected categories
-                queryable = queryable.Where(p => p.Categories.Any(cat => categories.Contains(cat.Id)));
+                // queryable = queryable.Where(p => p.Categories.All(cat => categories.Contains(cat.Category.Id)));
+                queryable = queryable.Where(p => p.Categories.Any(cat => categories.Contains(cat.Category.Id)));
             }
 
             if(orderBy != null)
