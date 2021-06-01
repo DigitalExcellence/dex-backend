@@ -74,8 +74,8 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the image ID's
         /// </summary>
-        public IEnumerable<int> ImageIds { get; set; }
-
+        public IEnumerable<int> ImageIds { get; set; } = new List<int>();
+        
     }
 
 }
