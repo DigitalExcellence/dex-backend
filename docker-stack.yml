@@ -2,9 +2,7 @@ version: "3.9"
 services: 
 
   db:
-    build:
-      context: .
-      dockerfile: Data/Dockerfile
+    image: 'digitalexcellence/stagingdb'
     networks:
       - mssql-network
     environment:
@@ -35,9 +33,7 @@ services:
 
 
   identity:
-    build:
-      context: .
-      dockerfile: IdentityServer/Dockerfile.dev
+    image: 'digitalexcellence/stagingidentity'
     depends_on:
       - db
     environment:
@@ -53,6 +49,7 @@ services:
       - App__ApiAuthentication__ClientSecret=test
     networks:
       mssql-network:
+      frontend-network:
     ports:
       - 5004:5004
       - 5005:5005
@@ -64,9 +61,7 @@ services:
 
 
   elasticsynchronizer:
-    build: 
-      context: .
-      dockerfile: ElasticSynchronizer/Dockerfile
+    image: 'digitalexcellence/elasticsynchronizer'
     depends_on: 
       - rabbitmq
     environment:
@@ -88,9 +83,7 @@ services:
 
 
   api:
-    build:
-      context: .
-      dockerfile: API/Dockerfile.dev
+    image: 'digitalexcellence/stagingapi'
     depends_on:
       - db
       - rabbitmq
@@ -114,6 +107,7 @@ services:
     networks:
       mssql-network:
       rabbitmq-network:
+      frontend-network:
     ports:
       - 5000:5000
       - 5001:5001
@@ -125,10 +119,7 @@ services:
 
 
   elasticsearch:
-    build:
-      context: elasticsearch/
-      args:
-        ELK_VERSION: 7.10.0
+    image: 'digitalexcellence/elasticsearch'
     volumes:
       - type: bind
         source: ./elasticsearch/config/elasticsearch.yml
@@ -158,9 +149,7 @@ services:
         condition: on-failure
 
   notificationservice:
-    build:
-      context: .
-      dockerfile: NotificationSystem/Dockerfile
+    image: 'digitalexcellence/notificationservice'
     depends_on:
       - rabbitmq
     environment:
@@ -180,9 +169,7 @@ services:
         condition: on-failure
 
   jobscheduler:
-    build:
-        context: .
-        dockerfile: JobScheduler/Dockerfile
+    image: 'digitalexcellence/jobscheduler'
     environment:
         - Config__IdentityServerConfig__IdentityUrl=http://identity:5004/
         - Config__IdentityServerConfig__ClientId=dex-jobscheduler
@@ -200,11 +187,20 @@ services:
       restart_policy:
         condition: on-failure
 
+  frontend:
+    image: digitalexcellence/stagingfrontend
+    container_name: frontend
+    networks:
+      frontend-network:
+
+
+
 volumes:
   elasticsearch:  
 
 networks:
   mssql-network:
+  frontend-network:
   rabbitmq-network:
 
 
