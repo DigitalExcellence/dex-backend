@@ -371,7 +371,7 @@ namespace API.Controllers
                                              {
                                                  Title = "Image was not found.",
                                                  Detail = "The specified image was not found while creating project.",
-                                                 Instance = "BBE862F5-0F88-478A-92EF-6864860ACEC5"
+                                                 Instance = "B040FAAD-FD22-4C77-822E-C498DFA1A9CB"
                     };
                     return BadRequest(problem);
                 }
@@ -575,8 +575,8 @@ namespace API.Controllers
                                              {
                                                  Title = "Image was not found.",
                                                  Detail = "The specified image was not found while creating project.",
-                                                 Instance = "BBE862F5-0F88-478A-92EF-6864860ACEC5"
-                                             };
+                                                 Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
+                    };
                     return BadRequest(problem);
                 }
 
