@@ -603,9 +603,11 @@ namespace API.Controllers
         /// Get recommended projects for the user who is logged in.
         /// </summary>
         /// <returns> Ok </returns>
+        /// <response code="200">This endpoint returns status code 200. An empty array is returned when no recommendations can be found.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user is not found.</response>
         [HttpGet("projectrecommendations/{amount}")]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ProjectResourceResult>), StatusCodes.Status200OK)]
         [Authorize]
         public async Task<IActionResult> GetRecommendedProjects(int amount)
         {
@@ -629,7 +631,7 @@ namespace API.Controllers
 
             } catch(RecommendationNotFoundException)
             {
-                return Ok(new List<Project>());
+                return Ok(new List<ProjectResourceResult>());
             }
             
         }
