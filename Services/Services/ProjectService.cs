@@ -138,7 +138,7 @@ namespace Services.Services
                 projectFilterParams.AmountOnPage = 20;
 
             int? skip = null;
-            int? take = null;
+            int? take = projectFilterParams.AmountOnPage;
             if(projectFilterParams.Page.HasValue && projectFilterParams.Page.Value > 1)
             {
                 skip = projectFilterParams.AmountOnPage * (projectFilterParams.Page - 1);
