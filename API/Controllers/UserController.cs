@@ -21,6 +21,7 @@ using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration;
@@ -604,6 +605,7 @@ namespace API.Controllers
         /// <returns> Ok </returns>
         [HttpGet("projectrecommendations/{amount}")]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize]
         public async Task<IActionResult> GetRecommendedProjects(int amount)
         {
@@ -625,15 +627,9 @@ namespace API.Controllers
                 List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id, amount);
                 return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectRecommendations));
 
-            } catch(RecommendationNotFoundException e)
+            } catch(RecommendationNotFoundException)
             {
-                ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the recommendations",
-                                             Detail = e.Message,
-                                             Instance = "948319D2-1A19-4E00-AF50-DB5D096AFD39"
-                                         };
-                return NotFound(problem);
+                return Ok(new List<Project>());
             }
             
         }
