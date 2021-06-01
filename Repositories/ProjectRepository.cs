@@ -204,39 +204,42 @@ namespace Repositories
         )
         {
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
-                .Include(u => u.User)
-                .Include(p => p.ProjectIcon)
-                .Include(p => p.CallToAction)
-                .Include(p => p.Collaborators)
-                .Include(p => p.Likes)
-                .Include(p => p.LinkedInstitutions)
-                .Include(p => p.Categories)
-                    .ThenInclude(c => c.Category)
+                                                    .Include(u => u.User)
+                                                    .Include(p => p.ProjectIcon)
+                                                    .Include(p => p.CallToAction)
+                                                    .Include(p => p.Collaborators)
+                                                    .Include(p => p.Likes)
+                                                    .Include(p => p.LinkedInstitutions)
+                                                    .Include(p => p.Categories)
+                                                    .ThenInclude(c => c.Category);
                   //Don't get the description for performance reasons.
-                  .Select(p => new Project
-                  {
-                      UserId = p.UserId,
-                      User = p.User,
-                      Id = p.Id,
-                      ProjectIconId = p.ProjectIconId,
-                      ProjectIcon = p.ProjectIcon,
-                      CallToAction = p.CallToAction,
-                      Collaborators = p.Collaborators,
-                      Likes = p.Likes,
-                      LinkedInstitutions = p.LinkedInstitutions,
-                      Categories = p.Categories,
-                      Created = p.Created,
-                      InstitutePrivate = p.InstitutePrivate,
-                      Name = p.Name,
-                      ShortDescription = p.ShortDescription,
-                      Updated = p.Updated,
-                      Uri = p.Uri
-                  });
 
-            queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
+                  queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
 
             //Execute the IQueryable to get a collection of results
-            List<Project> projectResults = await queryableProjects
+            List<Project> projectResults = await queryableProjects.Select(p => new Project
+                                                                               {
+                                                                                   UserId = p.UserId,
+                                                                                   User = p.User,
+                                                                                   Id = p.Id,
+                                                                                   ProjectIconId = p.ProjectIconId,
+                                                                                   ProjectIcon = p.ProjectIcon,
+                                                                                   CallToAction = p.CallToAction,
+                                                                                   Collaborators = p.Collaborators,
+                                                                                   Likes = p.Likes,
+                                                                                   LinkedInstitutions = p.LinkedInstitutions,
+                                                                                   Categories = p.Categories.Select(c => new ProjectCategory()
+                                                                                       {
+                                                                                           Category = c.Category,
+                                                                                           Id = c.Id
+                                                                                       }).ToList(),
+                                                                                   Created = p.Created,
+                                                                                   InstitutePrivate = p.InstitutePrivate,
+                                                                                   Name = p.Name,
+                                                                                   ShortDescription = p.ShortDescription,
+                                                                                   Updated = p.Updated,
+                                                                                   Uri = p.Uri
+                                                                               })
                 .ToListAsync();
 
             //Redact the user after fetching the collection from the project (no separate query needs to be executed)
