@@ -202,6 +202,10 @@ namespace Data.Helpers
                 new Category
                 {
                     Name = "Research"
+                },
+                new Category
+                {
+                    Name = "Assignment"
                 }
             });
 
