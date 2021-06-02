@@ -47,7 +47,7 @@ namespace API.Resources
         public string SortBy { get; set; }
 
         /// <summary>
-        ///     Get or Set the direction of sorting by query parameter.F
+        ///     Get or Set the direction of sorting by query parameter.
         ///     Possible options are : asc, desc
         /// </summary>
         [FromQuery(Name = "sortDirection")]
