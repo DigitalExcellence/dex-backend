@@ -339,3 +339,5 @@ IdentityServer/tempkey.rsa
 
 ###
 rabbitmq/data/
+
+/API/appsettingsapi.Development.json
