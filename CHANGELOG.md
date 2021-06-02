@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added autocomplete suggestions for search results - [#361](https://github.com/DigitalExcellence/dex-backend/issues/361)
 - Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
 - Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
 
@@ -19,8 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+
 - Fixed the get all projects query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
 - Removed getting the description for the projects get all query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
+
 ### Security
 
 

@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
 using Serilog;
 using Services.Services;
 using System;
@@ -237,6 +238,37 @@ namespace API.Controllers
 
             return Ok(resultsResource);
         }
+
+        /// <summary>
+        ///     This method returns suggestions while searching for projects
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>This method returns a list of autocomplete project resources.</returns>
+        /// <response code="200">This endpoint returns a list with suggested projects.</response>
+        /// <response code="503">A 503 status code is returned when the Elastic Search service is unavailable.</response>
+        [HttpGet("search/autocomplete")]
+        [ProducesResponseType(typeof(List<AutocompleteProjectResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), 503)]
+        public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
+        {
+            try
+            {
+                List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
+                List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
+                return Ok(autocompleteProjectResourceResults);
+            }
+            catch(ElasticUnavailableException)
+            {
+                return StatusCode(503,
+                    new ProblemDetails
+                    {
+                        Title = "Autocomplete results could not be retrieved.",
+                        Detail = "ElasticSearch service unavailable.",
+                        Instance = "26E7C55F-21DE-4A7B-804C-BC0B74597222"
+                    });
+            }
+        }
+
 
         /// <summary>
         ///     This method is responsible for retrieving a single project.
