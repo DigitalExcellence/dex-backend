@@ -9,7 +9,7 @@ namespace IntegrationTests.Test
     {
         protected dynamic CreateResource;
 
-        public CreateTest(BaseACLTestCollection collection, Type expectedResultType, dynamic createResource) : base(collection, expectedResultType)
+        public CreateTest(BaseTestCollection collection, Type expectedResultType, dynamic createResource) : base(collection, expectedResultType)
         {
             CreateResource = createResource;
         }

@@ -9,7 +9,7 @@ namespace IntegrationTests.Test
 {
     public class GetAllContainsTest : BaseTest
     {
-        public GetAllContainsTest(BaseACLTestCollection collection, Type expectedResultType) : base(collection, expectedResultType)
+        public GetAllContainsTest(BaseTestCollection collection, Type expectedResultType) : base(collection, expectedResultType)
         {
 
         }

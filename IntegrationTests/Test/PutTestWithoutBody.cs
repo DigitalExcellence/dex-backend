@@ -2,40 +2,34 @@ using IntegrationTests.Base;
 using IntegrationTests.Test.Base;
 using System;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace IntegrationTests.Test
 {
-    public class UpdateTest : BaseTest
+    public class PutTestWithoutBody : BaseTest
     {
-        protected dynamic UpdateResource;
-
-        public UpdateTest(BaseTestCollection collection, Type expectedResultType, dynamic updateResource) : base(collection, expectedResultType)
+        public PutTestWithoutBody(BaseTestCollection collection, Type expectedResultType) : base(collection, expectedResultType)
         {
-            UpdateResource = updateResource;
         }
 
         public override async Task Execute()
         {
-            await Update();
+            await Put();
         }
 
-        private async Task Update()
+        private async Task Put()
         {
             // Arrange
             var client = Collection.Connection.Client;
             var httpHelper = Collection.HttpHelper;
-            var endpoint = Collection.Endpoint;
-            var content = httpHelper.GetHttpContent(UpdateResource);
+            var content = httpHelper.GetHttpContent(null);
             var id = Collection.CreatedId;
 
             // Act
-            var response = await client.PutAsync(endpoint + $"/{id}", content);
+            var response = await client.PutAsync(Endpoint, content);
 
             // Assert
             dynamic responseObj = await httpHelper.GetFromResponse(response, ExpectedResultType);
             response.EnsureSuccessStatusCode();
-            Assert.Equal<int>(responseObj.Id, id);
         }
     }
 }

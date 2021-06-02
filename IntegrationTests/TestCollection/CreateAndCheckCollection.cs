@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 namespace IntegrationTests.TestCollection
 {
-    public abstract class CreateAndCheckCollection : BaseACLTestCollection
+    /// <summary>
+    /// Collection with Create & Get Created tests
+    /// 
+    /// </summary>
+    public abstract class CreateAndCheckCollection : BaseTestCollection
     {
         protected Type CreateEndpointResult;
         protected Type GetEndpointResult;

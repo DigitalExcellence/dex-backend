@@ -11,7 +11,7 @@ namespace IntegrationTests.Test
         protected string[] CheckProperties;
         protected dynamic CheckingResource;
 
-        public GetTest(BaseACLTestCollection collection, Type expectedResultType, string[] checkProperties, dynamic checkingResource) : base(collection, expectedResultType)
+        public GetTest(BaseTestCollection collection, Type expectedResultType, string[] checkProperties, dynamic checkingResource) : base(collection, expectedResultType)
         {
             CheckProperties = checkProperties;
             CheckingResource = checkingResource;

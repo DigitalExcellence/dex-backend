@@ -10,7 +10,10 @@ namespace IntegrationTests.Base
     {
         public HttpConnection Connection;
         public HttpHelper HttpHelper;
-        public string IdentityId = "88421113";
+        public string Endpoint { get; set; }
+        public int CreatedId { get; set; }
+        public string IdentityId { get; protected set; } = "88421113";
+        public bool Authorize { get; protected set; } = true;
 
         protected LinkedList<BaseTest> Tests;
 
@@ -20,22 +23,15 @@ namespace IntegrationTests.Base
             HttpHelper = new HttpHelper();
         }
 
-
-        //[Fact]
-        //public virtual async Task ACLTest()
-        //{
-        //    foreach(BaseTest test in Tests)
-        //    {
-        //        await test.Execute();
-        //    }
-        //}
-
-        public async Task InitializeAsync()
+        public virtual async Task InitializeAsync()
         {
-            await Connection.ApplyAuthenticationToClient(IdentityId);
+            if(Authorize)
+            {
+                await Connection.ApplyAuthenticationToClient(IdentityId);
+            }
         }
 
-        public Task DisposeAsync()
+        public virtual Task DisposeAsync()
         {
             return Task.CompletedTask;
         }

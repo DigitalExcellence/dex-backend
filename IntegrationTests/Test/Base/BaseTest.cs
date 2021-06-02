@@ -8,13 +8,16 @@ namespace IntegrationTests.Test.Base
 {
     public abstract class BaseTest
     {
-        protected BaseACLTestCollection Collection;
+        public string Endpoint { get; set; }
+
+        protected BaseTestCollection Collection;
         protected Type ExpectedResultType;
 
-        protected BaseTest(BaseACLTestCollection collection, Type expectedResultType)
+        protected BaseTest(BaseTestCollection collection, Type expectedResultType)
         {
             Collection = collection;
             ExpectedResultType = expectedResultType;
+            Endpoint = collection.Endpoint;
         }
 
         public abstract Task Execute();

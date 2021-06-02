@@ -21,4 +21,8 @@
     <ProjectReference Include="..\API\01_API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
+
 </Project>

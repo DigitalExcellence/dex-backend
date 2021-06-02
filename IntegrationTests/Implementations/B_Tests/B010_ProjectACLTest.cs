@@ -5,9 +5,10 @@ using Xunit;
 
 namespace IntegrationTests.Implementations
 {
-    public class ProjectACLTest : CreateAndUpdatedCheckAllCollection
+    [Collection("Sequential")]
+    public class B010_ProjectACLTest : CreateAndUpdatedCheckAllCollection
     {
-        public ProjectACLTest()
+        public B010_ProjectACLTest()
         {
             CreateEndpointResult = typeof(ProjectResultResource);
             GetEndpointResult = typeof(ProjectResourceResult);
@@ -33,9 +34,11 @@ namespace IntegrationTests.Implementations
             Endpoint = "api/Project";
         }
 
-        [Fact]
-        public override async Task Execute()
+        [Theory]
+        [ClassData(typeof(IdentityIdSupplier))]
+        public async Task Test(string identityId)
         {
+            IdentityId = identityId;
             await base.Execute();
         }
     }
