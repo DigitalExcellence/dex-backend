@@ -32,6 +32,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -127,6 +128,15 @@ namespace Repositories
         void CreateProjectIndex();
         void DeleteIndex();
         void MigrateDatabase(List<Project> projectsToExport);
+
+        /// <summary>
+        ///     This method will call the ElasticSearch index to retrieve projects where the title starts with the query.
+        /// </summary>
+        /// <param name="query">The string of characters with which the title must begin</param>
+        /// <returns>
+        ///     This method return a list of projects where the title, or part of the title matches the query.
+        /// </returns>
+        Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
     }
 
     /// <summary>
@@ -165,6 +175,7 @@ namespace Repositories
                                     .Where(s => s.Id == id)
                                     .Include(p => p.ProjectIcon)
                                     .Include(p => p.CallToAction)
+                                    .Include(p => p.Images)
                                     .SingleOrDefaultAsync();
 
             if(project != null)
@@ -204,16 +215,37 @@ namespace Repositories
         )
         {
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
-                                                    .Include(u => u.User)
-                                                    .Include(p => p.ProjectIcon)
-                                                    .Include(p => p.CallToAction)
-                                                    .Include(p => p.Collaborators)
-                                                    .Include(p => p.Likes)
-                                                    .Include(p => p.LinkedInstitutions)
-                                                    .Include(p => p.Categories)
-                                                    .ThenInclude(c => c.Category);
+                .Include(u => u.User)
+                .Include(p => p.ProjectIcon)
+                .Include(p => p.CallToAction)
+                .Include(p => p.Collaborators)
+                .Include(p => p.Likes)
+                .Include(p => p.LinkedInstitutions)
+                .Include(p => p.Images)
+                .Include(p => p.Categories)
+                    .ThenInclude(c => c.Category)
+                  //Don't get the description for performance reasons.
+                  .Select(p => new Project
+                  {
+                      UserId = p.UserId,
+                      User = p.User,
+                      Id = p.Id,
+                      ProjectIconId = p.ProjectIconId,
+                      ProjectIcon = p.ProjectIcon,
+                      CallToAction = p.CallToAction,
+                      Collaborators = p.Collaborators,
+                      Likes = p.Likes,
+                      LinkedInstitutions = p.LinkedInstitutions,
+                      Categories = p.Categories,
+                      Created = p.Created,
+                      InstitutePrivate = p.InstitutePrivate,
+                      Name = p.Name,
+                      ShortDescription = p.ShortDescription,
+                      Updated = p.Updated,
+                      Uri = p.Uri
+                  });
 
-                  queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
+            queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
 
             //Execute the IQueryable to get a collection of results
             //Don't get the description for performance reasons.
@@ -315,6 +347,7 @@ namespace Repositories
                                     .Include(p => p.User)
                                     .Include(p => p.ProjectIcon)
                                     .Include(p => p.CallToAction)
+                                    .Include(p => p.Images)
                                     .Where(p => p.Id == id)
                                     .FirstOrDefaultAsync();
             if(project != null)
@@ -457,6 +490,7 @@ namespace Repositories
             IEnumerable<Project> projects = await GetDbSet<Project>()
                    .Include(p => p.Collaborators)
                    .Include(p => p.ProjectIcon)
+                   .Include(p => p.Images)
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
 
@@ -728,6 +762,30 @@ namespace Repositories
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
 
 
+        }
+
+        /// <summary>
+        ///     This method will call the ElasticSearch index to retrieve projects where the title starts with the query.
+        /// </summary>
+        /// <param name="query">The string of characters with which the title must begin</param>
+        /// <returns>
+        ///     This method return a list of projects where the title, or part of the title matches the query.
+        /// </returns>
+        public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
+        {
+            RestRequest request = new RestRequest("_search", Method.POST);
+            string body = queries.SearchProjectsByPartOfTitle
+                .Replace("ReplaceWithQuery", query);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = elasticSearchContext.Execute(request);
+            if(!restResponse.IsSuccessful && restResponse.Content == "")
+            {
+                throw new ElasticUnavailableException();
+            }
+            List<ESProjectDTO> esProjectFormats = new List<ESProjectDTO>();
+
+            ParseJsonToESProjectFormatDTOList(restResponse, esProjectFormats);
+            return await ConvertProjects(esProjectFormats);
         }
         public Task<bool> ProjectExistsAsync(int id)
         {
