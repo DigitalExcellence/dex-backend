@@ -338,4 +338,3 @@ IdentityServer/tempkey.rsa
 !/API/Uploads/Images/.gitkeep
 
 ###
-rabbitmq/data/
