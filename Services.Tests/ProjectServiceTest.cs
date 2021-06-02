@@ -46,7 +46,7 @@ namespace Services.Tests
             RepositoryMock.Setup(repository =>
                                      repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
-                                         null,
+                                         It.IsAny<int>(),
                                          project => project.Updated,
                                          true,
                                          null,
@@ -54,20 +54,21 @@ namespace Services.Tests
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
-                                                  {
-                                                      Page = null,
-                                                      AmountOnPage = null,
-                                                      Highlighted = null,
-                                                      SortBy = null,
-                                                      SortDirection = "asc"
-                                                  });
+            {
+                Page = null,
+                AmountOnPage = null,
+                Highlighted = null,
+                SortBy = null,
+                SortDirection = "asc",
+                Categories = null
+            }); ;
 
             Assert.DoesNotThrow(() =>
             {
                 RepositoryMock.Verify(repository =>
                                           repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
-                                              null,
+                                              It.IsAny<int>(),
                                               project => project.Updated,
                                               true,
                                               null,
@@ -90,7 +91,7 @@ namespace Services.Tests
             RepositoryMock.Setup(repository =>
                                      repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
-                                         null,
+                                         It.IsAny<int>(),
                                          project => project.Created,
                                          true,
                                          null,
@@ -111,7 +112,7 @@ namespace Services.Tests
                 RepositoryMock.Verify(repository =>
                                           repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
-                                              null,
+                                              It.IsAny<int>(),
                                               project => project.Created,
                                               true,
                                               null,
@@ -134,7 +135,7 @@ namespace Services.Tests
             RepositoryMock.Setup(repository =>
                                      repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
-                                         null,
+                                         It.IsAny<int>(),
                                          project => project.Name,
                                          false,
                                          null,
@@ -155,7 +156,7 @@ namespace Services.Tests
                 RepositoryMock.Verify(repository =>
                                           repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
-                                              null,
+                                              It.IsAny<int>(),
                                               project => project.Name,
                                               false,
                                               null,
@@ -178,7 +179,7 @@ namespace Services.Tests
             RepositoryMock.Setup(repository =>
                                      repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
-                                         null,
+                                         It.IsAny<int>(),
                                          project => project.Updated,
                                          true,
                                          true,
@@ -199,7 +200,7 @@ namespace Services.Tests
                 RepositoryMock.Verify(repository =>
                                           repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
-                                              null,
+                                              It.IsAny<int>(),
                                               project => project.Updated,
                                               true,
                                               true,
@@ -222,7 +223,7 @@ namespace Services.Tests
             RepositoryMock.Setup(repository =>
                                      repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                          null,
-                                         null,
+                                         It.IsAny<int>(),
                                          project => project.Updated,
                                          true,
                                          false,
@@ -243,7 +244,7 @@ namespace Services.Tests
                 RepositoryMock.Verify(repository =>
                                           repository.GetAllWithUsersCollaboratorsAndInstitutionsAsync(
                                               null,
-                                              null,
+                                              It.IsAny<int>(),
                                               project => project.Updated,
                                               true,
                                               false,
