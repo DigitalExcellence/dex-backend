@@ -3,7 +3,7 @@ using IntegrationTests.TestCollection;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTests.Implementations
+namespace IntegrationTests.Implementations.B_Tests
 {
     [Collection("Sequential")]
     public class B010_ProjectACLTest : CreateAndUpdatedCheckAllCollection

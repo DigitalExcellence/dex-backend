@@ -12,7 +12,7 @@ namespace IntegrationTests.TestCollection
         {
             CreateEndpointResult = typeof(UserResourceResult);
             GetEndpointResult = typeof(UserResourceResult);
-            CreateCheckProperties = new string[] { "IdentityId", "Name", "Email", "InstitutionId" };
+            CreateCheckProperties = new string[] { "IdentityId", "Name", "Email" };
             Endpoint = "api/User";
         }
 
@@ -21,7 +21,7 @@ namespace IntegrationTests.TestCollection
             await base.Execute();
 
             var putTest = new PutTestWithoutBody(this, typeof(UserResourceResult));
-            Endpoint = $"api/Role/setRole?userId={CreatedId}&roleId={RoleId}";
+            putTest.Endpoint = $"api/Role/setRole?userId={CreatedId}&roleId={RoleId}";
             await putTest.Execute();
 
             IdentityIdSupplier.Collection.Add(new object[] { CreatedId });
