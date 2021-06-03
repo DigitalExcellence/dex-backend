@@ -16,10 +16,20 @@ namespace IntegrationTests.TestCollection
         protected dynamic CreateResource;
         protected string[] CreateCheckProperties;
 
-        public virtual async Task Execute()
+        private CreateTest create;
+        private GetTest getCreated;
+
+        public CreateAndCheckCollection()
         {
-            await new CreateTest(this, CreateEndpointResult, CreateResource).Execute();
-            await new GetTest(this, GetEndpointResult, CreateCheckProperties, CreateResource).Execute();
+            this.create = new CreateTest(this, CreateEndpointResult, CreateResource);
+            this.getCreated = new GetTest(this, GetEndpointResult, CreateCheckProperties, CreateResource);
+        }
+
+
+        public override async Task Execute()
+        {
+            await create.Execute();
+            await getCreated.Execute();
         }
     }
 }

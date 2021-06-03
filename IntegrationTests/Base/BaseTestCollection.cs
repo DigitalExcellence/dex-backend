@@ -35,5 +35,7 @@ namespace IntegrationTests.Base
         {
             return Task.CompletedTask;
         }
+
+        public abstract Task Execute();
     }
 }

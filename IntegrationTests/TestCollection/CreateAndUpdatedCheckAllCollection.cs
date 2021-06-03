@@ -10,11 +10,20 @@ namespace IntegrationTests.TestCollection
         protected dynamic UpdateResource;
         protected Type UpdateEndpointResult;
 
+        private UpdateTest update;
+        private GetTest getUpdated;
+
+        public CreateAndUpdatedCheckAllCollection()
+        {
+            this.update = new UpdateTest(this, UpdateEndpointResult, UpdateResource);
+            this.getUpdated = new GetTest(this, GetEndpointResult, UpdateCheckProperties, UpdateResource);
+        }
+
         public override async Task Execute()
         {
             await base.Execute();
-            await new UpdateTest(this, UpdateEndpointResult, UpdateResource).Execute();
-            await new GetTest(this, GetEndpointResult, UpdateCheckProperties, UpdateResource).Execute();
+            await update.Execute();
+            await getUpdated.Execute();
         }
     }
 }
