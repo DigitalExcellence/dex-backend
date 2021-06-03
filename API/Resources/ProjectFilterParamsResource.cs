@@ -53,9 +53,10 @@ namespace API.Resources
         [FromQuery(Name = "sortDirection")]
         public string SortDirection { get; set; }
 
-        // <summary>
-        //      Get or set the array of category id's
-        // </summary>
+        /// <summary>
+        ///      Get or set the array of category id's
+        ///
+        /// </summary>
         [FromQuery(Name = "categories")]
         public ICollection<int> Categories { get; set; }
 
