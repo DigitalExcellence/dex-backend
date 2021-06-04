@@ -840,6 +840,17 @@ namespace API.Controllers
 
             Collaborator collaborator = project.Collaborators.Where(c => c.Id == collaboratorId).FirstOrDefault();
 
+            if(collaborator == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed linking collaborator.",
+                    Detail = "The collaborator could not be found in the database.",
+                    Instance = "0da7858c-a8be-11eb-bcbc-0242ac130002"
+                };
+                return NotFound(problem);
+            }
+
             if(collaborator.LinkedUser != null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -877,9 +888,7 @@ namespace API.Controllers
 
                 collaborator.LinkedUser = linkedUserRequest;
 
-                //TODO: save changes to db
-                //projectService.Save();
-                //collaboratorLinkRequestService.Save();
+                projectService.Save();
 
                 //Generate a mail for the project owner/creator concerning the changed collaborator.
                 ProjectCollaboratorLinkRequestEmail mail =
