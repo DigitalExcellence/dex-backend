@@ -228,12 +228,9 @@ namespace API.Controllers
             {
                 Results = results.ToArray(),
                 Count = results.Count(),
-                TotalCount =
-                                                             await projectService.ProjectsCount(projectFilterParams),
+                TotalCount = await projectService.ProjectsCount(projectFilterParams),
                 Page = projectFilterParams.Page,
-                TotalPages =
-                                                             await projectService.GetProjectsTotalPages(
-                                                                 projectFilterParams)
+                TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams)
             };
 
             return Ok(resultsResource);
@@ -371,8 +368,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                     {
                         Title = "Call to action value was not found.",
-                        Detail =
-                                                     "The specified call to action value was not found while creating the project.",
+                        Detail = "The specified call to action value was not found while creating the project.",
                         Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
                     };
                     return BadRequest(problem);
@@ -421,10 +417,10 @@ namespace API.Controllers
 
                 foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
                 {
-                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
                     if(alreadyExcProjectCategory == null)
                     {
-                        Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
+                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
 
                         if(category == null)
                         {
@@ -539,8 +535,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                     {
                         Title = "Call to action value was not found.",
-                        Detail =
-                                                     "The specified call to action value was not found while creating the project.",
+                        Detail = "The specified call to action value was not found while creating the project.",
                         Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
                     };
                     return BadRequest(problem);
@@ -622,10 +617,10 @@ namespace API.Controllers
 
                 foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
                 {
-                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
                     if(alreadyExcProjectCategory == null)
                     {
-                        Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
+                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
 
                         if(category == null)
                         {

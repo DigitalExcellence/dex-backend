@@ -46,7 +46,6 @@ namespace API.Controllers
         /// <returns>This method returns a list of category resource results.</returns>
         /// <response code="200">This endpoint returns a list of categories.</response>
         [HttpGet]
-        [Authorize(Policy = nameof(Scopes.CategoryRead))]
         [ProducesResponseType(typeof(IEnumerable<CategoryResourceResult>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllCategories()
         {
@@ -64,7 +63,6 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the specified category id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no category is found with the specified category id.</response>
         [HttpGet("{categoryId}")]
-        [Authorize(Policy = nameof(Scopes.CategoryRead))]
         [ProducesResponseType(typeof(CategoryResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
