@@ -1456,9 +1456,50 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProjectCommentResourceResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PostCommentAsync(int projectId, [FromBody] ProjectCommentResource comment)
+        public async Task<IActionResult> AddCommentToProject(int projectId, [FromBody] ProjectCommentResource projectCommentResource)
         {
-            return null;
+            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to add comment to the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A293"
+                };
+                return NotFound(problem);
+            }
+            if(projectCommentResource.Content == null || projectCommentResource.UserId == null || projectCommentResource.Content == "")
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to add comment to the project.",
+                    Detail = "Not all necessary Fields are filled in.",
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A294"
+                };
+                return BadRequest(problem); 
+            }
+            
+
+            ProjectComment projectComment = mapper.Map<ProjectCommentResource, ProjectComment>(projectCommentResource);
+            projectComment.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            projectComment.ProjectId = projectId;
+            try
+            {
+                projectCommentService.Add(projectComment);
+                projectCommentService.Save();
+                return Created(nameof(AddCommentToProject), mapper.Map<ProjectComment,ProjectCommentResourceResult>(projectComment));
+            }catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e, "Database exception");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to add comment to the project.",
+                    Detail = "There was a problem while saving thecomment.",
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A292"
+                };
+                return BadRequest(problem);
+            }
         }
     }
 
