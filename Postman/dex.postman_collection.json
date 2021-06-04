@@ -2250,6 +2250,71 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-CallToActionSameActionValue-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-Administrator",
 									"event": [
 										{
@@ -12103,6 +12168,71 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-CallToActionSameActionValue-Registered",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{registeredUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply Now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-Registered",
 									"event": [
 										{
@@ -18543,6 +18673,71 @@
 									"response": []
 								},
 								{
+									"name": "Project-CreateProject-CallToActionSameActionValue-Data Office",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{dataOfficerUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-DataOfficer",
 									"event": [
 										{
@@ -23908,6 +24103,71 @@
 										"body": {
 											"mode": "raw",
 											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionSameActionValue-PR",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 400\", function () {",
+													"    pm.response.to.have.status(400);",
+													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{prUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -29498,6 +29758,70 @@
 										"body": {
 											"mode": "raw",
 											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-CallToActionSameActionValue-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 403\", function () {",
+													"    pm.response.to.have.status(403);",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{alumniIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"

@@ -332,31 +332,36 @@ namespace API.Controllers
 
             if(projectResource.CallToActions != null)
             {
-                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue)
-                                  .Any(cta => cta.Count() > 1))
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Duplicate call to action value.",
-                                                 Detail =
-                                                     "It is not possible to create a project with multiple of the same call to actions.",
-                                                 Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
-                                             };
+                    {
+                        Title = "Duplicate call to action option value.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
+                    };
                     return BadRequest(problem);
                 }
 
-                //This should be refactored. As for much of the code in the controllers, see issue #411 - Refactor controllers.
-                int maxAmountOfCallToActions = 4;
-
-                if(projectResource.CallToActions.Count > maxAmountOfCallToActions)
+                if(projectResource.CallToActions.GroupBy(cta => cta.Value).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = $"Maximum amount of {maxAmountOfCallToActions} call to actions exceeded.",
-                                                 Detail =
-                                                     $"It is not possible to create a project with more than {maxAmountOfCallToActions} call to actions.",
-                                                 Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
-                                             };
+                    {
+                        Title = "Duplicate call to action value.",
+                        Detail = "It is not possible to create a project with multiple call to actions with the same values.",
+                        Instance = "965D9C50-064F-4AFD-8CEB-28E556E47906"
+                    };
+                    return BadRequest(problem);
+                }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail = $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
                     return BadRequest(problem);
                 }
                 foreach(CallToActionResource callToAction in projectResource.CallToActions)
@@ -367,12 +372,11 @@ namespace API.Controllers
                     if(!callToActionOptions.Any())
                     {
                         ProblemDetails problem = new ProblemDetails
-                                                 {
-                                                     Title = "Call to action value was not found.",
-                                                     Detail =
-                                                         $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
-                                                     Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                                                 };
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail = $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
                         return BadRequest(problem);
                     }
                 }
@@ -514,31 +518,38 @@ namespace API.Controllers
 
             if(projectResource.CallToActions != null)
             {
-                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue)
-                                  .Any(cta => cta.Count() > 1))
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Duplicate call to action value.",
-                                                 Detail =
-                                                     "It is not possible to create a project with multiple of the same call to actions.",
-                                                 Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
-                                             };
+                    {
+                        Title = "Duplicate call to action option value.",
+                        Detail =
+                            "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
+                    };
                     return BadRequest(problem);
                 }
 
-                //This should be refactored. As for much of the code in the controllers, see issue #411 - Refactor controllers.
-                int maxAmountOfCallToActions = 4;
-
-                if(projectResource.CallToActions.Count > maxAmountOfCallToActions)
+                if(projectResource.CallToActions.GroupBy(cta => cta.Value).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Maximum amount of call to actions exceeded.",
-                                                 Detail =
-                                                     $"It is not possible to create a project with more than {maxAmountOfCallToActions} call to actions.",
-                                                 Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
-                                             };
+                    {
+                        Title = "Duplicate call to action value.",
+                        Detail = "It is not possible to create a project with multiple call to actions with the same values.",
+                        Instance = "965D9C50-064F-4AFD-8CEB-28E556E47906"
+                    };
+                    return BadRequest(problem);
+                }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail =
+                            $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
                     return BadRequest(problem);
                 }
 
@@ -547,15 +558,16 @@ namespace API.Controllers
                     IEnumerable<CallToActionOption> callToActionOptions =
                         await callToActionOptionService.GetCallToActionOptionFromValueAsync(
                             callToAction.OptionValue);
+
                     if(!callToActionOptions.Any())
                     {
                         ProblemDetails problem = new ProblemDetails
-                                                 {
-                                                     Title = "Call to action value was not found.",
-                                                     Detail =
-                                                         $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
-                                                     Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
-                                                 };
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail =
+                                $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
                         return BadRequest(problem);
                     }
                 }
