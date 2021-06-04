@@ -189,19 +189,23 @@ namespace Data.Helpers
             categories.AddRange(new[]{
                 new Category
                 {
-                    Name = "Some Category 1"
+                    Name = "UX/UI"
                 },
                 new Category
                 {
-                    Name = "Some Category 2"
+                    Name = "Video"
                 },
                 new Category
                 {
-                    Name = "Some Category 3"
+                    Name = "Code"
                 },
                 new Category
                 {
-                    Name = "Some Category 4"
+                    Name = "Research"
+                },
+                new Category
+                {
+                    Name = "Concept"
                 }
             });
 

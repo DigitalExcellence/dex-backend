@@ -16,6 +16,7 @@
 */
 
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace API.Resources
 {
@@ -51,6 +52,13 @@ namespace API.Resources
         /// </summary>
         [FromQuery(Name = "sortDirection")]
         public string SortDirection { get; set; }
+
+        /// <summary>
+        ///      Get or set the array of category id's
+        ///
+        /// </summary>
+        [FromQuery(Name = "categories")]
+        public ICollection<int> Categories { get; set; }
 
         /// <summary>
         ///     This property filter the projects on the highlighted state
