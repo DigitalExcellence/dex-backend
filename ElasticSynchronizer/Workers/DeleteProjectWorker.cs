@@ -46,7 +46,7 @@ namespace ElasticSynchronizer.Workers
             this.restClient = restClient;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             RabbitMQSubscriber subscriber = new RabbitMQSubscriber(
                 new RabbitMQConnectionFactory(config.RabbitMQ.Hostname,
@@ -59,8 +59,8 @@ namespace ElasticSynchronizer.Workers
             EventingBasicConsumer consumer = listener.CreateConsumer(documentDeleterService);
 
             listener.StartConsumer(consumer, subject);
+            return Task.CompletedTask;
         }
-
     }
 
 }

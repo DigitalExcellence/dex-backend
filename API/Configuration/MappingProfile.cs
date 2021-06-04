@@ -36,6 +36,9 @@ namespace API.Configuration
         /// </summary>
         public MappingProfile()
         {
+            CreateMap<Project, AutocompleteProjectResourceResult>();
+            CreateMap<AutocompleteProjectResourceResult, Project>();
+
             CreateMap<ProjectLike, UserProjectLikeResourceResult>()
                 .ForMember(source => source.Id,
                            option => option
