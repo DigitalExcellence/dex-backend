@@ -26,6 +26,11 @@ namespace API.Resources
     {
 
         /// <summary>
+        ///     This gets or sets the Id
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         ///     This gets or sets the Name
         /// </summary>
         public string Name { get; set; }

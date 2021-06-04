@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
 using System;
 
 namespace API.Resources
@@ -30,11 +31,6 @@ namespace API.Resources
         ///     This gets or sets the the id of highlight
         /// </summary>
         public int Id { get; set; }
-
-        /// <summary>
-        ///     This gets or sets the id of the project that this highlight is associated with
-        /// </summary>
-        public int ProjectId { get; set; }
 
         /// <summary>
         ///     This gets or sets the description of the project that this highlight is associated with
@@ -55,6 +51,11 @@ namespace API.Resources
         ///     This gets or sets the end date that highlight should end
         /// </summary>
         public DateTime? EndDate { get; set; }
+
+        /// <summary>
+        ///     This gets or sets the image of the project that this highlight is associated with
+        /// </summary>
+        public FileResourceResult Image { get; set; }
 
     }
 
