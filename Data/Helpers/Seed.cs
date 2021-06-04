@@ -205,7 +205,7 @@ namespace Data.Helpers
                 },
                 new Category
                 {
-                    Name = "Assignment"
+                    Name = "Concept"
                 }
             });
 
