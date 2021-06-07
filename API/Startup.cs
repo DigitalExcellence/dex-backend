@@ -473,12 +473,6 @@ namespace API
 
             if(!env.IsProduction())
             {
-                if(!context.Category.Any())
-                {
-                    context.Category.AddRange(Seed.SeedCategories());
-                    context.SaveChanges();
-                }
-
                 if(!context.Institution.Any())
                 {
                     // Seed institutions
@@ -534,6 +528,12 @@ namespace API
                     context.CallToActionOption.Add(callToActionOption);
                     context.SaveChanges();
                 }
+            }
+
+            if(!context.Category.Any())
+            {
+                context.Category.AddRange(Seed.SeedCategories());
+                context.SaveChanges();
             }
 
             if(!context.WizardPage.Any())

@@ -16,33 +16,19 @@
 */
 
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Models
+namespace Models.Exceptions
 {
-
-    public class Highlight
+    /// <summary>
+    ///     This exception will be thrown if Elastic is not available
+    /// </summary>
+    [Serializable]
+    public class ElasticUnavailableException : Exception
     {
-
-        public int Id { get; set; }
-
-        [Required]
-        public int ProjectId { get; set; }
-
-        [Required]
-        public Project Project { get; set; }
-
-        [Required]
-        public string Description { get; set; }
-
-        public DateTime? StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; }
-
-        public File Image { get; set; }
-
-        public int? ImageId { get; set; }
-
+        /// <summary>
+        ///     Elastic Search unavailable exception constructor
+        /// </summary>
+        public ElasticUnavailableException()
+            : base($"ElasticSearch service is unavailable.") { }
     }
-
 }

@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210430134605_AddedHighlightImage")]
+    partial class AddedHighlightImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,9 +189,6 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UploadDateTime")
                         .HasColumnType("datetime2");
 
@@ -197,8 +196,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UploaderId");
 
@@ -598,10 +595,6 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.File", b =>
                 {
-                    b.HasOne("Models.Project", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ProjectId");
-
                     b.HasOne("Models.User", "Uploader")
                         .WithMany()
                         .HasForeignKey("UploaderId")

@@ -32,6 +32,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -52,21 +53,24 @@ namespace Repositories
         /// <param name="orderBy"></param>
         /// <param name="orderByAsc"></param>
         /// <param name="highlighted"></param>
+        /// <param name="categories"></param>
         /// <returns>List of projects</returns>
         Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
             int? skip = null,
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
-            bool? highlighted = null
+            bool? highlighted = null,
+            ICollection<int> categories = null
         );
 
         /// <summary>
         ///     This interface method counts the amount of projects matching the filters.
         /// </summary>
         /// <param name="highlighted"></param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>number of projects found</returns>
-        Task<int> CountAsync(bool? highlighted = null);
+        Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null);
 
         /// <summary>
         ///     This interface method searches the database for projects matching the search query and parameters.
@@ -77,6 +81,7 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
         Task<IEnumerable<Project>> SearchAsync(
             string query,
@@ -84,7 +89,8 @@ namespace Repositories
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
-            bool? highlighted = null
+            bool? highlighted = null,
+            ICollection<int> categories = null
         );
 
         /// <summary>
@@ -92,12 +98,13 @@ namespace Repositories
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
-        Task<int> SearchCountAsync(string query, bool? highlighted = null);
+        Task<int> SearchCountAsync(string query, bool? highlighted = null, ICollection<int> categories = null);
 
 
         Task SyncProjectToES(Project project);
-        
+
 
         /// <summary>
         ///     This method will retrieve a project with user and collaborators async. Project will be redacted if user
@@ -121,6 +128,15 @@ namespace Repositories
         void CreateProjectIndex();
         void DeleteIndex();
         void MigrateDatabase(List<Project> projectsToExport);
+
+        /// <summary>
+        ///     This method will call the ElasticSearch index to retrieve projects where the title starts with the query.
+        /// </summary>
+        /// <param name="query">The string of characters with which the title must begin</param>
+        /// <returns>
+        ///     This method return a list of projects where the title, or part of the title matches the query.
+        /// </returns>
+        Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
     }
 
     /// <summary>
@@ -139,7 +155,8 @@ namespace Repositories
         public ProjectRepository(DbContext dbContext) : base(dbContext) { }
 
 
-        public ProjectRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, ITaskPublisher taskPublisher, Queries queries) : base(dbContext) {
+        public ProjectRepository(DbContext dbContext, IElasticSearchContext elasticSearchContext, ITaskPublisher taskPublisher, Queries queries) : base(dbContext)
+        {
             this.taskPublisher = taskPublisher;
             this.elasticSearchContext = elasticSearchContext.CreateRestClientForElasticRequests();
             this.queries = queries;
@@ -158,6 +175,7 @@ namespace Repositories
                                     .Where(s => s.Id == id)
                                     .Include(p => p.ProjectIcon)
                                     .Include(p => p.CallToAction)
+                                    .Include(p => p.Images)
                                     .SingleOrDefaultAsync();
 
             if(project != null)
@@ -185,56 +203,69 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns a list of projects filtered by the specified parameters.</returns>
         public virtual async Task<List<Project>> GetAllWithUsersCollaboratorsAndInstitutionsAsync(
-            int? skip = null,
-            int? take = null,
-            Expression<Func<Project, object>> orderBy = null,
-            bool orderByAsc = true,
-            bool? highlighted = null
-        )
+                    int? skip = null,
+                    int? take = null,
+                    Expression<Func<Project, object>> orderBy = null,
+                    bool orderByAsc = true,
+                    bool? highlighted = null,
+                    ICollection<int> categories = null
+                )
         {
-            IQueryable<Project> queryableProjects = GetDbSet<Project>().Include(u => u.User);
-            queryableProjects.Include(p => p.ProjectIcon).Load();
-            queryableProjects.Include(p => p.CallToAction).Load();
-            queryableProjects.Include(p => p.Collaborators).Load();
-            queryableProjects.Include(p => p.Likes).Load();
-            queryableProjects.Include(p => p.LinkedInstitutions).Load();
+            IQueryable<Project> queryableProjects = GetDbSet<Project>()
+                                                    .Include(u => u.User)
+                                                    .Include(p => p.ProjectIcon)
+                                                    .Include(p => p.CallToAction)
+                                                    .Include(p => p.Collaborators)
+                                                    .Include(p => p.Likes)
+                                                    .Include(p => p.LinkedInstitutions)
+                                                    .Include(p => p.Categories)
+                                                    .ThenInclude(c => c.Category);
 
-            queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
+            queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
 
             //Execute the IQueryable to get a collection of results
-            List<Project> projectResults = await queryableProjects.ToListAsync();
-
+            //Don't get the description for performance reasons.
+            List<Project> projectResults = await queryableProjects.Select(p => new Project
+            {
+                UserId = p.UserId,
+                User = p.User,
+                Id = p.Id,
+                ProjectIconId = p.ProjectIconId,
+                ProjectIcon = p.ProjectIcon,
+                CallToAction = p.CallToAction,
+                Collaborators = p.Collaborators,
+                Likes = p.Likes,
+                LinkedInstitutions = p.LinkedInstitutions,
+                Categories = p.Categories.Select(c => new ProjectCategory()
+                {
+                    Category = c.Category,
+                    Id = c.Id
+                }).ToList(),
+                Created = p.Created,
+                InstitutePrivate = p.InstitutePrivate,
+                Name = p.Name,
+                ShortDescription = p.ShortDescription,
+                Updated = p.Updated,
+                Uri = p.Uri
+            })
+                .ToListAsync();
             //Redact the user after fetching the collection from the project (no separate query needs to be executed)
             projectResults.ForEach(project => project.User = RedactUser(project.User));
-
-            // This is needed because otherwise likes, collaborators and categories are missing!
-            foreach(Project project in queryableProjects)
-            {
-                project.Collaborators = await GetDbSet<Collaborator>()
-                                              .Where(p => p.ProjectId == project.Id)
-                                              .ToListAsync();
-                project.User = RedactUser(project.User);
-                project.Likes = await GetDbSet<ProjectLike>()
-                                      .Where(p => p.LikedProject.Id == project.Id)
-                                      .ToListAsync();
-                project.Categories = await GetDbSet<ProjectCategory>()
-                                      .Include(p => p.Category)
-                                      .Where(p => p.Project.Id == project.Id)
-                                      .ToListAsync();
-            }
-            return await queryableProjects.ToListAsync();
+            return projectResults;
         }
 
         /// <summary>
         ///     This method counts the amount of projects matching the filters.
         /// </summary>
         /// <param name="highlighted">The highlighted parameter represents whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
-        public virtual async Task<int> CountAsync(bool? highlighted = null)
+        public virtual async Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null)
         {
-            return await ApplyFilters(DbSet, null, null, null, true, highlighted)
+            return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
                        .CountAsync();
         }
 
@@ -247,6 +278,7 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
         public virtual async Task<IEnumerable<Project>> SearchAsync(
             string query,
@@ -254,11 +286,12 @@ namespace Repositories
             int? take = null,
             Expression<Func<Project, object>> orderBy = null,
             bool orderByAsc = true,
-            bool? highlighted = null
+            bool? highlighted = null,
+            ICollection<int> categories = null
         )
         {
             List<Project> result =
-                await ApplyFilters(await GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted)
+                await ApplyFilters(await GetProjectQueryable(query), skip, take, orderBy, orderByAsc, highlighted, categories)
                     .ToListAsync();
             return result.Where(p => ProjectContainsQuery(p, query))
                          .ToList();
@@ -269,10 +302,11 @@ namespace Repositories
         /// </summary>
         /// <param name="query">The query parameters represents the search query used for filtering projects.</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
-        public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null)
+        public virtual async Task<int> SearchCountAsync(string query, bool? highlighted = null, ICollection<int> categories = null)
         {
-            return await ApplyFilters(await GetProjectQueryable(query), null, null, null, true, highlighted)
+            return await ApplyFilters(await GetProjectQueryable(query), null, null, null, true, highlighted, categories)
                        .CountAsync();
         }
 
@@ -290,6 +324,7 @@ namespace Repositories
                                     .Include(p => p.User)
                                     .Include(p => p.ProjectIcon)
                                     .Include(p => p.CallToAction)
+                                    .Include(p => p.Images)
                                     .Where(p => p.Id == id)
                                     .FirstOrDefaultAsync();
             if(project != null)
@@ -343,20 +378,20 @@ namespace Repositories
             SetLikes(entity);
             ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
-            
+
 
         }
 
         private static void SetLikes(Project entity)
         {
-            if (entity != null)
+            if(entity != null)
             {
-                if (entity.Likes != null)
+                if(entity.Likes != null)
                 {
                     _ = entity.Likes;
                 }
-                
-            }            
+
+            }
         }
 
         /// <summary>
@@ -389,7 +424,7 @@ namespace Repositories
                 taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync),
                     Subject.ELASTIC_CREATE_OR_UPDATE);
             });
-            
+
         }
 
         /// <summary>
@@ -401,7 +436,7 @@ namespace Repositories
         /// </returns>
         public override async Task AddAsync(Project entity)
         {
-                       
+
             await base.AddAsync(entity);
             base.Save();
             Console.WriteLine("AddAsync method id: " + entity.Id);
@@ -432,6 +467,7 @@ namespace Repositories
             IEnumerable<Project> projects = await GetDbSet<Project>()
                    .Include(p => p.Collaborators)
                    .Include(p => p.ProjectIcon)
+                   .Include(p => p.Images)
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
 
@@ -517,6 +553,7 @@ namespace Repositories
         /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories"></param>
         /// <returns>
         ///     This method returns a IQueryable Projects collection based on the given filters.
         /// </returns>
@@ -526,7 +563,8 @@ namespace Repositories
             int? take,
             Expression<Func<Project, object>> orderBy,
             bool orderByAsc,
-            bool? highlighted
+            bool? highlighted,
+            ICollection<int> categories
         )
         {
             if(highlighted.HasValue)
@@ -542,6 +580,13 @@ namespace Repositories
                 queryable = queryable.Where(p => highlightedQueryable.Contains(p.Id) == highlighted.Value);
             }
 
+            if(categories != null && categories.Count > 0)
+            {
+                // Check for every project if there is any project-category that matches the selected categories
+                // queryable = queryable.Where(p => p.Categories.All(cat => categories.Contains(cat.Category.Id)));
+                queryable = queryable.Where(p => p.Categories.Any(cat => categories.Contains(cat.Category.Id)));
+            }
+
             if(orderBy != null)
             {
                 if(orderByAsc)
@@ -553,7 +598,7 @@ namespace Repositories
                 }
             }
 
-            if(skip.HasValue) queryable = queryable.Skip(skip.Value);
+            if(skip.HasValue && skip.Value > 0) queryable = queryable.Skip(skip.Value);
             if(take.HasValue) queryable = queryable.Take(take.Value);
             return queryable;
         }
@@ -599,12 +644,12 @@ namespace Repositories
                                                               p.Id.ToString()
                                                                .Equals(query) ||
                                                               p.User.Name.Contains(query));
-                    projectsToReturn.Include(p => p.ProjectIcon).Load();
-                    projectsToReturn.Include(p => p.CallToAction).Load();
-                    projectsToReturn.Include(p => p.Likes).Load();
-                    projectsToReturn.Include(p => p.Categories).Load();
+            projectsToReturn.Include(p => p.ProjectIcon).Load();
+            projectsToReturn.Include(p => p.CallToAction).Load();
+            projectsToReturn.Include(p => p.Likes).Load();
+            projectsToReturn.Include(p => p.Categories).Load();
 
-            foreach (Project project in projectsToReturn)
+            foreach(Project project in projectsToReturn)
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
@@ -686,14 +731,38 @@ namespace Repositories
         public async Task SyncProjectToES(Project project)
         {
             Project projectToSync = await FindAsync(project.Id);
-            if (projectToSync == null)
+            if(projectToSync == null)
             {
                 throw new NotFoundException("Project to sync was not found");
             }
             ESProjectDTO eSProjectDTO = ProjectConverter.ProjectToESProjectDTO(projectToSync);
             taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(eSProjectDTO), Subject.ELASTIC_CREATE_OR_UPDATE);
-                     
-            
+
+
+        }
+
+        /// <summary>
+        ///     This method will call the ElasticSearch index to retrieve projects where the title starts with the query.
+        /// </summary>
+        /// <param name="query">The string of characters with which the title must begin</param>
+        /// <returns>
+        ///     This method return a list of projects where the title, or part of the title matches the query.
+        /// </returns>
+        public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
+        {
+            RestRequest request = new RestRequest("_search", Method.POST);
+            string body = queries.SearchProjectsByPartOfTitle
+                .Replace("ReplaceWithQuery", query);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse restResponse = elasticSearchContext.Execute(request);
+            if(!restResponse.IsSuccessful && restResponse.Content == "")
+            {
+                throw new ElasticUnavailableException();
+            }
+            List<ESProjectDTO> esProjectFormats = new List<ESProjectDTO>();
+
+            ParseJsonToESProjectFormatDTOList(restResponse, esProjectFormats);
+            return await ConvertProjects(esProjectFormats);
         }
         public Task<bool> ProjectExistsAsync(int id)
         {

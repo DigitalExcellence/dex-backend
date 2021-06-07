@@ -21,6 +21,7 @@ using API.Extensions;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration;
@@ -602,8 +603,11 @@ namespace API.Controllers
         /// Get recommended projects for the user who is logged in.
         /// </summary>
         /// <returns> Ok </returns>
+        /// <response code="200">This endpoint returns status code 200. An empty array is returned when no recommendations can be found.</response>
+        /// <response code="404">The 404 Not Found status code is returned when the user is not found.</response>
         [HttpGet("projectrecommendations/{amount}")]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(List<ProjectResourceResult>), StatusCodes.Status200OK)]
         [Authorize]
         public async Task<IActionResult> GetRecommendedProjects(int amount)
         {
@@ -625,15 +629,9 @@ namespace API.Controllers
                 List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id, amount);
                 return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectRecommendations));
 
-            } catch(RecommendationNotFoundException e)
+            } catch(RecommendationNotFoundException)
             {
-                ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed getting the recommendations",
-                                             Detail = e.Message,
-                                             Instance = "948319D2-1A19-4E00-AF50-DB5D096AFD39"
-                                         };
-                return NotFound(problem);
+                return Ok(new List<ProjectResourceResult>());
             }
             
         }
