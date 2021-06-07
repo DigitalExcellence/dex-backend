@@ -194,6 +194,9 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+      - /home/ubuntu/docker_compose/elasticonfig/wn_s.txt:/usr/share/elasticsearch/config/analysis/wn_s.txt
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: ${App__ElasticSearch__Password}
