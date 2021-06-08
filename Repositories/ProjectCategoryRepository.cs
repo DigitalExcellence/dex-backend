@@ -41,7 +41,7 @@ namespace Repositories
         Task<ProjectCategory> GetProjectCategory(int categoryId);
 
         /// <summary>
-        ///     Gets project categories by given projectid 
+        ///     Gets project categories by given projectid
         /// </summary>
         Task<List<ProjectCategory>> GetProjectCategories(int projectId);
     }
@@ -54,7 +54,7 @@ namespace Repositories
     {
 
         /// <summary>
-        ///     This is the project category repository constructor 
+        ///     This is the project category repository constructor
         /// </summary>
         /// <param name="dbContext"></param>
         public ProjectCategoryRepository(DbContext dbContext) :
@@ -79,7 +79,7 @@ namespace Repositories
         }
 
         /// <summary>
-        ///     Gets project categories by given projectid 
+        ///     Gets project categories by given projectid
         /// </summary>
         public Task<List<ProjectCategory>> GetProjectCategories(int projectId)
         {
