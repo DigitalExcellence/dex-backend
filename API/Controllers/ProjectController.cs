@@ -877,9 +877,7 @@ namespace API.Controllers
 
                 collaborator.LinkedUser = linkedUserRequest;
 
-                //TODO: save changes to db
-                //projectService.Save();
-                //collaboratorLinkRequestService.Save();
+                projectService.Save();
 
                 //Generate a mail for the project owner/creator concerning the changed collaborator.
                 ProjectCollaboratorLinkRequestEmail mail =

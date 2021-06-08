@@ -71,22 +71,6 @@ namespace Data
         /// </value>
         public DbSet<Collaborator> Collaborators { get; set; }
 
-        /// <summary>
-        ///     Gets or sets the collaborator linked users.
-        /// </summary>
-        /// <value>
-        ///     The collaborators linked users.
-        /// </value>
-        public DbSet<CollaboratorLinkedUser> CollaboratorLinkedUser { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the collaborator link requests
-        /// </summary>
-        /// <value>
-        ///     The collaborator link requests
-        /// </value>
-        public DbSet<CollaboratorLinkRequest> CollaboratorLinkRequest { get; set; }
-
 
         /// <summary>
         ///     Gets or sets the highlight.

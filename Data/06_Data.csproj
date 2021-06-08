@@ -11,6 +11,11 @@
         <EmbeddedResource Remove="Configurations\IdentityMigrations\**" />
         <None Remove="Configurations\IdentityMigrations\**" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Migrations\20210603133115_InitialCreate.cs" />
+      <Compile Remove="Migrations\20210603133115_InitialCreate.Designer.cs" />
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Bogus" Version="29.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
