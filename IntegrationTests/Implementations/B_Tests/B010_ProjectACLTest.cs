@@ -6,7 +6,7 @@ using Xunit;
 namespace IntegrationTests.Implementations.B_Tests
 {
     [Collection("Sequential")]
-    public class B010_ProjectACLTest : CreateAndUpdatedCheckAllCollection
+    public class B010_ProjectACLTest : CreateUpdateAndCheckAllCollection
     {
         public B010_ProjectACLTest()
         {

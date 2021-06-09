@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace IntegrationTests.TestCollection
 {
-    public abstract class CreateAndUpdatedCheckAllCollection : CreateAndCheckAllCollection
+    public abstract class CreateUpdateAndCheckAllCollection : CreateAndCheckAllCollection
     {
         protected string[] UpdateCheckProperties;
         protected dynamic UpdateResource;
@@ -13,7 +13,7 @@ namespace IntegrationTests.TestCollection
         private UpdateTest update;
         private GetTest getUpdated;
 
-        public CreateAndUpdatedCheckAllCollection()
+        public CreateUpdateAndCheckAllCollection()
         {
             this.update = new UpdateTest(this, UpdateEndpointResult, UpdateResource);
             this.getUpdated = new GetTest(this, GetEndpointResult, UpdateCheckProperties, UpdateResource);
