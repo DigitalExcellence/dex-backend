@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "24ed191e-3261-40e3-8d9a-c6ac94c55667",
+		"_postman_id": "6c937908-e95d-4a26-9338-e0d29d333c82",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -681,7 +681,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToTag\",\r\n  \"shortDescription\": \"postmantest_ProjectToTag\",\r\n  \"uri\": \"postmantest_ProjectToTag\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToTag\",\r\n      \"role\": \"postmantest_ProjectToTag\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"categories\": [\r\n    {\r\n      \"Id\": {{categoryIdToBeCategorized}}\r\n    }\r\n  ]\r\n}",
+							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToTag\",\r\n  \"shortDescription\": \"postmantest_ProjectToTag\",\r\n  \"uri\": \"postmantest_ProjectToTag\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToTag\",\r\n      \"role\": \"postmantest_ProjectToTag\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"categories\": [\r\n    {\r\n      \"id\": {{categoryIdToBeCategorized}}\r\n    }\r\n  ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2250,71 +2250,6 @@
 									"response": []
 								},
 								{
-									"name": "Project-CreateProject-CallToActionSameActionValue-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var projectName = pm.environment.get(\"projectName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 400\", function () {",
-													"    pm.response.to.have.status(400);",
-													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Project",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Project-GetAllProjects-Administrator",
 									"event": [
 										{
@@ -3263,83 +3198,6 @@
 									"response": []
 								},
 								{
-									"name": "Highlight-GetAllActiveHighlights-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var adminProjectId = pm.environment.get(\"adminProjectId\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"var foundAt;",
-													"",
-													"function findItem(jsonData, item) {",
-													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
-													"            return i;",
-													"        }",
-													"    }",
-													"    return -1;",
-													"}",
-													"",
-													"function findHighlight(jsonData, idToFind){",
-													"    for(var i = 0; i< jsonData.length; i++)",
-													"    {",
-													"        if(jsonData[i].projectId == idToFind) ",
-													"        { ",
-													"            return i; ",
-													"        }",
-													"    }",
-													"    return -1;",
-													"    ",
-													"}",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"    pm.response.to.be.ok;",
-													"    pm.response.to.be.withBody;",
-													"    pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Highlight is in list and matching: \" + adminProjectId, function () {",
-													"    foundAt = findHighlight(jsonData, adminProjectId);",
-													"    pm.expect(foundAt).to.not.eql(-1);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Highlight",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Highlight"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Highlight-GetHighlight-Administrator",
 									"event": [
 										{
@@ -3398,6 +3256,83 @@
 									"response": []
 								},
 								{
+									"name": "Highlight-GetAllActiveHighlights-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var adminProjectId = pm.environment.get(\"adminProjectId\");",
+													"",
+													"var jsonData = pm.response.json();",
+													"",
+													"var foundAt;",
+													"",
+													"function findItem(jsonData, item) {",
+													"    for (var i = 0; i < jsonData.length; i++) {",
+													"        if (jsonData[i].projectId == item) {",
+													"            return i;",
+													"        }",
+													"    }",
+													"    return -1;",
+													"}",
+													"",
+													"function findHighlight(jsonData, idToFind){",
+													"    for(var i = 0; i< jsonData.length; i++)",
+													"    {",
+													"        if(jsonData[i].project.id == idToFind) ",
+													"        { ",
+													"            return i; ",
+													"        }",
+													"    }",
+													"    return -1;",
+													"    ",
+													"}",
+													"",
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"Response must be valid and have a json body\", function () {",
+													"    pm.response.to.be.ok;",
+													"    pm.response.to.be.withBody;",
+													"    pm.response.to.be.json;",
+													"});",
+													"",
+													"pm.test(\"Highlight is in list and matching: \" + adminProjectId, function () {",
+													"    foundAt = findHighlight(jsonData, adminProjectId);",
+													"    pm.expect(foundAt).to.not.eql(-1);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/Highlight",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Highlight"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Highlight-GetHighlight-ByProject-Administrator",
 									"event": [
 										{
@@ -3423,7 +3358,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
+													"        if (jsonData[i].project.id == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -12168,71 +12103,6 @@
 									"response": []
 								},
 								{
-									"name": "Project-CreateProject-CallToActionSameActionValue-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var projectName = pm.environment.get(\"projectName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 400\", function () {",
-													"    pm.response.to.have.status(400);",
-													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply Now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Project",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Project-GetAllProjects-Registered",
 									"event": [
 										{
@@ -13021,8 +12891,8 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Project count matches: 4\", function () {",
-													"    pm.expect(jsonData.length).to.eql(4);",
+													"pm.test(\"Project count matches: 6\", function () {",
+													"    pm.expect(jsonData.length).to.eql(6);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -13859,7 +13729,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
+													"        if (jsonData[i].project.id == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -18673,71 +18543,6 @@
 									"response": []
 								},
 								{
-									"name": "Project-CreateProject-CallToActionSameActionValue-Data Office",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var projectName = pm.environment.get(\"projectName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 400\", function () {",
-													"    pm.response.to.have.status(400);",
-													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{dataOfficerUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Project",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Project-GetAllProjects-DataOfficer",
 									"event": [
 										{
@@ -20148,7 +19953,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
+													"        if (jsonData[i].project.id == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -24123,71 +23928,6 @@
 									"response": []
 								},
 								{
-									"name": "Project-CreateProject-CallToActionSameActionValue-PR",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var projectName = pm.environment.get(\"projectName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 400\", function () {",
-													"    pm.response.to.have.status(400);",
-													"    pm.response.instance == \"965D9C50-064F-4AFD-8CEB-28E556E47906\";",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{prUserIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Project",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Project-GetAllProjects-PR",
 									"event": [
 										{
@@ -25648,7 +25388,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
+													"        if (jsonData[i].project.id == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -25927,7 +25667,7 @@
 													"",
 													"function findProjectId(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
+													"        if (jsonData[i].project.id == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -26066,7 +25806,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
+													"        if (jsonData[i].project.id == item) {",
 													"            return i;",
 													"        }",
 													"    }",
@@ -29465,17 +29205,13 @@
 													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
 													"var projectName = pm.environment.get(\"projectName\");",
 													"",
-													"",
 													"var jsonData = pm.response.json();",
-													"pm.environment.set(\"projectId2\", jsonData.id);",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													""
+													"});"
 												],
 												"type": "text/javascript"
 											}
@@ -29532,7 +29268,6 @@
 													"var projectName = pm.environment.get(\"projectName\");",
 													"",
 													"var jsonData = pm.response.json();",
-													"pm.environment.set(\"projectId3\", jsonData.id);",
 													"",
 													"eval(pm.environment.get(\"commonTests\"))();",
 													"",
@@ -29601,6 +29336,7 @@
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
+													"    pm.response.instance == \"40EE82EB-930F-40C8-AE94-0041F7573FE9\";",
 													"});",
 													"",
 													""
@@ -29666,7 +29402,9 @@
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
+													"    pm.response.instance == \"E780005D-BBEB-423E-BA01-58145D3DBDF5\";",
 													"});",
+													"",
 													""
 												],
 												"type": "text/javascript"
@@ -29729,6 +29467,7 @@
 													"",
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
+													"    pm.response.instance == \"D2C8416A-9C55-408B-9468-F0E5C635F9B7\";",
 													"});",
 													"",
 													""
@@ -29752,76 +29491,12 @@
 											{
 												"key": "IdentityId",
 												"type": "text",
-												"value": "{{alumniIdentityId}}"
+												"value": "{{registeredUserIdentityId}}"
 											}
 										],
 										"body": {
 											"mode": "raw",
 											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Project",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-CreateProject-CallToActionSameActionValue-Alumni",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var projectName = pm.environment.get(\"projectName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 403\", function () {",
-													"    pm.response.to.have.status(403);",
-													"});",
-													"",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{alumniIdentityId}}"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Apply now\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -30966,7 +30641,7 @@
 													"",
 													"function findItem(jsonData, item) {",
 													"    for (var i = 0; i < jsonData.length; i++) {",
-													"        if (jsonData[i].projectId == item) {",
+													"        if (jsonData[i].project.id == item) {",
 													"            return i;",
 													"        }",
 													"    }",
