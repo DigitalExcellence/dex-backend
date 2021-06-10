@@ -24,7 +24,7 @@ namespace Repositories
 
         public Task<List<ProjectComment>> GetProjectComments(int projectId)
         {
-            return DbSet.Where(p => p.ProjectId == projectId)
+            return DbSet.Where(p => p.ProjectId == projectId).Include(u => u.User)
                         .ToListAsync();
         }
 
