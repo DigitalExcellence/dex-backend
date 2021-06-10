@@ -20,7 +20,10 @@ namespace Models
         public string Content { get; set; }
 
         public List<ProjectCommentLike> Likes { get; set; }
+        public ProjectComment()
+        {
 
+        }
 
     }
 

@@ -1484,6 +1484,8 @@ namespace API.Controllers
             ProjectComment projectComment = mapper.Map<ProjectCommentResource, ProjectComment>(projectCommentResource);
             projectComment.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             projectComment.ProjectId = projectId;
+            projectComment.DateCreated = DateTime.Now;
+            projectComment.DateUpdated = DateTime.Now;
             try
             {
                 projectCommentService.Add(projectComment);
