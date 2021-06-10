@@ -58,7 +58,6 @@ namespace API.Controllers
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
         private readonly IEmailSender emailSender;
-        private readonly ICollaboratorLinkRequestService collaboratorLinkRequestService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
@@ -82,7 +81,6 @@ namespace API.Controllers
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
         /// <param name="emailSender">Something something something</param>
-        /// <param name="collaboratorLinkRequestService">something something</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -92,8 +90,7 @@ namespace API.Controllers
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
                                  ICallToActionOptionService callToActionOptionService,
-                                 IEmailSender emailSender,
-                                 ICollaboratorLinkRequestService collaboratorLinkRequestService)
+                                 IEmailSender emailSender)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -105,7 +102,6 @@ namespace API.Controllers
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
             this.emailSender = emailSender;
-            this.collaboratorLinkRequestService = collaboratorLinkRequestService;
         }
 
         /// <summary>
@@ -888,6 +884,7 @@ namespace API.Controllers
 
                 collaborator.LinkedUser = linkedUserRequest;
 
+                projectService.Update(project);
                 projectService.Save();
 
                 //Generate a mail for the project owner/creator concerning the changed collaborator.
@@ -947,27 +944,28 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AcceptCollaborator(string requestHash)
         {
-            CollaboratorLinkRequest collaboratorLinkRequest =
-                (await collaboratorLinkRequestService.GetAll())
-                .Where(clr => clr.RequestHash == requestHash).FirstOrDefault();
+            return StatusCode(501);//Not Implemented
+            //CollaboratorLinkRequest collaboratorLinkRequest =
+            //    (await collaboratorLinkRequestService.GetAll())
+            //    .Where(clr => clr.RequestHash == requestHash).FirstOrDefault();
 
-            if(collaboratorLinkRequest == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed accepting link collaborator.",
-                    Detail = "Hash does not exist.",
-                    Instance = "67443384-a8c0-11eb-bcbc-0242ac130002"
-                };
-                return BadRequest(problem);
-            }
+            //if(collaboratorLinkRequest == null)
+            //{
+            //    ProblemDetails problem = new ProblemDetails
+            //    {
+            //        Title = "Failed accepting link collaborator.",
+            //        Detail = "Hash does not exist.",
+            //        Instance = "67443384-a8c0-11eb-bcbc-0242ac130002"
+            //    };
+            //    return BadRequest(problem);
+            //}
 
-            collaboratorLinkRequest.Collaborator.LinkedUser.Status = LinkedUserStatus.ACCEPTED;
+            //collaboratorLinkRequest.Collaborator.LinkedUser.Status = LinkedUserStatus.ACCEPTED;
 
-            collaboratorLinkRequestService.Update(collaboratorLinkRequest);
-            collaboratorLinkRequestService.Save();
+            //collaboratorLinkRequestService.Update(collaboratorLinkRequest);
+            //collaboratorLinkRequestService.Save();
 
-            return Ok();
+            //return Ok();
         }
 
 

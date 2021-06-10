@@ -89,7 +89,7 @@ namespace API.Configuration
             CreateMap<Project, ProjectHighlightResourceResult>();
 
             CreateMap<CollaboratorResource, Collaborator>();
-            CreateMap<Collaborator, CollaboratorResourceResult>();
+            CreateMap<Collaborator, CollaboratorResourceResult>();//TODO :Don't mix resource and resource results
 
             CreateMap<Project, ProjectResultResource>();
 
@@ -142,7 +142,8 @@ namespace API.Configuration
 
             CreateMap<OauthTokens, OauthTokensResourceResult>();
 
-            CreateMap<LinkedUserResource, CollaboratorLinkedUser>();
+            CreateMap<CollaboratorLinkedUserResource, CollaboratorLinkedUser>();
+            CreateMap<CollaboratorLinkedUser, CollaboratorLinkedUserResourceResult>();
 
             CreateExternalSourceMappingProfiles();
         }

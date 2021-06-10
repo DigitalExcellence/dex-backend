@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Remove="Resources\CollaboratorLinkedUserResourceResult.cs~RF3481f4.TMP" />
         <None Remove="Uploads\Images\.gitkeep" />
     </ItemGroup>
 

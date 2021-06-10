@@ -15,6 +15,10 @@
     <ItemGroup>
       <Compile Remove="Migrations\20210603133115_InitialCreate.cs" />
       <Compile Remove="Migrations\20210603133115_InitialCreate.Designer.cs" />
+      <Compile Remove="Migrations\20210604091218_AddCollaborator.cs" />
+      <Compile Remove="Migrations\20210604091218_AddCollaborator.Designer.cs" />
+      <Compile Remove="Migrations\20210610113603_SaveChanges.cs" />
+      <Compile Remove="Migrations\20210610113603_SaveChanges.Designer.cs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Bogus" Version="29.0.1" />

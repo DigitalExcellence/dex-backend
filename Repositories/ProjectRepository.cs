@@ -135,6 +135,7 @@ namespace Repositories
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
+                                              .Include(p => p.LinkedUser)
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
@@ -249,6 +250,7 @@ namespace Repositories
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
+                                              .Include(p => p.LinkedUser)
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
@@ -453,6 +455,7 @@ namespace Repositories
             {
                 project.Collaborators = await GetDbSet<Collaborator>()
                                               .Where(p => p.ProjectId == project.Id)
+                                              .Include(p => p.LinkedUser)
                                               .ToListAsync();
                 project.Likes = await GetDbSet<ProjectLike>()
                                       .Where(p => p.LikedProject.Id == project.Id)
