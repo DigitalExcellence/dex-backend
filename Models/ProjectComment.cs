@@ -10,7 +10,7 @@ namespace Models
         public int Id { get; set; }
 
         public int ProjectId { get; set; }
-
+        
         public User User { get; set; }
 
         public DateTime Created { get; set; }
