@@ -170,6 +170,15 @@ namespace Repositories
                                                     .Include( p => p.User )
                                                     .Include( p => p.Likes );
 
+            //TODO: should the linked collaborators be fetched here?
+            foreach(Project project in queryableProjects)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .Include(p => p.LinkedUser)
+                                              .ToListAsync();
+            }
+
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted);
 
             //Execute the IQueryable to get a collection of results
@@ -300,6 +309,15 @@ namespace Repositories
                    .Include(p => p.ProjectIcon)
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
+
+            //TODO: should the linked collaborators be fetched here?
+            foreach(Project project in projects)
+            {
+                project.Collaborators = await GetDbSet<Collaborator>()
+                                              .Where(p => p.ProjectId == project.Id)
+                                              .Include(p => p.LinkedUser)
+                                              .ToListAsync();
+            }
 
             return projects;
         }
