@@ -1,17 +1,17 @@
-using IntegrationTests.Base;
+using IntegrationTests.Settings;
 using IntegrationTests.Test.Base;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTests.Test
+namespace IntegrationTests.Test.Templates
 {
     public class GetTest : BaseTest
     {
         protected string[] CheckProperties;
         protected dynamic CheckingResource;
 
-        public GetTest(BaseTestCollection collection, Type expectedResultType, string[] checkProperties, dynamic checkingResource) : base(collection, expectedResultType)
+        public GetTest(RequestConfig requestConfig, Type expectedResultType, string[] checkProperties, dynamic checkingResource) : base(requestConfig, expectedResultType)
         {
             CheckProperties = checkProperties;
             CheckingResource = checkingResource;
@@ -25,10 +25,10 @@ namespace IntegrationTests.Test
         private async Task Get()
         {
             // Arrange
-            var client = Collection.Connection.Client;
-            var endpoint = Collection.Endpoint;
-            var httpHelper = Collection.HttpHelper;
-            var id = Collection.CreatedId;
+            var client = RequestConfig.Connection.Client;
+            var endpoint = RequestConfig.Endpoint;
+            var httpHelper = RequestConfig.HttpHelper;
+            var id = CheckingResource.Id;
 
             // Act
             var response = await client.GetAsync(endpoint + $"/{id}");

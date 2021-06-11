@@ -1,31 +1,33 @@
 using IntegrationTests.Base;
+using IntegrationTests.Settings;
 using IntegrationTests.Test.Base;
 using System;
 using System.Threading.Tasks;
 
-namespace IntegrationTests.Test
+namespace IntegrationTests.Test.Templates
 {
     public class CreateTest : BaseTest
     {
+        public dynamic Result { get; set; }
+
         protected dynamic CreateResource;
 
-        public CreateTest(BaseTestCollection collection, Type expectedResultType, dynamic createResource) : base(collection, expectedResultType)
+        public CreateTest(RequestConfig requestConfig, Type expectedResultType, dynamic createResource) : base(requestConfig, expectedResultType)
         {
             CreateResource = createResource;
         }
 
         public override async Task Execute()
         {
-            int createdId = await Create();
-            Collection.CreatedId = createdId;
+            await Create();
         }
 
-        private async Task<int> Create()
+        private async Task Create()
         {
             // Arrange
-            var httpHelper = Collection.HttpHelper;
-            var endpoint = Collection.Endpoint;
-            var client = Collection.Connection.Client;
+            var httpHelper = RequestConfig.HttpHelper;
+            var endpoint = RequestConfig.Endpoint;
+            var client = RequestConfig.Connection.Client;
             var content = httpHelper.GetHttpContent(CreateResource);
 
             // Act
@@ -33,8 +35,8 @@ namespace IntegrationTests.Test
 
             // Assert
             dynamic responseObj = await httpHelper.GetFromResponse(response, ExpectedResultType);
+            Result = responseObj;
             response.EnsureSuccessStatusCode();
-            return (int) responseObj.Id;
         }
     }
 }

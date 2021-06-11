@@ -1,16 +1,18 @@
 using IntegrationTests.Base;
+using IntegrationTests.Settings;
 using IntegrationTests.Test.Base;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IntegrationTests.Test
+namespace IntegrationTests.Test.Templates
 {
     public class UpdateTest : BaseTest
     {
         protected dynamic UpdateResource;
+        protected int CreatedId;
 
-        public UpdateTest(BaseTestCollection collection, Type expectedResultType, dynamic updateResource) : base(collection, expectedResultType)
+        public UpdateTest(RequestConfig requestConfig, Type expectedResultType, dynamic updateResource) : base(requestConfig, expectedResultType)
         {
             UpdateResource = updateResource;
         }
@@ -23,11 +25,11 @@ namespace IntegrationTests.Test
         private async Task Update()
         {
             // Arrange
-            var client = Collection.Connection.Client;
-            var httpHelper = Collection.HttpHelper;
-            var endpoint = Collection.Endpoint;
+            var client = RequestConfig.Connection.Client;
+            var httpHelper = RequestConfig.HttpHelper;
+            var endpoint = RequestConfig.Endpoint;
             var content = httpHelper.GetHttpContent(UpdateResource);
-            var id = Collection.CreatedId;
+            var id = CreatedId;
 
             // Act
             var response = await client.PutAsync(endpoint + $"/{id}", content);

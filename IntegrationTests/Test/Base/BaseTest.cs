@@ -1,7 +1,5 @@
-using IntegrationTests.Base;
+using IntegrationTests.Settings;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IntegrationTests.Test.Base
@@ -10,14 +8,13 @@ namespace IntegrationTests.Test.Base
     {
         public string Endpoint { get; set; }
 
-        protected BaseTestCollection Collection;
+        protected RequestConfig RequestConfig;
         protected Type ExpectedResultType;
 
-        protected BaseTest(BaseTestCollection collection, Type expectedResultType)
+        protected BaseTest(RequestConfig requestConfig, Type expectedResultType)
         {
-            Collection = collection;
             ExpectedResultType = expectedResultType;
-            Endpoint = collection.Endpoint;
+            RequestConfig = requestConfig;
         }
 
         public abstract Task Execute();

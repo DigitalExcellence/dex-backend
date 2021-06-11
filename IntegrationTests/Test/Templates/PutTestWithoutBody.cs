@@ -1,14 +1,18 @@
 using IntegrationTests.Base;
+using IntegrationTests.Settings;
 using IntegrationTests.Test.Base;
 using System;
 using System.Threading.Tasks;
 
-namespace IntegrationTests.Test
+namespace IntegrationTests.Test.Templates
 {
     public class PutTestWithoutBody : BaseTest
     {
-        public PutTestWithoutBody(BaseTestCollection collection, Type expectedResultType) : base(collection, expectedResultType)
+        public int Id { get; set; }
+
+        public PutTestWithoutBody(RequestConfig requestConfig, Type expectedResultType, int id) : base(requestConfig, expectedResultType)
         {
+            Id = id;
         }
 
         public override async Task Execute()
@@ -19,10 +23,9 @@ namespace IntegrationTests.Test
         private async Task Put()
         {
             // Arrange
-            var client = Collection.Connection.Client;
-            var httpHelper = Collection.HttpHelper;
+            var client = RequestConfig.Connection.Client;
+            var httpHelper = RequestConfig.HttpHelper;
             var content = httpHelper.GetHttpContent(null);
-            var id = Collection.CreatedId;
 
             // Act
             var response = await client.PutAsync(Endpoint, content);
