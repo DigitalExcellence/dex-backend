@@ -13,9 +13,9 @@ namespace Models
 
         public User User { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime Created { get; set; }
 
-        public DateTime DateUpdated { get; set; }
+        public DateTime Updated { get; set; }
 
         public string Content { get; set; }
 
