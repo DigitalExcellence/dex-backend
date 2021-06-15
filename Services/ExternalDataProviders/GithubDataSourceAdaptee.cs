@@ -532,7 +532,7 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns the github data source contributors resource result.</returns>
         public async Task<List<GithubDataSourceContributorResourceResult>> FetchContributorsFromRepository(string owner, string repo)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"repos/{owner}/{repo}/contributors");
             IRestResponse response = await client.ExecuteAsync(request);
 

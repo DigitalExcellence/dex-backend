@@ -143,8 +143,6 @@ namespace API.Extensions
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
 
             services.AddScoped<ITaskPublisher, TaskPublisher>();
-
-            return services;
         }
 
     }
