@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Performance testing using K6 - [#379](https://github.com/DigitalExcellence/dex-backend/issues/379)
 
 ### Changed
 
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
 - Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
 - Filtering through categories - [#444](https://github.com/DigitalExcellence/dex-backend/issues/444)
+
 
 ### Fixed
 
