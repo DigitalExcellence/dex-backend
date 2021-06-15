@@ -4,11 +4,13 @@ using Services.Sources;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Services.ExternalDataProviders
 {
     public class FontysGitlabDataSourceAdaptee : GitlabDataSourceAdaptee
     {
+
         public FontysGitlabDataSourceAdaptee(IRestClientFactory restClientFactory, IMapper mapper, IConfiguration configuration) : base(configuration, restClientFactory, mapper)
         {
             Title = "FontysGitlab";
@@ -16,6 +18,17 @@ namespace Services.ExternalDataProviders
             BaseApiUrl = "https://git.fhict.nl/api/v4/";
             BaseUrl = "https://git.fhict.nl/";
             AlwaysRequiresAuthentication = true;
+            IsVisible = false;
+        }
+
+        /// <summary>
+        /// Stop fetching readme for now as we cannot authorize towards protected uris yet.
+        /// </summary>
+        /// <param name="readmeUri"></param>
+        /// <returns></returns>
+        public override Task<string> FetchReadme( string readmeUri )
+        {
+            return Task.FromResult<string>( null );
         }
     }
 }

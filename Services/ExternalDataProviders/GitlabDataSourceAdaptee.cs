@@ -111,6 +111,7 @@ namespace Services.ExternalDataProviders
         ///     This method is responsible for retrieving the readme from a repository.
         /// </summary>
         /// <param name="readmeUri">This parameter represents the the uri of the readme file that should get retrieved.</param>
+        /// <param name="accessToken">Optional token, which if provided will be added to the authorization headers.</param>
         /// <returns>This method returns the content of the readme.</returns>
         /// <exception cref="ExternalException">
         ///     This method could throw an external exception whenever the status code is not
@@ -512,7 +513,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        public async Task<string> FetchReadme(string readmeUri)
+        public virtual async Task<string> FetchReadme(string readmeUri)
         {
             readmeUri = readmeUri.Replace("blob", "raw");
 

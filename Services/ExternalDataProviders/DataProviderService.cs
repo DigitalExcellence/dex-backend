@@ -132,6 +132,11 @@ namespace Services.ExternalDataProviders
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
+
+            // If the adaptee always requires authentication, we always expect a token.
+            if(adaptee.AlwaysRequiresAuthentication)
+                needsAuth = true;
+
             return await dataProviderAdapter.GetAllProjects(token, needsAuth);
         }
 
@@ -147,6 +152,11 @@ namespace Services.ExternalDataProviders
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
+
+            // If the adaptee always requires authentication, we always expect a token.
+            if ( adaptee.AlwaysRequiresAuthentication )
+                needsAuth = true;
+
             return await dataProviderAdapter.GetProjectByGuid(token, id, needsAuth);
         }
 
