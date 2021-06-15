@@ -31,7 +31,7 @@ export let options = {
             // The amount of time before the test will start since the cli is executed.
             startTime: defaultScenarioRuntime * 0 + 's',
             // The function the scenario will execute.
-            exec: "testDatasourceEndpoints"        
+            exec: "testDatasourceEndpoints"
         },
         getProjectsScenario: {
             // The executor the scenario will use see : https://k6.io/docs/using-k6/scenarios/executors/
