@@ -35,7 +35,7 @@ services:
     logging:
       driver: none
 
-  load_tests:
+  stess_tests:
     image: loadimpact/k6
     container_name: k6_stress_tests
     networks:

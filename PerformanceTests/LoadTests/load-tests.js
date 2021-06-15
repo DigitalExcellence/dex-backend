@@ -1,6 +1,6 @@
 // Import the test code the default function is what every VU will execute.
-import projectTest from './Tests/project-load-tests.js';
-import dataSourceTest from './Tests/project-load-tests.js';
+import projectTest from './Tests/getprojects-load-tests.js';
+import dataSourceTest from './Tests/getdatasources-load-tests.js';
 
 // This is the main function for running load tests using K6.
 // For more information please read the K6 documentation found here: https://k6.io/docs/
