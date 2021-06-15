@@ -27,7 +27,7 @@ namespace API.Resources
         /// <summary>
         ///     Gets or sets the Id of the category.
         /// </summary>
-        public int CategoryId { get; set; }
+        public int Id { get; set; }
     }
 
 }

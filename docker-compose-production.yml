@@ -38,6 +38,7 @@ services:
     networks:
       - proxy
       - mssql-network
+      - rabbitmq-network
     depends_on:
       - db
     volumes:
@@ -166,8 +167,8 @@ services:
         - Config__RabbitMQ__Username=${App__RabbitMQ__Username}
         - Config__RabbitMQ__Password=${App__RabbitMQ__Password}
     networks:
-        rabbitmq-network:
-	mssql-network:
+      rabbitmq-network:
+      mssql-network:
         
   elasticsynchronizer:
     image: digitalexcellence/elasticsynchronizer:latest
@@ -193,6 +194,9 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+      - /home/ubuntu/docker_compose/elasticonfig/wn_s.txt:/usr/share/elasticsearch/config/analysis/wn_s.txt
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: ${App__ElasticSearch__Password}
