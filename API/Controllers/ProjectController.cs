@@ -1502,6 +1502,49 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
         }
+
+        /// <summary>
+        /// this method is responsible for updating the comment with the specified identifier.
+        /// </summary>
+        /// <param name="projectCommentId"></param>
+        /// <param name="projectCommentResource"></param>
+        /// <returns></returns>
+        [HttpPut("comment/{projectCommentId}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateComment(int projectCommentId, [FromBody] ProjectCommentResource projectCommentResource)
+        {
+            ProjectComment projectComment = await projectCommentService.FindAsync(projectCommentId);
+            if(projectComment == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update Comment.",
+                    Detail = "The specified Comment could not be found in the database.",
+                    Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
+                };
+                return NotFound(problem);
+
+            }
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.AdminProjectWrite));
+
+            if(!(projectComment.User.Id == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to edit the comment.",
+                    Detail = "The user is not allowed to edit the comment.",
+                    Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
+                };
+                return Unauthorized(problem);
+            }
+            mapper.Map(projectCommentResource, projectComment);
+            projectCommentService.Update(projectComment);
+            projectService.Save();
+            return Ok(mapper.Map<ProjectComment, ProjectCommentResourceResult>(projectComment));
+
+        }
     }
 
+    
 }
