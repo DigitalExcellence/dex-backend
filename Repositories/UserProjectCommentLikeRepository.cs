@@ -24,7 +24,8 @@ namespace Repositories
 
          bool IUserProjectCommentLikeRepository.CheckIfUserAlreadyLiked(int userId, int projectCommentId)
         {
-            ProjectCommentLike projectCommentLike = GetDbSet<ProjectCommentLike>().SingleOrDefault(comment => comment.CommentLiker.Id == userId && comment.LikedComment.Id == projectCommentId);
+            ProjectCommentLike projectCommentLike = GetDbSet<ProjectCommentLike>()
+                .SingleOrDefault(comment => comment.CommentLiker.Id == userId && comment.LikedComment.Id == projectCommentId);
             if(projectCommentLike != null)
             {
                 return true;

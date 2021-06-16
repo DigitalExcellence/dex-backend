@@ -115,6 +115,9 @@ namespace API.Extensions
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
 
+            services.AddScoped<IUserProjectCommentLikeService, UserProjectCommentLikeService>();
+            services.AddScoped<IUserProjectCommentLikeRepository, UserProjectCommentLikeRepository>();
+
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
 

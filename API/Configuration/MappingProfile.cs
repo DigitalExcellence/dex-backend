@@ -62,6 +62,18 @@ namespace API.Configuration
                                             destination.LikedProject.Description))
                 .ForAllOtherMembers(member => member.Ignore());
 
+            CreateMap<ProjectCommentLike, UserProjectCommentLikeResourceResult>()
+                .ForMember(source => source.Id,
+                            option => option.
+                            MapFrom(destination =>
+                                 destination.LikedComment.Id))
+                .ForMember(source => source.comment, 
+                            option => option
+                            .MapFrom(destination =>
+                            destination.LikedComment.Content))
+                .ForAllOtherMembers(member => member.Ignore());
+            CreateMap<UserProjectCommentLikeResourceResult, ProjectCommentLike>();
+
             CreateMap<UserUserResourceResult, UserUser>();
 
             CreateMap<UserUser, UserUserResourceResult>()
