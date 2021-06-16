@@ -62,6 +62,7 @@ namespace API.Controllers
         private readonly IUserService userService;
         private readonly IProjectInstitutionService projectInstitutionService;
         private readonly IInstitutionService institutionService;
+        private readonly IUserProjectCommentLikeService userProjectCommentLikeService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -86,6 +87,7 @@ namespace API.Controllers
         /// <param name="categoryService">The category service is used to work with categories</param>
         /// <param name="projectCategoryService">The project category service is used to connect projects and categories</param>
         /// <param name="projectCommentService"></param>
+        /// <param name="userProjectCommentLikeService"></param>
         /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
         public ProjectController(IProjectService projectService,
@@ -101,7 +103,8 @@ namespace API.Controllers
                                  ICallToActionOptionService callToActionOptionService,
                                  ICategoryService categoryService,
                                  IProjectCategoryService projectCategoryService,
-                                 IProjectCommentService projectCommentService)
+                                 IProjectCommentService projectCommentService,
+                                 IUserProjectCommentLikeService userProjectCommentLikeService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -117,6 +120,7 @@ namespace API.Controllers
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
             this.projectCommentService = projectCommentService;
+            this.userProjectCommentLikeService = userProjectCommentLikeService;
         }
 
 
@@ -1449,6 +1453,7 @@ namespace API.Controllers
         /// Post a new comment to the provided project-id
         /// </summary>
         /// <param name="projectId">The project-id to add the new comment to</param>
+        /// <param name="projectCommentResource"></param>
         /// <param name="comment">The added comment and its metadata</param>
         /// <returns></returns>
         [HttpPost("comment/{projectId}")]
@@ -1544,7 +1549,67 @@ namespace API.Controllers
             return Ok(mapper.Map<ProjectComment, ProjectCommentResourceResult>(projectComment));
 
         }
+        [HttpPost("comment/like{projectCommentId}")]
+        [Authorize]
+        public async Task<IActionResult> LikeProjectComment(int projectCommentId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                                     .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail =
+                                                        "The database does not contain a user with the provided user id.",
+                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                };
+                return NotFound(problemDetails);
+            }
+            if(!userProjectCommentLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectCommentId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "User already liked this comment",
+                    Detail = "You already liked this comment.",
+                    Instance = "5B0104E2-C864-4ADB-9321-32CD352DC124"
+                };
+                return Conflict(problemDetails);
+            }
+            ProjectComment projectCommentToLike = await projectCommentService.FindAsync(projectCommentId);
+            if(projectCommentToLike == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the comment.",
+                    Detail =
+                                                       "The database does not contain a comment with the provided comment id.",
+                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                };
+                return NotFound(problemDetails);
+            }
+            try
+            {
+                ProjectCommentLike projectCommentLike = new ProjectCommentLike(projectCommentToLike, currentUser);
+                await userProjectCommentLikeService.AddAsync(projectCommentLike).ConfigureAwait(false);
+                userProjectCommentLikeService.Save();
+                //Todo: Fix return met mapper etc.
+                return Ok();
+            }catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e, "database exception");
+
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Could not create the liked comment details.",
+                    Detail = "The database failed to save the liked comment.",
+                    Instance = "F941879E-6C25-4A35-A962-8E86382E1849"
+                };
+                return BadRequest(problemDetails);
+            }
+            
+        }
     }
 
-    
 }
