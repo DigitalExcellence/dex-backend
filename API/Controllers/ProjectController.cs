@@ -1549,7 +1549,7 @@ namespace API.Controllers
             return Ok(mapper.Map<ProjectComment, ProjectCommentResourceResult>(projectComment));
 
         }
-        [HttpPost("comment/like{projectCommentId}")]
+        [HttpPost("comment/like/{projectCommentId}")]
         [Authorize]
         public async Task<IActionResult> LikeProjectComment(int projectCommentId)
         {
@@ -1567,7 +1567,7 @@ namespace API.Controllers
                 };
                 return NotFound(problemDetails);
             }
-            if(!userProjectCommentLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectCommentId))
+            if(userProjectCommentLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectCommentId))
             {
                 ProblemDetails problemDetails = new ProblemDetails
                 {
