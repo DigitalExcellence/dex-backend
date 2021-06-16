@@ -1583,8 +1583,7 @@ namespace API.Controllers
                 ProblemDetails problemDetails = new ProblemDetails
                 {
                     Title = "Failed to getting the comment.",
-                    Detail =
-                                                       "The database does not contain a comment with the provided comment id.",
+                    Detail = "The database does not contain a comment with the provided comment id.",
                     Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
                 };
                 return NotFound(problemDetails);
@@ -1594,8 +1593,8 @@ namespace API.Controllers
                 ProjectCommentLike projectCommentLike = new ProjectCommentLike(projectCommentToLike, currentUser);
                 await userProjectCommentLikeService.AddAsync(projectCommentLike).ConfigureAwait(false);
                 userProjectCommentLikeService.Save();
-                //Todo: Fix return met mapper etc.
-                return Ok();
+          
+                return Ok(mapper.Map< ProjectCommentLike, UserProjectCommentLikeResourceResult>(projectCommentLike));
             }catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "database exception");
