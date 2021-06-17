@@ -156,8 +156,6 @@ namespace Services.ExternalDataProviders
         /// </summary>
         private readonly IRestClientFactory restClientFactory;
 
-        private bool alwaysRequiresAuthentication;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="GitlabDataSourceAdaptee" /> class./>
         /// </summary>
@@ -326,6 +324,7 @@ namespace Services.ExternalDataProviders
             GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri, token);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
+
             List<GitLabDataSourceContributorResourceResult> contributors =
                 await FetchContributorsFromRepository(resourceResult.Id, token);
             project.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Name }));
@@ -546,11 +545,11 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns the gitlab data source contributors resource result.</returns>
         public virtual async Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id, string token = null)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
             IRestRequest request = new RestRequest($"projects/{id}/repository/contributors");
 
-            if ( !string.IsNullOrEmpty( token ) )
-                request.AddHeader( "Authorization", "Bearer " + token );
+            if(!string.IsNullOrEmpty(token))
+                request.AddHeader("Authorization", "Bearer " + token);
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(string.IsNullOrEmpty(response.Content)) return null;

@@ -27,14 +27,9 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="readmeUri"></param>
         /// <returns></returns>
-        public override Task<string> FetchReadme( string readmeUri )
+        public override Task<string> FetchReadme(string readmeUri)
         {
-            return Task.FromResult<string>( null );
-        }
-
-        public override Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository( int id, string token = null )
-        {
-            return Task.FromResult<List<GitLabDataSourceContributorResourceResult>>(new List<GitLabDataSourceContributorResourceResult>());
+            return Task.FromResult<string>(null);
         }
     }
 }

@@ -41,6 +41,7 @@ namespace Services.ExternalDataProviders
         ///     This method is responsible for retrieving a public project from a uri, from the external data source adaptee API.
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
+        /// <param name="token">Token used in requests that still require authentication even in 'public' projects. If nothing is filled in here the token will be ignored.</param>
         /// <returns>This method returns a public project from the specified source uri.</returns>
         public Task<Project> GetPublicProjectFromUri(Uri sourceUri, string token = null);
 

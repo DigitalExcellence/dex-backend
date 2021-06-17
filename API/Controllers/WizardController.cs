@@ -62,6 +62,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
         /// <param name="sourceUri">The uri that specifies which project will get retrieved.</param>
+        /// <param name="token">The token used for getting projects, is optional.</param>
         /// <returns>This method returns the found project with the specified source uri.</returns>
         /// <response code="200">This endpoint returns the project with the specified source uri.</response>
         /// <response code="400">
@@ -168,7 +169,7 @@ namespace API.Controllers
         ///     The token which is used for retrieving the projects from the user. This token can be the
         ///     access token for the auth flow, but can also be the username for the public flow.
         /// </param>
-        /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
+        /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used. This property gets ignored for datasources that always require authentication</param>
         /// <returns>This method returns a collection of all the projects.</returns>
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>

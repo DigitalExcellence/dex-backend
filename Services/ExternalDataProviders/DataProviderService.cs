@@ -126,7 +126,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
-        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
+        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used. This gets ignored for datasources that always requires authentication</param>
         /// <returns>This method returns a collection of projects.</returns>
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth)
         {

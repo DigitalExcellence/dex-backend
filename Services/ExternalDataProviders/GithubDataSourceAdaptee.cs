@@ -321,7 +321,7 @@ namespace Services.ExternalDataProviders
             Project p = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
             List<GithubDataSourceContributorResourceResult> contributors =
                 await FetchContributorsFromRepository(githubDataSource.Owner.Login, githubDataSource.Name);
-            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login })); 
+            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login }));
             p.Description = await FetchReadme(githubDataSource.Owner.Login, githubDataSource.Name) ?? p.Description;
             return p;
         }
@@ -416,8 +416,8 @@ namespace Services.ExternalDataProviders
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
-            if ( !string.IsNullOrEmpty( token ) )
-                request.AddHeader( "Authorization", "Bearer " + token );
+            if(!string.IsNullOrEmpty(token))
+                request.AddHeader("Authorization", "Bearer " + token);
 
             IRestResponse response = await client.ExecuteAsync(request);
 
