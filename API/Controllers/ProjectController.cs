@@ -858,7 +858,17 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            User user = await userService.GetUserByEmail(userEmail);
+            User user;
+
+            //Assume you want to link yourself
+            if(userEmail == null)
+            {
+                user = currentUser;
+            }
+            else
+            {
+                user = await userService.GetUserByEmail(userEmail);
+            }
 
             if(user == null)
             {

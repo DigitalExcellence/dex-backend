@@ -19,11 +19,6 @@ namespace API.Resources
         public UserResourceResult User { get; set; }
 
         /// <summary>
-        ///     The hash to allow for the Status of this model to change to: 'Accepted'
-        /// </summary>
-        public string AcceptanceHash { get; set; }
-
-        /// <summary>
         ///     Status of the linked user.
         /// </summary>
         public LinkedUserStatus Status { get; set; }
