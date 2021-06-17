@@ -296,8 +296,7 @@ namespace Data.Helpers
             {
                 Faker<Collaborator> collaboratorToFake = new Faker<Collaborator>()
                                                          .RuleFor(c => c.FullName, f => f.Name.FullName())
-                                                         .RuleFor(c => c.Role, f => f.Name.JobTitle())
-                                                         .RuleFor(c => c.LinkedUser, new CollaboratorLinkedUser());
+                                                         .RuleFor(c => c.Role, f => f.Name.JobTitle());
 
                 Collaborator collaborator = collaboratorToFake.Generate();
                 Collaborator collaborator2 = collaboratorToFake.Generate();
