@@ -62,7 +62,7 @@ namespace Services.ExternalDataProviders
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri);
+        Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for retrieving the oauth url from the specified data source.
@@ -176,7 +176,7 @@ namespace Services.ExternalDataProviders
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        public async Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri)
+        public async Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri, string token = null)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
@@ -193,7 +193,7 @@ namespace Services.ExternalDataProviders
                 Uri.TryCreate("https://" + sourceUri, UriKind.Absolute, out serializedUrl);
             }
 
-            return await dataProviderAdapter.GetProjectByUri(serializedUrl);
+            return await dataProviderAdapter.GetProjectByUri(serializedUrl, token);
         }
 
         /// <summary>

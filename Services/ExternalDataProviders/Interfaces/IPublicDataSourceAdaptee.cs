@@ -42,7 +42,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
         /// <returns>This method returns a public project from the specified source uri.</returns>
-        public Task<Project> GetPublicProjectFromUri(Uri sourceUri);
+        public Task<Project> GetPublicProjectFromUri(Uri sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for retrieving a public project from the user, by id from the external data source

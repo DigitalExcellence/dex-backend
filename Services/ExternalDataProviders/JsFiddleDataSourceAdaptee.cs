@@ -46,7 +46,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
         /// <returns>This method returns a JsFiddle data source resource result from the specified uri.</returns>
-        Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleFromUri(Uri sourceUri);
+        Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleFromUri(Uri sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for retrieving the content from a public fiddle by identifier.
@@ -138,9 +138,9 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
         /// <returns>This method throws a not supported by external API exception.</returns>
-        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri, string token = null)
         {
-            JsFiddleDataSourceResourceResult jsFiddleSource = await FetchPublicFiddleFromUri(sourceUri);
+            JsFiddleDataSourceResourceResult jsFiddleSource = await FetchPublicFiddleFromUri(sourceUri, token);
             Project project = mapper.Map<JsFiddleDataSourceResourceResult, Project>(jsFiddleSource);
             return project;
         }
@@ -150,7 +150,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which is used to retrieve the correct project.</param>
         /// <returns>This method returns a JsFiddle data source resource result from the specified uri.</returns>
-        public Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleFromUri(Uri sourceUri)
+        public Task<JsFiddleDataSourceResourceResult> FetchPublicFiddleFromUri(Uri sourceUri, string token = null)
         {
             throw new NotSupportedByExternalApiException(Title, nameof(GetPublicProjectFromUri));
         }

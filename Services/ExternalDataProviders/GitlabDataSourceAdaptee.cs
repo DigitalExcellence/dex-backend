@@ -59,7 +59,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
+        Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for retrieving the content from a public Gitlab project by id.
@@ -132,7 +132,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="id">This parameter represents the id of the repository.</param>
         /// <returns>This method returns the gitlab data source contributors resource result.</returns>
-        public Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id);
+        public Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id, string token = null);
 
     }
 
@@ -321,13 +321,13 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
         /// <returns>This method returns a public project from the specified source uri.</returns>
-        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri, string token = null)
         {
-            GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri);
+            GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri, token);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
             List<GitLabDataSourceContributorResourceResult> contributors =
-                await FetchContributorsFromRepository(resourceResult.Id);
+                await FetchContributorsFromRepository(resourceResult.Id, token);
             project.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Name }));
             return project;
         }
@@ -384,7 +384,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        public async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        public async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
@@ -395,6 +395,10 @@ namespace Services.ExternalDataProviders
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
+
+            if(!string.IsNullOrEmpty(token))
+                request.AddHeader("Authorization", "Bearer " + token);
+
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
@@ -540,14 +544,18 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="id">This parameter represents the id of the repository.</param>
         /// <returns>This method returns the gitlab data source contributors resource result.</returns>
-        public async Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id)
+        public virtual async Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id, string token = null)
         {
             IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"projects/{id}/repository/contributors");
+
+            if ( !string.IsNullOrEmpty( token ) )
+                request.AddHeader( "Authorization", "Bearer " + token );
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(string.IsNullOrEmpty(response.Content)) return null;
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
+            string test = response.Content;
             List<GitLabDataSourceContributorResourceResult> resourceResult =
                 JsonConvert.DeserializeObject<List<GitLabDataSourceContributorResourceResult>>(response.Content);
             return resourceResult;

@@ -79,6 +79,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByUriFromExternalDataSource(
             [FromQuery] string dataSourceGuid,
+            [FromQuery] string token,
             string sourceUri)
         {
             if(sourceUri == null)
@@ -116,7 +117,7 @@ namespace API.Controllers
 
             try
             {
-                Project project = await dataProviderService.GetProjectFromUri(dataSourceGuid, sourceUri);
+                Project project = await dataProviderService.GetProjectFromUri(dataSourceGuid, sourceUri, token);
                 if(project == null)
                 {
                     ProblemDetails problem = new ProblemDetails

@@ -67,7 +67,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
+        Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for retrieving the content from a public repositories from an identifier.
@@ -315,9 +315,9 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
         /// <returns>This method returns a public project from the specified source uri.</returns>
-        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri, string token = null)
         {
-            GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri);
+            GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri, token);
             Project p = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
             List<GithubDataSourceContributorResourceResult> contributors =
                 await FetchContributorsFromRepository(githubDataSource.Owner.Login, githubDataSource.Name);
@@ -405,7 +405,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        public async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
+        public async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
@@ -416,6 +416,9 @@ namespace Services.ExternalDataProviders
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
+            if ( !string.IsNullOrEmpty( token ) )
+                request.AddHeader( "Authorization", "Bearer " + token );
+
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(string.IsNullOrEmpty(response.Content)) return null;

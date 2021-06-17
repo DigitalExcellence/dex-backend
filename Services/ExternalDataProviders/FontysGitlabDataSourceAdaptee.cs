@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Services.ExternalDataProviders.Resources;
 
 namespace Services.ExternalDataProviders
 {
@@ -29,6 +30,11 @@ namespace Services.ExternalDataProviders
         public override Task<string> FetchReadme( string readmeUri )
         {
             return Task.FromResult<string>( null );
+        }
+
+        public override Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository( int id, string token = null )
+        {
+            return Task.FromResult<List<GitLabDataSourceContributorResourceResult>>(new List<GitLabDataSourceContributorResourceResult>());
         }
     }
 }

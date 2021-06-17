@@ -51,7 +51,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The uri which is used for searching an individual project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        Task<Project> GetProjectByUri(Uri sourceUri);
+        Task<Project> GetProjectByUri(Uri sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for return the Oauth url of the data source.
@@ -121,12 +121,12 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The uri which is used for searching an individual project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        public async Task<Project> GetProjectByUri(Uri sourceUri)
+        public async Task<Project> GetProjectByUri(Uri sourceUri, string token = null)
         {
             IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
             if(publicDataSource == null)
                 throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
-            return await publicDataSource.GetPublicProjectFromUri(sourceUri);
+            return await publicDataSource.GetPublicProjectFromUri(sourceUri, token);
         }
 
 

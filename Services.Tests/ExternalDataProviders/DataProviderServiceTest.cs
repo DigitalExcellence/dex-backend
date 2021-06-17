@@ -215,7 +215,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             dataSourceMock.As<IPublicDataSourceAdaptee>()
-                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>()))
+                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>(), string.Empty))
                           .ReturnsAsync(project);
 
             // Act
@@ -238,7 +238,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             dataSourceMock.As<IPublicDataSourceAdaptee>()
-                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>()))
+                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>(),string.Empty))
                           .ReturnsAsync((Project)null);
 
             // Act
