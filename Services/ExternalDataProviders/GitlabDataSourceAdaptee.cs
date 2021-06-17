@@ -170,6 +170,7 @@ namespace Services.ExternalDataProviders
         {
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
+            //Maybe it is better to pass the clientid etc in the constructor instead of getting it here?
             IConfigurationSection configurationSection = configuration.GetSection("App")
                                                                       .GetSection("DataSources")
                                                                       .GetSection(Title);
@@ -180,9 +181,13 @@ namespace Services.ExternalDataProviders
                                                .Value;
             RedirectUri = configurationSection.GetSection("RedirectUri")
                                               .Value;
+            string oauthUrl = configurationSection.GetSection("OauthUrl").Value;
+
+            if(oauthUrl is null)
+                throw new NullReferenceException(nameof(oauthUrl));
 
             OauthUrl =
-                string.Format(configurationSection.GetSection("OauthUrl").Value, clientId, RedirectUri);
+                string.Format(oauthUrl, clientId, RedirectUri);
         }
 
         /// <summary>
@@ -272,7 +277,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets or sets a value for the Title property from the Gitlab data source adaptee.
         /// </summary>
-        public string Title { get; set; } = "Gitlab";
+        public virtual string Title { get; set; } = "Gitlab";
 
         /// <summary>
         ///     Gets the value for the Base Url from the Gitlab data source adaptee.

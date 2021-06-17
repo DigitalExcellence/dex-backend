@@ -11,10 +11,10 @@ namespace Services.ExternalDataProviders
 {
     public class FontysGitlabDataSourceAdaptee : GitlabDataSourceAdaptee
     {
-
+        //We have to do it like this, since the constructor of the GitlabDataSourceAdaptee gets called before our constructor, causing an exception
+        public override string Title { get => "FontysGitlab"; set => base.Title = value; }
         public FontysGitlabDataSourceAdaptee(IRestClientFactory restClientFactory, IMapper mapper, IConfiguration configuration) : base(configuration, restClientFactory, mapper)
         {
-            Title = "FontysGitlab";
             Guid = "6a73f5ee-e7a5-4ef5-b874-0da0993d6f13";
             BaseApiUrl = "https://git.fhict.nl/api/v4/";
             BaseUrl = "https://git.fhict.nl/";

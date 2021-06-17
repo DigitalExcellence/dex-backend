@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Models;
@@ -40,16 +41,26 @@ namespace Services.Tests.ExternalDataProviders
     [TestFixture]
     public class GitlabDataSourceAdapteeTest : AdapteeTest<IGitlabDataSourceAdaptee>
     {
+        /// <summary>
+        /// Defines the way a gitlab datasource adaptee is created, is by default <see cref="GitlabDataSourceAdaptee"/>.
+        /// </summary>
+        protected Func<IConfiguration, Sources.IRestClientFactory, IMapper, GitlabDataSourceAdaptee> CreateDataSourceAdaptee;
+
+        public GitlabDataSourceAdapteeTest()
+        {
+            CreateDataSourceAdaptee = (configuration, restClientFactory, mapper)
+                => new GitlabDataSourceAdaptee(configuration, restClientFactory, mapper);
+        }
 
         /// <summary>
         ///     Initialize runs before every test
         /// </summary>
         [SetUp]
-        public void Initialize()
+        public virtual void Initialize()
         {
             Dictionary<string, string> inMemoryConf = new Dictionary<string, string>
                                                       {
-                                                          {"App:DataSources:Gitlab", "valid_access_token"}
+                                                          {"App:DataSources:Gitlab:OauthUrl", "valid_oauth_url"}
                                                       };
 
             ConfigurationMock = new ConfigurationBuilder()
@@ -69,7 +80,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             MockRestClient(resourceResults, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchAllPublicGitlabRepositories(It.IsAny<string>());
@@ -95,7 +106,7 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchAllPublicGitlabRepositories(It.IsAny<string>());
@@ -118,7 +129,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             MockRestClient(resourceResult, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Uri testUri = new Uri("https://google.nl/test");
@@ -144,7 +155,7 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Uri testUri = new Uri("https://google.nl/test");
@@ -168,7 +179,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             MockRestClient(resourceResult, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchPublicGitlabRepositoryById(It.IsAny<string>());
@@ -193,7 +204,7 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchPublicGitlabRepositoryById(It.IsAny<string>());
@@ -216,7 +227,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             MockRestClient(resourceResults, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchAllGitlabRepositories(It.IsAny<string>(), It.IsAny<string>());
@@ -241,7 +252,7 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchAllGitlabRepositories(It.IsAny<string>(), It.IsAny<string>());
@@ -264,7 +275,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             MockRestClient(resourceResult, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchGitlabRepositoryById(It.IsAny<string>(), It.IsAny<string>());
@@ -289,7 +300,7 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchGitlabRepositoryById(It.IsAny<string>(), It.IsAny<string>());
@@ -312,7 +323,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             MockRestClient(userResourceResult, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchUserFromAccessToken(It.IsAny<string>());
@@ -337,7 +348,7 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchUserFromAccessToken(It.IsAny<string>());
@@ -355,12 +366,12 @@ namespace Services.Tests.ExternalDataProviders
         /// </summary>
         /// <returns>The tested method will return the correct readme content.</returns>
         [Test]
-        public async Task FetchReadme_GoodFlow()
+        public virtual async Task FetchReadme_GoodFlow()
         {
             // Arrange
             string readmeContent = new string("This is the content from a test readme file");
             MockRestClient(readmeContent, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchReadme("https://google.nl/test");
@@ -368,7 +379,7 @@ namespace Services.Tests.ExternalDataProviders
 
             // Assert
             act.Should().NotThrow();
-            retrievedReadme.Substring(1, retrievedReadme.Length-2).Should().Be(readmeContent);
+            retrievedReadme.Substring(1, retrievedReadme.Length - 2).Should().Be(readmeContent);
         }
 
         /// <summary>
@@ -377,11 +388,11 @@ namespace Services.Tests.ExternalDataProviders
         /// </summary>
         /// <returns>The tested method will receive 404 Not Found from the external API.</returns>
         [Test]
-        public async Task FetchReadme_ContentNotFound()
+        public virtual async Task FetchReadme_ContentNotFound()
         {
             // Arrange
-            MockRestClient(null , HttpStatusCode.NotFound);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            MockRestClient(null, HttpStatusCode.NotFound);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchReadme("https://google.nl/test");
@@ -399,12 +410,12 @@ namespace Services.Tests.ExternalDataProviders
         /// </summary>
         /// <returns>The tested method will receive a not successful response from the external API.</returns>
         [Test]
-        public void FetchReadme_ResponseIsNotSuccessful()
+        public virtual void FetchReadme_ResponseIsNotSuccessful()
         {
             // Arrange
             string errorMessage = "Invalid test request";
-            MockRestClient(null , HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchReadme("https://google.nl/test");
@@ -423,7 +434,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             OauthTokens oauthTokens = new OauthTokens { AccessToken = "token" };
             MockRestClient(oauthTokens, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchOauthTokens(It.IsAny<string>());
@@ -447,7 +458,7 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchOauthTokens(It.IsAny<string>());
@@ -466,7 +477,7 @@ namespace Services.Tests.ExternalDataProviders
             [GitLabDataSourceContributorResourceResultDataSource(30)] List<GitLabDataSourceContributorResourceResult> resourceResults)
         {
             MockRestClient(resourceResults, HttpStatusCode.OK);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Action act = () => DataSourceAdaptee.FetchContributorsFromRepository(It.IsAny<int>());
@@ -490,13 +501,45 @@ namespace Services.Tests.ExternalDataProviders
             // Arrange
             string errorMessage = "Invalid test request";
             MockRestClient(null, HttpStatusCode.BadRequest, errorMessage);
-            DataSourceAdaptee = new GitlabDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+            DataSourceAdaptee = CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
 
             // Act
             Func<Task> act = () => DataSourceAdaptee.FetchContributorsFromRepository(It.IsAny<int>());
 
             // Assert
             act.Should().ThrowExactly<ExternalException>().WithMessage(errorMessage);
+        }
+
+        /// <summary>
+        ///     Tests if the GitlabDataSourceAdaptee can be created without an oauthurl
+        /// </summary>
+        /// <returns>A NullReferenceExceptions</returns>
+        [Test]
+        public void CreateGitlabAdapteeWithoutOauthUrl_ThrowsNullReferenceException()
+        {
+            // Arrange
+            IConfiguration configurationWithoutOauthUrl = new ConfigurationBuilder()
+                                .Build();
+            Func<GitlabDataSourceAdaptee> act = () => CreateDataSourceAdaptee(configurationWithoutOauthUrl, ClientFactoryMock.Object, Mapper);
+
+            // Assert
+            act.Should().ThrowExactly<NullReferenceException>();
+        }
+
+        /// <summary>
+        ///     Tests if the GitlabDataSourceAdaptee can be created with a valid oauthurl
+        /// </summary>
+        /// <returns>A valid GitlabDataSourceAdaptee</returns>
+        [Test]
+        public void CreateGitlabAdapteeWithOauthUrl_ThrowNoExceptions()
+        {
+            // Arrange
+            IConfiguration configurationWithoutOauthUrl = new ConfigurationBuilder()
+                                .Build();
+            Func<GitlabDataSourceAdaptee> act = () => CreateDataSourceAdaptee(ConfigurationMock, ClientFactoryMock.Object, Mapper);
+
+            // Assert
+            act.Should().NotThrow<NullReferenceException>();
         }
 
     }
