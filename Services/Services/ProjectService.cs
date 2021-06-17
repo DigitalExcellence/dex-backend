@@ -204,7 +204,7 @@ namespace Services.Services
             return Repository.GetUserProjects(userId);
         }
 
-        // TODO: Summary
+        // TODO: move to linkedcollaboratorservice
         public Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string acceptHash)
         {
             string requestAcceptUrl = $"localhost/project/collaborator/accept/{acceptHash}";

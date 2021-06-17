@@ -29,6 +29,7 @@ using Models;
 using Models.Defaults;
 using Serilog;
 using Services.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,6 +59,7 @@ namespace API.Controllers
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
         private readonly IEmailSender emailSender;
+        private readonly ILinkedCollaboratorService linkedCollaboratorService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
@@ -90,7 +92,8 @@ namespace API.Controllers
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
                                  ICallToActionOptionService callToActionOptionService,
-                                 IEmailSender emailSender)
+                                 IEmailSender emailSender,
+                                 ILinkedCollaboratorService linkedCollaboratorService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -102,6 +105,7 @@ namespace API.Controllers
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
             this.emailSender = emailSender;
+            this.linkedCollaboratorService = linkedCollaboratorService;
         }
 
         /// <summary>
@@ -884,11 +888,13 @@ namespace API.Controllers
             //TODO: Should this code be put into a service?
             if(currentUser.Id == user.Id)// [User flow] The user wants to link themselves to the collaborator.
             {
+                Guid acceptanceGUID = Guid.NewGuid();
+                string acceptanceHASH = acceptanceGUID.ToString();
+
                 CollaboratorLinkedUser linkedUserRequest = new CollaboratorLinkedUser()
                 {
-                    Id = 1,
                     User = user,
-                    AcceptanceHash = "HASH-123",//TODO: generate link/hash code
+                    AcceptanceHash = acceptanceHASH,
                     Status = LinkedUserStatus.PENDING
                 };
 
@@ -911,34 +917,7 @@ namespace API.Controllers
             else// [Project Creator/Owner flow] The project creator/owner wants to link a user to a collaborator.
             {
                 return StatusCode(501);//Not Implemented
-                //if(await projectService.CanUserEdit(currentUser, project) == false)
-                //{
-                //    ProblemDetails problem = new ProblemDetails
-                //    {
-                //        Title = "Failed linking collaborator.",
-                //        Detail = "Not allowed to send invite.",
-                //        Instance = "4af1780c-a8c7-11eb-bcbc-0242ac130002"
-                //    };
-                //    return Unauthorized(problem);
-                //}
-
-                //CollaboratorLinkRequest collaboratorLinkRequest =
-                //    await collaboratorLinkRequestService.RegisterCollaboratorLinkRequest(collaborator);
-
-                //ProjectCollaboratorLinkRequestEmail email =
-                //    await projectService.PrepareLinkRequestMail(collaborator,
-                //                                                user,
-                //                                                collaboratorLinkRequest.RequestHash);
-                //projectService.Save();
-                //collaboratorLinkRequestService.Save();
-
-                //emailSender.Send(user.Email, email.Content, email.Content);
-
-                //return Ok(email);
             }
-
-            return NotFound();
-
         }
 
         /// <summary>
@@ -954,28 +933,41 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AcceptCollaborator(string requestHash)
         {
-            return StatusCode(501);//Not Implemented
-            //CollaboratorLinkRequest collaboratorLinkRequest =
-            //    (await collaboratorLinkRequestService.GetAll())
-            //    .Where(clr => clr.RequestHash == requestHash).FirstOrDefault();
+            const string problemTitle = "Failed accepting linked collaborator.";
 
-            //if(collaboratorLinkRequest == null)
-            //{
-            //    ProblemDetails problem = new ProblemDetails
-            //    {
-            //        Title = "Failed accepting link collaborator.",
-            //        Detail = "Hash does not exist.",
-            //        Instance = "67443384-a8c0-11eb-bcbc-0242ac130002"
-            //    };
-            //    return BadRequest(problem);
-            //}
+            try
+            {
+                bool success = await linkedCollaboratorService.AcceptCollaboratorAsync(requestHash);
+            }
+            catch(ArgumentNullException ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = problemTitle,
+                    Detail = ex.Message,
+                    Instance = "31c18374-cf62-11eb-b8bc-0242ac130003"
+                });
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = problemTitle,
+                    Detail = ex.Message,
+                    Instance = "3743ec6a-cf62-11eb-b8bc-0242ac130003"
+                });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = problemTitle,
+                    Detail = ex.Message,
+                    Instance = "3743ec6a-cf62-11eb-b8bc-0242ac130003"
+                });
+            }
 
-            //collaboratorLinkRequest.Collaborator.LinkedUser.Status = LinkedUserStatus.ACCEPTED;
-
-            //collaboratorLinkRequestService.Update(collaboratorLinkRequest);
-            //collaboratorLinkRequestService.Save();
-
-            //return Ok();
+            return Ok();
         }
 
 

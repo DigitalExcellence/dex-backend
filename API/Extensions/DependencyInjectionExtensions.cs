@@ -101,6 +101,9 @@ namespace API.Extensions
             services.AddScoped<IWizardPageService, WizardPageService>();
             services.AddScoped<IWizardPageRepository, WizardPageRepository>();
 
+            services.AddScoped<ILinkedCollaboratorService, LinkedCollaboratorService>();
+            services.AddScoped<ILinkedCollaboratorRepository, LinkedCollaboratorRepository>();
+
             services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddExternalDataSources();
