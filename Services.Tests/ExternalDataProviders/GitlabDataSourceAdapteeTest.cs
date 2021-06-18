@@ -52,6 +52,11 @@ namespace Services.Tests.ExternalDataProviders
                 => new GitlabDataSourceAdaptee(configuration, restClientFactory, mapper);
         }
 
+        public GitlabDataSourceAdapteeTest(Func<IConfiguration, Sources.IRestClientFactory, IMapper, GitlabDataSourceAdaptee> createDataSourceAdapteeFunc)
+        {
+            this.CreateDataSourceAdaptee = createDataSourceAdapteeFunc;
+        }
+
         /// <summary>
         ///     Initialize runs before every test
         /// </summary>

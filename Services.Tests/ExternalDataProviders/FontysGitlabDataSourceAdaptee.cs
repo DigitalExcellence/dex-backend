@@ -11,10 +11,9 @@ namespace Services.Tests.ExternalDataProviders
 {
     public class FontysGitlabDataSourceAdapteeTest : GitlabDataSourceAdapteeTest
     {
-        public FontysGitlabDataSourceAdapteeTest() : base()
-        {
-            CreateDataSourceAdaptee = (configuration, restClientFactory, mapper) => new FontysGitlabDataSourceAdaptee(restClientFactory, mapper, configuration);
-        }
+        public FontysGitlabDataSourceAdapteeTest() : base(
+            (configuration, restClientFactory, mapper) => new FontysGitlabDataSourceAdaptee(restClientFactory, mapper, configuration))
+        { }
 
         [SetUp]
         public override void Initialize()

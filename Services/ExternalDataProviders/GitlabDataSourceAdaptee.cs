@@ -142,9 +142,9 @@ namespace Services.ExternalDataProviders
     public class GitlabDataSourceAdaptee : IGitlabDataSourceAdaptee
     {
 
-        private readonly string clientId;
+        private string clientId;
 
-        private readonly string clientSecret;
+        private string clientSecret;
 
         /// <summary>
         ///     Mapper object from auto mapper that will automatically maps one object to another.
@@ -170,10 +170,33 @@ namespace Services.ExternalDataProviders
         {
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
-            //Maybe it is better to pass the clientid etc in the constructor instead of getting it here?
+            SetOauthCredentials(configuration);
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="GitlabDataSourceAdaptee" /> class./>
+        /// </summary>
+        /// <param name="configuration">The configuration which is used to retrieve keys from the configuration file.</param>
+        /// <param name="restClientFactory">The rest client factory which is used to create rest clients.</param>
+        /// <param name="mapper">The mapper which is used to map Github resource results to projects.</param>
+        protected GitlabDataSourceAdaptee(
+            string title,
+            IConfiguration configuration,
+            IRestClientFactory restClientFactory,
+            IMapper mapper
+            )
+        {
+            this.restClientFactory = restClientFactory;
+            this.mapper = mapper;
+            this.Title = title;
+            SetOauthCredentials(configuration);
+        }
+
+        private void SetOauthCredentials(IConfiguration configuration)
+        {
             IConfigurationSection configurationSection = configuration.GetSection("App")
-                                                                      .GetSection("DataSources")
-                                                                      .GetSection(Title);
+                                                                     .GetSection("DataSources")
+                                                                     .GetSection(Title);
 
             clientId = configurationSection.GetSection("ClientId")
                                            .Value;
@@ -193,12 +216,12 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets or sets a value for the OauthUrl property from the Gitlab data source adaptee.
         /// </summary>
-        public string OauthUrl { get; }
+        public string OauthUrl { get; private set; }
 
         /// <summary>
         ///     Gets or sets a value for the RedirectUri property from the Gitlab data source adaptee.
         /// </summary>
-        public string RedirectUri { get; }
+        public string RedirectUri { get; private set; }
 
         /// <summary>
         ///     This method is responsible for retrieving Oauth tokens from the Gitlab API.
