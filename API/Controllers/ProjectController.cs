@@ -376,9 +376,9 @@ namespace API.Controllers
             }
 
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-            Models.File file = await fileService.FindAsync(projectResource.FileId);
+            Models.File file = await fileService.FindAsync(projectResource.ProjectIconId);
 
-            if(projectResource.FileId != 0 &&
+            if(projectResource.ProjectIconId != 0 &&
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -553,31 +553,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            // Upload the new file if there is one
-            Models.File file = null;
-            if(projectResource.FileId != 0)
+            if(projectResource.ProjectIconId != 0)
             {
-                if(project.ProjectIconId != 0 &&
-                   project.ProjectIconId != null)
-                {
-                    if(project.ProjectIconId != projectResource.FileId)
-                    {
-                        Models.File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
-
-                        // Remove the file from the filesystem
-                        fileUploader.DeleteFileFromDirectory(fileToDelete);
-
-                        // Remove file from DB
-                        await fileService.RemoveAsync(project.ProjectIconId.Value);
-
-
-                        fileService.Save();
-                    }
-                }
-
-                // Get the uploaded file
-                file = await fileService.FindAsync(projectResource.FileId);
-
+                Models.File file = await fileService.FindAsync(projectResource.ProjectIconId);
                 if(file != null)
                 {
                     project.ProjectIcon = file;
@@ -591,6 +569,9 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
+            } else
+            {
+                project.ProjectIcon = null;
             }
 
             foreach(int projectResourceImageId in projectResource.ImageIds)
