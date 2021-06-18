@@ -20,15 +20,17 @@ using Models;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using Repositories;
 using System.Threading.Tasks;
+using API.Resources;
 
 namespace Services.Services
 {
     public interface ILinkedCollaboratorService : IService<CollaboratorLinkedUser>
     {
         Task<bool> AcceptCollaboratorAsync(string requestHash);
+
+        ProjectCollaboratorLinkRequestEmail GenerateLinkRequestMail(Collaborator collaborator, string acceptHash);
     }
 
     /// <summary>
@@ -55,7 +57,7 @@ namespace Services.Services
         /// <exception cref="KeyNotFoundException">Not Found in DB</exception>
         /// <exception cref="Exception">State error</exception>
         /// <returns>
-        ///     boolean
+        ///     Task boolean
         /// </returns>
         public async Task<bool> AcceptCollaboratorAsync(string requestHash)
         {
@@ -76,6 +78,25 @@ namespace Services.Services
             base.Save();
 
             return true;
+        }
+
+        /// <summary>
+        ///     TODO
+        /// </summary>
+        /// <param name="requestHash">The hash to confirm the linking process.</param>
+        /// <exception cref="ArgumentNullException">Argument error</exception>
+        /// <exception cref="KeyNotFoundException">Not Found in DB</exception>
+        /// <exception cref="Exception">State error</exception>
+        /// <returns>
+        ///     Task boolean
+        /// </returns>
+        public ProjectCollaboratorLinkRequestEmail GenerateLinkRequestMail(Collaborator collaborator, string requestHash)
+        {
+            string requestAcceptUrl = $"localhost/project/collaborator/accept/{requestHash}";
+
+            string emailContent = $"aaaa <a href=\"{requestAcceptUrl}\">KLIK HIER</a>";
+
+            return new ProjectCollaboratorLinkRequestEmail { Content = emailContent, Title = "You've got mail!" };
         }
     }
 }

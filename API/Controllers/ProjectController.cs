@@ -82,7 +82,8 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
-        /// <param name="emailSender">Something something something</param>
+        /// <param name="emailSender">TODO</param>
+        /// <param name="linkedCollaboratorService">The linkedCollaborator service which is used to communicate with the logic layer. </param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -806,7 +807,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="projectId">The project related to the linking.</param>
         /// <param name="collaboratorId">The ID of the collaborator within the given project</param>
-        /// <param name="userEmail">The email of DeX user what the collaborator should represent.</param>
+        /// <param name="userEmail">The email of DeX user what the collaborator should represent. If none given, the current logged in user's email will be used.</param>
         /// <returns>
         ///     StatusCode 200 if success,
         ///     StatusCode 400 if the collaborator has already been linked to a(nother) DeX user,
@@ -819,9 +820,6 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> LinkCollaborator(int projectId, int collaboratorId, [FromQuery] string userEmail)
         {
-            //TODO: how to handle collaborator if it doesn't exist (rename method to LinkExistingCollaborator)?
-            // Solution: Make a new controller specifically for this task, and if the selected collaboratorId doesn't exist: bad request
-
             User currentUser = await HttpContext.GetContextUser(userService)
                                                 .ConfigureAwait(false);
 
@@ -865,9 +863,7 @@ namespace API.Controllers
             }
 
             User user;
-
-            //Assume you want to link yourself
-            if(userEmail == null)
+            if(userEmail == null)//Assume you want to link yourself if no email has been passed in.
             {
                 user = currentUser;
             }
@@ -887,16 +883,15 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            //TODO: Should this code be put into a service?
             if(currentUser.Id == user.Id)// [User flow] The user wants to link themselves to the collaborator.
             {
                 Guid acceptanceGUID = Guid.NewGuid();
-                string acceptanceHASH = acceptanceGUID.ToString();
+                string acceptanceString = acceptanceGUID.ToString();
 
                 CollaboratorLinkedUser linkedUserRequest = new CollaboratorLinkedUser()
                 {
                     User = user,
-                    AcceptanceHash = acceptanceHASH,
+                    AcceptanceHash = acceptanceString,
                     Status = LinkedUserStatus.PENDING
                 };
 
@@ -905,21 +900,27 @@ namespace API.Controllers
                 projectService.Update(project);
                 projectService.Save();
 
+                //TODO: Send an email to the project owner with a link to the AcceptCollaborator(string requestHash) method.
+
                 //Generate a mail for the project owner/creator concerning the changed collaborator.
-                ProjectCollaboratorLinkRequestEmail mail =
-                    await projectService.GenerateLinkRequestMail(collaborator, linkedUserRequest.AcceptanceHash);
+                ProjectCollaboratorLinkRequestEmail generatedMail = linkedCollaboratorService.GenerateLinkRequestMail(collaborator, linkedUserRequest.AcceptanceHash);
 
                 string emailAddress = project.User.Email;
 
-                //TODO: send mail
-                emailSender.Send(emailAddress, mail.Content, mail.Content);
+                emailSender.Send(emailAddress, generatedMail.Content, generatedMail.Content);
 
-                return Ok(mail);
+                return Ok("Link request has been submitted!");
             }
             else// [Project Creator/Owner flow] The project creator/owner wants to link a user to a collaborator.
             {
                 //TODO 
-                return StatusCode(501);//Not Implemented
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed linking collaborator.",
+                    Detail = "Currently, there is no support for linking other DeX users to collaborators.",
+                    Instance = "c417532e-2e38-407c-bd59-6d016563a86f"
+                };
+                return StatusCode(500, problem);
             }
         }
 

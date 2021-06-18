@@ -71,9 +71,6 @@ namespace Services.Services
         /// <returns>The total number of pages for the results</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId);
 
-        // TODO: Summary
-        Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string acceptHash);
-
         /// <summary>
         ///     Check if a user can edit a project
         /// </summary>
@@ -202,18 +199,6 @@ namespace Services.Services
         public Task<IEnumerable<Project>> GetUserProjects(int userId)
         {
             return Repository.GetUserProjects(userId);
-        }
-
-        // TODO: move to linkedcollaboratorservice
-        public Task<ProjectCollaboratorLinkRequestEmail> GenerateLinkRequestMail(Collaborator collaborator, string acceptHash)
-        {
-            string requestAcceptUrl = $"localhost/project/collaborator/accept/{acceptHash}";
-
-            string emailContent = $"aaaa <a href=\"{requestAcceptUrl}\">KLIK HIER</a>";
-
-            return Task.FromResult(
-                new ProjectCollaboratorLinkRequestEmail { Content = emailContent, Title = "You've got mail!" }
-            );
         }
 
         /// <summary>
