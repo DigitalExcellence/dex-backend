@@ -300,7 +300,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets or sets a value for the Title property from the Gitlab data source adaptee.
         /// </summary>
-        public virtual string Title { get; set; } = "Gitlab";
+        public string Title { get; set; } = "Gitlab";
 
         /// <summary>
         ///     Gets the value for the Base Url from the Gitlab data source adaptee.
