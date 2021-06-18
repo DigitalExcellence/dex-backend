@@ -376,9 +376,9 @@ namespace API.Controllers
             }
 
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-            Models.File file = await fileService.FindAsync(projectResource.ProjectIconId);
+            Models.File file = await fileService.FindAsync(projectResource.IconId);
 
-            if(projectResource.ProjectIconId != 0 &&
+            if(projectResource.IconId != 0 &&
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -553,9 +553,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.ProjectIconId != 0)
+            if(projectResource.IconId != 0)
             {
-                Models.File file = await fileService.FindAsync(projectResource.ProjectIconId);
+                Models.File file = await fileService.FindAsync(projectResource.IconId);
                 if(file != null)
                 {
                     project.ProjectIcon = file;

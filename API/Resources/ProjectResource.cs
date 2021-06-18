@@ -54,7 +54,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the project icon id
         /// </summary>
-        public int ProjectIconId { get; set; }
+        public int IconId { get; set; }
 
         /// <summary>
         ///     This gets or sets the call to action
