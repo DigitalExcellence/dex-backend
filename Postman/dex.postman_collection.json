@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "15e2e2d8-b5c6-42bd-91ca-22d6859d727f",
+		"_postman_id": "a8f78afe-54ed-470b-a617-6463ece8190f",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -14083,7 +14083,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"fileId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"iconId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -14252,7 +14252,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"fileId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"iconId\": {{ProjectIconRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -14426,7 +14426,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"fileId\": {{newRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectIcon-CreateProject-Registered\",\r\n      \"role\": \"postmantest_ProjectIcon-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"iconId\": {{newRegisteredFileId}},\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -14507,54 +14507,6 @@
 									"response": []
 								},
 								{
-									"name": "ProjectIcon-GetDeletedIcon-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 404\", function () {\r",
-													"    pm.response.to.have.status(404);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.notFound;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/file/{{ProjectIconRegisteredFileId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"file",
-												"{{ProjectIconRegisteredFileId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "ProjectIcon-GetNewIcon-Registered",
 									"event": [
 										{
@@ -14597,95 +14549,6 @@
 												"api",
 												"file",
 												"{{newRegisteredFileId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "ProjectIcon-DeleteProject-Registered",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "DELETE",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{ProjectIconProjectId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{ProjectIconProjectId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "ProjectIcon-GetNewIcon-Registered Copy",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var jsonData = pm.response.json();\r",
-													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
-													"\r",
-													"pm.test(\"Status code is 404\", function () {\r",
-													"    pm.response.to.have.status(404);\r",
-													"});\r",
-													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"    pm.response.to.be.notFound;\r",
-													"    pm.response.to.be.withBody;\r",
-													"    pm.response.to.be.json;\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{registeredUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/file/{{ProjectIconRegisteredFileId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"file",
-												"{{ProjectIconRegisteredFileId}}"
 											]
 										}
 									},
@@ -17359,6 +17222,7 @@
 												"exec": [
 													"var registeredUserId = pm.environment.get(\"dataOfficerUserId\");",
 													"var projectName = pm.environment.get(\"projectName\");",
+													"var fileId = pm.environment.get(\"generalFileId\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"pm.environment.set(\"projectId\", jsonData.id);",
@@ -22310,6 +22174,7 @@
 												"exec": [
 													"var PrUserId = pm.environment.get(\"PrUserId\");",
 													"var projectName = pm.environment.get(\"projectName\");",
+													"var fileId = pm.environment.get(\"generalFileId\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"pm.environment.set(\"projectId\", jsonData.id);",
@@ -27525,11 +27390,7 @@
 													"pm.test(\"Status code is 403\", function () {",
 													"    pm.response.to.have.status(403);",
 													"});",
-													"",
-													"pm.test(\"Image should be stored\", function () {",
-													"    pm.expect(jsonData.projectIcon.id).to.eql(fileId);",
-													"    pm.expect(jsonData.images.length).to.eql(1);",
-													"})"
+													""
 												],
 												"type": "text/javascript"
 											}
