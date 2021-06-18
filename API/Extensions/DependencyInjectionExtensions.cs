@@ -142,7 +142,7 @@ namespace API.Extensions
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
 
-            services.AddScoped<ITaskPublisher, TaskPublisher>();
+            services.AddSingleton<ITaskPublisher, TaskPublisher>();
         }
 
     }
