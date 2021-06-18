@@ -812,11 +812,12 @@ namespace API.Controllers
         ///     StatusCode 400 if the collaborator has already been linked to a(nother) DeX user,
         ///     StatusCode 404 if some requested resources aren't found.
         /// </returns>
-        [HttpPost("collaborator/link/{projectId}/{collaboratorId}/{userEmail}")]
+        [HttpPost("collaborator/link/{projectId}/{collaboratorId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> LinkCollaborator(int projectId, int collaboratorId, string userEmail)
+        public async Task<IActionResult> LinkCollaborator(int projectId, int collaboratorId, [FromQuery] string userEmail)
         {
             //TODO: how to handle collaborator if it doesn't exist (rename method to LinkExistingCollaborator)?
             // Solution: Make a new controller specifically for this task, and if the selected collaboratorId doesn't exist: bad request
@@ -851,6 +852,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
+            //TODO: allow for multiple people to set a request, now; the first person to make a request reserves their spot.
             if(collaborator.LinkedUser != null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -916,21 +918,27 @@ namespace API.Controllers
             }
             else// [Project Creator/Owner flow] The project creator/owner wants to link a user to a collaborator.
             {
+                //TODO 
                 return StatusCode(501);//Not Implemented
             }
         }
 
         /// <summary>
-        ///     Accept collaborator link request by given hash, previously sent in an email
+        ///     Accept collaborator link request by hash, provided through email.
         /// </summary>
         /// <param name="requestHash">Request identifier sent in an email</param>
         /// <returns>
         ///     StatusCode 200 if the linked collaborator has been accepted,
-        ///     StatusCode 400 if requestHash doesn't exist.
+        ///     StatusCode 400 if invalid input has been given.
+        ///     StatusCode 404 if requestHash doesn't exist.
+        ///     StatusCode 500 if a general error occurs.
         /// </returns>
         [HttpPost("collaborator/accept/{requestHash}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AcceptCollaborator(string requestHash)
         {
             const string problemTitle = "Failed accepting linked collaborator.";
@@ -969,7 +977,6 @@ namespace API.Controllers
 
             return Ok();
         }
-
 
     }
 
