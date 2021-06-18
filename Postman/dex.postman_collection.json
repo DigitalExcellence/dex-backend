@@ -11343,6 +11343,7 @@
 												"exec": [
 													"var registeredUserId = pm.environment.get(\"registeredUserId\");",
 													"var projectName = pm.environment.get(\"projectName\");",
+													"var fileId = pm.environment.get(\"generalFileId\");",
 													"",
 													"var jsonData = pm.response.json();",
 													"pm.environment.set(\"projectId\", jsonData.id);",
