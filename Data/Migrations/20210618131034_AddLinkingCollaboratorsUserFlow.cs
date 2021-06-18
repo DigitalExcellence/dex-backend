@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _4_Data.Migrations
 {
-    public partial class AddCollaboratorLinkedUser : Migration
+    public partial class AddLinkingCollaboratorsUserFlow : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,7 @@ namespace _4_Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(nullable: true),
+                    AcceptanceHash = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -31,6 +32,7 @@ namespace _4_Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
 
             migrationBuilder.CreateIndex(
                 name: "IX_Collaborators_LinkedUserId",
@@ -49,26 +51,6 @@ namespace _4_Data.Migrations
                 principalTable: "CollaboratorLinkedUser",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.CreateTable(
-                name: "CollaboratorLinkRequest",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RequestHash = table.Column<string>(nullable: true),
-                    CollaboratorId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CollaboratorLinkRequest", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CollaboratorLinkRequest_Collaborators_CollaboratorId",
-                        column: x => x.CollaboratorId,
-                        principalTable: "Collaborators",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -87,9 +69,6 @@ namespace _4_Data.Migrations
             migrationBuilder.DropColumn(
                 name: "LinkedUserId",
                 table: "Collaborators");
-
-            migrationBuilder.DropTable(
-               name: "CollaboratorLinkRequest");
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210603135414_UserAddedToCollaborator")]
-    partial class UserAddedToCollaborator
+    [Migration("20210618131034_AddLinkingCollaboratorsUserFlow")]
+    partial class AddLinkingCollaboratorsUserFlow
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

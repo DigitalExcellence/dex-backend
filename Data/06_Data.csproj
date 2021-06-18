@@ -13,14 +13,22 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Migrations\20210323140241_AddCollaboratorLinkedUser.cs" />
+      <Compile Remove="Migrations\20210323140241_AddCollaboratorLinkedUser.Designer.cs" />
       <Compile Remove="Migrations\20210603133115_InitialCreate.cs" />
       <Compile Remove="Migrations\20210603133115_InitialCreate.Designer.cs" />
+      <Compile Remove="Migrations\20210603135414_UserAddedToCollaborator.cs" />
+      <Compile Remove="Migrations\20210603135414_UserAddedToCollaborator.Designer.cs" />
       <Compile Remove="Migrations\20210604091218_AddCollaborator.cs" />
       <Compile Remove="Migrations\20210604091218_AddCollaborator.Designer.cs" />
       <Compile Remove="Migrations\20210610113603_SaveChanges.cs" />
       <Compile Remove="Migrations\20210610113603_SaveChanges.Designer.cs" />
       <Compile Remove="Migrations\20210618122858_RemoveTable.cs" />
       <Compile Remove="Migrations\20210618122858_RemoveTable.Designer.cs" />
+      <Compile Remove="Migrations\20210618131222_test.cs" />
+      <Compile Remove="Migrations\20210618131222_test.Designer.cs" />
+      <Compile Remove="Migrations\20210618131437_test.cs" />
+      <Compile Remove="Migrations\20210618131437_test.Designer.cs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Bogus" Version="29.0.1" />
