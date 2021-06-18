@@ -574,6 +574,7 @@ namespace API.Controllers
                 project.ProjectIcon = null;
             }
 
+            project.Images.Clear();
             foreach(int projectResourceImageId in projectResource.ImageIds)
             {
                 Models.File image = await fileService.FindAsync(projectResourceImageId);
