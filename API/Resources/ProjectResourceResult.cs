@@ -98,6 +98,11 @@ namespace API.Resources
         public List<ProjectLikesResourceResult> Likes { get; set; }
 
         /// <summary>
+        ///     This gets or sets the images in de project.
+        /// </summary>
+        public List<FileResourceResult> Images { get; set; }
+
+        /// <summary>
         ///     Sets or gets if project is visible to institute members only or not
         /// </summary>
         public bool InstitutePrivate { get; set; }

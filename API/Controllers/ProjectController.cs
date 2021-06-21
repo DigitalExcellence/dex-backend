@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
 using Serilog;
 using Services.Services;
 using System;
@@ -34,7 +35,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using File = Models.File;
 
 namespace API.Controllers
 {
@@ -228,16 +228,44 @@ namespace API.Controllers
             {
                 Results = results.ToArray(),
                 Count = results.Count(),
-                TotalCount =
-                                                             await projectService.ProjectsCount(projectFilterParams),
+                TotalCount = await projectService.ProjectsCount(projectFilterParams),
                 Page = projectFilterParams.Page,
-                TotalPages =
-                                                             await projectService.GetProjectsTotalPages(
-                                                                 projectFilterParams)
+                TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams)
             };
 
             return Ok(resultsResource);
         }
+
+        /// <summary>
+        ///     This method returns suggestions while searching for projects
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>This method returns a list of autocomplete project resources.</returns>
+        /// <response code="200">This endpoint returns a list with suggested projects.</response>
+        /// <response code="503">A 503 status code is returned when the Elastic Search service is unavailable.</response>
+        [HttpGet("search/autocomplete")]
+        [ProducesResponseType(typeof(List<AutocompleteProjectResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), 503)]
+        public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
+        {
+            try
+            {
+                List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
+                List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
+                return Ok(autocompleteProjectResourceResults);
+            }
+            catch(ElasticUnavailableException)
+            {
+                return StatusCode(503,
+                    new ProblemDetails
+                    {
+                        Title = "Autocomplete results could not be retrieved.",
+                        Detail = "ElasticSearch service unavailable.",
+                        Instance = "26E7C55F-21DE-4A7B-804C-BC0B74597222"
+                    });
+            }
+        }
+
 
         /// <summary>
         ///     This method is responsible for retrieving a single project.
@@ -373,7 +401,7 @@ namespace API.Controllers
             }
 
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-            File file = await fileService.FindAsync(projectResource.FileId);
+            Models.File file = await fileService.FindAsync(projectResource.FileId);
 
             if(projectResource.FileId != 0 &&
                file == null)
@@ -387,6 +415,23 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            foreach(int projectResourceImageId in projectResource.ImageIds)
+            {
+                Models.File image = await fileService.FindAsync(projectResourceImageId);
+                if(image == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Image was not found.",
+                                                 Detail = "The specified image was not found while creating project.",
+                                                 Instance = "B040FAAD-FD22-4C77-822E-C498DFA1A9CB"
+                    };
+                    return BadRequest(problem);
+                }
+
+                project.Images.Add(image);
+            }
+
             project.ProjectIcon = file;
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
@@ -397,10 +442,10 @@ namespace API.Controllers
 
                 foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
                 {
-                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
                     if(alreadyExcProjectCategory == null)
                     {
-                        Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
+                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
 
                         if(category == null)
                         {
@@ -563,7 +608,7 @@ namespace API.Controllers
             }
 
             // Upload the new file if there is one
-            File file = null;
+            Models.File file = null;
             if(projectResource.FileId != 0)
             {
                 if(project.ProjectIconId != 0 &&
@@ -571,7 +616,7 @@ namespace API.Controllers
                 {
                     if(project.ProjectIconId != projectResource.FileId)
                     {
-                        File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                        Models.File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
 
                         // Remove the file from the filesystem
                         fileUploader.DeleteFileFromDirectory(fileToDelete);
@@ -602,6 +647,23 @@ namespace API.Controllers
                 }
             }
 
+            foreach(int projectResourceImageId in projectResource.ImageIds)
+            {
+                Models.File image = await fileService.FindAsync(projectResourceImageId);
+                if(image == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Image was not found.",
+                                                 Detail = "The specified image was not found while creating project.",
+                                                 Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
+                    };
+                    return BadRequest(problem);
+                }
+
+                project.Images.Add(image);
+            }
+
             await projectCategoryService.ClearProjectCategories(project);
             if(projectResource.Categories != null)
             {
@@ -609,10 +671,10 @@ namespace API.Controllers
 
                 foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
                 {
-                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.CategoryId);
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
                     if(alreadyExcProjectCategory == null)
                     {
-                        Category category = await categoryService.FindAsync(projectCategoryResource.CategoryId);
+                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
 
                         if(category == null)
                         {
@@ -691,7 +753,7 @@ namespace API.Controllers
             if(project.ProjectIconId.HasValue)
             {
                 // We need to delete the old file.
-                File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                Models.File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
                 try
                 {
                     // Remove the file from the database

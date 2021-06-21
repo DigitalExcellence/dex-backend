@@ -31,6 +31,7 @@ namespace Models
         {
             Collaborators = new List<Collaborator>();
             LinkedInstitutions = new List<ProjectInstitution>();
+            Images = new List<File>();
         }
 
         public int Id { get; set; }
@@ -78,6 +79,8 @@ namespace Models
         public bool InstitutePrivate { get; set; }
 
         public List<ProjectCategory> Categories { get; set; }
+
+        public List<File> Images { get; set; }
 
 
         /// <summary>

@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210520120425_AddedImagesToProjects")]
+    partial class AddedImagesToProjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,16 +32,11 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("CallToAction");
                 });
@@ -270,6 +267,9 @@ namespace _4_Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CallToActionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -301,6 +301,8 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CallToActionId");
 
                     b.HasIndex("ProjectIconId");
 
@@ -550,13 +552,6 @@ namespace _4_Data.Migrations
                     b.ToTable("WizardPage");
                 });
 
-            modelBuilder.Entity("Models.CallToAction", b =>
-                {
-                    b.HasOne("Models.Project", null)
-                        .WithMany("CallToActions")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("Models.Collaborator", b =>
                 {
                     b.HasOne("Models.Project", null)
@@ -631,6 +626,10 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.Project", b =>
                 {
+                    b.HasOne("Models.CallToAction", "CallToAction")
+                        .WithMany()
+                        .HasForeignKey("CallToActionId");
+
                     b.HasOne("Models.File", "ProjectIcon")
                         .WithMany()
                         .HasForeignKey("ProjectIconId");
