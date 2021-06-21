@@ -343,17 +343,6 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }
 
-                if(projectResource.CallToActions.GroupBy(cta => cta.Value).Any(cta => cta.Count() > 1))
-                {
-                    ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Duplicate call to action value.",
-                        Detail = "It is not possible to create a project with multiple call to actions with the same values.",
-                        Instance = "965D9C50-064F-4AFD-8CEB-28E556E47906"
-                    };
-                    return BadRequest(problem);
-                }
-
                 if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
                 {
                     ProblemDetails problem = new ProblemDetails
@@ -523,20 +512,8 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                     {
                         Title = "Duplicate call to action option value.",
-                        Detail =
-                            "It is not possible to create a project with multiple of the same call to actions.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
                         Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
-                    };
-                    return BadRequest(problem);
-                }
-
-                if(projectResource.CallToActions.GroupBy(cta => cta.Value).Any(cta => cta.Count() > 1))
-                {
-                    ProblemDetails problem = new ProblemDetails
-                    {
-                        Title = "Duplicate call to action value.",
-                        Detail = "It is not possible to create a project with multiple call to actions with the same values.",
-                        Instance = "965D9C50-064F-4AFD-8CEB-28E556E47906"
                     };
                     return BadRequest(problem);
                 }
