@@ -583,7 +583,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                                              {
                                                  Title = "Image was not found.",
-                                                 Detail = "The specified image was not found while creating project.",
+                                                 Detail = "The specified image was not found while updating project.",
                                                  Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
                     };
                     return BadRequest(problem);
