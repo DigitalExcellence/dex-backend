@@ -8,11 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-
-- Added autocomplete suggestions for search results - [#361](https://github.com/DigitalExcellence/dex-backend/issues/361)
-- Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
-- Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
-- Filtering through categories - [#444](https://github.com/DigitalExcellence/dex-backend/issues/444)
+- Performance testing using K6 - [#379](https://github.com/DigitalExcellence/dex-backend/issues/379)
 
 ### Changed
 
@@ -22,11 +18,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed the get all projects query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
-- Removed getting the description for the projects get all query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
+- Able to remove images from project - [#454](https://github.com/DigitalExcellence/dex-backend/issues/454)
 
 ### Security
 
+
+## Release v.1.4.0-beta - 07-06-2021
+
+### Added
+
+- Added autocomplete suggestions for search results - [#361](https://github.com/DigitalExcellence/dex-backend/issues/361)
+- Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
+- Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
+- Filtering through categories - [#444](https://github.com/DigitalExcellence/dex-backend/issues/444)
+
+
+### Fixed
+
+- Improved performance of the get all projects query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
+- Removed getting the description for the projects get all query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
 
 ## Release v.1.2.0-beta - 15-04-2021
 

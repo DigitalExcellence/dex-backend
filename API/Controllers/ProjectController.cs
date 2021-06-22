@@ -401,9 +401,9 @@ namespace API.Controllers
             }
 
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-            Models.File file = await fileService.FindAsync(projectResource.FileId);
+            Models.File file = await fileService.FindAsync(projectResource.IconId);
 
-            if(projectResource.FileId != 0 &&
+            if(projectResource.IconId != 0 &&
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -607,31 +607,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            // Upload the new file if there is one
-            Models.File file = null;
-            if(projectResource.FileId != 0)
+            if(projectResource.IconId != 0)
             {
-                if(project.ProjectIconId != 0 &&
-                   project.ProjectIconId != null)
-                {
-                    if(project.ProjectIconId != projectResource.FileId)
-                    {
-                        Models.File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
-
-                        // Remove the file from the filesystem
-                        fileUploader.DeleteFileFromDirectory(fileToDelete);
-
-                        // Remove file from DB
-                        await fileService.RemoveAsync(project.ProjectIconId.Value);
-
-
-                        fileService.Save();
-                    }
-                }
-
-                // Get the uploaded file
-                file = await fileService.FindAsync(projectResource.FileId);
-
+                Models.File file = await fileService.FindAsync(projectResource.IconId);
                 if(file != null)
                 {
                     project.ProjectIcon = file;
@@ -645,8 +623,12 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
+            } else
+            {
+                project.ProjectIcon = null;
             }
 
+            project.Images.Clear();
             foreach(int projectResourceImageId in projectResource.ImageIds)
             {
                 Models.File image = await fileService.FindAsync(projectResourceImageId);
@@ -655,7 +637,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                                              {
                                                  Title = "Image was not found.",
-                                                 Detail = "The specified image was not found while creating project.",
+                                                 Detail = "The specified image was not found while updating project.",
                                                  Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
                     };
                     return BadRequest(problem);
