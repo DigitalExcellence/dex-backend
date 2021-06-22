@@ -56,11 +56,13 @@ namespace API.Controllers
         private readonly IProjectService projectService;
         private readonly IProjectCategoryService projectCategoryService;
         private readonly ICategoryService categoryService;
+        private readonly IProjectCommentService projectCommentService;
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
         private readonly IProjectInstitutionService projectInstitutionService;
         private readonly IInstitutionService institutionService;
+        private readonly IUserProjectCommentLikeService userProjectCommentLikeService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -84,6 +86,8 @@ namespace API.Controllers
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
         /// <param name="categoryService">The category service is used to work with categories</param>
         /// <param name="projectCategoryService">The project category service is used to connect projects and categories</param>
+        /// <param name="projectCommentService"></param>
+        /// <param name="userProjectCommentLikeService"></param>
         /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
         public ProjectController(IProjectService projectService,
@@ -98,7 +102,9 @@ namespace API.Controllers
                                  IInstitutionService institutionService,
                                  ICallToActionOptionService callToActionOptionService,
                                  ICategoryService categoryService,
-                                 IProjectCategoryService projectCategoryService)
+                                 IProjectCategoryService projectCategoryService,
+                                 IProjectCommentService projectCommentService,
+                                 IUserProjectCommentLikeService userProjectCommentLikeService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -113,6 +119,8 @@ namespace API.Controllers
             this.projectCategoryService = projectCategoryService;
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
+            this.projectCommentService = projectCommentService;
+            this.userProjectCommentLikeService = userProjectCommentLikeService;
         }
 
 
@@ -1380,6 +1388,208 @@ namespace API.Controllers
             projectCategoryService.Save();
 
             return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+        }
+
+        /// <summary>
+        /// Gets the comments belonging to the provided project-id.
+        /// </summary>
+        /// <param name="projectId">The project-id for which to retrieve the comments.</param>
+        /// <returns></returns>
+        [HttpGet("comments/{projectId}")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(List<ProjectCommentResourceResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetCommentsAsync(int projectId)
+        {
+            if(projectId < 0)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting comments",
+                                             Detail =
+                                                 "The projectId is smaller than 0 and therefore it could never retrieve comments.",
+                                             Instance = ""
+                                         };
+                return BadRequest(problem);
+            }
+
+            List<ProjectComment> comments = await projectCommentService.GetProjectComments(projectId);
+
+            if(comments == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                                         {
+                                             Title = "Failed getting comments",
+                                             Detail = "The comments could not be found in the database.",
+                                             Instance = ""
+
+                                         };
+                return NotFound(problem);
+            }
+
+            return Ok(mapper.Map<List<ProjectComment>, List<ProjectCommentResourceResult>>(comments));
+        }
+
+        /// <summary>
+        /// Post a new comment to the provided project-id
+        /// </summary>
+        /// <param name="projectId">The project-id to add the new comment to</param>
+        /// <param name="projectCommentResource"></param>
+        /// <param name="comment">The added comment and its metadata</param>
+        /// <returns></returns>
+        [HttpPost("comment/{projectId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectCommentResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AddCommentToProject(int projectId, [FromBody] ProjectCommentResource projectCommentResource)
+        {
+            Project project = await projectService.FindAsync(projectId).ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to add comment to the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A293"
+                };
+                return NotFound(problem);
+            }
+            if(projectCommentResource.Content == null || projectCommentResource.UserId == null || projectCommentResource.Content == "")
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to add comment to the project.",
+                    Detail = "Not all necessary Fields are filled in.",
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A294"
+                };
+                return BadRequest(problem); 
+            }
+            
+
+            ProjectComment projectComment = mapper.Map<ProjectCommentResource, ProjectComment>(projectCommentResource);
+            projectComment.User = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            projectComment.ProjectId = projectId;
+
+            try
+            {
+                projectCommentService.Add(projectComment);
+                projectCommentService.Save();
+                return Created(nameof(AddCommentToProject), mapper.Map<ProjectComment,ProjectCommentResourceResult>(projectComment));
+            }catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e, "Database exception");
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to add comment to the project.",
+                    Detail = "There was a problem while saving thecomment.",
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A292"
+                };
+                return BadRequest(problem);
+            }
+        }
+
+        /// <summary>
+        /// this method is responsible for updating the comment with the specified identifier.
+        /// </summary>
+        /// <param name="projectCommentId"></param>
+        /// <param name="projectCommentResource"></param>
+        /// <returns></returns>
+        [HttpPut("comment/{projectCommentId}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateComment(int projectCommentId, [FromBody] ProjectCommentResource projectCommentResource)
+        {
+            ProjectComment projectComment = await projectCommentService.FindAsync(projectCommentId);
+            if(projectComment == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update Comment.",
+                    Detail = "The specified Comment could not be found in the database.",
+                    Instance = "b27d3600-33b0-42a0-99aa-4b2f28ea07bb"
+                };
+                return NotFound(problem);
+
+            }
+            User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
+            bool isAllowed = userService.UserHasScope(user.IdentityId, nameof(Defaults.Scopes.AdminProjectWrite));
+
+            if(!(projectComment.User.Id == user.Id || isAllowed))
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to edit the comment.",
+                    Detail = "The user is not allowed to edit the comment.",
+                    Instance = "906cd8ad-b75c-4efb-9838-849f99e8026b"
+                };
+                return Unauthorized(problem);
+            }
+            mapper.Map(projectCommentResource, projectComment);
+            projectCommentService.Update(projectComment);
+            projectService.Save();
+            return Ok(mapper.Map<ProjectComment, ProjectCommentResourceResult>(projectComment));
+
+        }
+        [HttpPost("comment/like/{projectCommentId}")]
+        [Authorize]
+        public async Task<IActionResult> LikeProjectComment(int projectCommentId)
+        {
+            User currentUser = await HttpContext.GetContextUser(userService)
+                                                     .ConfigureAwait(false);
+
+            if(currentUser == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the user account.",
+                    Detail =
+                                                        "The database does not contain a user with the provided user id.",
+                    Instance = "F8DB2F94-48DA-4FEB-9BDA-FF24A59333C1"
+                };
+                return NotFound(problemDetails);
+            }
+            if(userProjectCommentLikeService.CheckIfUserAlreadyLiked(currentUser.Id, projectCommentId))
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "User already liked this comment",
+                    Detail = "You already liked this comment.",
+                    Instance = "5B0104E2-C864-4ADB-9321-32CD352DC124"
+                };
+                return Conflict(problemDetails);
+            }
+            ProjectComment projectCommentToLike = await projectCommentService.FindAsync(projectCommentId);
+            if(projectCommentToLike == null)
+            {
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Failed to getting the comment.",
+                    Detail = "The database does not contain a comment with the provided comment id.",
+                    Instance = "711B2DDE-D028-479E-8CB7-33F587478F8F"
+                };
+                return NotFound(problemDetails);
+            }
+            try
+            {
+                ProjectCommentLike projectCommentLike = new ProjectCommentLike(projectCommentToLike, currentUser);
+                await userProjectCommentLikeService.AddAsync(projectCommentLike).ConfigureAwait(false);
+                userProjectCommentLikeService.Save();
+          
+                return Ok(mapper.Map< ProjectCommentLike, UserProjectCommentLikeResourceResult>(projectCommentLike));
+            }catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e, "database exception");
+
+                ProblemDetails problemDetails = new ProblemDetails
+                {
+                    Title = "Could not create the liked comment details.",
+                    Detail = "The database failed to save the liked comment.",
+                    Instance = "F941879E-6C25-4A35-A962-8E86382E1849"
+                };
+                return BadRequest(problemDetails);
+            }
+            
         }
     }
 

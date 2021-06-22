@@ -180,6 +180,22 @@ namespace Data
         /// </summary>
         public DbSet<DataSourceWizardPage> DataSourceWizardPage { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the comments made by users
+        /// </summary>
+        /// <value>
+        ///     A comment by a user
+        /// </value>
+        public DbSet<ProjectComment> Comment { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the comments liked by users.
+        /// </summary>
+        /// <value>
+        ///     The like by the user.
+        /// </value>
+        public DbSet<ProjectCommentLike> CommentLike { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

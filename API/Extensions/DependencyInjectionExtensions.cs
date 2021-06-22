@@ -68,6 +68,9 @@ namespace API.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+            services.AddScoped<IProjectCommentService, ProjectCommentService>();
+            services.AddScoped<IProjectCommentRepository, ProjectCommentRepository>();
+
             services.AddScoped<IProjectCategoryService, ProjectCategoryService>();
             services.AddScoped<IProjectCategoryRepository, ProjectCategoryRepository>();
 
@@ -111,6 +114,9 @@ namespace API.Extensions
 
             services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
             services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
+
+            services.AddScoped<IUserProjectCommentLikeService, UserProjectCommentLikeService>();
+            services.AddScoped<IUserProjectCommentLikeRepository, UserProjectCommentLikeRepository>();
 
             services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
             services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
