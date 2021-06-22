@@ -52,9 +52,9 @@ namespace API.Resources
         public ICollection<CollaboratorResource> Collaborators { get; set; }
 
         /// <summary>
-        ///     This gets or sets the file id
+        ///     This gets or sets the project icon id
         /// </summary>
-        public int FileId { get; set; }
+        public int IconId { get; set; }
 
         /// <summary>
         ///     This gets or sets the call to action
