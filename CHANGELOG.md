@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Added fontys gitlab to the wizard, and the functionality to get private projects - [#377](https://github.com/DigitalExcellence/dex-backend/issues/377)
+- Performance testing using K6 - [#379](https://github.com/DigitalExcellence/dex-backend/issues/379)
 
 ### Changed
 
@@ -17,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+
+- Able to remove images from project - [#454](https://github.com/DigitalExcellence/dex-backend/issues/454)
 
 ### Security
 
@@ -29,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
 - Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
 - Filtering through categories - [#444](https://github.com/DigitalExcellence/dex-backend/issues/444)
+
 
 ### Fixed
 
