@@ -38,7 +38,7 @@ namespace Models
 
         /// <summary>
         ///     By which property the results should be sorted
-        ///     Possible values are: name, created, updated
+        ///     Possible values are: name, created, updated, likes
         /// </summary>
         public string SortBy { get; set; }
 
