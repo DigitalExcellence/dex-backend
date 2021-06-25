@@ -390,6 +390,17 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            if(projectResource.ImageIds.Count() > 10)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Too many images.",
+                    Detail = "A project can not have more than 10 images.",
+                    Instance = "9E3E4F91-A6ED-415F-8726-6D33BA0F200F"
+                };
+                return BadRequest(problem);
+            }
+
             foreach(int projectResourceImageId in projectResource.ImageIds)
             {
                 Models.File image = await fileService.FindAsync(projectResourceImageId);
@@ -572,6 +583,17 @@ namespace API.Controllers
             } else
             {
                 project.ProjectIcon = null;
+            }
+
+            if(projectResource.ImageIds.Count() > 10)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Too many images.",
+                    Detail = "A project can not have more than 10 images.",
+                    Instance = "5D179737-046E-482B-B6D8-DDDCEF518107"
+                };
+                return BadRequest(problem);
             }
 
             project.Images.Clear();
