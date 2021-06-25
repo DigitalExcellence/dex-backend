@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Performance testing using K6 - [#379](https://github.com/DigitalExcellence/dex-backend/issues/379)
 
 ### Changed
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Able to remove images from project - [#454](https://github.com/DigitalExcellence/dex-backend/issues/454)
+- Lowercase file extensions on upload - [#472](https://github.com/DigitalExcellence/dex-backend/issues/472)
 
 ### Security
 
