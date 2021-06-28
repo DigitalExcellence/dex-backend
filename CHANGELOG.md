@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Able to remove images from project - [#454](https://github.com/DigitalExcellence/dex-backend/issues/454)
+- Include categories in retrieving a user's project - [#468](https://github.com/DigitalExcellence/dex-backend/issues/468)
+- Lowercase file extensions on upload - [#472](https://github.com/DigitalExcellence/dex-backend/issues/472)
+- Fixed an issue where Swagger could not authorize with IdentityServer - [#429](https://github.com/DigitalExcellence/dex-backend/issues/429)
 
 ### Security
 
