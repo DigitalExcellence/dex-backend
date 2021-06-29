@@ -11,17 +11,6 @@
         <EmbeddedResource Remove="Configurations\IdentityMigrations\**" />
         <None Remove="Configurations\IdentityMigrations\**" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Migrations\20210528120743_AddMultipleCallToActions.cs" />
-      <Compile Remove="Migrations\20210528120743_AddMultipleCallToActions.Designer.cs" />
-      <Compile Remove="Migrations\20210629190107_CallToActionLinkedToAProject.cs" />
-      <Compile Remove="Migrations\20210629190107_CallToActionLinkedToAProject.Designer.cs" />
-      <Compile Remove="Migrations\20210629190311_RestructureMigrations.cs" />
-      <Compile Remove="Migrations\20210629190311_RestructureMigrations.Designer.cs" />
-      <Compile Remove="Migrations\20210629190751_AddCallToActionsToProject.cs" />
-      <Compile Remove="Migrations\20210629190751_AddCallToActionsToProject.Designer.cs" />
-    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Bogus" Version="29.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />

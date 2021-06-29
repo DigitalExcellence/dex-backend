@@ -49,10 +49,8 @@ namespace Models
         ///     Gets or sets a value for the ProjectId property.
         ///     For example, this would be the projectId this call to action is linked to.
         /// </summary>
-        //[Required]
-        //public int ProjectId { get; set; }
-
-        public Project Project { get; set; }
+        [Required]
+        public int ProjectId { get; set; }
 
     }
 

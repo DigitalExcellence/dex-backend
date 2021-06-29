@@ -552,8 +552,8 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.CallToAction", b =>
                 {
-                    b.HasOne("Models.Project", "Project")
-                        .WithMany()
+                    b.HasOne("Models.Project", null)
+                        .WithMany("CallToActions")
                         .HasForeignKey("ProjectId");
                 });
 

@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _4_Data.Migrations
 {
-    public partial class RestructureMigrations : Migration
+    public partial class AddMultipleCallToActions : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,15 +17,45 @@ namespace _4_Data.Migrations
             migrationBuilder.DropColumn(
                 name: "CallToActionId",
                 table: "Project");
+
+            migrationBuilder.AddColumn<int>(
+                name: "ProjectId",
+                table: "CallToAction",
+                nullable: false);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CallToAction_ProjectId",
+                table: "CallToAction",
+                column: "ProjectId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_CallToAction_Project_ProjectId",
+                table: "CallToAction",
+                column: "ProjectId",
+                principalTable: "Project",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_CallToAction_Project_ProjectId",
+                table: "CallToAction");
+
+            migrationBuilder.DropIndex(
+                name: "IX_CallToAction_ProjectId",
+                table: "CallToAction");
+
+            migrationBuilder.DropColumn(
+                name: "ProjectId",
+                table: "CallToAction");
+
             migrationBuilder.AddColumn<int>(
                 name: "CallToActionId",
                 table: "Project",
                 type: "int",
-                nullable: true);
+                nullable: false);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_CallToActionId",
