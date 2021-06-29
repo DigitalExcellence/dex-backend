@@ -617,7 +617,7 @@ namespace Repositories
         private static bool ProjectContainsQuery(Project project, string query)
         {
             Regex regex = new Regex(@$"{query}", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            Regex wholewordRegex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            Regex wholeWordRegex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
             return new List<string>
                    {
                        project.Description,
@@ -626,7 +626,7 @@ namespace Repositories
                        project.User.Name,
                        project.Id.ToString()
                    }
-                .Any(text => wholewordRegex.IsMatch(text))
+                .Any(text => wholeWordRegex.IsMatch(text))
                 || regex.IsMatch(project.Name);
         }
 
