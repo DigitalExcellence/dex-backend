@@ -359,21 +359,46 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.CallToAction != null)
+            if(projectResource.CallToActions != null)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = "Call to action value was not found.",
-                        Detail = "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        Title = "Duplicate call to action option value.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
                     };
                     return BadRequest(problem);
                 }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail = $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
+                    return BadRequest(problem);
+                }
+                foreach(CallToActionResource callToAction in projectResource.CallToActions)
+                {
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+                    if(!callToActionOptions.Any())
+                    {
+                        ProblemDetails problem = new ProblemDetails
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail = $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
+                        return BadRequest(problem);
+                    }
+                }
+                
             }
 
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
@@ -537,21 +562,50 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            if(projectResource.CallToAction != null)
+            if(projectResource.CallToActions != null)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = "Call to action value was not found.",
-                        Detail = "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        Title = "Duplicate call to action option value.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
                     };
                     return BadRequest(problem);
                 }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail =
+                            $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
+                    return BadRequest(problem);
+                }
+
+                foreach(CallToActionResource callToAction in projectResource.CallToActions)
+                {
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+
+                    if(!callToActionOptions.Any())
+                    {
+                        ProblemDetails problem = new ProblemDetails
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail =
+                                $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
+                        return BadRequest(problem);
+                    }
+                }
+                
             }
 
             if (projectResource.InstitutePrivate != project.InstitutePrivate)
