@@ -534,7 +534,7 @@ namespace Repositories.Tests
 
             // Combined search
             retrieved = (List<Project>) await Repository.SearchAsync("ex", 10, 40);
-            Assert.AreEqual(100, retrieved.Count, "Combined search failed");
+            Assert.AreEqual(40, retrieved.Count, "Combined search failed");
         }
 
         /// <summary>
