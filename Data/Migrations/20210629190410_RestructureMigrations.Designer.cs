@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210528120743_AddMultipleCallToActions")]
-    partial class AddMultipleCallToActions
+    [Migration("20210629190410_RestructureMigrations")]
+    partial class RestructureMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,16 +32,11 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("CallToAction");
                 });
@@ -194,6 +189,9 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UploadDateTime")
                         .HasColumnType("datetime2");
 
@@ -201,6 +199,8 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UploaderId");
 
@@ -547,13 +547,6 @@ namespace _4_Data.Migrations
                     b.ToTable("WizardPage");
                 });
 
-            modelBuilder.Entity("Models.CallToAction", b =>
-                {
-                    b.HasOne("Models.Project", null)
-                        .WithMany("CallToActions")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("Models.Collaborator", b =>
                 {
                     b.HasOne("Models.Project", null)
@@ -602,6 +595,10 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.File", b =>
                 {
+                    b.HasOne("Models.Project", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ProjectId");
+
                     b.HasOne("Models.User", "Uploader")
                         .WithMany()
                         .HasForeignKey("UploaderId")
