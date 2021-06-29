@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Include categories in retrieving a user's project - [#468](https://github.com/DigitalExcellence/dex-backend/issues/468)
 - Lowercase file extensions on upload - [#472](https://github.com/DigitalExcellence/dex-backend/issues/472)
 - Fixed an issue where Swagger could not authorize with IdentityServer - [#429](https://github.com/DigitalExcellence/dex-backend/issues/429)
+- Improved the functionality of the search endpoint - [#477](https://github.com/DigitalExcellence/dex-backend/issues/477)
 
 ### Security
 
