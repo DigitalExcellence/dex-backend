@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lowercase file extensions on upload - [#472](https://github.com/DigitalExcellence/dex-backend/issues/472)
 - Fixed an issue where Swagger could not authorize with IdentityServer - [#429](https://github.com/DigitalExcellence/dex-backend/issues/429)
 - Improved the functionality of the search endpoint - [#477](https://github.com/DigitalExcellence/dex-backend/issues/477)
+- Projects now has a maximum of 10 images - [#475](https://github.com/DigitalExcellence/dex-backend/issues/475)
 
 ### Security
 
