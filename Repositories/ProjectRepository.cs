@@ -468,6 +468,8 @@ namespace Repositories
                    .Include(p => p.Collaborators)
                    .Include(p => p.ProjectIcon)
                    .Include(p => p.Images)
+                   .Include(p => p.Categories)
+                   .ThenInclude(c => c.Category)
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
 

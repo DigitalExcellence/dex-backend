@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- Added fontys gitlab to the wizard, and the functionality to get private projects - [#377](https://github.com/DigitalExcellence/dex-backend/issues/377)
 - Performance testing using K6 - [#379](https://github.com/DigitalExcellence/dex-backend/issues/379)
+- Project sorting by likes - [#470](https://github.com/DigitalExcellence/dex-backend/issues/470)
 
 ### Changed
 
@@ -19,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Able to remove images from project - [#454](https://github.com/DigitalExcellence/dex-backend/issues/454)
+- Include categories in retrieving a user's project - [#468](https://github.com/DigitalExcellence/dex-backend/issues/468)
+- Lowercase file extensions on upload - [#472](https://github.com/DigitalExcellence/dex-backend/issues/472)
+- Fixed an issue where Swagger could not authorize with IdentityServer - [#429](https://github.com/DigitalExcellence/dex-backend/issues/429)
 
 ### Security
 
