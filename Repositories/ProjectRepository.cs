@@ -616,17 +616,18 @@ namespace Repositories
         /// </returns>
         private static bool ProjectContainsQuery(Project project, string query)
         {
-            Regex regex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@$"{query}", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            Regex wholewordRegex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
             return new List<string>
                    {
-                       project.Name,
                        project.Description,
                        project.ShortDescription,
                        project.Uri,
                        project.User.Name,
                        project.Id.ToString()
                    }
-                .Any(text => regex.IsMatch(text));
+                .Any(text => wholewordRegex.IsMatch(text))
+                || regex.IsMatch(project.Name);
         }
 
         /// <summary>
