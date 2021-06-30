@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210528120743_AddMultipleCallToActions")]
-    partial class AddMultipleCallToActions
+    [Migration("20210629193238_AddedCallToActionsToProject")]
+    partial class AddedCallToActionsToProject
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -194,6 +194,9 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UploadDateTime")
                         .HasColumnType("datetime2");
 
@@ -201,6 +204,8 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UploaderId");
 
@@ -602,6 +607,10 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.File", b =>
                 {
+                    b.HasOne("Models.Project", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ProjectId");
+
                     b.HasOne("Models.User", "Uploader")
                         .WithMany()
                         .HasForeignKey("UploaderId")
