@@ -174,7 +174,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                                     .Where(s => s.Id == id)
                                     .Include(p => p.ProjectIcon)
-                                    .Include(p => p.CallToActions)
+                                    .Include(p => p.CallToAction)
                                     .Include(p => p.Images)
                                     .SingleOrDefaultAsync();
 
@@ -215,14 +215,14 @@ namespace Repositories
                 )
         {
             IQueryable<Project> queryableProjects = GetDbSet<Project>()
-                .Include(u => u.User)
-                .Include(p => p.ProjectIcon)
-                .Include(p => p.CallToActions)
-                .Include(p => p.Collaborators)
-                .Include(p => p.Likes)
-                .Include(p => p.LinkedInstitutions)
-                .Include(p => p.Categories)
-                .ThenInclude(c => c.Category);
+                                                    .Include(u => u.User)
+                                                    .Include(p => p.ProjectIcon)
+                                                    .Include(p => p.CallToAction)
+                                                    .Include(p => p.Collaborators)
+                                                    .Include(p => p.Likes)
+                                                    .Include(p => p.LinkedInstitutions)
+                                                    .Include(p => p.Categories)
+                                                    .ThenInclude(c => c.Category);
 
             queryableProjects = ApplyFilters(queryableProjects, skip, take, orderBy, orderByAsc, highlighted, categories);
 
@@ -235,7 +235,7 @@ namespace Repositories
                 Id = p.Id,
                 ProjectIconId = p.ProjectIconId,
                 ProjectIcon = p.ProjectIcon,
-                CallToActions= p.CallToActions,
+                CallToAction = p.CallToAction,
                 Collaborators = p.Collaborators,
                 Likes = p.Likes,
                 LinkedInstitutions = p.LinkedInstitutions,
@@ -323,7 +323,7 @@ namespace Repositories
             Project project = await GetDbSet<Project>()
                                     .Include(p => p.User)
                                     .Include(p => p.ProjectIcon)
-                                    .Include(p => p.CallToActions)
+                                    .Include(p => p.CallToAction)
                                     .Include(p => p.Images)
                                     .Where(p => p.Id == id)
                                     .FirstOrDefaultAsync();
@@ -468,8 +468,6 @@ namespace Repositories
                    .Include(p => p.Collaborators)
                    .Include(p => p.ProjectIcon)
                    .Include(p => p.Images)
-                   .Include(p => p.Categories)
-                   .ThenInclude(c => c.Category)
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
 
@@ -616,18 +614,17 @@ namespace Repositories
         /// </returns>
         private static bool ProjectContainsQuery(Project project, string query)
         {
-            Regex regex = new Regex(@$"{query}", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            Regex wholeWordRegex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
             return new List<string>
                    {
+                       project.Name,
                        project.Description,
                        project.ShortDescription,
                        project.Uri,
                        project.User.Name,
                        project.Id.ToString()
                    }
-                .Any(text => wholeWordRegex.IsMatch(text))
-                || regex.IsMatch(project.Name);
+                .Any(text => regex.IsMatch(text));
         }
 
         /// <summary>
@@ -648,7 +645,7 @@ namespace Repositories
                                                                .Equals(query) ||
                                                               p.User.Name.Contains(query));
             projectsToReturn.Include(p => p.ProjectIcon).Load();
-            projectsToReturn.Include(p => p.CallToActions).Load();
+            projectsToReturn.Include(p => p.CallToAction).Load();
             projectsToReturn.Include(p => p.Likes).Load();
             projectsToReturn.Include(p => p.Categories).Load();
 

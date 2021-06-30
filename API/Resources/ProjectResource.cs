@@ -52,19 +52,14 @@ namespace API.Resources
         public ICollection<CollaboratorResource> Collaborators { get; set; }
 
         /// <summary>
-        ///     This gets or sets the project icon id
+        ///     This gets or sets the file id
         /// </summary>
-        public int IconId { get; set; }
+        public int FileId { get; set; }
 
         /// <summary>
         ///     This gets or sets the call to action
         /// </summary>
-        public List<CallToActionResource> CallToActions { get; set; }
-
-        /// <summary>
-        ///     The maximum allowed call to actions per project.
-        /// </summary>
-        public int MaximumCallToActions { get { return 4; } }
+        public CallToActionResource CallToAction { get; set; }
 
         /// <summary>
         ///     This gets or sets the institute private property

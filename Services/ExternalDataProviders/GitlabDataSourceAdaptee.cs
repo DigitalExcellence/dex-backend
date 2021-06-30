@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
-    public interface IGitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IPrivateDataSourceAdaptee
+    public interface IGitlabDataSourceAdaptee : IPublicDataSourceAdaptee, IAuthorizedDataSourceAdaptee
     {
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null);
+        Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
 
         /// <summary>
         ///     This method is responsible for retrieving the content from a public Gitlab project by id.
@@ -111,7 +111,6 @@ namespace Services.ExternalDataProviders
         ///     This method is responsible for retrieving the readme from a repository.
         /// </summary>
         /// <param name="readmeUri">This parameter represents the the uri of the readme file that should get retrieved.</param>
-        /// <param name="accessToken">Optional token, which if provided will be added to the authorization headers.</param>
         /// <returns>This method returns the content of the readme.</returns>
         /// <exception cref="ExternalException">
         ///     This method could throw an external exception whenever the status code is not
@@ -132,7 +131,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="id">This parameter represents the id of the repository.</param>
         /// <returns>This method returns the gitlab data source contributors resource result.</returns>
-        public Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id, string token = null);
+        public Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id);
 
     }
 
@@ -142,9 +141,9 @@ namespace Services.ExternalDataProviders
     public class GitlabDataSourceAdaptee : IGitlabDataSourceAdaptee
     {
 
-        private string clientId;
+        private readonly string clientId;
 
-        private string clientSecret;
+        private readonly string clientSecret;
 
         /// <summary>
         ///     Mapper object from auto mapper that will automatically maps one object to another.
@@ -170,33 +169,9 @@ namespace Services.ExternalDataProviders
         {
             this.restClientFactory = restClientFactory;
             this.mapper = mapper;
-            SetOauthCredentials(configuration);
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="GitlabDataSourceAdaptee" /> class./>
-        /// </summary>
-        /// <param name="configuration">The configuration which is used to retrieve keys from the configuration file.</param>
-        /// <param name="restClientFactory">The rest client factory which is used to create rest clients.</param>
-        /// <param name="mapper">The mapper which is used to map Github resource results to projects.</param>
-        protected GitlabDataSourceAdaptee(
-            string title,
-            IConfiguration configuration,
-            IRestClientFactory restClientFactory,
-            IMapper mapper
-            )
-        {
-            this.restClientFactory = restClientFactory;
-            this.mapper = mapper;
-            this.Title = title;
-            SetOauthCredentials(configuration);
-        }
-
-        private void SetOauthCredentials(IConfiguration configuration)
-        {
             IConfigurationSection configurationSection = configuration.GetSection("App")
-                                                                     .GetSection("DataSources")
-                                                                     .GetSection(Title);
+                                                                      .GetSection("DataSources")
+                                                                      .GetSection(Title);
 
             clientId = configurationSection.GetSection("ClientId")
                                            .Value;
@@ -204,24 +179,20 @@ namespace Services.ExternalDataProviders
                                                .Value;
             RedirectUri = configurationSection.GetSection("RedirectUri")
                                               .Value;
-            string oauthUrl = configurationSection.GetSection("OauthUrl").Value;
-
-            if(oauthUrl is null)
-                throw new NullReferenceException(nameof(oauthUrl));
 
             OauthUrl =
-                string.Format(oauthUrl, clientId, RedirectUri);
+                $"https://gitlab.com/oauth/authorize?client_id={clientId}&redirect_uri={RedirectUri}&response_type=code&scope=read_repository+read_user";
         }
 
         /// <summary>
         ///     Gets or sets a value for the OauthUrl property from the Gitlab data source adaptee.
         /// </summary>
-        public string OauthUrl { get; private set; }
+        public string OauthUrl { get; }
 
         /// <summary>
         ///     Gets or sets a value for the RedirectUri property from the Gitlab data source adaptee.
         /// </summary>
-        public string RedirectUri { get; private set; }
+        public string RedirectUri { get; }
 
         /// <summary>
         ///     This method is responsible for retrieving Oauth tokens from the Gitlab API.
@@ -230,7 +201,6 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns the Oauth tokens.</returns>
         public async Task<OauthTokens> GetTokens(string code)
         {
-            Uri baseUriGitlab = new Uri(BaseUrl);
             return await FetchOauthTokens(code);
         }
 
@@ -242,7 +212,7 @@ namespace Services.ExternalDataProviders
         /// <exception cref="ExternalException">This method throws the External Exception whenever the response is not successful.</exception>
         public async Task<OauthTokens> FetchOauthTokens(string code)
         {
-            Uri baseUriGitlab = new Uri(BaseUrl);
+            Uri baseUriGitlab = new Uri("https://gitlab.com/");
             IRestClient client = restClientFactory.Create(baseUriGitlab);
             IRestRequest request = new RestRequest("oauth/token", Method.POST);
             client.Authenticator = new HttpBasicAuthenticator(clientId, clientSecret);
@@ -290,12 +260,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the guid from the Gitlab data source adaptee.
         /// </summary>
-        public string Guid { get; protected set; } = "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
-
-        /// <summary>
-        ///     Defines whether the API requires authentication by default (even for fetching 'public' projects).
-        /// </summary>
-        public bool AlwaysRequiresAuthentication { get; protected set; } = false;
+        public string Guid => "66de59d4-5db0-4bf8-a9a5-06abe8d3443a";
 
         /// <summary>
         ///     Gets or sets a value for the Title property from the Gitlab data source adaptee.
@@ -305,9 +270,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the Base Url from the Gitlab data source adaptee.
         /// </summary>
-        public string BaseApiUrl { get; set; } = "https://gitlab.com/api/v4/";
-
-        public string BaseUrl { get; set; } = "https://gitlab.com/";
+        public string BaseUrl { get; set; } = "https://gitlab.com/api/v4/";
 
         /// <summary>
         ///     Gets or sets a value for the IsVisible property from the Gitlab data source adaptee.
@@ -347,14 +310,13 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
         /// <returns>This method returns a public project from the specified source uri.</returns>
-        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri, string token = null)
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
-            GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri, token);
+            GitlabDataSourceResourceResult resourceResult = await FetchPublicRepository(sourceUri);
             Project project = mapper.Map<GitlabDataSourceResourceResult, Project>(resourceResult);
             project.Description = await FetchReadme(resourceResult.ReadmeUrl) ?? project.Description;
-
             List<GitLabDataSourceContributorResourceResult> contributors =
-                await FetchContributorsFromRepository(resourceResult.Id, token);
+                await FetchContributorsFromRepository(resourceResult.Id);
             project.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Name }));
             return project;
         }
@@ -390,7 +352,7 @@ namespace Services.ExternalDataProviders
         public async Task<IEnumerable<GitlabDataSourceResourceResult>> FetchAllPublicGitlabRepositories(
             string username)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"users/{username}/projects");
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -411,21 +373,17 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        public async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null)
+        public async Task<GitlabDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
             string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
                                           .Substring(1)
                                           .Replace("/", "%2F");
-            Uri serializedUri = new Uri(BaseApiUrl + "projects/" + projectPath);
+            Uri serializedUri = new Uri(BaseUrl + "projects/" + projectPath);
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
-
-            if(!string.IsNullOrEmpty(token))
-                request.AddHeader("Authorization", "Bearer " + token);
-
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
@@ -445,7 +403,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         public async Task<GitlabDataSourceResourceResult> FetchPublicGitlabRepositoryById(string identifier)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -471,7 +429,7 @@ namespace Services.ExternalDataProviders
             string accessToken,
             string username)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"users/{username}/projects");
             request.AddHeader("Authorization", $"Bearer {accessToken}");
             IRestResponse response = await client.ExecuteAsync(request);
@@ -498,7 +456,7 @@ namespace Services.ExternalDataProviders
             string identifier,
             string accessToken)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             RestRequest request = new RestRequest($"projects/{identifier}", Method.GET);
             request.AddHeader("Authorization", $"Bearer {accessToken}");
             IRestResponse response = await client.ExecuteAsync(request);
@@ -522,7 +480,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         public async Task<GitlabDataSourceUserResourceResult> FetchUserFromAccessToken(string accessToken)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest("user");
             request.AddHeader("Authorization", $"Bearer {accessToken}");
             IRestResponse response = await client.ExecuteAsync(request);
@@ -544,7 +502,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        public virtual async Task<string> FetchReadme(string readmeUri)
+        public async Task<string> FetchReadme(string readmeUri)
         {
             readmeUri = readmeUri.Replace("blob", "raw");
 
@@ -571,18 +529,14 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="id">This parameter represents the id of the repository.</param>
         /// <returns>This method returns the gitlab data source contributors resource result.</returns>
-        public virtual async Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id, string token = null)
+        public async Task<List<GitLabDataSourceContributorResourceResult>> FetchContributorsFromRepository(int id)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"projects/{id}/repository/contributors");
-
-            if(!string.IsNullOrEmpty(token))
-                request.AddHeader("Authorization", "Bearer " + token);
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(string.IsNullOrEmpty(response.Content)) return null;
             if(!response.IsSuccessful) throw new ExternalException(response.ErrorMessage);
-            string test = response.Content;
             List<GitLabDataSourceContributorResourceResult> resourceResult =
                 JsonConvert.DeserializeObject<List<GitLabDataSourceContributorResourceResult>>(response.Content);
             return resourceResult;

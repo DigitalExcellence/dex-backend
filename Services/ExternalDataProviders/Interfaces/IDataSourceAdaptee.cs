@@ -33,11 +33,6 @@ namespace Services.ExternalDataProviders
         string Guid { get; }
 
         /// <summary>
-        ///     Defines whether the API requires authentication by default (even for fetching 'public' projects).
-        /// </summary>
-        bool AlwaysRequiresAuthentication { get; }
-
-        /// <summary>
         ///     Gets or sets a value for the Title property from the data source adaptee.
         /// </summary>
         string Title { get; set; }
@@ -45,7 +40,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the Base Url from the data source adaptee.
         /// </summary>
-        string BaseApiUrl { get; set; }
+        string BaseUrl { get; set; }
 
         /// <summary>
         ///     Gets or sets a value for the IsVisible property from the data source adaptee.

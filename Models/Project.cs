@@ -71,7 +71,7 @@ namespace Models
 
         public File ProjectIcon { get; set; }
 
-        public List<CallToAction> CallToActions { get; set; }
+        public CallToAction CallToAction { get; set; }
 
         [JsonIgnore]
         public List<ProjectLike> Likes { get; set; }

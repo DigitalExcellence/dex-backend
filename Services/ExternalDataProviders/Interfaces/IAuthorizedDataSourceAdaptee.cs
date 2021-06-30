@@ -25,7 +25,7 @@ namespace Services.ExternalDataProviders
     /// <summary>
     ///     The interface for a data source adaptee that supports the auth flow.
     /// </summary>
-    public interface IPrivateDataSourceAdaptee : IDataSourceAdaptee
+    public interface IAuthorizedDataSourceAdaptee : IDataSourceAdaptee
     {
 
         /// <summary>

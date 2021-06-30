@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 namespace Services.ExternalDataProviders
 {
 
-    public interface IGithubDataSourceAdaptee : IPrivateDataSourceAdaptee, IPublicDataSourceAdaptee
+    public interface IGithubDataSourceAdaptee : IAuthorizedDataSourceAdaptee, IPublicDataSourceAdaptee
     {
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null);
+        Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri);
 
         /// <summary>
         ///     This method is responsible for retrieving the content from a public repositories from an identifier.
@@ -183,11 +183,6 @@ namespace Services.ExternalDataProviders
         public string Guid => "de38e528-1d6d-40e7-83b9-4334c51c19be";
 
         /// <summary>
-        ///     Defines whether the API requires authentication by default (even for fetching 'public' projects).
-        /// </summary>
-        public bool AlwaysRequiresAuthentication { get; protected set; } = false;
-
-        /// <summary>
         ///     Gets or sets a value for the Title property from the Github data source adaptee.
         /// </summary>
         public string Title { get; set; } = "Github";
@@ -195,7 +190,7 @@ namespace Services.ExternalDataProviders
         /// <summary>
         ///     Gets the value for the Base Url from the Github data source adaptee.
         /// </summary>
-        public string BaseApiUrl { get; set; } = "https://api.github.com/";
+        public string BaseUrl { get; set; } = "https://api.github.com/";
 
         /// <summary>
         ///     Gets or sets a value for the IsVisible property from the Github data source adaptee.
@@ -315,13 +310,13 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The source uri which will be used to retrieve the correct project.</param>
         /// <returns>This method returns a public project from the specified source uri.</returns>
-        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri, string token = null)
+        public async Task<Project> GetPublicProjectFromUri(Uri sourceUri)
         {
-            GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri, token);
+            GithubDataSourceResourceResult githubDataSource = await FetchPublicRepository(sourceUri);
             Project p = mapper.Map<GithubDataSourceResourceResult, Project>(githubDataSource);
             List<GithubDataSourceContributorResourceResult> contributors =
                 await FetchContributorsFromRepository(githubDataSource.Owner.Login, githubDataSource.Name);
-            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login }));
+            p.Collaborators = new List<Collaborator>(contributors.Select(c => new Collaborator { FullName = c.Login })); 
             p.Description = await FetchReadme(githubDataSource.Owner.Login, githubDataSource.Name) ?? p.Description;
             return p;
         }
@@ -354,7 +349,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         public async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllGithubProjects(string accessToken)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest("user/repos", Method.GET);
 
             request.AddHeaders(new List<KeyValuePair<string, string>>
@@ -385,7 +380,7 @@ namespace Services.ExternalDataProviders
         public async Task<IEnumerable<GithubDataSourceResourceResult>> FetchAllPublicGithubRepositories(
             string username)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"users/{username}/repos", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -405,20 +400,17 @@ namespace Services.ExternalDataProviders
         ///     This method could throw an external exception whenever the status code is not
         ///     successful.
         /// </exception>
-        public async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri, string token = null)
+        public async Task<GithubDataSourceResourceResult> FetchPublicRepository(Uri sourceUri)
         {
             string domain = sourceUri.GetLeftPart(UriPartial.Authority);
 
             // Get the project path without the prefix slash
             string projectPath = sourceUri.AbsolutePath.Replace(domain, "")
                                           .Substring(1);
-            Uri serializedUri = new Uri(BaseApiUrl + "repos/" + projectPath);
+            Uri serializedUri = new Uri(BaseUrl + "repos/" + projectPath);
 
             IRestClient client = restClientFactory.Create(serializedUri);
             RestRequest request = new RestRequest(Method.GET);
-            if(!string.IsNullOrEmpty(token))
-                request.AddHeader("Authorization", "Bearer " + token);
-
             IRestResponse response = await client.ExecuteAsync(request);
 
             if(string.IsNullOrEmpty(response.Content)) return null;
@@ -437,7 +429,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         public async Task<GithubDataSourceResourceResult> FetchPublicGithubProjectById(string identifier)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repositories/{identifier}", Method.GET);
             IRestResponse response = await client.ExecuteAsync(request);
 
@@ -467,7 +459,7 @@ namespace Services.ExternalDataProviders
         /// </exception>
         public async Task<string> FetchReadme(string user, string repository, string accessToken = null)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repos/{user}/{repository}/readme");
 
             if(accessToken != null)
@@ -535,7 +527,7 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns the github data source contributors resource result.</returns>
         public async Task<List<GithubDataSourceContributorResourceResult>> FetchContributorsFromRepository(string owner, string repo)
         {
-            IRestClient client = restClientFactory.Create(new Uri(BaseApiUrl));
+            IRestClient client = restClientFactory.Create(new Uri(BaseUrl));
             IRestRequest request = new RestRequest($"repos/{owner}/{repo}/contributors");
             IRestResponse response = await client.ExecuteAsync(request);
 

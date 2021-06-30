@@ -41,7 +41,7 @@ namespace API.Resources
 
         /// <summary>
         ///     Get or Set the sort by query parameter
-        ///     Possible sorts are: name, created, updated, likes
+        ///     Possible sorts are: name, created, updated
         /// </summary>
         [FromQuery(Name = "sortBy")]
         public string SortBy { get; set; }

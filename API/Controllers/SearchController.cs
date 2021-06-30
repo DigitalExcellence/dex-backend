@@ -87,10 +87,9 @@ namespace API.Controllers
             if(projectFilterParamsResource.SortBy != null &&
                projectFilterParamsResource.SortBy != "name" &&
                projectFilterParamsResource.SortBy != "created" &&
-               projectFilterParamsResource.SortBy != "updated" &&
-               projectFilterParamsResource.SortBy != "likes")
+               projectFilterParamsResource.SortBy != "updated")
             {
-                problem.Detail = "Invalid sort value: Use \"name\", \"created\", \"updated\" or \"likes\".";
+                problem.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\".";
                 problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
                 return BadRequest(problem);
             }

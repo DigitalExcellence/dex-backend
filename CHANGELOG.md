@@ -19,26 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## Release v.1.5.0-beta - 30-06-2021
-
-### Added
-
-- Added Fontys Gitlab to the wizard, and the functionality to get private projects - [#377](https://github.com/DigitalExcellence/dex-backend/issues/377)
-- Performance testing using K6 - [#379](https://github.com/DigitalExcellence/dex-backend/issues/379)
-- Project sorting by likes - [#470](https://github.com/DigitalExcellence/dex-backend/issues/470)
-
-### Changed
-
-- Added support for multiple call to actions instead of one call to action - [#416](https://github.com/DigitalExcellence/dex-backend/issues/416)
-
-### Fixed
-
-- Able to remove images from project - [#454](https://github.com/DigitalExcellence/dex-backend/issues/454)
-- Include categories in retrieving a user's project - [#468](https://github.com/DigitalExcellence/dex-backend/issues/468)
-- Lowercase file extensions on upload - [#472](https://github.com/DigitalExcellence/dex-backend/issues/472)
-- Fixed an issue where Swagger could not authorize with IdentityServer - [#429](https://github.com/DigitalExcellence/dex-backend/issues/429)
-- Improved the functionality of the search endpoint - [#477](https://github.com/DigitalExcellence/dex-backend/issues/477)
-- Projects now has a maximum of 10 images - [#475](https://github.com/DigitalExcellence/dex-backend/issues/475)
 
 ## Release v.1.4.0-beta - 07-06-2021
 
@@ -48,7 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
 - Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
 - Filtering through categories - [#444](https://github.com/DigitalExcellence/dex-backend/issues/444)
-
 
 ### Fixed
 

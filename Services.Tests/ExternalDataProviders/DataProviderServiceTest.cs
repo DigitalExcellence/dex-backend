@@ -54,7 +54,7 @@ namespace Services.Tests.ExternalDataProviders
         public void Initialize()
         {
             dataSourceMock = new Mock<IDataSourceAdaptee>();
-            dataSourceMock.As<IPrivateDataSourceAdaptee>();
+            dataSourceMock.As<IAuthorizedDataSourceAdaptee>();
             dataSourceMock.As<IPublicDataSourceAdaptee>();
             dataSources = new List<IDataSourceAdaptee>();
 
@@ -78,7 +78,7 @@ namespace Services.Tests.ExternalDataProviders
         public async Task GetAllProjectsInAuthFlow_GoodFlow([ProjectDataSource(50)] IEnumerable<Project> projects)
         {
             // Arrange
-            dataSourceMock.As<IPrivateDataSourceAdaptee>().Setup(_ => _.GetAllProjects(It.IsAny<string>()))
+            dataSourceMock.As<IAuthorizedDataSourceAdaptee>().Setup(_ => _.GetAllProjects(It.IsAny<string>()))
                           .ReturnsAsync(projects);
 
             // Act
@@ -124,7 +124,7 @@ namespace Services.Tests.ExternalDataProviders
         public async Task GetProjectByIdInAuthFlow_GoodFlow([ProjectDataSource] Project project)
         {
             // Arrange
-            dataSourceMock.As<IPrivateDataSourceAdaptee>().Setup(_ => _.GetProjectById(It.IsAny<string>(), It.IsAny<string>()))
+            dataSourceMock.As<IAuthorizedDataSourceAdaptee>().Setup(_ => _.GetProjectById(It.IsAny<string>(), It.IsAny<string>()))
                           .ReturnsAsync(project);
 
             // Act
@@ -146,7 +146,7 @@ namespace Services.Tests.ExternalDataProviders
         public async Task GetProjectByIdInAuthFlow_NoProjectsFound()
         {
             // Arrange
-            dataSourceMock.As<IPrivateDataSourceAdaptee>()
+            dataSourceMock.As<IAuthorizedDataSourceAdaptee>()
                           .Setup(_ => _.GetProjectById(It.IsAny<string>(), It.IsAny<string>()))
                           .ReturnsAsync((Project) null);
 
@@ -215,7 +215,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             dataSourceMock.As<IPublicDataSourceAdaptee>()
-                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>(), null))
+                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>()))
                           .ReturnsAsync(project);
 
             // Act
@@ -238,7 +238,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             dataSourceMock.As<IPublicDataSourceAdaptee>()
-                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>(), null))
+                          .Setup(_ => _.GetPublicProjectFromUri(It.IsAny<Uri>()))
                           .ReturnsAsync((Project)null);
 
             // Act
@@ -261,7 +261,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             dataSources.Add(new Mock<IPublicDataSourceAdaptee>().Object);
-            dataSources.Add(new Mock<IPrivateDataSourceAdaptee>().Object);
+            dataSources.Add(new Mock<IAuthorizedDataSourceAdaptee>().Object);
 
             // Act
             Action act = () => service.RetrieveDataSources(null);
@@ -303,7 +303,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             dataSources.Add(new Mock<IPublicDataSourceAdaptee>().Object);
-            dataSources.Add(new Mock<IPrivateDataSourceAdaptee>().Object);
+            dataSources.Add(new Mock<IAuthorizedDataSourceAdaptee>().Object);
 
             // Act
             Action act = () => service.RetrieveDataSources(false);
@@ -325,7 +325,7 @@ namespace Services.Tests.ExternalDataProviders
         {
             // Arrange
             dataSources.Add(new Mock<IPublicDataSourceAdaptee>().Object);
-            dataSources.Add(new Mock<IPrivateDataSourceAdaptee>().Object);
+            dataSources.Add(new Mock<IAuthorizedDataSourceAdaptee>().Object);
 
             // Act
             Action act = () => service.RetrieveDataSources(true);
