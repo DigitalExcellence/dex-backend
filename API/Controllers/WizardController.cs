@@ -62,6 +62,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="dataSourceGuid">The guid that specifies the data source.</param>
         /// <param name="sourceUri">The uri that specifies which project will get retrieved.</param>
+        /// <param name="token">The token used for getting projects, is optional.</param>
         /// <returns>This method returns the found project with the specified source uri.</returns>
         /// <response code="200">This endpoint returns the project with the specified source uri.</response>
         /// <response code="400">
@@ -79,6 +80,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByUriFromExternalDataSource(
             [FromQuery] string dataSourceGuid,
+            [FromQuery] string token,
             string sourceUri)
         {
             if(sourceUri == null)
@@ -116,7 +118,7 @@ namespace API.Controllers
 
             try
             {
-                Project project = await dataProviderService.GetProjectFromUri(dataSourceGuid, sourceUri);
+                Project project = await dataProviderService.GetProjectFromUri(dataSourceGuid, sourceUri, token);
                 if(project == null)
                 {
                     ProblemDetails problem = new ProblemDetails
@@ -156,6 +158,15 @@ namespace API.Controllers
                                              Instance = "E7834AC0-43D0-4D40-AB7C-E120A6EFCD5B"
                                          };
                 return BadRequest(problem);
+            } catch(NullReferenceException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "There was a problem with getting the specified datasource.",
+                    Detail = e.Message + " was not found.",
+                    Instance = "0B8B0918-7D13-4388-8063-2F49A6D69099"
+                };
+                return BadRequest(problem);
             }
         }
 
@@ -167,7 +178,7 @@ namespace API.Controllers
         ///     The token which is used for retrieving the projects from the user. This token can be the
         ///     access token for the auth flow, but can also be the username for the public flow.
         /// </param>
-        /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used.</param>
+        /// <param name="needsAuth">The bool that represents whether the flow with authorization should get used. This property gets ignored for datasources that always require authentication</param>
         /// <returns>This method returns a collection of all the projects.</returns>
         /// <response code="200">This endpoint returns the project with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified data source guid is invalid.</response>
@@ -238,6 +249,15 @@ namespace API.Controllers
                                              Detail = e.Message,
                                              Instance = "E1500627-AAF8-46E3-9B20-8A3C952CDBC3"
                                          };
+                return BadRequest(problem);
+            } catch(NullReferenceException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "There was a problem with getting the specified datasource.",
+                    Detail = e.Message + " was not found.",
+                    Instance = "60082B6B-B04A-47E8-9A87-F7B54E2A1C02"
+                };
                 return BadRequest(problem);
             }
         }
@@ -335,6 +355,15 @@ namespace API.Controllers
                                              Instance = "0D02B0F5-71F8-427E-AB28-D4831B91639D"
                                          };
                 return BadRequest(problem);
+            } catch(NullReferenceException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "There was a problem with getting the specified datasource.",
+                    Detail = e.Message + " was not found.",
+                    Instance = "9F5BEE26-38D8-4290-AF39-853FCC800CDC"
+                };
+                return BadRequest(problem);
             }
         }
 
@@ -376,10 +405,10 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee =
-                dataSourceAdaptee as IAuthorizedDataSourceAdaptee;
+            IPrivateDataSourceAdaptee privateDataSourceAdaptee =
+                dataSourceAdaptee as IPrivateDataSourceAdaptee;
 
-            if(authorizedDataSourceAdaptee == null)
+            if(privateDataSourceAdaptee == null)
             {
                 ProblemDetails problem = new ProblemDetails
                                          {
@@ -392,7 +421,7 @@ namespace API.Controllers
 
             try
             {
-                OauthTokens tokens = await authorizedDataSourceAdaptee.GetTokens(code);
+                OauthTokens tokens = await privateDataSourceAdaptee.GetTokens(code);
                 OauthTokensResourceResult resourceResult = mapper.Map<OauthTokens, OauthTokensResourceResult>(tokens);
                 return Ok(resourceResult);
             } catch(NotSupportedByExternalApiException e)
@@ -421,6 +450,15 @@ namespace API.Controllers
                                              Detail = e.Message,
                                              Instance = "7F2C173E-F001-49CA-8DF8-C18A0837B4AF"
                                          };
+                return BadRequest(problem);
+            } catch(NullReferenceException e)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "There was a problem with getting the specified datasource.",
+                    Detail = e.Message + " was not found.",
+                    Instance = "D82E093A-25EC-4485-A017-CAF8C2B856D7"
+                };
                 return BadRequest(problem);
             }
         }

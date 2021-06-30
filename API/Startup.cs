@@ -207,7 +207,7 @@ namespace API
                 o.AddPolicy(nameof(Defaults.Scopes.WizardPageWrite),
                             policy => policy.Requirements.Add(
                                 new ScopeRequirement(nameof(Defaults.Scopes.WizardPageWrite))));
-              
+
                 o.AddPolicy(nameof(Defaults.Scopes.AdminProjectExport),
                     policy => policy.Requirements.Add(new ScopeRequirement(nameof(Defaults.Scopes.AdminProjectExport))));
 
@@ -513,10 +513,10 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                
+
                 // TODO seed embedded projects
             }
-            
+
 
             // Seed call to action options
             List<CallToActionOption> options = Seed.SeedCallToActionOptions();

@@ -104,8 +104,8 @@ services:
       - App__Frontend__PostLogoutUriFrontend=https://dex.software/
       - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
-      - App__swagger__RedirectUrisSwagger=https://dex.software/oauth2-redirect.html
-      - App__swagger__PostLogoutUrisSwagger=https://dex.software
+      - App__swagger__RedirectUrisSwagger=https://api.dex.software/oauth2-redirect.html
+      - App__swagger__PostLogoutUrisSwagger=https://api.dex.software
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.dex.software/external/callback/fhict

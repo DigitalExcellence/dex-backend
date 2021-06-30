@@ -174,9 +174,10 @@ namespace API.Controllers
             if(projectFilterParamsResource.SortBy != null &&
                projectFilterParamsResource.SortBy != "name" &&
                projectFilterParamsResource.SortBy != "created" &&
-               projectFilterParamsResource.SortBy != "updated")
+               projectFilterParamsResource.SortBy != "updated" &&
+               projectFilterParamsResource.SortBy != "likes")
             {
-                problem.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\".";
+                problem.Detail = "Invalid sort value: Use \"name\", \"created\", \"updated\" or \"likes\".";
                 problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
                 return BadRequest(problem);
             }
@@ -358,27 +359,52 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.CallToAction != null)
+            if(projectResource.CallToActions != null)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = "Call to action value was not found.",
-                        Detail = "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        Title = "Duplicate call to action option value.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
                     };
                     return BadRequest(problem);
                 }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail = $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
+                    return BadRequest(problem);
+                }
+                foreach(CallToActionResource callToAction in projectResource.CallToActions)
+                {
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+                    if(!callToActionOptions.Any())
+                    {
+                        ProblemDetails problem = new ProblemDetails
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail = $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
+                        return BadRequest(problem);
+                    }
+                }
+                
             }
 
             Project project = mapper.Map<ProjectResource, Project>(projectResource);
-            Models.File file = await fileService.FindAsync(projectResource.FileId);
+            Models.File file = await fileService.FindAsync(projectResource.IconId);
 
-            if(projectResource.FileId != 0 &&
+            if(projectResource.IconId != 0 &&
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -386,6 +412,17 @@ namespace API.Controllers
                     Title = "File was not found.",
                     Detail = "The specified file was not found while creating project.",
                     Instance = "8CABE64D-6B73-4C88-BBD8-B32FA9FE6EC7"
+                };
+                return BadRequest(problem);
+            }
+
+            if(projectResource.ImageIds.Count() > 10)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Too many images.",
+                    Detail = "A project can not have more than 10 images.",
+                    Instance = "9E3E4F91-A6ED-415F-8726-6D33BA0F200F"
                 };
                 return BadRequest(problem);
             }
@@ -525,21 +562,50 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            if(projectResource.CallToAction != null)
+            if(projectResource.CallToActions != null)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = "Call to action value was not found.",
-                        Detail = "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        Title = "Duplicate call to action option value.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
                     };
                     return BadRequest(problem);
                 }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail =
+                            $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
+                    return BadRequest(problem);
+                }
+
+                foreach(CallToActionResource callToAction in projectResource.CallToActions)
+                {
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+
+                    if(!callToActionOptions.Any())
+                    {
+                        ProblemDetails problem = new ProblemDetails
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail =
+                                $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
+                        return BadRequest(problem);
+                    }
+                }
+                
             }
 
             if (projectResource.InstitutePrivate != project.InstitutePrivate)
@@ -553,31 +619,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            // Upload the new file if there is one
-            Models.File file = null;
-            if(projectResource.FileId != 0)
+            if(projectResource.IconId != 0)
             {
-                if(project.ProjectIconId != 0 &&
-                   project.ProjectIconId != null)
-                {
-                    if(project.ProjectIconId != projectResource.FileId)
-                    {
-                        Models.File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
-
-                        // Remove the file from the filesystem
-                        fileUploader.DeleteFileFromDirectory(fileToDelete);
-
-                        // Remove file from DB
-                        await fileService.RemoveAsync(project.ProjectIconId.Value);
-
-
-                        fileService.Save();
-                    }
-                }
-
-                // Get the uploaded file
-                file = await fileService.FindAsync(projectResource.FileId);
-
+                Models.File file = await fileService.FindAsync(projectResource.IconId);
                 if(file != null)
                 {
                     project.ProjectIcon = file;
@@ -591,8 +635,23 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
+            } else
+            {
+                project.ProjectIcon = null;
             }
 
+            if(projectResource.ImageIds.Count() > 10)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Too many images.",
+                    Detail = "A project can not have more than 10 images.",
+                    Instance = "5D179737-046E-482B-B6D8-DDDCEF518107"
+                };
+                return BadRequest(problem);
+            }
+
+            project.Images.Clear();
             foreach(int projectResourceImageId in projectResource.ImageIds)
             {
                 Models.File image = await fileService.FindAsync(projectResourceImageId);
@@ -601,7 +660,7 @@ namespace API.Controllers
                     ProblemDetails problem = new ProblemDetails
                                              {
                                                  Title = "Image was not found.",
-                                                 Detail = "The specified image was not found while creating project.",
+                                                 Detail = "The specified image was not found while updating project.",
                                                  Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
                     };
                     return BadRequest(problem);
