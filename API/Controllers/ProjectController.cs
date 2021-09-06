@@ -359,6 +359,17 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            if(projectResource.Name.Count() > 75)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Maximum amount of project name characters exceeded.",
+                    Detail = "It is not possible to create a project name with more than 75 characters.",
+                    Instance = "2ddb12ce-9b2a-45bb-b995-25da84e97938"
+                };
+                return BadRequest(problem);
+            }
+
             if(projectResource.CallToActions != null)
             {
                 if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
