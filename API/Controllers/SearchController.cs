@@ -61,11 +61,11 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns search results.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the search request is invalid.</response>
         [HttpGet("internal/{query}")]
-        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectResultsInput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> SearchInternalProjects(string query,
                                                                 [FromQuery]
-                                                                ProjectFilterParamsResource projectFilterParamsResource)
+                                                                ProjectFilterParamsInput projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
                                      {
@@ -104,12 +104,12 @@ namespace API.Controllers
             }
 
             ProjectFilterParams projectFilterParams =
-                mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+                mapper.Map<ProjectFilterParamsInput, ProjectFilterParams>(projectFilterParamsResource);
             IEnumerable<Project> projects = await searchService.SearchInternalProjects(query, projectFilterParams);
-            IEnumerable<ProjectResultResource> searchResults =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(projects);
+            IEnumerable<ProjectResultInput> searchResults =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(projects);
 
-            ProjectResultsResource searchResultsResource = new ProjectResultsResource
+            ProjectResultsInput searchResultsResource = new ProjectResultsInput
                                                            {
                                                                Results = searchResults.ToArray(),
                                                                Query = query,
