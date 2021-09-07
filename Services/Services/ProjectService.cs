@@ -69,6 +69,7 @@ namespace Services.Services
         ///     Get the users projects
         /// </summary>
         /// <param name="userId">The user id whoms projects need to be retrieved</param>
+        /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The total number of pages for the results</returns>
         Task<IEnumerable<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams);
         /// <summary>
