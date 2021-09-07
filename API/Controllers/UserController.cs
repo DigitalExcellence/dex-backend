@@ -172,7 +172,9 @@ namespace API.Controllers
         [Authorize]
         [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetUserProjects()
+        public async Task<IActionResult> GetUserProjects(
+                [FromQuery] ProjectFilterParamsResource projectFilterParamsResource
+            )
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             if(user == null)
@@ -186,7 +188,10 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id);
+            ProjectFilterParams projectFilterParams =
+                mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+
+            IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id, projectFilterParams);
 
             return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(userProjects));
         }

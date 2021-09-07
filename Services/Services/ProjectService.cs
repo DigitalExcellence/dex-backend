@@ -70,7 +70,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The total number of pages for the results</returns>
-        Task<IEnumerable<Project>> GetUserProjects(int userId);
+        Task<IEnumerable<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams);
         /// <summary>
         ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
         /// </summary>
@@ -252,9 +252,44 @@ namespace Services.Services
         }
 
 
-        public Task<IEnumerable<Project>> GetUserProjects(int userId)
+        public Task<IEnumerable<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams)
         {
-            return Repository.GetUserProjects(userId);
+            if(!projectFilterParams.AmountOnPage.HasValue ||
+               projectFilterParams.AmountOnPage <= 0)
+                projectFilterParams.AmountOnPage = 20;
+
+            int? skip = null;
+            int? take = projectFilterParams.AmountOnPage;
+            if(projectFilterParams.Page.HasValue && projectFilterParams.Page.Value > 1)
+            {
+                skip = projectFilterParams.AmountOnPage * (projectFilterParams.Page - 1);
+                take = projectFilterParams.AmountOnPage;
+            }
+
+            Expression<Func<Project, object>> orderBy;
+            switch(projectFilterParams.SortBy)
+            {
+                case "name":
+                    orderBy = project => project.Name;
+                    break;
+                case "created":
+                    orderBy = project => project.Created;
+                    break;
+                case "likes":
+                    orderBy = project => project.Likes.Count;
+                    break;
+                default:
+                    orderBy = project => project.Updated;
+                    break;
+            }
+
+            bool orderByDirection = projectFilterParams.SortDirection == "asc";
+            return Repository.GetUserProjects(userId, skip,
+                                              take,
+                                              orderBy,
+                                              orderByDirection,
+                                              projectFilterParams.Highlighted,
+                                              projectFilterParams.Categories);
         }
         public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
         {

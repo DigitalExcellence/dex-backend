@@ -123,7 +123,13 @@ namespace Repositories
         /// </summary>
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
         /// <returns>A enumerable of the users projects</returns>
-        Task<IEnumerable<Project>> GetUserProjects(int userId);
+        Task<IEnumerable<Project>> GetUserProjects(int userId,
+                                                   int? skip = null,
+                                                   int? take = null,
+                                                   Expression<Func<Project, object>> orderBy = null,
+                                                   bool orderByAsc = true,
+                                                   bool? highlighted = null,
+                                                   ICollection<int> categories = null);
         Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId);
         void CreateProjectIndex();
         void DeleteIndex();
@@ -462,18 +468,50 @@ namespace Repositories
         /// </summary>
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
         /// <returns>A enumerable of the users projects</returns>
-        public async Task<IEnumerable<Project>> GetUserProjects(int userId)
+        public async Task<IEnumerable<Project>> GetUserProjects(
+            int userId,
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null,
+            ICollection<int> categories = null)
         {
-            IEnumerable<Project> projects = await GetDbSet<Project>()
-                   .Include(p => p.Collaborators)
-                   .Include(p => p.ProjectIcon)
-                   .Include(p => p.Images)
-                   .Include(p => p.Categories)
-                   .ThenInclude(c => c.Category)
-                   .Where(p => p.UserId == userId)
-                   .ToListAsync();
+            IQueryable<Project> projects = GetDbSet<Project>()
+               .Include(p => p.Collaborators)
+               .Include(p => p.ProjectIcon)
+               .Include(p => p.Images)
+               .Include(p => p.Categories)
+               .ThenInclude(c => c.Category)
+               .Where(p => p.UserId == userId);
 
-            return projects;
+            projects = ApplyFilters(projects, skip, take, orderBy, orderByAsc, highlighted, categories);
+
+            List<Project> projectResults = await projects.Select(p => new Project
+            {
+                   UserId = p.UserId,
+                   User = p.User,
+                   Id = p.Id,
+                   ProjectIconId = p.ProjectIconId,
+                   ProjectIcon = p.ProjectIcon,
+                   CallToActions = p.CallToActions,
+                   Collaborators = p.Collaborators,
+                   Likes = p.Likes,
+                   LinkedInstitutions = p.LinkedInstitutions,
+                   Categories = p.Categories.Select(c => new ProjectCategory()
+                       {
+                           Category = c.Category,
+                           Id = c.Id
+                       }).ToList(),
+                   Created = p.Created,
+                   InstitutePrivate = p.InstitutePrivate,
+                   Name = p.Name,
+                   ShortDescription = p.ShortDescription,
+                   Updated = p.Updated,
+                   Uri = p.Uri
+            })
+                .ToListAsync();
+            return projectResults;
         }
 
         /// <summary>
