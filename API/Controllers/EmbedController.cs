@@ -80,14 +80,14 @@ namespace API.Controllers
         /// <returns>This method returns a list of embedded projects resource result.</returns>
         /// <response code="200">This endpoint returns a list with embedded projects.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<EmbeddedProjectResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<EmbeddedProjectOutput>), (int) HttpStatusCode.OK)]
         [Authorize(Policy = nameof(Defaults.Scopes.EmbedRead))]
         public async Task<IActionResult> GetAllEmbeddedProjects()
         {
             IEnumerable<EmbeddedProject> embeddedProjects = await embedService.GetEmbeddedProjectsAsync();
 
             return Ok(
-                mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectResourceResult>>(embeddedProjects));
+                mapper.Map<IEnumerable<EmbeddedProject>, IEnumerable<EmbeddedProjectOutput>>(embeddedProjects));
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace API.Controllers
         ///     found with the specified guid.
         /// </response>
         [HttpGet("{guid}")]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetEmbeddedProject(string guid)
@@ -149,7 +149,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
             Project project = await projectService.FindWithUserCollaboratorsAndInstitutionsAsync(embeddedProject.ProjectId);
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
 
         /// <summary>
@@ -168,10 +168,10 @@ namespace API.Controllers
         /// </response>
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(EmbeddedProjectResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(EmbeddedProjectOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> CreateEmbeddedProject(EmbeddedProjectResource embedResource)
+        public async Task<IActionResult> CreateEmbeddedProject(EmbeddedProjectInput embedResource)
         {
             if(embedResource == null)
             {
@@ -183,7 +183,7 @@ namespace API.Controllers
                                          };
                 return BadRequest(problem);
             }
-            EmbeddedProject embeddedProject = mapper.Map<EmbeddedProjectResource, EmbeddedProject>(embedResource);
+            EmbeddedProject embeddedProject = mapper.Map<EmbeddedProjectInput, EmbeddedProject>(embedResource);
 
             Project project = await projectService.FindAsync(embedResource.ProjectId);
             if(project == null)
@@ -229,7 +229,7 @@ namespace API.Controllers
                 embedService.Add(embeddedProject);
                 embedService.Save();
                 return Created(nameof(CreateEmbeddedProject),
-                               mapper.Map<EmbeddedProject, EmbeddedProjectResourceResult>(embeddedProject));
+                               mapper.Map<EmbeddedProject, EmbeddedProjectOutput>(embeddedProject));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");

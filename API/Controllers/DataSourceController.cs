@@ -86,12 +86,12 @@ namespace API.Controllers
         /// <returns>This method returns a collection of data sources.</returns>
         /// <response code="200">This endpoint returns the available data sources with the specified flow.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<DataSourceResourceResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<DataSourceOutput>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableDataSources([FromQuery] bool? needsAuth)
         {
             IEnumerable<IDataSourceAdaptee> dataSources = await dataProviderService.RetrieveDataSources(needsAuth);
-            IEnumerable<DataSourceResourceResult> dataSourceResourceResult =
-                mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceResourceResult>>(dataSources);
+            IEnumerable<DataSourceOutput> dataSourceResourceResult =
+                mapper.Map<IEnumerable<IDataSourceAdaptee>, IEnumerable<DataSourceOutput>>(dataSources);
             return Ok(dataSourceResourceResult);
         }
 
@@ -108,7 +108,7 @@ namespace API.Controllers
         /// </response>
         [HttpGet("{guid}")]
         [Authorize]
-        [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DataSourceOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDataSourceById(string guid)
@@ -137,8 +137,8 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            DataSourceResourceResult dataSourceResourceResult =
-                mapper.Map<IDataSourceAdaptee, DataSourceResourceResult>(dataSource);
+            DataSourceOutput dataSourceResourceResult =
+                mapper.Map<IDataSourceAdaptee, DataSourceOutput>(dataSource);
             return Ok(dataSourceResourceResult);
         }
 
@@ -159,10 +159,10 @@ namespace API.Controllers
         /// </response>
         [HttpPut("{guid}")]
         [Authorize(Policy = nameof(Defaults.Scopes.DataSourceWrite))]
-        [ProducesResponseType(typeof(DataSourceResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DataSourceOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateDataSource(string guid, [FromBody] DataSourceResource dataSourceResource)
+        public async Task<IActionResult> UpdateDataSource(string guid, [FromBody] DataSourceInput dataSourceResource)
         {
             if(!Guid.TryParse(guid, out Guid _))
             {
@@ -271,7 +271,7 @@ namespace API.Controllers
             dataSourceModelService.Save();
 
             DataSource updatedDataSourceModel = await dataSourceModelService.GetDataSourceByGuid(guid);
-            DataSourceResourceResult model = mapper.Map<DataSource, DataSourceResourceResult>(updatedDataSourceModel);
+            DataSourceOutput model = mapper.Map<DataSource, DataSourceOutput>(updatedDataSourceModel);
             return Ok(model);
         }
 
