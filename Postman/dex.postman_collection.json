@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "00d940d8-47d9-4b73-b127-316844648687",
+		"_postman_id": "17d5a999-6aca-4f5e-af81-220ca0fd80b1",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -1635,6 +1635,20 @@
 												"98989"
 											]
 										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Administrator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": null
 									},
 									"response": []
 								}
@@ -29103,6 +29117,20 @@
 											""
 										]
 									}
+								}
+							]
+						},
+						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Alumni",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": null
+									},
+									"response": []
 								}
 							]
 						},

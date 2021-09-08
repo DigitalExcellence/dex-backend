@@ -192,8 +192,19 @@ namespace API.Controllers
                 mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
 
             IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id, projectFilterParams);
+            IEnumerable<ProjectResultResource> results =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(userProjects);
 
-            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(userProjects));
+            ProjectResultsResource resultsResource = new ProjectResultsResource
+                 {
+                     Results = results.ToArray(),
+                     Count = results.Count(),
+                     TotalCount = await projectService.ProjectsCount(projectFilterParams, user.Id),
+                     Page = projectFilterParams.Page,
+                     TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams, user.Id)
+                 };
+
+            return Ok(resultsResource);
         }
 
             /// <summary>

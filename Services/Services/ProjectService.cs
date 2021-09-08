@@ -53,15 +53,17 @@ namespace Services.Services
         ///     Get the number of projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The number of projects</returns>
-        Task<int> ProjectsCount(ProjectFilterParams projectFilterParams);
+        Task<int> ProjectsCount(ProjectFilterParams projectFilterParams, int? userId = null);
 
         /// <summary>
         ///     Get the total number of pages for the results
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The total number of pages for the results</returns>
-        Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
+        Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams, int? userId = null);
 
         Task<bool> ProjectExistsAsync(int id);
 
@@ -182,9 +184,14 @@ namespace Services.Services
         ///     Get the number of projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The number of projects</returns>
-        public virtual async Task<int> ProjectsCount(ProjectFilterParams projectFilterParams)
+        public virtual async Task<int> ProjectsCount(ProjectFilterParams projectFilterParams, int? userId = null)
         {
+            if(userId.HasValue)
+            {
+                return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories, userId);
+            }
             return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories);
         }
 
@@ -193,12 +200,12 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The total number of pages for the results</returns>
-        public virtual async Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams)
+        public virtual async Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams, int? userId = null)
         {
             if(projectFilterParams.AmountOnPage == null ||
                projectFilterParams.AmountOnPage <= 0)
                 projectFilterParams.AmountOnPage = 20;
-            int count = await ProjectsCount(projectFilterParams);
+            int count = await ProjectsCount(projectFilterParams, userId);
             return (int) Math.Ceiling(count / (decimal) projectFilterParams.AmountOnPage);
         }
 
