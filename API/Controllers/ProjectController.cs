@@ -61,6 +61,7 @@ namespace API.Controllers
         private readonly IUserService userService;
         private readonly IProjectInstitutionService projectInstitutionService;
         private readonly IInstitutionService institutionService;
+        private readonly IProjectTransferService projectTransferService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -86,6 +87,7 @@ namespace API.Controllers
         /// <param name="projectCategoryService">The project category service is used to connect projects and categories</param>
         /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
+        /// /// <param name="projectTransferService">The projectTransferservice which is used to communicate with the logic layer</param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -98,7 +100,7 @@ namespace API.Controllers
                                  IInstitutionService institutionService,
                                  ICallToActionOptionService callToActionOptionService,
                                  ICategoryService categoryService,
-                                 IProjectCategoryService projectCategoryService)
+                                 IProjectCategoryService projectCategoryService, IProjectTransferService projectTransferService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -113,6 +115,7 @@ namespace API.Controllers
             this.projectCategoryService = projectCategoryService;
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
+            this.projectTransferService = projectTransferService;
         }
 
 

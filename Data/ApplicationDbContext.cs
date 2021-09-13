@@ -180,6 +180,11 @@ namespace Data
         /// </summary>
         public DbSet<DataSourceWizardPage> DataSourceWizardPage { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the ProjectTransferRequest which is used to transfer project ownership to a new user.
+        /// </summary>
+        public DbSet<ProjectTransferRequest> ProjectTransferRequest { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
