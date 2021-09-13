@@ -18,7 +18,7 @@ namespace Repositories
     {
         public ProjectTransferRepository(DbContext dbContext) : base(dbContext) { }
 
-        protected new IHighlightRepository Repository => (IHighlightRepository) base.Repository;
+        protected new IProjectTransferRepository Repository => (IProjectTransferRepository) base.re;
 
         public async Task<ProjectTransferRequest> FindTransferByProjectId(int projectId)
         {
