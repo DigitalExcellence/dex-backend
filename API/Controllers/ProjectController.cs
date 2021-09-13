@@ -1497,6 +1497,7 @@ namespace API.Controllers
 
             User user = await HttpContext.GetContextUser(userService)
                                          .ConfigureAwait(false);
+
             
 
             if(project.UserId != user.Id)
@@ -1509,6 +1510,11 @@ namespace API.Controllers
                 };
                 return Unauthorized(problem);
             }
+
+            User potentialNewOwner = await userService.FindAsync(transferInput.PotentialNewOwnerId);
+
+
+            projectTransferService.InitiateTransfer(project,potentialNewOwner);
 
 
             return Ok(mapper.Map<Project, ProjectOutput>(project));
