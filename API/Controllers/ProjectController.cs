@@ -18,6 +18,7 @@
 using API.Common;
 using API.Extensions;
 using API.HelperClasses;
+using API.InputOutput.ProjectTransferRequest;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -1461,6 +1462,64 @@ namespace API.Controllers
 
             return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
+
+
+        /// <summary>
+        ///     Request project transfer request
+        /// </summary>
+        /// <param name="transferInput"></param>
+        /// <response code="200">Project transfer request succesfully created</response>
+        /// <response code="401">User is not authorized initiate transfer request</response>
+        /// <response code="404">Project was not found.</response>
+        /// <returns></returns>
+        [HttpPost("project/transfer/{projectId}/{categoryId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> InitiateTransfer(ProjectTransferRequestInput transferInput)
+        {
+            Project project = await projectService.FindAsync(transferInput.ProjectId)
+                                                  .ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to find project",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
+                };
+                return NotFound(problem);
+            }
+
+            
+
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
+            
+
+            if(project.UserId != user.Id)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to initiate transfer request",
+                    Detail = "The user is not allowed to initiate transfer request",
+                    Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
+                };
+                return Unauthorized(problem);
+            }
+
+
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
+        }
+
+
+
     }
 
+
+    
 }
+
+
