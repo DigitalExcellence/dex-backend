@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c49ce43b-4b60-464c-b58c-8ade0659f2d6",
+		"_postman_id": "45ee041e-e0a8-4433-bdd8-3517c9bf6a93",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -2340,7 +2340,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameLimitExceeded}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameLimitExceeded}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2495,54 +2495,6 @@
 									"response": []
 								},
 								{
-									"name": "Project-UpdateProject-ProjectNameLimitExceeded-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is 400\", function () {\r",
-													"    pm.response.to.have.status(400);\r",
-													"    pm.response.instance == \"2ddb12ce-9b2a-45bb-b995-25da84e97938\";\r",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "IdentityId",
-												"value": "{{administratorUserIdentityId}}",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameLimitExceeded}}\",\r\n  \"description\": \"postmantest_Proj rsect-UpdateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-UpdateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-UpdateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{projectId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "Project-UpdateProject-Administrator",
 									"event": [
 										{
@@ -2597,6 +2549,25 @@
 												}
 											}
 										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"{{projectId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UpdateProject-ProjectNameLimitExceeded-Administrator",
+									"request": {
+										"method": "PUT",
+										"header": [],
 										"url": {
 											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
 											"host": [
@@ -12488,7 +12459,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true,\r\n  \"IconId\": {{generalFileId}},\r\n    \"imageIds\": [\r\n    {{generalFileId}}\r\n  ]\r\n}",
+											"raw": "{\r\n  \"name\": \"{{projectNameUpdated}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Registered\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Registered\",\r\n      \"role\": \"postmantest_Project-CreateProject-Registered\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": true\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
