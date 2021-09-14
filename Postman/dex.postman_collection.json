@@ -2361,6 +2361,54 @@
 									"response": []
 								},
 								{
+									"name": "Project-UpdateProject-ProjectNameLimitExceeded-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"    pm.response.instance == \"2ddb12ce-9b2a-45bb-b995-25da84e97938\";\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectNameLimitExceeded}}\",\r\n  \"description\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-UpdateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-UpdateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"projectIconId\": 0,\r\n  \"imageIds\": []\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Project-GetAllProjects-Administrator",
 									"event": [
 										{
@@ -2549,25 +2597,6 @@
 												}
 											}
 										},
-										"url": {
-											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Project",
-												"{{projectId}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "Project-UpdateProject-ProjectNameLimitExceeded-Administrator",
-									"request": {
-										"method": "PUT",
-										"header": [],
 										"url": {
 											"raw": "{{apiUrl}}/api/Project/{{projectId}}",
 											"host": [
