@@ -75,7 +75,7 @@ namespace API.Controllers
         /// </response>
         [HttpGet("project/uri/{sourceUri}")]
         [Authorize]
-        [ProducesResponseType(typeof(WizardProjectResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(WizardProjectOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectByUriFromExternalDataSource(
@@ -130,7 +130,7 @@ namespace API.Controllers
                                              };
                     return NotFound(problem);
                 }
-                return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
+                return Ok(mapper.Map<Project, WizardProjectOutput>(project));
             } catch(NotSupportedByExternalApiException e)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -222,7 +222,7 @@ namespace API.Controllers
             {
                 IEnumerable<Project> projects =
                     await dataProviderService.GetAllProjects(dataSourceGuid, token, needsAuth);
-                return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<WizardProjectResourceResult>>(projects));
+                return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<WizardProjectOutput>>(projects));
             } catch(NotSupportedByExternalApiException e)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -327,7 +327,7 @@ namespace API.Controllers
                     return NotFound(problem);
                 }
 
-                return Ok(mapper.Map<Project, WizardProjectResourceResult>(project));
+                return Ok(mapper.Map<Project, WizardProjectOutput>(project));
             } catch(NotSupportedByExternalApiException e)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -422,7 +422,7 @@ namespace API.Controllers
             try
             {
                 OauthTokens tokens = await privateDataSourceAdaptee.GetTokens(code);
-                OauthTokensResourceResult resourceResult = mapper.Map<OauthTokens, OauthTokensResourceResult>(tokens);
+                OauthTokensOutput resourceResult = mapper.Map<OauthTokens, OauthTokensOutput>(tokens);
                 return Ok(resourceResult);
             } catch(NotSupportedByExternalApiException e)
             {

@@ -63,7 +63,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns a list of institutions.</response>
         /// <response code="404">The 404 Not Found status code is returned when no institutions are found.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<InstitutionResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<InstitutionOutput>), (int) HttpStatusCode.OK)]
         [Authorize(Policy = nameof(Defaults.Scopes.InstitutionRead))]
         public async Task<IActionResult> GetAllInstitutions()
         {
@@ -80,8 +80,8 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IEnumerable<InstitutionResourceResult> model =
-                mapper.Map<IEnumerable<Institution>, IEnumerable<InstitutionResourceResult>>(institutions);
+            IEnumerable<InstitutionOutput> model =
+                mapper.Map<IEnumerable<Institution>, IEnumerable<InstitutionOutput>>(institutions);
             return Ok(model);
         }
 
@@ -97,7 +97,7 @@ namespace API.Controllers
         ///     found with the specified id.
         /// </response>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(InstitutionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(InstitutionOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [Authorize(Policy = nameof(Defaults.Scopes.InstitutionRead))]
@@ -127,7 +127,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            InstitutionResourceResult model = mapper.Map<Institution, InstitutionResourceResult>(institution);
+            InstitutionOutput model = mapper.Map<Institution, InstitutionOutput>(institution);
             return Ok(model);
         }
 
@@ -143,9 +143,9 @@ namespace API.Controllers
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.InstitutionWrite))]
-        [ProducesResponseType(typeof(InstitutionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(InstitutionOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public IActionResult CreateInstitution(InstitutionResource institutionResource)
+        public IActionResult CreateInstitution(InstitutionInput institutionResource)
         {
             if(institutionResource == null)
             {
@@ -158,13 +158,13 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            Institution institution = mapper.Map<InstitutionResource, Institution>(institutionResource);
+            Institution institution = mapper.Map<InstitutionInput, Institution>(institutionResource);
 
             try
             {
                 institutionService.Add(institution);
                 institutionService.Save();
-                InstitutionResourceResult model = mapper.Map<Institution, InstitutionResourceResult>(institution);
+                InstitutionOutput model = mapper.Map<Institution, InstitutionOutput>(institution);
                 return Created(nameof(CreateInstitution), model);
             } catch(DbUpdateException e)
             {
@@ -193,10 +193,10 @@ namespace API.Controllers
         /// </response>
         [HttpPut("{institutionId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.InstitutionWrite))]
-        [ProducesResponseType(typeof(InstitutionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(InstitutionOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateInstitution(int institutionId,
-                                                           [FromBody] InstitutionResource institutionResource)
+                                                           [FromBody] InstitutionInput institutionResource)
         {
             Institution institution = await institutionService.FindAsync(institutionId);
             if(institution == null)
@@ -215,7 +215,7 @@ namespace API.Controllers
             institutionService.Update(institution);
             institutionService.Save();
 
-            return Ok(mapper.Map<Institution, InstitutionResourceResult>(institution));
+            return Ok(mapper.Map<Institution, InstitutionOutput>(institution));
         }
 
         /// <summary>

@@ -124,7 +124,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns a list of in ElasticSearch formatted projects.</response>
         [HttpGet("export")]
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectExport))]
-        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectResultsInput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> MigrateDatabaseToElasticSearch()
         {
@@ -133,7 +133,7 @@ namespace API.Controllers
                 List<Project> projectsToExport = await projectService.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
                 projectService.MigrateDatabase(projectsToExport);
 
-                return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectsToExport));
+                return Ok(mapper.Map<List<Project>, List<ProjectOutput>>(projectsToExport));
             } catch(Exception e)
             {
                 Log.Logger.Error(e.Message);
@@ -155,10 +155,10 @@ namespace API.Controllers
         ///
 
         [HttpGet]
-        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectResultsInput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAllProjects(
-            [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
+            [FromQuery] ProjectFilterParamsInput projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
             {
@@ -191,7 +191,7 @@ namespace API.Controllers
             }
 
             ProjectFilterParams projectFilterParams =
-                mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+                mapper.Map<ProjectFilterParamsInput, ProjectFilterParams>(projectFilterParamsResource);
 
             IEnumerable<Project> projects =
                 await projectService.GetAllWithUsersCollaboratorsAndInstitutionsAsync(projectFilterParams);
@@ -223,9 +223,9 @@ namespace API.Controllers
             }
 
 
-            IEnumerable<ProjectResultResource> results =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(filteredProjects);
-            ProjectResultsResource resultsResource = new ProjectResultsResource
+            IEnumerable<ProjectResultInput> results =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(filteredProjects);
+            ProjectResultsInput resultsResource = new ProjectResultsInput
             {
                 Results = results.ToArray(),
                 Count = results.Count(),
@@ -245,14 +245,14 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns a list with suggested projects.</response>
         /// <response code="503">A 503 status code is returned when the Elastic Search service is unavailable.</response>
         [HttpGet("search/autocomplete")]
-        [ProducesResponseType(typeof(List<AutocompleteProjectResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<AutocompleteProjectOutput>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), 503)]
         public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
         {
             try
             {
                 List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
-                List<AutocompleteProjectResourceResult> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectResourceResult>>(projects);
+                List<AutocompleteProjectOutput> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectOutput>>(projects);
                 return Ok(autocompleteProjectResourceResults);
             }
             catch(ElasticUnavailableException)
@@ -279,7 +279,7 @@ namespace API.Controllers
         ///     id.
         /// </response>
         [HttpGet("{projectId}")]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
@@ -316,14 +316,14 @@ namespace API.Controllers
 
                 if(project.CanAccess(currentUser))
                 {
-                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+                    return Ok(mapper.Map<Project, ProjectOutput>(project));
                 }
 
             } else
             {
                 if(project.InstitutePrivate == false)
                 {
-                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+                    return Ok(mapper.Map<Project, ProjectOutput>(project));
                 }
             }
 
@@ -343,10 +343,10 @@ namespace API.Controllers
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
+        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectInput projectResource)
         {
             if(projectResource == null)
             {
@@ -355,6 +355,17 @@ namespace API.Controllers
                     Title = "Failed to create a new project.",
                     Detail = "The specified project resource was null.",
                     Instance = "8D3D9119-0D12-4631-B2DC-56494639A849"
+                };
+                return BadRequest(problem);
+            }
+
+            if(projectResource.Name.Count() > 75)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Maximum amount of project name characters exceeded.",
+                    Detail = "It is not possible to create a project name with more than 75 characters.",
+                    Instance = "2ddb12ce-9b2a-45bb-b995-25da84e97938"
                 };
                 return BadRequest(problem);
             }
@@ -382,7 +393,7 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
-                foreach(CallToActionResource callToAction in projectResource.CallToActions)
+                foreach(CallToActionInput callToAction in projectResource.CallToActions)
                 {
                     IEnumerable<CallToActionOption> callToActionOptions =
                         await callToActionOptionService.GetCallToActionOptionFromValueAsync(
@@ -401,7 +412,7 @@ namespace API.Controllers
                 
             }
 
-            Project project = mapper.Map<ProjectResource, Project>(projectResource);
+            Project project = mapper.Map<ProjectInput, Project>(projectResource);
             Models.File file = await fileService.FindAsync(projectResource.IconId);
 
             if(projectResource.IconId != 0 &&
@@ -450,9 +461,9 @@ namespace API.Controllers
 
             if(projectResource.Categories != null)
             {
-                ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
+                ICollection<ProjectCategoryInput> projectCategoryResources = projectResource.Categories;
 
-                foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
+                foreach(ProjectCategoryInput projectCategoryResource in projectCategoryResources)
                 {
                     ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
                     if(alreadyExcProjectCategory == null)
@@ -500,7 +511,7 @@ namespace API.Controllers
 
                 projectCategoryService.Save();
 
-                return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
+                return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectOutput>(project));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
@@ -528,11 +539,11 @@ namespace API.Controllers
         /// <response code="400">The 404 if the use tries to update the institute private property with this endpoint.</response>
         [HttpPut("{projectId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
+        public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectInput projectResource)
         {
             Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
@@ -562,6 +573,17 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
+            if(projectResource.Name.Count() > 75)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Maximum amount of project name characters exceeded.",
+                    Detail = "It is not possible to create a project name with more than 75 characters.",
+                    Instance = "2ddb12ce-9b2a-45bb-b995-25da84e97938"
+                };
+                return BadRequest(problem);
+            }
+
             if(projectResource.CallToActions != null)
             {
                 if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
@@ -587,7 +609,7 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }
 
-                foreach(CallToActionResource callToAction in projectResource.CallToActions)
+                foreach(CallToActionInput callToAction in projectResource.CallToActions)
                 {
                     IEnumerable<CallToActionOption> callToActionOptions =
                         await callToActionOptionService.GetCallToActionOptionFromValueAsync(
@@ -672,9 +694,9 @@ namespace API.Controllers
             await projectCategoryService.ClearProjectCategories(project);
             if(projectResource.Categories != null)
             {
-                ICollection<ProjectCategoryResource> projectCategoryResources = projectResource.Categories;
+                ICollection<ProjectCategoryInput> projectCategoryResources = projectResource.Categories;
 
-                foreach(ProjectCategoryResource projectCategoryResource in projectCategoryResources)
+                foreach(ProjectCategoryInput projectCategoryResource in projectCategoryResources)
                 {
                     ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
                     if(alreadyExcProjectCategory == null)
@@ -704,7 +726,7 @@ namespace API.Controllers
             projectService.Save();
 
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
 
         /// <summary>
@@ -846,7 +868,7 @@ namespace API.Controllers
             userProjectService.Add(userProject);
 
             userProjectService.Save();
-            return Ok(mapper.Map<UserProject, UserProjectResourceResult>(userProject));
+            return Ok(mapper.Map<UserProject, UserProjectOutput>(userProject));
         }
 
         /// <summary>
@@ -974,7 +996,7 @@ namespace API.Controllers
 
                 // Update Elastic Database about this change.
                 await userProjectLikeService.SyncProjectToES(projectToLike);
-                return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(like));
+                return Ok(mapper.Map<ProjectLike, UserProjectLikeOutput>(like));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception!");
@@ -1052,7 +1074,7 @@ namespace API.Controllers
 
             // Update Elastic Database about this change.
             await userProjectLikeService.SyncProjectToES(projectToLike);
-            return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
+            return Ok(mapper.Map<ProjectLike, UserProjectLikeOutput>(projectLike));
         }
 
 
@@ -1070,7 +1092,7 @@ namespace API.Controllers
         /// <response code="200">If success</response>
         [HttpPut("instituteprivate/{projectId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResultResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProjectResultInput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateProjectPrivateStatus(int projectId, [FromBody] bool institutePrivate)
@@ -1146,7 +1168,7 @@ namespace API.Controllers
 
             projectService.Save();
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
 
         /// <summary>
@@ -1161,7 +1183,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(ProjectInstitutionResourceResult), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProjectInstitutionOutput), StatusCodes.Status201Created)]
         public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -1218,7 +1240,7 @@ namespace API.Controllers
             projectInstitution.Project = await projectService.FindAsync(projectId);
             projectInstitution.Institution = await institutionService.FindAsync(institutionId);
 
-            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionResourceResult>(projectInstitution));
+            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionOutput>(projectInstitution));
         }
 
         /// <summary>
@@ -1301,7 +1323,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost("category/{projectId}/{categoryId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
@@ -1372,7 +1394,7 @@ namespace API.Controllers
 
             projectCategoryService.Save();
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
 
         /// <summary>
@@ -1387,7 +1409,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpDelete("category/{projectId}/{categoryId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
@@ -1456,7 +1478,7 @@ namespace API.Controllers
 
             projectCategoryService.Save();
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
     }
 

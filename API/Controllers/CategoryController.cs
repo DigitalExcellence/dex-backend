@@ -46,13 +46,13 @@ namespace API.Controllers
         /// <returns>This method returns a list of category resource results.</returns>
         /// <response code="200">This endpoint returns a list of categories.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<CategoryResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<CategoryOutput>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllCategories()
         {
             IEnumerable<Category> categories = await categoryService.GetAll()
                                                 .ConfigureAwait(false);
 
-            return Ok(mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResourceResult>>(categories));
+            return Ok(mapper.Map<IEnumerable<Category>, IEnumerable<CategoryOutput>>(categories));
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the specified category id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no category is found with the specified category id.</response>
         [HttpGet("{categoryId}")]
-        [ProducesResponseType(typeof(CategoryResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CategoryOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetCategory(int categoryId)
@@ -93,7 +93,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<Category, CategoryResourceResult>(category));
+            return Ok(mapper.Map<Category, CategoryOutput>(category));
         }
 
         /// <summary>
@@ -105,9 +105,9 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when unable to create category.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Scopes.CategoryWrite))]
-        [ProducesResponseType(typeof(CategoryResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(CategoryOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryResource categoryResource)
+        public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryInput categoryResource)
         {
             if(categoryResource == null)
             {
@@ -119,14 +119,14 @@ namespace API.Controllers
                                          };
                 return BadRequest(problem);
             }
-            Category category = mapper.Map<CategoryResource, Category>(categoryResource);
+            Category category = mapper.Map<CategoryInput, Category>(categoryResource);
 
             try
             {
                 await categoryService.AddAsync(category)
                                  .ConfigureAwait(false);
                 categoryService.Save();
-                return Created(nameof(CreateCategoryAsync), mapper.Map<Category, CategoryResourceResult>(category));
+                return Created(nameof(CreateCategoryAsync), mapper.Map<Category, CategoryOutput>(category));
             }
             catch(DbUpdateException e)
             {
@@ -152,9 +152,9 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the category with the specified id could not be found.</response>
         [HttpPut("{categoryId}")]
         [Authorize(Policy = nameof(Scopes.CategoryWrite))]
-        [ProducesResponseType(typeof(CategoryResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CategoryOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> UpdateCategory(int categoryId, CategoryResource categoryResource)
+        public async Task<IActionResult> UpdateCategory(int categoryId, CategoryInput categoryResource)
         {
             Category currentCategory = await categoryService.FindAsync(categoryId)
                                                 .ConfigureAwait(false);
@@ -173,7 +173,7 @@ namespace API.Controllers
             categoryService.Update(currentCategory);
             categoryService.Save();
 
-            return Ok(mapper.Map<Category, CategoryResourceResult>(currentCategory));
+            return Ok(mapper.Map<Category, CategoryOutput>(currentCategory));
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace API.Controllers
         /// <response code="409">The 409 Conflict status code is returned when the category is still connected to a project.</response>
         [HttpDelete("{categoryId}")]
         [Authorize(Policy = nameof(Scopes.CategoryWrite))]
-        [ProducesResponseType(typeof(CategoryResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CategoryOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Conflict)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteCategory(int categoryId)
@@ -224,7 +224,7 @@ namespace API.Controllers
             IEnumerable<Category> categories = await categoryService.GetAll()
                                                 .ConfigureAwait(false);
 
-            return Ok(mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResourceResult>>(categories));
+            return Ok(mapper.Map<IEnumerable<Category>, IEnumerable<CategoryOutput>>(categories));
         }
     }
 
