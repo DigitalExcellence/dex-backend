@@ -68,12 +68,12 @@ namespace API.Controllers
         /// <returns>This method returns a list of highlight resource results.</returns>
         /// <response code="200">This endpoint returns a list highlights.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<HighlightOutput>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllHighlights()
         {
             IEnumerable<Highlight> highlights = await highlightService.GetHighlightsAsync();
 
-            return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
+            return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightOutput>>(highlights));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the highlight id is not valid.</response>
         /// <response code="404">The 404 Not Found status code is returned when there is no highlight found with the specified id.</response>
         [HttpGet("{highlightId}")]
-        [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(HighlightOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetHighlight(int highlightId)
@@ -113,7 +113,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<Highlight, HighlightResourceResult>(highlight));
+            return Ok(mapper.Map<Highlight, HighlightOutput>(highlight));
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace API.Controllers
         /// </response>
         [HttpGet("Project/{projectId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightRead))]
-        [ProducesResponseType(typeof(IEnumerable<HighlightResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<HighlightOutput>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetHighlightsByProjectId(int projectId)
@@ -155,7 +155,7 @@ namespace API.Controllers
                                          };
                 return NotFound(problem);
             }
-            return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightResourceResult>>(highlights));
+            return Ok(mapper.Map<IEnumerable<Highlight>, IEnumerable<HighlightOutput>>(highlights));
         }
 
         /// <summary>
@@ -170,10 +170,10 @@ namespace API.Controllers
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(HighlightOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> CreateHighlight(HighlightResource highlightResource)
+        public async Task<IActionResult> CreateHighlight(HighlightInput highlightResource)
         {
             if(highlightResource == null)
             {
@@ -186,7 +186,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            Highlight highlight = mapper.Map<HighlightResource, Highlight>(highlightResource);
+            Highlight highlight = mapper.Map<HighlightInput, Highlight>(highlightResource);
             File file = null;
 
             if(highlightResource.ImageId != null)
@@ -224,7 +224,7 @@ namespace API.Controllers
             {
                 highlightService.Add(highlight);
                 highlightService.Save();
-                return Created(nameof(CreateHighlight), mapper.Map<Highlight, HighlightResourceResult>(highlight));
+                return Created(nameof(CreateHighlight), mapper.Map<Highlight, HighlightOutput>(highlight));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
@@ -252,11 +252,11 @@ namespace API.Controllers
         /// </response>
         [HttpPut("{highlightId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.HighlightWrite))]
-        [ProducesResponseType(typeof(HighlightResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(HighlightOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UpdateHighlight(int highlightId,
-                                                         [FromBody] HighlightResource highlightResource)
+                                                         [FromBody] HighlightInput highlightResource)
         {
             Highlight highlight = await highlightService.FindAsync(highlightId);
             if(highlight == null)
@@ -310,7 +310,7 @@ namespace API.Controllers
                 highlightService.Update(highlight);
                 highlightService.Save();
 
-                return Ok(mapper.Map<Highlight, HighlightResourceResult>(highlight));
+                return Ok(mapper.Map<Highlight, HighlightOutput>(highlight));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");

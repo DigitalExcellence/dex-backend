@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "17d5a999-6aca-4f5e-af81-220ca0fd80b1",
+		"_postman_id": "45ee041e-e0a8-4433-bdd8-3517c9bf6a93",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -2322,6 +2322,101 @@
 											"path": [
 												"api",
 												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-CreateProject-ProjectNameLimitExceeded-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"    pm.response.instance == \"2ddb12ce-9b2a-45bb-b995-25da84e97938\";\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectNameLimitExceeded}}\",\r\n  \"description\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-CreateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-CreateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-CreateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"callToActions\": [\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    },\r\n    {\r\n      \"optionValue\": \"Join today\",\r\n      \"value\": \"https://postmantest-calltoaction1-Administrator.com/\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"institutePrivate\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Project-UpdateProject-ProjectNameLimitExceeded-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"    pm.response.instance == \"2ddb12ce-9b2a-45bb-b995-25da84e97938\";\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"{{projectNameLimitExceeded}}\",\r\n  \"description\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"shortDescription\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"uri\": \"postmantest_Project-UpdateProject-Administrator\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_Project-UpdateProject-Administrator\",\r\n      \"role\": \"postmantest_Project-UpdateProject-Administrator\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\",\r\n  \"projectIconId\": 0,\r\n  \"imageIds\": []\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/Project/1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"Project",
+												"1"
 											]
 										}
 									},

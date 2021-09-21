@@ -92,7 +92,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetCurrentUser()
         {
@@ -108,7 +108,7 @@ namespace API.Controllers
                 };
                 return NotFound(problem);
             }
-            return Ok(mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserOutput>(user));
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpGet("{userId}")]
         [Authorize]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUser(int userId)
@@ -159,7 +159,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserOutput>(user));
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
         [HttpGet("projects")]
         [Authorize]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUserProjects(
                 [FromQuery] ProjectFilterParamsResource projectFilterParamsResource
@@ -218,10 +218,10 @@ namespace API.Controllers
             /// <response code="404">The institution with the specified institution id could not be found.</response>
             [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.UserWrite))]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> CreateAccountAsync([FromBody] UserResource accountResource)
+        public async Task<IActionResult> CreateAccountAsync([FromBody] UserInput accountResource)
         {
             if(accountResource.InstitutionId != null)
             {
@@ -250,7 +250,7 @@ namespace API.Controllers
                 }
             }
 
-            User user = mapper.Map<UserResource, User>(accountResource);
+            User user = mapper.Map<UserInput, User>(accountResource);
             Role registeredUserRole =
                 (await roleService.GetAll()).FirstOrDefault(i => i.Name == nameof(Defaults.Roles.RegisteredUser));
             user.Role = registeredUserRole;
@@ -259,8 +259,8 @@ namespace API.Controllers
             {
                 userService.Add(user);
                 userService.Save();
-                UserResourceResult model =
-                    mapper.Map<User, UserResourceResult>(await userService.GetUserAsync(user.Id));
+                UserOutput model =
+                    mapper.Map<User, UserOutput>(await userService.GetUserAsync(user.Id));
                 return Created(nameof(CreateAccountAsync), model);
             } catch(DbUpdateException e)
             {
@@ -287,10 +287,10 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the user with the specified id could not be found.</response>
         [HttpPut("{userId}")]
         [Authorize]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserResource userResource)
+        public async Task<IActionResult> UpdateAccount(int userId, [FromBody] UserInput userResource)
         {
             if(userResource.InstitutionId != null)
             {
@@ -379,7 +379,7 @@ namespace API.Controllers
             userService.Update(userToUpdate);
             userService.Save();
 
-            return Ok(mapper.Map<User, UserResourceResult>(userToUpdate));
+            return Ok(mapper.Map<User, UserOutput>(userToUpdate));
         }
 
         /// <summary>
@@ -523,7 +523,7 @@ namespace API.Controllers
             userUserService.Add(userUser);
 
             userUserService.Save();
-            return Ok(mapper.Map<UserUser, UserUserResourceResult>(userUser));
+            return Ok(mapper.Map<UserUser, UserUserOutput>(userUser));
         }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace API.Controllers
         [HttpPut("graduationdate")]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [Authorize]
-        public async Task<IActionResult> SetUserGraduationDate([FromBody] UserResource userResource)
+        public async Task<IActionResult> SetUserGraduationDate([FromBody] UserInput userResource)
         {
             User user = await HttpContext.GetContextUser(userService)
                                          .ConfigureAwait(false);
@@ -611,7 +611,7 @@ namespace API.Controllers
             userService.Update(user);
             userService.Save();
 
-            return Ok(mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserOutput>(user));
         }
 
 
@@ -623,7 +623,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the user is not found.</response>
         [HttpGet("projectrecommendations/{amount}")]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(List<ProjectResourceResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ProjectOutput>), StatusCodes.Status200OK)]
         [Authorize]
         public async Task<IActionResult> GetRecommendedProjects(int amount)
         {
@@ -643,11 +643,11 @@ namespace API.Controllers
             try
             {
                 List<Project> projectRecommendations = await userService.GetRecommendedProjects(user.Id, amount);
-                return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectRecommendations));
+                return Ok(mapper.Map<List<Project>, List<ProjectOutput>>(projectRecommendations));
 
             } catch(RecommendationNotFoundException)
             {
-                return Ok(new List<ProjectResourceResult>());
+                return Ok(new List<ProjectOutput>());
             }
             
         }

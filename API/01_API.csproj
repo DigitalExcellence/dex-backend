@@ -6,15 +6,8 @@
         <DocumentationFile>.\API.xml</DocumentationFile>
         <Company>Digital Excellence Fontys</Company>
         <LangVersion>8</LangVersion>
-        <Version>1.5.0-beta</Version>
+        <Version>1.6.0-beta</Version>
     </PropertyGroup>
-
-    <ItemGroup>
-        <Compile Remove="Resources\Project\**" />
-        <Content Remove="Resources\Project\**" />
-        <EmbeddedResource Remove="Resources\Project\**" />
-        <None Remove="Resources\Project\**" />
-    </ItemGroup>
 
     <ItemGroup>
         <None Remove="Uploads\Images\.gitkeep" />
