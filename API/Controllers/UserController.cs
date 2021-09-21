@@ -173,7 +173,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUserProjects(
-                [FromQuery] ProjectFilterParamsResource projectFilterParamsResource
+                [FromQuery] ProjectFilterParamsInput projectFilterParamsResource
             )
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
@@ -189,14 +189,14 @@ namespace API.Controllers
             }
 
             ProjectFilterParams projectFilterParams =
-                mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+                mapper.Map<ProjectFilterParamsInput, ProjectFilterParams>(projectFilterParamsResource);
 
             IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id, projectFilterParams);
-            IEnumerable<ProjectResultResource> results =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(userProjects);
+            IEnumerable<ProjectResultInput> results =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(userProjects);
 
-            ProjectResultsResource resultsResource = new ProjectResultsResource
-                 {
+            ProjectResultsInput resultsResource = new ProjectResultsInput
+            {
                      Results = results.ToArray(),
                      Count = results.Count(),
                      TotalCount = await projectService.ProjectsCount(projectFilterParams, user.Id),
