@@ -34,8 +34,8 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
                 HttpHelper = httpHelper
             };
 
-            var expectedResultType = typeof(UserResourceResult);
-            var createResource = new UserResource
+            var expectedResultType = typeof(UserOutput);
+            var createResource = new UserInput
             {
                 IdentityId = "999",
                 Name = userName,
