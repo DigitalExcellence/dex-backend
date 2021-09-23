@@ -14,14 +14,14 @@ namespace IntegrationTests.Implementations.B_Tests
 
         }
 
-        [Theory]
-        [ClassData(typeof(ProjectDataSourceAttribute))]
-        //[ClassData(typeof(IdentityIdSupplier))]
-        public void Test([ProjectDataSource] Project project)
-        {
-            var id = project.Id;
-            //IdentityId = identityId;
-            //await base.Execute();
-        }
+        //[Theory]
+        //[ClassData(typeof(ProjectDataSourceAttribute))]
+        ////[ClassData(typeof(IdentityIdSupplier))]
+        //public void Test([ProjectDataSource] Project project)
+        //{
+        //    var id = project.Id;
+        //IdentityId = identityId;
+        //await base.Execute();
     }
 }
+
