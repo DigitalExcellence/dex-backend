@@ -62,12 +62,12 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the collection of wizard pages.</response>
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<WizardPageResourceResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<WizardPageOutput>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllPages()
         {
             IEnumerable<WizardPage> pages = await wizardPageService.GetAll();
-            IEnumerable<WizardPageResourceResult> models =
-                mapper.Map<IEnumerable<WizardPage>, IEnumerable<WizardPageResourceResult>>(pages);
+            IEnumerable<WizardPageOutput> models =
+                mapper.Map<IEnumerable<WizardPage>, IEnumerable<WizardPageOutput>>(pages);
             return Ok(models);
         }
 
@@ -84,7 +84,7 @@ namespace API.Controllers
         /// </response>
         [HttpGet("{id}")]
         [Authorize]
-        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(WizardPageOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPageById(int id)
@@ -113,7 +113,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            WizardPageResourceResult model = mapper.Map<WizardPage, WizardPageResourceResult>(page);
+            WizardPageOutput model = mapper.Map<WizardPage, WizardPageOutput>(page);
             return Ok(model);
         }
 
@@ -129,9 +129,9 @@ namespace API.Controllers
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.WizardPageWrite))]
-        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(WizardPageOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateWizardPage(WizardPageResource wizardPageResource)
+        public async Task<IActionResult> CreateWizardPage(WizardPageInput wizardPageResource)
         {
             if(wizardPageResource == null)
             {
@@ -144,13 +144,13 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            WizardPage wizardPage = mapper.Map<WizardPageResource, WizardPage>(wizardPageResource);
+            WizardPage wizardPage = mapper.Map<WizardPageInput, WizardPage>(wizardPageResource);
 
             try
             {
                 await wizardPageService.AddAsync(wizardPage);
                 wizardPageService.Save();
-                WizardPageResourceResult createdPage = mapper.Map<WizardPage, WizardPageResourceResult>(wizardPage);
+                WizardPageOutput createdPage = mapper.Map<WizardPage, WizardPageOutput>(wizardPage);
                 return Created(nameof(CreateWizardPage), createdPage);
             } catch(DbUpdateException e)
             {
@@ -180,10 +180,10 @@ namespace API.Controllers
         /// </response>
         [HttpPut("{id}")]
         [Authorize(Policy = nameof(Defaults.Scopes.WizardPageWrite))]
-        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(WizardPageOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdatedWizardPage(int id, [FromBody] WizardPageResource wizardPageResource)
+        public async Task<IActionResult> UpdatedWizardPage(int id, [FromBody] WizardPageInput wizardPageResource)
         {
             if(id <= 0)
             {
@@ -214,7 +214,7 @@ namespace API.Controllers
             wizardPageService.Update(wizardPage);
             wizardPageService.Save();
 
-            WizardPageResourceResult model = mapper.Map<WizardPage, WizardPageResourceResult>(wizardPage);
+            WizardPageOutput model = mapper.Map<WizardPage, WizardPageOutput>(wizardPage);
             return Ok(model);
         }
 
@@ -231,7 +231,7 @@ namespace API.Controllers
         /// </response>
         [HttpDelete("{id}")]
         [Authorize(Policy = nameof(Defaults.Scopes.WizardPageWrite))]
-        [ProducesResponseType(typeof(WizardPageResourceResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(WizardPageOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteWizardPage(int id)

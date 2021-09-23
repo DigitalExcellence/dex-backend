@@ -31,6 +31,7 @@ namespace Models
         {
             Collaborators = new List<Collaborator>();
             LinkedInstitutions = new List<ProjectInstitution>();
+            Images = new List<File>();
         }
 
         public int Id { get; set; }
@@ -70,12 +71,17 @@ namespace Models
 
         public File ProjectIcon { get; set; }
 
-        public CallToAction CallToAction { get; set; }
+        public List<CallToAction> CallToActions { get; set; }
 
         [JsonIgnore]
         public List<ProjectLike> Likes { get; set; }
 
         public bool InstitutePrivate { get; set; }
+
+        public List<ProjectCategory> Categories { get; set; }
+
+        public List<File> Images { get; set; }
+
 
         /// <summary>
         /// Checks if the user can access the project based on

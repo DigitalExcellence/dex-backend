@@ -65,6 +65,12 @@ namespace API.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+            services.AddScoped<IProjectCategoryService, ProjectCategoryService>();
+            services.AddScoped<IProjectCategoryRepository, ProjectCategoryRepository>();
+
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IFileRepository, FileRepository>();
 
@@ -128,6 +134,15 @@ namespace API.Extensions
             services.AddScoped<GithubDataSourceAdaptee>();
             services.AddScoped<GitlabDataSourceAdaptee>();
             services.AddScoped<JsFiddleDataSourceAdaptee>();
+            services.AddScoped<FontysGitlabDataSourceAdaptee>();
+
+            services.AddScoped<IUserProjectLikeService, UserProjectLikeService>();
+            services.AddScoped<IUserProjectLikeRepository, UserProjectLikeRepository>();
+
+            services.AddScoped<ICallToActionOptionService, CallToActionOptionService>();
+            services.AddScoped<ICallToActionOptionRepository, CallToActionOptionRepository>();
+
+            services.AddSingleton<ITaskPublisher, TaskPublisher>();
         }
 
     }

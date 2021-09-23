@@ -74,12 +74,12 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns all projects.</response>
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<FileResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<FileOutput>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetFilesAsync()
         {
             IEnumerable<File> files = await fileService.GetAll();
 
-            return Ok(mapper.Map<IEnumerable<File>, IEnumerable<FileResourceResult>>(files));
+            return Ok(mapper.Map<IEnumerable<File>, IEnumerable<FileOutput>>(files));
         }
 
         /// <summary>
@@ -93,9 +93,9 @@ namespace API.Controllers
         [Consumes("multipart/form-data")]
         [ControllerAttributes.AllowedFileExtensions(new string[] { ".jpeg", ".png", ".jpg", ".gif" })]
         [ControllerAttributes.MaxFileSize(2097152)]
-        [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FileOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> UploadSingleFile([FromForm] FileResource fileResource)
+        public async Task<IActionResult> UploadSingleFile([FromForm] FileInput fileResource)
         {
             if(fileResource.File == null)
             {
@@ -122,7 +122,7 @@ namespace API.Controllers
                 await fileService.AddAsync(file);
                 fileService.Save();
 
-                return Ok(mapper.Map<File, FileResourceResult>(file));
+                return Ok(mapper.Map<File, FileOutput>(file));
             } catch(FileExistException fileExistException)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -142,7 +142,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns one single file.</response>
         /// <returns> File </returns>
         [HttpGet("{fileId}")]
-        [ProducesResponseType(typeof(FileResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FileOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetSingleFile(int fileId)
         {
@@ -159,7 +159,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<File, FileResourceResult>(file));
+            return Ok(mapper.Map<File, FileOutput>(file));
         }
 
         /// <summary>

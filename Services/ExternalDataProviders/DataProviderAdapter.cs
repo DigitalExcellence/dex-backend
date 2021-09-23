@@ -51,7 +51,7 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The uri which is used for searching an individual project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        Task<Project> GetProjectByUri(Uri sourceUri);
+        Task<Project> GetProjectByUri(Uri sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for return the Oauth url of the data source.
@@ -110,10 +110,10 @@ namespace Services.ExternalDataProviders
                     throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
                 return await publicDataSource.GetPublicProjectById(id);
             }
-            IAuthorizedDataSourceAdaptee authorizedDataSource = adaptee as IAuthorizedDataSourceAdaptee;
-            if(authorizedDataSource == null)
+            IPrivateDataSourceAdaptee privateDataSource = adaptee as IPrivateDataSourceAdaptee;
+            if(privateDataSource == null)
                 throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
-            return await authorizedDataSource.GetProjectById(token, id);
+            return await privateDataSource.GetProjectById(token, id);
         }
 
         /// <summary>
@@ -121,12 +121,12 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="sourceUri">The uri which is used for searching an individual project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        public async Task<Project> GetProjectByUri(Uri sourceUri)
+        public async Task<Project> GetProjectByUri(Uri sourceUri, string token = null)
         {
             IPublicDataSourceAdaptee publicDataSource = adaptee as IPublicDataSourceAdaptee;
             if(publicDataSource == null)
                 throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
-            return await publicDataSource.GetPublicProjectFromUri(sourceUri);
+            return await publicDataSource.GetPublicProjectFromUri(sourceUri, token);
         }
 
 
@@ -136,8 +136,8 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns a string containing the Oauth url.</returns>
         public string GetOauthUrl()
         {
-            IAuthorizedDataSourceAdaptee authorizedDataSource = adaptee as IAuthorizedDataSourceAdaptee;
-            return authorizedDataSource?.OauthUrl;
+            IPrivateDataSourceAdaptee privateDataSource = adaptee as IPrivateDataSourceAdaptee;
+            return privateDataSource?.OauthUrl;
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Services.ExternalDataProviders
         /// <returns>This method returns the Oauth tokens from the external data source.</returns>
         public async Task<OauthTokens> GetTokens(string code)
         {
-            IAuthorizedDataSourceAdaptee dataProvider = adaptee as IAuthorizedDataSourceAdaptee;
+            IPrivateDataSourceAdaptee dataProvider = adaptee as IPrivateDataSourceAdaptee;
             if(dataProvider == null)
                 throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
             return await dataProvider.GetTokens(code);
@@ -155,10 +155,10 @@ namespace Services.ExternalDataProviders
 
         private async Task<IEnumerable<Project>> GetAllProjectWithAccessToken(string accessToken)
         {
-            IAuthorizedDataSourceAdaptee authorizedDataSourceAdaptee = adaptee as IAuthorizedDataSourceAdaptee;
-            if(authorizedDataSourceAdaptee == null)
+            IPrivateDataSourceAdaptee privateDataSourceAdaptee = adaptee as IPrivateDataSourceAdaptee;
+            if(privateDataSourceAdaptee == null)
                 throw new NotSupportedException("Can not cast specified adaptee to authorized adaptee.");
-            IEnumerable<Project> projects = await authorizedDataSourceAdaptee.GetAllProjects(accessToken);
+            IEnumerable<Project> projects = await privateDataSourceAdaptee.GetAllProjects(accessToken);
             return projects;
         }
 

@@ -120,7 +120,8 @@ namespace Services.Services
                                                        take,
                                                        orderBy,
                                                        orderByDirection,
-                                                       projectFilterParams.Highlighted);
+                                                       projectFilterParams.Highlighted,
+                                                       projectFilterParams.Categories);
         }
 
         /// <summary>
@@ -132,7 +133,7 @@ namespace Services.Services
         public virtual async Task<int> SearchInternalProjectsCount(string query,
                                                                    ProjectFilterParams projectFilterParams)
         {
-            return await projectRepository.SearchCountAsync(query, projectFilterParams.Highlighted);
+            return await projectRepository.SearchCountAsync(query, projectFilterParams.Highlighted, projectFilterParams.Categories);
         }
 
         /// <summary>

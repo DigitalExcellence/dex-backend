@@ -1,0 +1,31 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      - name: NPM Install Semantic Release
+        run: |
+          npm install -g semantic-release
+          npm install \
+              @semantic-release/changelog \
+              @semantic-release/exec \
+              @semantic-release/git \
+              @semantic-release/github \
+              @semantic-release/release-notes-generator \
+              conventional-changelog-conventionalcommits
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using System.Collections.Generic;
+
 namespace Models
 {
 
@@ -36,7 +38,7 @@ namespace Models
 
         /// <summary>
         ///     By which property the results should be sorted
-        ///     Possible values are: name, created, updated
+        ///     Possible values are: name, created, updated, likes
         /// </summary>
         public string SortBy { get; set; }
 
@@ -45,6 +47,11 @@ namespace Models
         ///     Possible values are: asc (Ascending), desc (Descending)
         /// </summary>
         public string SortDirection { get; set; }
+
+        // <summary>
+        //      Get or set the array of category id's
+        // </summary>
+        public ICollection<int> Categories { get; set; }
 
         /// <summary>
         ///     This property filter the projects on the highlighted state

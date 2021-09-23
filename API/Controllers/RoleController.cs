@@ -47,13 +47,13 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns a list of roles.</response>
         [HttpGet]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
-        [ProducesResponseType(typeof(IEnumerable<RoleResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<RoleOutput>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllRoles()
         {
             List<Role> roles = await roleService.GetAllAsync()
                                                 .ConfigureAwait(false);
 
-            return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleResourceResult>>(roles));
+            return Ok(mapper.Map<IEnumerable<Role>, IEnumerable<RoleOutput>>(roles));
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when no role is found with the specified role id.</response>
         [HttpGet("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
-        [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(RoleOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetRole(int roleId)
@@ -122,7 +122,7 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            return Ok(mapper.Map<Role, RoleResourceResult>(role));
+            return Ok(mapper.Map<Role, RoleOutput>(role));
         }
 
         /// <summary>
@@ -134,9 +134,9 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when unable to create role.</response>
         [HttpPost]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
-        [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(RoleOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateRoleAsync([FromBody] RoleResource roleResource)
+        public async Task<IActionResult> CreateRoleAsync([FromBody] RoleInput roleResource)
         {
             if(roleResource == null)
             {
@@ -148,7 +148,7 @@ namespace API.Controllers
                                          };
                 return BadRequest(problem);
             }
-            Role role = mapper.Map<RoleResource, Role>(roleResource);
+            Role role = mapper.Map<RoleInput, Role>(roleResource);
 
             foreach(RoleScope roleScope in role.Scopes)
             {
@@ -169,7 +169,7 @@ namespace API.Controllers
                 await roleService.AddAsync(role)
                                  .ConfigureAwait(false);
                 roleService.Save();
-                return Created(nameof(CreateRoleAsync), mapper.Map<Role, RoleResourceResult>(role));
+                return Created(nameof(CreateRoleAsync), mapper.Map<Role, RoleOutput>(role));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
@@ -195,10 +195,10 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the role with the specified id could not be found.</response>
         [HttpPut("{roleId}")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
-        [ProducesResponseType(typeof(RoleResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(RoleOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> UpdateRole(int roleId, RoleResource roleResource)
+        public async Task<IActionResult> UpdateRole(int roleId, RoleInput roleResource)
         {
             Role currentRole = await roleService.FindAsync(roleId)
                                                 .ConfigureAwait(false);
@@ -232,7 +232,7 @@ namespace API.Controllers
             roleService.Update(currentRole);
             roleService.Save();
 
-            return Ok(mapper.Map<Role, RoleResourceResult>(currentRole));
+            return Ok(mapper.Map<Role, RoleOutput>(currentRole));
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the specified role or user could not be found.</response>
         [HttpPut("setRole")]
         [Authorize(Policy = nameof(Scopes.RoleWrite))]
-        [ProducesResponseType(typeof(UserResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> SetRole(int userId, int roleId)
         {
@@ -337,7 +337,7 @@ namespace API.Controllers
             userService.Update(user);
             userService.Save();
 
-            return Ok(mapper.Map<User, UserResourceResult>(user));
+            return Ok(mapper.Map<User, UserOutput>(user));
         }
 
     }

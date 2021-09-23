@@ -62,7 +62,7 @@ namespace Services.ExternalDataProviders
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri);
+        Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri, string token = null);
 
         /// <summary>
         ///     This method is responsible for retrieving the oauth url from the specified data source.
@@ -126,12 +126,17 @@ namespace Services.ExternalDataProviders
         /// </summary>
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="token">The token which is used for retrieving all the projects. This can be a username or Oauth tokens.</param>
-        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used.</param>
+        /// <param name="needsAuth">The needsAuth parameter specifies which flow should get used. This gets ignored for datasources that always requires authentication</param>
         /// <returns>This method returns a collection of projects.</returns>
         public async Task<IEnumerable<Project>> GetAllProjects(string dataSourceGuid, string token, bool needsAuth)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
+
+            // If the adaptee always requires authentication, we always expect a token.
+            if(adaptee.AlwaysRequiresAuthentication)
+                needsAuth = true;
+
             return await dataProviderAdapter.GetAllProjects(token, needsAuth);
         }
 
@@ -147,6 +152,11 @@ namespace Services.ExternalDataProviders
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
+
+            // If the adaptee always requires authentication, we always expect a token.
+            if ( adaptee.AlwaysRequiresAuthentication )
+                needsAuth = true;
+
             return await dataProviderAdapter.GetProjectByGuid(token, id, needsAuth);
         }
 
@@ -166,7 +176,7 @@ namespace Services.ExternalDataProviders
         /// <param name="dataSourceGuid">The data source guid that specifies which data source should get used.</param>
         /// <param name="sourceUri">The source uri of the project which will get used for retrieving the correct project.</param>
         /// <returns>This method returns a project from the specified uri.</returns>
-        public async Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri)
+        public async Task<Project> GetProjectFromUri(string dataSourceGuid, string sourceUri, string token = null)
         {
             IDataSourceAdaptee adaptee = await dataProviderLoader.GetDataSourceByGuid(dataSourceGuid);
             dataProviderAdapter = new DataProviderAdapter(adaptee);
@@ -183,7 +193,7 @@ namespace Services.ExternalDataProviders
                 Uri.TryCreate("https://" + sourceUri, UriKind.Absolute, out serializedUrl);
             }
 
-            return await dataProviderAdapter.GetProjectByUri(serializedUrl);
+            return await dataProviderAdapter.GetProjectByUri(serializedUrl, token);
         }
 
         /// <summary>
@@ -227,7 +237,7 @@ namespace Services.ExternalDataProviders
 
             sources = FilterAuthPages(sources, needsAuth.Value);
 
-            if(needsAuth.Value) return sources.Where(s => s is IAuthorizedDataSourceAdaptee);
+            if(needsAuth.Value) return sources.Where(s => s is IPrivateDataSourceAdaptee);
 
             return sources.Where(s => s is IPublicDataSourceAdaptee);
         }

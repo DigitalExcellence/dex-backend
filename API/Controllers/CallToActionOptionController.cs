@@ -67,12 +67,12 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns a list of call to action options.</response>
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<CallToActionOptionOutput>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllCallToActionOptions()
         {
             IEnumerable<CallToActionOption> options = await callToActionOptionService.GetAll();
-            IEnumerable<CallToActionOptionResourceResult> returnModel =
-                mapper.Map<IEnumerable<CallToActionOption>, IEnumerable<CallToActionOptionResourceResult>>(options);
+            IEnumerable<CallToActionOptionOutput> returnModel =
+                mapper.Map<IEnumerable<CallToActionOption>, IEnumerable<CallToActionOptionOutput>>(options);
 
             return Ok(returnModel);
         }
@@ -90,7 +90,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when the type could not be found.</response>
         [HttpGet("type/{typeName}")]
         [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<CallToActionOptionResourceResult>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<CallToActionOptionOutput>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetAllCallToActionOptionsFromType(string typeName)
@@ -122,8 +122,8 @@ namespace API.Controllers
 
             IEnumerable<CallToActionOption> options =
                 await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(typeName);
-            IEnumerable<CallToActionOptionResourceResult> returnModel =
-                mapper.Map<IEnumerable<CallToActionOption>, IEnumerable<CallToActionOptionResourceResult>>(options);
+            IEnumerable<CallToActionOptionOutput> returnModel =
+                mapper.Map<IEnumerable<CallToActionOption>, IEnumerable<CallToActionOptionOutput>>(options);
 
             return Ok(returnModel);
         }
@@ -141,7 +141,7 @@ namespace API.Controllers
         /// </response>
         [HttpGet("{id}")]
         [Authorize]
-        [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CallToActionOptionOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetCallToActionOptionById(int id)
@@ -170,8 +170,8 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            CallToActionOptionResourceResult model =
-                mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(callToActionOption);
+            CallToActionOptionOutput model =
+                mapper.Map<CallToActionOption, CallToActionOptionOutput>(callToActionOption);
             return Ok(model);
         }
 
@@ -190,9 +190,9 @@ namespace API.Controllers
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionWrite))]
-        [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CallToActionOptionOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateCallToActionOption(CallToActionOptionResource callToActionOptionResource)
+        public async Task<IActionResult> CreateCallToActionOption(CallToActionOptionInput callToActionOptionResource)
         {
             if(callToActionOptionResource == null)
             {
@@ -206,7 +206,7 @@ namespace API.Controllers
             }
 
             CallToActionOption option =
-                mapper.Map<CallToActionOptionResource, CallToActionOption>(callToActionOptionResource);
+                mapper.Map<CallToActionOptionInput, CallToActionOption>(callToActionOptionResource);
 
             if((await callToActionOptionService.GetCallToActionOptionsFromTypeAsync(option.Type)).Any() &&
                (await callToActionOptionService.GetCallToActionOptionFromValueAsync(option.Value)).Any())
@@ -224,8 +224,8 @@ namespace API.Controllers
             {
                 callToActionOptionService.Add(option);
                 callToActionOptionService.Save();
-                CallToActionOptionResourceResult model =
-                    mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(option);
+                CallToActionOptionOutput model =
+                    mapper.Map<CallToActionOption, CallToActionOptionOutput>(option);
                 return Created(nameof(CreateCallToActionOption), model);
             } catch(DbUpdateException)
             {
@@ -257,11 +257,11 @@ namespace API.Controllers
         /// </response>
         [HttpPut("{callToActionId}")]
         [Authorize(Policy = nameof(Defaults.Scopes.CallToActionOptionWrite))]
-        [ProducesResponseType(typeof(CallToActionOptionResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CallToActionOptionOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> UpdateCallToActionOption(int callToActionId,
                                                                   [FromBody]
-                                                                  CallToActionOptionResource callToActionOptionResource)
+                                                                  CallToActionOptionInput callToActionOptionResource)
         {
             CallToActionOption option = await callToActionOptionService.FindAsync(callToActionId);
             if(option == null)
@@ -293,7 +293,7 @@ namespace API.Controllers
             callToActionOptionService.Update(option);
             callToActionOptionService.Save();
 
-            return Ok(mapper.Map<CallToActionOption, CallToActionOptionResourceResult>(option));
+            return Ok(mapper.Map<CallToActionOption, CallToActionOptionOutput>(option));
         }
 
         /// <summary>

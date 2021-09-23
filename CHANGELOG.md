@@ -5,27 +5,77 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Release v.1.6.0-beta - 15-9-2021
+
+### Added
+
+### Changed
+- Added max character length when creating project name [#418](https://github.com/DigitalExcellence/dex-backend/issues/418)
+- Renamed resources and folder structure changed [#500](https://github.com/DigitalExcellence/dex-backend/pull/500)
+- Updated resharp manually [#494](https://github.com/DigitalExcellence/dex-backend/pull/494)
+
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+- Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.2 to 3.1.18 [Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.2 to 3.1.18](https://github.com/DigitalExcellence/dex-backend/pull/486)
+
+- Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.3 to 3.1.18 in /IdentityServer[Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.2 to 3.1.18](https://github.com/DigitalExcellence/dex-backend/pull/487)
+
+
+## Release v.1.5.0-beta - 30-06-2021
+
+### Added
+
+- Added Fontys Gitlab to the wizard, and the functionality to get private projects - [#377](https://github.com/DigitalExcellence/dex-backend/issues/377)
+- Performance testing using K6 - [#379](https://github.com/DigitalExcellence/dex-backend/issues/379)
+- Project sorting by likes - [#470](https://github.com/DigitalExcellence/dex-backend/issues/470)
+
+### Changed
+
+- Added support for multiple call to actions instead of one call to action - [#416](https://github.com/DigitalExcellence/dex-backend/issues/416)
+
+### Fixed
+
+- Able to remove images from project - [#454](https://github.com/DigitalExcellence/dex-backend/issues/454)
+- Include categories in retrieving a user's project - [#468](https://github.com/DigitalExcellence/dex-backend/issues/468)
+- Lowercase file extensions on upload - [#472](https://github.com/DigitalExcellence/dex-backend/issues/472)
+- Fixed an issue where Swagger could not authorize with IdentityServer - [#429](https://github.com/DigitalExcellence/dex-backend/issues/429)
+- Improved the functionality of the search endpoint - [#477](https://github.com/DigitalExcellence/dex-backend/issues/477)
+- Projects now has a maximum of 10 images - [#475](https://github.com/DigitalExcellence/dex-backend/issues/475)
+
+## Release v.1.4.0-beta - 07-06-2021
+
+### Added
+
+- Added autocomplete suggestions for search results - [#361](https://github.com/DigitalExcellence/dex-backend/issues/361)
+- Added image to highlights - [#431](https://github.com/DigitalExcellence/dex-backend/issues/431)
+- Added functionality to add multiples images to a project - [#430](https://github.com/DigitalExcellence/dex-backend/issues/430)
+- Filtering through categories - [#444](https://github.com/DigitalExcellence/dex-backend/issues/444)
+
+
+### Fixed
+
+- Improved performance of the get all projects query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
+- Removed getting the description for the projects get all query - [#436](https://github.com/DigitalExcellence/dex-backend/issues/436)
+
+## Release v.1.2.0-beta - 15-04-2021
 
 ### Added
 
 - Added tests for the wizard - [#372](https://github.com/DigitalExcellence/dex-backend/issues/372)
-- Recommendation system, allowing users to get projects recommended based on similar users. [#63](https://github.com/DigitalExcellence/dex-backend/issues/63)
+- Recommendation system, allowing users to get projects recommended based on similar users [#63](https://github.com/DigitalExcellence/dex-backend/issues/63)
+- Categories. It is now possible to categorize projects. [#362](https://github.com/DigitalExcellence/dex-backend/issues/362)
 
 ### Changed
-- Improved integration tests. - [#395](https://github.com/DigitalExcellence/dex-backend/issues/395)
-
-### Deprecated
-
-
-### Removed
-
+- Improved integration tests in pipeline - [#395](https://github.com/DigitalExcellence/dex-backend/issues/395)
 
 ### Fixed
-- Renamed IdentityServer to match the rest of the project name. - [#386](https://github.com/DigitalExcellence/dex-backend/issues/386)
-
-
-### Security
+- Renamed IdentityServer to match the rest of the project name - [#386](https://github.com/DigitalExcellence/dex-backend/issues/386)
 
 
 ## Release v.1.1.0-beta - 18-03-2021

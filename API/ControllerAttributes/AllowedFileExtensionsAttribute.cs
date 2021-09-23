@@ -61,7 +61,7 @@ namespace API.ControllerAttributes
             {
                 string fileExtension = Path.GetExtension(file.FileName);
                 // Check if file extension is allowed
-                if(!allowedExtensions.Contains(fileExtension))
+                if(!allowedExtensions.Contains(fileExtension.ToLower()))
                 {
                     fileExtensionsAreValid = false;
                     ProblemDetails problem = new ProblemDetails

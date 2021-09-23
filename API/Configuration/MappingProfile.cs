@@ -20,6 +20,7 @@ using AutoMapper;
 using Models;
 using Services.ExternalDataProviders;
 using Services.ExternalDataProviders.Resources;
+using System.Collections.Generic;
 
 namespace API.Configuration
 {
@@ -35,7 +36,10 @@ namespace API.Configuration
         /// </summary>
         public MappingProfile()
         {
-            CreateMap<ProjectLike, UserProjectLikeResourceResult>()
+            CreateMap<Project, AutocompleteProjectOutput>();
+            CreateMap<AutocompleteProjectOutput, Project>();
+
+            CreateMap<ProjectLike, UserProjectLikeOutput>()
                 .ForMember(source => source.Id,
                            option => option
                                .MapFrom(destination =>
@@ -58,14 +62,14 @@ namespace API.Configuration
                                             destination.LikedProject.Description))
                 .ForAllOtherMembers(member => member.Ignore());
 
-            CreateMap<UserUserResourceResult, UserUser>();
+            CreateMap<UserUserOutput, UserUser>();
 
-            CreateMap<UserUser, UserUserResourceResult>()
+            CreateMap<UserUser, UserUserOutput>()
                 .ForMember(q => q.Id, opt => opt.MapFrom(q => q.FollowedUser.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(q => q.FollowedUser.Name))
                 .ForAllOtherMembers(o => o.Ignore());
 
-            CreateMap<UserProject, UserProjectResourceResult>()
+            CreateMap<UserProject, UserProjectOutput>()
                 .ForMember(q => q.Id, opt => opt.MapFrom(p => p.Project.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(p => p.Project.Name))
                 .ForMember(q => q.ShortDescription, opt => opt.MapFrom(p => p.Project.ShortDescription))
@@ -74,92 +78,100 @@ namespace API.Configuration
                 .ForAllOtherMembers(o => o.Ignore());
 
 
-            CreateMap<User, UserResourceResult>()
+            CreateMap<User, UserOutput>()
                 .ForMember(q => q.UserTask, opt => opt.MapFrom(q => q.UserTasks))
                 .ForMember(q => q.ExpectedGraduationDateTime, opt => opt.MapFrom(q => q.ExpectedGraduationDate));
 
-            CreateMap<UserResource, User>()
+            CreateMap<UserInput, User>()
                 .ForMember(q => q.ExpectedGraduationDate, opt => opt.MapFrom(q => q.ExpectedGraduationDateTime));
 
-            CreateMap<User, LimitedUserResourceResult>();
+            CreateMap<User, LimitedUserOutput>();
 
-            CreateMap<ProjectResource, Project>();
-            CreateMap<Project, ProjectResourceResult>();
-            CreateMap<ProjectLike, ProjectLikesResourceResult>();
-            CreateMap<Project, ProjectHighlightResourceResult>();
+            CreateMap<ProjectInput, Project>()
+                .ForMember(q => q.Categories, opt => opt.Ignore());
+            CreateMap<Project, ProjectOutput>();
+            CreateMap<ProjectLike, ProjectLikesOutput>();
+            CreateMap<Project, ProjectHighlightOutput>();
 
-            CreateMap<CollaboratorResource, Collaborator>();
-            CreateMap<Collaborator, CollaboratorResourceResult>();
+            CreateMap<CollaboratorInput, Collaborator>();
+            CreateMap<Collaborator, CollaboratorOutput>();
 
-            CreateMap<Project, ProjectResultResource>();
+            CreateMap<Project, ProjectResultInput>();
 
-            CreateMap<ProjectFilterParamsResource, ProjectFilterParams>();
+            CreateMap<ProjectFilterParamsInput, ProjectFilterParams>();
 
-            CreateMap<HighlightResource, Highlight>();
-            CreateMap<Highlight, HighlightResourceResult>()
+            CreateMap<HighlightInput, Highlight>();
+            CreateMap<Highlight, HighlightOutput>()
                 .ForMember(e => e.Project,
                            opt => opt.MapFrom(d => d.Project));
 
-            CreateMap<RoleResource, Role>();
-            CreateMap<Role, RoleResourceResult>();
+            CreateMap<RoleInput, Role>();
+            CreateMap<Role, RoleOutput>();
 
-            CreateMap<EmbeddedProjectResource, EmbeddedProject>();
-            CreateMap<EmbeddedProject, EmbeddedProjectResourceResult>();
+            CreateMap<CategoryInput, Category>();
+            CreateMap<Category, CategoryOutput>();
+            CreateMap<ProjectCategoryInput, ProjectCategory>();
+            CreateMap<ProjectCategory, ProjectCategoryOutput>()
+                .ForMember(q => q.Id, opt => opt.MapFrom(q=> q.Category.Id))
+                .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Category.Name));
 
-            CreateMap<FileResourceResult, File>();
-            CreateMap<File, FileResourceResult>()
+            CreateMap<EmbeddedProjectInput, EmbeddedProject>();
+            CreateMap<EmbeddedProject, EmbeddedProjectOutput>();
+
+            CreateMap<FileOutput, File>();
+            CreateMap<File, FileOutput>()
                 .ForMember(e => e.UploaderUserId,
                            opt => opt.MapFrom(e => e.Uploader.Id));
 
-            CreateMap<RoleScopeResource, RoleScope>();
-            CreateMap<RoleScope, RoleScopeResource>();
+            CreateMap<RoleScopeInput, RoleScope>();
+            CreateMap<RoleScope, RoleScopeInput>();
 
-            CreateMap<InstitutionResource, Institution>();
-            CreateMap<Institution, InstitutionResourceResult>();
+            CreateMap<InstitutionInput, Institution>();
+            CreateMap<Institution, InstitutionOutput>();
 
-            CreateMap<UserTask, UserTaskResourceResult>()
+            CreateMap<UserTask, UserTaskOutput>()
                 .ForMember(e => e.UserResourceResult,
                            opt => opt.MapFrom(d => d.User))
                 .ForMember(e => e.Id, opt => opt.MapFrom(e => e.Id))
                 .ForMember(e => e.Status, opt => opt.MapFrom(e => e.Status))
                 .ForMember(e => e.Type, opt => opt.MapFrom(e => e.Type));
-            CreateMap<Project, WizardProjectResourceResult>();
+            CreateMap<Project, WizardProjectOutput>();
 
-            CreateMap<IDataSourceAdaptee, DataSourceResourceResult>()
+            CreateMap<IDataSourceAdaptee, DataSourceOutput>()
                 .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
 
-            CreateMap<DataSourceResource, DataSource>()
+            CreateMap<DataSourceInput, DataSource>()
                 .ForMember(dest => dest.DataSourceWizardPages, opt => opt.MapFrom(src => src.WizardPageResources));
-            CreateMap<DataSourceWizardPageResource, DataSourceWizardPage>();
+            CreateMap<DataSourceWizardPageInput, DataSourceWizardPage>();
 
-            CreateMap<DataSourceWizardPage, WizardPageResourceResult>()
+            CreateMap<DataSourceWizardPage, WizardPageOutput>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name));
 
-            CreateMap<DataSource, DataSourceResourceResult>()
+            CreateMap<DataSource, DataSourceOutput>()
                 .ForMember(dest => dest.WizardPages, opt => opt.MapFrom(src => src.DataSourceWizardPages));
             CreateMap<IDataSourceAdaptee, DataSource>();
 
-            CreateMap<OauthTokens, OauthTokensResourceResult>();
+            CreateMap<OauthTokens, OauthTokensOutput>();
 
-            CreateMap<CallToActionResource, CallToAction>()
+            CreateMap<CallToActionInput, CallToAction>()
                 .ForMember(dest => dest.OptionValue, opt => opt.MapFrom(src => src.OptionValue.ToLower()));
-            CreateMap<CallToAction, CallToActionResourceResult>();
+            CreateMap<CallToAction, CallToActionOutput>();
 
-            CreateMap<CallToActionOptionResource, CallToActionOption>()
+            CreateMap<CallToActionOptionInput, CallToActionOption>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToLower()))
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToLower()));
-            CreateMap<CallToActionOption, CallToActionOptionResourceResult>();
+            CreateMap<CallToActionOption, CallToActionOptionOutput>();
 
-            CreateMap<WizardPageResource, WizardPage>();
-            CreateMap<WizardPage, WizardPageResourceResult>();
+            CreateMap<WizardPageInput, WizardPage>();
+            CreateMap<WizardPage, WizardPageOutput>();
 
-            CreateMap<DataSourceWizardPage, DataSourceWizardPageResourceResult>()
+            CreateMap<DataSourceWizardPage, DataSourceWizardPageOutput>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WizardPage.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.WizardPage.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.WizardPage.Description));
 
-            CreateMap<ProjectInstitution, ProjectInstitutionResourceResult>()
+            CreateMap<ProjectInstitution, ProjectInstitutionOutput>()
                 .ForMember(dest => dest.InstititutionName, opt => opt.MapFrom(src => src.Institution.Name))
                 .ForMember(dest => dest.ProjectName, opt => opt.MapFrom(src => src.Project.Name));
 

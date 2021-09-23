@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
+using Models.Exceptions;
 using Serilog;
 using Services.Services;
 using System;
@@ -34,7 +35,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using File = Models.File;
 
 namespace API.Controllers
 {
@@ -54,6 +54,8 @@ namespace API.Controllers
         private readonly IFileUploader fileUploader;
         private readonly IMapper mapper;
         private readonly IProjectService projectService;
+        private readonly IProjectCategoryService projectCategoryService;
+        private readonly ICategoryService categoryService;
         private readonly IUserProjectLikeService userProjectLikeService;
         private readonly IUserProjectService userProjectService;
         private readonly IUserService userService;
@@ -80,6 +82,8 @@ namespace API.Controllers
         ///     projects.
         /// </param>
         /// <param name="callToActionOptionService">The call to action option service is used to communicate with the logic layer.</param>
+        /// <param name="categoryService">The category service is used to work with categories</param>
+        /// <param name="projectCategoryService">The project category service is used to connect projects and categories</param>
         /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
         public ProjectController(IProjectService projectService,
@@ -90,9 +94,11 @@ namespace API.Controllers
                                  IAuthorizationHelper authorizationHelper,
                                  IFileUploader fileUploader,
                                  IUserProjectService userProjectService,
-                                 ICallToActionOptionService callToActionOptionService,
                                  IProjectInstitutionService projectInstitutionService,
-                                 IInstitutionService institutionService)
+                                 IInstitutionService institutionService,
+                                 ICallToActionOptionService callToActionOptionService,
+                                 ICategoryService categoryService,
+                                 IProjectCategoryService projectCategoryService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -103,6 +109,8 @@ namespace API.Controllers
             this.authorizationHelper = authorizationHelper;
             this.userProjectService = userProjectService;
             this.callToActionOptionService = callToActionOptionService;
+            this.categoryService = categoryService;
+            this.projectCategoryService = projectCategoryService;
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
         }
@@ -116,7 +124,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns a list of in ElasticSearch formatted projects.</response>
         [HttpGet("export")]
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectExport))]
-        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectResultsInput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> MigrateDatabaseToElasticSearch()
         {
@@ -125,7 +133,7 @@ namespace API.Controllers
                 List<Project> projectsToExport = await projectService.GetAllWithUsersCollaboratorsAndInstitutionsAsync();
                 projectService.MigrateDatabase(projectsToExport);
 
-                return Ok(mapper.Map<List<Project>, List<ProjectResourceResult>>(projectsToExport));
+                return Ok(mapper.Map<List<Project>, List<ProjectOutput>>(projectsToExport));
             } catch(Exception e)
             {
                 Log.Logger.Error(e.Message);
@@ -147,10 +155,10 @@ namespace API.Controllers
         ///
 
         [HttpGet]
-        [ProducesResponseType(typeof(ProjectResultsResource), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectResultsInput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAllProjects(
-            [FromQuery] ProjectFilterParamsResource projectFilterParamsResource)
+            [FromQuery] ProjectFilterParamsInput projectFilterParamsResource)
         {
             ProblemDetails problem = new ProblemDetails
             {
@@ -166,9 +174,10 @@ namespace API.Controllers
             if(projectFilterParamsResource.SortBy != null &&
                projectFilterParamsResource.SortBy != "name" &&
                projectFilterParamsResource.SortBy != "created" &&
-               projectFilterParamsResource.SortBy != "updated")
+               projectFilterParamsResource.SortBy != "updated" &&
+               projectFilterParamsResource.SortBy != "likes")
             {
-                problem.Detail = "Invalid sort value: Use \"name\", \"created\" or \"updated\".";
+                problem.Detail = "Invalid sort value: Use \"name\", \"created\", \"updated\" or \"likes\".";
                 problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
                 return BadRequest(problem);
             }
@@ -182,7 +191,7 @@ namespace API.Controllers
             }
 
             ProjectFilterParams projectFilterParams =
-                mapper.Map<ProjectFilterParamsResource, ProjectFilterParams>(projectFilterParamsResource);
+                mapper.Map<ProjectFilterParamsInput, ProjectFilterParams>(projectFilterParamsResource);
 
             IEnumerable<Project> projects =
                 await projectService.GetAllWithUsersCollaboratorsAndInstitutionsAsync(projectFilterParams);
@@ -214,22 +223,50 @@ namespace API.Controllers
             }
 
 
-            IEnumerable<ProjectResultResource> results =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultResource>>(filteredProjects);
-            ProjectResultsResource resultsResource = new ProjectResultsResource
+            IEnumerable<ProjectResultInput> results =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(filteredProjects);
+            ProjectResultsInput resultsResource = new ProjectResultsInput
             {
                 Results = results.ToArray(),
                 Count = results.Count(),
-                TotalCount =
-                                                             await projectService.ProjectsCount(projectFilterParams),
+                TotalCount = await projectService.ProjectsCount(projectFilterParams),
                 Page = projectFilterParams.Page,
-                TotalPages =
-                                                             await projectService.GetProjectsTotalPages(
-                                                                 projectFilterParams)
+                TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams)
             };
 
             return Ok(resultsResource);
         }
+
+        /// <summary>
+        ///     This method returns suggestions while searching for projects
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>This method returns a list of autocomplete project resources.</returns>
+        /// <response code="200">This endpoint returns a list with suggested projects.</response>
+        /// <response code="503">A 503 status code is returned when the Elastic Search service is unavailable.</response>
+        [HttpGet("search/autocomplete")]
+        [ProducesResponseType(typeof(List<AutocompleteProjectOutput>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), 503)]
+        public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
+        {
+            try
+            {
+                List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
+                List<AutocompleteProjectOutput> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectOutput>>(projects);
+                return Ok(autocompleteProjectResourceResults);
+            }
+            catch(ElasticUnavailableException)
+            {
+                return StatusCode(503,
+                    new ProblemDetails
+                    {
+                        Title = "Autocomplete results could not be retrieved.",
+                        Detail = "ElasticSearch service unavailable.",
+                        Instance = "26E7C55F-21DE-4A7B-804C-BC0B74597222"
+                    });
+            }
+        }
+
 
         /// <summary>
         ///     This method is responsible for retrieving a single project.
@@ -242,7 +279,7 @@ namespace API.Controllers
         ///     id.
         /// </response>
         [HttpGet("{projectId}")]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetProject(int projectId)
@@ -279,14 +316,14 @@ namespace API.Controllers
 
                 if(project.CanAccess(currentUser))
                 {
-                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+                    return Ok(mapper.Map<Project, ProjectOutput>(project));
                 }
 
             } else
             {
                 if(project.InstitutePrivate == false)
                 {
-                    return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+                    return Ok(mapper.Map<Project, ProjectOutput>(project));
                 }
             }
 
@@ -306,10 +343,10 @@ namespace API.Controllers
         /// </response>
         [HttpPost]
         [Authorize(Policy = nameof(Defaults.Scopes.ProjectWrite))]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectResource projectResource)
+        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectInput projectResource)
         {
             if(projectResource == null)
             {
@@ -322,28 +359,63 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.CallToAction != null)
+            if(projectResource.Name.Count() > 75)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Maximum amount of project name characters exceeded.",
+                    Detail = "It is not possible to create a project name with more than 75 characters.",
+                    Instance = "2ddb12ce-9b2a-45bb-b995-25da84e97938"
+                };
+                return BadRequest(problem);
+            }
+
+            if(projectResource.CallToActions != null)
+            {
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = "Call to action value was not found.",
-                        Detail =
-                                                     "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        Title = "Duplicate call to action option value.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
                     };
                     return BadRequest(problem);
                 }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail = $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
+                    return BadRequest(problem);
+                }
+                foreach(CallToActionInput callToAction in projectResource.CallToActions)
+                {
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+                    if(!callToActionOptions.Any())
+                    {
+                        ProblemDetails problem = new ProblemDetails
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail = $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
+                        return BadRequest(problem);
+                    }
+                }
+                
             }
 
-            Project project = mapper.Map<ProjectResource, Project>(projectResource);
-            File file = await fileService.FindAsync(projectResource.FileId);
+            Project project = mapper.Map<ProjectInput, Project>(projectResource);
+            Models.File file = await fileService.FindAsync(projectResource.IconId);
 
-            if(projectResource.FileId != 0 &&
+            if(projectResource.IconId != 0 &&
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -355,9 +427,66 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
+            if(projectResource.ImageIds.Count() > 10)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Too many images.",
+                    Detail = "A project can not have more than 10 images.",
+                    Instance = "9E3E4F91-A6ED-415F-8726-6D33BA0F200F"
+                };
+                return BadRequest(problem);
+            }
+
+            foreach(int projectResourceImageId in projectResource.ImageIds)
+            {
+                Models.File image = await fileService.FindAsync(projectResourceImageId);
+                if(image == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Image was not found.",
+                                                 Detail = "The specified image was not found while creating project.",
+                                                 Instance = "B040FAAD-FD22-4C77-822E-C498DFA1A9CB"
+                    };
+                    return BadRequest(problem);
+                }
+
+                project.Images.Add(image);
+            }
+
             project.ProjectIcon = file;
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
+
+            if(projectResource.Categories != null)
+            {
+                ICollection<ProjectCategoryInput> projectCategoryResources = projectResource.Categories;
+
+                foreach(ProjectCategoryInput projectCategoryResource in projectCategoryResources)
+                {
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
+                    if(alreadyExcProjectCategory == null)
+                    {
+                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
+
+                        if(category == null)
+                        {
+                            ProblemDetails problem = new ProblemDetails
+                            {
+                                Title = "Failed to save new project.",
+                                Detail = "One of the given categories did not exist.",
+                                Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
+                            };
+                            return BadRequest(problem);
+                        }
+
+                        ProjectCategory projectCategory = new ProjectCategory(project, category);
+                        await projectCategoryService.AddAsync(projectCategory)
+                                               .ConfigureAwait(false);
+                    }
+                }
+            }
 
             if(project.InstitutePrivate)
             {
@@ -379,7 +508,10 @@ namespace API.Controllers
             {
                 projectService.Add(project);
                 projectService.Save();
-                return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectResourceResult>(project));
+
+                projectCategoryService.Save();
+
+                return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectOutput>(project));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception");
@@ -407,11 +539,11 @@ namespace API.Controllers
         /// <response code="400">The 404 if the use tries to update the institute private property with this endpoint.</response>
         [HttpPut("{projectId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResourceResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectResource projectResource)
+        public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectInput projectResource)
         {
             Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
@@ -441,22 +573,61 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            if(projectResource.CallToAction != null)
+            if(projectResource.Name.Count() > 75)
             {
-                IEnumerable<CallToActionOption> callToActionOptions =
-                    await callToActionOptionService.GetCallToActionOptionFromValueAsync(
-                        projectResource.CallToAction.OptionValue);
-                if(!callToActionOptions.Any())
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Maximum amount of project name characters exceeded.",
+                    Detail = "It is not possible to create a project name with more than 75 characters.",
+                    Instance = "2ddb12ce-9b2a-45bb-b995-25da84e97938"
+                };
+                return BadRequest(problem);
+            }
+
+            if(projectResource.CallToActions != null)
+            {
+                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = "Call to action value was not found.",
-                        Detail =
-                                                     "The specified call to action value was not found while creating the project.",
-                        Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        Title = "Duplicate call to action option value.",
+                        Detail = "It is not possible to create a project with multiple of the same call to actions.",
+                        Instance = "D2C8416A-9C55-408B-9468-F0E5C635F9B7"
                     };
                     return BadRequest(problem);
                 }
+
+                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                    {
+                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Detail =
+                            $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
+                    };
+                    return BadRequest(problem);
+                }
+
+                foreach(CallToActionInput callToAction in projectResource.CallToActions)
+                {
+                    IEnumerable<CallToActionOption> callToActionOptions =
+                        await callToActionOptionService.GetCallToActionOptionFromValueAsync(
+                            callToAction.OptionValue);
+
+                    if(!callToActionOptions.Any())
+                    {
+                        ProblemDetails problem = new ProblemDetails
+                        {
+                            Title = "Call to action value was not found.",
+                            Detail =
+                                $"The call to action optionvalue: '{callToAction.OptionValue}' was not found while creating the project.",
+                            Instance = "40EE82EB-930F-40C8-AE94-0041F7573FE9"
+                        };
+                        return BadRequest(problem);
+                    }
+                }
+                
             }
 
             if (projectResource.InstitutePrivate != project.InstitutePrivate)
@@ -470,31 +641,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            // Upload the new file if there is one
-            File file = null;
-            if(projectResource.FileId != 0)
+            if(projectResource.IconId != 0)
             {
-                if(project.ProjectIconId != 0 &&
-                   project.ProjectIconId != null)
-                {
-                    if(project.ProjectIconId != projectResource.FileId)
-                    {
-                        File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
-
-                        // Remove the file from the filesystem
-                        fileUploader.DeleteFileFromDirectory(fileToDelete);
-
-                        // Remove file from DB
-                        await fileService.RemoveAsync(project.ProjectIconId.Value);
-
-
-                        fileService.Save();
-                    }
-                }
-
-                // Get the uploaded file
-                file = await fileService.FindAsync(projectResource.FileId);
-
+                Models.File file = await fileService.FindAsync(projectResource.IconId);
                 if(file != null)
                 {
                     project.ProjectIcon = file;
@@ -508,6 +657,68 @@ namespace API.Controllers
                     };
                     return BadRequest(problem);
                 }
+            } else
+            {
+                project.ProjectIcon = null;
+            }
+
+            if(projectResource.ImageIds.Count() > 10)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Too many images.",
+                    Detail = "A project can not have more than 10 images.",
+                    Instance = "5D179737-046E-482B-B6D8-DDDCEF518107"
+                };
+                return BadRequest(problem);
+            }
+
+            project.Images.Clear();
+            foreach(int projectResourceImageId in projectResource.ImageIds)
+            {
+                Models.File image = await fileService.FindAsync(projectResourceImageId);
+                if(image == null)
+                {
+                    ProblemDetails problem = new ProblemDetails
+                                             {
+                                                 Title = "Image was not found.",
+                                                 Detail = "The specified image was not found while updating project.",
+                                                 Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
+                    };
+                    return BadRequest(problem);
+                }
+
+                project.Images.Add(image);
+            }
+
+            await projectCategoryService.ClearProjectCategories(project);
+            if(projectResource.Categories != null)
+            {
+                ICollection<ProjectCategoryInput> projectCategoryResources = projectResource.Categories;
+
+                foreach(ProjectCategoryInput projectCategoryResource in projectCategoryResources)
+                {
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
+                    if(alreadyExcProjectCategory == null)
+                    {
+                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
+
+                        if(category == null)
+                        {
+                            ProblemDetails problem = new ProblemDetails
+                            {
+                                Title = "Failed to update project.",
+                                Detail = "One of the given categories did not exist.",
+                                Instance = "09D1458E-B2CF-4F23-B120-DDD38A7727C9"
+                            };
+                            return BadRequest(problem);
+                        }
+
+                        ProjectCategory projectCategory = new ProjectCategory(project, category);
+                        await projectCategoryService.AddAsync(projectCategory)
+                                               .ConfigureAwait(false);
+                    }
+                }
             }
 
             mapper.Map(projectResource, project);
@@ -515,7 +726,7 @@ namespace API.Controllers
             projectService.Save();
 
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
 
         /// <summary>
@@ -569,7 +780,7 @@ namespace API.Controllers
             if(project.ProjectIconId.HasValue)
             {
                 // We need to delete the old file.
-                File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
+                Models.File fileToDelete = await fileService.FindAsync(project.ProjectIconId.Value);
                 try
                 {
                     // Remove the file from the database
@@ -592,6 +803,8 @@ namespace API.Controllers
                 }
             }
 
+            await projectCategoryService.ClearProjectCategories(project);
+
             await projectService.RemoveAsync(projectId)
                                 .ConfigureAwait(false);
             projectService.Save();
@@ -603,7 +816,10 @@ namespace API.Controllers
         ///     Follows a project with given projectId and gets userId
         /// </summary>
         /// <param name="projectId"></param>
-        /// <returns>200 if success 409 if user already follows project</returns>
+        /// <response code="200">Project was followed.</response>
+        /// <response code="404">Project or user could not be found.</response>
+        /// <response code="409">User already follows this project.</response>
+        /// <returns></returns>
         [HttpPost("follow/{projectId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -652,13 +868,16 @@ namespace API.Controllers
             userProjectService.Add(userProject);
 
             userProjectService.Save();
-            return Ok(mapper.Map<UserProject, UserProjectResourceResult>(userProject));
+            return Ok(mapper.Map<UserProject, UserProjectOutput>(userProject));
         }
 
         /// <summary>
         ///     Unfollows project
         /// </summary>
         /// <param name="projectId"></param>
+        /// <response code="200">Project was unfollowed.</response>
+        /// <response code="404">Project or user could not be found.</response>
+        /// <response code="409">User does not follow this project.</response>
         /// <returns></returns>
         [HttpDelete("follow/{projectId}")]
         [Authorize]
@@ -715,11 +934,11 @@ namespace API.Controllers
         ///     Likes an individual project with the provided projectId.
         /// </summary>
         /// <param name="projectId">The project identifier.</param>
-        /// <returns>
-        ///     StatusCode 200 If success,
-        ///     StatusCode 409 If the user already liked the project,
-        ///     StatusCode 404 if the project could not be found.
-        /// </returns>
+        /// <response code="200">Project was liked.</response>
+        /// <response code="400">Database failed to like the project.</response>
+        /// <response code="404">Project could not be found.</response>
+        /// <response code="409">User already liked this project before.</response>
+        /// <returns></returns>
         [HttpPost("like/{projectId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -777,7 +996,7 @@ namespace API.Controllers
 
                 // Update Elastic Database about this change.
                 await userProjectLikeService.SyncProjectToES(projectToLike);
-                return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(like));
+                return Ok(mapper.Map<ProjectLike, UserProjectLikeOutput>(like));
             } catch(DbUpdateException e)
             {
                 Log.Logger.Error(e, "Database exception!");
@@ -796,11 +1015,10 @@ namespace API.Controllers
         ///     Unlikes an individual project with the provided projectId.
         /// </summary>
         /// <param name="projectId">The project identifier.</param>
-        /// <returns>
-        ///     StatusCode 200 If success,
-        ///     StatusCode 409 if the user didn't like the project already,
-        ///     StatusCode 404 if the project could not be found.
-        /// </returns>
+        /// <response code="200">Project was unliked.</response>
+        /// <response code="404">Project could not be found.</response>
+        /// <response code="409">User did not like this project before.</response>
+        /// <returns></returns>
         [HttpDelete("like/{projectId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -856,7 +1074,7 @@ namespace API.Controllers
 
             // Update Elastic Database about this change.
             await userProjectLikeService.SyncProjectToES(projectToLike);
-            return Ok(mapper.Map<ProjectLike, UserProjectLikeResourceResult>(projectLike));
+            return Ok(mapper.Map<ProjectLike, UserProjectLikeOutput>(projectLike));
         }
 
 
@@ -874,7 +1092,7 @@ namespace API.Controllers
         /// <response code="200">If success</response>
         [HttpPut("instituteprivate/{projectId}")]
         [Authorize]
-        [ProducesResponseType(typeof(ProjectResultResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProjectResultInput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateProjectPrivateStatus(int projectId, [FromBody] bool institutePrivate)
@@ -950,7 +1168,7 @@ namespace API.Controllers
 
             projectService.Save();
 
-            return Ok(mapper.Map<Project, ProjectResourceResult>(project));
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
 
         /// <summary>
@@ -965,7 +1183,7 @@ namespace API.Controllers
         [Authorize(Policy = nameof(Defaults.Scopes.AdminProjectWrite))]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(ProjectInstitutionResourceResult), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProjectInstitutionOutput), StatusCodes.Status201Created)]
         public async Task<IActionResult> LinkInstitutionToProjectAsync(int projectId, int institutionId)
         {
             User currentUser = await HttpContext.GetContextUser(userService)
@@ -981,7 +1199,6 @@ namespace API.Controllers
                 };
                 return NotFound(problemDetails);
             }
-
             if(!await projectService.ProjectExistsAsync(projectId))
             {
                 ProblemDetails problemDetails = new ProblemDetails
@@ -1023,7 +1240,7 @@ namespace API.Controllers
             projectInstitution.Project = await projectService.FindAsync(projectId);
             projectInstitution.Institution = await institutionService.FindAsync(institutionId);
 
-            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionResourceResult>(projectInstitution));
+            return Created(nameof(LinkInstitutionToProjectAsync), mapper.Map<ProjectInstitution, ProjectInstitutionOutput>(projectInstitution));
         }
 
         /// <summary>
@@ -1092,6 +1309,176 @@ namespace API.Controllers
             projectInstitutionService.Save();
 
             return Ok();
+        }
+
+        /// <summary>
+        ///     Categorize a project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="categoryId"></param>
+        /// <response code="200">Category was added to the project.</response>
+        /// <response code="401">User is not authorized to add the category to the project.</response>
+        /// <response code="404">Project or category was not found.</response>
+        /// <response code="409">Project is already categorized with the category.</response>
+        /// <returns></returns>
+        [HttpPost("category/{projectId}/{categoryId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> ProjectAddCategory(int projectId, int categoryId)
+        {
+            Project project = await projectService.FindAsync(projectId)
+                                                  .ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to categorize the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "1C8D069D-E6CE-43E2-9CF9-D82C0A71A292"
+                };
+                return NotFound(problem);
+            }
+
+            Category category = await categoryService.FindAsync(categoryId)
+                                      .ConfigureAwait(false);
+
+            if(category == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to categorize the project.",
+                    Detail = "The category could not be found in the database.",
+                    Instance = "93C6B5BD-EC14-482A-9907-001C888F3D3F"
+                };
+                return NotFound(problem);
+            }
+
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
+                                                                     project.UserId);
+
+            if(project.UserId != user.Id && !isAllowed)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to categorize the project.",
+                    Detail = "The user is not allowed to modify the project.",
+                    Instance = "1243016C-081F-441C-A388-3D56B0998D2E"
+                };
+                return Unauthorized(problem);
+            }
+
+            ProjectCategory alreadyCategorized = await projectCategoryService.GetProjectCategory(projectId, categoryId);
+
+            if(alreadyCategorized != null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to categorize the project.",
+                    Detail = "Project has already been categorized with this category.",
+                    Instance = "4986CBC6-FB6D-4255-ACE8-833E92B25FBD"
+                };
+                return Conflict(problem);
+            }
+
+
+            ProjectCategory projectCategory = new ProjectCategory(project, category);
+            await projectCategoryService.AddAsync(projectCategory)
+                                   .ConfigureAwait(false);
+
+            projectCategoryService.Save();
+
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
+        }
+
+        /// <summary>
+        ///     Remove a category from a project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="categoryId"></param>
+        /// <response code="200">Category was removed from the project.</response>
+        /// <response code="401">User is not authorized to remove the category from the project.</response>
+        /// <response code="404">Project or category was not found.</response>
+        /// <response code="409">Project is not categorized with the category.</response>
+        /// <returns></returns>
+        [HttpDelete("category/{projectId}/{categoryId}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> ProjectRemoveCategory(int projectId, int categoryId)
+        {
+            Project project = await projectService.FindAsync(projectId)
+                                                  .ConfigureAwait(false);
+            if(project == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the category from the project.",
+                    Detail = "The project could not be found in the database.",
+                    Instance = "2CC94251-9103-4AAC-B461-F99939E78AD0"
+                };
+                return NotFound(problem);
+            }
+
+            Category category = await categoryService.FindAsync(categoryId)
+                                      .ConfigureAwait(false);
+
+            if(category == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the category from the project.",
+                    Detail = "The category could not be found in the database.",
+                    Instance = "3E41B5DC-F78B-429B-89AB-1A98A6F65FDC"
+                };
+                return NotFound(problem);
+            }
+
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
+            bool isAllowed = await authorizationHelper.UserIsAllowed(user,
+                                                                     nameof(Defaults.Scopes.AdminProjectWrite),
+                                                                     nameof(Defaults.Scopes.InstitutionProjectWrite),
+                                                                     project.UserId);
+
+            if(project.UserId != user.Id && !isAllowed)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the category from the project.",
+                    Detail = "The user is not allowed to modify the project.",
+                    Instance = "4D1878C1-1606-4224-841A-73F30AE4F930"
+                };
+                return Unauthorized(problem);
+            }
+
+            ProjectCategory alreadyCategorized = await projectCategoryService.GetProjectCategory(projectId, categoryId);
+
+            if(alreadyCategorized == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to remove the category from the project.",
+                    Detail = "Project has not been categorized with this category.",
+                    Instance = "5EABA4F3-47E6-45A7-8522-E87268716912"
+                };
+                return Conflict(problem);
+            }
+
+            await projectCategoryService.RemoveAsync(alreadyCategorized.Id)
+                             .ConfigureAwait(false);
+
+            projectCategoryService.Save();
+
+            return Ok(mapper.Map<Project, ProjectOutput>(project));
         }
     }
 

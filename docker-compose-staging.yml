@@ -44,6 +44,7 @@ services:
     networks:
       - proxy
       - mssql-network
+      - rabbitmq-network
     depends_on:
       - db
     volumes:
@@ -110,8 +111,8 @@ services:
       - App__Frontend__PostLogoutUriFrontend=https://staging.dex.software/
       - App__Frontend__ClientId=${FRONTEND_CLIENT_ID}
       - App__Frontend__ClientSecret=${FRONTEND_CLIENT_SECRET}
-      - App__swagger__RedirectUrisSwagger=https://staging.dex.software/oauth2-redirect.html
-      - App__swagger__PostLogoutUrisSwagger=https://staging.dex.software
+      - App__swagger__RedirectUrisSwagger=https://api.staging.dex.software/oauth2-redirect.html
+      - App__swagger__PostLogoutUrisSwagger=https://api.staging.dex.software
       - App__FfhictOIDC__ClientId=${FFHICTOIDC_CLIENT_ID}
       - App__FfhictOIDC__ClientSecret=${FFHICTOIDC_CLIENT_SECRET}
       - App__FfhictOIDC__RedirectUri=https://identity.staging.dex.software/external/callback/fhict
@@ -195,6 +196,9 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+      - /home/ubuntu/docker_compose/elasticonfig/wn_s.txt:/usr/share/elasticsearch/config/analysis/wn_s.txt
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: ${App__ElasticSearch__Password}
