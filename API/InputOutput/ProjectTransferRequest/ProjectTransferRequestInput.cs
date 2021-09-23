@@ -10,10 +10,6 @@ namespace API.InputOutput.ProjectTransferRequest
     /// </summary>
     public class ProjectTransferRequestInput
     {
-        /// <summary>
-        ///     id of the project
-        /// </summary>
-        public int ProjectId { get; set; }
 
         /// <summary>
         ///     id of the potential new owner

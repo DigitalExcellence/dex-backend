@@ -123,6 +123,9 @@ namespace API.Extensions
             services.AddScoped<IProjectInstitutionService, ProjectInstitutionService>();
             services.AddScoped<IProjectInstitutionRepository, ProjectInstitutionRepository>();
 
+            //services.AddScoped<MessageBrokerPublisher.HelperClasses.IEmailSender, MessageBrokerPublisher.HelperClasses.EmailSender>();
+            services.AddScoped<IEmailSender, EmailSender>();
+
             services.AddScoped<IProjectTransferService, ProjectTransferService>();
             services.AddScoped<IProjectTransferRepository, ProjectTransferRepository>();
 

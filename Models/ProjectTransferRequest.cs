@@ -6,6 +6,17 @@ namespace Models
 {
     public class ProjectTransferRequest
     {
+        public ProjectTransferRequest(Project project, User potentialNewOwner)
+        {
+            Project = project;
+            PotentialNewOwner = potentialNewOwner;
+        }
+
+        public ProjectTransferRequest()
+        {
+
+        }
+
         public int Id { get; set; }
         public Project Project { get; set; }
         public User PotentialNewOwner { get; set; }
@@ -13,6 +24,7 @@ namespace Models
        public bool CurrentOwnerAcceptedRequest { get; set; }
         public bool PotentialNewOwnerAcceptedRequest { get; set; }
         public ProjectTransferRequestStatus Status { get; set; }
+
 
     }
 

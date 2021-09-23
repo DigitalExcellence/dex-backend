@@ -63,6 +63,7 @@ namespace API.Controllers
         private readonly IProjectInstitutionService projectInstitutionService;
         private readonly IInstitutionService institutionService;
         private readonly IProjectTransferService projectTransferService;
+        private readonly IEmailSender emailSender;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -101,7 +102,7 @@ namespace API.Controllers
                                  IInstitutionService institutionService,
                                  ICallToActionOptionService callToActionOptionService,
                                  ICategoryService categoryService,
-                                 IProjectCategoryService projectCategoryService, IProjectTransferService projectTransferService)
+                                 IProjectCategoryService projectCategoryService, IProjectTransferService projectTransferService, IEmailSender emailSender)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -117,6 +118,7 @@ namespace API.Controllers
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
             this.projectTransferService = projectTransferService;
+            this.emailSender = emailSender;
         }
 
 
@@ -1467,21 +1469,24 @@ namespace API.Controllers
         /// <summary>
         ///     Request project transfer request
         /// </summary>
-        /// <param name="transferInput"></param>
+        /// <param name="potentialNewOwnerId"></param>
+        /// <param name="projectId"></param>
         /// <response code="200">Project transfer request succesfully created</response>
         /// <response code="401">User is not authorized initiate transfer request</response>
         /// <response code="404">Project was not found.</response>
         /// <returns></returns>
-        [HttpPost("project/transfer/{projectId}/{categoryId}")]
+        [HttpPost("project/transfer/{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> InitiateTransfer(ProjectTransferRequestInput transferInput)
+        public async Task<IActionResult> InitiateTransfer(int potentialNewOwnerId,int projectId)
         {
-            Project project = await projectService.FindAsync(transferInput.ProjectId)
+            Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
+            emailSender.Send("meesvanstraten@gmail.com", "test", null);
+
             if(project == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -1511,13 +1516,20 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            User potentialNewOwner = await userService.FindAsync(transferInput.PotentialNewOwnerId);
+            User potentialNewOwner = await userService.FindAsync(potentialNewOwnerId);
+
+            try
+            {
+                await projectTransferService.InitiateTransfer(project, potentialNewOwner);
+            }
+            catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
+            {
+                return BadRequest(transferAlreadyInitiated.Message);
+            }
 
 
-            projectTransferService.InitiateTransfer(project,potentialNewOwner);
 
-
-            return Ok(mapper.Map<Project, ProjectOutput>(project));
+            return Ok("Transfer has been initiated, check your email");
         }
 
 
