@@ -1467,7 +1467,7 @@ namespace API.Controllers
         /// <summary>
         ///     Request project transfer request
         /// </summary>
-        /// <param name="potentialNewOwnerId"></param>
+        /// <param name="potentialNewOwnerUserEmail"></param>
         /// <param name="projectId"></param>
         /// <response code="200">Project transfer request succesfully created</response>
         /// <response code="401">User is not authorized initiate transfer request</response>
@@ -1479,7 +1479,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> InitiateTransfer(int potentialNewOwnerId,int projectId)
+        public async Task<IActionResult> InitiateTransfer(string potentialNewOwnerUserEmail,int projectId)
         {
             Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
@@ -1513,7 +1513,7 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            User potentialNewOwner = await userService.FindAsync(potentialNewOwnerId);
+            User potentialNewOwner = await userService.GetUserByUserEmail(potentialNewOwnerUserEmail);
 
             try
             {
