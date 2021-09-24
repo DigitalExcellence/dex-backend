@@ -10,6 +10,7 @@ namespace Models
         {
             Project = project;
             PotentialNewOwner = potentialNewOwner;
+            TransferGuid = new Guid();
         }
 
         public ProjectTransferRequest()
@@ -21,9 +22,10 @@ namespace Models
         public Project Project { get; set; }
         public User PotentialNewOwner { get; set; }
 
-       public bool CurrentOwnerAcceptedRequest { get; set; }
+        public bool CurrentOwnerAcceptedRequest { get; set; }
         public bool PotentialNewOwnerAcceptedRequest { get; set; }
         public ProjectTransferRequestStatus Status { get; set; }
+        public Guid TransferGuid { get; set; }
 
 
     }

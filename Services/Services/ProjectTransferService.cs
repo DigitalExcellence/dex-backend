@@ -16,6 +16,8 @@ namespace Services.Services
     public interface IProjectTransferService : IService<ProjectTransferRequest>
     {
         Task InitiateTransfer(Project project, User potentialNewOwner);
+        Task<ProjectTransferRequest> FindTransferByGuid(Guid guid);
+        Task ProcessTransfer(Guid guid);
     }
     public class ProjectTransferService : Service<ProjectTransferRequest>, IProjectTransferService
     {
@@ -28,6 +30,11 @@ namespace Services.Services
         {
             this.repository = repository;
             this.mailClient = mailClient;
+        }
+
+        public async Task<ProjectTransferRequest> FindTransferByGuid(Guid guid)
+        {
+            return await repository.FindTransferByGuid(guid);
         }
 
         public async Task InitiateTransfer(Project project, User potentialNewOwner)
@@ -57,6 +64,9 @@ namespace Services.Services
             }
         }
 
-
+        public Task ProcessTransfer(Guid guid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
