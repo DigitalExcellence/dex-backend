@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using MessageBrokerPublisher.HelperClasses;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using Services.Resources;
 
 namespace Services.Services
 {
@@ -17,31 +20,40 @@ namespace Services.Services
     public class ProjectTransferService : Service<ProjectTransferRequest>, IProjectTransferService
     {
         private readonly IProjectTransferRepository repository;
-        private readonly IEmailSender emailSender;
+        private readonly MailClient mailClient;
+        
 
-        public ProjectTransferService(IProjectTransferRepository repository, IEmailSender emailSender) :
+        public ProjectTransferService(IProjectTransferRepository repository, MailClient mailClient) :
             base(repository)
         {
             this.repository = repository;
-            this.emailSender = emailSender;
+            this.mailClient = mailClient;
         }
 
         public async Task InitiateTransfer(Project project, User potentialNewOwner)
         {
             ProjectTransferRequest existingTransferRequest = await repository.FindTransferByProjectId(project.Id);
 
-            
+
             if(existingTransferRequest != null)
             {
                 throw new ProjectTransferAlreadyInitiatedException("A transfer request is already initiated for this project");
             }
             else
             {
-                ProjectTransferRequest transferRequest = new ProjectTransferRequest(project,potentialNewOwner);
+                string subject = "DeX project ownership transfer";
 
-                repository.Add(transferRequest);
-                repository.Save();
-                emailSender.Send("whbivisd@sharklasers.com", "Test", null);
+                //TODO Change email to project owner
+                string to = "email here";
+                string plainTextContent = "We inform you...";
+                string htmlContent = "<Button>Confirm transfer</Button> <Button>Cancel transfer</Button>";
+
+                Response response = await mailClient.SendMail(to, plainTextContent, subject, htmlContent);
+
+                ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
+
+                //repository.Add(transferRequest);
+               // repository.Save();
             }
         }
 

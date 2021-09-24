@@ -63,7 +63,6 @@ namespace API.Controllers
         private readonly IProjectInstitutionService projectInstitutionService;
         private readonly IInstitutionService institutionService;
         private readonly IProjectTransferService projectTransferService;
-        private readonly IEmailSender emailSender;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -102,7 +101,7 @@ namespace API.Controllers
                                  IInstitutionService institutionService,
                                  ICallToActionOptionService callToActionOptionService,
                                  ICategoryService categoryService,
-                                 IProjectCategoryService projectCategoryService, IProjectTransferService projectTransferService, IEmailSender emailSender)
+                                 IProjectCategoryService projectCategoryService, IProjectTransferService projectTransferService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -118,7 +117,6 @@ namespace API.Controllers
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
             this.projectTransferService = projectTransferService;
-            this.emailSender = emailSender;
         }
 
 
@@ -1485,7 +1483,6 @@ namespace API.Controllers
         {
             Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
-            emailSender.Send("meesvanstraten@gmail.com", "test", null);
 
             if(project == null)
             {
