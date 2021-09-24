@@ -22,6 +22,7 @@ using API.InputOutput.ProjectTransferRequest;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -1524,6 +1525,43 @@ namespace API.Controllers
                 return BadRequest(transferAlreadyInitiated.Message);
             }
 
+
+
+            return Ok("Transfer has been initiated, check your email");
+        }
+
+        /// <summary>
+        ///     Process the transfer request
+        /// </summary>
+        /// <param name="transferGuid"></param>
+        /// <param name="isOwnerMail"></param>
+        /// <param name="acceptedRequest"></param>
+        /// <response code="200">Project transfer request succesfully created</response>
+        /// <response code="401">User is not authorized initiate transfer request</response>
+        /// <response code="404">Project was not found.</response>
+        /// <returns></returns>
+        [HttpPost("project/transfer/process")]
+        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        [EnableCors]
+        public async Task<IActionResult> ProcessTransfer(Guid transferGuid, bool isOwnerMail, bool acceptedRequest)
+        {
+            ProjectTransferRequest transferRequest = await projectTransferService.FindTransferByGuid(transferGuid);
+
+            if(transferRequest == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to find projectransfer request",
+                    Detail = "The project transfer request could not be found in the database.",
+                    Instance = "7BBD2018-2E1C-465D-A3FF-611C6E76424C"
+                };
+                return NotFound(problem);
+            }
+
+            await projectTransferService.ProcessTransfer(transferRequest, isOwnerMail, acceptedRequest);
 
 
             return Ok("Transfer has been initiated, check your email");

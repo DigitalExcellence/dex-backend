@@ -17,19 +17,21 @@ namespace Services.Services
     {
         Task InitiateTransfer(Project project, User potentialNewOwner);
         Task<ProjectTransferRequest> FindTransferByGuid(Guid guid);
-        Task ProcessTransfer(Guid guid);
+        Task ProcessTransfer(ProjectTransferRequest transferRequest, bool boolisOwnerMail, bool acceptedRequest);
     }
     public class ProjectTransferService : Service<ProjectTransferRequest>, IProjectTransferService
     {
         private readonly IProjectTransferRepository repository;
+        private readonly IProjectService projectService;
         private readonly MailClient mailClient;
         
 
-        public ProjectTransferService(IProjectTransferRepository repository, MailClient mailClient) :
+        public ProjectTransferService(IProjectTransferRepository repository, MailClient mailClient, IProjectService projectService) :
             base(repository)
         {
             this.repository = repository;
             this.mailClient = mailClient;
+            this.projectService = projectService;
         }
 
         public async Task<ProjectTransferRequest> FindTransferByGuid(Guid guid)
@@ -48,25 +50,70 @@ namespace Services.Services
             }
             else
             {
-                string subject = "DeX project ownership transfer";
+                ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
 
+
+                string subject = "DeX project ownership transfer";
+                //(Guid transferGuid, bool isOwnerMail, bool acceptedRequest
                 //TODO Change email to project owner
-                string to = "email here";
+                string to = "meesvanstraten@gmail.com";
                 string plainTextContent = "We inform you...";
-                string htmlContent = "<Button>Confirm transfer</Button> <Button>Cancel transfer</Button>";
+                string url = "localhost:5001/project/transfer/process?transferGuid="+transferRequest.TransferGuid + "& isOwnerMail=true&acceptedRequest=true";
+                string htmlContent = "url here";
 
                 Response response = await mailClient.SendMail(to, plainTextContent, subject, htmlContent);
 
-                ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
 
                 //repository.Add(transferRequest);
                // repository.Save();
             }
         }
 
-        public Task ProcessTransfer(Guid guid)
+        public async Task ProcessTransfer(ProjectTransferRequest transferRequest, bool isOwnerMail, bool acceptedRequest)
         {
-            throw new NotImplementedException();
+            if(isOwnerMail && acceptedRequest)
+            {
+                //Current project owner clicked mail and accepted request
+                transferRequest.CurrentOwnerAcceptedRequest = true;
+
+                Repository.Update(transferRequest);
+                Repository.Save();
+
+                await mailClient.SendMail(transferRequest.PotentialNewOwner.Email
+                    , "Do you want to accept this transfer request?"
+                    ,"DeX project ownership request"
+                    , "<Button>Accept transfer</Button><Button>Deny transfer</Button>");
+            }
+
+            if(isOwnerMail == false && acceptedRequest)
+            {
+                //Mail clicked by new owner and accepted transfer request
+                transferRequest.PotentialNewOwnerAcceptedRequest = true;
+
+                
+                Repository.Update(transferRequest);
+                Repository.Save();
+
+
+                //Transfer project to new owner
+                transferRequest.Project.User = transferRequest.PotentialNewOwner;
+                projectService.Update(transferRequest.Project);
+                projectService.Save();
+
+
+                //Finish transfer, after project is actually transfered to new user.
+                transferRequest.Status = ProjectTransferRequestStatus.Completed;
+
+                Repository.Update(transferRequest);
+                Repository.Save();
+            } else
+            {
+                transferRequest.Status = ProjectTransferRequestStatus.Denied;
+
+                Repository.Update(transferRequest);
+                Repository.Save();
+                //TODO: Send mail to owner about denied transfer
+            }
         }
     }
 }
