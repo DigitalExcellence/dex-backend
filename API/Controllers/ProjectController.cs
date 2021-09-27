@@ -1474,7 +1474,7 @@ namespace API.Controllers
         /// <response code="401">User is not authorized initiate transfer request</response>
         /// <response code="404">Project was not found.</response>
         /// <returns></returns>
-        [HttpPost("project/transfer/{projectId}")]
+        [HttpPost("transfer/{projectId}")]
         [Authorize]
         [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
@@ -1540,12 +1540,11 @@ namespace API.Controllers
         /// <response code="401">User is not authorized initiate transfer request</response>
         /// <response code="404">Project was not found.</response>
         /// <returns></returns>
-        [HttpPost("project/transfer/process")]
+        [HttpGet("transfer/process/{transferGuid}/{isOwnerMail}/{acceptedRequest}")]
         [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        [EnableCors]
         public async Task<IActionResult> ProcessTransfer(Guid transferGuid, bool isOwnerMail, bool acceptedRequest)
         {
             ProjectTransferRequest transferRequest = await projectTransferService.FindTransferByGuid(transferGuid);

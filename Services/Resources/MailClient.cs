@@ -3,6 +3,7 @@ using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Services.Resources
@@ -23,6 +24,20 @@ namespace Services.Resources
         {
             EmailAddress receiverEmail = new EmailAddress(receiverAdress);
             SendGridMessage msg = MailHelper.CreateSingleEmail(fromEmailAdress, receiverEmail, subject, plainTextContent, htmlContent);
+
+            return await sendGridClient.SendEmailAsync(msg);
+        }
+
+        public async Task<Response> SendTemplatedMail(string receiverAdress, Guid guid, string subject,string templateId)
+        {
+            EmailAddress receiverEmail = new EmailAddress(receiverAdress);
+            SendGridMessage  msg = new SendGridMessage();
+            msg.SetTemplateId(templateId);
+            msg.SetFrom(fromEmailAdress);
+            msg.AddTo(receiverAdress);
+
+            SendGridParamaters sendGridParamaters = new SendGridParamaters(guid, receiverAdress);
+            msg.SetTemplateData(sendGridParamaters);
 
             return await sendGridClient.SendEmailAsync(msg);
         }

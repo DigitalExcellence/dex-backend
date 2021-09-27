@@ -10,7 +10,7 @@ namespace Models
         {
             Project = project;
             PotentialNewOwner = potentialNewOwner;
-            TransferGuid = new Guid();
+            TransferGuid = Guid.NewGuid();
         }
 
         public ProjectTransferRequest()

@@ -52,20 +52,14 @@ namespace Services.Services
             {
                 ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
 
-
                 string subject = "DeX project ownership transfer";
                 //(Guid transferGuid, bool isOwnerMail, bool acceptedRequest
                 //TODO Change email to project owner
-                string to = "meesvanstraten@gmail.com";
-                string plainTextContent = "We inform you...";
-                string url = "localhost:5001/project/transfer/process?transferGuid="+transferRequest.TransferGuid + "& isOwnerMail=true&acceptedRequest=true";
-                string htmlContent = "url here";
+                string to = existingTransferRequest.Project.User.Email;
+                Response response = await mailClient.SendTemplatedMail(to, transferRequest.TransferGuid, subject, "d-6680df0406bf488e9810802bbaa29f2e");
 
-                Response response = await mailClient.SendMail(to, plainTextContent, subject, htmlContent);
-
-
-                //repository.Add(transferRequest);
-               // repository.Save();
+                repository.Add(transferRequest);
+                repository.Save();
             }
         }
 

@@ -25,6 +25,8 @@ namespace Repositories
         {
             return await GetDbSet<ProjectTransferRequest>()
                 .Where(transfer => transfer.TransferGuid == guid)
+                .Include(p => p.Project)
+                .Include(u => u.PotentialNewOwner)
                 .FirstOrDefaultAsync();
         }
 
