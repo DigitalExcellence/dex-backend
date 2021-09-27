@@ -53,9 +53,8 @@ namespace Services.Services
                 ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
 
                 string subject = "DeX project ownership transfer";
-                //(Guid transferGuid, bool isOwnerMail, bool acceptedRequest
-                //TODO Change email to project owner
-                string to = existingTransferRequest.Project.User.Email;
+                string to = transferRequest.Project.User.Email;
+
                 Response response = await mailClient.SendTemplatedMail(to, transferRequest.TransferGuid, subject, "d-6680df0406bf488e9810802bbaa29f2e");
 
                 repository.Add(transferRequest);
@@ -65,41 +64,43 @@ namespace Services.Services
 
         public async Task ProcessTransfer(ProjectTransferRequest transferRequest, bool isOwnerMail, bool acceptedRequest)
         {
-            if(isOwnerMail && acceptedRequest)
+            if(transferRequest.Status == ProjectTransferRequestStatus.Pending)
             {
-                //Current project owner clicked mail and accepted request
-                transferRequest.CurrentOwnerAcceptedRequest = true;
+                if(isOwnerMail && acceptedRequest)
+                {
+                    //Current project owner clicked mail and accepted request
+                    transferRequest.CurrentOwnerAcceptedRequest = true;
 
-                Repository.Update(transferRequest);
-                Repository.Save();
+                    string subject = "DeX somebody wants to transfer project ownership to you.";
+                    Response response = await mailClient.SendTemplatedMail(transferRequest.PotentialNewOwner.Email, transferRequest.TransferGuid, subject, "d-898692df37204f57b31a224e715f4433");
 
-                await mailClient.SendMail(transferRequest.PotentialNewOwner.Email
-                    , "Do you want to accept this transfer request?"
-                    ,"DeX project ownership request"
-                    , "<Button>Accept transfer</Button><Button>Deny transfer</Button>");
-            }
+                    Repository.Update(transferRequest);
+                    Repository.Save();
+                }
 
-            if(isOwnerMail == false && acceptedRequest)
-            {
-                //Mail clicked by new owner and accepted transfer request
-                transferRequest.PotentialNewOwnerAcceptedRequest = true;
-
-                
-                Repository.Update(transferRequest);
-                Repository.Save();
+                if(isOwnerMail == false && acceptedRequest)
+                {
+                    //Mail clicked by new owner and accepted transfer request
+                    transferRequest.PotentialNewOwnerAcceptedRequest = true;
 
 
-                //Transfer project to new owner
-                transferRequest.Project.User = transferRequest.PotentialNewOwner;
-                projectService.Update(transferRequest.Project);
-                projectService.Save();
+                    Repository.Update(transferRequest);
+                    Repository.Save();
 
 
-                //Finish transfer, after project is actually transfered to new user.
-                transferRequest.Status = ProjectTransferRequestStatus.Completed;
+                    //Transfer project to new owner
+                    transferRequest.Project.User = transferRequest.PotentialNewOwner;
+                    projectService.Update(transferRequest.Project);
+                    projectService.Save();
 
-                Repository.Update(transferRequest);
-                Repository.Save();
+
+                    //Finish transfer, after project is actually transfered to new user.
+                    transferRequest.Status = ProjectTransferRequestStatus.Completed;
+
+                    Repository.Update(transferRequest);
+                    Repository.Save();
+                }
+            
             } else
             {
                 transferRequest.Status = ProjectTransferRequestStatus.Denied;
