@@ -15,9 +15,9 @@ namespace Services.Services
 {
     public interface IProjectTransferService : IService<ProjectTransferRequest>
     {
-        Task InitiateTransfer(Project project, User potentialNewOwner);
+        Task <Response>InitiateTransfer(Project project, User potentialNewOwner);
         Task<ProjectTransferRequest> FindTransferByGuid(Guid guid);
-        Task ProcessTransfer(ProjectTransferRequest transferRequest, bool boolisOwnerMail, bool acceptedRequest);
+        Task<ProjectTransferRequest> ProcessTransfer(ProjectTransferRequest transferRequest, bool boolisOwnerMail, bool acceptedRequest);
     }
     public class ProjectTransferService : Service<ProjectTransferRequest>, IProjectTransferService
     {
@@ -39,30 +39,34 @@ namespace Services.Services
             return await repository.FindTransferByGuid(guid);
         }
 
-        public async Task InitiateTransfer(Project project, User potentialNewOwner)
+        public async Task <Response> InitiateTransfer(Project project, User potentialNewOwner)
         {
-            ProjectTransferRequest existingTransferRequest = await repository.FindTransferByProjectId(project.Id);
+            List <ProjectTransferRequest> existingTransferRequests = await repository.FindTransferByProjectId(project.Id);
 
-
-            if(existingTransferRequest != null)
+            if(existingTransferRequests != null && existingTransferRequests.Count >= 1)
             {
-                throw new ProjectTransferAlreadyInitiatedException("A transfer request is already initiated for this project");
+                foreach(ProjectTransferRequest existingRequest in existingTransferRequests)
+                {
+                    if(existingRequest.Status == ProjectTransferRequestStatus.Pending)
+                    {
+                        throw new ProjectTransferAlreadyInitiatedException("A transfer request is already initiated for this project");
+                    }
+                }
             }
-            else
-            {
-                ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
+            
 
-                string subject = "DeX project ownership transfer";
-                string to = transferRequest.Project.User.Email;
+            ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
 
-                Response response = await mailClient.SendTemplatedMail(to, transferRequest.TransferGuid, subject, "d-6680df0406bf488e9810802bbaa29f2e");
+            Response response = await mailClient.SendTemplatedMail(transferRequest.Project.User.Email, transferRequest.TransferGuid, "d-6680df0406bf488e9810802bbaa29f2e");
 
-                repository.Add(transferRequest);
-                repository.Save();
-            }
+            repository.Add(transferRequest);
+            repository.Save();
+
+            return response;
+
         }
 
-        public async Task ProcessTransfer(ProjectTransferRequest transferRequest, bool isOwnerMail, bool acceptedRequest)
+        public async Task <ProjectTransferRequest> ProcessTransfer(ProjectTransferRequest transferRequest, bool isOwnerMail, bool acceptedRequest)
         {
             if(transferRequest.Status == ProjectTransferRequestStatus.Pending)
             {
@@ -71,11 +75,12 @@ namespace Services.Services
                     //Current project owner clicked mail and accepted request
                     transferRequest.CurrentOwnerAcceptedRequest = true;
 
-                    string subject = "DeX somebody wants to transfer project ownership to you.";
-                    Response response = await mailClient.SendTemplatedMail(transferRequest.PotentialNewOwner.Email, transferRequest.TransferGuid, subject, "d-898692df37204f57b31a224e715f4433");
+                    await mailClient.SendTemplatedMail(transferRequest.PotentialNewOwner.Email, transferRequest.TransferGuid, "d-898692df37204f57b31a224e715f4433");
 
                     Repository.Update(transferRequest);
                     Repository.Save();
+
+                    return transferRequest;
                 }
 
                 if(isOwnerMail == false && acceptedRequest)
@@ -99,16 +104,22 @@ namespace Services.Services
 
                     Repository.Update(transferRequest);
                     Repository.Save();
-                }
-            
-            } else
-            {
-                transferRequest.Status = ProjectTransferRequestStatus.Denied;
 
-                Repository.Update(transferRequest);
-                Repository.Save();
-                //TODO: Send mail to owner about denied transfer
-            }
+                    return transferRequest;
+                }
+                else
+                {
+                    transferRequest.Status = ProjectTransferRequestStatus.Denied;
+
+                    Repository.Update(transferRequest);
+                    Repository.Save();
+
+                    return transferRequest;
+                    //TODO: Send mail to owner about denied transfer
+                }
+            } 
+
+            return transferRequest;
         }
     }
 }

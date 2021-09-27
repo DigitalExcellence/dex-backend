@@ -28,9 +28,8 @@ namespace Services.Resources
             return await sendGridClient.SendEmailAsync(msg);
         }
 
-        public async Task<Response> SendTemplatedMail(string receiverAdress, Guid guid, string subject,string templateId)
+        public async Task<Response> SendTemplatedMail(string receiverAdress, Guid guid,string templateId)
         {
-            EmailAddress receiverEmail = new EmailAddress(receiverAdress);
             SendGridMessage  msg = new SendGridMessage();
             msg.SetTemplateId(templateId);
             msg.SetFrom(fromEmailAdress);

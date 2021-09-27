@@ -29,6 +29,7 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Defaults;
 using Models.Exceptions;
+using SendGrid;
 using Serilog;
 using Services.Services;
 using System;
@@ -1518,7 +1519,11 @@ namespace API.Controllers
 
             try
             {
-                await projectTransferService.InitiateTransfer(project, potentialNewOwner);
+                Response response = await projectTransferService.InitiateTransfer(project, potentialNewOwner);
+                if(response.StatusCode == HttpStatusCode.Accepted)
+                {
+                    return Ok("Transfer has been initiated, please check your email");
+                }
             }
             catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
             {
@@ -1526,8 +1531,7 @@ namespace API.Controllers
             }
 
 
-
-            return Ok("Transfer has been initiated, check your email");
+            return BadRequest("Transfer could not be initiated");
         }
 
         /// <summary>
@@ -1544,7 +1548,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ProcessTransfer(Guid transferGuid, bool isOwnerMail, bool acceptedRequest)
         {
             ProjectTransferRequest transferRequest = await projectTransferService.FindTransferByGuid(transferGuid);
@@ -1553,17 +1557,30 @@ namespace API.Controllers
             {
                 ProblemDetails problem = new ProblemDetails
                 {
-                    Title = "Failed to find projectransfer request",
+                    Title = "Failed to find project transfer request",
                     Detail = "The project transfer request could not be found in the database.",
                     Instance = "7BBD2018-2E1C-465D-A3FF-611C6E76424C"
                 };
                 return NotFound(problem);
             }
 
-            await projectTransferService.ProcessTransfer(transferRequest, isOwnerMail, acceptedRequest);
+            ProjectTransferRequest result = await projectTransferService.ProcessTransfer(transferRequest, isOwnerMail, acceptedRequest);
+
+            if(result.Status == ProjectTransferRequestStatus.Completed)
+            {
+                return Ok("The project has been succesfully transferred to the new owner");
+            }
+            if(result.Status == ProjectTransferRequestStatus.Denied)
+            {
+                return BadRequest("Project transfer has been denied");
+            }
+            if(result.Status == ProjectTransferRequestStatus.Pending && result.CurrentOwnerAcceptedRequest)
+            {
+                return Ok("You accepted the transfer request, the potential new owner should receive an email about the transfer");
+            }
 
 
-            return Ok("Transfer has been initiated, check your email");
+            return BadRequest("Project transfer has been denied");
         }
 
 

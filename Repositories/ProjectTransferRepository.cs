@@ -11,7 +11,7 @@ namespace Repositories
 {
     public interface IProjectTransferRepository : IRepository<ProjectTransferRequest>
     {
-       public Task<ProjectTransferRequest> FindTransferByProjectId(int projectId);
+       public Task<List<ProjectTransferRequest>> FindTransferByProjectId(int projectId);
        public Task<ProjectTransferRequest> FindTransferByGuid(Guid guid);
     }
 
@@ -30,11 +30,11 @@ namespace Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ProjectTransferRequest> FindTransferByProjectId(int projectId)
+        public Task<List<ProjectTransferRequest>> FindTransferByProjectId(int projectId)
         {
-            return await GetDbSet<ProjectTransferRequest>()
+            return GetDbSet<ProjectTransferRequest>()
                          .Where(transfer => transfer.Project.Id == projectId)
-                         .SingleOrDefaultAsync();
+                         .ToListAsync();
         }
     }
 }
