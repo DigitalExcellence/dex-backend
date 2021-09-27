@@ -1641,6 +1641,20 @@
 							]
 						},
 						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Administrator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": null
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Institution",
 							"item": [
 								{
@@ -29198,6 +29212,20 @@
 											""
 										]
 									}
+								}
+							]
+						},
+						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Alumni",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": null
+									},
+									"response": []
 								}
 							]
 						},
