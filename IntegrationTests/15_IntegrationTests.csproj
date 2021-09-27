@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <Folder Include="Configuration\" />
+    <Folder Include="Implementations\B_Tests\B1_Guest\" />
+    <Folder Include="Implementations\B_Tests\B0_Administrator\" />
   </ItemGroup>
 
 </Project>
