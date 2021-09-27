@@ -28,14 +28,14 @@ namespace Services.Resources
             return await sendGridClient.SendEmailAsync(msg);
         }
 
-        public async Task<Response> SendTemplatedMail(string receiverAdress, Guid guid,string templateId)
+        public async Task<Response> SendTemplatedMail(string receiverAdress, Guid guid,string templateId, string projectOwnerMail, string projectName)
         {
             SendGridMessage  msg = new SendGridMessage();
             msg.SetTemplateId(templateId);
             msg.SetFrom(fromEmailAdress);
             msg.AddTo(receiverAdress);
 
-            SendGridParamaters sendGridParamaters = new SendGridParamaters(guid, receiverAdress);
+            SendGridParameters sendGridParamaters = new SendGridParameters(guid, receiverAdress,projectOwnerMail,projectName);
             msg.SetTemplateData(sendGridParamaters);
 
             return await sendGridClient.SendEmailAsync(msg);

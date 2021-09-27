@@ -57,7 +57,7 @@ namespace Services.Services
 
             ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
 
-            Response response = await mailClient.SendTemplatedMail(transferRequest.Project.User.Email, transferRequest.TransferGuid, "d-6680df0406bf488e9810802bbaa29f2e");
+            Response response = await mailClient.SendTemplatedMail(transferRequest.Project.User.Email, transferRequest.TransferGuid, "d-6680df0406bf488e9810802bbaa29f2e",transferRequest.PotentialNewOwner.Name,transferRequest.Project.Name);
 
             repository.Add(transferRequest);
             repository.Save();
@@ -75,7 +75,7 @@ namespace Services.Services
                     //Current project owner clicked mail and accepted request
                     transferRequest.CurrentOwnerAcceptedRequest = true;
 
-                    await mailClient.SendTemplatedMail(transferRequest.PotentialNewOwner.Email, transferRequest.TransferGuid, "d-898692df37204f57b31a224e715f4433");
+                    await mailClient.SendTemplatedMail(transferRequest.PotentialNewOwner.Email, transferRequest.TransferGuid, "d-898692df37204f57b31a224e715f4433",transferRequest.Project.User.Name,transferRequest.Project.Name);
 
                     Repository.Update(transferRequest);
                     Repository.Save();

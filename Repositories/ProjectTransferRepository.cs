@@ -27,6 +27,7 @@ namespace Repositories
                 .Where(transfer => transfer.TransferGuid == guid)
                 .Include(p => p.Project)
                 .Include(u => u.PotentialNewOwner)
+                .Include(c => c.Project.User)
                 .FirstOrDefaultAsync();
         }
 
