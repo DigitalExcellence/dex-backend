@@ -35,6 +35,7 @@ namespace Repositories
         {
             return GetDbSet<ProjectTransferRequest>()
                          .Where(transfer => transfer.Project.Id == projectId)
+                         .Include(u => u.PotentialNewOwner)
                          .ToListAsync();
         }
     }
