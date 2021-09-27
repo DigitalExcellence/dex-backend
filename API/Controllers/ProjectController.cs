@@ -1517,6 +1517,17 @@ namespace API.Controllers
 
             User potentialNewOwner = await userService.GetUserByUserEmail(potentialNewOwnerUserEmail);
 
+            if(potentialNewOwner == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to find the user to transfer to",
+                    Detail = "TFailed to find the user to transfer to",
+                    Instance = "56F7B453-1244-4EF4-9CD1-78CAC0C146AF"
+                };
+                return NotFound(problem);
+            }
+
             try
             {
                 Response response = await projectTransferService.InitiateTransfer(project, potentialNewOwner);
