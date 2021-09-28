@@ -65,6 +65,13 @@ namespace Repositories
         );
 
         /// <summary>
+        /// Returns project with a NON redacted User. Do not use when you do not need the user's email adress.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<Project> FindAsyncNotRedacted(int id);
+
+        /// <summary>
         ///     This interface method counts the amount of projects matching the filters.
         /// </summary>
         /// <param name="highlighted"></param>
@@ -770,6 +777,11 @@ namespace Repositories
         public Task<bool> ProjectExistsAsync(int id)
         {
             return GetDbSet<Project>().AnyAsync(i => i.Id == id);
+        }
+
+        public Task<Project> FindAsyncNotRedacted(int id)
+        {
+            return GetDbSet<Project>().Where(p => p.Id == id).Include(u => u.User).FirstOrDefaultAsync();
         }
     }
 

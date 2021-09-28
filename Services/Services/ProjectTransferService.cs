@@ -58,12 +58,13 @@ namespace Services.Services
             ProjectTransferRequest transferRequest = new ProjectTransferRequest(project, potentialNewOwner);
 
             Response response = await mailClient.SendTemplatedMail(transferRequest.Project.User.Email, transferRequest.TransferGuid, "d-6680df0406bf488e9810802bbaa29f2e",transferRequest.PotentialNewOwner.Name,transferRequest.Project.Name);
-
-            repository.Add(transferRequest);
-            repository.Save();
+            if(response.IsSuccessStatusCode)
+            {
+                repository.Add(transferRequest);
+                repository.Save();
+            }
 
             return response;
-
         }
 
         public async Task <ProjectTransferRequest> ProcessTransfer(ProjectTransferRequest transferRequest, bool isOwnerMail, bool acceptedRequest)

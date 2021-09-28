@@ -50,6 +50,13 @@ namespace Services.Services
         Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
         /// <summary>
+        /// Returns project with a NON redacted User. Do not use when you do not need the user's email adress.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<Project> FindAsyncNotRedacted(int id);
+
+        /// <summary>
         ///     Get the number of projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
@@ -259,6 +266,11 @@ namespace Services.Services
         public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
         {
             return await Repository.FindProjectsWhereTitleStartsWithQuery(query);
+        }
+
+        public async Task<Project> FindAsyncNotRedacted(int id)
+        {
+            return await Repository.FindAsyncNotRedacted(id);
         }
     }
 

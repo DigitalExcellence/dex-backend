@@ -1483,8 +1483,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> InitiateTransfer(string potentialNewOwnerUserEmail,int projectId)
         {
-            Project project = await projectService.FindAsync(projectId)
-                                                  .ConfigureAwait(false);
+            Project project = await projectService.FindAsyncNotRedacted(projectId);
 
             if(project == null)
             {
@@ -1522,7 +1521,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed to find the user to transfer to",
-                    Detail = "TFailed to find the user to transfer to",
+                    Detail = "Failed to find the user to transfer to",
                     Instance = "56F7B453-1244-4EF4-9CD1-78CAC0C146AF"
                 };
                 return NotFound(problem);
