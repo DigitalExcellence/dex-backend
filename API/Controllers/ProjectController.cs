@@ -1537,7 +1537,7 @@ namespace API.Controllers
             }
             catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
             {
-                return BadRequest(transferAlreadyInitiated.Message);
+                return Forbid(transferAlreadyInitiated.Message);
             }
 
 
