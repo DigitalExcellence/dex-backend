@@ -93,6 +93,7 @@ namespace Services.Services
                     Repository.Update(transferRequest);
                     Repository.Save();
 
+                    User oldOwner = transferRequest.Project.User;
 
                     //Transfer project to new owner
                     transferRequest.Project.User = transferRequest.PotentialNewOwner;
@@ -105,6 +106,10 @@ namespace Services.Services
 
                     Repository.Update(transferRequest);
                     Repository.Save();
+
+                    //Notify both users about succesfull transfer
+                    await mailClient.SendTemplatedMail(oldOwner.Email, transferRequest.TransferGuid, "d-e384d06815f74588a9ff0cf8922c694f",oldOwner.Email,transferRequest.Project.Name);
+                    await mailClient.SendTemplatedMail(transferRequest.Project.User.Email, transferRequest.TransferGuid, "d-e384d06815f74588a9ff0cf8922c694f", transferRequest.Project.User.Email, transferRequest.Project.Name);
 
                     return transferRequest;
                 }
