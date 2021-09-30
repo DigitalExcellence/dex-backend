@@ -189,7 +189,7 @@ namespace Repositories
                          .Include(f => f.UserProject)
                          .Include(s => s.LikedProjectsByUsers)
                          .Include(u => u.UserTasks)
-                         .SingleOrDefaultAsync();
+                         .FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Repositories
                         .Where(s => s.IdentityId == identityId)
                         .Include(s => s.Role)
                         .ThenInclude(s => s.Scopes)
-                        .SingleOrDefault();
+                        .FirstOrDefault();
             if(user?.Role == null)
             {
                 return false;
