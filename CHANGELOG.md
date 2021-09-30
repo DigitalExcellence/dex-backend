@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added project ownership transfer implementation - [#438](https://github.com/DigitalExcellence/dex-backend/pull/506)
 
 ### Changed
 
