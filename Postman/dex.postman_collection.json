@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "45ee041e-e0a8-4433-bdd8-3517c9bf6a93",
+		"_postman_id": "ff8d313b-51aa-4d4c-94cc-bcdb2457fbd9",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -23,7 +23,8 @@
 											"script": {
 												"exec": [
 													"var jsonData = pm.response.json();\r",
-													"pm.environment.set(\"registeredUserId\", jsonData.id)"
+													"pm.environment.set(\"registeredUserId\", jsonData.id)\r",
+													"pm.environment.set(\"userEmailToTransferProjectTo\", jsonData.email)"
 												],
 												"type": "text/javascript"
 											}
@@ -807,6 +808,75 @@
 							"path": [
 								"api",
 								"File"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProjectTransfer-ProjectToTransfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var projectName = pm.environment.get(\"projectName\");",
+									"var adminUserName = pm.environment.get(\"adminUserName\");",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"projectIdToTransfer\", jsonData.id);",
+									"",
+									"eval(pm.environment.get(\"commonTests\"))();",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response must be valid and have a json body\", function () {",
+									"     pm.response.to.be.success;",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
+									"    pm.expect(jsonData.name).to.eql(projectName);",
+									"});",
+									"",
+									"pm.test(\"User Name is correct and matching: \" + adminUserName, function () {",
+									"    pm.expect(jsonData.user.name).to.eql(adminUserName);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{administratorUserIdentityId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{projectName}}\",\r\n  \"description\": \"postmantest_ProjectToTransfer\",\r\n  \"shortDescription\": \"postmantest_ProjectToTransfer\",\r\n  \"uri\": \"postmantest_ProjectToTransfer\",\r\n  \"collaborators\": [\r\n    {\r\n      \"fullName\": \"postmantest_ProjectToTransfer\",\r\n      \"role\": \"postmantest_ProjectToTransfer\"\r\n    }\r\n  ],\r\n  \"created\": \"2020-04-20T08:24:26.693Z\",\r\n  \"updated\": \"2020-04-20T08:24:26.693Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}/api/Project",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project"
 							]
 						}
 					},
@@ -1634,6 +1704,22 @@
 												"Category",
 												"98989"
 											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Administrator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
 										}
 									},
 									"response": []
@@ -6556,6 +6642,251 @@
 												"api",
 												"Institution",
 												"{{createdInstitutionId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "TransferProject",
+							"item": [
+								{
+									"name": "TransferProject-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/transfer/{{projectIdToTransfer}}?potentialNewOwnerUserEmail={{userEmailToTransferProjectTo}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"transfer",
+												"{{projectIdToTransfer}}"
+											],
+											"query": [
+												{
+													"key": "potentialNewOwnerUserEmail",
+													"value": "{{userEmailToTransferProjectTo}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "TransferProjectAlreadyInit-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 500\", function () {",
+													"    pm.response.to.have.status(500);",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/transfer/{{projectIdToTransfer}}?potentialNewOwnerUserEmail={{userEmailToTransferProjectTo}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"transfer",
+												"{{projectIdToTransfer}}"
+											],
+											"query": [
+												{
+													"key": "potentialNewOwnerUserEmail",
+													"value": "{{userEmailToTransferProjectTo}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "TransferProjectProjectNotFound-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/transfer/{{projectIdToTransferNonExisting}}?potentialNewOwnerUserEmail={{userEmailToTransferProjectTo}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"transfer",
+												"{{projectIdToTransferNonExisting}}"
+											],
+											"query": [
+												{
+													"key": "potentialNewOwnerUserEmail",
+													"value": "{{userEmailToTransferProjectTo}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "TransferProjectProjectNotOwned-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"eval(pm.environment.get(\"commonTests\"))();",
+													"",
+													"pm.test(\"Status code is 401\", function () {",
+													"    pm.response.to.have.status(401);",
+													"});",
+													"",
+													"",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "IdentityId",
+												"type": "text",
+												"value": "{{administratorUserIdentityId}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{apiUrl}}/api/project/transfer/1?potentialNewOwnerUserEmail={{userEmailToTransferProjectTo}}",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"project",
+												"transfer",
+												"1"
+											],
+											"query": [
+												{
+													"key": "potentialNewOwnerUserEmail",
+													"value": "{{userEmailToTransferProjectTo}}"
+												}
 											]
 										}
 									},
@@ -29198,6 +29529,22 @@
 											""
 										]
 									}
+								}
+							]
+						},
+						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Alumni",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
 								}
 							]
 						},
