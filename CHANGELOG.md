@@ -5,12 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Release v.1.6.0-beta - 15-9-2021
 
 ### Added
 - Added project ownership transfer implementation - [#438](https://github.com/DigitalExcellence/dex-backend/pull/506)
 
 ### Changed
+- Added max character length when creating project name [#418](https://github.com/DigitalExcellence/dex-backend/issues/418)
+- Renamed resources and folder structure changed [#500](https://github.com/DigitalExcellence/dex-backend/pull/500)
+- Updated resharp manually [#494](https://github.com/DigitalExcellence/dex-backend/pull/494)
+
 
 ### Deprecated
 
@@ -19,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+- Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.2 to 3.1.18 [Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.2 to 3.1.18](https://github.com/DigitalExcellence/dex-backend/pull/486)
+
+- Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.3 to 3.1.18 in /IdentityServer[Bump Microsoft.AspNetCore.Authentication.JwtBearer from 3.1.2 to 3.1.18](https://github.com/DigitalExcellence/dex-backend/pull/487)
+
 
 ## Release v.1.5.0-beta - 30-06-2021
 
