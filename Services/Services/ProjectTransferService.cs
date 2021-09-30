@@ -120,8 +120,9 @@ namespace Services.Services
                     Repository.Update(transferRequest);
                     Repository.Save();
 
+                    await mailClient.SendTemplatedMail(transferRequest.Project.User.Email, transferRequest.TransferGuid, "d-436228d7785049f59675963344a8fa62", transferRequest.Project.User.Email, transferRequest.Project.Name);
+
                     return transferRequest;
-                    //TODO: Send mail to owner about denied transfer
                 }
             } 
 
