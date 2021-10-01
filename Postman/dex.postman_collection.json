@@ -13136,7 +13136,7 @@
 													"    pm.response.to.be.json;",
 													"});",
 													"",
-													"pm.test(\"Project count matches: 6\", function () {",
+													"pm.test(\"Project count matches: 3\", function () {",
 													"    pm.expect(jsonData.results.length).to.eql(1);",
 													"    pm.expect(jsonData.totalCount).to.eql(3);",
 													"});"
@@ -29310,7 +29310,7 @@
 													"\r",
 													"pm.test(\"Project pagination displays correct amount of projects and all project count matches\", function() {\r",
 													"    pm.expect(jsonData.results.length).to.eql(1);\r",
-													"    pm.expect(jsonData.totalCount).to.eql(5);\r",
+													"    pm.expect(jsonData.totalCount).to.eql(3);\r",
 													"})"
 												],
 												"type": "text/javascript"
