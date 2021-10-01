@@ -267,7 +267,7 @@ namespace Repositories
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await GetDbSet<User>()
-                .Where(user => user.Email == email).SingleOrDefaultAsync();
+                .Where(user => user.Email == email).FirstOrDefaultAsync();
         }
     }
 
