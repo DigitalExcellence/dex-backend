@@ -17,6 +17,7 @@ namespace Services.Services
     {
         Task <Response>InitiateTransfer(Project project, User potentialNewOwner);
         Task<ProjectTransferRequest> FindTransferByGuid(Guid guid);
+        Task<ProjectTransferRequest> FindPendingTransferByProjectId(int projectId);
         Task<ProjectTransferRequest> ProcessTransfer(ProjectTransferRequest transferRequest, bool boolisOwnerMail, bool acceptedRequest);
     }
     public class ProjectTransferService : Service<ProjectTransferRequest>, IProjectTransferService
@@ -39,9 +40,14 @@ namespace Services.Services
             return await repository.FindTransferByGuid(guid);
         }
 
+        public async Task<ProjectTransferRequest> FindPendingTransferByProjectId(int projectId)
+        {
+            return await repository.FindPendingTransferByProjectId(projectId);
+        }
+
         public async Task <Response> InitiateTransfer(Project project, User potentialNewOwner)
         {
-            List <ProjectTransferRequest> existingTransferRequests = await repository.FindTransferByProjectId(project.Id);
+            List <ProjectTransferRequest> existingTransferRequests = await repository.FindTransfersByProjectId(project.Id);
 
             if(existingTransferRequests != null && existingTransferRequests.Count >= 1)
             {
