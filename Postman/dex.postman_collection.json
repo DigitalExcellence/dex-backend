@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "45ee041e-e0a8-4433-bdd8-3517c9bf6a93",
+		"_postman_id": "cfd740d0-2cb3-4a6d-9ca6-25db86e7c9c7",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -1633,6 +1633,76 @@
 												"api",
 												"Category",
 												"98989"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Administrator",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function(){\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function() {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Project pagination displays correct amount of projects and all project count matches\", function() {\r",
+													"    pm.expect(jsonData.results.length).to.eql(1);\r",
+													"    pm.expect(jsonData.totalCount).to.eql(3);\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{administratorUserIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/user/projects?page=1&amountOnPage=1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"user",
+												"projects"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "amountOnPage",
+													"value": "1"
+												}
 											]
 										}
 									},
@@ -13067,7 +13137,8 @@
 													"});",
 													"",
 													"pm.test(\"Project count matches: 6\", function () {",
-													"    pm.expect(jsonData.length).to.eql(6);",
+													"    pm.expect(jsonData.results.length).to.eql(1);",
+													"    pm.expect(jsonData.totalCount).to.eql(6);",
 													"});"
 												],
 												"type": "text/javascript"
@@ -13084,7 +13155,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{apiUrl}}/api/user/projects",
+											"raw": "{{apiUrl}}/api/user/projects?page=1&amountOnPage=1",
 											"host": [
 												"{{apiUrl}}"
 											],
@@ -13092,6 +13163,16 @@
 												"api",
 												"user",
 												"projects"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "amountOnPage",
+													"value": "1"
+												}
 											]
 										}
 									},
@@ -29198,6 +29279,76 @@
 											""
 										]
 									}
+								}
+							]
+						},
+						{
+							"name": "UserProjects",
+							"item": [
+								{
+									"name": "UserProject-GetProject-Self-Alumni",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var projectName = pm.environment.get(\"projectName\");\r",
+													"\r",
+													"var jsonData = pm.response.json();\r",
+													"\r",
+													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function(){\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response must be valid and have a json body\", function() {\r",
+													"    pm.response.to.be.ok;\r",
+													"    pm.response.to.be.withBody;\r",
+													"    pm.response.to.be.json;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Project pagination displays correct amount of projects and all project count matches\", function() {\r",
+													"    pm.expect(jsonData.results.length).to.eql(1);\r",
+													"    pm.expect(jsonData.totalCount).to.eql(3);\r",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "IdentityId",
+												"value": "{{alumniIdentityId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{apiUrl}}/api/user/projects?page=1&amountOnPage=1",
+											"host": [
+												"{{apiUrl}}"
+											],
+											"path": [
+												"api",
+												"user",
+												"projects"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "amountOnPage",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
