@@ -256,7 +256,7 @@ namespace Repositories
                 Id = p.Id,
                 ProjectIconId = p.ProjectIconId,
                 ProjectIcon = p.ProjectIcon,
-                CallToActions= p.CallToActions,
+                CallToActions = p.CallToActions,
                 Collaborators = p.Collaborators,
                 Likes = p.Likes,
                 LinkedInstitutions = p.LinkedInstitutions,
@@ -287,11 +287,11 @@ namespace Repositories
         /// <returns>This method returns the amount of projects matching the filters.</returns>
         public virtual async Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null, int? userId = null)
         {
-            if (userId.HasValue)
+            if(userId.HasValue)
                 return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
                              .Where(p => p.UserId == userId)
                              .CountAsync();
-            
+
 
             return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
                        .CountAsync();
@@ -517,26 +517,26 @@ namespace Repositories
 
             List<Project> projectResults = await projects.Select(p => new Project
             {
-                   UserId = p.UserId,
-                   User = p.User,
-                   Id = p.Id,
-                   ProjectIconId = p.ProjectIconId,
-                   ProjectIcon = p.ProjectIcon,
-                   CallToActions = p.CallToActions,
-                   Collaborators = p.Collaborators,
-                   Likes = p.Likes,
-                   LinkedInstitutions = p.LinkedInstitutions,
-                   Categories = p.Categories.Select(c => new ProjectCategory()
-                       {
-                           Category = c.Category,
-                           Id = c.Id
-                       }).ToList(),
-                   Created = p.Created,
-                   InstitutePrivate = p.InstitutePrivate,
-                   Name = p.Name,
-                   ShortDescription = p.ShortDescription,
-                   Updated = p.Updated,
-                   Uri = p.Uri
+                UserId = p.UserId,
+                User = p.User,
+                Id = p.Id,
+                ProjectIconId = p.ProjectIconId,
+                ProjectIcon = p.ProjectIcon,
+                CallToActions = p.CallToActions,
+                Collaborators = p.Collaborators,
+                Likes = p.Likes,
+                LinkedInstitutions = p.LinkedInstitutions,
+                Categories = p.Categories.Select(c => new ProjectCategory()
+                {
+                    Category = c.Category,
+                    Id = c.Id
+                }).ToList(),
+                Created = p.Created,
+                InstitutePrivate = p.InstitutePrivate,
+                Name = p.Name,
+                ShortDescription = p.ShortDescription,
+                Updated = p.Updated,
+                Uri = p.Uri
             })
                 .ToListAsync();
             return projectResults;
@@ -848,12 +848,7 @@ namespace Repositories
         public Task<Project> FindAsyncNotRedacted(int id)
         {
             return GetDbSet<Project>().Where(p => p.Id == id).Include(u => u.User).FirstOrDefaultAsync();
-
-            
-        public Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null)
-        {
-            throw new NotImplementedException();
+           
         }
     }
-
 }
