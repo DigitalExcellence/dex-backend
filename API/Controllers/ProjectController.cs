@@ -1604,7 +1604,7 @@ namespace API.Controllers
             }
             if(result.Status == ProjectTransferRequestStatus.Denied)
             {
-                return BadRequest("Project transfer has been denied");
+                return Ok("Project transfer has been denied");
             }
             if(result.Status == ProjectTransferRequestStatus.Pending && result.CurrentOwnerAcceptedRequest)
             {
@@ -1612,7 +1612,7 @@ namespace API.Controllers
             }
 
 
-            return BadRequest("Project transfer has been denied");
+            return BadRequest("Project transfer could not be processed");
         }
 
 
@@ -1662,21 +1662,26 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
+            if(transfer.Status == ProjectTransferRequestStatus.Pending)
+            {
+                try
+                {
+                    transfer.Status = ProjectTransferRequestStatus.Denied;
+                    projectTransferService.Update(transfer);
+                    projectTransferService.Save();
+
+                    return Ok("Transfer cancelled");
+
+                } catch(Exception e)
+                {
+                    return Forbid(e.Message);
+                }
+            }
+
+
+            return BadRequest();
+
             
-
-            try
-            {
-                transfer.Status = ProjectTransferRequestStatus.Denied;
-                projectTransferService.Update(transfer);
-                
-            }
-            catch(Exception e)
-            {
-                return Forbid(e.Message);
-            }
-
-
-            return BadRequest("Transfer could not be Cancelled");
         }
 
     }
