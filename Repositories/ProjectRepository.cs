@@ -76,8 +76,9 @@ namespace Repositories
         /// </summary>
         /// <param name="highlighted"></param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>number of projects found</returns>
-        Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null);
+        Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null, int? userId = null);
 
         /// <summary>
         ///     This interface method searches the database for projects matching the search query and parameters.
@@ -98,6 +99,7 @@ namespace Repositories
             bool orderByAsc = true,
             bool? highlighted = null,
             ICollection<int> categories = null
+
         );
 
         /// <summary>
@@ -129,8 +131,20 @@ namespace Repositories
         ///     Get the user projects.
         /// </summary>
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>A enumerable of the users projects</returns>
-        Task<IEnumerable<Project>> GetUserProjects(int userId);
+        Task<IEnumerable<Project>> GetUserProjects(int userId,
+                                                   int? skip = null,
+                                                   int? take = null,
+                                                   Expression<Func<Project, object>> orderBy = null,
+                                                   bool orderByAsc = true,
+                                                   bool? highlighted = null,
+                                                   ICollection<int> categories = null);
         Task<List<Project>> GetLikedProjectsFromSimilarUser(int userId, int similarUserId);
         void CreateProjectIndex();
         void DeleteIndex();
@@ -269,9 +283,16 @@ namespace Repositories
         /// </summary>
         /// <param name="highlighted">The highlighted parameter represents whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>This method returns the amount of projects matching the filters.</returns>
-        public virtual async Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null)
+        public virtual async Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null, int? userId = null)
         {
+            if (userId.HasValue)
+                return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
+                             .Where(p => p.UserId == userId)
+                             .CountAsync();
+            
+
             return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
                        .CountAsync();
         }
@@ -468,19 +489,57 @@ namespace Repositories
         ///     Get the user projects.
         /// </summary>
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
+        /// <param name="skip">The skip parameter represents the number of projects to skip.</param>
+        /// <param name="take">The take parameter represents the number of projects to return.</param>
+        /// <param name="orderBy">The order by parameter represents the way how to order the projects.</param>
+        /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
+        /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
+        /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>A enumerable of the users projects</returns>
-        public async Task<IEnumerable<Project>> GetUserProjects(int userId)
+        public async Task<IEnumerable<Project>> GetUserProjects(
+            int userId,
+            int? skip = null,
+            int? take = null,
+            Expression<Func<Project, object>> orderBy = null,
+            bool orderByAsc = true,
+            bool? highlighted = null,
+            ICollection<int> categories = null)
         {
-            IEnumerable<Project> projects = await GetDbSet<Project>()
-                   .Include(p => p.Collaborators)
-                   .Include(p => p.ProjectIcon)
-                   .Include(p => p.Images)
-                   .Include(p => p.Categories)
-                   .ThenInclude(c => c.Category)
-                   .Where(p => p.UserId == userId)
-                   .ToListAsync();
+            IQueryable<Project> projects = GetDbSet<Project>()
+               .Include(p => p.Collaborators)
+               .Include(p => p.ProjectIcon)
+               .Include(p => p.Images)
+               .Include(p => p.Categories)
+               .ThenInclude(c => c.Category)
+               .Where(p => p.UserId == userId);
 
-            return projects;
+            projects = ApplyFilters(projects, skip, take, orderBy, orderByAsc, highlighted, categories);
+
+            List<Project> projectResults = await projects.Select(p => new Project
+            {
+                   UserId = p.UserId,
+                   User = p.User,
+                   Id = p.Id,
+                   ProjectIconId = p.ProjectIconId,
+                   ProjectIcon = p.ProjectIcon,
+                   CallToActions = p.CallToActions,
+                   Collaborators = p.Collaborators,
+                   Likes = p.Likes,
+                   LinkedInstitutions = p.LinkedInstitutions,
+                   Categories = p.Categories.Select(c => new ProjectCategory()
+                       {
+                           Category = c.Category,
+                           Id = c.Id
+                       }).ToList(),
+                   Created = p.Created,
+                   InstitutePrivate = p.InstitutePrivate,
+                   Name = p.Name,
+                   ShortDescription = p.ShortDescription,
+                   Updated = p.Updated,
+                   Uri = p.Uri
+            })
+                .ToListAsync();
+            return projectResults;
         }
 
         /// <summary>
@@ -563,6 +622,7 @@ namespace Repositories
         /// <param name="orderByAsc">The order by asc parameters represents the order direction (True: asc, False: desc)</param>
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories"></param>
+        /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>
         ///     This method returns a IQueryable Projects collection based on the given filters.
         /// </returns>
@@ -573,7 +633,8 @@ namespace Repositories
             Expression<Func<Project, object>> orderBy,
             bool orderByAsc,
             bool? highlighted,
-            ICollection<int> categories
+            ICollection<int> categories,
+            int? userId = null
         )
         {
             if(highlighted.HasValue)
@@ -605,6 +666,11 @@ namespace Repositories
                 {
                     queryable = queryable.OrderByDescending(orderBy);
                 }
+            }
+
+            if(userId.HasValue)
+            {
+                queryable = queryable.Where(p => p.UserId == userId);
             }
 
             if(skip.HasValue && skip.Value > 0) queryable = queryable.Skip(skip.Value);
@@ -782,6 +848,11 @@ namespace Repositories
         public Task<Project> FindAsyncNotRedacted(int id)
         {
             return GetDbSet<Project>().Where(p => p.Id == id).Include(u => u.User).FirstOrDefaultAsync();
+
+            
+        public Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null)
+        {
+            throw new NotImplementedException();
         }
     }
 
