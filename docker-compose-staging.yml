@@ -72,6 +72,9 @@ services:
       - App__Elastic__Username=${App__ElasticSearch__Username}
       - App__Elastic__Password=${App__ElasticSearch__Password}
       - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
+      - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
+      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
+
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=http"
@@ -149,8 +152,8 @@ services:
       - App__RabbitMQ__Hostname=${App__RabbitMQ__Hostname}
       - App__RabbitMQ__Username=${App__RabbitMQ__Username}
       - App__RabbitMQ__Password=${App__RabbitMQ__Password}
-      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
       - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
+      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
     stdin_open: true
     tty: true
     networks:
