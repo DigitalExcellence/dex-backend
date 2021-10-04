@@ -343,7 +343,7 @@ namespace API.Controllers
         /// <returns>This method returns the project resource result.</returns>
         /// <response code="200">This endpoint returns the created project.</response>
         /// <response code="400">
-        ///     The 400 Bad Request status code is returned when the project
+        ///     The 400 Bad RequeBad Request status code is returned when the project
         ///     resource is not specified or failed to save project to the database.
         ///     404 not found when the user is not bound to and institution and tries to make the project isntitute private
         /// </response>
@@ -1563,7 +1563,7 @@ namespace API.Controllers
             }
 
 
-            return BadRequest("Transfer could not be initiated");
+            return Conflict("Transfer could not be initiated");
         }
 
         /// <summary>
@@ -1612,12 +1612,12 @@ namespace API.Controllers
             }
 
 
-            return BadRequest("Project transfer could not be processed");
+            return Conflict("Project transfer could not be processed");
         }
 
 
         /// <summary>
-        ///     Cancell project transfer request
+        ///     Cancel project transfer request
         /// </summary>
         /// <param name="transferGuid"></param>
         /// <response code="200">Project transfer request succesfully created</response>
@@ -1674,21 +1674,21 @@ namespace API.Controllers
 
                 } catch(Exception e)
                 {
-                    return Forbid(e.Message);
+                    return Conflict(e.Message);
                 }
             }
 
 
-            return BadRequest();
+            return Conflict();
         }
 
 
         /// <summary>
-        ///     Check if project has transfer request
+        ///     Check if project has transfer request and receive transfer GUID
         /// </summary>
         /// <param name="projectId"></param>
         /// <response code="200">Project has open transfer, transfer guid returned</response>
-        /// <response code="401">User is not authorized initiate transfer request</response>
+        /// <response code="401">User is not authorized check</response>
         /// <response code="404">Project has no open transfer</response>
         /// <returns></returns>
         [HttpGet("transfer/check/{projectId}")]
