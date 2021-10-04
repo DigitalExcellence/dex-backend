@@ -1616,11 +1616,76 @@ namespace API.Controllers
         }
 
 
+        /// <summary>
+        ///     Cancell project transfer request
+        /// </summary>
+        /// <param name="transferGuid"></param>
+        /// <response code="200">Project transfer request succesfully created</response>
+        /// <response code="401">User is not authorized initiate transfer request</response>
+        /// <response code="404">Project was not found.</response>
+        /// <returns></returns>
+        [HttpDelete("transfer/{transferGuid}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> CancelTransfer(Guid transferGuid)
+        {
+            ProjectTransferRequest transfer = await projectTransferService.FindTransferByGuid(transferGuid);
+
+            if(transfer == null)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to find transfer request",
+                    Detail = "The transfer could not be found in the database.",
+                    Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
+                };
+                return NotFound(problem);
+            }
+
+
+
+            User user = await HttpContext.GetContextUser(userService)
+                                         .ConfigureAwait(false);
+
+
+            if(transfer.Project.User.Id != user.Id)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to cancel transfer request",
+                    Detail = "The user is not allowed to cancel transfer request",
+                    Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
+                };
+                return Unauthorized(problem);
+            }
+
+            
+
+            try
+            {
+                transfer.Status = ProjectTransferRequestStatus.Denied;
+                projectTransferService.Update(transfer);
+                
+            }
+            catch(Exception e)
+            {
+                return Forbid(e.Message);
+            }
+
+
+            return BadRequest("Transfer could not be Cancelled");
+        }
 
     }
 
 
     
+
+
+
 }
 
 
