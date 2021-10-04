@@ -272,15 +272,6 @@ namespace Repositories
         /// <returns>This method returns the amount of projects matching the filters.</returns>
         public virtual async Task<int> CountAsync(bool? highlighted = null, ICollection<int> categories = null)
         {
-<<<<<<< HEAD
-            if(userId.HasValue)
-                return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
-                             .Where(p => p.UserId == userId)
-                             .CountAsync();
-
-
-=======
->>>>>>> parent of 36bad18 (Merge branch 'feature/461-add-pagination-getuserprojects-endpoint' into Feature#438TransferProjectOwnership)
             return await ApplyFilters(DbSet, null, null, null, true, highlighted, categories)
                        .CountAsync();
         }
@@ -489,37 +480,7 @@ namespace Repositories
                    .Where(p => p.UserId == userId)
                    .ToListAsync();
 
-<<<<<<< HEAD
-            projects = ApplyFilters(projects, skip, take, orderBy, orderByAsc, highlighted, categories);
-
-            List<Project> projectResults = await projects.Select(p => new Project
-            {
-                UserId = p.UserId,
-                User = p.User,
-                Id = p.Id,
-                ProjectIconId = p.ProjectIconId,
-                ProjectIcon = p.ProjectIcon,
-                CallToActions = p.CallToActions,
-                Collaborators = p.Collaborators,
-                Likes = p.Likes,
-                LinkedInstitutions = p.LinkedInstitutions,
-                Categories = p.Categories.Select(c => new ProjectCategory()
-                {
-                    Category = c.Category,
-                    Id = c.Id
-                }).ToList(),
-                Created = p.Created,
-                InstitutePrivate = p.InstitutePrivate,
-                Name = p.Name,
-                ShortDescription = p.ShortDescription,
-                Updated = p.Updated,
-                Uri = p.Uri
-            })
-                .ToListAsync();
-            return projectResults;
-=======
             return projects;
->>>>>>> parent of 36bad18 (Merge branch 'feature/461-add-pagination-getuserprojects-endpoint' into Feature#438TransferProjectOwnership)
         }
 
         /// <summary>
@@ -821,10 +782,6 @@ namespace Repositories
         public Task<Project> FindAsyncNotRedacted(int id)
         {
             return GetDbSet<Project>().Where(p => p.Id == id).Include(u => u.User).FirstOrDefaultAsync();
-<<<<<<< HEAD
-           
-=======
->>>>>>> parent of 36bad18 (Merge branch 'feature/461-add-pagination-getuserprojects-endpoint' into Feature#438TransferProjectOwnership)
         }
     }
 }
