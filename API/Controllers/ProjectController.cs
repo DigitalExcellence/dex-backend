@@ -1586,7 +1586,7 @@ namespace API.Controllers
             }
 
 
-            return Conflict("Transfer could not be initiated");
+            return Conflict("Transfer could not be initiated" + Response);
         }
 
         /// <summary>
