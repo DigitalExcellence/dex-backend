@@ -25,14 +25,11 @@ namespace IntegrationTests.Test.Templates
             //Arrange
             var client = RequestConfig.Connection.Client;
             var endpoint = RequestConfig.Endpoint;
-            //var httpHelper = RequestConfig.HttpHelper;
 
             // Act
             var response = await client.DeleteAsync(endpoint);
 
             // Assert
-            //dynamic responseObj = await httpHelper.GetFromResponse(response, ExpectedResultType);
-
             response.EnsureSuccessStatusCode();
         }
     }

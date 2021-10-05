@@ -25,13 +25,13 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
         [Fact]
         public async Task CreateRegisteredUser()
         {
+            //AdministratorId
             string identityId = "818727";
 
             string name = "Registered Postman User";
             string email = "registeredUser@postman.com";
             int institutionId = 1;
 
-            //?
             await connection.ApplyAuthenticationToClient(IdentityId);
 
             var requestConfig = new RequestConfig
@@ -40,8 +40,6 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
                 Endpoint = "/api/User",
                 HttpHelper = httpHelper
             };
-            //
-
 
             var expectedResultType = typeof(UserOutput);
             var createResource = new UserInput
@@ -55,9 +53,9 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
             var test = new CreateTest(requestConfig, expectedResultType, createResource);
             await test.Execute();
 
-            //Naam controleren?
             Assert.Equal(name, test.Result.Name);
             EnvironmentVariables.Variables["RegisteredUser"] = test.Result.IdentityId.ToString();
+            EnvironmentVariables.Variables["RegisteredUserId"] = test.Result.Id.ToString();
         }
     }
 }

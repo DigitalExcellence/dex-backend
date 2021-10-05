@@ -20,11 +20,6 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
             this.httpHelper = fixture.HttpHelper;
         }
 
-
-
-        //apiurl/api/user/projects
-        //header = IdentityId = registeredUserIdentityId
-
         [Fact]
         public async Task Test1()
         {
@@ -62,9 +57,6 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
 
             var test = new CreateTest(requestConfig, expectedResultType, createResource);
             await test.Execute();
-
-            //Naam controleren?
-            //Assert.Equal(name, test.Result.Name);
 
             EnvironmentVariables.Variables["UserProjectId1"] = test.Result.Id.ToString();
             await test.Execute();
