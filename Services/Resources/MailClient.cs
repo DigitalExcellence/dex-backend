@@ -18,6 +18,9 @@ namespace Services.Resources
         {
             sendGridClient = new SendGridClient(Environment.GetEnvironmentVariable("App__SendGrid__ApiKey"));
             fromEmailAdress = new EmailAddress(Environment.GetEnvironmentVariable("App__SendGrid__EmailFrom"));
+
+            Console.WriteLine(Environment.GetEnvironmentVariable("!!!!!!!"+"App__SendGrid__ApiKey"));
+            Console.WriteLine(Environment.GetEnvironmentVariable("!!!!!!!"+"App__SendGrid__EmailFrom"));
         }
 
         public async Task<Response> SendMail(string receiverAdress, string plainTextContent,string subject, string htmlContent)

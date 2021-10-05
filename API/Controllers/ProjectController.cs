@@ -1568,7 +1568,7 @@ namespace API.Controllers
                     return Conflict("Mail client returned null response");
                 }
 
-                return Conflict("Transfer could not be initiated" + response);
+                return Conflict("Transfer could not be initiated" + response.Body + response.StatusCode + response.Headers);
             }
             catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
             {
