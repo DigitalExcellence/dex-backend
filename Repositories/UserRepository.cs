@@ -40,11 +40,13 @@ namespace Repositories
     {
 
         /// <summary>
-        ///     Gets the user asynchronous.
+        ///     Gets the user asynchronous by username.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>The task that will get the User object.</returns>
         Task<User> GetUserAsync(int userId);
+
+        Task<User> GetUserByEmailAsync(string email);
 
         /// <summary>
         ///     Gets the user by identity identifier asynchronous.
@@ -187,7 +189,7 @@ namespace Repositories
                          .Include(f => f.UserProject)
                          .Include(s => s.LikedProjectsByUsers)
                          .Include(u => u.UserTasks)
-                         .SingleOrDefaultAsync();
+                         .FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -223,7 +225,7 @@ namespace Repositories
                         .Where(s => s.IdentityId == identityId)
                         .Include(s => s.Role)
                         .ThenInclude(s => s.Scopes)
-                        .SingleOrDefault();
+                        .FirstOrDefault();
             if(user?.Role == null)
             {
                 return false;
@@ -262,6 +264,11 @@ namespace Repositories
                          .ToListAsync();
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await GetDbSet<User>()
+                .Where(user => user.Email == email).FirstOrDefaultAsync();
+        }
     }
 
 }

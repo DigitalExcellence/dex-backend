@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Release v.1.6.0-beta - 15-9-2021
 
 ### Added
+- Added project ownership transfer implementation - [#438](https://github.com/DigitalExcellence/dex-backend/pull/506)
 
 ### Changed
 - Added max character length when creating project name [#418](https://github.com/DigitalExcellence/dex-backend/issues/418)

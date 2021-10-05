@@ -122,7 +122,12 @@ namespace API.Extensions
           
             services.AddScoped<IProjectInstitutionService, ProjectInstitutionService>();
             services.AddScoped<IProjectInstitutionRepository, ProjectInstitutionRepository>();
-          
+
+            services.AddSingleton<MailClient>();
+
+            services.AddScoped<IProjectTransferService, ProjectTransferService>();
+            services.AddScoped<IProjectTransferRepository, ProjectTransferRepository>();
+
             services.AddExternalDataSources();
 
             return services;
