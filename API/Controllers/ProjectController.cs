@@ -1558,7 +1558,7 @@ namespace API.Controllers
                 }
                 if(response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    return Conflict("Mail client returned bad request");
+                    return Conflict(response);
                 }
                 if(response == null)
                 {
