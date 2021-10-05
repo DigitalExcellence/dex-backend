@@ -50,13 +50,6 @@ namespace API.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-       public class DebugClass
-        {
-            public User user { get; set; }
-            public Project project { get; set; }
-            public Response Response { get; set; }
-        }
-
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly ICallToActionOptionService callToActionOptionService;
         private readonly IFileService fileService;
@@ -1564,12 +1557,11 @@ namespace API.Controllers
                 }
                 if(response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    DebugClass debug = new DebugClass();
-                    debug.project = project;
-                    debug.user = potentialNewOwner;
-                    debug.Response = response;
+                    if(project.User.Email == null || potentialNewOwner.Email == null)
+                    {
+                        return Conflict("Could not fetch email adresses for users");
 
-                    return Conflict(debug);
+                    }
                 }
                 if(response == null)
                 {
@@ -1588,6 +1580,7 @@ namespace API.Controllers
 
             return Conflict("Transfer could not be initiated");
         }
+
 
         /// <summary>
         ///     Process the transfer request
