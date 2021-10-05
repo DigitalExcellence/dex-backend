@@ -1556,10 +1556,22 @@ namespace API.Controllers
                 {
                     return Ok("Transfer has been initiated, please check your email");
                 }
+                if(response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return Conflict("Mail client returned bad request");
+                }
+                if(response == null)
+                {
+                    return Conflict("Mail client returned null response");
+                }
             }
             catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
             {
                 return Forbid(transferAlreadyInitiated.Message);
+            }
+            catch(Exception genericException)
+            {
+                return BadRequest(genericException.Message);
             }
 
 
