@@ -52,7 +52,9 @@ services:
       - App__Elastic__Hostname=${App__ElasticSearch__Hostname}
       - App__Elastic__Username=${App__ElasticSearch__Username}
       - App__Elastic__Password=${App__ElasticSearch__Password}
-      - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
+      - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl}
+      - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
+      - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}      
     image:  digitalexcellence/api
     networks:
       mssql-network:

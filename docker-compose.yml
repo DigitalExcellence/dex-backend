@@ -93,6 +93,8 @@ services:
       - App__Elastic__Username=elastic
       - App__Elastic__Password=changeme
       - App__Elastic__IndexUrl=projects/ 
+      - App__SendGrid__EmailFrom=changeme
+      - App__SendGrid__ApiKey=changeme
     networks:
       mssql-network:
       rabbitmq-network:
