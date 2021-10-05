@@ -104,5 +104,37 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
             await test2.Execute();
         }
 
+        [Fact]
+        public async Task Test3()
+        {
+            string identityId = EnvironmentVariables.Variables["RegisteredUser"];
+
+            var userProjectId2 = EnvironmentVariables.Variables["UserProjectId2"];
+
+            string endpoint = "/api/Project/" + EnvironmentVariables.Variables["UserProjectId1"];
+            await connection.ApplyAuthenticationToClient(identityId);
+
+            var requestConfig = new RequestConfig
+            {
+                Connection = connection,
+                Endpoint = endpoint,
+                HttpHelper = httpHelper
+            };
+            var test = new DeleteTest(requestConfig);
+
+            await test.Execute();
+
+            string endpoint2 = "/api/Project/" + EnvironmentVariables.Variables["UserProjectId2"];
+            var requestConfig2 = new RequestConfig
+            {
+                Connection = connection,
+                Endpoint = endpoint2,
+                HttpHelper = httpHelper
+            };
+            var test2 = new DeleteTest(requestConfig2);
+            await test2.Execute();
+        }
+
+
     }
 }
