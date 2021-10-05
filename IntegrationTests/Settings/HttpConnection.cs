@@ -25,8 +25,19 @@ namespace IntegrationTests.Settings
         public async Task ApplyAuthenticationToClient(string identityId)
         {
             string accessToken = await GetAccessToken();
+            if(Client.DefaultRequestHeaders.Contains("Authorization"))
+            {
+                Client.DefaultRequestHeaders.Remove("Authorization");
+            }
             Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+
+
+            if(Client.DefaultRequestHeaders.Contains("IdentityId"))
+            {
+                Client.DefaultRequestHeaders.Remove("IdentityId");
+            }
             Client.DefaultRequestHeaders.Add("IdentityId", identityId);
+
         }
     }
 }

@@ -55,8 +55,9 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
             var test = new CreateTest(requestConfig, expectedResultType, createResource);
             await test.Execute();
 
-            //Naam controleren? ID ergens opslaan voor gebruik andere testen?
+            //Naam controleren?
             Assert.Equal(name, test.Result.Name);
+            EnvironmentVariables.Variables["RegisteredUser"] = test.Result.IdentityId.ToString();
         }
     }
 }
