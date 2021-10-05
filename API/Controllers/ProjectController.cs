@@ -50,6 +50,12 @@ namespace API.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
+       public class DebugClass
+        {
+            public User user { get; set; }
+            public Project project { get; set; }
+            public Response Response { get; set; }
+        }
 
         private readonly IAuthorizationHelper authorizationHelper;
         private readonly ICallToActionOptionService callToActionOptionService;
@@ -1558,7 +1564,12 @@ namespace API.Controllers
                 }
                 if(response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    return Conflict(response);
+                    DebugClass debug = new DebugClass();
+                    debug.project = project;
+                    debug.user = potentialNewOwner;
+                    debug.Response = response;
+
+                    return Conflict(debug);
                 }
                 if(response == null)
                 {
@@ -1645,6 +1656,7 @@ namespace API.Controllers
         public async Task<IActionResult> CancelTransfer(Guid transferGuid)
         {
             ProjectTransferRequest transfer = await projectTransferService.FindTransferByGuid(transferGuid);
+            
 
             if(transfer == null)
             {
