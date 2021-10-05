@@ -1567,6 +1567,8 @@ namespace API.Controllers
                 {
                     return Conflict("Mail client returned null response");
                 }
+
+                return Conflict("Transfer could not be initiated" + response);
             }
             catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
             {
@@ -1576,9 +1578,6 @@ namespace API.Controllers
             {
                 return BadRequest(genericException.Message);
             }
-
-
-            return Conflict("Transfer could not be initiated" + Response);
         }
 
 
