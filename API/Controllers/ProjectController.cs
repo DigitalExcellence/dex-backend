@@ -1496,89 +1496,89 @@ namespace API.Controllers
         /// <response code="401">User is not authorized initiate transfer request</response>
         /// <response code="404">Project was not found.</response>
         /// <returns></returns>
-        [HttpPost("transfer/{projectId}")]
-        [Authorize]
-        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> InitiateTransfer(string potentialNewOwnerUserEmail,int projectId)
-        {
-            Project project = await projectService.FindAsyncNotRedacted(projectId);
+        //[HttpPost("transfer/{projectId}")]
+        //[Authorize]
+        //[ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        //public async Task<IActionResult> InitiateTransfer(string potentialNewOwnerUserEmail,int projectId)
+        //{
+        //    Project project = await projectService.FindAsyncNotRedacted(projectId);
 
-            if(project == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to find project",
-                    Detail = "The project could not be found in the database.",
-                    Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
-                };
-                return NotFound(problem);
-            }
-
-            
-
-            User user = await HttpContext.GetContextUser(userService)
-                                         .ConfigureAwait(false);
+        //    if(project == null)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to find project",
+        //            Detail = "The project could not be found in the database.",
+        //            Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
+        //        };
+        //        return NotFound(problem);
+        //    }
 
             
 
-            if(project.UserId != user.Id)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to initiate transfer request",
-                    Detail = "The user is not allowed to initiate transfer request",
-                    Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
-                };
-                return Unauthorized(problem);
-            }
+        //    User user = await HttpContext.GetContextUser(userService)
+        //                                 .ConfigureAwait(false);
 
-            User potentialNewOwner = await userService.GetUserByUserEmail(potentialNewOwnerUserEmail);
+            
 
-            if(potentialNewOwner == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to find the user to transfer to",
-                    Detail = "Failed to find the user to transfer to",
-                    Instance = "56F7B453-1244-4EF4-9CD1-78CAC0C146AF"
-                };
-                return NotFound(problem);
-            }
+        //    if(project.UserId != user.Id)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to initiate transfer request",
+        //            Detail = "The user is not allowed to initiate transfer request",
+        //            Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
+        //        };
+        //        return Unauthorized(problem);
+        //    }
 
-            try
-            {
-                Response response = await projectTransferService.InitiateTransfer(project, potentialNewOwner);
-                if(response.StatusCode == HttpStatusCode.Accepted)
-                {
-                    return Ok("Transfer has been initiated, please check your email");
-                }
-                if(response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    if(project.User.Email == null || potentialNewOwner.Email == null)
-                    {
-                        return Conflict("Could not fetch email adresses for users");
+        //    User potentialNewOwner = await userService.GetUserByUserEmail(potentialNewOwnerUserEmail);
 
-                    }
-                }
-                if(response == null)
-                {
-                    return Conflict("Mail client returned null response");
-                }
+        //    if(potentialNewOwner == null)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to find the user to transfer to",
+        //            Detail = "Failed to find the user to transfer to",
+        //            Instance = "56F7B453-1244-4EF4-9CD1-78CAC0C146AF"
+        //        };
+        //        return NotFound(problem);
+        //    }
 
-                return Conflict("Transfer could not be initiated" + project.User.Email + potentialNewOwner.Email);
-            }
-            catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
-            {
-                return Forbid(transferAlreadyInitiated.Message);
-            }
-            catch(Exception genericException)
-            {
-                return BadRequest(genericException.Message);
-            }
-        }
+        //    try
+        //    {
+        //        Response response = await projectTransferService.InitiateTransfer(project, potentialNewOwner);
+        //        if(response.StatusCode == HttpStatusCode.Accepted)
+        //        {
+        //            return Ok("Transfer has been initiated, please check your email");
+        //        }
+        //        if(response.StatusCode == HttpStatusCode.BadRequest)
+        //        {
+        //            if(project.User.Email == null || potentialNewOwner.Email == null)
+        //            {
+        //                return Conflict("Could not fetch email adresses for users");
+
+        //            }
+        //        }
+        //        if(response == null)
+        //        {
+        //            return Conflict("Mail client returned null response");
+        //        }
+
+        //        return Conflict("Transfer could not be initiated" + project.User.Email + potentialNewOwner.Email);
+        //    }
+        //    catch(ProjectTransferAlreadyInitiatedException transferAlreadyInitiated)
+        //    {
+        //        return Forbid(transferAlreadyInitiated.Message);
+        //    }
+        //    catch(Exception genericException)
+        //    {
+        //        return BadRequest(genericException.Message);
+        //    }
+        //}
 
 
         /// <summary>
@@ -1591,44 +1591,44 @@ namespace API.Controllers
         /// <response code="401">User is not authorized initiate transfer request</response>
         /// <response code="404">Project was not found.</response>
         /// <returns></returns>
-        [HttpGet("transfer/process/{transferGuid}/{isOwnerMail}/{acceptedRequest}")]
-        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ProcessTransfer(Guid transferGuid, bool isOwnerMail, bool acceptedRequest)
-        {
-            ProjectTransferRequest transferRequest = await projectTransferService.FindTransferByGuid(transferGuid);
+        //[HttpGet("transfer/process/{transferGuid}/{isOwnerMail}/{acceptedRequest}")]
+        //[ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> ProcessTransfer(Guid transferGuid, bool isOwnerMail, bool acceptedRequest)
+        //{
+        //    ProjectTransferRequest transferRequest = await projectTransferService.FindTransferByGuid(transferGuid);
 
-            if(transferRequest == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to find project transfer request",
-                    Detail = "The project transfer request could not be found in the database.",
-                    Instance = "7BBD2018-2E1C-465D-A3FF-611C6E76424C"
-                };
-                return NotFound(problem);
-            }
+        //    if(transferRequest == null)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to find project transfer request",
+        //            Detail = "The project transfer request could not be found in the database.",
+        //            Instance = "7BBD2018-2E1C-465D-A3FF-611C6E76424C"
+        //        };
+        //        return NotFound(problem);
+        //    }
 
-            ProjectTransferRequest result = await projectTransferService.ProcessTransfer(transferRequest, isOwnerMail, acceptedRequest);
+        //    ProjectTransferRequest result = await projectTransferService.ProcessTransfer(transferRequest, isOwnerMail, acceptedRequest);
 
-            if(result.Status == ProjectTransferRequestStatus.Completed)
-            {
-                return Ok("The project has been succesfully transferred to the new owner");
-            }
-            if(result.Status == ProjectTransferRequestStatus.Denied)
-            {
-                return Ok("Project transfer has been denied");
-            }
-            if(result.Status == ProjectTransferRequestStatus.Pending && result.CurrentOwnerAcceptedRequest)
-            {
-                return Ok("You accepted the transfer request, the potential new owner should receive an email about the transfer");
-            }
+        //    if(result.Status == ProjectTransferRequestStatus.Completed)
+        //    {
+        //        return Ok("The project has been succesfully transferred to the new owner");
+        //    }
+        //    if(result.Status == ProjectTransferRequestStatus.Denied)
+        //    {
+        //        return Ok("Project transfer has been denied");
+        //    }
+        //    if(result.Status == ProjectTransferRequestStatus.Pending && result.CurrentOwnerAcceptedRequest)
+        //    {
+        //        return Ok("You accepted the transfer request, the potential new owner should receive an email about the transfer");
+        //    }
 
 
-            return Conflict("Project transfer could not be processed");
-        }
+        //    return Conflict("Project transfer could not be processed");
+        //}
 
 
         /// <summary>
@@ -1639,64 +1639,64 @@ namespace API.Controllers
         /// <response code="401">User is not authorized initiate transfer request</response>
         /// <response code="404">Project was not found.</response>
         /// <returns></returns>
-        [HttpDelete("transfer/{transferGuid}")]
-        [Authorize]
-        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> CancelTransfer(Guid transferGuid)
-        {
-            ProjectTransferRequest transfer = await projectTransferService.FindTransferByGuid(transferGuid);
+        //[HttpDelete("transfer/{transferGuid}")]
+        //[Authorize]
+        //[ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        //public async Task<IActionResult> CancelTransfer(Guid transferGuid)
+        //{
+        //    ProjectTransferRequest transfer = await projectTransferService.FindTransferByGuid(transferGuid);
             
 
-            if(transfer == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to find transfer request",
-                    Detail = "The transfer could not be found in the database.",
-                    Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
-                };
-                return NotFound(problem);
-            }
+        //    if(transfer == null)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to find transfer request",
+        //            Detail = "The transfer could not be found in the database.",
+        //            Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
+        //        };
+        //        return NotFound(problem);
+        //    }
 
 
 
-            User user = await HttpContext.GetContextUser(userService)
-                                         .ConfigureAwait(false);
+        //    User user = await HttpContext.GetContextUser(userService)
+        //                                 .ConfigureAwait(false);
 
 
-            if(transfer.Project.User.Id != user.Id)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to cancel transfer request",
-                    Detail = "The user is not allowed to cancel transfer request",
-                    Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
-                };
-                return Unauthorized(problem);
-            }
+        //    if(transfer.Project.User.Id != user.Id)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to cancel transfer request",
+        //            Detail = "The user is not allowed to cancel transfer request",
+        //            Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
+        //        };
+        //        return Unauthorized(problem);
+        //    }
 
-            if(transfer.Status == ProjectTransferRequestStatus.Pending)
-            {
-                try
-                {
-                    transfer.Status = ProjectTransferRequestStatus.Denied;
-                    projectTransferService.Update(transfer);
-                    projectTransferService.Save();
+        //    if(transfer.Status == ProjectTransferRequestStatus.Pending)
+        //    {
+        //        try
+        //        {
+        //            transfer.Status = ProjectTransferRequestStatus.Denied;
+        //            projectTransferService.Update(transfer);
+        //            projectTransferService.Save();
 
-                    return Ok("Transfer cancelled");
+        //            return Ok("Transfer cancelled");
 
-                } catch(Exception e)
-                {
-                    return Conflict(e.Message);
-                }
-            }
+        //        } catch(Exception e)
+        //        {
+        //            return Conflict(e.Message);
+        //        }
+        //    }
 
 
-            return Conflict();
-        }
+        //    return Conflict();
+        //}
 
 
         /// <summary>
@@ -1707,54 +1707,54 @@ namespace API.Controllers
         /// <response code="401">User is not authorized check</response>
         /// <response code="404">Project has no open transfer</response>
         /// <returns></returns>
-        [HttpGet("transfer/check/{projectId}")]
-        [Authorize]
-        [ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> CheckTransfer(int projectId)
-        {
-            ProjectTransferRequest transfer = await projectTransferService.FindPendingTransferByProjectId(projectId);
+        //[HttpGet("transfer/check/{projectId}")]
+        //[Authorize]
+        //[ProducesResponseType(typeof(ProjectOutput), StatusCodes.Status200OK)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+        //public async Task<IActionResult> CheckTransfer(int projectId)
+        //{
+        //    ProjectTransferRequest transfer = await projectTransferService.FindPendingTransferByProjectId(projectId);
 
-            if(transfer == null)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to find transfer request",
-                    Detail = "The transfer could not be found in the database.",
-                    Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
-                };
-                return NotFound(problem);
-            }
-
-
-
-            User user = await HttpContext.GetContextUser(userService)
-                                         .ConfigureAwait(false);
+        //    if(transfer == null)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to find transfer request",
+        //            Detail = "The transfer could not be found in the database.",
+        //            Instance = "FAFC4DB9-3169-48DB-9170-9D6B08D383D9"
+        //        };
+        //        return NotFound(problem);
+        //    }
 
 
-            if(transfer.Project.User.Id != user.Id)
-            {
-                ProblemDetails problem = new ProblemDetails
-                {
-                    Title = "Failed to check transfer request",
-                    Detail = "The user is not allowed to check transfer request",
-                    Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
-                };
-                return Unauthorized(problem);
-            }
 
-            if(transfer.Status == ProjectTransferRequestStatus.Pending)
-            {
-                return Ok(transfer.TransferGuid);
-            }
+        //    User user = await HttpContext.GetContextUser(userService)
+        //                                 .ConfigureAwait(false);
 
 
-            return NotFound("No pending tranfer found");
+        //    if(transfer.Project.User.Id != user.Id)
+        //    {
+        //        ProblemDetails problem = new ProblemDetails
+        //        {
+        //            Title = "Failed to check transfer request",
+        //            Detail = "The user is not allowed to check transfer request",
+        //            Instance = "CB7280CD-AA66-4180-A0C1-D2B091C668F1"
+        //        };
+        //        return Unauthorized(problem);
+        //    }
+
+        //    if(transfer.Status == ProjectTransferRequestStatus.Pending)
+        //    {
+        //        return Ok(transfer.TransferGuid);
+        //    }
 
 
-        }
+        //    return NotFound("No pending tranfer found");
+
+
+        //}
 
     }
 
