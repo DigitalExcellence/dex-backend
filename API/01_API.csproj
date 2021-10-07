@@ -6,7 +6,7 @@
         <DocumentationFile>.\API.xml</DocumentationFile>
         <Company>Digital Excellence Fontys</Company>
         <LangVersion>8</LangVersion>
-        <Version>1.6.0-beta</Version>
+        <Version>1.7.0-beta</Version>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,6 +35,7 @@
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
         <PackageReference Include="NetEscapades.Configuration.Validation" Version="2.0.0" />
         <PackageReference Include="RestSharp" Version="106.12.0" />
+        <PackageReference Include="SendGrid" Version="9.24.3" />
         <PackageReference Include="Sentry.AspNetCore" Version="2.1.1" />
         <PackageReference Include="Sentry.Serilog" Version="2.1.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />

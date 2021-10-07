@@ -16,6 +16,10 @@ ENV App__IdentityServer__IdentityUrl = ''
 
 ENV SENTRY_DSN = ''
 
+ENV App__SendGrid__EmailFrom = ''
+
+ENV App__SendGrid__ApiKey = ''
+
 RUN dotnet publish API/01_API.csproj -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1

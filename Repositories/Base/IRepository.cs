@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -99,7 +100,6 @@ namespace Repositories.Base
         /// <param name="entity"></param>
         /// <returns></returns>
         Task AddAsync(TEntity entity);
-
     }
 
 }

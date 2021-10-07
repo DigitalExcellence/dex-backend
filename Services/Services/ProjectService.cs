@@ -50,18 +50,25 @@ namespace Services.Services
         Task<Project> FindWithUserCollaboratorsAndInstitutionsAsync(int id);
 
         /// <summary>
+        /// Returns project with a NON redacted User. Do not use when you do not need the user's email adress.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<Project> FindAsyncNotRedacted(int id);
+
+        /// <summary>
         ///     Get the number of projects
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The number of projects</returns>
-        Task<int> ProjectsCount(ProjectFilterParams projectFilterParams);
+        Task<int> ProjectsCount(ProjectFilterParams projectFilterParams, int? userId = null);
 
         /// <summary>
         ///     Get the total number of pages for the results
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The total number of pages for the results</returns>
-        Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams);
+        Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams, int? userId = null);
 
         Task<bool> ProjectExistsAsync(int id);
 
@@ -70,7 +77,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The total number of pages for the results</returns>
-        Task<IEnumerable<Project>> GetUserProjects(int userId);
+        Task<IEnumerable<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams);
         /// <summary>
         ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
         /// </summary>
@@ -182,8 +189,12 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The number of projects</returns>
-        public virtual async Task<int> ProjectsCount(ProjectFilterParams projectFilterParams)
+        public virtual async Task<int> ProjectsCount(ProjectFilterParams projectFilterParams, int? userId = null)
         {
+            if(userId.HasValue)
+            {
+                return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories, userId);
+            }
             return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories);
         }
 
@@ -192,12 +203,12 @@ namespace Services.Services
         /// </summary>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The total number of pages for the results</returns>
-        public virtual async Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams)
+        public virtual async Task<int> GetProjectsTotalPages(ProjectFilterParams projectFilterParams, int? userId = null)
         {
             if(projectFilterParams.AmountOnPage == null ||
                projectFilterParams.AmountOnPage <= 0)
                 projectFilterParams.AmountOnPage = 20;
-            int count = await ProjectsCount(projectFilterParams);
+            int count = await ProjectsCount(projectFilterParams, userId);
             return (int) Math.Ceiling(count / (decimal) projectFilterParams.AmountOnPage);
         }
 
@@ -252,13 +263,53 @@ namespace Services.Services
         }
 
 
-        public Task<IEnumerable<Project>> GetUserProjects(int userId)
+        public Task<IEnumerable<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams)
         {
-            return Repository.GetUserProjects(userId);
+            if(!projectFilterParams.AmountOnPage.HasValue ||
+               projectFilterParams.AmountOnPage <= 0)
+                projectFilterParams.AmountOnPage = 20;
+
+            int? skip = null;
+            int? take = projectFilterParams.AmountOnPage;
+            if(projectFilterParams.Page.HasValue && projectFilterParams.Page.Value > 1)
+            {
+                skip = projectFilterParams.AmountOnPage * (projectFilterParams.Page - 1);
+                take = projectFilterParams.AmountOnPage;
+            }
+
+            Expression<Func<Project, object>> orderBy;
+            switch(projectFilterParams.SortBy)
+            {
+                case "name":
+                    orderBy = project => project.Name;
+                    break;
+                case "created":
+                    orderBy = project => project.Created;
+                    break;
+                case "likes":
+                    orderBy = project => project.Likes.Count;
+                    break;
+                default:
+                    orderBy = project => project.Updated;
+                    break;
+            }
+
+            bool orderByDirection = projectFilterParams.SortDirection == "asc";
+            return Repository.GetUserProjects(userId, skip,
+                                              take,
+                                              orderBy,
+                                              orderByDirection,
+                                              projectFilterParams.Highlighted,
+                                              projectFilterParams.Categories);
         }
         public async Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query)
         {
             return await Repository.FindProjectsWhereTitleStartsWithQuery(query);
+        }
+
+        public async Task<Project> FindAsyncNotRedacted(int id)
+        {
+            return await Repository.FindAsyncNotRedacted(id);
         }
     }
 

@@ -68,7 +68,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="upn"></param>
         /// <returns>User entity</returns>
-        User GetUserByUsername(string upn);
+        Task<User> GetUserByUserEmail(string upn);
 
         /// <summary>
         ///     This is the interface method which checks if the user has a certain scope
@@ -168,15 +168,7 @@ namespace Services.Services
                                    .ConfigureAwait(false);
         }
 
-        /// <summary>
-        ///     This is the method which gets the user by username
-        /// </summary>
-        /// <param name="upn"></param>
-        /// <returns>User entity</returns>
-        public User GetUserByUsername(string upn)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         /// <summary>
         ///     This is the method which checks if the user has a certain scope
@@ -277,6 +269,12 @@ namespace Services.Services
             return users;
         }
 
+        
+
+        async Task<User> IUserService.GetUserByUserEmail(string upn)
+        {
+            return await Repository.GetUserByEmailAsync(upn);
+        }
     }
 
 }

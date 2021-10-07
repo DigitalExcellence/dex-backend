@@ -30,6 +30,7 @@ using Models.Defaults;
 using Serilog;
 using Services.Resources;
 using Services.Services;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -172,7 +173,9 @@ namespace API.Controllers
         [Authorize]
         [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetUserProjects()
+        public async Task<IActionResult> GetUserProjects(
+                [FromQuery] ProjectFilterParamsInput ProjectFilterParamsResource
+            )
         {
             User user = await HttpContext.GetContextUser(userService).ConfigureAwait(false);
             if(user == null)
@@ -186,9 +189,22 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id);
+            ProjectFilterParams projectFilterParams =
+                mapper.Map<ProjectFilterParamsInput, ProjectFilterParams>(ProjectFilterParamsResource);
 
-            return Ok(mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(userProjects));
+            IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id, projectFilterParams);
+            IEnumerable<ProjectResultInput> results =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(userProjects);
+
+            ProjectResultsInput resultsResource = new ProjectResultsInput
+            {
+                  Results = results.ToArray(),
+                  Count = results.Count(),
+                  TotalCount = await projectService.ProjectsCount(projectFilterParams, user.Id),
+                  Page = projectFilterParams.Page,
+                  TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams, user.Id)
+                };
+            return Ok(resultsResource);
         }
 
             /// <summary>
