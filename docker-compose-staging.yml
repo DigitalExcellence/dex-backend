@@ -47,6 +47,7 @@ services:
       - rabbitmq-network
     depends_on:
       - db
+      - rabbitmq
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home/ubuntu/Uploads/Images:/app/Uploads/Images
@@ -163,6 +164,8 @@ services:
     image: digitalexcellence/jobscheduler:latest
     container_name: jobscheduler
     restart: on-failure
+    depends_on: 
+      - rabbitmq
     environment:
         - Config__IdentityServerConfig__IdentityUrl=https://identity.staging.dex.software/
         - Config__IdentityServerConfig__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
