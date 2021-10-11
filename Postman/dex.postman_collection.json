@@ -33138,14 +33138,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectToBeDeletedByUnauthorizedRoles}}",
+							"raw": "{{apiUrl}}/api/Project/{{projectToMakePrivateId}}",
 							"host": [
 								"{{apiUrl}}"
 							],
 							"path": [
 								"api",
 								"Project",
-								"{{projectToBeDeletedByUnauthorizedRoles}}"
+								"{{projectToMakePrivateId}}"
 							]
 						}
 					},
@@ -33306,6 +33306,44 @@
 								"api",
 								"File",
 								"{{generalFileId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-projectToMakePrivateId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "IdentityId",
+								"type": "text",
+								"value": "{{administratorUserIdentityId}}"
+							}
+						],
+						"url": {
+							"raw": "{{apiUrl}}/api/Project/{{projectToBeDeletedByUnauthorizedRoles}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"Project",
+								"{{projectToBeDeletedByUnauthorizedRoles}}"
 							]
 						}
 					},
