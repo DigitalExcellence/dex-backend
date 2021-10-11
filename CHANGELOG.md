@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Release v.1.8.0-beta - DATE HERE
 
 ### Fixed
-- Fixed postman test and staging pipeline
+- Fixed postman test and staging pipeline[#402](https://github.com/DigitalExcellence/dex-backend/pull/518)
 
 
 ## Release v.1.7.0-beta - 7-10-2021
