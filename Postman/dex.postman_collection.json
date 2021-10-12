@@ -33138,14 +33138,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{apiUrl}}/api/Project/{{projectToMakePrivateId}}",
+							"raw": "{{apiUrl}}/api/Project/{{projectToBeDeletedByUnauthorizedRoles}}",
 							"host": [
 								"{{apiUrl}}"
 							],
 							"path": [
 								"api",
 								"Project",
-								"{{projectToMakePrivateId}}"
+								"{{projectToBeDeletedByUnauthorizedRoles}}"
 							]
 						}
 					},
