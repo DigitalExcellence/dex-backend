@@ -1668,7 +1668,7 @@
 													"\r",
 													"pm.test(\"Project pagination displays correct amount of projects and all project count matches\", function() {\r",
 													"    pm.expect(jsonData.results.length).to.eql(1);\r",
-													"    pm.expect(jsonData.totalCount).to.eql(7);\r",
+													"    pm.expect(jsonData.totalCount).to.eql(5);\r",
 													"})"
 												],
 												"type": "text/javascript"
