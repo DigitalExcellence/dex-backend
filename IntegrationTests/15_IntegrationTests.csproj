@@ -8,18 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Configuration\**" />
-    <Compile Remove="Implementations\B_Tests\B0_Administrator\**" />
-    <Compile Remove="Implementations\B_Tests\B1_Guest\**" />
-    <EmbeddedResource Remove="Configuration\**" />
-    <EmbeddedResource Remove="Implementations\B_Tests\B0_Administrator\**" />
-    <EmbeddedResource Remove="Implementations\B_Tests\B1_Guest\**" />
-    <None Remove="Configuration\**" />
-    <None Remove="Implementations\B_Tests\B0_Administrator\**" />
-    <None Remove="Implementations\B_Tests\B1_Guest\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Bogus" Version="33.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.9" />
@@ -33,6 +21,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API\01_API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+    <Folder Include="Implementations\B_Tests\B1_Guest\" />
+    <Folder Include="Implementations\B_Tests\B0_Administrator\" />
   </ItemGroup>
 
 </Project>
