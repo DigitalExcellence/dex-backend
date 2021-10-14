@@ -49,7 +49,7 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
                 Email = email,
                 InstitutionId = institutionId
             };
-
+            
             var test = new CreateTest(requestConfig, expectedResultType, createResource);
             await test.Execute();
 

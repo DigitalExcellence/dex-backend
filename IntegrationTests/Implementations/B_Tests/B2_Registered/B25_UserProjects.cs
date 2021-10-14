@@ -10,6 +10,7 @@ using Xunit;
 namespace IntegrationTests.Implementations.B_Tests.B2_Registered
 {
     [Collection("Sequential")]
+    [TestCaseOrderer("IntegrationTests.Settings.PriorityOrderer", "15_IntegrationTests")]
     public class B25_UserProjects
     {
         private HttpConnection connection;
@@ -20,12 +21,11 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
             this.httpHelper = fixture.HttpHelper;
         }
 
-        [Fact]
-        public async Task Test1()
+        [Fact, TestPriority(0)]
+        public async Task CreateUserProjectTest()
         {
             string identityId = EnvironmentVariables.Variables["RegisteredUser"];
 
-            //?
             await connection.ApplyAuthenticationToClient(identityId);
 
             var requestConfig = new RequestConfig
@@ -34,7 +34,6 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
                 Endpoint = "/api/Project",
                 HttpHelper = httpHelper
             };
-            //
 
             var collaborators = new List<CollaboratorInput>
             {
@@ -64,8 +63,8 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
 
         }
 
-        [Fact]
-        public async Task Test2()
+        [Fact, TestPriority(5)]
+        public async Task GetUserProjectTest()
         {
             string identityId = EnvironmentVariables.Variables["RegisteredUser"];
 
@@ -96,8 +95,8 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
             await test2.Execute();
         }
 
-        [Fact]
-        public async Task Test3()
+        [Fact, TestPriority(10)]
+        public async Task DeleteUserProjectTest()
         {
             string identityId = EnvironmentVariables.Variables["RegisteredUser"];
 
