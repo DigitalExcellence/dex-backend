@@ -31,16 +31,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.5" />
   </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\API\01_API.csproj" />
-    </ItemGroup>
-
-
-
-    <ItemGroup>
-        <Folder Include="Configuration\" />
-        <Folder Include="Implementations\B_Tests\B1_Guest\" />
-        <Folder Include="Implementations\B_Tests\B0_Administrator\" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\API\01_API.csproj" />
+  </ItemGroup>
 
 </Project>
