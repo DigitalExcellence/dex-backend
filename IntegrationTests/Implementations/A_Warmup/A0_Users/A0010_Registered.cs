@@ -25,7 +25,6 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
         }
 
         [Fact, Priority(0)]
-
         public async Task CreateRegisteredUser()
         {
             //AdministratorId
