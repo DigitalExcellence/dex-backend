@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Priority;
 
 namespace IntegrationTests.Implementations.A_Warmup.A0_Users
 {
     [Collection("Sequential")]
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class A0010_Registered
     {
         public string IdentityId { get; protected set; } = "88421113";
@@ -22,7 +24,8 @@ namespace IntegrationTests.Implementations.A_Warmup.A0_Users
             this.httpHelper = fixture.HttpHelper;
         }
 
-        [Fact]
+        [Fact, Priority(0)]
+
         public async Task CreateRegisteredUser()
         {
             //AdministratorId
