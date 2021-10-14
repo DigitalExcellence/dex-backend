@@ -25,8 +25,8 @@ namespace IntegrationTests.Test.Templates
         private async Task Create()
         {
             // Arrange
-            var httpHelper = RequestConfig.HttpHelper;
-            var endpoint = RequestConfig.Endpoint;
+            HttpHelper httpHelper = RequestConfig.HttpHelper;
+            string endpoint = RequestConfig.Endpoint;
             var client = RequestConfig.Connection.Client;
             var content = httpHelper.GetHttpContent(CreateResource);
 
