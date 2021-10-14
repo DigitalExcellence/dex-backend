@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Priority;
 
 namespace IntegrationTests.Implementations.C_CleanUp
 {
     [Collection("Sequential")]
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class DeleteUsers
     {
         private HttpConnection connection;
@@ -19,7 +21,7 @@ namespace IntegrationTests.Implementations.C_CleanUp
             this.httpHelper = fixture.HttpHelper;
         }
 
-        [Fact]
+        [Fact, Priority(90)]
         public async Task RemoveUser()
         {
             //Administrator user id

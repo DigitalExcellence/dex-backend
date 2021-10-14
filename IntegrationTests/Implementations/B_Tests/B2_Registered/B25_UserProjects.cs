@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Priority;
 
 namespace IntegrationTests.Implementations.B_Tests.B2_Registered
 {
     [Collection("Sequential")]
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class B25_UserProjects
     {
         private HttpConnection connection;
@@ -20,7 +22,8 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
             this.httpHelper = fixture.HttpHelper;
         }
 
-        [Fact]
+        [Fact, Priority(10)]
+
         public async Task Test1()
         {
             string identityId = EnvironmentVariables.Variables["RegisteredUser"];
@@ -64,7 +67,7 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
 
         }
 
-        [Fact]
+        [Fact, Priority(20)]
         public async Task Test2()
         {
             string identityId = EnvironmentVariables.Variables["RegisteredUser"];
@@ -96,7 +99,7 @@ namespace IntegrationTests.Implementations.B_Tests.B2_Registered
             await test2.Execute();
         }
 
-        [Fact]
+        [Fact, Priority(30)]
         public async Task Test3()
         {
             string identityId = EnvironmentVariables.Variables["RegisteredUser"];
