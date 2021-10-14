@@ -38,11 +38,6 @@ namespace Models
             Scope = scope;
         }
 
-        public RoleScope()
-        {
-
-        }
-
         public int RoleId { get; set; }
 
         public int Id { get; set; }

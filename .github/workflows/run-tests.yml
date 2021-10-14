@@ -22,62 +22,12 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Test Services
-      run: dotnet test --no-restore --verbosity normal Services.Tests
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
-        
-    - name: Test Repositories
-      run: dotnet test --no-restore --verbosity normal Repositories.Tests
-      env:
-        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
-        App__SendGrid__EmailFrom: test@dex.software
-        
-    - name: Test MessageBrokerPublisher
-      run: dotnet test --no-restore --verbosity normal MessageBrokerPublisher.Tests
-      env:
-        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
-        App__SendGrid__EmailFrom: test@dex.software
-        
-    - name: Test NotificationSystem
-      run: dotnet test --no-restore --verbosity normal NotificationSystem.Tests
-      env:
-        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
-        App__SendGrid__EmailFrom: test@dex.software
-        
-  integration-test-vs:
-    runs-on: ubuntu-18.04
 
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Docker Compose
-      run: docker-compose up --build -d
-
-    - name: Sleep for 90 seconds
-      uses: juliangruber/sleep-action@v1
-      with:
-        time: 90s
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
-
-    - name: Install dependencies
-      run: dotnet restore
-
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-
-
-    - name: Test Services
-      run: dotnet test --no-restore --verbosity normal IntegrationTests
-      env:
-        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
-        App__SendGrid__EmailFrom: test@dex.software
-        
   integration-test:
     runs-on: ubuntu-18.04
 
