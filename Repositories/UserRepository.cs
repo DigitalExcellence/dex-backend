@@ -85,8 +85,6 @@ namespace Repositories
         Task<List<User>> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
         List<int> GetSimilarUsers(int userId);
-
-        Task<List<User>> FindUserWithEmailRedacted();
     }
 
     /// <summary>
@@ -124,19 +122,7 @@ namespace Repositories
                          .SingleOrDefaultAsync();
         }
 
-
-        /// <summary>
-        ///     Finds the asynchronous.
-        /// </summary>
-        /// <param name="userId">The user identifier.</param>
-        /// <returns>Returns the user object.</returns>
-        public async Task<List<User>> FindUserWithEmailRedacted()
-        {
-            return await GetDbSet<User>()
-                         .Where(s => s.Email == "<Redacted>").ToListAsync();
-        }
-
-
+        
 
         public List<int> GetSimilarUsers(int userId)
         {

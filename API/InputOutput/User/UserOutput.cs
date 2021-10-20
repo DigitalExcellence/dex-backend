@@ -86,12 +86,6 @@ namespace API.Resources
         /// </summary>
         public DateTime? ExpectedGraduationDateTime { get; set; }
 
-
-        /// <summary>
-        /// Set or get the isPublic flag
-        /// </summary>
-        public bool IsPublic { get; set; }
-
     }
 
 }

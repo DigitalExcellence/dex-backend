@@ -112,25 +112,6 @@ namespace API.Controllers
             return Ok(mapper.Map<User, UserOutput>(user));
         }
 
-
-
-        /// <summary>
-        ///     The method is responsible for retrieving the current user.
-        /// </summary>
-        /// <returns>The current user as user resource result.</returns>
-        /// <response code="200">This endpoint returns the current user.</response>
-        /// <response code="404">The 404 Not found status code is returned when the user could not be found.</response>
-        [HttpGet("/redacted")]
-        [Authorize]
-        [ProducesResponseType(typeof(UserOutput), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public async Task<IActionResult> FindUserWithEmailRedacted()
-        {
-            List<User> users = await userService.FindUserWithEmalRedacted();
-
-            return Ok(users);
-        }
-
         /// <summary>
         ///     This method is responsible for retrieving a user account.
         /// </summary>
