@@ -108,6 +108,8 @@ namespace Services.Services
         /// <returns>List of users</returns>
         List<User> GetAllExpectedGraduatingUsers(int amountOfMonths);
 
+        Task<List<User>> FindUserWithEmalRedacted();
+
     }
 
     /// <summary>
@@ -145,6 +147,8 @@ namespace Services.Services
             return await Repository.GetUserAsync(userId)
                                    .ConfigureAwait(false);
         }
+
+        
 
         /// <summary>
         ///     This is the method which gets the user by identity identifier asynchronous
@@ -274,6 +278,11 @@ namespace Services.Services
         async Task<User> IUserService.GetUserByUserEmail(string upn)
         {
             return await Repository.GetUserByEmailAsync(upn);
+        }
+
+        public async Task<List<User>> FindUserWithEmalRedacted()
+        {
+            return await Repository.FindUserWithEmailRedacted();
         }
     }
 

@@ -1505,6 +1505,8 @@ namespace API.Controllers
         public async Task<IActionResult> InitiateTransfer(string potentialNewOwnerUserEmail, int projectId)
         {
             Project project = await projectService.FindAsyncNotRedacted(projectId);
+            User projectUser = await userService.FindAsync(project.UserId);
+            project.User = projectUser;
 
             if(project == null)
             {
