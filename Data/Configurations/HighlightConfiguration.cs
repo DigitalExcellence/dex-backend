@@ -22,16 +22,15 @@ using Models;
 namespace Data.Configurations
 {
 
-    internal class RoleConfiguration : IEntityTypeConfiguration<Role>
+    internal class HighlightConfiguration : IEntityTypeConfiguration<Highlight>
     {
 
-        public void Configure(EntityTypeBuilder<Role> builder)
+        public void Configure(EntityTypeBuilder<Highlight> builder)
         {
-            builder.HasKey(r => r.Id);
+            builder.HasKey(h => h.Id);
 
-            builder.HasIndex(r => r.Name).IsUnique();
+            builder.Property(h => h.StartDate).IsRequired();
+            builder.Property(h => h.EndDate).IsRequired();
         }
-
     }
-
 }

@@ -22,16 +22,16 @@ using Models;
 namespace Data.Configurations
 {
 
-    internal class RoleConfiguration : IEntityTypeConfiguration<Role>
+    internal class CollaboratorConfiguration : IEntityTypeConfiguration<Collaborator>
     {
 
-        public void Configure(EntityTypeBuilder<Role> builder)
+        public void Configure(EntityTypeBuilder<Collaborator> builder)
         {
-            builder.HasKey(r => r.Id);
+            builder.HasKey(c => c.Id);
 
-            builder.HasIndex(r => r.Name).IsUnique();
+            builder.Property(c => c.FullName).IsRequired();
+            builder.Property(c => c.Role).IsRequired();
+            builder.Property(c => c.ProjectId).IsRequired();
         }
-
     }
-
 }
