@@ -27,6 +27,7 @@ namespace Data.Configurations
         {
             builder.HasKey(u => u.Id);
 
+            builder.Property(u => u.Lastname).IsRequired();
             builder.Property(u => u.Firstname).IsRequired();
             builder.Property(u => u.IsActive).IsRequired();
             builder.Property(u => u.Name).IsRequired();

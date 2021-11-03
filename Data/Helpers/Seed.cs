@@ -227,7 +227,6 @@ namespace Data.Helpers
                 IdentityId = "88421113",
                 Email = "Administrator@dex.software",
                 Name = "Administrator bob",
-                ExpectedGraduationDate = DateTime.Now
             };
 
             return user;
@@ -294,8 +293,7 @@ namespace Data.Helpers
                 IdentityId = "985632147",
                 Email = "Pr@dex.software",
                 Name = "Pr jerry",
-                Role = prRole,
-                ExpectedGraduationDate = DateTime.Now
+                Role = prRole
             };
 
             return user;
@@ -315,8 +313,7 @@ namespace Data.Helpers
                 Email = "dataofficer@dex.software",
                 Name = "data officer Sam",
                 Role = dataOfficerRole,
-                InstitutionId = 1,
-                ExpectedGraduationDate = DateTime.Now
+                InstitutionId = 1
             };
 
             return user;
@@ -330,8 +327,7 @@ namespace Data.Helpers
                 IdentityId = "123456789",
                 Email = "Alumni@dex.software",
                 Name = "Alumni test",
-                Role = alumniRole,
-                ExpectedGraduationDate = DateTime.Now
+                Role = alumniRole
             };
 
             return user;

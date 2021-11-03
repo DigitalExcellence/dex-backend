@@ -45,6 +45,7 @@ namespace _4_Data.IdentityMigrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Lastname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
