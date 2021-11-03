@@ -22,19 +22,14 @@ using Models;
 namespace Data.Configurations
 {
 
-    internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
+    internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
 
-        public void Configure(EntityTypeBuilder<Project> builder)
+        public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(p => p.Id);
+            builder.HasKey(ds => ds.Id);
 
-            builder.Property(p => p.Name).IsRequired();
-            
-            builder.Property(p => p.ShortDescription).IsRequired();
-            builder.Property(p => p.Created).IsRequired();
-            builder.Property(p => p.Updated).IsRequired();
-            builder.Property(p => p.InstitutePrivate).IsRequired();
+            builder.HasIndex(ds => ds.Name).IsUnique();
         }
     }
 }

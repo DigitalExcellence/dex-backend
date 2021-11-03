@@ -21,20 +21,19 @@ using Models;
 
 namespace Data.Configurations
 {
-
-    internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
+    internal class IdentityUserConfiguration : IEntityTypeConfiguration<IdentityUser>
     {
-
-        public void Configure(EntityTypeBuilder<Project> builder)
+        public void Configure(EntityTypeBuilder<IdentityUser> builder)
         {
-            builder.HasKey(p => p.Id);
+            builder.HasKey(u => u.Id);
 
-            builder.Property(p => p.Name).IsRequired();
-            
-            builder.Property(p => p.ShortDescription).IsRequired();
-            builder.Property(p => p.Created).IsRequired();
-            builder.Property(p => p.Updated).IsRequired();
-            builder.Property(p => p.InstitutePrivate).IsRequired();
+            builder.Property(u => u.Lastname).IsRequired();
+            builder.Property(u => u.Firstname).IsRequired();
+            builder.Property(u => u.IsActive).IsRequired();
+            builder.Property(u => u.Name).IsRequired();
+
+            builder.HasIndex(u => u.Email).IsUnique();
+            builder.HasIndex(u => u.SubjectId).IsUnique();
         }
     }
 }
