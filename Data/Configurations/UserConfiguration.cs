@@ -34,7 +34,6 @@ namespace Data.Configurations
             builder.Property(u => u.IdentityId).IsRequired();
             builder.Property(u => u.IsPublic).IsRequired();
             builder.Property(u => u.AccountCreationDate).IsRequired();
-            builder.Property(u => u.ExpectedGraduationDate).IsRequired();
         }
     }
 }
