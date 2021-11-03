@@ -35,8 +35,6 @@ namespace Data.Configurations
             builder.Property(p => p.Created).IsRequired();
             builder.Property(p => p.Updated).IsRequired();
             builder.Property(p => p.InstitutePrivate).IsRequired();
-
-            builder.HasIndex(p => p.Uri).IsUnique();
         }
     }
 }
