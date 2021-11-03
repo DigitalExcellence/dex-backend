@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -25,16 +25,8 @@ namespace Data.Configurations
     internal class UserConfiguration : IEntityTypeConfiguration<User>
     {
 
-        public void Configure(EntityTypeBuilder<User> builder)
-        {
-            builder.HasKey(u => u.Id);
+        public void Configure(EntityTypeBuilder<User> builder) { }
 
-            builder.Property(u => u.Name).IsRequired();
-            builder.Property(u => u.Email).IsRequired();
-            builder.Property(u => u.IdentityId).IsRequired();
-            builder.Property(u => u.IsPublic).IsRequired();
-            builder.Property(u => u.AccountCreationDate).IsRequired();
-            builder.Property(u => u.ExpectedGraduationDate).IsRequired();
-        }
     }
+
 }

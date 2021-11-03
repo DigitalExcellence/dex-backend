@@ -15,7 +15,6 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
-using Data.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -43,11 +42,6 @@ namespace Data
         /// </value>
         public DbSet<IdentityUser> IdentityUser { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new IdentityUserConfiguration());
-        }
     }
 
 }

@@ -73,12 +73,9 @@ namespace _4_Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Category");
                 });
@@ -91,14 +88,12 @@ namespace _4_Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -119,7 +114,7 @@ namespace _4_Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Guid")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("IconId")
                         .HasColumnType("int");
@@ -128,14 +123,9 @@ namespace _4_Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Guid")
-                        .IsUnique()
-                        .HasFilter("[Guid] IS NOT NULL");
 
                     b.HasIndex("IconId");
 
@@ -232,7 +222,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EndDate")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ImageId")
@@ -242,7 +231,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("StartDate")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -262,20 +250,15 @@ namespace _4_Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdentityId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Institution");
                 });
@@ -291,7 +274,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("InstitutePrivate")
@@ -427,9 +409,6 @@ namespace _4_Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("TransferGuid")
-                        .IsUnique();
-
                     b.ToTable("ProjectTransferRequest");
                 });
 
@@ -441,13 +420,9 @@ namespace _4_Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Role");
                 });
@@ -480,7 +455,6 @@ namespace _4_Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("AccountCreationDate")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -488,7 +462,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ExpectedGraduationDate")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IdentityId")

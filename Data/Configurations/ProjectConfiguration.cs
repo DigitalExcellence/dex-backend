@@ -25,16 +25,8 @@ namespace Data.Configurations
     internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
     {
 
-        public void Configure(EntityTypeBuilder<Project> builder)
-        {
-            builder.HasKey(p => p.Id);
+        public void Configure(EntityTypeBuilder<Project> builder) { }
 
-            builder.Property(p => p.Name).IsRequired();
-            
-            builder.Property(p => p.ShortDescription).IsRequired();
-            builder.Property(p => p.Created).IsRequired();
-            builder.Property(p => p.Updated).IsRequired();
-            builder.Property(p => p.InstitutePrivate).IsRequired();
-        }
     }
+
 }

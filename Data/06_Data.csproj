@@ -15,8 +15,6 @@
     <ItemGroup>
       <Compile Remove="Migrations\20210528120743_AddMultipleCallToActions.cs" />
       <Compile Remove="Migrations\20210528120743_AddMultipleCallToActions.Designer.cs" />
-      <Compile Remove="Migrations\20211015105743_AddProjectConstraints.cs" />
-      <Compile Remove="Migrations\20211015105743_AddProjectConstraints.Designer.cs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Bogus" Version="29.0.1" />

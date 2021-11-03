@@ -25,12 +25,7 @@ namespace Data.Configurations
     internal class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
 
-        public void Configure(EntityTypeBuilder<Role> builder)
-        {
-            builder.HasKey(r => r.Id);
-
-            builder.HasIndex(r => r.Name).IsUnique();
-        }
+        public void Configure(EntityTypeBuilder<Role> builder) { }
 
     }
 
