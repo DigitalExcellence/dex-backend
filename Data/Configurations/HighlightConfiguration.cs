@@ -22,21 +22,15 @@ using Models;
 namespace Data.Configurations
 {
 
-    internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
+    internal class HighlightConfiguration : IEntityTypeConfiguration<Highlight>
     {
 
-        public void Configure(EntityTypeBuilder<Project> builder)
+        public void Configure(EntityTypeBuilder<Highlight> builder)
         {
-            builder.HasKey(p => p.Id);
+            builder.HasKey(h => h.Id);
 
-            builder.Property(p => p.Name).IsRequired();
-            builder.Property(p => p.Description).IsRequired();
-            builder.Property(p => p.ShortDescription).IsRequired();
-            builder.Property(p => p.Created).IsRequired();
-            builder.Property(p => p.Updated).IsRequired();
-            builder.Property(p => p.InstitutePrivate).IsRequired();
-
-            builder.HasIndex(p => p.Uri).IsUnique();
+            builder.Property(h => h.StartDate).IsRequired();
+            builder.Property(h => h.EndDate).IsRequired();
         }
     }
 }

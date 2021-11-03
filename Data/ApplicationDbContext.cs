@@ -192,6 +192,13 @@ namespace Data
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
             modelBuilder.ApplyConfiguration(new DataSourceWizardPageConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectInstitutionConfiguration());
+            modelBuilder.ApplyConfiguration(new DataSourceConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectTransferRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new InstitutionConfiguration());
+            modelBuilder.ApplyConfiguration(new HighlightConfiguration());
+            modelBuilder.ApplyConfiguration(new CollaboratorConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         }
 
     }

@@ -22,21 +22,18 @@ using Models;
 namespace Data.Configurations
 {
 
-    internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
+    internal class ProjectTransferRequestConfiguration : IEntityTypeConfiguration<ProjectTransferRequest>
     {
 
-        public void Configure(EntityTypeBuilder<Project> builder)
+        public void Configure(EntityTypeBuilder<ProjectTransferRequest> builder)
         {
-            builder.HasKey(p => p.Id);
+            builder.HasKey(ptr => ptr.Id);
 
-            builder.Property(p => p.Name).IsRequired();
-            builder.Property(p => p.Description).IsRequired();
-            builder.Property(p => p.ShortDescription).IsRequired();
-            builder.Property(p => p.Created).IsRequired();
-            builder.Property(p => p.Updated).IsRequired();
-            builder.Property(p => p.InstitutePrivate).IsRequired();
+            builder.Property(ptr => ptr.Status).IsRequired();
+            builder.Property(ptr => ptr.CurrentOwnerAcceptedRequest).IsRequired();
+            builder.Property(ptr => ptr.PotentialNewOwnerAcceptedRequest).IsRequired();
 
-            builder.HasIndex(p => p.Uri).IsUnique();
+            builder.HasIndex(ptr => ptr.TransferGuid).IsUnique();
         }
     }
 }

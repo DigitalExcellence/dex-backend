@@ -22,21 +22,16 @@ using Models;
 namespace Data.Configurations
 {
 
-    internal class ProjectConfiguration : IEntityTypeConfiguration<Project>
+    internal class CollaboratorConfiguration : IEntityTypeConfiguration<Collaborator>
     {
 
-        public void Configure(EntityTypeBuilder<Project> builder)
+        public void Configure(EntityTypeBuilder<Collaborator> builder)
         {
-            builder.HasKey(p => p.Id);
+            builder.HasKey(c => c.Id);
 
-            builder.Property(p => p.Name).IsRequired();
-            builder.Property(p => p.Description).IsRequired();
-            builder.Property(p => p.ShortDescription).IsRequired();
-            builder.Property(p => p.Created).IsRequired();
-            builder.Property(p => p.Updated).IsRequired();
-            builder.Property(p => p.InstitutePrivate).IsRequired();
-
-            builder.HasIndex(p => p.Uri).IsUnique();
+            builder.Property(c => c.FullName).IsRequired();
+            builder.Property(c => c.Role).IsRequired();
+            builder.Property(c => c.ProjectId).IsRequired();
         }
     }
 }
