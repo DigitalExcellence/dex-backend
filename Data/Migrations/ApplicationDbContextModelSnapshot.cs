@@ -488,6 +488,7 @@ namespace _4_Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ExpectedGraduationDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IdentityId")
