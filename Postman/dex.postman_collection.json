@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cfd740d0-2cb3-4a6d-9ca6-25db86e7c9c7",
+		"_postman_id": "8a5411ca-9d89-4851-b78c-c1712e796a80",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -1668,7 +1668,7 @@
 													"\r",
 													"pm.test(\"Project pagination displays correct amount of projects and all project count matches\", function() {\r",
 													"    pm.expect(jsonData.results.length).to.eql(1);\r",
-													"    pm.expect(jsonData.totalCount).to.eql(3);\r",
+													"    pm.expect(jsonData.totalCount).to.eql(4);\r",
 													"})"
 												],
 												"type": "text/javascript"
