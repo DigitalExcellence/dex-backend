@@ -16,8 +16,8 @@ namespace Services.Resources
         //This class might be temporary untill the RabbitMQ emailSender has been fixed
         public MailClient()
         {
-            sendGridClient = new SendGridClient(Environment.GetEnvironmentVariable("App__SendGrid__ApiKey"));
-            fromEmailAdress = new EmailAddress(Environment.GetEnvironmentVariable("App__SendGrid__EmailFrom"));
+            //sendGridClient = new SendGridClient(Environment.GetEnvironmentVariable("App__SendGrid__ApiKey"));
+            //fromEmailAdress = new EmailAddress(Environment.GetEnvironmentVariable("App__SendGrid__EmailFrom"));
         }
 
         public async Task<Response> SendMail(string receiverAdress, string plainTextContent,string subject, string htmlContent)
