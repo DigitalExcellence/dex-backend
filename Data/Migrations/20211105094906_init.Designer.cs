@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace _4_Data.Migrations
+namespace _06_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210629193238_AddedCallToActionsToProject")]
-    partial class AddedCallToActionsToProject
+    [Migration("20211105094906_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -380,6 +380,40 @@ namespace _4_Data.Migrations
                     b.ToTable("ProjectLike");
                 });
 
+            modelBuilder.Entity("Models.ProjectTransferRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CurrentOwnerAcceptedRequest")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PotentialNewOwnerAcceptedRequest")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PotentialNewOwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TransferGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PotentialNewOwnerId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectTransferRequest");
+                });
+
             modelBuilder.Entity("Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -685,6 +719,17 @@ namespace _4_Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.ProjectTransferRequest", b =>
+                {
+                    b.HasOne("Models.User", "PotentialNewOwner")
+                        .WithMany()
+                        .HasForeignKey("PotentialNewOwnerId");
+
+                    b.HasOne("Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("Models.RoleScope", b =>
