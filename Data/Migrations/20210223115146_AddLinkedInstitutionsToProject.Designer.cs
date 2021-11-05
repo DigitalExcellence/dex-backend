@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210223115146_AddLinkedInstitutionsToProject")]
+    partial class AddLinkedInstitutionsToProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,16 +32,11 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("CallToAction");
                 });
@@ -62,22 +59,6 @@ namespace _4_Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CallToActionOption");
-                });
-
-            modelBuilder.Entity("Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Models.Collaborator", b =>
@@ -192,9 +173,6 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UploadDateTime")
                         .HasColumnType("datetime2");
 
@@ -202,8 +180,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UploaderId");
 
@@ -224,9 +200,6 @@ namespace _4_Data.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -234,8 +207,6 @@ namespace _4_Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
 
                     b.HasIndex("ProjectId");
 
@@ -270,6 +241,9 @@ namespace _4_Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CallToActionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -302,6 +276,8 @@ namespace _4_Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CallToActionId");
+
                     b.HasIndex("ProjectIconId");
 
                     b.HasIndex("UserId");
@@ -309,46 +285,17 @@ namespace _4_Data.Migrations
                     b.ToTable("Project");
                 });
 
-            modelBuilder.Entity("Models.ProjectCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectCategory");
-                });
-
             modelBuilder.Entity("Models.ProjectInstitution", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
 
                     b.Property<int>("InstitutionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("ProjectId", "InstitutionId");
 
                     b.HasIndex("InstitutionId");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectInstitution");
                 });
@@ -376,40 +323,6 @@ namespace _4_Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ProjectLike");
-                });
-
-            modelBuilder.Entity("Models.ProjectTransferRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("CurrentOwnerAcceptedRequest")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("PotentialNewOwnerAcceptedRequest")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("PotentialNewOwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TransferGuid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PotentialNewOwnerId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectTransferRequest");
                 });
 
             modelBuilder.Entity("Models.Role", b =>
@@ -584,13 +497,6 @@ namespace _4_Data.Migrations
                     b.ToTable("WizardPage");
                 });
 
-            modelBuilder.Entity("Models.CallToAction", b =>
-                {
-                    b.HasOne("Models.Project", null)
-                        .WithMany("CallToActions")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("Models.Collaborator", b =>
                 {
                     b.HasOne("Models.Project", null)
@@ -639,10 +545,6 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.File", b =>
                 {
-                    b.HasOne("Models.Project", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ProjectId");
-
                     b.HasOne("Models.User", "Uploader")
                         .WithMany()
                         .HasForeignKey("UploaderId")
@@ -652,10 +554,6 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.Highlight", b =>
                 {
-                    b.HasOne("Models.File", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
-
                     b.HasOne("Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
@@ -665,6 +563,10 @@ namespace _4_Data.Migrations
 
             modelBuilder.Entity("Models.Project", b =>
                 {
+                    b.HasOne("Models.CallToAction", "CallToAction")
+                        .WithMany()
+                        .HasForeignKey("CallToActionId");
+
                     b.HasOne("Models.File", "ProjectIcon")
                         .WithMany()
                         .HasForeignKey("ProjectIconId");
@@ -672,21 +574,6 @@ namespace _4_Data.Migrations
                     b.HasOne("Models.User", "User")
                         .WithMany("Projects")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.ProjectCategory", b =>
-                {
-                    b.HasOne("Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Project", "Project")
-                        .WithMany("Categories")
-                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -717,17 +604,6 @@ namespace _4_Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.ProjectTransferRequest", b =>
-                {
-                    b.HasOne("Models.User", "PotentialNewOwner")
-                        .WithMany()
-                        .HasForeignKey("PotentialNewOwnerId");
-
-                    b.HasOne("Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("Models.RoleScope", b =>

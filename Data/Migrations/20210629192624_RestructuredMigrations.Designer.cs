@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210629192624_RestructuredMigrations")]
+    partial class RestructuredMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,16 +32,11 @@ namespace _4_Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("CallToAction");
                 });
@@ -378,40 +375,6 @@ namespace _4_Data.Migrations
                     b.ToTable("ProjectLike");
                 });
 
-            modelBuilder.Entity("Models.ProjectTransferRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("CurrentOwnerAcceptedRequest")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("PotentialNewOwnerAcceptedRequest")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("PotentialNewOwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TransferGuid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PotentialNewOwnerId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectTransferRequest");
-                });
-
             modelBuilder.Entity("Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -584,13 +547,6 @@ namespace _4_Data.Migrations
                     b.ToTable("WizardPage");
                 });
 
-            modelBuilder.Entity("Models.CallToAction", b =>
-                {
-                    b.HasOne("Models.Project", null)
-                        .WithMany("CallToActions")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("Models.Collaborator", b =>
                 {
                     b.HasOne("Models.Project", null)
@@ -717,17 +673,6 @@ namespace _4_Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.ProjectTransferRequest", b =>
-                {
-                    b.HasOne("Models.User", "PotentialNewOwner")
-                        .WithMany()
-                        .HasForeignKey("PotentialNewOwnerId");
-
-                    b.HasOne("Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("Models.RoleScope", b =>
