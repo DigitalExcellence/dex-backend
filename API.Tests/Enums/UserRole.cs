@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _15_API.Tests.Enums
+namespace API.Tests.Enums
 {
     public enum UserRole
     {

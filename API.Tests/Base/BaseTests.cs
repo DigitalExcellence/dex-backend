@@ -10,7 +10,7 @@ using API.Resources;
 using Data;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace _15_API.Tests.Base
+namespace API.Tests.Base
 {
     public class BaseTests
     {

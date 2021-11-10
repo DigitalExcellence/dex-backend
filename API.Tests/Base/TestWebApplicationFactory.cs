@@ -10,9 +10,9 @@ using Microsoft.Extensions.Hosting;
 using API;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using _15_API.Tests.Helpers;
+using API.Tests.Helpers;
 
-namespace _15_API.Tests.Base
+namespace API.Tests.Base
 {
     public class TestWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
     {

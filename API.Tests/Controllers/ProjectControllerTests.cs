@@ -1,4 +1,4 @@
-using _15_API.Tests.Base;
+using API.Tests.Base;
 using API.Resources;
 using Bogus;
 using FluentAssertions;
@@ -10,10 +10,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
-using _15_API.Tests.Enums;
+using API.Tests.Enums;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace _15_API.Tests.Controllers
+namespace API.Tests.Controllers
 {
     public class ProjectControllerTests : BaseTests
     {
