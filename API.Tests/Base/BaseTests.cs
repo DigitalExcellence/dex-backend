@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 using API;
 using Newtonsoft.Json;
@@ -19,9 +18,9 @@ namespace API.Tests.Base
 
         protected BaseTests()
         {
-            TestWebApplicationFactory<Startup> factory = new();
+            TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             TestClient = factory.CreateClient();
-            TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
+            TestClient.BaseAddress = new Uri("https://localhost:5000/api/");
         }
 
         protected async Task AuthenticateAs(int identityId)
@@ -58,14 +57,14 @@ namespace API.Tests.Base
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
 
-            HttpRequestMessage request = new(HttpMethod.Post, $"https://localhost:5005/connect/token")
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5004/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };
 
-            HttpClient client = new();
+            HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
-            string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).access_token;
+            string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
 
             return token;
         }
@@ -78,16 +77,16 @@ namespace API.Tests.Base
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
 
-            HttpRequestMessage request = new(HttpMethod.Post, "https://localhost:5005/connect/token")
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:5005/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };
 
-            HttpClient client = new();
+            HttpClient client = new HttpClient();
 
             HttpResponseMessage response = await client.SendAsync(request);
 
-            string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).access_token;
+            string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
 
             return token;
         }
@@ -95,9 +94,9 @@ namespace API.Tests.Base
 
     public class AccessTokenReponse
     {
-        public string access_token { get; set; }
-        public string expires_in { get; set; }
-        public string token_type { get; set; }
-        public string scope { get; set; }
+        public string Access_token { get; set; }
+        public string Expires_in { get; set; }
+        public string Token_type { get; set; }
+        public string Scope { get; set; }
     }
 }
