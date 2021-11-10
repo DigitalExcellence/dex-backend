@@ -20,7 +20,7 @@ namespace API.Tests.Base
         {
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             TestClient = factory.CreateClient();
-            TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
+            TestClient.BaseAddress = new Uri("https://localhost:5000/api/");
         }
 
         protected async Task AuthenticateAs(int identityId)
@@ -57,7 +57,7 @@ namespace API.Tests.Base
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5005/connect/token")
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5004/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };
