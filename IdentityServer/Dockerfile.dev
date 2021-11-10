@@ -25,4 +25,4 @@ COPY --from=build-env /app/IdentityServer/bin/Debug/netcoreapp3.1 .
 COPY --from=build-env /app/IdentityServer/wwwroot ./wwwroot
 COPY --from=build-env /app/dex-identity.pfx .
 
-ENTRYPOINT ["dotnet", "08_IdentityServer.dll", "--environment=Development"]
+ENTRYPOINT ["dotnet", "09_IdentityServer.dll", "--environment=Development"]
