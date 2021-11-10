@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{445ECBDE-DF20-43B3-BD4B-4881F05203A2}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,31 +10,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_API", "API\01_API.csproj", "{F40BA6E7-D870-47A8-A672-DEA4D5FA96F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_Services", "Services\02_Services.csproj", "{9940A638-7501-49EE-A816-560A2908A029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Services", "Services\03_Services.csproj", "{9940A638-7501-49EE-A816-560A2908A029}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03_Services.Tests", "Services.Tests\03_Services.Tests.csproj", "{D7ABD315-4B00-4A5F-8961-8147ED6602C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04_Services.Tests", "Services.Tests\04_Services.Tests.csproj", "{D7ABD315-4B00-4A5F-8961-8147ED6602C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04_Repositories", "Repositories\04_Repositories.csproj", "{860D05B3-46CB-4EA9-9F83-63BBF44AFB2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05_Repositories", "Repositories\05_Repositories.csproj", "{860D05B3-46CB-4EA9-9F83-63BBF44AFB2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05_Repositories.Tests", "Repositories.Tests\05_Repositories.Tests.csproj", "{471B1E44-E308-4C6D-B595-15AD939820DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06_Repositories.Tests", "Repositories.Tests\06_Repositories.Tests.csproj", "{471B1E44-E308-4C6D-B595-15AD939820DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06_Data", "Data\06_Data.csproj", "{B626B71A-6C31-4921-896C-A8946092D159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07_Data", "Data\07_Data.csproj", "{B626B71A-6C31-4921-896C-A8946092D159}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "07_Models", "Models\07_Models.csproj", "{22BBD62E-AD77-46E5-86F8-900737BE19FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "08_Models", "Models\08_Models.csproj", "{22BBD62E-AD77-46E5-86F8-900737BE19FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "08_IdentityServer", "IdentityServer\08_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_IdentityServer", "IdentityServer\09_IdentityServer.csproj", "{823A7672-639A-4C68-AD71-04C9C62E1468}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "09_MessageBrokerPublisher", "MessageBrokerPublisher\09_MessageBrokerPublisher.csproj", "{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_MessageBrokerPublisher", "MessageBrokerPublisher\10_MessageBrokerPublisher.csproj", "{3A0B6EED-3F6B-43F7-9C1E-0311EC9871CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\10_MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "11_MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\11_MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "14_ElasticSynchronizer", "ElasticSynchronizer\14_ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "15_ElasticSynchronizer", "ElasticSynchronizer\15_ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "11_NotificationSystem", "NotificationSystem\11_NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "12_NotificationSystem", "NotificationSystem\12_NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "12_NotificationSystem.Tests", "NotificationSystem.Tests\12_NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "13_NotificationSystem.Tests", "NotificationSystem.Tests\13_NotificationSystem.Tests.csproj", "{C85546CD-EFA2-42C5-A698-175BAE85515E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "13_JobScheduler", "JobScheduler\13_JobScheduler.csproj", "{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "14_JobScheduler", "JobScheduler\14_JobScheduler.csproj", "{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_API.Tests", "API.Tests\02_API.Tests.csproj", "{7283F142-135F-4F59-AA64-2241A565B99E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,10 @@ Global
 		{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7283F142-135F-4F59-AA64-2241A565B99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7283F142-135F-4F59-AA64-2241A565B99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7283F142-135F-4F59-AA64-2241A565B99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7283F142-135F-4F59-AA64-2241A565B99E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

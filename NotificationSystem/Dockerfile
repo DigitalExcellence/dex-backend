@@ -12,4 +12,4 @@ WORKDIR /app
 
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "11_NotificationSystem.dll"]
+ENTRYPOINT ["dotnet", "12_NotificationSystem.dll"]

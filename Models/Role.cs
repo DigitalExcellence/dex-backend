@@ -31,4 +31,13 @@ namespace Models
 
     }
 
+    public enum EnumRole
+    {
+        RegisteredUser = 1,
+        PrUser = 2,
+        DataOfficer = 3,
+        Administrator = 4,
+        Alumni = 5
+    }
+
 }

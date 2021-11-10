@@ -20,6 +20,7 @@ using API.Configuration;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,10 +31,12 @@ using Models.Defaults;
 using Serilog;
 using Services.Resources;
 using Services.Services;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -651,6 +654,24 @@ namespace API.Controllers
             }
             
         }
-    }
 
+        [AllowAnonymous]
+        [HttpPost("test-login")]
+        public async Task<IActionResult> TestLogin([FromBody] int role)
+        {
+            User user = new User
+            {
+                Name = "Testing user",
+                Email = "TestingUser@gmail.com",
+                Role = await roleService.FindAsync(role),
+                AccountCreationDate = DateTime.Now,
+                IdentityId = "483290",
+                ProfileUrl = null,
+                InstitutionId = null,
+            };
+
+            userService.Add(user);
+            return Ok();
+        }
+    }
 }

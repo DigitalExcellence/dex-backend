@@ -12,4 +12,4 @@ WORKDIR /app
 
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "14_ElasticSynchronizer.dll"]
+ENTRYPOINT ["dotnet", "15_ElasticSynchronizer.dll"]

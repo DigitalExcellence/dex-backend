@@ -29,12 +29,12 @@
         <PackageReference Include="RestSharp" Version="106.12.0" />
     </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Models\07_Models.csproj" />
-  </ItemGroup>
-
     <ItemGroup>
         <Folder Include="Configurations\IdentityMigrations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Models\08_Models.csproj" />
     </ItemGroup>
 
 </Project>
