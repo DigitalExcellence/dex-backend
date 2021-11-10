@@ -654,24 +654,5 @@ namespace API.Controllers
             }
             
         }
-
-        [AllowAnonymous]
-        [HttpPost("test-login")]
-        public async Task<IActionResult> TestLogin([FromBody] int role)
-        {
-            User user = new User
-            {
-                Name = "Testing user",
-                Email = "TestingUser@gmail.com",
-                Role = await roleService.FindAsync(role),
-                AccountCreationDate = DateTime.Now,
-                IdentityId = "483290",
-                ProfileUrl = null,
-                InstitutionId = null,
-            };
-
-            userService.Add(user);
-            return Ok();
-        }
     }
 }
