@@ -11,6 +11,7 @@ namespace _15_API.Tests.Enums
         PrUser = 985632147,
         DataOfficer = 954654861,
         Alumni = 123456789,
-        Admin = 88421113
+        Admin = 88421113,
+        RegisteredUser = 3
     }
 }

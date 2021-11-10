@@ -26,6 +26,10 @@ namespace _15_API.Tests.Base
 
         protected async Task AuthenticateAs(int identityId)
         {
+            if(TestClient.DefaultRequestHeaders.Contains("Authorization")) TestClient.DefaultRequestHeaders.Remove("Authorization");
+            
+            if(TestClient.DefaultRequestHeaders.Contains("IdentityId")) TestClient.DefaultRequestHeaders.Remove("IdentityId");
+
             TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + await GetToken());
             TestClient.DefaultRequestHeaders.Add("IdentityId", identityId.ToString());
         }

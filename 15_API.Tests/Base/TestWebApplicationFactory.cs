@@ -43,7 +43,7 @@ namespace _15_API.Tests.Base
 
 
                 string databaseName = Guid.NewGuid().ToString();
-                DbContextOptions<ApplicationDbContext> contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
+                //DbContextOptions<ApplicationDbContext> contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
 
                 services.AddDbContext<ApplicationDbContext>(contextOptions =>
                 {
