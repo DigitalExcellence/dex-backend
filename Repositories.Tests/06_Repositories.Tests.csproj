@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\06_Data.csproj" />
-    <ProjectReference Include="..\Repositories\04_Repositories.csproj" />
+    <ProjectReference Include="..\Data\07_Data.csproj" />
+    <ProjectReference Include="..\Repositories\05_Repositories.csproj" />
   </ItemGroup>
 
 </Project>

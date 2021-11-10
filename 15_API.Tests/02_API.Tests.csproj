@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API\01_API.csproj" />
-    <ProjectReference Include="..\Data\06_Data.csproj" />
+    <ProjectReference Include="..\Data\07_Data.csproj" />
   </ItemGroup>
 
 </Project>
