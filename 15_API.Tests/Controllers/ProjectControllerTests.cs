@@ -17,9 +17,6 @@ namespace _15_API.Tests.Controllers
 {
     public class ProjectControllerTests : BaseTests
     {
-
-        
-
         [Theory]
         [InlineData(UserRole.Admin, HttpStatusCode.Created)]
         [InlineData(UserRole.Alumni, HttpStatusCode.Forbidden)]
@@ -48,7 +45,6 @@ namespace _15_API.Tests.Controllers
             // Assert
             response.StatusCode.Should()
                     .Be(expectedResult);
-
         }
     }
 }

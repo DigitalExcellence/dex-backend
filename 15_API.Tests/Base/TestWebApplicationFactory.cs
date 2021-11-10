@@ -36,29 +36,18 @@ namespace _15_API.Tests.Base
         {
             builder.ConfigureServices(services =>
             {
-                //ApplicationDbContext inMemoryContext;
-                //DbContextOptions<ApplicationDbContext> options;
-                //options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
-
-                //inMemoryContext = new ApplicationDbContext(options);
-                //services.AddScoped<ApplicationDbContext>(_ => inMemoryContext);
-
-                //using(var _newContext = new ApplicationDbContext(options))
-                //{
-                //}
-
                 ServiceDescriptor descriptor = services.SingleOrDefault(d => d.ServiceType ==
                                                                              typeof(DbContextOptions<ApplicationDbContext>));
                 
                 services.Remove(descriptor);
 
-                var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                                     .Options;
 
-                services.AddDbContext<ApplicationDbContext>(options =>
+                string databaseName = Guid.NewGuid().ToString();
+                DbContextOptions<ApplicationDbContext> contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
+
+                services.AddDbContext<ApplicationDbContext>(contextOptions =>
                 {
-                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                    contextOptions.UseInMemoryDatabase(databaseName);
                 });
 
                 ServiceProvider sp = services.BuildServiceProvider();
@@ -74,7 +63,7 @@ namespace _15_API.Tests.Base
 
                     try
                     {
-                        SeedUtility.InitializeDbForTests(new ApplicationDbContext(contextOptions));
+                        SeedUtility.InitializeDbForTests(db);
                     }
                     catch(Exception ex)
                     {

@@ -24,17 +24,6 @@ namespace _15_API.Tests.Base
             TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
         }
 
-        //protected void CleanUp()
-        //{
-        //    ServiceProvider sp = services.BuildServiceProvider();
-        //    using(IServiceScope scope = sp.CreateScope())
-        //    {
-        //        ApplicationDbContext dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
-        //        dbContext.Database.EnsureDeleted();
-        //    }
-
-        //}
-
         protected async Task AuthenticateAs(int identityId)
         {
             TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + await GetToken());

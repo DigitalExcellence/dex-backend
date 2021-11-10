@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{445ECBDE-DF20-43B3-BD4B-4881F05203A2}"
 	ProjectSection(SolutionItems) = preProject
@@ -36,9 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "12_NotificationSystem.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "13_JobScheduler", "JobScheduler\13_JobScheduler.csproj", "{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "15_API.Tests", "15_API.Tests\15_API.Tests.csproj", "{8FB597C9-9715-4F91-BE14-87AD1C167CCE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "15_IntegrationTests", "IntegrationTests\15_IntegrationTests.csproj", "{081B71E5-7F2E-4F0E-BB8E-68118DAB0119}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "15_API.Tests", "15_API.Tests\15_API.Tests.csproj", "{5F68B72E-158B-4CC1-9E16-5C7D1A074A45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,14 +100,10 @@ Global
 		{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4BFCDFE-A85E-451E-8D02-7B55052FFB6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FB597C9-9715-4F91-BE14-87AD1C167CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FB597C9-9715-4F91-BE14-87AD1C167CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FB597C9-9715-4F91-BE14-87AD1C167CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FB597C9-9715-4F91-BE14-87AD1C167CCE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{081B71E5-7F2E-4F0E-BB8E-68118DAB0119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{081B71E5-7F2E-4F0E-BB8E-68118DAB0119}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{081B71E5-7F2E-4F0E-BB8E-68118DAB0119}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{081B71E5-7F2E-4F0E-BB8E-68118DAB0119}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F68B72E-158B-4CC1-9E16-5C7D1A074A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F68B72E-158B-4CC1-9E16-5C7D1A074A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F68B72E-158B-4CC1-9E16-5C7D1A074A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F68B72E-158B-4CC1-9E16-5C7D1A074A45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
