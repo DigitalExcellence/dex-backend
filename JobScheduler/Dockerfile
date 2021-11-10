@@ -12,4 +12,4 @@ WORKDIR /app
 
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "13_JobScheduler.dll"]
+ENTRYPOINT ["dotnet", "14_JobScheduler.dll"]
