@@ -25,6 +25,9 @@ jobs:
     - name: Docker Compose Build
       run: docker-compose build -d
       
+    - name: Create Docker Containers
+      run: docker-compose up --no-start
+      
     - name: Run RabbitMQ Container
       run: docker-compose start rabbitmq
       
