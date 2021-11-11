@@ -32,10 +32,14 @@ jobs:
       run: docker-compose start rabbitmq
       
     - name: Run API
-      run: dotnet run -d .\API\
+      run: |
+        cd API
+        dotnet run -d
 
     - name: Run Identity Server
-      run: dotnet run -d .\IdentityServer\
+      run: |
+        cd IdentityServer
+        dotnet run -d
       
     - name: Test
       run: dotnet test --no-restore --verbosity normal
