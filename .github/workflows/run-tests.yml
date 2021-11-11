@@ -31,10 +31,13 @@ jobs:
     - name: Run RabbitMQ Container
       run: docker-compose start rabbitmq
       
+    - name: Run Database Container
+      run: docker-compose start database
+      
     - name: Run API
       run: |
         cd API
-        dotnet run -d
+        dotnet run --environment 'test' -d
 
     - name: Run Identity Server
       run: |
