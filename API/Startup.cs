@@ -338,7 +338,7 @@ namespace API
                                         });
             } else
             {
-                app.UseExceptionHandler();
+                app.UseExceptionHandler("/Error");
             }
 
             app.UseProblemDetails();
