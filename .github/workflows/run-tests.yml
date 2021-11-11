@@ -21,7 +21,19 @@ jobs:
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
+      
+    - name: Docker Compose Build
+      run: docker-compose build -d
+      
+    - name: Run RabbitMQ Container
+      run: docker-compose start rabbitmq
+      
+    - name: Run API
+      run: dotnet run -d .\API\
 
+    - name: Run Identity Server
+      run: dotnet run -d .\IdentityServer\
+      
     - name: Test
       run: dotnet test --no-restore --verbosity normal
       env:
