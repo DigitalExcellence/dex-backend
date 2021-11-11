@@ -100,8 +100,14 @@ namespace API
             IdentityModelEventSource.ShowPII = true;
             services.AddDbContext<ApplicationDbContext>(o =>
             {
-                o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
+                try
+                {
+                    o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
                     sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
+                } catch
+                {
+                    o.UseInMemoryDatabase("inMemoryTestDatabase");
+                }
             });
 
             services.AddSingleton<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname, Config.RabbitMQ.Username, Config.RabbitMQ.Password));

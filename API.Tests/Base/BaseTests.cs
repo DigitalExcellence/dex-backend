@@ -20,7 +20,7 @@ namespace API.Tests.Base
         {
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             TestClient = factory.CreateClient();
-            TestClient.BaseAddress = new Uri("https://localhost:5000/api/");
+            TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
         }
 
         protected async Task AuthenticateAs(int identityId)
@@ -57,35 +57,13 @@ namespace API.Tests.Base
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5004/connect/token")
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5005/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };
 
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
-            string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
-
-            return token;
-        }
-
-        protected async Task<string> GetJwtAsync()
-        {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict.Add("client_id", "dex-api-client");
-            dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
-            dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
-            dict.Add("grant_type", "client_credentials");
-
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:5005/connect/token")
-            {
-                Content = new FormUrlEncodedContent(dict)
-            };
-
-            HttpClient client = new HttpClient();
-
-            HttpResponseMessage response = await client.SendAsync(request);
-
             string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
 
             return token;
