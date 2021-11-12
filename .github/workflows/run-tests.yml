@@ -32,25 +32,31 @@ jobs:
     - name: Run RabbitMQ Container
       run: docker-compose start rabbitmq
       
-    - uses: actions/github-script@v5
-      id: startup
-      with:
-        script: cmd.exe /c cd IdentityServer && dotnet run --launch-profile 'Test' -d
-				
-      
-    #- name: Run Identity Server
-    
-     # run: |
-      #  cd IdentityServer
-       # cmd.exe /c dotnet run --launch-profile 'Test' -d
-              
-   # - name: Run API
-     # run: |
-       # cd API
-       # cmd.exe /c dotnet run --launch-profile 'Test' -d
+    #- name: Run all
+      #run: cd IdentityServer && dotnet run --launch-profile 'Test' & && cd ../ && cd API && dotnet run --launch-profile 'Test' &
+                    
+    - name: Run API
+      run: |
+         cd API
+         dotnet run --launch-profile 'Test' &
+         
+    - name: Run IdentityServer
+      run: |
+         cd IdentityServer
+         dotnet run --launch-profile 'Test' &
+         
+    - name: Trust certificates
+      run: |
+          dotnet tool install --tool-path ./ dotnet-certificate-tool --version 2.0.1
+          
+          
+    - name: Trust certificates
+      run: |
+          dotnet dev-certs https --clean
+          dotnet dev-certs https -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
       
     - name: Test
-      run: dotnet test --environment 'test' --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
