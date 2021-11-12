@@ -51,6 +51,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Sqlite;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace API
 {
@@ -103,6 +106,16 @@ namespace API
                 if (Environment.IsEnvironment("test"))
                 {
                     o.UseInMemoryDatabase("inMemoryTestDatabase");
+                    ServicePointManager.ServerCertificateValidationCallback =
+                        delegate (
+                            object s,
+                            X509Certificate certificate,
+                            X509Chain chain,
+                            SslPolicyErrors sslPolicyErrors
+                        )
+                        {
+                            return true;
+                        };
                 }
                 else
                 {
