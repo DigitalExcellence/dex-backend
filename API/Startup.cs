@@ -106,16 +106,6 @@ namespace API
                 if (Environment.IsEnvironment("test"))
                 {
                     o.UseInMemoryDatabase("inMemoryTestDatabase");
-                    ServicePointManager.ServerCertificateValidationCallback =
-                        delegate (
-                            object s,
-                            X509Certificate certificate,
-                            X509Chain chain,
-                            SslPolicyErrors sslPolicyErrors
-                        )
-                        {
-                            return true;
-                        };
                 }
                 else
                 {
@@ -497,6 +487,7 @@ namespace API
             {
                 context.Database.Migrate();
             }
+
 
             // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
             SeedHelper.InsertRoles(Seed.SeedRoles(), context);

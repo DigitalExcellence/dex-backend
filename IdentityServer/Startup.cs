@@ -88,18 +88,8 @@ namespace IdentityServer
                 if(Environment.IsEnvironment("test"))
                 {
                     o.UseInMemoryDatabase("inMemoryTestDatabase");
-
-                    ServicePointManager.ServerCertificateValidationCallback =
-                        delegate (
-                            object s,
-                            X509Certificate certificate,
-                            X509Chain chain,
-                            SslPolicyErrors sslPolicyErrors
-                        )
-                        {
-                            return true;
-                        };
-                } else
+                }
+                else
                 {
                     o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));

@@ -14,17 +14,13 @@ namespace API.Tests.Base
     public class BaseTests
     {
         protected readonly HttpClient TestClient;
-        private readonly HttpClientHandler clientHandler;
         private string accessToken;
 
         protected BaseTests()
         {
-            clientHandler = new HttpClientHandler();
-            clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             TestClient = factory.CreateClient();
-            TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
+            TestClient.BaseAddress = new Uri("http://localhost:5001/api/");
         }
 
         protected async Task AuthenticateAs(int identityId)
@@ -33,12 +29,8 @@ namespace API.Tests.Base
             
             if(TestClient.DefaultRequestHeaders.Contains("IdentityId")) TestClient.DefaultRequestHeaders.Remove("IdentityId");
 
-            string token = await GetToken();
-            if(token != null)
-            {
-                TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + await GetToken());
 
-            }
             TestClient.DefaultRequestHeaders.Add("IdentityId", identityId.ToString());
         }
 
@@ -71,7 +63,7 @@ namespace API.Tests.Base
                 Content = new FormUrlEncodedContent(dict)
             };
 
-            HttpClient client = new HttpClient(clientHandler);
+            HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
             try
             {
