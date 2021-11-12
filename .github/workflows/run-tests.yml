@@ -34,13 +34,13 @@ jobs:
     - name: Run Identity Server
       run: |
         cd IdentityServer
-        dotnet run --environment 'test' -d
+        dotnet run --launch-profile 'Test' -d
               
               
     - name: Run API
       run: |
         cd API
-        dotnet run --environment 'test' -d
+        dotnet run --launch-profile 'Test' -d
 
     
       
