@@ -241,7 +241,14 @@ namespace IdentityServer
                                                   .GetRequiredService<IServiceScopeFactory>()
                                                   .CreateScope();
             using IdentityDbContext context = serviceScope.ServiceProvider.GetService<IdentityDbContext>();
-            context.Database.Migrate();
+
+            //Only apply migrations when db is running via MSSQL instead of IN Memory
+            if(!context.Database.IsInMemory())
+            {
+                context.Database.Migrate();
+            }
+
+
             List<IdentityUser> identityUsers = TestUsers.GetDefaultIdentityUsers();
             foreach(IdentityUser identityUser in identityUsers.Where(identityUser =>
                                                                          !context.IdentityUser.Any(

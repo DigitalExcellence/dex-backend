@@ -479,7 +479,11 @@ namespace API
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            //context.Database.Migrate();
+            //Only apply migrations when db is running via MSSQL instead of IN Memory
+            if(!context.Database.IsInMemory())
+            {
+                context.Database.Migrate();
+            }
 
             // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
             SeedHelper.InsertRoles(Seed.SeedRoles(), context);
