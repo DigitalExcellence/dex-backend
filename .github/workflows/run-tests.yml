@@ -31,15 +31,18 @@ jobs:
     - name: Run RabbitMQ Container
       run: docker-compose start rabbitmq
 
+    - name: Run Identity Server
+      run: |
+        cd IdentityServer
+        dotnet run -d
+              
+              
     - name: Run API
       run: |
         cd API
         dotnet run --environment 'test' -d
 
-    - name: Run Identity Server
-      run: |
-        cd IdentityServer
-        dotnet run -d
+    
       
     - name: Test
       run: dotnet test --environment 'test' --no-restore --verbosity normal
