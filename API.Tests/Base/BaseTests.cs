@@ -14,10 +14,14 @@ namespace API.Tests.Base
     public class BaseTests
     {
         protected readonly HttpClient TestClient;
+        private readonly HttpClientHandler clientHandler;
         private string accessToken;
 
         protected BaseTests()
         {
+            clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             TestClient = factory.CreateClient();
             TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
@@ -62,7 +66,7 @@ namespace API.Tests.Base
                 Content = new FormUrlEncodedContent(dict)
             };
 
-            HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient(clientHandler);
             HttpResponseMessage response = await client.SendAsync(request);
             string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
 
