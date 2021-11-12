@@ -31,7 +31,6 @@ jobs:
       
     - name: Run RabbitMQ Container
       run: docker-compose start rabbitmq
-				
       
     - name: Run Identity Server
       run: |
