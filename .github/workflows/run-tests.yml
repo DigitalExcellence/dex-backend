@@ -44,6 +44,10 @@ jobs:
       run: |
          cd IdentityServer
          dotnet run --launch-profile 'Test' &
+         
+    - name: Trust certificates
+      run: |
+          dotnet dev-certs https --trust
       
     - name: Test
       run: dotnet test --no-restore --verbosity normal
