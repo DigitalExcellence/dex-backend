@@ -8,7 +8,7 @@
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty
 * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
+* 1 the GNU Lesser General Public License for more details.
 *
 * You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
@@ -192,10 +192,11 @@ namespace IdentityServer
                     })
                     .AddCookie();
 
-            if(Environment.IsDevelopment())
+            if(Environment.IsDevelopment() || Environment.IsEnvironment("Test"))
             {
                 builder.AddDeveloperSigningCredential();
-            } else
+            }
+            else
             {
                 X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 certStore.Open(OpenFlags.ReadOnly);
