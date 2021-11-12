@@ -83,9 +83,16 @@ namespace IdentityServer
         {
             services.AddDbContext<IdentityDbContext>(o =>
             {
-                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                if(Environment.IsEnvironment("test"))
+                {
+                    o.UseInMemoryDatabase("inMemoryTestDatabase");
+                } else
+                {
+                    o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
+                }
             });
+           
 
             services.AddServicesAndRepositories();
 
