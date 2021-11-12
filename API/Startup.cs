@@ -317,6 +317,14 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+            | SecurityProtocolType.Tls11
+            | SecurityProtocolType.Tls12
+            | SecurityProtocolType.Tls13;
+
+
+
             env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
             Defaults.Path.FilePath = Path.Combine(env.WebRootPath, "Images");
 
@@ -365,6 +373,8 @@ namespace API
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            
 
             //UserInfo
             app.UseWhen(context =>

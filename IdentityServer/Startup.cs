@@ -57,6 +57,7 @@ namespace IdentityServer
                                   .Get<Config>();
             Configuration = configuration;
             Environment = environment;
+
         }
 
         /// <summary>
@@ -220,6 +221,13 @@ namespace IdentityServer
         /// <param name="env">The environmental variable.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+            | SecurityProtocolType.Tls11
+            | SecurityProtocolType.Tls12
+            | SecurityProtocolType.Tls13;
+
+
             UpdateDatabase(app, env);
             if(Environment.IsDevelopment())
             {
