@@ -32,14 +32,11 @@ jobs:
     - name: Run RabbitMQ Container
       run: docker-compose start rabbitmq
       
-      
-      steps:
-      - script: 'start cmd.exe /c cd IdentityServer && dotnet run --launch-profile "Test"'
-        displayName: 'Open new Session to run dotnet run'
-
-        steps:
-      - script: 'start cmd.exe /c cd API && dotnet run --launch-profile "Test"'
-        displayName: 'Open new Session to run dotnet run'
+    - uses: actions/github-script@v5
+      id: startup
+      with:
+        script: cmd.exe /c cd IdentityServer && dotnet run --launch-profile 'Test' -d
+				
       
     #- name: Run Identity Server
     
@@ -51,14 +48,12 @@ jobs:
      # run: |
        # cd API
        # cmd.exe /c dotnet run --launch-profile 'Test' -d
-
-    
       
-      - name: Test
-        run: dotnet test --environment 'test' --no-restore --verbosity normal
-        env:
-          App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
-          App__SendGrid__EmailFrom: test@dex.software
+    - name: Test
+      run: dotnet test --environment 'test' --no-restore --verbosity normal
+      env:
+        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
+        App__SendGrid__EmailFrom: test@dex.software
 
   integration-test:
     runs-on: ubuntu-18.04
