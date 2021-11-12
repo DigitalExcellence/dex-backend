@@ -39,6 +39,11 @@ jobs:
       run: |
          cd API
          dotnet run --launch-profile 'Test' &
+         
+    - name: Run IdentityServer
+      run: |
+         cd IdentityServer
+         dotnet run --launch-profile 'Test' &
       
     - name: Test
       run: dotnet test --environment 'test' --no-restore --verbosity normal
