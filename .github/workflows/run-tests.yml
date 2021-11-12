@@ -46,7 +46,7 @@ jobs:
          dotnet run --launch-profile 'Test' &
       
     - name: Test
-      run: dotnet test --environment 'test' --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
