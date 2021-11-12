@@ -7,6 +7,14 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "applicationUrl": "https://localhost:5005"
+        },
+        "Test": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Test"
+            },
+            "applicationUrl": "https://localhost:5005"
         }
     }
 }
