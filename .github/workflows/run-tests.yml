@@ -34,7 +34,7 @@ jobs:
     - name: Run Identity Server
       run: |
         cd IdentityServer
-        dotnet run -d
+        dotnet run --environment 'test' -d
               
               
     - name: Run API
