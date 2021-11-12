@@ -33,7 +33,12 @@ namespace API.Tests.Base
             
             if(TestClient.DefaultRequestHeaders.Contains("IdentityId")) TestClient.DefaultRequestHeaders.Remove("IdentityId");
 
-            TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + await GetToken());
+            string token = await GetToken();
+            if(token != null)
+            {
+                TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+
+            }
             TestClient.DefaultRequestHeaders.Add("IdentityId", identityId.ToString());
         }
 
@@ -68,9 +73,19 @@ namespace API.Tests.Base
 
             HttpClient client = new HttpClient(clientHandler);
             HttpResponseMessage response = await client.SendAsync(request);
-            string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
+            try
+            {
+                string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
 
-            return token;
+                return token;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return null;
         }
     }
 
