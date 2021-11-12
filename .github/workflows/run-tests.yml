@@ -33,7 +33,7 @@ jobs:
       run: docker-compose start rabbitmq
       
     - name: Run all
-      run: cd IdentityServer && dotnet run --launch-profile 'Test' -d && cd ../ && cd API && dotnet run --launch-profile 'Test' -d
+      run: cd IdentityServer && dotnet run --launch-profile 'Test' & && cd ../ && cd API && dotnet run --launch-profile 'Test' &
                     
    # - name: Run API
      # run: |
