@@ -21,9 +21,9 @@ namespace API.Tests.Base
             IHostBuilder builder = Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();//.UseTestServer();
-                    webBuilder.UseUrls("https://localhost:5001");
-                    webBuilder.UseKestrel();
+                    webBuilder.UseStartup<Startup>().UseTestServer();
+                    //webBuilder.UseUrls("https://localhost:5001");
+                    //webBuilder.UseKestrel();
                 })  
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
@@ -42,7 +42,6 @@ namespace API.Tests.Base
                                                                              typeof(DbContextOptions<ApplicationDbContext>));
                 
                 services.Remove(descriptor);
-
                 string databaseName = Guid.NewGuid().ToString();
                 //DbContextOptions<ApplicationDbContext> contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
 
