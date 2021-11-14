@@ -19,7 +19,7 @@ namespace API.Tests.Controllers
     {
         [Theory]
         [InlineData(UserRole.Admin, HttpStatusCode.Created)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.Forbidden)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.Created)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.Created)]
         [InlineData(UserRole.PrUser, HttpStatusCode.Created)]
         [InlineData(UserRole.RegisteredUser, HttpStatusCode.Created)]
@@ -51,7 +51,7 @@ namespace API.Tests.Controllers
 
         [Theory]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.NotFound)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
         [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
