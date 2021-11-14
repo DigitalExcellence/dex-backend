@@ -21,8 +21,9 @@ namespace API.Tests.Base
             IHostBuilder builder = Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>().UseTestServer();
-                })
+                    webBuilder.UseStartup<Startup>();//.UseTestServer();
+                    webBuilder.UseKestrel();
+                })  
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.AddJsonFile("appsettingsapi.Development.json", true, true);
