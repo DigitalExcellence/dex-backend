@@ -22,6 +22,7 @@ namespace API.Tests.Base
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();//.UseTestServer();
+                    webBuilder.UseUrls("https://localhost:5001");
                     webBuilder.UseKestrel();
                 })  
                 .ConfigureAppConfiguration((hostingContext, config) =>
@@ -42,7 +43,6 @@ namespace API.Tests.Base
                 
                 services.Remove(descriptor);
 
-
                 string databaseName = Guid.NewGuid().ToString();
                 //DbContextOptions<ApplicationDbContext> contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
 
@@ -52,7 +52,6 @@ namespace API.Tests.Base
                 });
 
                 ServiceProvider sp = services.BuildServiceProvider();
-
                 using(IServiceScope scope = sp.CreateScope())
                 {
                     IServiceProvider scopedServices = scope.ServiceProvider;
