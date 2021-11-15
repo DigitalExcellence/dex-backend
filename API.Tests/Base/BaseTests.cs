@@ -24,8 +24,8 @@ namespace API.Tests.Base
             //clientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
 
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
-            //TestClient = factory.CreateClient();
-            TestClient = new HttpClient(clientHandler);
+            TestClient = factory.CreateClient();
+            //TestClient = new HttpClient(clientHandler);
             TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
         }
 
