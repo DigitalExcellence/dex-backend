@@ -14,6 +14,7 @@ namespace API.Tests.Base
     public class BaseTests
     {
         protected readonly HttpClient TestClient;
+        protected readonly HttpClient TestClient2;
         private readonly HttpClientHandler clientHandler;
         private string accessToken;
 
@@ -25,6 +26,7 @@ namespace API.Tests.Base
 
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             TestClient = factory.CreateClient();
+            TestClient2 = factory.CreateClient();
             //TestClient = new HttpClient(clientHandler);
             TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
         }
@@ -68,7 +70,7 @@ namespace API.Tests.Base
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5005/connect/token")
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:5005/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };
