@@ -70,7 +70,7 @@ namespace API.Tests.Base
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:5005/connect/token")
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5005/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };
