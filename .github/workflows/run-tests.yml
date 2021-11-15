@@ -43,7 +43,7 @@ jobs:
     - name: Run IdentityServer
       run: |
          cd IdentityServer
-         dotnet run --launch-profile 'Test' --insecure &
+         dotnet run --launch-profile 'Test' --insecure
          
     - name: Trust certificates
       run: |
