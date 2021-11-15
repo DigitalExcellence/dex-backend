@@ -18,6 +18,30 @@ namespace API.Tests.Controllers
     public class ProjectControllerTests : BaseTests
     {
         [Theory]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
+        [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
+        [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
+        [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
+        public async Task GetProject_Returns_Expected_Result_For_All_Roles(
+            UserRole role,
+            HttpStatusCode expectedResult)
+        {
+            // Arrange
+            await AuthenticateAs((int) role);
+
+            
+
+            // Act
+            HttpResponseMessage response = await TestClient.GetAsync("project");
+
+            // Assert
+            response.StatusCode.Should()
+                    .Be(expectedResult);
+        }
+
+
+        [Theory]
         [InlineData(UserRole.Admin, HttpStatusCode.Created)]
         [InlineData(UserRole.Alumni, HttpStatusCode.Created)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.Created)]
