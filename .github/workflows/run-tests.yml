@@ -38,12 +38,12 @@ jobs:
     - name: Run API
       run: |
          cd API
-         dotnet run --launch-profile 'Test' &
+         dotnet run --launch-profile 'Test' --insecure &
          
     - name: Run IdentityServer
       run: |
          cd IdentityServer
-         dotnet run --launch-profile 'Test' &
+         dotnet run --launch-profile 'Test' --insecure &
          
     - name: Trust certificates
       run: |
