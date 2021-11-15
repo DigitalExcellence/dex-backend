@@ -11,6 +11,9 @@ using API;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using API.Tests.Helpers;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 
 namespace API.Tests.Base
 {
@@ -32,30 +35,33 @@ namespace API.Tests.Base
                 });
             return builder;
         }
-
+       
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
-                ServiceDescriptor descriptor = services.SingleOrDefault(d => d.ServiceType ==
-                                                                             typeof(DbContextOptions<ApplicationDbContext>));
-                
-                services.Remove(descriptor);
-                string databaseName = Guid.NewGuid().ToString();
-                //DbContextOptions<ApplicationDbContext> contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType ==
+                        typeof(DbContextOptions<ApplicationDbContext>));
 
-                services.AddDbContext<ApplicationDbContext>(contextOptions =>
+                services.Remove(descriptor);
+
+                services.AddDbContext<ApplicationDbContext>(options =>
                 {
-                    contextOptions.UseInMemoryDatabase(databaseName);
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
 
-                ServiceProvider sp = services.BuildServiceProvider();
-                using(IServiceScope scope = sp.CreateScope())
+               
+
+
+                var sp = services.BuildServiceProvider();
+
+                using(var scope = sp.CreateScope())
                 {
-                    IServiceProvider scopedServices = scope.ServiceProvider;
-                    ApplicationDbContext db = scopedServices.GetRequiredService<ApplicationDbContext>();
-                    ILogger<TestWebApplicationFactory<TStartup>> logger = scopedServices
+                    var scopedServices = scope.ServiceProvider;
+                    var db = scopedServices.GetRequiredService<ApplicationDbContext>();
+                    var logger = scopedServices
                         .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
 
                     db.Database.EnsureCreated();
@@ -63,8 +69,7 @@ namespace API.Tests.Base
                     try
                     {
                         SeedUtility.InitializeDbForTests(db);
-                    }
-                    catch(Exception ex)
+                    } catch(Exception ex)
                     {
                         logger.LogError(ex, "An error occurred seeding the " +
                             "database with test messages. Error: {Message}", ex.Message);
@@ -72,5 +77,43 @@ namespace API.Tests.Base
                 }
             });
         }
+        //protected override void ConfigureWebHost(IWebHostBuilder builder)
+        //{
+        //    builder.ConfigureServices(services =>
+        //    {
+        //        ServiceDescriptor descriptor = services.SingleOrDefault(d => d.ServiceType ==
+        //                                                                     typeof(DbContextOptions<ApplicationDbContext>));
+
+        //        services.Remove(descriptor);
+        //        string databaseName = Guid.NewGuid().ToString();
+        //        //DbContextOptions<ApplicationDbContext> contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
+
+        //        services.AddDbContext<ApplicationDbContext>(contextOptions =>
+        //        {
+        //            contextOptions.UseInMemoryDatabase(databaseName);
+        //        });
+
+        //        ServiceProvider sp = services.BuildServiceProvider();
+        //        using(IServiceScope scope = sp.CreateScope())
+        //        {
+        //            IServiceProvider scopedServices = scope.ServiceProvider;
+        //            ApplicationDbContext db = scopedServices.GetRequiredService<ApplicationDbContext>();
+        //            ILogger<TestWebApplicationFactory<TStartup>> logger = scopedServices
+        //                .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
+
+        //            db.Database.EnsureCreated();
+
+        //            try
+        //            {
+        //                SeedUtility.InitializeDbForTests(db);
+        //            }
+        //            catch(Exception ex)
+        //            {
+        //                logger.LogError(ex, "An error occurred seeding the " +
+        //                    "database with test messages. Error: {Message}", ex.Message);
+        //            }
+        //        }
+        //    });
+        //}
     }
 }

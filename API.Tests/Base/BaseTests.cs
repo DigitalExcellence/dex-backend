@@ -8,13 +8,15 @@ using Newtonsoft.Json;
 using API.Resources;
 using Data;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
+using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace API.Tests.Base
 {
-    public class BaseTests
+    public class BaseTests : IClassFixture <WebApplicationFactory<Startup>>
     {
         protected readonly HttpClient TestClient;
-        protected readonly HttpClient TestClient2;
+        protected readonly HttpClient AuthClient;
         private readonly HttpClientHandler clientHandler;
         private string accessToken;
 
@@ -25,10 +27,10 @@ namespace API.Tests.Base
             //clientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
 
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
+            AuthClient = factory.CreateClient();
             TestClient = factory.CreateClient();
-            TestClient2 = factory.CreateClient();
-            //TestClient = new HttpClient(clientHandler);
-            TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
+            AuthClient.BaseAddress = new Uri("https://localhost:5005/");
+            TestClient.BaseAddress = new Uri("http://localhost:5000/api/");
         }
 
         protected async Task AuthenticateAs(int identityId)
@@ -66,6 +68,7 @@ namespace API.Tests.Base
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             dict.Add("client_id", "dex-api-client");
+            //dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
             dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
             dict.Add("grant_type", "client_credentials");
