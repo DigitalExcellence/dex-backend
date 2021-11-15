@@ -45,18 +45,20 @@ jobs:
          cd IdentityServer
          dotnet run --launch-profile 'Test' &
          
-    #- name: Trust certificates
-      #run: |
-          #dotnet tool install --tool-path ./ dotnet-certificate-tool --version 2.0.1
+    - name: Trust certificates
+      run: |
+          dotnet tool install --tool-path ./ dotnet-certificate-tool --version 2.0.1
           
           
-    #- name: Trust certificates
-      #run: |
-            #dotnet dev-certs https --clean
-            #dotnet dev-certs https --trust -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
-      #run: |
-          #dotnet dev-certs https --clean
-          #dotnet dev-certs https -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
+    - name: Trust certificates
+      run: |
+            dotnet dev-certs https --clean
+            dotnet dev-certs https --trust -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
+            
+    - name: Trust certificates 
+      run: |
+          dotnet dev-certs https --clean
+          dotnet dev-certs https -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
       
     - name: Test
       run: dotnet test --no-restore --verbosity normal
