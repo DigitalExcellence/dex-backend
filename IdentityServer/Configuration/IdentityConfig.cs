@@ -229,6 +229,39 @@ namespace IdentityServer.Configuration
                                     {
                                         new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication)
                                     }
+                       },
+                        new Client
+                       {
+                           ClientId = "Test",
+                           ClientName = "Test",
+                           AllowedGrantTypes = GrantTypes.ClientCredentials,
+                           ClientSecrets =
+                           {
+                               new Secret("Test".Sha256())
+                           },
+                           AllowedScopes =
+                           {
+                               "dex-api",
+                               nameof(Defaults.Scopes.ProjectRead),
+                               nameof(Defaults.Scopes.AdminProjectWrite),
+                               nameof(Defaults.Scopes.ProjectWrite),
+                               nameof(Defaults.Scopes.UserWrite),
+                               nameof(Defaults.Scopes.UserRead),
+                               nameof(Defaults.Scopes.CategoryWrite),
+                               nameof(Defaults.Scopes.CategoryRead),
+                               nameof(Defaults.Scopes.HighlightRead),
+                               nameof(Defaults.Scopes.HighlightWrite),
+                               nameof(Defaults.Scopes.EmbedWrite),
+                               nameof(Defaults.Scopes.EmbedRead),
+                               nameof(Defaults.Scopes.FileWrite),
+                               nameof(Defaults.Scopes.UserTaskWrite),
+                               nameof(Defaults.Scopes.WizardPageWrite)
+                           },
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication),
+
+                                    }
                        }
                    };
         }
