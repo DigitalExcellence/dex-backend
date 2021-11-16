@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    
     - uses: actions/checkout@v2
 
     - name: Setup .NET Core
@@ -22,12 +21,7 @@ jobs:
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
-      
-      
-    - name: Create Docker Containers
-      run: docker-compose up --build
-         
-      
+
     - name: Test
       run: dotnet test --no-restore --verbosity normal
       env:
