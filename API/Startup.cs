@@ -54,6 +54,7 @@ using Microsoft.EntityFrameworkCore.Sqlite;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using System.Net.Http;
 
 namespace API
 {
@@ -144,6 +145,7 @@ namespace API
                         options.ApiName = Config.Frontend.ClientId;
                         options.ApiSecret = Config.Frontend.ClientSecret;
                         options.EnableCaching = true;
+                        options.JwtBackChannelHandler = new HttpClientHandler { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator };
                     });
 
             services.AddAuthorization(o =>

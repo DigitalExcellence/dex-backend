@@ -10,36 +10,48 @@ using Data;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Security.Claims;
+using IdentityModel.Client;
+using IdentityServer4;
 
 namespace API.Tests.Base
 {
-    public class BaseTests : IClassFixture <WebApplicationFactory<Startup>>
+
+
+
+
+    public class BaseTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         protected readonly HttpClient TestClient;
         protected readonly HttpClient AuthClient;
         private readonly HttpClientHandler clientHandler;
         private string accessToken;
 
+
         protected BaseTests()
         {
             clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            //clientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
 
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             AuthClient = factory.CreateClient();
-            TestClient = factory.CreateClient();
+            TestClient = new HttpClient(clientHandler);
             AuthClient.BaseAddress = new Uri("https://localhost:5005/");
-            TestClient.BaseAddress = new Uri("http://localhost:5000/api/");
+            TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
         }
 
         protected async Task AuthenticateAs(int identityId)
         {
             if(TestClient.DefaultRequestHeaders.Contains("Authorization")) TestClient.DefaultRequestHeaders.Remove("Authorization");
-            
+
             if(TestClient.DefaultRequestHeaders.Contains("IdentityId")) TestClient.DefaultRequestHeaders.Remove("IdentityId");
 
             string token = await GetToken();
+
+
             if(token != null)
             {
                 TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
@@ -67,32 +79,48 @@ namespace API.Tests.Base
         private async Task<string> GetAccessToken()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict.Add("client_id", "dex-api-client");
+            dict.Add("client_id", "integration-test");
             //dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
-            dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
+            dict.Add("client_secret", "testtest");
             dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
-            dict.Add("grant_type", "client_credentials");
+            dict.Add("grant_type", "code");
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5005/connect/token")
             {
                 Content = new FormUrlEncodedContent(dict)
             };
 
-            HttpClient client = new HttpClient(clientHandler);
-            HttpResponseMessage response = await client.SendAsync(request);
-            try
+            var disco = await TestClient.GetDiscoveryDocumentAsync("https://localhost:5005");
+            var response = await TestClient.RequestTokenAsync(new TokenRequest
             {
-                string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
+                Address = disco.TokenEndpoint,
+                GrantType = IdentityModel.OidcConstants.GrantTypes.ClientCredentials,
+                ClientId = "Test",
+                ClientSecret = "Test"
+                //Parameters =
+                //            {
+                //                { "username", "bob"},
+                //                { "password", "bob"},
+                //                { "scope", "ProjectWrite"}
+                //            }
+            });
 
-                return token;
+            Console.WriteLine(response);
+            //HttpClient client = new HttpClient(clientHandler);
+            //HttpResponseMessage response = await client.SendAsync(request);
+            //try
+            //{
+            //    string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            //    return token;
 
-            return null;
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+
+            return response.AccessToken;
         }
     }
 

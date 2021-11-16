@@ -14,6 +14,7 @@ using API.Tests.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace API.Tests.Base
 {
@@ -25,8 +26,8 @@ namespace API.Tests.Base
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>().UseTestServer();
-                    //webBuilder.UseUrls("https://localhost:5001");
-                    //webBuilder.UseKestrel();
+                    //webBuilder.UseUrls("http://localhost:5001/api/");
+                    webBuilder.UseKestrel();
                 })  
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
@@ -35,10 +36,33 @@ namespace API.Tests.Base
                 });
             return builder;
         }
-       
+
+
+        //protected virtual void ConfigureServices(IServiceCollection services)
+        //{
+        //    //services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+        //    //{
+        //    //    var config = new OpenIdConnectConfiguration()
+        //    //    {
+        //    //        Issuer = MockJwtTokens.Issuer
+        //    //    };
+
+        //    //    config.SigningKeys.Add(MockJwtTokens.SecurityKey);
+        //    //    options.Configuration = config;
+        //    //});
+        //}
+
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            //builder.ConfigureTestServices(ConfigureServices);
+            builder.ConfigureLogging((WebHostBuilderContext context, ILoggingBuilder loggingBuilder) =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddConsole(options => options.IncludeScopes = true);
+            });
+
+
             builder.ConfigureServices(services =>
             {
                 var descriptor = services.SingleOrDefault(
@@ -52,7 +76,16 @@ namespace API.Tests.Base
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
 
-               
+                //services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+                //{
+                //    var config = new OpenIdConnectConfiguration()
+                //    {
+                //        Issuer = MockJwtTokens.Issuer
+                //    };
+
+                //    config.SigningKeys.Add(MockJwtTokens.SecurityKey);
+                //    options.Configuration = config;
+                //});
 
 
                 var sp = services.BuildServiceProvider();
