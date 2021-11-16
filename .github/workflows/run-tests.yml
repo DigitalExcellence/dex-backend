@@ -37,17 +37,30 @@ jobs:
     - name: Docker Compose
       run: docker-compose up --build -d
 
-    - name: Sleep for 90 seconds
+    - name: Sleep for 45 seconds
       uses: juliangruber/sleep-action@v1
       with:
-        time: 90s
+        time: 45s
         
+        
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
         
     - name: XUnit integration tests
       run: dotnet test --no-restore --verbosity normal
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
+
 
     - name: Setup node
       uses: actions/setup-node@v1
