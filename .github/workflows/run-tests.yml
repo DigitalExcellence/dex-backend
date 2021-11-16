@@ -23,37 +23,9 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
       
-    - name: Docker Compose Build
-      run: docker-compose build -d
       
     - name: Create Docker Containers
-      run: docker-compose up --no-start
-      
-    - name: Run RabbitMQ Container
-      run: docker-compose start rabbitmq
-      
-    #- name: Run all
-      #run: cd IdentityServer && dotnet run --launch-profile 'Test' & && cd ../ && cd API && dotnet run --launch-profile 'Test' &
-      
-    - name: Trust certificates
-      run: |
-          dotnet tool install --tool-path ./ dotnet-certificate-tool --version 2.0.1
-          
-          
-    - name: Trust certificates
-      run: |
-            dotnet dev-certs https --clean
-            dotnet dev-certs https -ep ./dex-api.pfx -p xI90DrNea7M6UJFNDwip6t
-                    
-    - name: Run API
-      run: |
-         cd API
-         dotnet run --launch-profile 'Test' --insecure &
-         
-    - name: Run IdentityServer
-      run: |
-         cd IdentityServer
-         dotnet run --launch-profile 'Test' --insecure &
+      run: docker-compose up --build
          
       
     - name: Test
