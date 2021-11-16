@@ -44,7 +44,7 @@ jobs:
         
         
     - name: XUnit integration tests
-      run: dotnet test --no-restore --verbosity normal --filter FullyQualifiedName~API.Tests
+      run: dotnet test --no-restore --verbosity normal --filter API.Tests
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
