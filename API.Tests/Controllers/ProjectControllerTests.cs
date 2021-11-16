@@ -50,6 +50,24 @@ namespace API.Tests.Controllers
         }
 
 
+
+        [Theory]
+        [InlineData(UserRole.Admin, HttpStatusCode.Created)]
+        public async Task TestTest(
+            UserRole role,
+            HttpStatusCode expectedResult)
+        {
+            // Arrange
+            await AuthenticateAs((int) role);
+
+            HttpResponseMessage response = new HttpResponseMessage();
+            response.StatusCode = (HttpStatusCode) 500;
+
+            // Assert
+            response.StatusCode.Should()
+                    .Be(expectedResult);
+        }
+
         //[Theory]
         //[InlineData(UserRole.Admin, HttpStatusCode.OK)]
         //[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
