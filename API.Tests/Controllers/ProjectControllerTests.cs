@@ -92,6 +92,21 @@ namespace API.Tests.Controllers
            
         }
 
+
+
+        [Theory]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        public async Task TestToFail(
+            UserRole role,
+            HttpStatusCode expectedResult)
+        {
+            int a = 1;
+            int b = 2;
+
+            a.Should().Be(b);
+
+        }
+
         ////[Theory]
         ////[InlineData(UserRole.Admin, HttpStatusCode.OK)]
         ////[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
