@@ -37,7 +37,7 @@ jobs:
 
 
     - name: XUnit Integration tests via Docker compose-test.yml
-      run: docker-compose -f docker-compose-test.yml up --build -d
+      run: docker-compose -f docker-compose-test.yml up --build
 
 
     - name: Sleep for 20 seconds
