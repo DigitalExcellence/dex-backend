@@ -172,7 +172,7 @@ services:
         
   xunit:
     container_name: xunit
-    restart: on-failure:3
+    restart: on-failure:1
     build:
       context: .
       dockerfile: API.Tests/Dockerfile
