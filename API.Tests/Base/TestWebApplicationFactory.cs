@@ -10,11 +10,10 @@ using Microsoft.Extensions.Hosting;
 using API;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using API.Tests.Helpers;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using API.Tests.Helpers;
 
 namespace API.Tests.Base
 {
@@ -26,9 +25,7 @@ namespace API.Tests.Base
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>().UseTestServer();
-                    //webBuilder.UseUrls("http://localhost:5001/api/");
-                    webBuilder.UseKestrel();
-                })  
+                })
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.AddJsonFile("appsettingsapi.Development.json", true, true);
@@ -36,21 +33,7 @@ namespace API.Tests.Base
                 });
             return builder;
         }
-
-
-        //protected virtual void ConfigureServices(IServiceCollection services)
-        //{
-        //    //services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
-        //    //{
-        //    //    var config = new OpenIdConnectConfiguration()
-        //    //    {
-        //    //        Issuer = MockJwtTokens.Issuer
-        //    //    };
-
-        //    //    config.SigningKeys.Add(MockJwtTokens.SecurityKey);
-        //    //    options.Configuration = config;
-        //    //});
-        //}
+       
 
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -75,17 +58,6 @@ namespace API.Tests.Base
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
-
-                //services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
-                //{
-                //    var config = new OpenIdConnectConfiguration()
-                //    {
-                //        Issuer = MockJwtTokens.Issuer
-                //    };
-
-                //    config.SigningKeys.Add(MockJwtTokens.SecurityKey);
-                //    options.Configuration = config;
-                //});
 
 
                 var sp = services.BuildServiceProvider();

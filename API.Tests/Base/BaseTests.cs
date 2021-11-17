@@ -5,55 +5,40 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using API;
 using Newtonsoft.Json;
-using API.Resources;
 using Data;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Security.Claims;
 using IdentityModel.Client;
-using IdentityServer4;
 
 namespace API.Tests.Base
 {
-
-    public class BaseTests : IClassFixture<WebApplicationFactory<Startup>>
+    public class BaseTests
     {
         protected readonly HttpClient TestClient;
         protected readonly HttpClient AuthClient;
-        private readonly HttpClientHandler clientHandler;
         private string accessToken;
-
+        private string identityAddress = Environment.GetEnvironmentVariable("IdentityAddress");
+        public string apiAddress = Environment.GetEnvironmentVariable("ApiAddress");
 
         protected BaseTests()
         {
-            clientHandler = new HttpClientHandler();
+            HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
-            AuthClient = factory.CreateClient();
+            //TestClient = factory.CreateClient();
+            AuthClient = new HttpClient(clientHandler);
             TestClient = new HttpClient(clientHandler);
-            AuthClient.BaseAddress = new Uri("https://localhost:5005/");
-            TestClient.BaseAddress = new Uri("https://localhost:5001/api/");
+            AuthClient.BaseAddress = new Uri(identityAddress);
+            TestClient.BaseAddress = new Uri(apiAddress + "api/");
         }
 
         protected async Task AuthenticateAs(int identityId)
         {
             if(TestClient.DefaultRequestHeaders.Contains("Authorization")) TestClient.DefaultRequestHeaders.Remove("Authorization");
-
+            
             if(TestClient.DefaultRequestHeaders.Contains("IdentityId")) TestClient.DefaultRequestHeaders.Remove("IdentityId");
 
-            string token = await GetToken();
-
-
-            if(token != null)
-            {
-                TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-
-            }
+            TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + await GetToken());
             TestClient.DefaultRequestHeaders.Add("IdentityId", identityId.ToString());
         }
 
@@ -69,25 +54,45 @@ namespace API.Tests.Base
 
         private async Task<string> RenewAccessToken()
         {
-            accessToken = await GetAccessToken();
+            accessToken = await GetJwtAsync();
             return accessToken;
         }
 
-        private async Task<string> GetAccessToken()
+        //private async Task<string> GetAccessToken()
+        //{
+        //    Dictionary<string, string> dict = new Dictionary<string, string>();
+        //    dict.Add("client_id", "dex-api-client");
+        //    dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
+        //    dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
+        //    dict.Add("grant_type", "client_credentials");
+
+        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5004/connect/token")
+        //    {
+        //        Content = new FormUrlEncodedContent(dict)
+        //    };
+
+        //    HttpClient client = new HttpClient();
+        //    HttpResponseMessage response = await client.SendAsync(request);
+        //    string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
+
+        //    return token;
+        //}
+
+        protected async Task<string> GetJwtAsync()
         {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            dict.Add("client_id", "integration-test");
+            //Dictionary<string, string> dict = new Dictionary<string, string>();
+            //dict.Add("client_id", "dex-api-client");
             //dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
-            dict.Add("client_secret", "testtest");
-            dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
-            dict.Add("grant_type", "code");
+            //dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
+            //dict.Add("grant_type", "client_credentials");
+            
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5005/connect/token")
-            {
-                Content = new FormUrlEncodedContent(dict)
-            };
+            var disco = await TestClient.GetDiscoveryDocumentAsync(identityAddress);
+            Console.WriteLine(identityAddress);
+            Console.WriteLine(disco.HttpResponse);
+            Console.WriteLine(disco.DeviceAuthorizationEndpoint);
+            Console.WriteLine(disco.Issuer);
 
-            var disco = await TestClient.GetDiscoveryDocumentAsync("https://localhost:5005");
             var response = await TestClient.RequestTokenAsync(new TokenRequest
             {
                 Address = disco.TokenEndpoint,
@@ -101,8 +106,9 @@ namespace API.Tests.Base
                 //                { "scope", "ProjectWrite"}
                 //            }
             });
-
-            Console.WriteLine(response);
+            Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            Console.WriteLine(response.HttpStatusCode);
+            Console.WriteLine(response.AccessToken);
             //HttpClient client = new HttpClient(clientHandler);
             //HttpResponseMessage response = await client.SendAsync(request);
             //try
