@@ -261,7 +261,11 @@ namespace IdentityServer.Configuration
                                     {
                                         new Claim(JwtClaimTypes.Role, Defaults.Roles.BackendApplication),
 
-                                    }
+                                    },
+
+                           AccessTokenLifetime = 86400,
+                           IdentityTokenLifetime = 86400
+                            
                        }
                    };
         }

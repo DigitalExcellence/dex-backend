@@ -181,6 +181,11 @@ services:
     environment:
       - ApiAddress=https://api:5001/
       - IdentityAddress=http://identity:5004/
+      - Config__RabbitMQ__Hostname=rabbitmq
+      - Config__RabbitMQ__Username=test
+      - Config__RabbitMQ__Password=test
+    networks:
+      mssql-network:
 
       
       

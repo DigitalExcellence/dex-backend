@@ -61,31 +61,35 @@ namespace API.Tests.Controllers
             UserRole role,
             HttpStatusCode expectedResult)
         {
-            // Arrange
-            await AuthenticateAs((int) role);
+          
 
-            Faker<Project> projectToFake = new Faker<Project>()
-                                           .RuleFor(p => p.UserId, 1)
-                                           .RuleFor(p => p.Uri, f => f.Internet.Url())
-                                           .RuleFor(p => p.Name, f => f.Commerce.ProductName())
-                                           .RuleFor(p => p.Description, f => f.Lorem.Sentences(10))
-                                           .RuleFor(p => p.ShortDescription, f => f.Lorem.Sentences(1));
-            Project project = projectToFake.Generate();
-            project.Created = DateTime.Now.AddDays(-2);
-            project.Updated = DateTime.Now;
+                // Arrange
+                await AuthenticateAs((int) role);
 
-            // Act
-            HttpResponseMessage addProjectResponse = await TestClient.PostAsJsonAsync("project", project);
-            var responseContent = await addProjectResponse.Content.ReadAsStringAsync();
-            var projectToDelete = JsonConvert.DeserializeObject<Project>(responseContent);
+                Faker<Project> projectToFake = new Faker<Project>()
+                                               .RuleFor(p => p.UserId, 1)
+                                               .RuleFor(p => p.Uri, f => f.Internet.Url())
+                                               .RuleFor(p => p.Name, f => f.Commerce.ProductName())
+                                               .RuleFor(p => p.Description, f => f.Lorem.Sentences(10))
+                                               .RuleFor(p => p.ShortDescription, f => f.Lorem.Sentences(1));
+                Project project = projectToFake.Generate();
+                project.Created = DateTime.Now.AddDays(-2);
+                project.Updated = DateTime.Now;
 
 
-            await AuthenticateAs((int) role);
 
-            HttpResponseMessage response = await TestClient.DeleteAsync($"project/{projectToDelete.Id}");
+                HttpResponseMessage addProjectResponse = await TestClient.PostAsJsonAsync("project", project);
+                var responseContent = await addProjectResponse.Content.ReadAsStringAsync();
+                var projectToDelete = JsonConvert.DeserializeObject<Project>(responseContent);
 
-            // Assert
-            response.StatusCode.Should().Be(expectedResult);
+
+                HttpResponseMessage response = await TestClient.DeleteAsync($"project/{projectToDelete.Id}");
+
+
+
+                // Assert
+                response.StatusCode.Should().Be(expectedResult);
+           
         }
 
         ////[Theory]

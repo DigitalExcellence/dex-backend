@@ -4,10 +4,10 @@ COPY . .
 
 
 ENV ApiAddress = "https://api:5001/"
-ENV IdentityAddress = "http://identity:5004/"
+ENV IdentityAddress = "https://identity:5005/"
 
 
 WORKDIR /API.Tests
 
 
-ENTRYPOINT ["dotnet", "test","--filter 02_API.Tests"]
+ENTRYPOINT ["dotnet", "test"]

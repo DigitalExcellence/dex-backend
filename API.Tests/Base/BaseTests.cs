@@ -38,7 +38,13 @@ namespace API.Tests.Base
             
             if(TestClient.DefaultRequestHeaders.Contains("IdentityId")) TestClient.DefaultRequestHeaders.Remove("IdentityId");
 
-            TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + await GetToken());
+            string token = await GetToken();
+
+            if(token == null)
+            {
+                throw new Exception("NO JWT TOKEN!!!!!!!!!!!!!!!!!!!!!");
+            }
+            TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
             TestClient.DefaultRequestHeaders.Add("IdentityId", identityId.ToString());
         }
 
@@ -87,43 +93,46 @@ namespace API.Tests.Base
             //dict.Add("grant_type", "client_credentials");
             
 
-            var disco = await TestClient.GetDiscoveryDocumentAsync(identityAddress);
-            Console.WriteLine(identityAddress);
-            Console.WriteLine(disco.HttpResponse);
-            Console.WriteLine(disco.DeviceAuthorizationEndpoint);
-            Console.WriteLine(disco.Issuer);
+            //DiscoveryDocumentResponse disco = await TestClient.GetDiscoveryDocumentAsync(identityAddress);
+            //if(disco.TokenEndpoint == null || disco.TokenEndpoint.Equals(""))
+            //{
+            //    throw new Exception("disco doc token endpoint is null," + identityAddress + disco.TokenEndpoint);
+            //}
+            
+            //Console.WriteLine(identityAddress);
+            //Console.WriteLine(disco.HttpResponse);
+            //Console.WriteLine(disco.DeviceAuthorizationEndpoint);
+            //Console.WriteLine(disco.Issuer);
 
-            var response = await TestClient.RequestTokenAsync(new TokenRequest
+            try
             {
-                Address = disco.TokenEndpoint,
-                GrantType = IdentityModel.OidcConstants.GrantTypes.ClientCredentials,
-                ClientId = "Test",
-                ClientSecret = "Test"
-                //Parameters =
-                //            {
-                //                { "username", "bob"},
-                //                { "password", "bob"},
-                //                { "scope", "ProjectWrite"}
-                //            }
-            });
-            Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            Console.WriteLine(response.HttpStatusCode);
-            Console.WriteLine(response.AccessToken);
-            //HttpClient client = new HttpClient(clientHandler);
-            //HttpResponseMessage response = await client.SendAsync(request);
-            //try
-            //{
-            //    string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
-
-            //    return token;
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
-
-            return response.AccessToken;
+                if(identityAddress == null)
+                {
+                    Console.WriteLine("identityadress null@1123!!!!@@@#$%^&");
+                }
+                TokenResponse response = await TestClient.RequestTokenAsync(new TokenRequest
+                {
+                    Address = identityAddress+"connect/token",
+                    GrantType = IdentityModel.OidcConstants.GrantTypes.ClientCredentials,
+                    ClientId = "Test",
+                    ClientSecret = "Test",
+                    Parameters =
+                                {
+                                    { "username", "bob"},
+                                    { "password", "bob"},
+                                    { "scope", "ProjectWrite"}
+                                }
+                });
+                Console.WriteLine(response);
+                Console.WriteLine(response.AccessToken);
+                return response.AccessToken;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
+            return null;
         }
     }
 
