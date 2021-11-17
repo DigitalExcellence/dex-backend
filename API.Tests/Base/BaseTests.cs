@@ -20,9 +20,6 @@ using IdentityServer4;
 namespace API.Tests.Base
 {
 
-
-
-
     public class BaseTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         protected readonly HttpClient TestClient;

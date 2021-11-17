@@ -120,8 +120,9 @@ namespace API
                 }
                 else
                 {
-                    o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
-                        sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
+                    o.UseInMemoryDatabase("inMemoryTestDatabase");
+                    //o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
+                    //    sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
                 }
             });
 
