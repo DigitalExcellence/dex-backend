@@ -5,7 +5,7 @@ on:
     branches: [ develop, master ]
 
 jobs:
-  unit-test:
+  unit-tests:
     runs-on: ubuntu-18.04
 
     steps:
@@ -28,39 +28,23 @@ jobs:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
 
-  integration-test:
+
+  XUnit_And_Postman_Integration-tests:
     runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Docker Compose
+
+    - name: XUnit Integration tests via Docker compose-test.yml
       run: docker-compose -f docker-compose-test.yml up --build -d
 
-    - name: Sleep for 90 seconds
+
+    - name: Sleep for 20 seconds
       uses: juliangruber/sleep-action@v1
       with:
-        time: 90s
-        
-        
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
-
-    - name: Install dependencies
-      run: dotnet restore
-
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-
-        
-    - name: XUnit integration tests
-      run: dotnet test --no-restore --verbosity normal
-      env:
-        App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
-        App__SendGrid__EmailFrom: test@dex.software
-
+        time: 20s
+    
 
     - name: Setup node
       uses: actions/setup-node@v1
