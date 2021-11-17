@@ -170,22 +170,22 @@ services:
         
         
         
-  # xunit:
-    # container_name: xunit
-    # restart: on-failure
-    # build:
-      # context: .
-      # dockerfile: API.Tests/Dockerfile
-    # depends_on:
-      # - api
-    # environment:
-      # - ApiAddress=https://api:5001/
-      # - IdentityAddress=http://identity:5004/
-      # - Config__RabbitMQ__Hostname=rabbitmq
-      # - Config__RabbitMQ__Username=test
-      # - Config__RabbitMQ__Password=test
-    # networks:
-      # mssql-network:
+  xunit:
+    container_name: xunit
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: API.Tests/Dockerfile
+    depends_on:
+      - api
+    environment:
+      - ApiAddress=https://api:5001/
+      - IdentityAddress=http://identity:5004/
+      - Config__RabbitMQ__Hostname=rabbitmq
+      - Config__RabbitMQ__Username=test
+      - Config__RabbitMQ__Password=test
+    networks:
+      mssql-network:
 
       
       
