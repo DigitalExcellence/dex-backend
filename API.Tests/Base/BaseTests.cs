@@ -25,7 +25,6 @@ namespace API.Tests.Base
             clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
             TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
-            //TestClient = factory.CreateClient();
             AuthClient = new HttpClient(clientHandler);
             TestClient = new HttpClient(clientHandler);
             AuthClient.BaseAddress = new Uri(identityAddress);
@@ -64,45 +63,10 @@ namespace API.Tests.Base
             return accessToken;
         }
 
-        //private async Task<string> GetAccessToken()
-        //{
-        //    Dictionary<string, string> dict = new Dictionary<string, string>();
-        //    dict.Add("client_id", "dex-api-client");
-        //    dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
-        //    dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
-        //    dict.Add("grant_type", "client_credentials");
-
-        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://localhost:5004/connect/token")
-        //    {
-        //        Content = new FormUrlEncodedContent(dict)
-        //    };
-
-        //    HttpClient client = new HttpClient();
-        //    HttpResponseMessage response = await client.SendAsync(request);
-        //    string token = JsonConvert.DeserializeObject<AccessTokenReponse>(await response.Content.ReadAsStringAsync()).Access_token;
-
-        //    return token;
-        //}
+        
 
         protected async Task<string> GetJwtAsync()
         {
-            //Dictionary<string, string> dict = new Dictionary<string, string>();
-            //dict.Add("client_id", "dex-api-client");
-            //dict.Add("client_secret", "Q!P5kqCukQBe77cVk5dqWHqx#8FaC2fDN&bstyxrHtw%5R@3Cz*Z");
-            //dict.Add("scope", "ProjectRead ProjectWrite UserRead UserWrite HighlightRead HighlightWrite");
-            //dict.Add("grant_type", "client_credentials");
-            
-
-            //DiscoveryDocumentResponse disco = await TestClient.GetDiscoveryDocumentAsync(identityAddress);
-            //if(disco.TokenEndpoint == null || disco.TokenEndpoint.Equals(""))
-            //{
-            //    throw new Exception("disco doc token endpoint is null," + identityAddress + disco.TokenEndpoint);
-            //}
-            
-            //Console.WriteLine(identityAddress);
-            //Console.WriteLine(disco.HttpResponse);
-            //Console.WriteLine(disco.DeviceAuthorizationEndpoint);
-            //Console.WriteLine(disco.Issuer);
 
             try
             {

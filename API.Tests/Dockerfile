@@ -11,3 +11,7 @@ WORKDIR /API.Tests
 
 
 ENTRYPOINT ["dotnet", "test"]
+
+
+
+
