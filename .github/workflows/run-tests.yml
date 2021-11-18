@@ -46,7 +46,9 @@ jobs:
         time: 50s
         
     - name: Run XUnit container
-      run: docker build api.tests
+      run: |
+        cd api.tests
+        docker build .
         
     - name: Run XUnit container
       run: docker run -e "ApiAddress=https://api:5001/" -e "IdentityAddress=http://identity:5004/" --network  dex-backend_mssql-network dex-backend_xunit
