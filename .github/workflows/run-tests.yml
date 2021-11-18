@@ -37,7 +37,7 @@ jobs:
 
 
     - name: Docker compose up
-      run: docker-compose up --build
+      run: docker-compose up --build -d
 
 
     - name: Sleep for 90 seconds
