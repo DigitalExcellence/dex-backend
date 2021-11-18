@@ -43,6 +43,7 @@ services:
       - App__JobScheduler__ClientId=dex-jobscheduler
       - App__JobScheduler__ClientSecret=test
       - App__ApiAuthentication__ClientSecret=test
+      - Use__In_Memory_Database=true
     networks:
       mssql-network:
     ports:
