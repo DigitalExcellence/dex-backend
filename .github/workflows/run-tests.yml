@@ -61,7 +61,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./API.Tests
-        push: true
+        push: false
         tags: dex-backend_xunit:latest
         
     - name: Run XUnit container
