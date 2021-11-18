@@ -84,7 +84,7 @@ namespace API.Tests.Controllers
 
         [Theory]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
+        //[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
         [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
@@ -121,21 +121,6 @@ namespace API.Tests.Controllers
                 // Assert
                 response.StatusCode.Should().Be(expectedResult);
            
-        }
-
-
-
-        [Theory]
-        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        public async Task TestToFail(
-            UserRole role,
-            HttpStatusCode expectedResult)
-        {
-            int a = 1;
-            int b = 2;
-
-            a.Should().Be(b);
-
         }
 
         ////[Theory]
