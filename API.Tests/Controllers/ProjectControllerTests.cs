@@ -53,6 +53,37 @@ namespace API.Tests.Controllers
 
         [Theory]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        public async Task GetAPI(
+            UserRole role,
+            HttpStatusCode expectedResult)
+        {
+
+            HttpResponseMessage response = await TestClient.GetAsync($"project");
+
+
+
+            // Assert
+            response.StatusCode.Should().Be(expectedResult);
+
+        }
+
+        [Theory]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        public async Task GetIdentityServer(
+            UserRole role,
+            HttpStatusCode expectedResult)
+        {
+
+            HttpResponseMessage response = await AuthClient.GetAsync($"/account/login");
+
+            // Assert
+            response.StatusCode.Should().Be(expectedResult);
+
+        }
+
+
+        [Theory]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
         [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
