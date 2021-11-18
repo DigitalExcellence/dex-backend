@@ -47,7 +47,7 @@ jobs:
         
     - name: Run XUnit container
       run: |
-        cd api.tests
+        cd ./api.tests
         docker build .
         
     - name: Run XUnit container
