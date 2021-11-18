@@ -47,8 +47,7 @@ jobs:
         
     - name: Build Docker XUnit image
       run: |
-      working-directory: API.Tests
-        cd API.Tests
+        cd ./API.Tests
         docker build . -t dex-backend_xunit
         
     - name: Run XUnit container
