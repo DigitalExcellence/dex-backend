@@ -101,13 +101,15 @@ namespace API
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            string useInMemDatabase = System.Environment.GetEnvironmentVariable("Use__In_Memory_Database");
             IdentityModelEventSource.ShowPII = true;
             services.AddDbContext<ApplicationDbContext>(o =>
             {
-                if (Environment.IsEnvironment("test"))
+                if(useInMemDatabase != null && useInMemDatabase.Equals("true"))
                 {
                     o.UseInMemoryDatabase("inMemoryTestDatabase");
                 }
+                
                 else
                 {
                     o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),

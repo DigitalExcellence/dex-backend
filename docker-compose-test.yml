@@ -95,6 +95,7 @@ services:
       - App__Elastic__IndexUrl=projects/ 
       - App__SendGrid__EmailFrom=test
       - App__SendGrid__ApiKey=test
+      - Use__In_Memory_Database=true
     networks:
       mssql-network:
       rabbitmq-network:
@@ -168,26 +169,6 @@ services:
         rabbitmq-network:
         mssql-network:
         
-        
-        
-  xunit:
-    container_name: xunit
-    restart: on-failure:2
-    build:
-      context: .
-      dockerfile: API.Tests/Dockerfile
-    depends_on:
-      - api
-    environment:
-      - ApiAddress=https://api:5001/
-      - IdentityAddress=http://identity:5004/
-    networks:
-      mssql-network:
-
-      
-      
-    
-      
     
 
 volumes:
