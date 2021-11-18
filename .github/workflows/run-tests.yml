@@ -49,7 +49,7 @@ jobs:
       run: docker build -t dex-backend_xunit -f API.Tests/Dockerfile .
         
     - name: Run XUnit container
-      run: docker run -e "ApiAddress=https://api:5001/" -e "IdentityAddress=http://identity:5004/" --network  dex-backend_mssql-network dex-backend_xunit
+      run: docker run -e "ApiAddress=https://api:5001/" -e "IdentityAddress=http://identity:5004/" -e "ASPNETCORE_ENVIRONMENT=Test" --network  dex-backend_mssql-network dex-backend_xunit
     
 
     - name: Setup node
