@@ -62,7 +62,7 @@ jobs:
       with:
         context: ./API.Tests
         push: false
-        tags: dex-backend_xunit:latest
+        tags: dex-backend_xunit
         
     - name: Run XUnit container
       run: docker run -e "ApiAddress=https://api:5001/" -e "IdentityAddress=http://identity:5004/" --network  dex-backend_mssql-network dex-backend_xunit
