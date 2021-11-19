@@ -24,9 +24,11 @@ namespace API.Tests.Controllers
         {
             // Arrange
             await AuthenticateAs(role);
+            Project project = SeedUtility.RandomProject();
+            await TestClient.PostAsJsonAsync("project", project);
 
             // Act
-            HttpResponseMessage response = await TestClient.PostAsJsonAsync("highlight", SeedUtility.RandomHighlight());
+            HttpResponseMessage response = await TestClient.PostAsJsonAsync("highlight", project);
 
             // Assert
             response.StatusCode.Should().Be(expectedResult);
