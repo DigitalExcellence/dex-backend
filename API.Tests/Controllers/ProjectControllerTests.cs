@@ -95,18 +95,18 @@ namespace API.Tests.Controllers
         //}
 
         [Theory]
-        [InlineData(UserRole.RegisteredUser, HttpStatusCode.Unauthorized)]
+        [InlineData(UserRole.RegisteredUser, HttpStatusCode.Forbidden)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        [InlineData(UserRole.DataOfficer, HttpStatusCode.NotFound)]
-        [InlineData(UserRole.PrUser, HttpStatusCode.Unauthorized)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.Unauthorized)]
+        [InlineData(UserRole.DataOfficer, HttpStatusCode.Forbidden)]
+        [InlineData(UserRole.PrUser, HttpStatusCode.Forbidden)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.Forbidden)]
         public async Task CreateCategory_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
         {
             // Arrange
             await AuthenticateAs(role);
 
             // Act
-            HttpResponseMessage response = await TestClient.PostAsJsonAsync("category", "TestCategory");
+            HttpResponseMessage response = await TestClient.PostAsJsonAsync("category", SeedUtility.RandomCategoryName());
 
             // Assert
             response.StatusCode.Should().Be(expectedResult);
