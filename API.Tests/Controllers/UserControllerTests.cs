@@ -14,23 +14,23 @@ namespace API.Tests.Controllers
 {
     public class UserControllerTests : BaseTests
     {
-        [Theory]
-        [InlineData(UserRole.RegisteredUser)]
-        [InlineData(UserRole.Admin)]
-        [InlineData(UserRole.DataOfficer)]
-        [InlineData(UserRole.PrUser)]
-        [InlineData(UserRole.Alumni)]
-        public async Task GetCurrentUser_Returns_Correct_User(UserRole role)
-        {
-            // Arrange
-            await AuthenticateAs(role);
+        //[Theory]
+        //[InlineData(UserRole.RegisteredUser)]
+        //[InlineData(UserRole.Admin)]
+        //[InlineData(UserRole.DataOfficer)]
+        //[InlineData(UserRole.PrUser)]
+        //[InlineData(UserRole.Alumni)]
+        //public async Task GetCurrentUser_Returns_Correct_User(UserRole role)
+        //{
+        //    // Arrange
+        //    await AuthenticateAs(role);
 
-            // Act
-            HttpResponseMessage response = await TestClient.GetAsync("user");
-            int responseUserIdentityId = Convert.ToInt32(JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync()).IdentityId);
+        //    // Act
+        //    HttpResponseMessage response = await TestClient.GetAsync("user");
+        //    int responseUserIdentityId = Convert.ToInt32(JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync()).IdentityId);
 
-            // Assert
-            responseUserIdentityId.Should().Be((int)role);
-        }
+        //    // Assert
+        //    responseUserIdentityId.Should().Be((int)role);
+        //}
     }
 }
