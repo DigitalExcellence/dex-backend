@@ -37,7 +37,6 @@ namespace API.Tests.Controllers
 
         [Theory]
         [InlineData(UserRole.Admin, HttpStatusCode.Created)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.Forbidden)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.Created)]
         [InlineData(UserRole.PrUser, HttpStatusCode.Created)]
         [InlineData(UserRole.RegisteredUser, HttpStatusCode.Created)]
@@ -77,10 +76,9 @@ namespace API.Tests.Controllers
         [Theory]
         [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.Unauthorized)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
-        public async Task UpdateProject_Returns_Expected_Result_For_Admin(UserRole role, HttpStatusCode expectedResult)
+        public async Task UpdateProject_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
         {
             // Arrange
             await AuthenticateAs(role);
@@ -91,6 +89,24 @@ namespace API.Tests.Controllers
 
             // Act
             HttpResponseMessage response = await TestClient.PutAsJsonAsync($"project/{projectToUpdate.Id}", projectToUpdate);
+
+            // Assert
+            response.StatusCode.Should().Be(expectedResult);
+        }
+
+        [Theory]
+        [InlineData(UserRole.RegisteredUser, HttpStatusCode.Unauthorized)]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        [InlineData(UserRole.DataOfficer, HttpStatusCode.Unauthorized)]
+        [InlineData(UserRole.PrUser, HttpStatusCode.Unauthorized)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.Unauthorized)]
+        public async Task GetAllScopes_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
+        {
+            // Arrange
+            await AuthenticateAs(role);
+
+            // Act
+            HttpResponseMessage response = await TestClient.GetAsync("scopes");
 
             // Assert
             response.StatusCode.Should().Be(expectedResult);
