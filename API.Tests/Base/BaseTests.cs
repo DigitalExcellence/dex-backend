@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Data;
 using Microsoft.Extensions.DependencyInjection;
 using IdentityModel.Client;
+using API.Tests.Enums;
 
 namespace API.Tests.Base
 {
@@ -15,23 +16,24 @@ namespace API.Tests.Base
     {
         protected readonly HttpClient TestClient;
         protected readonly HttpClient AuthClient;
+
         private string accessToken;
-        private string identityAddress = Environment.GetEnvironmentVariable("IdentityAddress");
-        public string apiAddress = Environment.GetEnvironmentVariable("ApiAddress");
+        private readonly string identityAddress = Environment.GetEnvironmentVariable("IdentityAddress");
+        private readonly string apiAddress = Environment.GetEnvironmentVariable("ApiAddress");
 
         protected BaseTests()
         {
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
-            TestWebApplicationFactory<Startup> factory = new TestWebApplicationFactory<Startup>();
             AuthClient = new HttpClient(clientHandler);
             TestClient = new HttpClient(clientHandler);
+
             AuthClient.BaseAddress = new Uri(identityAddress);
             TestClient.BaseAddress = new Uri(apiAddress + "api/");
         }
 
-        protected async Task AuthenticateAs(int identityId)
+        protected async Task AuthenticateAs(UserRole identityId)
         {
             if(TestClient.DefaultRequestHeaders.Contains("Authorization")) TestClient.DefaultRequestHeaders.Remove("Authorization");
             
@@ -41,10 +43,13 @@ namespace API.Tests.Base
 
             if(token == null)
             {
-                throw new Exception("NO JWT TOKEN!!!!!!!!!!!!!!!!!!!!!");
+                throw new Exception("NO JWT TOKEN!!!!!!!!");
             }
+
             TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-            TestClient.DefaultRequestHeaders.Add("IdentityId", identityId.ToString());
+
+            int id = (int)identityId;
+            TestClient.DefaultRequestHeaders.Add("IdentityId", id.ToString());
         }
 
         private async Task<string> GetToken()
@@ -54,29 +59,22 @@ namespace API.Tests.Base
                 return accessToken;
             }
 
-            return await RenewAccessToken();
-        }
-
-        private async Task<string> RenewAccessToken()
-        {
             accessToken = await GetJwtAsync();
             return accessToken;
         }
 
-        
-
         protected async Task<string> GetJwtAsync()
         {
-
             try
             {
                 if(identityAddress == null)
                 {
-                    Console.WriteLine("identityadress null@1123!!!!@@@#$%^&");
+                    Console.WriteLine("IdentityAddress is null!!!!!!!!");
                 }
+
                 TokenResponse response = await TestClient.RequestTokenAsync(new TokenRequest
                 {
-                    Address = identityAddress+"connect/token",
+                    Address = identityAddress + "connect/token",
                     GrantType = IdentityModel.OidcConstants.GrantTypes.ClientCredentials,
                     ClientId = "Test",
                     ClientSecret = "Test",
@@ -87,8 +85,7 @@ namespace API.Tests.Base
                                     { "scope", "ProjectWrite"}
                                 }
                 });
-                Console.WriteLine(response);
-                Console.WriteLine(response.AccessToken);
+
                 return response.AccessToken;
             }
             catch(Exception ex)
@@ -98,13 +95,5 @@ namespace API.Tests.Base
             }
             return null;
         }
-    }
-
-    public class AccessTokenReponse
-    {
-        public string Access_token { get; set; }
-        public string Expires_in { get; set; }
-        public string Token_type { get; set; }
-        public string Scope { get; set; }
     }
 }
