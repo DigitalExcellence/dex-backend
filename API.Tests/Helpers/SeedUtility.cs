@@ -26,13 +26,25 @@ namespace API.Tests.Helpers
             return project;
         }
 
-        public static Category RandomCategoryName()
+        public static Category RandomCategory()
         {
             Faker<Category> categoryToFake = new Faker<Category>()
                                            .RuleFor(c => c.Name, f => f.Lorem.Word());
             Category category = categoryToFake.Generate();
 
             return category;
+        }
+
+        public static Highlight RandomHighlight()
+        {
+            Faker<Highlight> highlightToFake = new Faker<Highlight>()
+                                                 .RuleFor(s => s.Description, f => f.Lorem.Sentence(5))
+                                                 .RuleFor(s => s.StartDate, DateTime.Now)
+                                                 .RuleFor(s => s.EndDate, DateTime.Now.AddYears(2))
+                                                 .RuleFor(s => s.Project, RandomProject());
+            Highlight highlight = highlightToFake.Generate();
+
+            return highlight;
         }
     }
 }
