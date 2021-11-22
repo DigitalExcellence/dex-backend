@@ -39,5 +39,40 @@ namespace API.Tests.Controllers
             // Assert
             response.StatusCode.Should().Be(expectedResult);
         }
+
+
+        [Theory]
+        [InlineData(UserRole.RegisteredUser, HttpStatusCode.Forbidden)]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        [InlineData(UserRole.DataOfficer, HttpStatusCode.Forbidden)]
+        [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.Forbidden)]
+        public async Task DeleteHighlight_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
+        {
+            // Arrange
+            await AuthenticateAs(role);
+
+            Project project = SeedUtility.RandomProject();
+            HttpResponseMessage postProjectResponse = await TestClient.PostAsJsonAsync("project", project);
+
+
+            string responseContent = await postProjectResponse.Content.ReadAsStringAsync();
+            Project projectToHighlight = JsonConvert.DeserializeObject<Project>(responseContent);
+
+
+            HighlightInput highlightInput = new HighlightInput { ProjectId = projectToHighlight.Id, Description = projectToHighlight.Description };
+            HttpResponseMessage response = await TestClient.PostAsJsonAsync($"highlight", highlightInput);
+
+            string highlightResponse = await response.Content.ReadAsStringAsync();
+            HighlightOutput highlightOutput = JsonConvert.DeserializeObject<HighlightOutput>(highlightResponse);
+           
+
+            // Act
+            HttpResponseMessage finalResponse = await TestClient.DeleteAsync($"highlight/{highlightOutput.Id}");
+            
+
+            // Assert
+            finalResponse.StatusCode.Should().Be(expectedResult);
+        }
     }
 }
