@@ -50,7 +50,7 @@ namespace API.Tests.Controllers
         }
 
         [Theory]
-        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
+        //[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
