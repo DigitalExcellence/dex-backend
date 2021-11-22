@@ -65,7 +65,7 @@ services:
       - App__Elastic__Username=${App__ElasticSearch__Username}
       - App__Elastic__Password=${App__ElasticSearch__Password}
       - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
-      - Use__In_Memory_Database=false
+      - Use__In_Memory_Database='false'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=http"
