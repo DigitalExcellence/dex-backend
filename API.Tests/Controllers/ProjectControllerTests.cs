@@ -14,8 +14,8 @@ namespace API.Tests.Controllers
     public class ProjectControllerTests : BaseTests
     {
         [Theory]
+        [InlineData(UserRole.Alumni,HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
         [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
@@ -32,6 +32,7 @@ namespace API.Tests.Controllers
         }
 
         [Theory]
+        [InlineData(UserRole.Alumni, HttpStatusCode.Created)]
         [InlineData(UserRole.Admin, HttpStatusCode.Created)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.Created)]
         [InlineData(UserRole.PrUser, HttpStatusCode.Created)]
@@ -49,6 +50,7 @@ namespace API.Tests.Controllers
         }
 
         [Theory]
+        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
@@ -67,6 +69,40 @@ namespace API.Tests.Controllers
 
             // Assert
             response.StatusCode.Should().Be(expectedResult);           
+        }
+
+        [Theory]
+        [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
+        [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
+        [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
+        public async Task UpdateProject_Returns_Expected_Result_For_Admin(UserRole role, HttpStatusCode expectedResult)
+
+        {
+            // Arrange
+
+            await AuthenticateAs(role);
+
+
+
+            HttpResponseMessage addProjectResponse = await TestClient.PostAsJsonAsync("project", SeedUtility.RandomProject());
+
+            string responseContent = await addProjectResponse.Content.ReadAsStringAsync();
+
+            Project projectToUpdate = JsonConvert.DeserializeObject<Project>(responseContent);
+
+
+
+            // Act
+
+            HttpResponseMessage response = await TestClient.PutAsJsonAsync($"project/{projectToUpdate.Id}", projectToUpdate);
+
+
+
+            // Assert
+
+            response.StatusCode.Should().Be(expectedResult);
         }
     }
 }
