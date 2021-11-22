@@ -232,12 +232,12 @@ namespace IdentityServer.Configuration
                        },
                         new Client
                        {
-                           ClientId = "Test",
-                           ClientName = "Test",
+                           ClientId = "XUnitIntegrationTests",
+                           ClientName = "XUnitIntegrationTests",
                            AllowedGrantTypes = GrantTypes.ClientCredentials,
                            ClientSecrets =
                            {
-                               new Secret("Test".Sha256())
+                               new Secret("XUnitIntegrationTests".Sha256())
                            },
                            AllowedScopes =
                            {

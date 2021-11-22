@@ -76,15 +76,8 @@ namespace API.Tests.Base
                 {
                     Address = identityAddress + "connect/token",
                     GrantType = IdentityModel.OidcConstants.GrantTypes.ClientCredentials,
-                    ClientId = "Test",
-                    ClientSecret = "Test"
-                    //,
-                    //Parameters =
-                    //            {
-                    //                { "username", "bob"},
-                    //                { "password", "bob"},
-                    //                { "scope", "ProjectWrite"}
-                    //            }
+                    ClientId = "XUnitIntegrationTests",
+                    ClientSecret = "XUnitIntegrationTests"
                 });
 
                 return response.AccessToken;
