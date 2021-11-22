@@ -50,7 +50,7 @@ namespace API.Tests.Controllers
         }
 
         [Theory]
-        //[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
+        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
@@ -83,16 +83,12 @@ namespace API.Tests.Controllers
             // Arrange
             await AuthenticateAs(role);
 
-
             HttpResponseMessage addProjectResponse = await TestClient.PostAsJsonAsync("project", SeedUtility.RandomProject());
-
             string responseContent = await addProjectResponse.Content.ReadAsStringAsync();
             Project projectToUpdate = JsonConvert.DeserializeObject<Project>(responseContent);
 
-
             // Act
             HttpResponseMessage response = await TestClient.PutAsJsonAsync($"project/{projectToUpdate.Id}", projectToUpdate);
-
 
             // Assert
             response.StatusCode.Should().Be(expectedResult);
@@ -100,7 +96,7 @@ namespace API.Tests.Controllers
 
 
         [Theory]
-        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
+        //[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
@@ -114,10 +110,8 @@ namespace API.Tests.Controllers
 
             Project projectToCategorize = JsonConvert.DeserializeObject<Project>(responseContent);
 
-
             // Act
             HttpResponseMessage response = await TestClient.PostAsync($"project/category/{projectToCategorize.Id}/2", null);
-
 
             // Assert
             response.StatusCode.Should().Be(expectedResult);

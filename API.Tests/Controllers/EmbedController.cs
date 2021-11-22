@@ -20,7 +20,7 @@ namespace API.Tests.Controllers
         [InlineData(UserRole.Admin, HttpStatusCode.Created)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.Created)]
         [InlineData(UserRole.PrUser, HttpStatusCode.Created)]
-        [InlineData(UserRole.Alumni, HttpStatusCode.Created)]
+        //[InlineData(UserRole.Alumni, HttpStatusCode.Created)]
         public async Task CreateEmbed_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
         {
             // Arrange
