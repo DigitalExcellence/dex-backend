@@ -43,7 +43,7 @@ services:
       - App__JobScheduler__ClientId=dex-jobscheduler
       - App__JobScheduler__ClientSecret=test
       - App__ApiAuthentication__ClientSecret=test
-      - Use__In_Memory_Database=false
+      - Use__In_Memory_Database='false'
     networks:
       mssql-network:
     ports:
@@ -96,7 +96,7 @@ services:
       - App__Elastic__IndexUrl=projects/ 
       - App__SendGrid__EmailFrom=noreply@dex.software
       - App__SendGrid__ApiKey=test     
-      - Use__In_Memory_Database=false
+      - Use__In_Memory_Database='false'
     networks:
       mssql-network:
       rabbitmq-network:
