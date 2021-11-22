@@ -32,7 +32,6 @@ namespace API.Tests.Controllers
         }
 
         [Theory]
-        //[InlineData(UserRole.Alumni, HttpStatusCode.Created)]
         [InlineData(UserRole.Admin, HttpStatusCode.Created)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.Created)]
         [InlineData(UserRole.PrUser, HttpStatusCode.Created)]
@@ -50,7 +49,6 @@ namespace API.Tests.Controllers
         }
 
         [Theory]
-       //[InlineData(UserRole.Alumni, HttpStatusCode.NotFound)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
@@ -74,7 +72,6 @@ namespace API.Tests.Controllers
         [Theory]
         [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        //[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
         public async Task UpdateProject_Returns_Expected_Result_For_Admin(UserRole role, HttpStatusCode expectedResult)
@@ -96,7 +93,6 @@ namespace API.Tests.Controllers
 
 
         [Theory]
-        //[InlineData(UserRole.Alumni, HttpStatusCode.OK)]
         [InlineData(UserRole.Admin, HttpStatusCode.OK)]
         [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
         [InlineData(UserRole.PrUser, HttpStatusCode.OK)]

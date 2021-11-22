@@ -43,7 +43,7 @@ namespace API.Tests.Base
 
             if(token == null)
             {
-                throw new Exception("NO JWT TOKEN!!!!!!!!");
+                throw new Exception("No JWT token, Check IdentityServer request"); 
             }
 
             TestClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
@@ -69,7 +69,7 @@ namespace API.Tests.Base
             {
                 if(identityAddress == null)
                 {
-                    Console.WriteLine("IdentityAddress is null!!!!!!!!");
+                    Console.WriteLine("IdentityAddress is null");
                 }
 
                 TokenResponse response = await TestClient.RequestTokenAsync(new TokenRequest
