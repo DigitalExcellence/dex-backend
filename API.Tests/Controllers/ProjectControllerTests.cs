@@ -81,27 +81,20 @@ namespace API.Tests.Controllers
 
         {
             // Arrange
-
             await AuthenticateAs(role);
-
 
 
             HttpResponseMessage addProjectResponse = await TestClient.PostAsJsonAsync("project", SeedUtility.RandomProject());
 
             string responseContent = await addProjectResponse.Content.ReadAsStringAsync();
-
             Project projectToUpdate = JsonConvert.DeserializeObject<Project>(responseContent);
 
 
-
             // Act
-
             HttpResponseMessage response = await TestClient.PutAsJsonAsync($"project/{projectToUpdate.Id}", projectToUpdate);
 
 
-
             // Assert
-
             response.StatusCode.Should().Be(expectedResult);
         }
 
