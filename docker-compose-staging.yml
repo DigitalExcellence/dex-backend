@@ -75,7 +75,7 @@ services:
       - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
       - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
       - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
-      - Use__In_Memory_Database=false
+      - Use__In_Memory_Database='false'
 
     labels:
       - "traefik.enable=true"
