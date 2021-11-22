@@ -30051,19 +30051,19 @@
 											"listen": "test",
 											"script": {
 												"exec": [
-													"var jsonData = pm.response.json();\r",
+													"// var jsonData = pm.response.json();\r",
 													"\r",
-													"eval(pm.environment.get(\"commonTests\"))();\r",
+													"// eval(pm.environment.get(\"commonTests\"))();\r",
 													"\r",
-													"pm.test(\"Status code is 200\", function () {\r",
-													"    pm.response.to.have.status(200);\r",
-													"});\r",
+													"// pm.test(\"Status code is 200\", function () {\r",
+													"//     pm.response.to.have.status(200);\r",
+													"// });\r",
 													"\r",
-													"pm.test(\"Response must be valid and have a json body\", function () {\r",
-													"     pm.response.to.be.ok;\r",
-													"     pm.response.to.be.withBody;\r",
-													"     pm.response.to.be.json;\r",
-													"});"
+													"// pm.test(\"Response must be valid and have a json body\", function () {\r",
+													"//      pm.response.to.be.ok;\r",
+													"//      pm.response.to.be.withBody;\r",
+													"//      pm.response.to.be.json;\r",
+													"// });"
 												],
 												"type": "text/javascript"
 											}
