@@ -1,7 +1,5 @@
 using API.HelperClasses;
-using Bogus;
 using Data;
-using System;
 using Data.Helpers;
 using Models;
 using System.Collections.Generic;
@@ -11,40 +9,49 @@ namespace API.Tests.Helpers
 {
     public class SeedUtility
     {
-        public static Project RandomProject()
+        public static void InitializeDbForTests(ApplicationDbContext context)
         {
-            Faker<Project> projectToFake = new Faker<Project>()
-                                           .RuleFor(p => p.UserId, 1)
-                                           .RuleFor(p => p.Uri, f => f.Internet.Url())
-                                           .RuleFor(p => p.Name, f => f.Commerce.ProductName())
-                                           .RuleFor(p => p.Description, f => f.Lorem.Sentences(10))
-                                           .RuleFor(p => p.ShortDescription, f => f.Lorem.Sentences(1));
-            Project project = projectToFake.Generate();
-            project.Created = DateTime.Now.AddDays(-2);
-            project.Updated = DateTime.Now;
+            // Seed roles
+            SeedHelper.InsertRoles(Seed.SeedRoles(), context);
+            List<Role> roles = context.Role.ToList();
 
-            return project;
-        }
+            // Seed institutions
+            context.Institution.AddRange(Seed.SeedInstitution());
+            context.SaveChanges();
 
-        public static Category RandomCategory()
-        {
-            Faker<Category> categoryToFake = new Faker<Category>()
-                                           .RuleFor(c => c.Name, f => f.Lorem.Word());
-            Category category = categoryToFake.Generate();
+            // Seed admin user
+            context.User.Add(Seed.SeedAdminUser(roles));
+            context.SaveChanges();
 
-            return category;
-        }
+            // Seed random users
+            context.User.Add(Seed.SeedPrUser(roles));
+            context.User.AddRange(Seed.SeedUsers(roles));
+            context.User.Add(Seed.SeedDataOfficerUser(roles));
+            context.SaveChanges();
 
-        public static Highlight RandomHighlight()
-        {
-            Faker<Highlight> highlightToFake = new Faker<Highlight>()
-                                                 .RuleFor(s => s.Description, f => f.Lorem.Sentence(5))
-                                                 .RuleFor(s => s.StartDate, DateTime.Now)
-                                                 .RuleFor(s => s.EndDate, DateTime.Now.AddYears(2))
-                                                 .RuleFor(s => s.Project, RandomProject());
-            Highlight highlight = highlightToFake.Generate();
+            // Seed projects
+            List<User> users = context.User.ToList();
+            context.Project.AddRange(Seed.SeedProjects(users));
+            context.SaveChanges();
 
-            return highlight;
+            // Seed collaborators
+            List<Project> projectsForCollaborators = context.Project.ToList();
+            context.Collaborators.AddRange(Seed.SeedCollaborators(projectsForCollaborators));
+            context.SaveChanges();
+
+            // Seed highlights
+            List<Project> projectsForHighlights = context.Project.ToList();
+            context.Highlight.AddRange(Seed.SeedHighlights(projectsForHighlights));
+            context.SaveChanges();
+
+            // Seed wizardpages
+            context.WizardPage.AddRange(Seed.SeedWizardPages());
+            context.SaveChanges();
+
+            // Seed datasources
+            context.DataSource.AddRange(Seed.SeedDataSources());
+            context.SaveChanges();
+            SeedHelper.SeedDataSourceWizardPages(context);
         }
     }
 }

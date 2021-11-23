@@ -75,7 +75,6 @@ services:
       - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
       - App__SendGrid__EmailFrom=${App__SendGrid__EmailFrom}
       - App__SendGrid__ApiKey=${App__SendGrid__ApiKey}
-      - Use__In_Memory_Database='false'
 
     labels:
       - "traefik.enable=true"
@@ -127,7 +126,6 @@ services:
       - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
       - App__JobScheduler__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
       - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
-      - Use__In_Memory_Database=false
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.identity.entrypoints=http"

@@ -8,7 +8,7 @@
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty
 * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* the GNU Lesser General Public License for more details.
+* See the GNU Lesser General Public License for more details.
 *
 * You can find a copy of the GNU Lesser General Public License
 * along with this program, in the LICENSE.md file in the root project directory.
@@ -32,8 +32,6 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -57,7 +55,6 @@ namespace IdentityServer
                                   .Get<Config>();
             Configuration = configuration;
             Environment = environment;
-
         }
 
         /// <summary>
@@ -84,20 +81,11 @@ namespace IdentityServer
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            string useInMemDatabase = System.Environment.GetEnvironmentVariable("Use__In_Memory_Database");
-
             services.AddDbContext<IdentityDbContext>(o =>
             {
-                if(useInMemDatabase != null && useInMemDatabase.Equals("true"))
-                {
-                    o.UseInMemoryDatabase("inMemoryTestDatabase");
-                } else
-                {
-                    o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                                sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
-                }
             });
-           
 
             services.AddServicesAndRepositories();
 
@@ -184,11 +172,10 @@ namespace IdentityServer
                     })
                     .AddCookie();
 
-            if(Environment.IsDevelopment() || Environment.IsEnvironment("Test"))
+            if(Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
-            }
-            else
+            } else
             {
                 X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 certStore.Open(OpenFlags.ReadOnly);
@@ -222,13 +209,6 @@ namespace IdentityServer
         /// <param name="env">The environmental variable.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-            | SecurityProtocolType.Tls11
-            | SecurityProtocolType.Tls12
-            | SecurityProtocolType.Tls13;
-
-
             UpdateDatabase(app, env);
             if(Environment.IsDevelopment())
             {
@@ -254,14 +234,7 @@ namespace IdentityServer
                                                   .GetRequiredService<IServiceScopeFactory>()
                                                   .CreateScope();
             using IdentityDbContext context = serviceScope.ServiceProvider.GetService<IdentityDbContext>();
-
-            //Only apply migrations when db is running via MSSQL instead of IN Memory
-            if(!context.Database.IsInMemory())
-            {
-                context.Database.Migrate();
-            }
-
-
+            context.Database.Migrate();
             List<IdentityUser> identityUsers = TestUsers.GetDefaultIdentityUsers();
             foreach(IdentityUser identityUser in identityUsers.Where(identityUser =>
                                                                          !context.IdentityUser.Any(
