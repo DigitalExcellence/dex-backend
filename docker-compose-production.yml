@@ -65,6 +65,7 @@ services:
       - App__Elastic__Username=${App__ElasticSearch__Username}
       - App__Elastic__Password=${App__ElasticSearch__Password}
       - App__Elastic__IndexUrl=${App__ElasticSearch__IndexUrl} 
+      - Use__In_Memory_Database='false'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=http"
@@ -117,6 +118,7 @@ services:
       - App__JobScheduler__ClientId=${JOBSCHEDULER_IDENTITY_CLIENTID}
       - App__JobScheduler__ClientSecret=${JOBSCHEDULER_IDENTITY_CLIENTSECRET}
       - SENTRY_DSN=https://9ab54615b99746ddaff11714a636f56e@o395685.ingest.sentry.io/5256525
+      - Use__In_Memory_Database=false
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.identity.entrypoints=http"

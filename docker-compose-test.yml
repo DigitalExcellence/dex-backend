@@ -34,7 +34,7 @@ services:
       - db
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Database=identity;User=sa;Password=Dexcelence!1;
-      - App__Self__IssuerUri=https://identity:5005
+      - App__Self__IssuerUri=https://localhost:5005
       - App__Api__DeXApiUrl=https://api:5001
       - ASPNETCORE_URLS=http://+:5004;https://+:5005;
       - ASPNETCORE_HTTPS_PORT=5005
@@ -43,7 +43,7 @@ services:
       - App__JobScheduler__ClientId=dex-jobscheduler
       - App__JobScheduler__ClientSecret=test
       - App__ApiAuthentication__ClientSecret=test
-      - Use__In_Memory_Database='false'
+      - Use__In_Memory_Database='true'
     networks:
       mssql-network:
     ports:
@@ -94,9 +94,9 @@ services:
       - App__Elastic__Username=elastic
       - App__Elastic__Password=changeme
       - App__Elastic__IndexUrl=projects/ 
-      - App__SendGrid__EmailFrom=noreply@dex.software
-      - App__SendGrid__ApiKey=test     
-      - Use__In_Memory_Database='false'
+      - App__SendGrid__EmailFrom=test
+      - App__SendGrid__ApiKey=test
+      - Use__In_Memory_Database='true'
     networks:
       mssql-network:
       rabbitmq-network:
@@ -170,6 +170,7 @@ services:
         rabbitmq-network:
         mssql-network:
         
+    
 
 volumes:
   elasticsearch:  
