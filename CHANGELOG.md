@@ -5,21 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Release v.2.0.0-beta - DATE HERE
+### Added
+- Added JobScheduler unit tests[#381](https://github.com/DigitalExcellence/dex-backend/pull/539)
+
 ## Release v.1.9.0-beta - DATE HERE
 
 ### Fixed
 - Added XUnit integration tests[#364](https://github.com/DigitalExcellence/dex-backend/pull/537)
 
-
-## Release v.1.7.0-beta - 7-10-2021
-- Added project ownership transfer implementation - [#438](https://github.com/DigitalExcellence/dex-backend/pull/506)
-- Added pagination getuserprojects endpoint - [#461](https://github.com/DigitalExcellence/dex-backend/pull/504)
-
 ## Release v.1.8.0-beta - DATE HERE
 
 ### Fixed
 - Fixed postman test and staging pipeline[#402](https://github.com/DigitalExcellence/dex-backend/pull/518)
-
 
 ## Release v.1.7.0-beta - 7-10-2021
 - Added project ownership transfer implementation - [#438](https://github.com/DigitalExcellence/dex-backend/pull/506)
