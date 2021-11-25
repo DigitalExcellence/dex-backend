@@ -1548,11 +1548,9 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            string responseString = "";
             try
             {
                 Response response = await projectTransferService.InitiateTransfer(project, potentialNewOwner);
-                responseString = response.StatusCode.ToString() + response.Body.ToString();
                 if(response.StatusCode == HttpStatusCode.Accepted)
                 {
                     return Ok("Transfer has been initiated, please check your email");
@@ -1576,7 +1574,7 @@ namespace API.Controllers
                 return Forbid(transferAlreadyInitiated.Message);
             } catch(Exception genericException)
             {
-                return BadRequest(genericException.Message + responseString);
+                return BadRequest(genericException.Message);
             }
         }
 
