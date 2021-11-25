@@ -1523,6 +1523,10 @@ namespace API.Controllers
                                          .ConfigureAwait(false);
 
 
+            if(user == null)
+            {
+                return NotFound("Could not find current user");
+            }
 
             if(project.UserId != user.Id)
             {
@@ -1548,11 +1552,11 @@ namespace API.Controllers
                 return NotFound(problem);
             }
 
-            string responseString = "";
+            string responseString = "123";
             try
             {
                 Response response = await projectTransferService.InitiateTransfer(project, potentialNewOwner);
-                responseString = response.StatusCode.ToString() + response.Body.ToString();
+                if(response != null) responseString = response.StatusCode.ToString() + response.Body.ToString();
                 if(response.StatusCode == HttpStatusCode.Accepted)
                 {
                     return Ok("Transfer has been initiated, please check your email");
