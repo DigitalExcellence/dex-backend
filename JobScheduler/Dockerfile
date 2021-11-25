@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . ./
 
-RUN dotnet publish JobScheduler/13_JobScheduler.csproj -c Release -o out
+RUN dotnet publish JobScheduler/14_JobScheduler.csproj -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1
 
@@ -12,4 +12,4 @@ WORKDIR /app
 
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "13_JobScheduler.dll"]
+ENTRYPOINT ["dotnet", "14_JobScheduler.dll"]

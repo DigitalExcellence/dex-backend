@@ -20,6 +20,7 @@ using API.Configuration;
 using API.Extensions;
 using API.Resources;
 using AutoMapper;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,10 +31,12 @@ using Models.Defaults;
 using Serilog;
 using Services.Resources;
 using Services.Services;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -652,5 +655,4 @@ namespace API.Controllers
             
         }
     }
-
 }

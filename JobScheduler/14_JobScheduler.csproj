@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>dotnet-JobScheduler-3CE46EAB-4F12-4C7D-A37B-BFA136C798C1</UserSecretsId>
-    <AssemblyName>13_JobScheduler</AssemblyName>
-    <RootNamespace>13_JobScheduler</RootNamespace>
+    <AssemblyName>14_JobScheduler</AssemblyName>
+    <RootNamespace>14_JobScheduler</RootNamespace>
       <Version>1.8.0-beta</Version>
   </PropertyGroup>
 
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <ProjectReference Include="..\MessageBrokerPublisher\09_MessageBrokerPublisher.csproj" />
-      <ProjectReference Include="..\Models\07_Models.csproj" />
+      <ProjectReference Include="..\MessageBrokerPublisher\10_MessageBrokerPublisher.csproj" />
+      <ProjectReference Include="..\Models\08_Models.csproj" />
   </ItemGroup>
 </Project>

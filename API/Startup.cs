@@ -50,10 +50,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Sqlite;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
+using System.Net.Http;
 
 namespace API
 {
-
     /// <summary>
     ///     Startup file
     /// </summary>
@@ -97,11 +101,20 @@ namespace API
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            string useInMemDatabase = System.Environment.GetEnvironmentVariable("Use__In_Memory_Database");
             IdentityModelEventSource.ShowPII = true;
             services.AddDbContext<ApplicationDbContext>(o =>
             {
-                o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
-                               sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
+                if(useInMemDatabase != null && useInMemDatabase.Equals("true"))
+                {
+                    o.UseInMemoryDatabase("inMemoryTestDatabase");
+                }
+                
+                else
+                {
+                    o.UseSqlServer(Config.OriginalConfiguration.GetConnectionString("DefaultConnection"),
+                        sqlOptions => sqlOptions.EnableRetryOnFailure(50, TimeSpan.FromSeconds(30), null));
+                }
             });
 
             services.AddSingleton<IRabbitMQConnectionFactory>(c => new RabbitMQConnectionFactory(Config.RabbitMQ.Hostname, Config.RabbitMQ.Username, Config.RabbitMQ.Password));
@@ -235,7 +248,7 @@ namespace API
                                                Url = new Uri("https://www.gnu.org/licenses/lgpl-3.0.txt")
                                            }
                              });
-                o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
+                //o.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}{typeof(Startup).Namespace}.xml", true);
 
                 o.AddSecurityDefinition("oauth2",
                                         new OpenApiSecurityScheme
@@ -307,6 +320,14 @@ namespace API
         /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+            | SecurityProtocolType.Tls11
+            | SecurityProtocolType.Tls12
+            | SecurityProtocolType.Tls13;
+
+
+
             env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
             Defaults.Path.FilePath = Path.Combine(env.WebRootPath, "Images");
 
@@ -331,7 +352,7 @@ namespace API
                                         });
             } else
             {
-                app.UseExceptionHandler();
+                app.UseExceptionHandler("/Error");
             }
 
             app.UseProblemDetails();
@@ -355,6 +376,8 @@ namespace API
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            
 
             //UserInfo
             app.UseWhen(context =>
@@ -471,7 +494,14 @@ namespace API
                                                   .GetRequiredService<IServiceScopeFactory>()
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-            context.Database.Migrate();
+
+
+            //Only apply migrations when db is running via MSSQL instead of IN Memory
+            if(!context.Database.IsInMemory())
+            {
+                context.Database.Migrate();
+            }
+
 
             // Check if Roles and RoleScopes in DB matches seed, if it doesn't match: database is updated.
             SeedHelper.InsertRoles(Seed.SeedRoles(), context);

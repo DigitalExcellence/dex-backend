@@ -12,7 +12,7 @@ A few sentences describing the overall goals of the pull request's commits.
 ## Checklist
 
 -   [ ] My code follows the style guidelines of this project
--   [ ] I did not update API Controllers, if I did, I added/changed Postman tests
+-   [ ] I did not update API Controllers, if I did, I added/changed Postman or XUnit integration tests
 -   [ ] I have performed a self-review of my own code
 -   [ ] I have commented my code, particularly in hard-to-understand areas
 -   [ ] I have made corresponding changes to the documentation

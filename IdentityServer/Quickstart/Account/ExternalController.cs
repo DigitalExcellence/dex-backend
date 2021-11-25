@@ -116,7 +116,7 @@ namespace IdentityServer
         ///     or
         ///     Content:\n" + response.Content + "\n\nError:\n" + response.ErrorMessage
         /// </exception>
-        [HttpPost("/external/callback/fhict")]
+        [HttpPost("/external/callback/fhict")] 
         public async Task<IActionResult> Callback(string code, string state, string session_state)
         {
             // Get the return url for the frontend from the cookies.

@@ -5,6 +5,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 ENV App__Self__IssuerUri = ''
 
 ENV ConnectionStrings__DefaultConnection = ''
+ENV Use__In_Memory_Database=''
 
 ARG BuildConfiguration=Debug
 
@@ -25,4 +26,4 @@ COPY --from=build-env /app/IdentityServer/bin/Debug/netcoreapp3.1 .
 COPY --from=build-env /app/IdentityServer/wwwroot ./wwwroot
 COPY --from=build-env /app/dex-identity.pfx .
 
-ENTRYPOINT ["dotnet", "08_IdentityServer.dll", "--environment=Development"]
+ENTRYPOINT ["dotnet", "09_IdentityServer.dll", "--environment=Development"]

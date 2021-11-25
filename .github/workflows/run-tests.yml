@@ -5,7 +5,7 @@ on:
     branches: [ develop, master ]
 
 jobs:
-  unit-test:
+  Unit-Tests:
     runs-on: ubuntu-18.04
 
     steps:
@@ -23,24 +23,34 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal --filter FullyQualifiedName!~API.Tests
       env:
         App__SendGrid__ApiKey: ${{secrets.STAGING_SENDGRID_APIKEY }}
         App__SendGrid__EmailFrom: test@dex.software
 
-  integration-test:
+
+  XUnit-Postman-Integration-Tests:
     runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Docker Compose
-      run: docker-compose up --build -d
+
+    - name: Docker test compose up
+      run: docker-compose -f docker-compose-test.yml up --build -d
+
 
     - name: Sleep for 90 seconds
       uses: juliangruber/sleep-action@v1
       with:
         time: 90s
+    
+    - name: Docker build XUnit container
+      run: docker build -t dex-backend_xunit -f API.Tests/Dockerfile .
+        
+    - name: Run XUnit integration test container
+      run: docker run -e "ApiAddress=https://api:5001/" -e "IdentityAddress=http://identity:5004/" --network  dex-backend_mssql-network dex-backend_xunit
+    
 
     - name: Setup node
       uses: actions/setup-node@v1

@@ -40,6 +40,8 @@ namespace Configuration
         /// </value>
         public ApiConfig Api { get; set; }
 
+        public IntegrationTestsConfig IntegrationTests { get; set; }
+
         /// <summary>
         ///     Gets or sets the frontend
         /// </summary>
@@ -69,6 +71,7 @@ namespace Configuration
         {
             Validator.ValidateObject(Self, new ValidationContext(Self), true);
             Validator.ValidateObject(Api, new ValidationContext(Api), true);
+            Validator.ValidateObject(IntegrationTests, new ValidationContext(IntegrationTests), true);
             Validator.ValidateObject(Swagger, new ValidationContext(Swagger), true);
             Validator.ValidateObject(FfhictOIDC, new ValidationContext(FfhictOIDC), true);
             Validator.ValidateObject(JobScheduler, new ValidationContext(JobScheduler), true);
@@ -117,6 +120,37 @@ namespace Configuration
             /// </value>
             public string PublicOrigin { get; set; }
 
+        }
+
+        public class IntegrationTestsConfig
+        {
+            /// <summary>
+            ///     Gets or sets the DeX rest API URL.
+            /// </summary>
+            /// <value>
+            ///     The DeX rest API URL.
+            /// </value>
+            [Required]
+            [Url]
+            public string DeXApiUrl { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the client identifier.
+            /// </summary>
+            /// <value>
+            ///     The client identifier.
+            /// </value>
+            [Required]
+            public string ClientId { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the client secret.
+            /// </summary>
+            /// <value>
+            ///     The client secret.
+            /// </value>
+            [Required]
+            public string ClientSecret { get; set; }
         }
 
         /// <summary>
