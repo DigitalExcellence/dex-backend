@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "10_MessageBrokerPublisher",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "11_MessageBrokerPublisher.Tests", "MessageBrokerPublisher.Tests\11_MessageBrokerPublisher.Tests.csproj", "{4F2E803B-9C59-4A7F-9830-6627381851EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "16_ElasticSynchronizer", "ElasticSynchronizer\16_ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "15_ElasticSynchronizer", "ElasticSynchronizer\15_ElasticSynchronizer.csproj", "{E8FB8195-9C72-4366-9F4B-65230EF98031}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "12_NotificationSystem", "NotificationSystem\12_NotificationSystem.csproj", "{A0F1BB66-1749-47B7-940F-2EA6D004F33B}"
 EndProject
@@ -38,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "14_JobScheduler", "JobSched
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_API.Tests", "API.Tests\02_API.Tests.csproj", "{7283F142-135F-4F59-AA64-2241A565B99E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15_JobScheduler.Tests", "JobScheduler.Tests\15_JobScheduler.Tests.csproj", "{C0523773-43F4-47E0-8EC6-6E058950462C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobScheduler.Tests", "JobScheduler.Tests\JobScheduler.Tests.csproj", "{C0523773-43F4-47E0-8EC6-6E058950462C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
