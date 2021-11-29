@@ -38,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "14_JobScheduler", "JobSched
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_API.Tests", "API.Tests\02_API.Tests.csproj", "{7283F142-135F-4F59-AA64-2241A565B99E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobScheduler.Tests", "JobScheduler.Tests\JobScheduler.Tests.csproj", "{C0523773-43F4-47E0-8EC6-6E058950462C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "16_JobScheduler.Tests", "JobScheduler.Tests\16_JobScheduler.Tests.csproj", "{C0523773-43F4-47E0-8EC6-6E058950462C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
