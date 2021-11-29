@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "14_JobScheduler", "JobSched
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02_API.Tests", "API.Tests\02_API.Tests.csproj", "{7283F142-135F-4F59-AA64-2241A565B99E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "16_JobScheduler.Tests", "JobScheduler.Tests\16_JobScheduler.Tests.csproj", "{C0523773-43F4-47E0-8EC6-6E058950462C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{7283F142-135F-4F59-AA64-2241A565B99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7283F142-135F-4F59-AA64-2241A565B99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7283F142-135F-4F59-AA64-2241A565B99E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0523773-43F4-47E0-8EC6-6E058950462C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0523773-43F4-47E0-8EC6-6E058950462C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0523773-43F4-47E0-8EC6-6E058950462C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0523773-43F4-47E0-8EC6-6E058950462C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
