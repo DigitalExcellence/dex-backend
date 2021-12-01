@@ -57,8 +57,6 @@ jobs:
       with:
         node-version: '10.15.3'
 
-    - name: Postman tests
-      run:  npm install -g newman && newman run Postman/dex.postman_collection.json -e Postman/local.postman_environment.json --insecure --reporter-cli-no-console --reporter-cli-no-success-assertions -n 3
-
+    
     - name: Recommendation tests
       run: npm install -g newman && newman run Postman/ElasticSearch/DeX_Elastic.postman_collection.json -e Postman/ElasticSearch/DeX_Elastic.postman_environment.json --insecure --reporter-cli-no-console --reporter-cli-no-success-assertions -n 3
