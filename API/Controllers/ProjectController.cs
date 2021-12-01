@@ -1555,7 +1555,6 @@ namespace API.Controllers
             try
             {
                 Response response = await projectTransferService.InitiateTransfer(project, potentialNewOwner);
-                if(response != null) responseString = response.StatusCode.ToString() + response.Body.ToString();
                 if(response.StatusCode == HttpStatusCode.Accepted)
                 {
                     return Ok("Transfer has been initiated, please check your email");
