@@ -389,7 +389,7 @@ namespace API
                                 DbContext dbContext = context.RequestServices.GetService<DbContext>();
                                 IUserService userService =
                                     context.RequestServices.GetService<IUserService>();
-                                string identityId = "";
+                                string identityId = Guid.NewGuid().ToString();
                                 try
                                 {
                                     identityId = context.User.GetIdentityId(context);

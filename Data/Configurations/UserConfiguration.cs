@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Digital Excellence Copyright (C) 2020 Brend Smits
 * 
 * This program is free software: you can redistribute it and/or modify 
@@ -25,7 +25,9 @@ namespace Data.Configurations
     internal class UserConfiguration : IEntityTypeConfiguration<User>
     {
 
-        public void Configure(EntityTypeBuilder<User> builder) { }
+        public void Configure(EntityTypeBuilder<User> builder) {
+            builder.HasIndex(x => x.IdentityId).IsUnique();
+        }
 
     }
 
