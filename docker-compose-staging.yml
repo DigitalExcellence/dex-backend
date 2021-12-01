@@ -6,7 +6,7 @@ services:
    container_name: db
    restart: unless-stopped
    ports:
-     - 1433:1433
+      - 1433:1433
    networks:
      mssql-network:
        ipv4_address: 172.16.238.2

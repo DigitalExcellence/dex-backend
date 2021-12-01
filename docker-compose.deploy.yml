@@ -11,7 +11,10 @@ services:
     image: digitalexcellence/database
     networks:
       mssql-network:
-        ipv4_address: 172.16.238.2
+        #ipv4_address: 172.16.238.2
+    ports:
+      - 1433:1433
+    
 
   rabbitmq:
     image: 'bitnami/rabbitmq:3.8.9'

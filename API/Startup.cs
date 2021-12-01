@@ -453,11 +453,11 @@ namespace API
                                                 userInformation.IdentityInstitutionId);
                                         if(institution != null) user.InstitutionId = institution.Id;
 
-                                        //if(user.Email == "Developer@DEX.com" || user.Name == "Developer" || user.Email == "<Redacted>")
-                                        //{
-                                        //    user.Email = userInformation.Email;
-                                        //    user.Name = userInformation.Name;
-                                        //}
+                                        if(user.Email == "Developer@DEX.com" || user.Name == "Developer" || user.Email == "<Redacted>")
+                                        {
+                                            user.Email = userInformation.Email;
+                                            user.Name = userInformation.Name;
+                                        }
 
                                         userService.Update(user);
                                         await dbContext.SaveChangesAsync()

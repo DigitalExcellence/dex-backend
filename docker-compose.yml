@@ -23,6 +23,8 @@ services:
       - MSSQL_SA_PASSWORD=Dexcelence!1
     networks:
       mssql-network:
+    ports:
+      - 1433:1433
 
   identity:
     container_name: identity
