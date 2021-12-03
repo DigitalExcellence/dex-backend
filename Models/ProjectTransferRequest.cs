@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Models
@@ -19,7 +20,10 @@ namespace Models
         }
 
         public int Id { get; set; }
+
+        [Required]
         public Project Project { get; set; }
+        [Required]
         public User PotentialNewOwner { get; set; }
 
         public bool CurrentOwnerAcceptedRequest { get; set; }
