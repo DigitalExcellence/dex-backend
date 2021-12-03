@@ -82,6 +82,8 @@ namespace Models
 
         public List<File> Images { get; set; }
 
+        public double ActivityScore { get; set; }
+
 
         /// <summary>
         /// Checks if the user can access the project based on
