@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.Defaults;
+using Repositories;
+using Services.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -12,9 +16,10 @@ namespace API.Controllers
     {
         [HttpPost("Activity")]
         [Authorize(Policy = nameof(Defaults.Roles.BackendApplication))]
-        public async Task<IActionResult> ActivityAlgorithm()
+        public async Task<IActionResult> ActivityAlgorithm(ActivityAlgorithmService activityAlgorithmService, ProjectRepository projectRepository)
         {
-            return Ok("Test");
+            IEnumerable<Project>  projects = activityAlgorithmService.CalculateAllProjects(await projectRepository.GetAll());
+            return Ok(projects);
         }
     }
 }
