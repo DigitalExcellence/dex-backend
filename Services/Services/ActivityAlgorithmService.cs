@@ -11,41 +11,45 @@ namespace Services.Services
 {
     public interface IActivityAlgorithmService
     {
-        IEnumerable<Project> CalculateAllProjects(IEnumerable<Project> projects);
+        List<Project> CalculateAllProjects(IEnumerable<Project> projects);
         double CalculateProjectActivityScore(Project project);
-        bool SetProjectActivityScore(Project project, double score);
+        void SetProjectActivityScore(Project project, double score);
 
     }
     public class ActivityAlgorithmService : IActivityAlgorithmService
     {
 
-        private readonly List<IActivityAlgorithmDataPoint> dataPoints;
-        private readonly ProjectRepository projectRepo;
-
-        public ActivityAlgorithmService(ProjectRepository projectRepo)
-        {
-            this.projectRepo = projectRepo;
-            //List all data points wat are required to calculate each projects activity score
-            dataPoints = new List<IActivityAlgorithmDataPoint>()
+        private readonly List<IActivityAlgorithmDataPointService> dataPoints
+                            = new List<IActivityAlgorithmDataPointService>()
                           {
-                              new LikeDataPoint()
+                              new LikeDataPoint(),
+                              new RecentCreationDate(),
                           };
+        private readonly IProjectRepository projectRepository;
+        private readonly IProjectService projectService;
+        public ActivityAlgorithmService(IProjectRepository projectRepository, IProjectService projectService)
+        {
+            this.projectRepository = projectRepository;
+            this.projectService = projectService;
+            //List all data points wat are required to calculate each projects activity score
+
         }
 
-        public IEnumerable<Project> CalculateAllProjects(IEnumerable<Project> projects)
+        public List<Project> CalculateAllProjects(IEnumerable<Project> projects)
         {
             foreach(Project project in projects.ToList())
             {
-                double score = this.CalculateProjectActivityScore(project);
-                this.SetProjectActivityScore(project, score);
+                double score = CalculateProjectActivityScore(project);
+                SetProjectActivityScore(project, score);
             }
-            return projects;
+            projectService.Save();
+            return projects.ToList();
         }
 
         public double CalculateProjectActivityScore(Project project)
         {
             double score = 0;
-            foreach(IActivityAlgorithmDataPoint dataPoint in this.dataPoints)
+            foreach(IActivityAlgorithmDataPointService dataPoint in dataPoints)
             {
                 score += dataPoint.Calculate(project);
             }
@@ -55,30 +59,17 @@ namespace Services.Services
             // return this._dataPoints.Sum(dataPoint => dataPoint.Calculate(project));
         }
 
-        public bool SetProjectActivityScore(Project project, double score)
+        public void SetProjectActivityScore(Project project, double score)
         {
             project.ActivityScore = score;
+            projectService.Update(project);
+
+
             //TODO database implementation
             //TODO Elastic search implementation
-            return true;
+            return;
         }
     }
 
-    internal interface IActivityAlgorithmDataPoint
-    {
 
-        public double Calculate(Project project);
-
-    }
-
-
-    internal class  LikeDataPoint : IActivityAlgorithmDataPoint
-    {
-
-        public double Calculate(Project project)
-        {
-            return project.Likes.Count;
-        }
-
-    }
 }
