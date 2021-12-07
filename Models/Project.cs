@@ -32,6 +32,7 @@ namespace Models
             Collaborators = new List<Collaborator>();
             LinkedInstitutions = new List<ProjectInstitution>();
             Images = new List<File>();
+            Tags = new List<Tag>();
         }
 
         public int Id { get; set; }
@@ -81,6 +82,8 @@ namespace Models
         public List<ProjectCategory> Categories { get; set; }
 
         public List<File> Images { get; set; }
+
+        public List<Tag> Tags { get; set; }
 
 
         /// <summary>

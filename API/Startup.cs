@@ -495,7 +495,6 @@ namespace API
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-
             //Only apply migrations when db is running via MSSQL instead of IN Memory
             if(!context.Database.IsInMemory())
             {

@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.InputOutput.Tag;
 using System;
 using System.Collections.Generic;
 
@@ -111,6 +112,11 @@ namespace API.Resources
         ///     This gets or sets the categories belonging to a project.
         /// </summary>
         public List<ProjectCategoryOutput> Categories { get; set; }
+
+        /// <summary>
+        ///     This gets or sets the tags belonging to a project.
+        /// </summary>
+        public IEnumerable<TagOutput> Tags { get; set; }
 
     }
 

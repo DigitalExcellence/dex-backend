@@ -44,14 +44,15 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method returns a list of tag resource results.</returns>
         /// <response code="200">This endpoint returns a list of tags.</response>
+
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<TagOutput>), (int) HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllTags()
         {
             IEnumerable<Tag> tags = await tagService.GetAll()
                                                 .ConfigureAwait(false);
-
-            return Ok(mapper.Map<IEnumerable<Tag>, IEnumerable<TagOutput>>(tags));
+            IEnumerable<TagOutput> tagsOutput = mapper.Map<IEnumerable<Tag>, IEnumerable<TagOutput>>(tags);
+            return Ok(tagsOutput);
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace API.Controllers
         /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag id.</response>
         [HttpGet("{id}")]
         [Authorize(Policy = nameof(Scopes.RoleRead))]
-        [ProducesResponseType(typeof(RoleOutput), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(TagOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetTagById(int id)
@@ -103,8 +104,7 @@ namespace API.Controllers
         /// <response code="400">The 400 Bad Request status code is returned when the specified tag name is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag name.</response>
         [HttpGet("{name}")]
-        [Authorize(Policy = nameof(Scopes.RoleRead))]
-        [ProducesResponseType(typeof(RoleOutput), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(TagOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetTagByName(string name)
@@ -132,11 +132,8 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the tag with the specified name.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified tag name is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag name.</response>
-        [Authorize(Policy = nameof(Scopes.RoleRead))]
-        [ProducesResponseType(typeof(RoleOutput), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
-        public List<Tag> GetTagList(List<Tag> tags)
+        [HttpGet("Tags")]
+        public async Task<IActionResult> GetTagList(List<Tag> tags)
         {
             List<Tag> searchTags = new List<Tag>();
             foreach(Tag tag in tags)
@@ -148,8 +145,8 @@ namespace API.Controllers
                 }
                 searchTags.Add(tag);
             }
-
-            return searchTags;
+            IEnumerable<TagOutput> tagsOutput = mapper.Map<IEnumerable<Tag>, IEnumerable<TagOutput>>(searchTags);
+            return Ok(tagsOutput);
         }
 
         /// <summary>
@@ -160,8 +157,7 @@ namespace API.Controllers
         /// <response code="201">This endpoint returns the created tag.</response>
         /// <response code="400">The 400 Bad Request status code is returned when unable to create tag.</response>
         [HttpPost]
-        [Authorize(Policy = nameof(Scopes.RoleWrite))]
-        [ProducesResponseType(typeof(RoleOutput), (int) HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(TagOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateTagAsync([FromBody] TagInput tagResource)
         {

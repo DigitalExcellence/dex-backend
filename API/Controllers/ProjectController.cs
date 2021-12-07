@@ -19,6 +19,7 @@ using API.Common;
 using API.Extensions;
 using API.HelperClasses;
 using API.InputOutput.ProjectTransferRequest;
+using API.InputOutput.Tag;
 using API.Resources;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,7 @@ using Models.Defaults;
 using Models.Exceptions;
 using SendGrid;
 using Serilog;
+using Services;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -64,6 +66,7 @@ namespace API.Controllers
         private readonly IProjectInstitutionService projectInstitutionService;
         private readonly IInstitutionService institutionService;
         private readonly IProjectTransferService projectTransferService;
+        private readonly ITagService tagService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -102,7 +105,9 @@ namespace API.Controllers
                                  IInstitutionService institutionService,
                                  ICallToActionOptionService callToActionOptionService,
                                  ICategoryService categoryService,
-                                 IProjectCategoryService projectCategoryService, IProjectTransferService projectTransferService)
+                                 IProjectCategoryService projectCategoryService,
+                                 IProjectTransferService projectTransferService,
+                                 ITagService tagService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -118,6 +123,7 @@ namespace API.Controllers
             this.projectInstitutionService = projectInstitutionService;
             this.institutionService = institutionService;
             this.projectTransferService = projectTransferService;
+            this.tagService = tagService;
         }
 
 
@@ -509,6 +515,8 @@ namespace API.Controllers
                 project.LinkedInstitutions.Add(new ProjectInstitution { Project = project, Institution = project.User.Institution });
             }
 
+            project.Tags = GetTagList(project.Tags);
+
             try
             {
                 projectService.Add(project);
@@ -532,6 +540,9 @@ namespace API.Controllers
             }
         }
 
+
+
+
         /// <summary>
         ///     This method is responsible for updating the project with the specified identifier.
         /// </summary>
@@ -548,7 +559,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectInput projectResource)
+        public async Task<IActionResult> UpdateProject(int projectId, [FromBody] ProjectInput projectInput)
         {
             Project project = await projectService.FindAsync(projectId)
                                                   .ConfigureAwait(false);
@@ -578,7 +589,7 @@ namespace API.Controllers
                 return Unauthorized(problem);
             }
 
-            if(projectResource.Name.Count() > 75)
+            if(projectInput.Name.Count() > 75)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -589,9 +600,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.CallToActions != null)
+            if(projectInput.CallToActions != null)
             {
-                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
+                if(projectInput.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
@@ -602,19 +613,19 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }
 
-                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                if(projectInput.CallToActions.Count > projectInput.MaximumCallToActions)
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
+                        Title = $"Maximum amount of {projectInput.MaximumCallToActions} call to actions exceeded.",
                         Detail =
-                            $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                            $"It is not possible to create a project with more than {projectInput.MaximumCallToActions} call to actions.",
                         Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
                     };
                     return BadRequest(problem);
                 }
 
-                foreach(CallToActionInput callToAction in projectResource.CallToActions)
+                foreach(CallToActionInput callToAction in projectInput.CallToActions)
                 {
                     IEnumerable<CallToActionOption> callToActionOptions =
                         await callToActionOptionService.GetCallToActionOptionFromValueAsync(
@@ -635,7 +646,7 @@ namespace API.Controllers
                 
             }
 
-            if (projectResource.InstitutePrivate != project.InstitutePrivate)
+            if (projectInput.InstitutePrivate != project.InstitutePrivate)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -646,9 +657,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.IconId != 0)
+            if(projectInput.IconId != 0)
             {
-                Models.File file = await fileService.FindAsync(projectResource.IconId);
+                Models.File file = await fileService.FindAsync(projectInput.IconId);
                 if(file != null)
                 {
                     project.ProjectIcon = file;
@@ -667,7 +678,7 @@ namespace API.Controllers
                 project.ProjectIcon = null;
             }
 
-            if(projectResource.ImageIds.Count() > 10)
+            if(projectInput.ImageIds.Count() > 10)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -679,7 +690,7 @@ namespace API.Controllers
             }
 
             project.Images.Clear();
-            foreach(int projectResourceImageId in projectResource.ImageIds)
+            foreach(int projectResourceImageId in projectInput.ImageIds)
             {
                 Models.File image = await fileService.FindAsync(projectResourceImageId);
                 if(image == null)
@@ -697,9 +708,9 @@ namespace API.Controllers
             }
 
             await projectCategoryService.ClearProjectCategories(project);
-            if(projectResource.Categories != null)
+            if(projectInput.Categories != null)
             {
-                ICollection<ProjectCategoryInput> projectCategoryResources = projectResource.Categories;
+                ICollection<ProjectCategoryInput> projectCategoryResources = projectInput.Categories;
 
                 foreach(ProjectCategoryInput projectCategoryResource in projectCategoryResources)
                 {
@@ -726,7 +737,13 @@ namespace API.Controllers
                 }
             }
 
-            mapper.Map(projectResource, project);
+            //Project project = mapper.Map<ProjectOutput, Project>(projectInput);
+            List<Tag> projectTags = mapper.Map(projectInput.Tags, project.Tags);
+                
+
+            //projectInput.Tags = GetTagList(projectTags);
+
+            mapper.Map(projectInput, project);
             projectService.Update(project);
             projectService.Save();
 
@@ -1755,6 +1772,29 @@ namespace API.Controllers
 
             return NotFound("No pending tranfer found");
 
+        }
+
+        /// <summary>
+        ///     This method is responsible for retrieving a list of tags and add new tags from the list.
+        /// </summary>
+        /// <returns>This method return the list of tags.</returns>
+
+        private List<TagOutput> GetTagList(List<Tag> tags)
+        {
+            List<Tag> searchTags = new List<Tag>();
+            foreach(Tag tag in tags)
+            {
+                Tag newTag = tagService.FindByName(tag.Name);
+                if(newTag == null)
+                {
+                    tagService.Add(tag);
+                    tagService.Save();
+                    newTag = tagService.FindByName(tag.Name);
+                }
+                searchTags.Add(newTag);
+            }
+            List<TagOutput> result = mapper.Map<List<Tag>, List <TagOutput>> (searchTags);
+            return result;
         }
     }
 }
