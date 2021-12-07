@@ -1,5 +1,7 @@
 using Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Services.Services
 {
@@ -7,7 +9,7 @@ namespace Services.Services
     {
         protected readonly double Multiplier;
 
-        public AbstractDataPoint(int multiplier = 1)
+        public AbstractDataPoint(double multiplier = 1)
         {
             Multiplier = multiplier;
         }
@@ -17,11 +19,11 @@ namespace Services.Services
 
     public class LikeDataPoint : AbstractDataPoint
     {
-        public LikeDataPoint(int multiplier = 1) : base(multiplier) { }
+        public LikeDataPoint(double multiplier = 1) : base(multiplier) { }
         public override double Calculate(Project project)
         {
             if(project.Likes != null)
-                return project.Likes.Count * Multiplier;
+                return Math.Round(project.Likes.Count * Multiplier, 2);
             return 0;
         }
 
@@ -29,16 +31,79 @@ namespace Services.Services
     }
     public class RecentCreatedDataPoint : AbstractDataPoint
     {
-        public RecentCreatedDataPoint(int multiplier = 1) : base(multiplier) { }
+        public RecentCreatedDataPoint(double multiplier = 1) : base(multiplier) { }
         public override double Calculate(Project project)
         {
-            return (DateTime.Now - project.Created).TotalDays * Multiplier;
+            double projectCreatedDays = (DateTime.Now - project.Created).TotalDays;
+            if(projectCreatedDays < 14)
+            {
+                return 5;
+            }
+            return Math.Round(projectCreatedDays * Multiplier, 2);
         }
     }
 
+    public class AverageLikeDateDataPoint : AbstractDataPoint
+    {
+        public AverageLikeDateDataPoint(double multiplier = 1) : base(multiplier) { }
+
+        public override double Calculate(Project project)
+        {
+            List<DateTime> dates = new List<DateTime>();
+            foreach(ProjectLike projectLike in project.Likes)
+            {
+                dates.Add(projectLike.Date);
+            }
+            if(dates.Count > 0)
+            {
+                DateTime averageDateTime = DateTime
+                            .MinValue
+                            .AddSeconds
+                            (dates
+                                 .Sum(r => (r - DateTime.MinValue).TotalSeconds)
+                                     / dates.Count);
+                double totalDays = Math.Round((DateTime.Now - averageDateTime).TotalDays, 2);
+                if(totalDays < 14)
+                {
+                    return 2;
+                }
+                return totalDays * Multiplier;
+            }
+            return 0;
+        }
+    }
+
+    public class UpdatedTimeDataPoint : AbstractDataPoint
+    {
+        public UpdatedTimeDataPoint(double multiplier = 1) : base(multiplier) { }
+
+        public override double Calculate(Project project)
+        {
+            return Math.Round((DateTime.Now - project.Updated).TotalDays * Multiplier, 2);
+        }
+    }
+
+    public class InstitutionDataPoint : AbstractDataPoint
+    {
+        public InstitutionDataPoint(double multiplier = 1) : base(multiplier) { }
+
+        public override double Calculate(Project project)
+        {
+            return Math.Round(project.LinkedInstitutions.Count * Multiplier, 2);
+        }
+    }
+
+    public class ConnectedCollaboratorsDataPoint : AbstractDataPoint
+    {
+        public ConnectedCollaboratorsDataPoint(double multiplier = 1) : base(multiplier) { }
+
+        public override double Calculate(Project project)
+        {
+            return Math.Round(project.Collaborators.Count * Multiplier, 2);
+        }
+    }
     // TODO: Update like DataPoint
     // TODO: Updated Time
-    // TODO: Average Like Date
     // TODO: Institution
     // TODO: Connected Collaborators
     // TODO: Sufficient MetaData

@@ -180,7 +180,8 @@ namespace API.Controllers
                projectFilterParamsResource.SortBy != "name" &&
                projectFilterParamsResource.SortBy != "created" &&
                projectFilterParamsResource.SortBy != "updated" &&
-               projectFilterParamsResource.SortBy != "likes")
+               projectFilterParamsResource.SortBy != "likes" &&
+               projectFilterParamsResource.SortBy != "activity")
             {
                 problem.Detail = "Invalid sort value: Use \"name\", \"created\", \"updated\" or \"likes\".";
                 problem.Instance = "5CE2F569-C0D5-4179-9299-62916270A058";
@@ -238,7 +239,6 @@ namespace API.Controllers
                 Page = projectFilterParams.Page,
                 TotalPages = await projectService.GetProjectsTotalPages(projectFilterParams)
             };
-
             return Ok(resultsResource);
         }
 

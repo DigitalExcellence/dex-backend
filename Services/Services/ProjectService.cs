@@ -170,6 +170,9 @@ namespace Services.Services
                 case "likes":
                     orderBy = project => project.Likes.Count;
                     break;
+                case "activity":
+                    orderBy = project => project.ActivityScore;
+                    break;
                 default:
                     orderBy = project => project.Updated;
                     break;

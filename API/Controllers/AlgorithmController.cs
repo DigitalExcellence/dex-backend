@@ -44,7 +44,6 @@ namespace API.Controllers
             return Ok(activityAlgorithmService.CalculateAllProjects(
                 await projectRepository.GetAllWithUsersCollaboratorsAndInstitutionsAsync())
                 .OrderByDescending(p => p.ActivityScore).ToList());
-
         }
     }
 }

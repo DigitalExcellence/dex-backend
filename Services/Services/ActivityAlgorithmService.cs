@@ -23,7 +23,10 @@ namespace Services.Services
                             = new List<AbstractDataPoint>()
                           {
                               new LikeDataPoint(1),
-                              new RecentCreatedDataPoint(1),
+                              new RecentCreatedDataPoint(0.1),
+                              new AverageLikeDateDataPoint(1),
+                              new UpdatedTimeDataPoint(1),
+                              new InstitutionDataPoint(1)
                           };
 
         private readonly IProjectService projectService;
@@ -45,7 +48,7 @@ namespace Services.Services
 
         public double CalculateProjectActivityScore(Project project)
         {
-            return this.dataPoints.Sum(dataPoint => dataPoint.Calculate(project));
+            return dataPoints.Sum(dataPoint => dataPoint.Calculate(project));
         }
 
         public void SetProjectActivityScore(Project project, double score)
