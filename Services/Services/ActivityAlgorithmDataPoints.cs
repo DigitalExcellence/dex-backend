@@ -39,6 +39,7 @@ namespace Services.Services
             {
                 return 5;
             }
+            // This does not make sense, older == more points?
             return Math.Round(projectCreatedDays * Multiplier, 2);
         }
     }
@@ -67,6 +68,7 @@ namespace Services.Services
                 {
                     return 2;
                 }
+                // Older equals more?
                 return totalDays * Multiplier;
             }
             return 0;
