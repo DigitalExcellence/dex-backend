@@ -19,13 +19,16 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories;
 using Repositories.Base;
+using Services.Base;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Services.Base
+namespace Services
 {
     public interface ITagService: IService<Tag>
     {
+        Task<Tag> FindByNameAsync(string name);
+        Tag FindByName(string name);
 
     }
 
@@ -36,14 +39,14 @@ namespace Services.Base
     /// <typeparam name="TEntity"></typeparam>
     public abstract class TagService : Service<Tag>, ITagService
     {
-        private readonly IProjectRepository projectRepository;
+        private readonly ITagRepository repository;
         /// <summary>
         ///     This is the tag service constructor
         /// </summary>
         /// <param name="repository"></param>
-        public TagService(ITagRepository repository, IProjectRepository projectRepository) : base(repository)
+        public TagService(ITagRepository repository) : base(repository)
         {
-            this.projectRepository = projectRepository;
+            this.repository = repository;
         }
 
         /// <summary>
@@ -62,9 +65,19 @@ namespace Services.Base
                                    .ConfigureAwait(false);
         }
 
-        public virtual async Task<Tag> FindAsyncByName(string name)
+        /// <summary>
+        ///     This is the method for finding a single entity by the name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>The found entity</returns>
+        public virtual async Task<Tag> FindByNameAsync(string name)
         {
-            return Repository.FindByNameAsync(name);
+            return await repository.FindByNameAsync(name).ConfigureAwait(false);
+        }
+
+        public Tag FindByName(string name)
+        {
+            return repository.FindByName(name);
         }
 
         /// <summary>

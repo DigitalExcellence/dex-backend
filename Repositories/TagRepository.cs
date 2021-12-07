@@ -28,7 +28,8 @@ namespace Repositories
 {
     public interface ITagRepository : IRepository<Tag>
     {
-        Tag FindByNameAsync(string name);
+        Task<Tag> FindByNameAsync(string name);
+        Tag FindByName(string name);
     }
 
     /// <summary>
@@ -44,11 +45,16 @@ namespace Repositories
         /// <param name="dbContext"></param>
         public TagRepository(DbContext dbContext) : base(dbContext) { }
 
-        public Tag FindByNameAsync(string name)
+        public async Task<Tag> FindByNameAsync(string name)
         {
-            return GetDbSet<Tag>()
+            return await GetDbSet<Tag>()
                 .Where(s => s.Name == name)
-                .FirstOrDefault();
+                .SingleOrDefaultAsync();
+        }
+
+        public Tag FindByName(string name)
+        {
+            return GetDbSet<Tag>().Where(s => s.Name == name).FirstOrDefault();
         }
 
 

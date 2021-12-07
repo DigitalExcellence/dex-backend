@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.InputOutput.Tag;
 using API.Resources;
 using AutoMapper;
 using Models;
@@ -175,6 +176,8 @@ namespace API.Configuration
                 .ForMember(dest => dest.InstititutionName, opt => opt.MapFrom(src => src.Institution.Name))
                 .ForMember(dest => dest.ProjectName, opt => opt.MapFrom(src => src.Project.Name));
 
+            CreateMap<Tag, TagOutput>();
+            CreateMap<Tag, TagInput>();
 
             CreateExternalSourceMappingProfiles();
         }
