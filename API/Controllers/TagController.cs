@@ -132,22 +132,23 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the tag with the specified name.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified tag name is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag name.</response>
-        [HttpGet("Tags")]
-        public async Task<IActionResult> GetTagList(List<Tag> tags)
-        {
-            List<Tag> searchTags = new List<Tag>();
-            foreach(Tag tag in tags)
-            {
-                if(tagService.FindByName(tag.Name) == null)
-                {
-                    tagService.Add(tag);
-                    tagService.Save();
-                }
-                searchTags.Add(tag);
-            }
-            IEnumerable<TagOutput> tagsOutput = mapper.Map<IEnumerable<Tag>, IEnumerable<TagOutput>>(searchTags);
-            return Ok(tagsOutput);
-        }
+        
+        //[HttpGet("Tags")]
+        //public async Task<IActionResult> GetTagList(List<Tag> tags)
+        //{
+        //    List<Tag> searchTags = new List<Tag>();
+        //    foreach(Tag tag in tags)
+        //    {
+        //        if(tagService.FindByName(tag.Name) == null)
+        //        {
+        //            tagService.Add(tag);
+        //            tagService.Save();
+        //        }
+        //        searchTags.Add(tag);
+        //    }
+        //    IEnumerable<TagOutput> tagsOutput = mapper.Map<IEnumerable<Tag>, IEnumerable<TagOutput>>(searchTags);
+        //    return Ok(tagsOutput);
+        //}
 
         /// <summary>
         ///     This method is responsible for creating the tag.
