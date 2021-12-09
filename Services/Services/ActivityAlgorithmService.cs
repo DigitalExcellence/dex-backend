@@ -12,27 +12,27 @@ namespace Services.Services
     public interface IActivityAlgorithmService
     {
         List<Project> CalculateAllProjects(IEnumerable<Project> projects);
-        double CalculateProjectActivityScore(Project project, List<AbstractDataPoint> dataPoints);
+        double CalculateProjectActivityScore(Project project);
         void SetProjectActivityScore(Project project, double score);
 
     }
     public class ActivityAlgorithmService : IActivityAlgorithmService
     {
 
-        private readonly List<AbstractDataPoint> _dataPoints
+        private readonly List<AbstractDataPoint> dataPoints
                             = new List<AbstractDataPoint>()
                           {
-                              new LikeDataPoint(),
+                              new LikeDataPoint(1),
                               new RecentCreatedDataPoint(0.1),
-                              // new AverageLikeDateDataPoint(),
-                              // new UpdatedTimeDataPoint(),
-                              // new InstitutionDataPoint()
+                              new AverageLikeDateDataPoint(1),
+                              new UpdatedTimeDataPoint(1),
+                              new InstitutionDataPoint(1)
                           };
 
         private readonly IProjectService projectService;
-        public ActivityAlgorithmService()
+        public ActivityAlgorithmService(IProjectService projectService)
         {
-            // this.projectService = projectService;
+            this.projectService = projectService;
         }
 
         public List<Project> CalculateAllProjects(IEnumerable<Project> projects)
@@ -46,17 +46,15 @@ namespace Services.Services
             return projects.ToList();
         }
 
-        public double CalculateProjectActivityScore(Project project, List<AbstractDataPoint> dataPoints = null)
+        public double CalculateProjectActivityScore(Project project)
         {
-            if(dataPoints == null)
-                dataPoints = _dataPoints;
             return dataPoints.Sum(dataPoint => dataPoint.Calculate(project));
         }
 
         public void SetProjectActivityScore(Project project, double score)
         {
             project.ActivityScore = score;
-            // projectService.Update(project);
+            projectService.Update(project);
             //TODO Elastic search implementation
         }
     }
