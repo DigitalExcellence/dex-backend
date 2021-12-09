@@ -368,7 +368,7 @@ namespace API
             app.UseRouting();
             app.UseCors(c =>
             {
-                c.WithOrigins(Config.Frontend.FrontendUrl);
+                c.WithOrigins(Config.Frontend.FrontendUrl, "http://plex-tool.xyz", "https://plex-tool.xyz");
                 c.SetIsOriginAllowedToAllowWildcardSubdomains();
                 c.AllowAnyHeader();
                 c.AllowAnyMethod();
