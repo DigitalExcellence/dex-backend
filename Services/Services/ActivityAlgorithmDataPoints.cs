@@ -1,4 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
 using Models;
+using Services.Sources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +26,7 @@ namespace Services.Services
         {
             if(project.Likes != null)
                 return Math.Round(project.Likes.Count * Multiplier, 2);
-            return 0;
+            return 0.00;
         }
 
 
@@ -37,10 +39,10 @@ namespace Services.Services
             double projectCreatedDays = (DateTime.Now - project.Created).TotalDays;
             if(projectCreatedDays < 14)
             {
-                return 5;
+                return 5.00;
             }
             // This does not make sense, older == more points?
-            return Math.Round(projectCreatedDays * Multiplier, 2);
+            return Math.Round(Multiplier / projectCreatedDays * 10, 2);
         }
     }
 
@@ -63,15 +65,14 @@ namespace Services.Services
                             (dates
                                  .Sum(r => (r - DateTime.MinValue).TotalSeconds)
                                      / dates.Count);
-                double totalDays = Math.Round((DateTime.Now - averageDateTime).TotalDays, 2);
-                if(totalDays < 14)
+                double averageLikeDate = Math.Round((DateTime.Now - averageDateTime).TotalDays, 2);
+                if(averageLikeDate < 14)
                 {
-                    return 2;
+                    return 2.00;
                 }
-                // Older equals more?
-                return totalDays * Multiplier;
+                return Math.Round(Multiplier / averageLikeDate, 2);
             }
-            return 0;
+            return 0.00;
         }
     }
 
@@ -81,7 +82,12 @@ namespace Services.Services
 
         public override double Calculate(Project project)
         {
-            return Math.Round((DateTime.Now - project.Updated).TotalDays * Multiplier, 2);
+            double updatedDate = (DateTime.Now - project.Updated).TotalDays;
+            if(updatedDate < 14)
+            {
+                return 2.00;
+            }
+            return Math.Round(Multiplier / updatedDate, 2);
         }
     }
 
@@ -101,14 +107,49 @@ namespace Services.Services
 
         public override double Calculate(Project project)
         {
+            if(project.Collaborators.Count > 5) return Math.Round(6 * Multiplier, 2);
             return Math.Round(project.Collaborators.Count * Multiplier, 2);
         }
     }
-    // TODO: Update like DataPoint
-    // TODO: Updated Time
-    // TODO: Institution
-    // TODO: Connected Collaborators
-    // TODO: Sufficient MetaData
-    // TODO: CTA'S
-    // TODO: Research and implementation for GitHub
+
+    public class MetaDataDataPoint : AbstractDataPoint
+    {
+        public MetaDataDataPoint(double multiplier = 1) : base(multiplier) { }
+        public override double Calculate(Project project)
+        {
+            double score = 0;
+            if(project.Categories.Count >= 1) score += 1;
+            if(project.CallToActions.Count >= 1) score += project.CallToActions.Count;
+            if(project.Images.Count >= 1) score += 2;
+            if(project.Uri != null) score += 1;
+            return Math.Round(score * Multiplier, 2);
+        }
+    }
+    //ToDo: Research Repo System.
+    public class RepoScoreDataPoint : AbstractDataPoint
+    {
+        readonly IGitLabSource gitLabSource = new GitLabSource(new RestClientFactory());
+        public RepoScoreDataPoint(double multiplier = 1) : base(multiplier) {}
+        public override double Calculate(Project project)
+        {
+            Uri sourceUri = new Uri(project.Uri);
+
+            if(sourceUri.Host == "github.com")
+            {
+                return 2.00 * Multiplier;
+            }
+            if(sourceUri.Host == "gitlab.com")
+            {
+                Project gitlabProject = gitLabSource.GetProjectInformation(sourceUri);
+                if(gitlabProject != null)
+                {
+                    return Math.Round(2.00 * Multiplier, 2);
+                } else
+                {
+                    return 0.00;
+                }
+            }
+            return 2.00 * Multiplier;
+        }
+    }
 }
