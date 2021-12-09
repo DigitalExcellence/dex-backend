@@ -515,7 +515,7 @@ namespace API.Controllers
                 project.LinkedInstitutions.Add(new ProjectInstitution { Project = project, Institution = project.User.Institution });
             }
 
-            project.Tags = CreateTagList(project.Tags);
+            //project.Tags = CreateTagList(project.Tags);
 
             try
             {
@@ -737,7 +737,7 @@ namespace API.Controllers
                 }
             }
 
-            projectInput.Tags = UpdateTagList(project.Tags);
+            //projectInput.Tags = UpdateTagList(project.Tags);
 
             mapper.Map(projectInput, project);
             projectService.Update(project);

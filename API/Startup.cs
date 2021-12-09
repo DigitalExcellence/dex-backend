@@ -527,7 +527,13 @@ namespace API
                     context.User.Add(Seed.SeedDataOfficerUser(roles));
                     context.SaveChanges();
                 }
-
+                //Seed Tags
+                if(!context.Tag.Any())
+                {
+                    List<Tag> tags = context.Tag.ToList();
+                    context.Tag.AddRange(Seed.SeedTags(tags));
+                    context.SaveChanges();
+                }
                 if(!context.Project.Any())
                 {
                     //Seed projects
@@ -548,12 +554,7 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-                if(!context.Tag.Any())
-                {
-                    List<Tag> tags = context.Tag.ToList();
-                    context.Tag.AddRange(Seed.SeedTags(tags));
-                    context.SaveChanges();
-                }
+
                 // TODO seed embedded projects
             }
 

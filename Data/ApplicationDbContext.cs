@@ -191,6 +191,11 @@ namespace Data
         /// </summary>
         public DbSet<Tag> Tag { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ProjectTags
+        /// </summary>
+        public DbSet<ProjectTag> ProjectTag {get; set;}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
