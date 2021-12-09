@@ -357,20 +357,20 @@ namespace Data.Helpers
         /// </summary>
         public static List<Project> SeedProjects(List<User> users)
         {
-            List<Tag> tags = new List<Tag> { new Tag() { Name = "CSharp" }, new Tag() { Name = "Java" } };
             if(users.Count < 1) return null;
             List<Project> projects = new List<Project>();
             Random r = new Random();
             for(int i = 0; i < 30; i++)
             {
                 User user = users[r.Next(0, users.Count - 1)];
+                //ProjectTag projectTag = new ProjectTag() { Id = i, Project = i, Tag = }
                 Faker<Project> projectToFake = new Faker<Project>()
                                                .RuleFor(s => s.UserId, user.Id)
                                                .RuleFor(s => s.Uri, f => f.Internet.Url())
                                                .RuleFor(s => s.Name, f => f.Commerce.ProductName())
                                                .RuleFor(s => s.Description, f => f.Lorem.Sentences(10))
                                                .RuleFor(s => s.ShortDescription, f => f.Lorem.Sentences(1));
-            Project project = projectToFake.Generate();
+                Project project = projectToFake.Generate();
 
                 project.Created = DateTime.Now.AddDays(-2);
                 project.Updated = DateTime.Now;
