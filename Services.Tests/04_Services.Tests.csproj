@@ -1,26 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
 
-    <IsPackable>false</IsPackable>
+        <IsPackable>false</IsPackable>
 
-    <Version>1.8.0-beta</Version>
-  </PropertyGroup>
+        <Version>1.8.0-beta</Version>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.12" />
-    <PackageReference Include="Moq" Version="4.13.1" />
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Bogus" Version="34.0.1" />
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.12" />
+        <PackageReference Include="Moq" Version="4.13.1" />
+        <PackageReference Include="nunit" Version="3.12.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Repositories.Tests\06_Repositories.Tests.csproj" />
-    <ProjectReference Include="..\Repositories\05_Repositories.csproj" />
-    <ProjectReference Include="..\Services\03_Services.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Repositories.Tests\06_Repositories.Tests.csproj" />
+        <ProjectReference Include="..\Repositories\05_Repositories.csproj" />
+        <ProjectReference Include="..\Services\03_Services.csproj" />
+    </ItemGroup>
 
 </Project>
