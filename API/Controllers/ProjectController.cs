@@ -515,7 +515,7 @@ namespace API.Controllers
                 project.LinkedInstitutions.Add(new ProjectInstitution { Project = project, Institution = project.User.Institution });
             }
 
-            project.Tags = GetTagList(project.Tags);
+            project.Tags = CreateTagList(project.Tags);
 
             try
             {
@@ -737,11 +737,7 @@ namespace API.Controllers
                 }
             }
 
-            //Project project = mapper.Map<ProjectOutput, Project>(projectInput);
-            List<Tag> projectTags = mapper.Map(projectInput.Tags, project.Tags);
-                
-
-            //projectInput.Tags = GetTagList(projectTags);
+            projectInput.Tags = UpdateTagList(project.Tags);
 
             mapper.Map(projectInput, project);
             projectService.Update(project);
@@ -1779,7 +1775,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns>This method return the list of tags.</returns>
 
-        private List<TagOutput> GetTagList(List<Tag> tags)
+        private List<Tag> CreateTagList(List<Tag> tags)
         {
             List<Tag> searchTags = new List<Tag>();
             foreach(Tag tag in tags)
@@ -1793,7 +1789,25 @@ namespace API.Controllers
                 }
                 searchTags.Add(newTag);
             }
-            List<TagOutput> result = mapper.Map<List<Tag>, List <TagOutput>> (searchTags);
+            return searchTags;
+        }
+
+        private List<TagInput> UpdateTagList(List<Tag> tags)
+        {
+            List<Tag> searchTags = new List<Tag>();
+            foreach(Tag tag in tags)
+            {
+                if(tag.Id == null)
+                {
+                    if(tagService.FindByName(tag.Name) == null)
+                    {
+                        tagService.Add(tag);
+                        tagService.Save();
+                    }
+                }
+                searchTags.Add(tagService.FindByName(tag.Name));
+            }
+            List<TagInput> result = mapper.Map<List<Tag>, List<TagInput>>(searchTags);
             return result;
         }
     }

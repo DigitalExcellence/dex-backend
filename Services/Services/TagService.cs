@@ -23,7 +23,7 @@ using Services.Base;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Services
+namespace Services.Services
 {
     public interface ITagService: IService<Tag>
     {

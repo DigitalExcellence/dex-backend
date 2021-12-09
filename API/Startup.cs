@@ -548,7 +548,12 @@ namespace API
                     context.Highlight.AddRange(Seed.SeedHighlights(projects));
                     context.SaveChanges();
                 }
-
+                if(!context.Tag.Any())
+                {
+                    List<Tag> tags = context.Tag.ToList();
+                    context.Tag.AddRange(Seed.SeedTags(tags));
+                    context.SaveChanges();
+                }
                 // TODO seed embedded projects
             }
 
