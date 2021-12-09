@@ -67,6 +67,7 @@ namespace API.Controllers
         private readonly IInstitutionService institutionService;
         private readonly IProjectTransferService projectTransferService;
         private readonly ITagService tagService;
+        private readonly IProjectTagService projectTagService;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProjectController" /> class
         /// </summary>
@@ -107,7 +108,8 @@ namespace API.Controllers
                                  ICategoryService categoryService,
                                  IProjectCategoryService projectCategoryService,
                                  IProjectTransferService projectTransferService,
-                                 ITagService tagService)
+                                 ITagService tagService,
+                                 IProjectTagService projectTagService)
         {
             this.projectService = projectService;
             this.userService = userService;
@@ -124,6 +126,7 @@ namespace API.Controllers
             this.institutionService = institutionService;
             this.projectTransferService = projectTransferService;
             this.tagService = tagService;
+            this.projectTagService = projectTagService;
         }
 
 
@@ -357,9 +360,9 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ProjectOutput), (int) HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectInput projectResource)
+        public async Task<IActionResult> CreateProjectAsync([FromBody] ProjectInput projectInput)
         {
-            if(projectResource == null)
+            if(projectInput == null)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -370,7 +373,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.Name.Count() > 75)
+            if(projectInput.Name.Count() > 75)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -381,9 +384,9 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.CallToActions != null)
+            if(projectInput.CallToActions != null)
             {
-                if(projectResource.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
+                if(projectInput.CallToActions.GroupBy(cta => cta.OptionValue).Any(cta => cta.Count() > 1))
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
@@ -394,17 +397,17 @@ namespace API.Controllers
                     return BadRequest(problem);
                 }
 
-                if(projectResource.CallToActions.Count > projectResource.MaximumCallToActions)
+                if(projectInput.CallToActions.Count > projectInput.MaximumCallToActions)
                 {
                     ProblemDetails problem = new ProblemDetails
                     {
-                        Title = $"Maximum amount of {projectResource.MaximumCallToActions} call to actions exceeded.",
-                        Detail = $"It is not possible to create a project with more than {projectResource.MaximumCallToActions} call to actions.",
+                        Title = $"Maximum amount of {projectInput.MaximumCallToActions} call to actions exceeded.",
+                        Detail = $"It is not possible to create a project with more than {projectInput.MaximumCallToActions} call to actions.",
                         Instance = "E780005D-BBEB-423E-BA01-58145D3DBDF5"
                     };
                     return BadRequest(problem);
                 }
-                foreach(CallToActionInput callToAction in projectResource.CallToActions)
+                foreach(CallToActionInput callToAction in projectInput.CallToActions)
                 {
                     IEnumerable<CallToActionOption> callToActionOptions =
                         await callToActionOptionService.GetCallToActionOptionFromValueAsync(
@@ -423,10 +426,10 @@ namespace API.Controllers
                 
             }
 
-            Project project = mapper.Map<ProjectInput, Project>(projectResource);
-            Models.File file = await fileService.FindAsync(projectResource.IconId);
+            Project project = mapper.Map<ProjectInput, Project>(projectInput);
+            Models.File file = await fileService.FindAsync(projectInput.IconId);
 
-            if(projectResource.IconId != 0 &&
+            if(projectInput.IconId != 0 &&
                file == null)
             {
                 ProblemDetails problem = new ProblemDetails
@@ -438,7 +441,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            if(projectResource.ImageIds.Count() > 10)
+            if(projectInput.ImageIds.Count() > 10)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -449,7 +452,7 @@ namespace API.Controllers
                 return BadRequest(problem);
             }
 
-            foreach(int projectResourceImageId in projectResource.ImageIds)
+            foreach(int projectResourceImageId in projectInput.ImageIds)
             {
                 Models.File image = await fileService.FindAsync(projectResourceImageId);
                 if(image == null)
@@ -470,9 +473,9 @@ namespace API.Controllers
             project.User = await HttpContext.GetContextUser(userService)
                                             .ConfigureAwait(false);
 
-            if(projectResource.Categories != null)
+            if(projectInput.Categories != null)
             {
-                ICollection<ProjectCategoryInput> projectCategoryResources = projectResource.Categories;
+                ICollection<ProjectCategoryInput> projectCategoryResources = projectInput.Categories;
 
                 foreach(ProjectCategoryInput projectCategoryResource in projectCategoryResources)
                 {
@@ -513,6 +516,37 @@ namespace API.Controllers
                 }
 
                 project.LinkedInstitutions.Add(new ProjectInstitution { Project = project, Institution = project.User.Institution });
+            }
+
+            //todo: add tag/project to projecttag (if tag doesn't exists, create it first)
+            if(projectInput.Tags != null)
+            {
+                IEnumerable<TagInput> projectCategoryResources = projectInput.Tags;
+
+                foreach(TagInput projectCategoryResource in projectCategoryResources)
+                {
+                    //ProjectTag alreadyExistingProjectTag = await projectTagService.GetProjectTag(project.Id, );
+                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
+                    if(alreadyExcProjectCategory == null)
+                    {
+                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
+
+                        if(category == null)
+                        {
+                            ProblemDetails problem = new ProblemDetails
+                            {
+                                Title = "Failed to save new project.",
+                                Detail = "One of the given categories did not exist.",
+                                Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
+                            };
+                            return BadRequest(problem);
+                        }
+
+                        ProjectCategory projectCategory = new ProjectCategory(project, category);
+                        await projectCategoryService.AddAsync(projectCategory)
+                                               .ConfigureAwait(false);
+                    }
+                }
             }
 
             //project.Tags = CreateTagList(project.Tags);
