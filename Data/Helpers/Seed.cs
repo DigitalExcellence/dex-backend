@@ -101,7 +101,7 @@ namespace Data.Helpers
             for(int i = 0; i < 30; i++)
             {
                 Faker<Tag> tagToFake = new Faker<Tag>()
-                    .RuleFor(t => t.Name, f => f.Company.CompanyName());
+                    .RuleFor(t => t.Name, f => f.Hacker.Adjective());
 
                 Tag tag = tagToFake.Generate();
 

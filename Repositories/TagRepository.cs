@@ -36,7 +36,7 @@ namespace Repositories
     ///     This is the abstract base class of the repositories
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class TagRepository : Repository<Tag>, ITagRepository
+    public class TagRepository : Repository<Tag>, ITagRepository
     {
 
         /// <summary>

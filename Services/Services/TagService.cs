@@ -37,7 +37,7 @@ namespace Services.Services
     ///     This is the tag service
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class TagService : Service<Tag>, ITagService
+    public class TagService : Service<Tag>, ITagService
     {
         private readonly ITagRepository repository;
         /// <summary>
@@ -97,8 +97,11 @@ namespace Services.Services
         /// <returns></returns>
         public virtual async Task AddAsync(Tag entity)
         {
-            await Repository.AddAsync(entity)
-                            .ConfigureAwait(false);
+            if(FindByName(entity.Name) == null)
+            {
+                await Repository.AddAsync(entity)
+                                .ConfigureAwait(false);
+            }
         }
 
         /// <summary>
