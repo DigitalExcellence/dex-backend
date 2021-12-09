@@ -33,9 +33,9 @@ namespace Services.Services
                           };
 
         private readonly IProjectService projectService;
-        public ActivityAlgorithmService()
+        public ActivityAlgorithmService(IProjectService projectService)
         {
-            // this.projectService = projectService;
+            this.projectService = projectService;
         }
 
         public List<Project> CalculateAllProjects(IEnumerable<Project> projects)

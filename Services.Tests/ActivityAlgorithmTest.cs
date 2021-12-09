@@ -1,4 +1,4 @@
-﻿using Models;
+using Models;
 using NUnit.Framework;
 using Services.Services;
 using Services.Tests.Helpers;
