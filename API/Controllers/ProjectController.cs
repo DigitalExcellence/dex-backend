@@ -94,6 +94,8 @@ namespace API.Controllers
         /// <param name="projectInstitutionService">The projectinstitution service is responsible for link projects and institutions.</param>
         /// <param name="institutionService">The institution service which is used to communicate with the logic layer</param>
         /// /// <param name="projectTransferService">The projectTransferservice which is used to communicate with the logic layer</param>
+        /// <param name="tagService"></param>
+        /// <param name="projectTagService"></param>
         public ProjectController(IProjectService projectService,
                                  IUserService userService,
                                  IMapper mapper,
@@ -857,6 +859,8 @@ namespace API.Controllers
             }
 
             await projectCategoryService.ClearProjectCategories(project);
+
+            await projectTagService.ClearProjectTags(project);
 
             await projectService.RemoveAsync(projectId)
                                 .ConfigureAwait(false);
