@@ -27,6 +27,10 @@ namespace Services.Services
 {
     public interface IProjectTagService: IService<ProjectTag>
     {
+        /// <summary>
+        ///     Clear tags by given project
+        /// </summary>
+        Task ClearProjectTags(Project project);
     }
 
 

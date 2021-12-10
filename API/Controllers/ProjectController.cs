@@ -755,7 +755,24 @@ namespace API.Controllers
                 }
             }
 
-            //projectInput.Tags = UpdateTagList(project.Tags);
+            //Same like categories, remove all and then add/create every tag again
+            await projectTagService.ClearProjectTags(project);
+            if(projectInput.Tags != null)
+            {
+                IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
+
+                foreach(TagInput projectTagInput in projectTagInputs)
+                {
+                    Tag tag = tagService.FindByName(projectTagInput.Name);
+                    if(tag == null)
+                    {
+                        tagService.Add(tag);
+                        tag = tagService.FindByName(tag.Name);
+                    }
+                    ProjectTag projectTag = new ProjectTag(tag, project);
+                    await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
+                }
+            }
 
             mapper.Map(projectInput, project);
             projectService.Update(project);

@@ -28,6 +28,7 @@ namespace Repositories
 {
     public interface IProjectTagRepository : IRepository<ProjectTag>
     {
+        Task<List<ProjectTag>> GetProjectTags(int projectId);
     }
 
     /// <summary>
@@ -43,5 +44,14 @@ namespace Repositories
         /// <param name="dbContext"></param>
         public ProjectTagRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        ///     Gets project tags by given projectId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        public Task<List<ProjectTag>> GetProjectTags(int projectId)
+        {
+            return DbSet.Where(p => p.Project.Id == projectId).ToListAsync();
+        }
     }
 }
