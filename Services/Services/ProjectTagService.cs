@@ -21,6 +21,7 @@ using Repositories;
 using Repositories.Base;
 using Services.Base;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.Services
@@ -114,6 +115,18 @@ namespace Services.Services
         public virtual void Update(ProjectTag entity)
         {
             Repository.Update(entity);
+        }
+
+        /// <summary>
+        ///     This methods clears all tags
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public async Task ClearProjectTags(Project project)
+        {
+            IEnumerable<int> currentProjectTagIds = (await repository.GetProjectTags(project.Id)).Select(t => t.Id);
+            await Repository.RemoveRangeAsync(currentProjectTagIds);
+            Repository.Save();
         }
 
         /// <summary>
