@@ -517,51 +517,23 @@ namespace API.Controllers
                 project.LinkedInstitutions.Add(new ProjectInstitution { Project = project, Institution = project.User.Institution });
             }
 
-            //todo: add tag/project to projecttag (if tag doesn't exists, create it first)
             if(projectInput.Tags != null)
             {
                 IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
 
                 foreach(TagInput projectTagInput in projectTagInputs)
                 {
-                    //ProjectTag alreadyExistingProjectTag = await projectTagService.GetProjectTag(project.Id, );
-                    //findbyname?
-                    //ProjectTag projectTag = await projectTagService.GetByName(projectTagInput.Name);
                     Tag tag = tagService.FindByName(projectTagInput.Name);
                     if(tag == null)
                     {
-                        //create tag
                         tagService.Add(tag);
                         tag = tagService.FindByName(tag.Name);
                     }
                     ProjectTag projectTag = new ProjectTag(tag, project);
                     await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
-
-
-                    //ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
-                    //if(alreadyExcProjectCategory == null)
-                    //{
-                    //    Category category = await categoryService.FindAsync(projectCategoryResource.Id);
-
-                    //    if(category == null)
-                    //    {
-                    //        ProblemDetails problem = new ProblemDetails
-                    //        {
-                    //            Title = "Failed to save new project.",
-                    //            Detail = "One of the given categories did not exist.",
-                    //            Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
-                    //        };
-                    //        return BadRequest(problem);
-                    //    }
-
-                    //    ProjectCategory projectCategory = new ProjectCategory(project, category);
-                    //    await projectCategoryService.AddAsync(projectCategory)
-                    //                           .ConfigureAwait(false);
-                    //}
                 }
             }
 
-            //project.Tags = CreateTagList(project.Tags);
 
             try
             {
