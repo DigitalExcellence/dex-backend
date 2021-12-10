@@ -83,6 +83,9 @@ namespace API.Resources
         /// </summary>
         public List<ProjectCategoryOutput> Categories { get; set; }
 
+        /// <summary>
+        ///     This gets or sets the tags of the project.
+        /// </summary>
         public List<TagOutput> Tags { get; set; }
     }
 
