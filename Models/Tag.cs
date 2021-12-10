@@ -13,6 +13,14 @@ namespace Models
 
     public class ProjectTag
     {
+        public ProjectTag(Tag tag, Project project)
+        {
+            this.Tag = tag;
+            this.Project = project;
+        }
+
+        public ProjectTag(){}
+
         public int Id { get; set; }
         public Tag Tag { get; set; }
         public Project Project { get; set; }

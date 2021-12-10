@@ -261,15 +261,14 @@ namespace API.Controllers
         [HttpGet("search/autocomplete")]
         [ProducesResponseType(typeof(List<AutocompleteProjectOutput>), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), 503)]
-        public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name ="query")] string query)
+        public async Task<IActionResult> GetAutoCompleteProjects([FromQuery(Name = "query")] string query)
         {
             try
             {
                 List<Project> projects = await projectService.FindProjectsWhereTitleStartsWithQuery(query);
                 List<AutocompleteProjectOutput> autocompleteProjectResourceResults = mapper.Map<List<Project>, List<AutocompleteProjectOutput>>(projects);
                 return Ok(autocompleteProjectResourceResults);
-            }
-            catch(ElasticUnavailableException)
+            } catch(ElasticUnavailableException)
             {
                 return StatusCode(503,
                     new ProblemDetails
@@ -423,7 +422,7 @@ namespace API.Controllers
                         return BadRequest(problem);
                     }
                 }
-                
+
             }
 
             Project project = mapper.Map<ProjectInput, Project>(projectInput);
@@ -458,10 +457,10 @@ namespace API.Controllers
                 if(image == null)
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Image was not found.",
-                                                 Detail = "The specified image was not found while creating project.",
-                                                 Instance = "B040FAAD-FD22-4C77-822E-C498DFA1A9CB"
+                    {
+                        Title = "Image was not found.",
+                        Detail = "The specified image was not found while creating project.",
+                        Instance = "B040FAAD-FD22-4C77-822E-C498DFA1A9CB"
                     };
                     return BadRequest(problem);
                 }
@@ -521,31 +520,44 @@ namespace API.Controllers
             //todo: add tag/project to projecttag (if tag doesn't exists, create it first)
             if(projectInput.Tags != null)
             {
-                IEnumerable<TagInput> projectCategoryResources = projectInput.Tags;
+                IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
 
-                foreach(TagInput projectCategoryResource in projectCategoryResources)
+                foreach(TagInput projectTagInput in projectTagInputs)
                 {
                     //ProjectTag alreadyExistingProjectTag = await projectTagService.GetProjectTag(project.Id, );
-                    ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
-                    if(alreadyExcProjectCategory == null)
+                    //findbyname?
+                    //ProjectTag projectTag = await projectTagService.GetByName(projectTagInput.Name);
+                    Tag tag = tagService.FindByName(projectTagInput.Name);
+                    if(tag == null)
                     {
-                        Category category = await categoryService.FindAsync(projectCategoryResource.Id);
-
-                        if(category == null)
-                        {
-                            ProblemDetails problem = new ProblemDetails
-                            {
-                                Title = "Failed to save new project.",
-                                Detail = "One of the given categories did not exist.",
-                                Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
-                            };
-                            return BadRequest(problem);
-                        }
-
-                        ProjectCategory projectCategory = new ProjectCategory(project, category);
-                        await projectCategoryService.AddAsync(projectCategory)
-                                               .ConfigureAwait(false);
+                        //create tag
+                        tagService.Add(tag);
+                        tag = tagService.FindByName(tag.Name);
                     }
+                    ProjectTag projectTag = new ProjectTag(tag, project);
+                    await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
+
+
+                    //ProjectCategory alreadyExcProjectCategory = await projectCategoryService.GetProjectCategory(project.Id, projectCategoryResource.Id);
+                    //if(alreadyExcProjectCategory == null)
+                    //{
+                    //    Category category = await categoryService.FindAsync(projectCategoryResource.Id);
+
+                    //    if(category == null)
+                    //    {
+                    //        ProblemDetails problem = new ProblemDetails
+                    //        {
+                    //            Title = "Failed to save new project.",
+                    //            Detail = "One of the given categories did not exist.",
+                    //            Instance = "C152D170-F9C2-48DE-8111-02DBD160C768"
+                    //        };
+                    //        return BadRequest(problem);
+                    //    }
+
+                    //    ProjectCategory projectCategory = new ProjectCategory(project, category);
+                    //    await projectCategoryService.AddAsync(projectCategory)
+                    //                           .ConfigureAwait(false);
+                    //}
                 }
             }
 
@@ -677,10 +689,10 @@ namespace API.Controllers
                         return BadRequest(problem);
                     }
                 }
-                
+
             }
 
-            if (projectInput.InstitutePrivate != project.InstitutePrivate)
+            if(projectInput.InstitutePrivate != project.InstitutePrivate)
             {
                 ProblemDetails problem = new ProblemDetails
                 {
@@ -730,10 +742,10 @@ namespace API.Controllers
                 if(image == null)
                 {
                     ProblemDetails problem = new ProblemDetails
-                                             {
-                                                 Title = "Image was not found.",
-                                                 Detail = "The specified image was not found while updating project.",
-                                                 Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
+                    {
+                        Title = "Image was not found.",
+                        Detail = "The specified image was not found while updating project.",
+                        Instance = "FC816E40-31A6-4187-BEBA-D22F06019F8F"
                     };
                     return BadRequest(problem);
                 }
