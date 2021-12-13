@@ -52,18 +52,13 @@ namespace Services.Services
         {
             if(project.Likes.Count > 0)
             {
-                DateTime averageDateTime = DateTime
-                            .MinValue
-                            .AddSeconds
-                            (project.Likes
-                                 .Sum(r => (r.Date - DateTime.MinValue).TotalSeconds)
-                                     / project.Likes.Count);
-                double averageLikeDate = Math.Round((DateTime.Now - averageDateTime).TotalDays, 2);
-                if(averageLikeDate < 14)
+                DateTime averageDateTime = DateTime.MinValue.AddSeconds(project.Likes.Sum(r => (r.Date - DateTime.MinValue).TotalSeconds) / project.Likes.Count);
+                int daysAfterLikeDate = (int)(DateTime.Now - averageDateTime).TotalDays;
+                if(daysAfterLikeDate > 28)
                 {
                     return 2 * Multiplier;
                 }
-                return Multiplier / averageLikeDate;
+                return daysAfterLikeDate / Multiplier;
             }
             return 0;
         }

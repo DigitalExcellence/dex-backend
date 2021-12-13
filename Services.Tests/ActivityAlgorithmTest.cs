@@ -52,7 +52,6 @@ namespace Services.Tests
             project.Likes =  new List<ProjectLike>()
                              {
                                  _projectGeneratorHelper.GetOldLike(),
-                                 _projectGeneratorHelper.GetOldLike(),
                                  _projectGeneratorHelper.GetRecentLike()
                              };
 
@@ -61,7 +60,7 @@ namespace Services.Tests
                     new AverageLikeDateDataPoint()
                 });
 
-            Assert.AreEqual(1, score);
+            Assert.AreEqual(2, score);
 
         }
 
