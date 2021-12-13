@@ -150,6 +150,9 @@ namespace Repositories
         ///     This method return a list of projects where the title, or part of the title matches the query.
         /// </returns>
         Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
+
+        void UpdateActivityScore(Project entity);
+
     }
 
     /// <summary>
@@ -400,6 +403,14 @@ namespace Repositories
 
 
         }
+
+        public void UpdateActivityScore(Project entity)
+        {
+            DbSet.Update(entity);
+            ESProjectDTO projectToSync = ProjectConverter.ProjectToESProjectDTO(entity);
+            taskPublisher.RegisterTask(Newtonsoft.Json.JsonConvert.SerializeObject(projectToSync), Subject.ELASTIC_CREATE_OR_UPDATE);
+        }
+
 
         private static void SetLikes(Project entity)
         {

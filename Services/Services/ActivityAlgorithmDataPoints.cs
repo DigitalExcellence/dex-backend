@@ -1,12 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
 using Models;
 using RestSharp;
 using Services.Sources;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -54,27 +50,22 @@ namespace Services.Services
 
         public override double Calculate(Project project)
         {
-            List<DateTime> dates = new List<DateTime>();
-            foreach(ProjectLike projectLike in project.Likes)
-            {
-                dates.Add(projectLike.Date);
-            }
-            if(dates.Count > 0)
+            if(project.Likes.Count > 0)
             {
                 DateTime averageDateTime = DateTime
                             .MinValue
                             .AddSeconds
-                            (dates
-                                 .Sum(r => (r - DateTime.MinValue).TotalSeconds)
-                                     / dates.Count);
+                            (project.Likes
+                                 .Sum(r => (r.Date - DateTime.MinValue).TotalSeconds)
+                                     / project.Likes.Count);
                 double averageLikeDate = Math.Round((DateTime.Now - averageDateTime).TotalDays, 2);
                 if(averageLikeDate < 14)
                 {
-                    return 2.00 * Multiplier;
+                    return 2 * Multiplier;
                 }
                 return Multiplier / averageLikeDate;
             }
-            return 0.00;
+            return 0;
         }
     }
 
@@ -87,12 +78,11 @@ namespace Services.Services
             double updatedDate = (DateTime.Now - project.Updated).TotalDays;
             if(updatedDate < 14)
             {
-                return 2.00 * Multiplier;
+                return 2 * Multiplier;
             }
             return Multiplier / updatedDate;
         }
     }
-
     public class InstitutionDataPoint : AbstractDataPoint
     {
         public InstitutionDataPoint(double multiplier = 1) : base(multiplier) { }
@@ -121,13 +111,14 @@ namespace Services.Services
         {
             double score = 0;
             if(project.Categories.Count >= 1) score += 1;
-            if(project.CallToActions.Count >= 1) score += project.CallToActions.Count;
+            if(project.CallToActions.Count >= 1 && project.CallToActions.Count <= 4) score += project.CallToActions.Count;
+            if(project.CallToActions.Count >= 4 )score += 4;
             if(project.Images.Count >= 1) score += 2;
             if(project.Uri != null) score += 1;
             return score * Multiplier;
         }
     }
-
+    //ToDo: Research Repo System.
     public class RepoScoreDataPoint : AbstractDataPoint
     {
         public RepoScoreDataPoint(double multiplier = 1) : base(multiplier) { }
@@ -142,7 +133,7 @@ namespace Services.Services
             IRestResponse response = client.Execute(request);
             if((int)response.StatusCode < 400)
             {
-                return 2;
+                return 2 * Multiplier;
             }
             return 0;
         }

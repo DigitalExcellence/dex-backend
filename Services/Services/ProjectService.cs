@@ -96,6 +96,9 @@ namespace Services.Services
         /// <param name="Query">The string with which the title must begin</param>
         /// <returns>The projects where the title matches the query</returns>
         Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
+
+        void UpdateActivityScore(Project entity);
+
     }
 
     /// <summary>
@@ -313,6 +316,11 @@ namespace Services.Services
         public async Task<Project> FindAsyncNotRedacted(int id)
         {
             return await Repository.FindAsyncNotRedacted(id);
+        }
+
+        public void UpdateActivityScore(Project entity)
+        {
+            Repository.UpdateActivityScore(entity);
         }
     }
 

@@ -32,8 +32,8 @@ namespace Services.Services
                               new RepoScoreDataPoint(1),
                           };
 
-        private readonly IProjectService projectService;
-        public ActivityAlgorithmService(IProjectService projectService)
+        private readonly IProjectService? projectService;
+        public ActivityAlgorithmService(IProjectService? projectService = null)
         {
             this.projectService = projectService;
         }
@@ -45,7 +45,7 @@ namespace Services.Services
                 double score = CalculateProjectActivityScore(project);
                 SetProjectActivityScore(project, score);
             }
-            projectService.Save();
+            projectService?.Save();
             return projects.ToList();
         }
 
@@ -59,8 +59,7 @@ namespace Services.Services
         public void SetProjectActivityScore(Project project, double score)
         {
             project.ActivityScore = score;
-            // projectService.Update(project);
-            //TODO Elastic search implementation
+            projectService?.UpdateActivityScore(project);
         }
     }
 
