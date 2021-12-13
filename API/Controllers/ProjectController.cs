@@ -536,8 +536,6 @@ namespace API.Controllers
                         TagInput newTagInput = new TagInput() { Name = projectTagInput };
                         Tag newTag = mapper.Map<TagInput, Tag>(newTagInput);
                         tagService.Add(newTag);
-                        tagService.Save();
-
                     }
                     Tag newestTag = tagService.FindByName(projectTagInput);
                     ProjectTag projectTag = new ProjectTag(newestTag, project);
