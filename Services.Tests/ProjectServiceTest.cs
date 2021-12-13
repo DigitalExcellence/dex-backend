@@ -50,7 +50,7 @@ namespace Services.Tests
                                          project => project.Updated,
                                          true,
                                          null,
-                                         null))
+                                         null, null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams

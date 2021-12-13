@@ -181,7 +181,8 @@ namespace Services.Services
                                                                                orderBy,
                                                                                orderByDirection,
                                                                                projectFilterParams.Highlighted,
-                                                                               projectFilterParams.Categories);
+                                                                               projectFilterParams.Categories,
+                                                                               projectFilterParams.Tags);
         }
 
         /// <summary>
@@ -193,7 +194,7 @@ namespace Services.Services
         {
             if(userId.HasValue)
             {
-                return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories, userId);
+                return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories, projectFilterParams.Tags, userId);
             }
             return await Repository.CountAsync(projectFilterParams.Highlighted, projectFilterParams.Categories);
         }

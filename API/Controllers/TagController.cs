@@ -61,8 +61,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the tag with the specified id.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified tag id is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag id.</response>
-        [HttpGet("{id}")]
-        [Authorize(Policy = nameof(Scopes.RoleRead))]
+        [HttpGet("id/{id}")]
         [ProducesResponseType(typeof(TagOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
@@ -102,7 +101,7 @@ namespace API.Controllers
         /// <response code="200">This endpoint returns the tag with the specified name.</response>
         /// <response code="400">The 400 Bad Request status code is returned when the specified tag name is invalid.</response>
         /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag name.</response>
-        [HttpGet("{name}")]
+        [HttpGet("name/{name}")]
         [ProducesResponseType(typeof(TagOutput), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), (int) HttpStatusCode.NotFound)]
@@ -123,31 +122,6 @@ namespace API.Controllers
 
             return Ok(mapper.Map<Tag, TagOutput>(tag));
         }
-
-        /// <summary>
-        ///     This method is responsible for retrieving a list of tags.
-        /// </summary>
-        /// <returns>This method return the list of tags.</returns>
-        /// <response code="200">This endpoint returns the tag with the specified name.</response>
-        /// <response code="400">The 400 Bad Request status code is returned when the specified tag name is invalid.</response>
-        /// <response code="404">The 404 Not Found status code is returned when no tag is found with the specified tag name.</response>
-        
-        //[HttpGet("Tags")]
-        //public async Task<IActionResult> GetTagList(List<Tag> tags)
-        //{
-        //    List<Tag> searchTags = new List<Tag>();
-        //    foreach(Tag tag in tags)
-        //    {
-        //        if(tagService.FindByName(tag.Name) == null)
-        //        {
-        //            tagService.Add(tag);
-        //            tagService.Save();
-        //        }
-        //        searchTags.Add(tag);
-        //    }
-        //    IEnumerable<TagOutput> tagsOutput = mapper.Map<IEnumerable<Tag>, IEnumerable<TagOutput>>(searchTags);
-        //    return Ok(tagsOutput);
-        //}
 
         /// <summary>
         ///     This method is responsible for creating the tag.

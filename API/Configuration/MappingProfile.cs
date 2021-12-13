@@ -177,7 +177,12 @@ namespace API.Configuration
                 .ForMember(dest => dest.ProjectName, opt => opt.MapFrom(src => src.Project.Name));
 
             CreateMap<Tag, TagOutput>();
-            CreateMap<Tag, TagInput>();
+            CreateMap<TagInput, Tag>();
+            CreateMap<TagInput, ProjectTag>();
+            CreateMap<ProjectTag, TagOutput>();
+            CreateMap<ProjectTag, ProjectTagOutput>()
+              .ForMember(q => q.Id, opt => opt.MapFrom(q => q.Tag.Id))
+              .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Tag.Name));
 
             CreateExternalSourceMappingProfiles();
         }

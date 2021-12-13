@@ -70,6 +70,12 @@ namespace API.Resources
         [FromQuery(Name = "highlighted")]
         public bool? Highlighted { get; set; }
 
+        /// <summary>
+        ///     Get or set the array of tag id's
+        /// </summary>
+        [FromQuery(Name = "tags")]
+        public ICollection<int> Tags { get; set; }
+
     }
 
 }

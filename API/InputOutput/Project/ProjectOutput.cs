@@ -116,7 +116,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the tags belonging to a project.
         /// </summary>
-        public IEnumerable<TagOutput> Tags { get; set; }
+        public List<ProjectTagOutput> Tags { get; set; }
 
     }
 

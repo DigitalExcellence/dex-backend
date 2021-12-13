@@ -304,8 +304,7 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Failed getting project.",
-                    Detail =
-                                                 "The Id is smaller then 0 and therefore it could never be a valid project id.",
+                    Detail = "The Id is smaller then 0 and therefore it could never be a valid project id.",
                     Instance = "D590A4FE-FDBA-4AE5-B184-BC7395C45D4E"
                 };
                 return BadRequest(problem);
@@ -523,13 +522,17 @@ namespace API.Controllers
             {
                 IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
 
+                project.Tags = new List<ProjectTag>();
+
                 foreach(TagInput projectTagInput in projectTagInputs)
                 {
                     Tag tag = tagService.FindByName(projectTagInput.Name);
                     if(tag == null)
                     {
-                        tagService.Add(tag);
-                        tag = tagService.FindByName(tag.Name);
+                        Tag newTag = mapper.Map<TagInput, Tag>(projectTagInput);
+                        tagService.Add(newTag);
+                        tagService.Save();
+                        tag = tagService.FindByName(newTag.Name);
                     }
                     ProjectTag projectTag = new ProjectTag(tag, project);
                     await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
