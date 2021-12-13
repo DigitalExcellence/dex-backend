@@ -1,9 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using RestSharp;
 using Services.Sources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -25,7 +28,7 @@ namespace Services.Services
         public override double Calculate(Project project)
         {
             if(project.Likes != null)
-                return Math.Round(project.Likes.Count * Multiplier, 2);
+                return project.Likes.Count * Multiplier;
             return 0.00;
         }
 
@@ -39,10 +42,9 @@ namespace Services.Services
             double projectCreatedDays = (DateTime.Now - project.Created).TotalDays;
             if(projectCreatedDays < 14)
             {
-                return 5.00;
+                return 3.00 * Multiplier;
             }
-            // This does not make sense, older == more points?
-            return Math.Round(Multiplier / projectCreatedDays * 10, 2);
+            return Multiplier / projectCreatedDays * 10;
         }
     }
 
@@ -68,9 +70,9 @@ namespace Services.Services
                 double averageLikeDate = Math.Round((DateTime.Now - averageDateTime).TotalDays, 2);
                 if(averageLikeDate < 14)
                 {
-                    return 2.00;
+                    return 2.00 * Multiplier;
                 }
-                return Math.Round(Multiplier / averageLikeDate, 2);
+                return Multiplier / averageLikeDate;
             }
             return 0.00;
         }
@@ -85,9 +87,9 @@ namespace Services.Services
             double updatedDate = (DateTime.Now - project.Updated).TotalDays;
             if(updatedDate < 14)
             {
-                return 2.00;
+                return 2.00 * Multiplier;
             }
-            return Math.Round(Multiplier / updatedDate, 2);
+            return Multiplier / updatedDate;
         }
     }
 
@@ -97,7 +99,7 @@ namespace Services.Services
 
         public override double Calculate(Project project)
         {
-            return Math.Round(project.LinkedInstitutions.Count * Multiplier, 2);
+            return project.LinkedInstitutions.Count * Multiplier;
         }
     }
 
@@ -108,7 +110,7 @@ namespace Services.Services
         public override double Calculate(Project project)
         {
             if(project.Collaborators.Count > 5) return Math.Round(6 * Multiplier, 2);
-            return Math.Round(project.Collaborators.Count * Multiplier, 2);
+            return project.Collaborators.Count * Multiplier;
         }
     }
 
@@ -122,34 +124,27 @@ namespace Services.Services
             if(project.CallToActions.Count >= 1) score += project.CallToActions.Count;
             if(project.Images.Count >= 1) score += 2;
             if(project.Uri != null) score += 1;
-            return Math.Round(score * Multiplier, 2);
+            return score * Multiplier;
         }
     }
-    //ToDo: Research Repo System.
+
     public class RepoScoreDataPoint : AbstractDataPoint
     {
-        readonly IGitLabSource gitLabSource = new GitLabSource(new RestClientFactory());
-        public RepoScoreDataPoint(double multiplier = 1) : base(multiplier) {}
+        public RepoScoreDataPoint(double multiplier = 1) : base(multiplier) { }
         public override double Calculate(Project project)
         {
-            Uri sourceUri = new Uri(project.Uri);
 
-            if(sourceUri.Host == "github.com")
+            if(string.IsNullOrWhiteSpace(project.Uri)) return 0;
+            Uri uri = new Uri(project.Uri);
+            IRestClientFactory restClientFactory = new RestClientFactory();
+            IRestClient client = restClientFactory.Create(uri);
+            RestRequest request = new RestRequest(Method.GET);
+            IRestResponse response = client.Execute(request);
+            if((int)response.StatusCode < 400)
             {
-                return 2.00 * Multiplier;
+                return 2;
             }
-            if(sourceUri.Host == "gitlab.com")
-            {
-                Project gitlabProject = gitLabSource.GetProjectInformation(sourceUri);
-                if(gitlabProject != null)
-                {
-                    return Math.Round(2.00 * Multiplier, 2);
-                } else
-                {
-                    return 0.00;
-                }
-            }
-            return 2.00 * Multiplier;
+            return 0;
         }
     }
 }
