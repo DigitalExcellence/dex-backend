@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.InputOutput.ActivityAlgorithm;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -65,5 +66,48 @@ namespace API.Controllers
             return Forbid();
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [HttpPut("UpdateActivityMultiplier")]
+        [Authorize]
+        public async Task<IActionResult> UpdateActivityMutliplier([FromBody] ActivityAlgorithmInput activityAlgorithmInput)
+        {
+            bool isAllowed = HttpContext.User.HasClaim("client_role", Defaults.Roles.BackendApplication);
+
+            if(isAllowed == false)
+            {
+                User currentUser = await HttpContext.GetContextUser(userService)
+                                                    .ConfigureAwait(false);
+                if(currentUser.Role.Name == Defaults.Roles.Administrator)
+                {
+                    isAllowed = true;
+                }
+            }
+            if(isAllowed && ModelState.IsValid)
+            {
+                ActivityAlgorithmMultiplier activityAlgorithmMultiplier = new ActivityAlgorithmMultiplier()
+                {
+                    Id = 1,
+                    AverageLikeDateMultiplier = activityAlgorithmInput.AverageLikeDateMultiplier,
+                    ConnectedCollaboratorsMultiplier = activityAlgorithmInput.ConnectedCollaboratorsMultiplier,
+                    RecentCreatedDataMultiplier = activityAlgorithmInput.RecentCreatedDataMultiplier,
+                    InstitutionMultiplier = activityAlgorithmInput.InstitutionMultiplier,
+                    LikeDataMultiplier = activityAlgorithmInput.LikeDataMultiplier,
+                    MetaDataMultiplier = activityAlgorithmInput.MetaDataMultiplier,
+                    RepoScoreMultiplier = activityAlgorithmInput.RepoScoreMultiplier,
+                    UpdatedTimeMultiplier = activityAlgorithmInput.UpdatedTimeMultiplier,
+                };
+                activityAlgorithmService.SetActivityAlgorithmMultiplier(activityAlgorithmMultiplier);
+                return Ok();
+            }
+            if(ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            return Forbid();
+        }
     }
 }
+

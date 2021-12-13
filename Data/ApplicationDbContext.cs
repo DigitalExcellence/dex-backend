@@ -186,6 +186,11 @@ namespace Data
         /// </summary>
         public DbSet<ProjectTransferRequest> ProjectTransferRequest { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the ActivityAlgorithmMultiplier which represents the activity algorithm multipliers.
+        /// </summary>
+        public DbSet<ActivityAlgorithmMultiplier> ActivityAlgorithmMultiplier { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -14,12 +14,14 @@ namespace Services.Services
         List<Project> CalculateAllProjects(IEnumerable<Project> projects);
         double CalculateProjectActivityScore(Project project, List<AbstractDataPoint> dataPoints);
         void SetProjectActivityScore(Project project, double score);
+        ActivityAlgorithmMultiplier GetActivityAlgorithmMultiplier();
+        void SetActivityAlgorithmMultiplier(ActivityAlgorithmMultiplier activityAlgorithmMultiplier);
 
     }
     public class ActivityAlgorithmService : IActivityAlgorithmService
     {
 
-        private readonly List<AbstractDataPoint> _dataPoints
+        private List<AbstractDataPoint> dataPoints
                             = new List<AbstractDataPoint>()
                           {
                               new LikeDataPoint(1),
@@ -33,6 +35,24 @@ namespace Services.Services
                           };
 
         private readonly IProjectService? projectService;
+        private readonly IActivityAlgorithmRepository activityAlgorithmRepository;
+        public ActivityAlgorithmService(IActivityAlgorithmRepository activityAlgorithmRepository, IProjectService projectService)
+        {
+            this.projectService = projectService;
+            this.activityAlgorithmRepository = activityAlgorithmRepository;
+            ActivityAlgorithmMultiplier multiplier = GetActivityAlgorithmMultiplier();
+            dataPoints = new List<AbstractDataPoint>()
+            {
+                new LikeDataPoint(multiplier.LikeDataMultiplier),
+                new RecentCreatedDataPoint(multiplier.RecentCreatedDataMultiplier),
+                new AverageLikeDateDataPoint(multiplier.AverageLikeDateMultiplier),
+                new UpdatedTimeDataPoint(multiplier.UpdatedTimeMultiplier),
+                new InstitutionDataPoint(multiplier.InstitutionMultiplier),
+                new ConnectedCollaboratorsDataPoint(multiplier.ConnectedCollaboratorsMultiplier),
+                new MetaDataDataPoint(multiplier.MetaDataMultiplier),
+                new RepoScoreDataPoint(multiplier.RepoScoreMultiplier),
+            };
+        }
         public ActivityAlgorithmService(IProjectService? projectService = null)
         {
             this.projectService = projectService;
@@ -52,7 +72,7 @@ namespace Services.Services
         public double CalculateProjectActivityScore(Project project, List<AbstractDataPoint> dataPoints = null)
         {
             if(dataPoints == null)
-                dataPoints = _dataPoints;
+                dataPoints = this.dataPoints;
             return Math.Round(dataPoints.Sum(dataPoint => dataPoint.Calculate(project)), 2);
         }
 
@@ -61,7 +81,14 @@ namespace Services.Services
             project.ActivityScore = score;
             projectService?.UpdateActivityScore(project);
         }
+        public void SetActivityAlgorithmMultiplier(ActivityAlgorithmMultiplier activityAlgorithmMultiplier)
+        {
+            activityAlgorithmRepository.UpdateActivityAlgorithmMultiplierAsync(activityAlgorithmMultiplier);
+        }
+        public ActivityAlgorithmMultiplier GetActivityAlgorithmMultiplier()
+        {
+            ActivityAlgorithmMultiplier activityAlgorithmMultiplier = activityAlgorithmRepository.GetActivityAlgorithmMultiplierAsync().Result;
+            return activityAlgorithmMultiplier;
+        }
     }
-
-
 }

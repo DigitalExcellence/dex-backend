@@ -129,6 +129,7 @@ namespace API.Extensions
             services.AddScoped<IProjectTransferRepository, ProjectTransferRepository>();
 
             services.AddScoped<IActivityAlgorithmService, ActivityAlgorithmService>();
+            services.AddScoped<IActivityAlgorithmRepository, ActivityAlgorithmRepository>();
 
             services.AddExternalDataSources();
 
