@@ -33,6 +33,7 @@ namespace JobScheduler
         Task<List<UserTask>> GetExpectedGraduationUsersAsync();
 
         void SetGraduationTaskStatusToMailed(int userTaskId);
+        void SetActivityAlgorithmScore();
 
     }
 
@@ -67,6 +68,17 @@ namespace JobScheduler
             HttpResponseMessage response =
                 await client.GetAsync("api/UserTask/CreateUserTasks/" + config.JobSchedulerConfig.TimeRange);
             return JsonConvert.DeserializeObject<List<UserTask>>(await response.Content.ReadAsStringAsync());
+        }
+
+
+        /// <summary>
+        ///     This is the method which requests the API executes the activity algorithm
+        /// </summary>
+        /// <returns></returns>
+        public async void SetActivityAlgorithmScore()
+        {
+            HttpResponseMessage response =
+                await client.GetAsync("api/Algorithm/Activity");
         }
 
         /// <summary>
