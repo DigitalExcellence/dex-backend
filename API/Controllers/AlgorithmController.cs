@@ -1,3 +1,4 @@
+using API.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,16 +23,18 @@ namespace API.Controllers
 
         private readonly IActivityAlgorithmService activityAlgorithmService;
         private readonly IProjectRepository projectRepository;
+        private readonly IUserService userService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="AlgorithmController" /> class
         /// </summary>
         /// <param name="activityAlgorithmService">The category service which is used to communicate with the logic layer.</param>
         /// <param name="projectRepository">The project category service which is used to communicate with the logic layer.</param>
-        public AlgorithmController(IActivityAlgorithmService activityAlgorithmService, IProjectRepository projectRepository)
+        public AlgorithmController(IActivityAlgorithmService activityAlgorithmService, IProjectRepository projectRepository, IUserService userService)
         {
             this.activityAlgorithmService = activityAlgorithmService;
             this.projectRepository = projectRepository;
+            this.userService = userService;
         }
 
         /// <summary>
@@ -39,11 +42,28 @@ namespace API.Controllers
         /// </summary>
         /// <returns>HttpStatusCode</returns>
         [HttpPost("Activity")]
+        [Authorize]
         public async Task<IActionResult> ActivityAlgorithm()
         {
-            return Ok(activityAlgorithmService.CalculateAllProjects(
-                await projectRepository.GetAllWithUsersCollaboratorsAndInstitutionsAsync())
-                .OrderByDescending(p => p.ActivityScore).ToList());
+            bool isAllowed = HttpContext.User.HasClaim("client_role", Defaults.Roles.BackendApplication);
+
+            if(isAllowed == false)
+            {
+                User currentUser = await HttpContext.GetContextUser(userService)
+                                                    .ConfigureAwait(false);
+                if(currentUser.Role.Name == Defaults.Roles.Administrator)
+                {
+                    isAllowed = true;
+                }
+            }
+            if(isAllowed)
+            {
+                return Ok(activityAlgorithmService.CalculateAllProjects(
+                                                      await projectRepository.GetAllWithUsersCollaboratorsAndInstitutionsAsync())
+                                                  .OrderByDescending(p => p.ActivityScore).ToList());
+            }
+            return Forbid();
+
         }
     }
 }
