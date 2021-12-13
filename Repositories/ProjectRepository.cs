@@ -151,6 +151,10 @@ namespace Repositories
         /// </returns>
         Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
 
+        /// <summary>
+        ///     This is a update method to only update the activity score
+        /// </summary>
+        /// <param name="entity"></param>
         void UpdateActivityScore(Project entity);
 
     }
@@ -404,6 +408,10 @@ namespace Repositories
 
         }
 
+        /// <summary>
+        ///     This is a update method to only update the activity score
+        /// </summary>
+        /// <param name="entity"></param>
         public void UpdateActivityScore(Project entity)
         {
             DbSet.Update(entity);

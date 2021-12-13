@@ -97,6 +97,10 @@ namespace Services.Services
         /// <returns>The projects where the title matches the query</returns>
         Task<List<Project>> FindProjectsWhereTitleStartsWithQuery(string query);
 
+        /// <summary>
+        ///     This is a update method to only update the activity score
+        /// </summary>
+        /// <param name="entity"></param>
         void UpdateActivityScore(Project entity);
 
     }
@@ -318,6 +322,10 @@ namespace Services.Services
             return await Repository.FindAsyncNotRedacted(id);
         }
 
+        /// <summary>
+        ///     This is a update method to only update the activity score
+        /// </summary>
+        /// <param name="entity"></param>
         public void UpdateActivityScore(Project entity)
         {
             Repository.UpdateActivityScore(entity);
