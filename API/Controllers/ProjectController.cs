@@ -520,22 +520,29 @@ namespace API.Controllers
 
             if(projectInput.Tags != null)
             {
-                IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
-
+                //fooArray.GroupBy(x => x.Id).Select(x => x.First()).ToList();
+                //IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
+                var projectTagInputs = projectInput.Tags.GroupBy(item => item.Name, StringComparer.OrdinalIgnoreCase)
+                   .Where(g => g.Count() >= 1)
+                   .Select(g => g.Key)
+                   .ToList();
                 project.Tags = new List<ProjectTag>();
 
-                foreach(TagInput projectTagInput in projectTagInputs)
+                foreach(var projectTagInput in projectTagInputs)
                 {
-                    Tag tag = tagService.FindByName(projectTagInput.Name);
+                    Tag tag = tagService.FindByName(projectTagInput);
                     if(tag == null)
                     {
-                        Tag newTag = mapper.Map<TagInput, Tag>(projectTagInput);
+                        TagInput newTagInput = new TagInput() { Name = projectTagInput };
+                        Tag newTag = mapper.Map<TagInput, Tag>(newTagInput);
                         tagService.Add(newTag);
                         tagService.Save();
-                        tag = tagService.FindByName(newTag.Name);
+
                     }
-                    ProjectTag projectTag = new ProjectTag(tag, project);
-                    await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
+                    Tag newestTag = tagService.FindByName(projectTagInput);
+                    ProjectTag projectTag = new ProjectTag(newestTag, project);
+                    projectTagService.Add(projectTag);
+
                 }
             }
 
@@ -761,18 +768,21 @@ namespace API.Controllers
             }
 
             //Same like categories, remove all and then add/create every tag again
-            await projectTagService.ClearProjectTags(project);
+            projectTagService.RemoveRange(project.Tags);
             if(projectInput.Tags != null)
             {
-                IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
+                IEnumerable<TagInput> projectTagInputs = projectInput.Tags.Distinct();
+                project.Tags = new List<ProjectTag>();
 
                 foreach(TagInput projectTagInput in projectTagInputs)
                 {
                     Tag tag = tagService.FindByName(projectTagInput.Name);
                     if(tag == null)
                     {
-                        tagService.Add(tag);
-                        tag = tagService.FindByName(tag.Name);
+                        Tag newTag = mapper.Map<TagInput, Tag>(projectTagInput);
+                        tagService.Add(newTag);
+                        tagService.Save();
+                        tag = tagService.FindByName(newTag.Name);
                     }
                     ProjectTag projectTag = new ProjectTag(tag, project);
                     await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
