@@ -764,7 +764,7 @@ namespace API.Controllers
                     }
                 }
             }
-
+            mapper.Map(projectInput, project);
             //Same like categories, remove all and then add/create every tag again
             projectTagService.RemoveRange(project.Tags);
             if(projectInput.Tags != null)
@@ -796,8 +796,6 @@ namespace API.Controllers
                 }
             }
 
-
-            mapper.Map(projectInput, project);
 
             try
             {
