@@ -520,40 +520,38 @@ namespace API.Controllers
 
             if(projectInput.Tags != null)
             {
-                //fooArray.GroupBy(x => x.Id).Select(x => x.First()).ToList();
-                //IEnumerable<TagInput> projectTagInputs = projectInput.Tags;
-                var projectTagInputs = projectInput.Tags.GroupBy(item => item.Name, StringComparer.OrdinalIgnoreCase)
+                // replaces duplicate tag names
+                List<string> projectTagInputs = projectInput.Tags.GroupBy(item => item.Name, StringComparer.OrdinalIgnoreCase)
                    .Where(g => g.Count() >= 1)
                    .Select(g => g.Key)
                    .ToList();
-                project.Tags = new List<ProjectTag>();
-                List<ProjectTag> projectTags = new List<ProjectTag>();
 
-                foreach(var projectTagInput in projectTagInputs)
+                //empties the tag list for new inserts
+                project.Tags = new List<ProjectTag>();
+
+                foreach(string projectTagInput in projectTagInputs)
                 {
                     Tag tag = await tagService.FindByNameAsync(projectTagInput);
+
                     if(tag == null)
                     {
-                        TagInput newTagInput = new TagInput() { Name = projectTagInput };
-                        Tag newTag = mapper.Map<TagInput, Tag>(newTagInput);
-                        await tagService.AddAsync(newTag);
-                        tagService.Save();
+                        Tag newTag = new Tag {Name = projectTagInput };
+                        await tagService.AddAsync(newTag)
+                            .ConfigureAwait(false);
+                        tagService.Save();  
                     }
-                    Tag newestTag = tagService.FindByName(projectTagInput);
-                    ProjectTag projectTag = new ProjectTag(newestTag, project);
-                    await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
-                    //projectTags.Add(projectTag);
+
+                    tag = tagService.FindByName(projectTagInput);
+                    ProjectTag projectTag = new ProjectTag(tag, project);
+                    project.Tags.Add(projectTag);
                 }
-                //projectTagService.AddRangeAsync(projectTags);
-                //projectTagService.Save();
+
             }
 
             try
             {
                 projectService.Add(project);
                 projectService.Save();
-
-                projectCategoryService.Save();
 
                 return Created(nameof(CreateProjectAsync), mapper.Map<Project, ProjectOutput>(project));
             } catch(DbUpdateException e)
@@ -578,7 +576,7 @@ namespace API.Controllers
         ///     This method is responsible for updating the project with the specified identifier.
         /// </summary>
         /// <param name="projectId">The project identifier which is used for searching the project.</param>
-        /// <param name="projectResource">The project resource which is used for updating the project.</param>
+        /// <param name="projectInput">The project resource which is used for updating the project.</param>
         /// <returns>This method returns the project resource result.</returns>
         /// <response code="200">This endpoint returns the updated project.</response>
         /// <response code="401">The 401 Unauthorized status code is return when the user has not the correct permission to update.</response>
@@ -1821,47 +1819,6 @@ namespace API.Controllers
 
             return NotFound("No pending tranfer found");
 
-        }
-
-        /// <summary>
-        ///     This method is responsible for retrieving a list of tags and add new tags from the list.
-        /// </summary>
-        /// <returns>This method return the list of tags.</returns>
-
-        private List<Tag> CreateTagList(List<Tag> tags)
-        {
-            List<Tag> searchTags = new List<Tag>();
-            foreach(Tag tag in tags)
-            {
-                Tag newTag = tagService.FindByName(tag.Name);
-                if(newTag == null)
-                {
-                    tagService.Add(tag);
-                    tagService.Save();
-                    newTag = tagService.FindByName(tag.Name);
-                }
-                searchTags.Add(newTag);
-            }
-            return searchTags;
-        }
-
-        private List<TagInput> UpdateTagList(List<Tag> tags)
-        {
-            List<Tag> searchTags = new List<Tag>();
-            foreach(Tag tag in tags)
-            {
-                if(tag.Id == null)
-                {
-                    if(tagService.FindByName(tag.Name) == null)
-                    {
-                        tagService.Add(tag);
-                        tagService.Save();
-                    }
-                }
-                searchTags.Add(tagService.FindByName(tag.Name));
-            }
-            List<TagInput> result = mapper.Map<List<Tag>, List<TagInput>>(searchTags);
-            return result;
         }
     }
 }

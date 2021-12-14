@@ -147,20 +147,6 @@ namespace API.Controllers
             }
             Tag tag = mapper.Map<TagInput, Tag>(tagResource);
 
-            //foreach(RoleScope roleScope in role.Scopes)
-            //{
-            //    if(!roleService.IsValidScope(roleScope.Scope))
-            //    {
-            //        ProblemDetails problem = new ProblemDetails
-            //        {
-            //            Title = "Failed to create a new role.",
-            //            Detail = $"The specified scope: {roleScope.Scope} is not valid.",
-            //            Instance = "1F40D851-8A4C-41F6-917C-D876970D825F"
-            //        };
-            //        return BadRequest(problem);
-            //    }
-            //}
-
             try
             {
                 await tagService.AddAsync(tag)
@@ -203,10 +189,10 @@ namespace API.Controllers
             if(tag == null)
             {
                 ProblemDetails problem = new ProblemDetails
-                                         {
-                                             Title = "Failed to delete the tag.",
-                                             Detail = "The tag could not be found in the database.",
-                                             Instance = "0C2FA6FC-62F0-434D-B3F1-3251D60AF02C"
+                {
+                    Title = "Failed to delete the tag.",
+                    Detail = "The tag could not be found in the database.",
+                    Instance = "0C2FA6FC-62F0-434D-B3F1-3251D60AF02C"
                 };
                 return NotFound(problem);
             }
@@ -216,7 +202,7 @@ namespace API.Controllers
             tagService.Save();
             return Ok();
         }
-        
+
     }
 
 }
