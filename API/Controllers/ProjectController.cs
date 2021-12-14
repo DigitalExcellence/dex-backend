@@ -545,7 +545,6 @@ namespace API.Controllers
                     ProjectTag projectTag = new ProjectTag(tag, project);
                     project.Tags.Add(projectTag);
                 }
-
             }
 
             try
@@ -770,30 +769,56 @@ namespace API.Controllers
             projectTagService.RemoveRange(project.Tags);
             if(projectInput.Tags != null)
             {
-                IEnumerable<TagInput> projectTagInputs = projectInput.Tags.Distinct();
+                // replaces duplicate tag names
+                List<string> projectTagInputs = projectInput.Tags.GroupBy(item => item.Name, StringComparer.OrdinalIgnoreCase)
+                   .Where(g => g.Count() >= 1)
+                   .Select(g => g.Key)
+                   .ToList();
+
+                //empties the tag list for new inserts
                 project.Tags = new List<ProjectTag>();
 
-                foreach(TagInput projectTagInput in projectTagInputs)
+                foreach(string projectTagInput in projectTagInputs)
                 {
-                    Tag tag = tagService.FindByName(projectTagInput.Name);
+                    Tag tag = await tagService.FindByNameAsync(projectTagInput);
+
                     if(tag == null)
                     {
-                        Tag newTag = mapper.Map<TagInput, Tag>(projectTagInput);
-                        tagService.Add(newTag);
+                        Tag newTag = new Tag { Name = projectTagInput };
+                        await tagService.AddAsync(newTag)
+                            .ConfigureAwait(false);
                         tagService.Save();
-                        tag = tagService.FindByName(newTag.Name);
                     }
+
+                    tag = tagService.FindByName(projectTagInput);
                     ProjectTag projectTag = new ProjectTag(tag, project);
-                    await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
+                    project.Tags.Add(projectTag);
                 }
             }
 
+
             mapper.Map(projectInput, project);
-            projectService.Update(project);
-            projectService.Save();
+
+            try
+            {
+                projectService.Update(project);
+                projectService.Save();
+
+                return Ok(mapper.Map<Project, ProjectOutput>(project));
+            } catch(DbUpdateException e)
+            {
+                Log.Logger.Error(e, "Database exception");
 
 
-            return Ok(mapper.Map<Project, ProjectOutput>(project));
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Failed to update new project.",
+                    Detail = "There was a problem while saving the project to the database.",
+                    Instance = "9FEEF001-F91F-44E9-8090-6106703AB033"
+                };
+                return BadRequest(problem);
+            }
+                      
         }
 
         /// <summary>
