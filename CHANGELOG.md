@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Release v.2.0.0-beta - DATE HERE
 ### Added
 - Added JobScheduler unit tests - [#381](https://github.com/DigitalExcellence/dex-backend/pull/539)
-
+- Added a way to order inactive projects - [#522](https://github.com/DigitalExcellence/dex-backend/issues/522)
 ## Release v.1.9.0-beta - 25-11-2021
 
 ### Added
