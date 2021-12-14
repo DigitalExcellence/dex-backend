@@ -10,8 +10,8 @@ namespace Repositories
 {
     public interface IActivityAlgorithmRepository
     {
-        Task<ActivityAlgorithmMultiplier> GetActivityAlgorithmMultiplierAsync();
-        void UpdateActivityAlgorithmMultiplierAsync(ActivityAlgorithmMultiplier activityAlgorithmMultiplier);
+        Task<ProjectActivityConfig> GetActivityAlgorithmConfig();
+        void UpdateActivityAlgorithmConfig(ProjectActivityConfig projectActivityConfig);
     }
     public class ActivityAlgorithmRepository : IActivityAlgorithmRepository
     {
@@ -25,14 +25,32 @@ namespace Repositories
             this.dbContext = dbContext;
         }
 
-        public async Task<ActivityAlgorithmMultiplier> GetActivityAlgorithmMultiplierAsync()
+        public async Task<ProjectActivityConfig> GetActivityAlgorithmConfig()
         {
-            return await dbContext.Set<ActivityAlgorithmMultiplier>().AsNoTracking().FirstOrDefaultAsync();
+            ProjectActivityConfig projectActivityConfig = await dbContext.Set<ProjectActivityConfig>().AsNoTracking().FirstOrDefaultAsync();
+            if(projectActivityConfig == null)
+            {
+                ProjectActivityConfig newProjectActivityConfig = new ProjectActivityConfig()
+                {
+                    AverageLikeDateMultiplier = 1,
+                    ConnectedCollaboratorsMultiplier = 1,
+                    RecentCreatedDataMultiplier = 1,
+                    InstitutionMultiplier = 1,
+                    LikeDataMultiplier = 1,
+                    MetaDataMultiplier = 1,
+                    RepoScoreMultiplier = 1,
+                    UpdatedTimeMultiplier = 1
+                };
+                dbContext.Set<ProjectActivityConfig>().Add(newProjectActivityConfig);
+                dbContext.SaveChanges();
+                return newProjectActivityConfig;
+            }
+            return projectActivityConfig;
         }
 
-        public void UpdateActivityAlgorithmMultiplierAsync(ActivityAlgorithmMultiplier activityAlgorithmMultiplier)
+        public void UpdateActivityAlgorithmConfig(ProjectActivityConfig projectActivityConfig)
         {
-            dbContext.Set<ActivityAlgorithmMultiplier>().Update(activityAlgorithmMultiplier);
+            dbContext.Set<ProjectActivityConfig>().Update(projectActivityConfig);
             dbContext.SaveChanges();
         }
     }

@@ -87,7 +87,7 @@ namespace API.Controllers
             }
             if(isAllowed && ModelState.IsValid)
             {
-                ActivityAlgorithmMultiplier activityAlgorithmMultiplier = new ActivityAlgorithmMultiplier()
+                ProjectActivityConfig projectActivityConfig = new ProjectActivityConfig()
                 {
                     Id = 1,
                     AverageLikeDateMultiplier = activityAlgorithmInput.AverageLikeDateMultiplier,
@@ -99,7 +99,7 @@ namespace API.Controllers
                     RepoScoreMultiplier = activityAlgorithmInput.RepoScoreMultiplier,
                     UpdatedTimeMultiplier = activityAlgorithmInput.UpdatedTimeMultiplier,
                 };
-                activityAlgorithmService.SetActivityAlgorithmMultiplier(activityAlgorithmMultiplier);
+                activityAlgorithmService.SetActivityAlgorithmMultiplier(projectActivityConfig);
                 return Ok();
             }
             if(ModelState.IsValid)

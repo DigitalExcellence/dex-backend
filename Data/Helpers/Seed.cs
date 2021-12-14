@@ -544,6 +544,20 @@ namespace Data.Helpers
                    };
         }
 
+        public static ProjectActivityConfig SeedActivityAlgorithmMultiplier()
+        {
+            return new ProjectActivityConfig()
+            {
+                AverageLikeDateMultiplier = 1,
+                ConnectedCollaboratorsMultiplier = 1,
+                RecentCreatedDataMultiplier = 1,
+                InstitutionMultiplier = 1,
+                LikeDataMultiplier = 1,
+                MetaDataMultiplier = 1,
+                RepoScoreMultiplier = 1,
+                UpdatedTimeMultiplier = 1
+            };
+        }
         public static User SeedAdminUser2(List<Role> roles)
         {
             Role adminRole = roles.Find(i => i.Name == nameof(Defaults.Roles.Administrator));

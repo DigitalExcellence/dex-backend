@@ -39,7 +39,7 @@ namespace API
         /// <param name="args">The arguments.</param>
         /// <returns>The exit code of the program.</returns>
         public static int Main(string[] args)
-        {
+      {
             Log.Logger = new LoggerConfiguration()
                          .MinimumLevel.Debug()
                          .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)

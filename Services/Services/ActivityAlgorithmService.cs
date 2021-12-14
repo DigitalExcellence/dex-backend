@@ -14,8 +14,8 @@ namespace Services.Services
         List<Project> CalculateAllProjects(IEnumerable<Project> projects);
         double CalculateProjectActivityScore(Project project, List<AbstractDataPoint> dataPoints);
         void SetProjectActivityScore(Project project, double score);
-        ActivityAlgorithmMultiplier GetActivityAlgorithmMultiplier();
-        void SetActivityAlgorithmMultiplier(ActivityAlgorithmMultiplier activityAlgorithmMultiplier);
+        ProjectActivityConfig GetActivityAlgorithmMultiplier();
+        void SetActivityAlgorithmMultiplier(ProjectActivityConfig projectActivityConfig);
 
     }
     public class ActivityAlgorithmService : IActivityAlgorithmService
@@ -34,13 +34,18 @@ namespace Services.Services
                               new RepoScoreDataPoint(1),
                           };
 
-        private readonly IProjectService? projectService;
+        private readonly IProjectService projectService;
         private readonly IActivityAlgorithmRepository activityAlgorithmRepository;
         public ActivityAlgorithmService(IActivityAlgorithmRepository activityAlgorithmRepository, IProjectService projectService)
         {
             this.projectService = projectService;
             this.activityAlgorithmRepository = activityAlgorithmRepository;
-            ActivityAlgorithmMultiplier multiplier = GetActivityAlgorithmMultiplier();
+        }
+        
+
+        public List<Project> CalculateAllProjects(IEnumerable<Project> projects)
+        {
+            ProjectActivityConfig multiplier = GetActivityAlgorithmMultiplier();
             dataPoints = new List<AbstractDataPoint>()
             {
                 new LikeDataPoint(multiplier.LikeDataMultiplier),
@@ -52,20 +57,12 @@ namespace Services.Services
                 new MetaDataDataPoint(multiplier.MetaDataMultiplier),
                 new RepoScoreDataPoint(multiplier.RepoScoreMultiplier),
             };
-        }
-        public ActivityAlgorithmService(IProjectService? projectService = null)
-        {
-            this.projectService = projectService;
-        }
-
-        public List<Project> CalculateAllProjects(IEnumerable<Project> projects)
-        {
             foreach(Project project in projects)
             {
                 double score = CalculateProjectActivityScore(project);
                 SetProjectActivityScore(project, score);
             }
-            projectService?.Save();
+            projectService.Save();
             return projects.ToList();
         }
 
@@ -79,16 +76,16 @@ namespace Services.Services
         public void SetProjectActivityScore(Project project, double score)
         {
             project.ActivityScore = score;
-            projectService?.UpdateActivityScore(project);
+            projectService.UpdateActivityScore(project);
         }
-        public void SetActivityAlgorithmMultiplier(ActivityAlgorithmMultiplier activityAlgorithmMultiplier)
+        public void SetActivityAlgorithmMultiplier(ProjectActivityConfig projectActivityConfig)
         {
-            activityAlgorithmRepository.UpdateActivityAlgorithmMultiplierAsync(activityAlgorithmMultiplier);
+            activityAlgorithmRepository.UpdateActivityAlgorithmConfig(projectActivityConfig);
         }
-        public ActivityAlgorithmMultiplier GetActivityAlgorithmMultiplier()
+        public ProjectActivityConfig GetActivityAlgorithmMultiplier()
         {
-            ActivityAlgorithmMultiplier activityAlgorithmMultiplier = activityAlgorithmRepository.GetActivityAlgorithmMultiplierAsync().Result;
-            return activityAlgorithmMultiplier;
+            ProjectActivityConfig projectActivityConfig = activityAlgorithmRepository.GetActivityAlgorithmConfig().Result;
+            return projectActivityConfig;
         }
     }
 }

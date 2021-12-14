@@ -8,6 +8,8 @@ using Services.Tests.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Repositories;
+using System.Threading.Tasks;
 
 namespace Services.Tests
 {
@@ -15,13 +17,27 @@ namespace Services.Tests
     public class ActivityAlgorithmTest
     {
 
-        private IActivityAlgorithmService _activityAlgorithmService;
-        private ProjectGeneratorHelper _projectGeneratorHelper;
+        private readonly IActivityAlgorithmService activityAlgorithmService;
+        private readonly ProjectGeneratorHelper projectGeneratorHelper;
 
         public ActivityAlgorithmTest()
         {
-            _activityAlgorithmService = new ActivityAlgorithmService();
-            _projectGeneratorHelper = new ProjectGeneratorHelper();
+            Mock<IProjectService> projectServiceMock = new Mock<IProjectService>();
+            Mock<IActivityAlgorithmRepository> activityRepoMock = new Mock<IActivityAlgorithmRepository>();
+            activityRepoMock.Setup(m => m.GetActivityAlgorithmConfig()).Returns(Task.FromResult(new ProjectActivityConfig()
+            {
+                AverageLikeDateMultiplier = 1,
+                ConnectedCollaboratorsMultiplier = 1,
+                RecentCreatedDataMultiplier = 1,
+                InstitutionMultiplier = 1,
+                LikeDataMultiplier = 1,
+                MetaDataMultiplier = 1,
+                RepoScoreMultiplier = 1,
+                UpdatedTimeMultiplier = 1
+            }));
+            projectServiceMock.Setup(m => m.UpdateActivityScore((new Mock<Project>()).Object));
+            activityAlgorithmService = new ActivityAlgorithmService(activityRepoMock.Object, projectServiceMock.Object);
+            projectGeneratorHelper = new ProjectGeneratorHelper();
         }
 
         [Test]
@@ -30,12 +46,12 @@ namespace Services.Tests
             Project project = new Project();
             project.Likes =  new List<ProjectLike>()
                                                     {
-                                                        _projectGeneratorHelper.GetOldLike(),
-                                                        _projectGeneratorHelper.GetOldLike(),
-                                                        _projectGeneratorHelper.GetRecentLike()
+                                                        projectGeneratorHelper.GetOldLike(),
+                                                        projectGeneratorHelper.GetOldLike(),
+                                                        projectGeneratorHelper.GetRecentLike()
                                                     };
 
-            double score = _activityAlgorithmService.CalculateProjectActivityScore(project, new List<AbstractDataPoint>
+            double score = activityAlgorithmService.CalculateProjectActivityScore(project, new List<AbstractDataPoint>
                                                                              {
                                                                                  new LikeDataPoint()
                                                                              });
@@ -51,11 +67,11 @@ namespace Services.Tests
             Project project = new Project();
             project.Likes =  new List<ProjectLike>()
                              {
-                                 _projectGeneratorHelper.GetOldLike(),
-                                 _projectGeneratorHelper.GetRecentLike()
+                                 projectGeneratorHelper.GetOldLike(),
+                                 projectGeneratorHelper.GetRecentLike()
                              };
 
-            double score = _activityAlgorithmService.CalculateProjectActivityScore(project, new List<AbstractDataPoint>
+            double score = activityAlgorithmService.CalculateProjectActivityScore(project, new List<AbstractDataPoint>
                 {
                     new AverageLikeDateDataPoint()
                 });
@@ -79,7 +95,7 @@ namespace Services.Tests
                                  new Collaborator(),
                              };
 
-            double score = _activityAlgorithmService.CalculateProjectActivityScore(project, new List<AbstractDataPoint>
+            double score = activityAlgorithmService.CalculateProjectActivityScore(project, new List<AbstractDataPoint>
                 {
                     new ConnectedCollaboratorsDataPoint()
                 });
@@ -92,10 +108,10 @@ namespace Services.Tests
         [Test]
         public void OrderProjectsWithAlgorithm()
         {
-            Project firstProject = _projectGeneratorHelper.GetActiveProject();
-            Project secondProject = _projectGeneratorHelper.GetInactiveProject(10);
-            Project thirdProject = _projectGeneratorHelper.GetInactiveProject();
-            Project fourthProject = _projectGeneratorHelper.GetActiveProject(10);
+            Project firstProject = projectGeneratorHelper.GetActiveProject();
+            Project secondProject = projectGeneratorHelper.GetInactiveProject(10);
+            Project thirdProject = projectGeneratorHelper.GetInactiveProject();
+            Project fourthProject = projectGeneratorHelper.GetActiveProject(10);
             IEnumerable<Project> projects = new List<Project>()
                                      {
                                          firstProject,
@@ -104,7 +120,7 @@ namespace Services.Tests
                                          fourthProject
                                      };
 
-            List<Project> orderedProjects = _activityAlgorithmService.CalculateAllProjects(projects)
+            List<Project> orderedProjects =  activityAlgorithmService.CalculateAllProjects(projects)
                                                                      .OrderByDescending(p => p.ActivityScore)
                                                                      .ToList();
 

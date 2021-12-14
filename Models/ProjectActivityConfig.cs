@@ -1,7 +1,7 @@
 namespace Models
 {
     
-    public class ActivityAlgorithmMultiplier
+    public class ProjectActivityConfig
     {
         public int Id { get; set; }
         public int LikeDataMultiplier { get; set; }

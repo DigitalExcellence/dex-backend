@@ -189,7 +189,7 @@ namespace Data
         /// <summary>
         ///     Gets or sets the ActivityAlgorithmMultiplier which represents the activity algorithm multipliers.
         /// </summary>
-        public DbSet<ActivityAlgorithmMultiplier> ActivityAlgorithmMultiplier { get; set; }
+        public DbSet<ProjectActivityConfig> ActivityAlgorithmMultiplier { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

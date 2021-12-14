@@ -583,6 +583,11 @@ namespace API
                 context.SaveChanges();
             }
 
+            if(!context.ActivityAlgorithmMultiplier.Any())
+            {
+                context.ActivityAlgorithmMultiplier.AddRange(Seed.SeedActivityAlgorithmMultiplier());
+                context.SaveChanges();
+            }
             SeedHelper.SeedDataSourceWizardPages(context);
         }
 
