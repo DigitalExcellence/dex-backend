@@ -527,23 +527,26 @@ namespace API.Controllers
                    .Select(g => g.Key)
                    .ToList();
                 project.Tags = new List<ProjectTag>();
+                List<ProjectTag> projectTags = new List<ProjectTag>();
 
                 foreach(var projectTagInput in projectTagInputs)
                 {
-                    Tag tag = tagService.FindByName(projectTagInput);
+                    Tag tag = await tagService.FindByNameAsync(projectTagInput);
                     if(tag == null)
                     {
                         TagInput newTagInput = new TagInput() { Name = projectTagInput };
                         Tag newTag = mapper.Map<TagInput, Tag>(newTagInput);
-                        tagService.Add(newTag);
+                        await tagService.AddAsync(newTag);
+                        tagService.Save();
                     }
                     Tag newestTag = tagService.FindByName(projectTagInput);
                     ProjectTag projectTag = new ProjectTag(newestTag, project);
-                    projectTagService.Add(projectTag);
-
+                    await projectTagService.AddAsync(projectTag).ConfigureAwait(false);
+                    //projectTags.Add(projectTag);
                 }
+                //projectTagService.AddRangeAsync(projectTags);
+                //projectTagService.Save();
             }
-
 
             try
             {
