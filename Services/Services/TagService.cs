@@ -75,20 +75,15 @@ namespace Services.Services
             return await repository.FindByNameAsync(name).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// This is the method for finding a single entity by the name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>The found entity</returns>
         public Tag FindByName(string name)
         {
             return repository.FindByName(name);
         }
-
-        /// <summary>
-        ///     This is the method for adding an entity.
-        /// </summary>
-        /// <param name="entity"></param>
-        public virtual void AddToProject(Tag entity)
-        {
-            Repository.Add(entity);
-        }
-
 
         /// <summary>
         ///     This is the method adding an entity asynchronous
