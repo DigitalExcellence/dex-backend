@@ -15,7 +15,6 @@ namespace Repositories
     }
     public class ActivityAlgorithmRepository : Repository<ProjectActivityConfig>, IActivityAlgorithmRepository
     {
-        private readonly DbContext dbContext;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ActivityAlgorithmRepository" /> class.
         /// </summary>

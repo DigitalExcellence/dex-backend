@@ -31,6 +31,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="activityAlgorithmService">The category service which is used to communicate with the logic layer.</param>
         /// <param name="projectRepository">The project category service which is used to communicate with the logic layer.</param>
+        /// <param name="userService">The userService to get the current user.</param>
         public AlgorithmController(IActivityAlgorithmService activityAlgorithmService, IProjectRepository projectRepository, IUserService userService)
         {
             this.activityAlgorithmService = activityAlgorithmService;
