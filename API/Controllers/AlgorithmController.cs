@@ -68,8 +68,9 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// This endpoint is used to update the activity multiplier
         /// </summary>
+        /// <param name="activityAlgorithmInput">The input model of the activity algorithm multipliers</param>
         [HttpPut("UpdateActivityMultiplier")]
         [Authorize]
         public async Task<IActionResult> UpdateActivityMutliplier([FromBody] ActivityAlgorithmInput activityAlgorithmInput)

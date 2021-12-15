@@ -8,26 +8,28 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
-    public interface IActivityAlgorithmRepository
+    public interface IActivityAlgorithmRepository : IRepository<ProjectActivityConfig>
     {
         Task<ProjectActivityConfig> GetActivityAlgorithmConfig();
         void UpdateActivityAlgorithmConfig(ProjectActivityConfig projectActivityConfig);
     }
-    public class ActivityAlgorithmRepository : IActivityAlgorithmRepository
+    public class ActivityAlgorithmRepository : Repository<ProjectActivityConfig>, IActivityAlgorithmRepository
     {
         private readonly DbContext dbContext;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ActivityAlgorithmRepository" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        public ActivityAlgorithmRepository(DbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        public ActivityAlgorithmRepository(DbContext dbContext) : base(dbContext) { }
 
+        /// <summary>
+        /// Gets the config for the activity algorithm
+        /// </summary>
+        /// <returns>The project activity config</returns>
         public async Task<ProjectActivityConfig> GetActivityAlgorithmConfig()
         {
-            ProjectActivityConfig projectActivityConfig = await dbContext.Set<ProjectActivityConfig>().AsNoTracking().FirstOrDefaultAsync();
+            DbSet<ProjectActivityConfig> dbSet = GetDbSet<ProjectActivityConfig>();
+            ProjectActivityConfig projectActivityConfig = await  dbSet.AsNoTracking().FirstOrDefaultAsync();
             if(projectActivityConfig == null)
             {
                 ProjectActivityConfig newProjectActivityConfig = new ProjectActivityConfig()
@@ -41,8 +43,8 @@ namespace Repositories
                     RepoScoreMultiplier = 1,
                     UpdatedTimeMultiplier = 1
                 };
-                dbContext.Set<ProjectActivityConfig>().Add(newProjectActivityConfig);
-                dbContext.SaveChanges();
+                dbSet.Add(newProjectActivityConfig);
+                base.Save();
                 return newProjectActivityConfig;
             }
             return projectActivityConfig;
@@ -50,8 +52,8 @@ namespace Repositories
 
         public void UpdateActivityAlgorithmConfig(ProjectActivityConfig projectActivityConfig)
         {
-            dbContext.Set<ProjectActivityConfig>().Update(projectActivityConfig);
-            dbContext.SaveChanges();
+            GetDbSet<ProjectActivityConfig>().Update(projectActivityConfig);
+            base.Save();
         }
     }
 }
