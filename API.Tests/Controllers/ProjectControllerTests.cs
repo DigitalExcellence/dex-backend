@@ -113,24 +113,26 @@ namespace API.Tests.Controllers
             response.StatusCode.Should().Be(expectedResult);
         }
 
-        [Theory]
-        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
-        [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
-        [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
-        public async Task Create_Tag_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
-        {
-            // Arrange
-            await AuthenticateAs(role);
-            HttpResponseMessage postProjectResponse = await TestClient.PostAsJsonAsync("project", SeedUtility.RandomProject());
-            string responseContent = await postProjectResponse.Content.ReadAsStringAsync();
+        //[Theory]
+        //[InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        //[InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
+        //[InlineData(UserRole.PrUser, HttpStatusCode.OK)]
+        //[InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
+        //public async Task Create_Tag_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
+        //{
+        //    // Arrange
+        //    await AuthenticateAs(role);
+        //    HttpResponseMessage postProjectResponse = await TestClient.PostAsJsonAsync("project", SeedUtility.RandomProject());
+        //    string responseContent = await postProjectResponse.Content.ReadAsStringAsync();
 
-            Project projectToCategorize = JsonConvert.DeserializeObject<Project>(responseContent);
-            // Act
-            HttpResponseMessage response = await TestClient.PostAsync($"project/category/{projectToCategorize.Id}/2", null);
+        //    Project projectToCategorize = JsonConvert.DeserializeObject<Project>(responseContent);
+        //    //projectToCategorize.Tags.Add(new ProjectTag() { Project = projectToCategorize, Tag = new Tag { Name = "java" } });
 
-            // Assert
-            response.StatusCode.Should().Be(expectedResult);
-        }
+        //    // Act
+        //    HttpResponseMessage response = await TestClient.PostAsync($"project/category/{projectToCategorize.Id}/2", null);
+
+        //    // Assert
+        //    response.StatusCode.Should().Be(expectedResult);
+        //}
     }
 }
