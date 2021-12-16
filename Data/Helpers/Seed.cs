@@ -93,6 +93,25 @@ namespace Data.Helpers
         }
 
         /// <summary>
+        ///     Seed random tags into the database using fake date from Bogus
+        /// </summary>
+        public static List<Tag> SeedTags(List<Tag> tags)
+        {
+            List<Tag> result = new List<Tag>();
+            for(int i = 0; i < 30; i++)
+            {
+                Faker<Tag> tagToFake = new Faker<Tag>()
+                    .RuleFor(t => t.Name, f => f.Hacker.Adjective());
+
+                Tag tag = tagToFake.Generate();
+
+                tags.Add(tag);
+            }
+
+            return tags;
+        }
+
+        /// <summary>
         ///     Seeds the roles.
         /// </summary>
         /// <returns>The list of roles that will be seeded.</returns>
@@ -344,6 +363,7 @@ namespace Data.Helpers
             for(int i = 0; i < 30; i++)
             {
                 User user = users[r.Next(0, users.Count - 1)];
+                //ProjectTag projectTag = new ProjectTag() { Id = i, Project = i, Tag = }
                 Faker<Project> projectToFake = new Faker<Project>()
                                                .RuleFor(s => s.UserId, user.Id)
                                                .RuleFor(s => s.Uri, f => f.Internet.Url())

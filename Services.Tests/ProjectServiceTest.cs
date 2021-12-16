@@ -50,7 +50,7 @@ namespace Services.Tests
                                          project => project.Updated,
                                          true,
                                          null,
-                                         null))
+                                         null, null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
@@ -71,6 +71,7 @@ namespace Services.Tests
                                               It.IsAny<int>(),
                                               project => project.Updated,
                                               true,
+                                              null,
                                               null,
                                               null),
                                       Times.Once);
@@ -95,17 +96,18 @@ namespace Services.Tests
                                          project => project.Created,
                                          true,
                                          null,
+                                         null,
                                          null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
-                                                  {
-                                                      Page = null,
-                                                      AmountOnPage = null,
-                                                      Highlighted = null,
-                                                      SortBy = "created",
-                                                      SortDirection = "asc"
-                                                  });
+            {
+                Page = null,
+                AmountOnPage = null,
+                Highlighted = null,
+                SortBy = "created",
+                SortDirection = "asc"
+            });
 
             Assert.DoesNotThrow(() =>
             {
@@ -115,6 +117,7 @@ namespace Services.Tests
                                               It.IsAny<int>(),
                                               project => project.Created,
                                               true,
+                                              null,
                                               null,
                                               null),
                                       Times.Once);
@@ -139,17 +142,18 @@ namespace Services.Tests
                                          project => project.Name,
                                          false,
                                          null,
+                                         null,
                                          null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
-                                                  {
-                                                      Page = null,
-                                                      AmountOnPage = null,
-                                                      Highlighted = null,
-                                                      SortBy = "name",
-                                                      SortDirection = "desc"
-                                                  });
+            {
+                Page = null,
+                AmountOnPage = null,
+                Highlighted = null,
+                SortBy = "name",
+                SortDirection = "desc"
+            });
 
             Assert.DoesNotThrow(() =>
             {
@@ -159,6 +163,7 @@ namespace Services.Tests
                                               It.IsAny<int>(),
                                               project => project.Name,
                                               false,
+                                              null,
                                               null,
                                               null),
                                       Times.Once);
@@ -183,17 +188,18 @@ namespace Services.Tests
                                          project => project.Updated,
                                          true,
                                          true,
+                                         null,
                                          null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
-                                                  {
-                                                      Page = null,
-                                                      AmountOnPage = null,
-                                                      Highlighted = true,
-                                                      SortBy = null,
-                                                      SortDirection = "asc"
-                                                  });
+            {
+                Page = null,
+                AmountOnPage = null,
+                Highlighted = true,
+                SortBy = null,
+                SortDirection = "asc"
+            });
 
             Assert.DoesNotThrow(() =>
             {
@@ -204,6 +210,7 @@ namespace Services.Tests
                                               project => project.Updated,
                                               true,
                                               true,
+                                              null,
                                               null),
                                       Times.Once);
             });
@@ -227,17 +234,18 @@ namespace Services.Tests
                                          project => project.Updated,
                                          true,
                                          false,
+                                         null,
                                          null))
                           .Returns(Task.FromResult(projects));
 
             List<Project> retrievedProjects = await Service.GetAllWithUsersCollaboratorsAndInstitutionsAsync(new ProjectFilterParams
-                                                  {
-                                                      Page = null,
-                                                      AmountOnPage = null,
-                                                      Highlighted = false,
-                                                      SortBy = null,
-                                                      SortDirection = "asc"
-                                                  });
+            {
+                Page = null,
+                AmountOnPage = null,
+                Highlighted = false,
+                SortBy = null,
+                SortDirection = "asc"
+            });
 
             Assert.DoesNotThrow(() =>
             {
@@ -248,6 +256,7 @@ namespace Services.Tests
                                               project => project.Updated,
                                               true,
                                               false,
+                                              null,
                                               null),
                                       Times.Once);
             });

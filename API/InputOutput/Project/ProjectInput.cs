@@ -15,6 +15,8 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.InputOutput.Tag;
+using Models;
 using System.Collections.Generic;
 
 namespace API.Resources
@@ -80,7 +82,11 @@ namespace API.Resources
         ///     This gets or sets the image ID's
         /// </summary>
         public IEnumerable<int> ImageIds { get; set; } = new List<int>();
-        
+
+        /// <summary>
+        ///     This gets or sets the tags
+        /// </summary>
+        public IList<TagInput> Tags { get; set; }
     }
 
 }
