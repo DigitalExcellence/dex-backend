@@ -20,7 +20,7 @@ namespace _4_Data.Migrations
                 column: "ProjectId",
                 principalTable: "Project",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ProjectTag_Tag_TagId",
@@ -28,7 +28,7 @@ namespace _4_Data.Migrations
                 column: "TagId",
                 principalTable: "Tag",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
