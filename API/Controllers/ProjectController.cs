@@ -247,7 +247,7 @@ namespace API.Controllers
             {
                 for(int j = 0; j < results[i].Tags.Count(); j++)
                 {
-                    results[i].Tags[j].Id = filteredProjects[i].Tags[j].Id;
+                    results[i].Tags[j].Id = filteredProjects[i].Tags[j].Tag.Id;
                     results[i].Tags[j].Name = filteredProjects[i].Tags[j].Tag.Name;
                 }
             }
