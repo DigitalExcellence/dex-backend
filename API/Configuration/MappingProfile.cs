@@ -89,17 +89,23 @@ namespace API.Configuration
             CreateMap<User, LimitedUserOutput>();
 
             CreateMap<ProjectInput, Project>()
-                .ForMember(q => q.Categories, opt => opt.Ignore());
-            CreateMap<Project, ProjectOutput>();
+                .ForMember(q => q.Categories, opt => opt.Ignore())
+                .ForMember(q => q.Tags, opt => opt.MapFrom(t => t.Tags));
+
+            CreateMap<Project, ProjectOutput>()
+                .ForMember(q => q.Tags, opt => opt.MapFrom(t => t.Tags));
+
             CreateMap<ProjectLike, ProjectLikesOutput>();
             CreateMap<Project, ProjectHighlightOutput>();
 
             CreateMap<CollaboratorInput, Collaborator>();
             CreateMap<Collaborator, CollaboratorOutput>();
 
-            CreateMap<Project, ProjectResultInput>();
+            CreateMap<Project, ProjectResultInput>()
+               .ForMember(q => q.Tags, opt => opt.MapFrom(t => t.Tags));
 
-            CreateMap<ProjectFilterParamsInput, ProjectFilterParams>();
+            CreateMap<ProjectFilterParamsInput, ProjectFilterParams>()
+                .ForMember(e => e.Tags, opt => opt.MapFrom(d => d.Tags));
 
             CreateMap<HighlightInput, Highlight>();
             CreateMap<Highlight, HighlightOutput>()
@@ -113,7 +119,7 @@ namespace API.Configuration
             CreateMap<Category, CategoryOutput>();
             CreateMap<ProjectCategoryInput, ProjectCategory>();
             CreateMap<ProjectCategory, ProjectCategoryOutput>()
-                .ForMember(q => q.Id, opt => opt.MapFrom(q=> q.Category.Id))
+                .ForMember(q => q.Id, opt => opt.MapFrom(q => q.Category.Id))
                 .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Category.Name));
 
             CreateMap<EmbeddedProjectInput, EmbeddedProject>();
