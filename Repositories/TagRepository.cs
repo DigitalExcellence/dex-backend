@@ -57,6 +57,12 @@ namespace Repositories
             return GetDbSet<Tag>().Where(s => s.Name == name).FirstOrDefault();
         }
 
+        public override void Remove(Tag entity)
+        {
+
+
+        }
+
 
     }
 }
