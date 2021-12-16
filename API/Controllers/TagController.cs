@@ -145,6 +145,18 @@ namespace API.Controllers
                 };
                 return BadRequest(problem);
             }
+
+            if(tagResource.Name.Length > 30)
+            {
+                ProblemDetails problem = new ProblemDetails
+                {
+                    Title = "Maximum amount of tag name characters exceeded.",
+                    Detail = "It is not possible to create a project name with more than 75 characters.",
+                    Instance = "bdc17517-0b26-4bef-ad54-86c22cb107ed"
+                };
+                return BadRequest(problem);
+            }
+
             Tag tag = mapper.Map<TagInput, Tag>(tagResource);
 
             try
