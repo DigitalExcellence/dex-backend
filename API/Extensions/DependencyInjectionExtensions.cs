@@ -128,6 +128,12 @@ namespace API.Extensions
             services.AddScoped<IProjectTransferService, ProjectTransferService>();
             services.AddScoped<IProjectTransferRepository, ProjectTransferRepository>();
 
+            services.AddScoped<ITagService, TagService>();
+            services.AddScoped<ITagRepository, TagRepository>();
+
+            services.AddScoped<IProjectTagService, ProjectTagService>();
+            services.AddScoped<IProjectTagRepository, ProjectTagRepository>();
+
             services.AddExternalDataSources();
 
             return services;

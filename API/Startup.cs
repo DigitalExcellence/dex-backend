@@ -495,7 +495,6 @@ namespace API
                                                   .CreateScope();
             using ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-
             //Only apply migrations when db is running via MSSQL instead of IN Memory
             if(!context.Database.IsInMemory())
             {
@@ -528,7 +527,13 @@ namespace API
                     context.User.Add(Seed.SeedDataOfficerUser(roles));
                     context.SaveChanges();
                 }
-
+                //Seed Tags
+                if(!context.Tag.Any())
+                {
+                    List<Tag> tags = context.Tag.ToList();
+                    context.Tag.AddRange(Seed.SeedTags(tags));
+                    context.SaveChanges();
+                }
                 if(!context.Project.Any())
                 {
                     //Seed projects

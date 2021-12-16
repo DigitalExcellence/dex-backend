@@ -15,6 +15,7 @@
 * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
 */
 
+using API.InputOutput.Tag;
 using System;
 using System.Collections.Generic;
 
@@ -82,6 +83,10 @@ namespace API.Resources
         /// </summary>
         public List<ProjectCategoryOutput> Categories { get; set; }
 
+        /// <summary>
+        ///     This gets or sets the tags of the project.
+        /// </summary>
+        public List<TagOutput> Tags { get; set; }
     }
 
 }

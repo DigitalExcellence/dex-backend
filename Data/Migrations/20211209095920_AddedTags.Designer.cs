@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _4_Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211209095920_AddedTags")]
+    partial class AddedTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -378,28 +380,6 @@ namespace _4_Data.Migrations
                     b.ToTable("ProjectLike");
                 });
 
-            modelBuilder.Entity("Models.ProjectTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ProjectTag");
-                });
-
             modelBuilder.Entity("Models.ProjectTransferRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -479,7 +459,12 @@ namespace _4_Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Tag");
                 });
@@ -756,17 +741,6 @@ namespace _4_Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.ProjectTag", b =>
-                {
-                    b.HasOne("Models.Project", "Project")
-                        .WithMany("Tags")
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("Models.Tag", "Tag")
-                        .WithMany("ProjectTags")
-                        .HasForeignKey("TagId");
-                });
-
             modelBuilder.Entity("Models.ProjectTransferRequest", b =>
                 {
                     b.HasOne("Models.User", "PotentialNewOwner")
@@ -789,6 +763,13 @@ namespace _4_Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Tag", b =>
+                {
+                    b.HasOne("Models.Project", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("Models.User", b =>

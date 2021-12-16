@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "35c11209-a7f9-4792-a704-efbef8cf5b4f",
+		"_postman_id": "cc08c559-2f57-4721-ac7b-e79c52c4b334",
 		"name": "DeX_Elastic",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -747,78 +747,7 @@
 				},
 				{
 					"name": "Tests",
-					"item": [
-						{
-							"name": "Get Project Recommendations",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = pm.response.json();\r",
-											"var project1 = pm.environment.get(\"projectId1\");\r",
-											"var project2 = pm.environment.get(\"projectId2\");\r",
-											"var foundProject1;\r",
-											"var foundProject2;\r",
-											"\r",
-											"function findProject(jsonData, id) {\r",
-											"    for (var i = 0; i < jsonData.length; i++) {\r",
-											"        if (jsonData[i].id == id) {\r",
-											"            console.log(jsonData[i].id);\r",
-											"            console.log(id);\r",
-											"            return i;\r",
-											"        }\r",
-											"    }\r",
-											"    return -1;\r",
-											"}\r",
-											"\r",
-											"pm.test(\"Expected projects are recommended: \", function() {\r",
-											"    foundProject1 = findProject(jsonData, project1);\r",
-											"    foundProject2 = findProject(jsonData, project2);\r",
-											"    console.log(foundProject1);\r",
-											"    console.log(foundProject2);\r",
-											"    pm.expect(foundProject1).to.not.eql(-1);\r",
-											"    pm.expect(foundProject2).to.not.eql(-1);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											"setTimeout(function(){}, [2500]);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "IdentityId",
-										"value": "{{registeredUserIdentityId2}}",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{apiUrl}}/api/User/projectrecommendations/2",
-									"host": [
-										"{{apiUrl}}"
-									],
-									"path": [
-										"api",
-										"User",
-										"projectrecommendations",
-										"2"
-									]
-								}
-							},
-							"response": []
-						}
-					]
+					"item": []
 				},
 				{
 					"name": "Cleanup",
