@@ -55,17 +55,6 @@ namespace Services.Services
         protected DbContext DbContext { get; }
 
         /// <summary>
-        ///     This is the method for finding a single entity by the identifier.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>The found entity</returns>
-        public virtual async Task<Tag> FindAsync(int id)
-        {
-            return await Repository.FindAsync(id)
-                                   .ConfigureAwait(false);
-        }
-
-        /// <summary>
         ///     This is the method for finding a single entity by the name
         /// </summary>
         /// <param name="name"></param>
@@ -83,104 +72,6 @@ namespace Services.Services
         public Tag FindByName(string name)
         {
             return repository.FindByName(name);
-        }
-
-        /// <summary>
-        ///     This is the method adding an entity asynchronous
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual async Task AddAsync(Tag entity)
-        {
-            if(FindByName(entity.Name) == null)
-            {
-                await Repository.AddAsync(entity)
-                                .ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
-        ///     This is the method for adding multiple entities at once
-        /// </summary>
-        /// <param name="entities"></param>
-        public virtual void AddRange(IEnumerable<Tag> entities)
-        {
-            Repository.AddRange(entities);
-        }
-
-        /// <summary>
-        ///     This is the method for adding multiple entities at once asynchronous.
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        public virtual async Task AddRangeAsync(IEnumerable<Tag> entities)
-        {
-            await Repository.AddRangeAsync(entities);
-        }
-
-        /// <summary>
-        ///     This is the method to update an entity
-        /// </summary>
-        /// <param name="entity"></param>
-        public virtual void Update(Tag entity)
-        {
-            Repository.Update(entity);
-        }
-
-        /// <summary>
-        ///     This is the method to remove an entity
-        /// </summary>
-        /// <param name="entity"></param>
-        public virtual void Remove(Tag entity)
-        {
-            Repository.Remove(entity);
-        }
-
-        /// <summary>
-        ///     This is the method to remove an entity asynchronous
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public virtual Task RemoveAsync(int id)
-        {
-            return Repository.RemoveAsync(id);
-        }
-
-        /// <summary>
-        ///     This is the method to remove multiple entities at ones.
-        /// </summary>
-        /// <param name="entities"></param>
-        public virtual void RemoveRange(IEnumerable<Tag> entities)
-        {
-            Repository.RemoveRange(entities);
-        }
-
-        /// <summary>
-        ///     This is the method to remove multiple entities at ones asynchronous.
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
-        public virtual Task RemoveRangeAsync(IEnumerable<int> ids)
-        {
-            return Repository.RemoveRangeAsync(ids);
-        }
-
-        /// <summary>
-        ///     This is the method to get all entities
-        /// </summary>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<Tag>> GetAll()
-        {
-            return await Repository.GetAll()
-                                   .ConfigureAwait(false);
-        }
-
-        /// <summary>
-        ///     This is the method to save changes that were made
-        /// </summary>
-        public virtual void Save()
-        {
-            Repository.Save();
         }
 
         /// <summary>
