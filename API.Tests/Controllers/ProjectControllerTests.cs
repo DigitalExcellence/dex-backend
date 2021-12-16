@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Xunit;
 using API.Tests.Enums;
 using API.Tests.Helpers;
+using API.Resources;
+using API.InputOutput.Tag;
+using System.Collections.Generic;
 
 namespace API.Tests.Controllers
 {
@@ -113,26 +116,36 @@ namespace API.Tests.Controllers
             response.StatusCode.Should().Be(expectedResult);
         }
 
-        //[Theory]
-        //[InlineData(UserRole.Admin, HttpStatusCode.OK)]
-        //[InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
-        //[InlineData(UserRole.PrUser, HttpStatusCode.OK)]
-        //[InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
-        //public async Task Create_Tag_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
-        //{
-        //    // Arrange
-        //    await AuthenticateAs(role);
-        //    HttpResponseMessage postProjectResponse = await TestClient.PostAsJsonAsync("project", SeedUtility.RandomProject());
-        //    string responseContent = await postProjectResponse.Content.ReadAsStringAsync();
+        [Theory]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
+        [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
+        [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
+        public async Task Update_Tag_Returns_Expected_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
+        {
+            // Arrange
+            await AuthenticateAs(role);
+            ProjectInput projectInput = SeedUtility.RandomProjectInput();
+            projectInput.Tags = new List<TagInput>() {
+                new TagInput() { Name = "java" }
+            };
+            HttpResponseMessage postProjectResponse = await TestClient.PostAsJsonAsync("project", projectInput);
+            string responseContent = await postProjectResponse.Content.ReadAsStringAsync();
 
-        //    Project projectToCategorize = JsonConvert.DeserializeObject<Project>(responseContent);
-        //    //projectToCategorize.Tags.Add(new ProjectTag() { Project = projectToCategorize, Tag = new Tag { Name = "java" } });
+            int projectId = JsonConvert.DeserializeObject<Project>(responseContent).Id;
+            
+            ProjectInput project = JsonConvert.DeserializeObject<ProjectInput>(responseContent);
 
-        //    // Act
-        //    HttpResponseMessage response = await TestClient.PostAsync($"project/category/{projectToCategorize.Id}/2", null);
+            project.Tags = new List<TagInput>() {
+                new TagInput() { Name = "csharp" },
+                new TagInput() { Name = "java" }
+            };
 
-        //    // Assert
-        //    response.StatusCode.Should().Be(expectedResult);
-        //}
+            // Act
+            HttpResponseMessage response = await TestClient.PutAsJsonAsync("project/" + projectId, projectInput);
+
+            // Assert
+            response.StatusCode.Should().Be(expectedResult);
+        }
     }
 }

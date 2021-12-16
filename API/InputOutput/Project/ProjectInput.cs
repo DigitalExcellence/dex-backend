@@ -86,7 +86,7 @@ namespace API.Resources
         /// <summary>
         ///     This gets or sets the tags
         /// </summary>
-        public IEnumerable<TagInput> Tags { get; set; }
+        public IList<TagInput> Tags { get; set; }
     }
 
 }

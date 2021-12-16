@@ -6,6 +6,7 @@ using Data.Helpers;
 using Models;
 using System.Collections.Generic;
 using System.Linq;
+using API.Resources;
 
 namespace API.Tests.Helpers
 {
@@ -22,6 +23,18 @@ namespace API.Tests.Helpers
             Project project = projectToFake.Generate();
             project.Created = DateTime.Now.AddDays(-2);
             project.Updated = DateTime.Now;
+
+            return project;
+        }
+
+        public static ProjectInput RandomProjectInput()
+        {
+            Faker<ProjectInput> projectToFake = new Faker<ProjectInput>()
+                                .RuleFor(p => p.Uri, f => f.Internet.Url())
+                                .RuleFor(p => p.Name, f => f.Commerce.ProductName())
+                                .RuleFor(p => p.Description, f => f.Lorem.Sentences(10))
+                                .RuleFor(p => p.ShortDescription, f => f.Lorem.Sentences(1));
+            ProjectInput project = projectToFake.Generate();
 
             return project;
         }
