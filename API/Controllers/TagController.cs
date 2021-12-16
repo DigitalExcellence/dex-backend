@@ -151,8 +151,8 @@ namespace API.Controllers
                 ProblemDetails problem = new ProblemDetails
                 {
                     Title = "Maximum amount of tag name characters exceeded.",
-                    Detail = "It is not possible to create a project name with more than 75 characters.",
-                    Instance = "bdc17517-0b26-4bef-ad54-86c22cb107ed"
+                    Detail = "It is not possible to create a project name with more than 30 characters.",
+                    Instance = "072e9a65-04cf-4ec3-ad0a-8d42c1495068"
                 };
                 return BadRequest(problem);
             }
