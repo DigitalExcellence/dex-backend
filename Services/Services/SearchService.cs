@@ -37,7 +37,7 @@ namespace Services.Services
         /// <param name="query">The search query</param>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The projects that match the search query</returns>
-        Task<IEnumerable<Project>> SearchInternalProjects(string query, ProjectFilterParams projectFilterParams);
+        Task<IList<Project>> SearchInternalProjects(string query, ProjectFilterParams projectFilterParams);
 
         /// <summary>
         ///     Get the number of projects that match the search query
@@ -83,7 +83,7 @@ namespace Services.Services
         /// <param name="query">The search query</param>
         /// <param name="projectFilterParams">The parameters to filter, sort and paginate the projects</param>
         /// <returns>The projects that match the search query</returns>
-        public virtual async Task<IEnumerable<Project>> SearchInternalProjects(
+        public virtual async Task<IList<Project>> SearchInternalProjects(
             string query,
             ProjectFilterParams projectFilterParams)
         {

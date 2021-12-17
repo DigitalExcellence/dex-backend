@@ -92,7 +92,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
-        Task<IEnumerable<Project>> SearchAsync(
+        Task<IList<Project>> SearchAsync(
             string query,
             int? skip = null,
             int? take = null,
@@ -313,7 +313,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
-        public virtual async Task<IEnumerable<Project>> SearchAsync(
+        public virtual async Task<IList<Project>> SearchAsync(
             string query,
             int? skip = null,
             int? take = null,
