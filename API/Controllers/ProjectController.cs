@@ -788,7 +788,9 @@ namespace API.Controllers
             }
             mapper.Map(projectInput, project);
             //Same like categories, remove all and then add/create every tag again
-            projectTagService.RemoveRange(project.Tags);
+
+            project.Tags = new List<ProjectTag>();
+
             if(projectInput.Tags != null)
             {
                 // replaces duplicate tag names

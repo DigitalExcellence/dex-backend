@@ -193,6 +193,7 @@ namespace Repositories
                                     .Include(p => p.ProjectIcon)
                                     .Include(p => p.CallToActions)
                                     .Include(p => p.Images)
+                                    .Include(p => p.Tags)
                                     .SingleOrDefaultAsync();
 
             if(project != null)
