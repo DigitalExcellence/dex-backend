@@ -105,9 +105,19 @@ namespace API.Controllers
 
             ProjectFilterParams projectFilterParams =
                 mapper.Map<ProjectFilterParamsInput, ProjectFilterParams>(projectFilterParamsResource);
-            IEnumerable<Project> projects = await searchService.SearchInternalProjects(query, projectFilterParams);
-            IEnumerable<ProjectResultInput> searchResults =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(projects);
+            IList<Project> projects = await searchService.SearchInternalProjects(query, projectFilterParams);
+            IList<ProjectResultInput> searchResults =
+                mapper.Map<IList<Project>, IList<ProjectResultInput>>(projects);
+
+            //sets the tags to the result
+            for(int i = 0; i < searchResults.Count(); i++)
+            {
+                for(int j = 0; j < searchResults[i].Tags.Count(); j++)
+                {
+                    searchResults[i].Tags[j].Id = projects[i].Tags[j].Tag.Id;
+                    searchResults[i].Tags[j].Name = projects[i].Tags[j].Tag.Name;
+                }
+            }
 
             ProjectResultsInput searchResultsResource = new ProjectResultsInput
                                                            {
