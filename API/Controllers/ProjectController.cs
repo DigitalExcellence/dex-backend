@@ -239,8 +239,19 @@ namespace API.Controllers
             }
 
 
-            IEnumerable<ProjectResultInput> results =
-                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(filteredProjects);
+            IList<ProjectResultInput> results =
+                mapper.Map<IList<Project>, IList<ProjectResultInput>>(filteredProjects);
+
+            //sets the tags to the result
+            for(int i = 0; i < results.Count(); i++)
+            {
+                for(int j = 0; j < results[i].Tags.Count(); j++)
+                {
+                    results[i].Tags[j].Id = filteredProjects[i].Tags[j].Tag.Id;
+                    results[i].Tags[j].Name = filteredProjects[i].Tags[j].Tag.Name;
+                }
+            }
+
             ProjectResultsInput resultsResource = new ProjectResultsInput
             {
                 Results = results.ToArray(),
@@ -777,7 +788,9 @@ namespace API.Controllers
             }
             mapper.Map(projectInput, project);
             //Same like categories, remove all and then add/create every tag again
-            projectTagService.RemoveRange(project.Tags);
+
+            project.Tags = new List<ProjectTag>();
+
             if(projectInput.Tags != null)
             {
                 // replaces duplicate tag names
