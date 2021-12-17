@@ -133,7 +133,7 @@ namespace Repositories
         /// </summary>
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
         /// <returns>A enumerable of the users projects</returns>
-        Task<IEnumerable<Project>> GetUserProjects(int userId,
+        Task<IList<Project>> GetUserProjects(int userId,
                                                    int? skip = null,
                                                    int? take = null,
                                                    Expression<Func<Project, object>> orderBy = null,
@@ -506,7 +506,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>A enumerable of the users projects</returns>
-        public async Task<IEnumerable<Project>> GetUserProjects(
+        public async Task<IList<Project>> GetUserProjects(
             int userId,
             int? skip = null,
             int? take = null,
@@ -548,7 +548,8 @@ namespace Repositories
                 Name = p.Name,
                 ShortDescription = p.ShortDescription,
                 Updated = p.Updated,
-                Uri = p.Uri
+                Uri = p.Uri,
+                Tags = p.Tags,
             })
                     .ToListAsync();
             return projectResults;
