@@ -721,17 +721,6 @@ namespace Repositories
 
             return searchableList.Any(text => wholeWordRegex.IsMatch(text))
                 || regex.IsMatch(project.Name);
-
-            //return new List<string>
-            //       {
-            //           project.Description,
-            //           project.ShortDescription,
-            //           project.Uri,
-            //           project.User.Name,
-            //           project.Id.ToString(),
-            //       }
-            //    .Any(text => wholeWordRegex.IsMatch(text))
-            //    || regex.IsMatch(project.Name);
         }
 
         /// <summary>
