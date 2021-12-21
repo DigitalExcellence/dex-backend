@@ -92,7 +92,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
-        Task<IList<Project>> SearchAsync(
+        Task<IEnumerable<Project>> SearchAsync(
             string query,
             int? skip = null,
             int? take = null,
@@ -133,7 +133,7 @@ namespace Repositories
         /// </summary>
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
         /// <returns>A enumerable of the users projects</returns>
-        Task<IList<Project>> GetUserProjects(int userId,
+        Task<IEnumerable<Project>> GetUserProjects(int userId,
                                                    int? skip = null,
                                                    int? take = null,
                                                    Expression<Func<Project, object>> orderBy = null,
@@ -313,7 +313,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
-        public virtual async Task<IList<Project>> SearchAsync(
+        public virtual async Task<IEnumerable<Project>> SearchAsync(
             string query,
             int? skip = null,
             int? take = null,
@@ -506,7 +506,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>A enumerable of the users projects</returns>
-        public async Task<IList<Project>> GetUserProjects(
+        public async Task<IEnumerable<Project>> GetUserProjects(
             int userId,
             int? skip = null,
             int? take = null,
