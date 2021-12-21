@@ -704,16 +704,34 @@ namespace Repositories
         {
             Regex regex = new Regex(@$"{query}", RegexOptions.Singleline | RegexOptions.IgnoreCase);
             Regex wholeWordRegex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            return new List<string>
-                   {
-                       project.Description,
-                       project.ShortDescription,
-                       project.Uri,
-                       project.User.Name,
-                       project.Id.ToString()
-                   }
-                .Any(text => wholeWordRegex.IsMatch(text))
+
+            List<string> searchableList = new List<string>();
+
+            foreach(ProjectTag tag in project.Tags)
+            {
+                searchableList.Add(tag.Tag.Name);
+            }
+
+            searchableList.Add(project.Description);
+            searchableList.Add(project.ShortDescription);
+            searchableList.Add(project.Uri);
+            searchableList.Add(project.User.Name);
+            searchableList.Add(project.User.Name);
+            searchableList.Add(project.Id.ToString());
+
+            return searchableList.Any(text => wholeWordRegex.IsMatch(text))
                 || regex.IsMatch(project.Name);
+
+            //return new List<string>
+            //       {
+            //           project.Description,
+            //           project.ShortDescription,
+            //           project.Uri,
+            //           project.User.Name,
+            //           project.Id.ToString(),
+            //       }
+            //    .Any(text => wholeWordRegex.IsMatch(text))
+            //    || regex.IsMatch(project.Name);
         }
 
         /// <summary>
@@ -725,19 +743,20 @@ namespace Repositories
         {
             IQueryable<Project> projectsToReturn = GetDbSet<Project>()
                                                    .Include(u => u.User)
+                                                   .Include(p => p.Tags)
                                                    .Where(p =>
                                                               p.Name.Contains(query) ||
+                                                              p.Tags.Any(x => x.Tag.Name.Contains(query) ||
                                                               p.Description.Contains(query) ||
                                                               p.ShortDescription.Contains(query) ||
                                                               p.Uri.Contains(query) ||
                                                               p.Id.ToString()
                                                                .Equals(query) ||
-                                                              p.User.Name.Contains(query));
+                                                              p.User.Name.Contains(query)));
             projectsToReturn.Include(p => p.ProjectIcon).Load();
             projectsToReturn.Include(p => p.CallToActions).Load();
             projectsToReturn.Include(p => p.Likes).Load();
             projectsToReturn.Include(p => p.Categories).Load();
-            projectsToReturn.Include(p => p.Tags).Load();
 
             foreach(Project project in projectsToReturn)
             {
