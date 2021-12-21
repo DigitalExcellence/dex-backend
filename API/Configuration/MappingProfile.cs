@@ -101,6 +101,8 @@ namespace API.Configuration
             CreateMap<CollaboratorInput, Collaborator>();
             CreateMap<Collaborator, CollaboratorOutput>();
 
+
+
             CreateMap<Project, ProjectResultInput>()
                .ForMember(q => q.Tags, opt => opt.MapFrom(t => t.Tags));
 
@@ -185,7 +187,11 @@ namespace API.Configuration
             CreateMap<Tag, TagOutput>();
             CreateMap<TagInput, Tag>();
             CreateMap<TagInput, ProjectTag>();
-            CreateMap<ProjectTag, TagOutput>();
+            CreateMap<ProjectTag, TagOutput>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Tag.Name))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Tag.Id));
+
+
             CreateMap<ProjectTag, ProjectTagOutput>()
               .ForMember(q => q.Id, opt => opt.MapFrom(q => q.Tag.Id))
               .ForMember(q => q.Name, opt => opt.MapFrom(q => q.Tag.Name));

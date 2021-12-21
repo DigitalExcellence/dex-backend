@@ -239,18 +239,8 @@ namespace API.Controllers
             }
 
 
-            IList<ProjectResultInput> results =
-                mapper.Map<IList<Project>, IList<ProjectResultInput>>(filteredProjects);
-
-            //sets the tags to the result
-            for(int i = 0; i < results.Count(); i++)
-            {
-                for(int j = 0; j < results[i].Tags.Count(); j++)
-                {
-                    results[i].Tags[j].Id = filteredProjects[i].Tags[j].Tag.Id;
-                    results[i].Tags[j].Name = filteredProjects[i].Tags[j].Tag.Name;
-                }
-            }
+            IEnumerable<ProjectResultInput> results =
+                mapper.Map<IList<Project>, IEnumerable<ProjectResultInput>>(filteredProjects);
 
             ProjectResultsInput resultsResource = new ProjectResultsInput
             {
