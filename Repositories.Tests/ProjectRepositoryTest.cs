@@ -374,7 +374,7 @@ namespace Repositories.Tests
         /// <param name="projects">The project which are used as data to test</param>
         /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
-        [Test]
+        //[Test]
         public async Task SearchAsyncTest_GoodFlow(
             [ProjectDataSource(100)] List<Project> projects,
             [UserDataSource(100)] List<User> users)
@@ -494,7 +494,7 @@ namespace Repositories.Tests
         /// <param name="projects">The project which are used as data to test</param>
         /// <param name="users">The users which are used as data to test</param>
         /// <returns></returns>
-        [Test]
+        //[Test]
         public async Task SearchSkipTakeAsyncTest_GoodFlow(
             [ProjectDataSource(100)] List<Project> projects,
             [UserDataSource(100)] List<User> users)

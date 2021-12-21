@@ -77,7 +77,7 @@ namespace Services.Services
         /// </summary>
         /// <param name="userId">The user id whoms projects need to be retrieved</param>
         /// <returns>The total number of pages for the results</returns>
-        Task<IList<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams);
+        Task<IEnumerable<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams);
         /// <summary>
         ///     Registers all records of the current database to the message broker to be added to ElasticSearch.
         /// </summary>
@@ -264,7 +264,7 @@ namespace Services.Services
         }
 
 
-        public Task<IList<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams)
+        public Task<IEnumerable<Project>> GetUserProjects(int userId, ProjectFilterParams projectFilterParams)
         {
             if(!projectFilterParams.AmountOnPage.HasValue ||
                projectFilterParams.AmountOnPage <= 0)

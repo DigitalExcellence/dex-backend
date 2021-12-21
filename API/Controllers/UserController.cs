@@ -195,20 +195,9 @@ namespace API.Controllers
             ProjectFilterParams projectFilterParams =
                 mapper.Map<ProjectFilterParamsInput, ProjectFilterParams>(ProjectFilterParamsResource);
 
-            IList<Project> userProjects = await projectService.GetUserProjects(user.Id, projectFilterParams);
-            IList<ProjectResultInput> results =
-                mapper.Map<IEnumerable<Project>, IList<ProjectResultInput>>(userProjects);
-
-
-            //sets the tags to the result
-            for(int i = 0; i < results.Count(); i++)
-            {
-                for(int j = 0; j < results[i].Tags.Count(); j++)
-                {
-                    results[i].Tags[j].Id = userProjects[i].Tags[j].Tag.Id;
-                    results[i].Tags[j].Name = userProjects[i].Tags[j].Tag.Name;
-                }
-            }
+            IEnumerable<Project> userProjects = await projectService.GetUserProjects(user.Id, projectFilterParams);
+            IEnumerable<ProjectResultInput> results =
+                mapper.Map<IEnumerable<Project>, IEnumerable<ProjectResultInput>>(userProjects);
 
             ProjectResultsInput resultsResource = new ProjectResultsInput
             {

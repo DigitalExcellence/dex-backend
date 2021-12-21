@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8a5411ca-9d89-4851-b78c-c1712e796a80",
+		"_postman_id": "b658e7fd-c373-47b1-bf3e-8f7a284d3772",
 		"name": "DEV",
 		"description": "Testing Digital Excellence API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -4668,66 +4668,6 @@
 							]
 						},
 						{
-							"name": "Search",
-							"item": [
-								{
-									"name": "Search-SearchInternal-Administrator",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"var projectName = pm.environment.get(\"projectName\");",
-													"",
-													"var jsonData = pm.response.json();",
-													"",
-													"eval(pm.environment.get(\"commonTests\"))();",
-													"",
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"pm.test(\"Response must be valid and have a json body\", function () {",
-													"     pm.response.to.be.ok;",
-													"     pm.response.to.be.withBody;",
-													"     pm.response.to.be.json;",
-													"});",
-													"",
-													"pm.test(\"Project Name is set correctly and matching: \" + projectName, function () {",
-													"    pm.expect(jsonData.results[0].name).to.eql(projectName);",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "IdentityId",
-												"type": "text",
-												"value": "{{administratorUserIdentityId}}"
-											}
-										],
-										"url": {
-											"raw": "{{apiUrl}}/api/Search/internal/{{projectId}}",
-											"host": [
-												"{{apiUrl}}"
-											],
-											"path": [
-												"api",
-												"Search",
-												"internal",
-												"{{projectId}}"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
 							"name": "Wizard",
 							"item": []
 						},
@@ -6632,6 +6572,10 @@
 									"response": []
 								}
 							]
+						},
+						{
+							"name": "Search",
+							"item": []
 						}
 					]
 				},
