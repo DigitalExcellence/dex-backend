@@ -92,7 +92,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
-        Task<IList<Project>> SearchAsync(
+        Task<IEnumerable<Project>> SearchAsync(
             string query,
             int? skip = null,
             int? take = null,
@@ -133,7 +133,7 @@ namespace Repositories
         /// </summary>
         /// <param name="userId">The id of the user whoms projects need to be retrieved</param>
         /// <returns>A enumerable of the users projects</returns>
-        Task<IList<Project>> GetUserProjects(int userId,
+        Task<IEnumerable<Project>> GetUserProjects(int userId,
                                                    int? skip = null,
                                                    int? take = null,
                                                    Expression<Func<Project, object>> orderBy = null,
@@ -313,7 +313,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>This method returns thee projects matching the search query and parameters.</returns>
-        public virtual async Task<IList<Project>> SearchAsync(
+        public virtual async Task<IEnumerable<Project>> SearchAsync(
             string query,
             int? skip = null,
             int? take = null,
@@ -506,7 +506,7 @@ namespace Repositories
         /// <param name="highlighted">The highlighted parameter represents the whether to filter highlighted projects.</param>
         /// <param name="categories">The categories parameter represents the categories the project needs to have</param>
         /// <returns>A enumerable of the users projects</returns>
-        public async Task<IList<Project>> GetUserProjects(
+        public async Task<IEnumerable<Project>> GetUserProjects(
             int userId,
             int? skip = null,
             int? take = null,
@@ -704,15 +704,22 @@ namespace Repositories
         {
             Regex regex = new Regex(@$"{query}", RegexOptions.Singleline | RegexOptions.IgnoreCase);
             Regex wholeWordRegex = new Regex(@$"\b{query}\b", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            return new List<string>
-                   {
-                       project.Description,
-                       project.ShortDescription,
-                       project.Uri,
-                       project.User.Name,
-                       project.Id.ToString()
-                   }
-                .Any(text => wholeWordRegex.IsMatch(text))
+
+            List<string> searchableList = new List<string>();
+
+            foreach(ProjectTag tag in project.Tags)
+            {
+                searchableList.Add(tag.Tag.Name);
+            }
+
+            searchableList.Add(project.Description);
+            searchableList.Add(project.ShortDescription);
+            searchableList.Add(project.Uri);
+            searchableList.Add(project.User.Name);
+            searchableList.Add(project.User.Name);
+            searchableList.Add(project.Id.ToString());
+
+            return searchableList.Any(text => wholeWordRegex.IsMatch(text))
                 || regex.IsMatch(project.Name);
         }
 
@@ -725,19 +732,20 @@ namespace Repositories
         {
             IQueryable<Project> projectsToReturn = GetDbSet<Project>()
                                                    .Include(u => u.User)
+                                                   .Include(p => p.Tags)
                                                    .Where(p =>
                                                               p.Name.Contains(query) ||
+                                                              p.Tags.Any(x => x.Tag.Name.Contains(query) ||
                                                               p.Description.Contains(query) ||
                                                               p.ShortDescription.Contains(query) ||
                                                               p.Uri.Contains(query) ||
                                                               p.Id.ToString()
                                                                .Equals(query) ||
-                                                              p.User.Name.Contains(query));
+                                                              p.User.Name.Contains(query)));
             projectsToReturn.Include(p => p.ProjectIcon).Load();
             projectsToReturn.Include(p => p.CallToActions).Load();
             projectsToReturn.Include(p => p.Likes).Load();
             projectsToReturn.Include(p => p.Categories).Load();
-            projectsToReturn.Include(p => p.Tags).Load();
 
             foreach(Project project in projectsToReturn)
             {
