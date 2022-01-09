@@ -147,5 +147,54 @@ namespace API.Tests.Controllers
             // Assert
             response.StatusCode.Should().Be(expectedResult);
         }
+
+
+        [Theory]
+        [InlineData(UserRole.Alumni, HttpStatusCode.OK)]
+        [InlineData(UserRole.Admin, HttpStatusCode.OK)]
+        [InlineData(UserRole.DataOfficer, HttpStatusCode.OK)]
+        [InlineData(UserRole.PrUser, HttpStatusCode.OK)]
+        [InlineData(UserRole.RegisteredUser, HttpStatusCode.OK)]
+        public async Task GetProjects_By_Multiple_Ids_Returns_OK_Result_For_All_Roles(UserRole role, HttpStatusCode expectedResult)
+        {
+            // Arrange
+            await AuthenticateAs(role);
+
+            int[] existingProjectIds = new int[] { 1,2,3,10,15,20,30 };
+
+            // Act
+            HttpResponseMessage response = await TestClient.PostAsJsonAsync("project/multiple", existingProjectIds);
+
+            // Assert
+            response.StatusCode.Should().Be(expectedResult);
+        }
+
+
+        [Theory]
+        [InlineData(UserRole.Alumni, 7)]
+        [InlineData(UserRole.Admin, 7)]
+        [InlineData(UserRole.DataOfficer, 7)]
+        [InlineData(UserRole.PrUser, 7)]
+        [InlineData(UserRole.RegisteredUser, 7)]
+        public async Task GetProjects_By_Multiple_Ids_Returns_Correct_Count_Result_For_All_Roles(UserRole role, int expectedCount)
+        {
+            // Arrange
+            await AuthenticateAs(role);
+
+            int[] existingProjectIds = new int[] { 1, 2, 3, 10, 15, 20, 30 };
+
+            // Act
+            HttpResponseMessage response = await TestClient.PostAsJsonAsync("Project/multiple", existingProjectIds);
+            string result = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            if(response.IsSuccessStatusCode)
+            {
+                List<ProjectOutput> projectOutputs = JsonConvert.DeserializeObject<List<ProjectOutput>>(result);
+                Assert.Equal(expectedCount, projectOutputs.Count);
+            }
+
+            Assert.True(false);
+        }
     }
 }
