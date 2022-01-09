@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Release v.2.1.0-beta - DATE HERE
+### Added
+- Added endpoint to search for projects by multiple ids - [#547](https://github.com/DigitalExcellence/dex-backend/pull/553)
+
+
+
+
 ## Release v.2.0.0-beta - DATE HERE
 ### Added
 - Added JobScheduler unit tests - [#381](https://github.com/DigitalExcellence/dex-backend/pull/539)
