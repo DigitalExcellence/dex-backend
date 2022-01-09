@@ -163,7 +163,7 @@ namespace API.Tests.Controllers
             int[] existingProjectIds = new int[] { 1,2,3,10,15,20,30 };
 
             // Act
-            HttpResponseMessage response = await TestClient.PostAsJsonAsync("project/multiple", existingProjectIds);
+            HttpResponseMessage response = await TestClient.PostAsJsonAsync("Project/multiple", existingProjectIds);
 
             // Assert
             response.StatusCode.Should().Be(expectedResult);
@@ -192,9 +192,10 @@ namespace API.Tests.Controllers
             {
                 List<ProjectOutput> projectOutputs = JsonConvert.DeserializeObject<List<ProjectOutput>>(result);
                 Assert.Equal(expectedCount, projectOutputs.Count);
+            } else
+            {
+                Assert.True(false);
             }
-
-            Assert.True(false);
         }
     }
 }
