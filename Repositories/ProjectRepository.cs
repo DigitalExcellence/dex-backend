@@ -73,6 +73,15 @@ namespace Repositories
         /// <returns></returns>
         Task<Project> FindAsyncNotRedacted(int id);
 
+
+
+        /// <summary>
+        /// Find multiple projects by their id
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        Task<List<Project>> FindAsyncByMultipleIds(int [] ids);
+
         /// <summary>
         ///     This interface method counts the amount of projects matching the filters.
         /// </summary>
@@ -874,6 +883,18 @@ namespace Repositories
         public Task<Project> FindAsyncNotRedacted(int id)
         {
             return GetDbSet<Project>().Where(p => p.Id == id).Include(u => u.User).FirstOrDefaultAsync();
+        }
+
+        Task<List<Project>> IProjectRepository.FindAsyncByMultipleIds(int[] ids)
+        {
+            return GetDbSet<Project>().Where(p => ids.Contains(p.Id))
+                .Include(p => p.User)
+                .Include(p => p.Tags)
+                .Include(p => p.Categories)
+                .Include(p => p.Likes)
+                .Include(p => p.CallToActions)
+                .Include(p => p.ProjectIcon)
+                .ToListAsync();
         }
     }
 }
