@@ -285,6 +285,30 @@ namespace API.Controllers
 
 
         /// <summary>
+        /// Find multiple projects by their ids.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpPost("multiple")]
+        [ProducesResponseType(typeof(List<ProjectOutput>), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ProblemDetails), 503)]
+        public async Task<IActionResult> FindByMultipleIds(int [] ids)
+        {
+            try
+            {
+                List<ProjectOutput> projectOutputs = mapper.Map<List<Project>, List<ProjectOutput>>(await projectService.FindAsyncByMultipleIds(ids));
+
+                if(projectOutputs != null && projectOutputs.Any()) return Ok(projectOutputs);
+
+                return NotFound("Could not find any projects matching the ids");
+                   
+            } catch(Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
         ///     This method is responsible for retrieving a single project.
         /// </summary>
         /// <returns>This method returns the project resource result.</returns>
