@@ -676,12 +676,12 @@ namespace Repositories
             {
                 // Check for every project if there is any project-category that matches the selected categories
                 // queryable = queryable.Where(p => p.Categories.All(cat => categories.Contains(cat.Category.Id)));
-                queryable = queryable.Where(p => p.Categories.Any(cat => categories.Contains(cat.Category.Id)));
+                queryable = queryable.Where(project => project.Categories.Any(projectCategory => categories.Contains(projectCategory.Category.Id)));
             }
 
             if(tags != null && tags.Count > 0)
             {
-                queryable = queryable.Where(p => p.Tags.Any(tag => tags.Contains(tag.Id)));
+                queryable = queryable.Where(project => project.Tags.Any(projectTag => tags.Contains(projectTag.Tag.Id)));
             }
 
             if(orderBy != null)
